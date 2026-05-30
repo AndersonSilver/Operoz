@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "@plane/propel/button";
-import { Calendar } from "@plane/propel/calendar";
-import { CloseIcon } from "@plane/propel/icons";
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { renderFormattedPayloadDate, renderFormattedDate, getDate } from "@plane/utils";
+import { Button } from "@operis/propel/button";
+import { Calendar } from "@operis/propel/calendar";
+import { CloseIcon } from "@operis/propel/icons";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { renderFormattedPayloadDate, renderFormattedDate, getDate } from "@operis/utils";
 import { DateFilterSelect } from "./date-filter-select";
 type Props = {
   title: string;

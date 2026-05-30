@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, useEffect, useCallback } from "react";
 // plane imports
-import type { EditorRefApi, IMarking } from "@plane/editor";
-import { cn } from "@plane/utils";
+import type { EditorRefApi, IMarking } from "@operis/editor";
+import { cn } from "@operis/utils";
 // components
 import type { THeadingComponentProps } from "./heading-components";
 import { OutlineHeading1, OutlineHeading2, OutlineHeading3 } from "./heading-components";

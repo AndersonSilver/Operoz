@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { SWRConfiguration } from "swr";
-import type { TClient360ReportCoverage } from "@plane/types";
+import type { TClient360ReportCoverage } from "@operis/types";
 
 /** Evita polling de 5s do SWR em erro e revalidações desnecessárias no hub do board. */
 export const CLIENT_360_SWR_CONFIG: SWRConfiguration = {

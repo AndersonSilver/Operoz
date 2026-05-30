@@ -1,25 +1,19 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { PlusIcon, ChevronRightIcon } from "@plane/propel/icons";
-import { IconButton } from "@plane/propel/icon-button";
-import { Tooltip } from "@plane/propel/tooltip";
-import { Loader } from "@plane/ui";
-import { cn, copyUrlToClipboard, orderJoinedProjects } from "@plane/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { PlusIcon, ChevronRightIcon } from "@operis/propel/icons";
+import { IconButton } from "@operis/propel/icon-button";
+import { Tooltip } from "@operis/propel/tooltip";
+import { Loader } from "@operis/ui";
+import { cn, copyUrlToClipboard, orderJoinedProjects } from "@operis/utils";
 import type { TProject } from "@/plane-web/types";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import { CreateBoardModal } from "@/components/board/create-board-modal";
 import { useBoard } from "@/hooks/store/use-board";
 import { useProject } from "@/hooks/store/use-project";

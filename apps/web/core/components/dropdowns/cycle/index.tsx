@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // ui
-import { CycleIcon, ChevronDownIcon } from "@plane/propel/icons";
-import { ComboDropDown } from "@plane/ui";
+import { CycleIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { ComboDropDown } from "@operis/ui";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useDropdown } from "@/hooks/use-dropdown";

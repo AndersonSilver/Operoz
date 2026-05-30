@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { IState, TStateGroups, TStateOperationsCallbacks } from "@plane/types";
-import { cn } from "@plane/utils";
+import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operis/types";
+import { cn } from "@operis/utils";
 // components
 import { GroupItem } from "@/components/project-states";
 

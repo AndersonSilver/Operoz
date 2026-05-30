@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // Plane Imports
-import { ORGANIZATION_SIZE, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { EditIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IWorkspace } from "@plane/types";
-import { CustomSelect, Input } from "@plane/ui";
-import { cn, copyUrlToClipboard, getFileURL, validateWorkspaceName } from "@plane/utils";
+import { ORGANIZATION_SIZE, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { EditIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IWorkspace } from "@operis/types";
+import { CustomSelect, Input } from "@operis/ui";
+import { cn, copyUrlToClipboard, getFileURL, validateWorkspaceName } from "@operis/utils";
 // components
 import { WorkspaceImageUploadModal } from "@/components/core/modals/workspace-image-upload-modal";
 import { TimezoneSelect } from "@/components/global/timezone-select";

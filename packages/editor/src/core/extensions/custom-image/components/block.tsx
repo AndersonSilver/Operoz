@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { NodeSelection } from "@tiptap/pm/state";
 import React, { useRef, useState, useCallback, useLayoutEffect, useEffect } from "react";
 // plane imports
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // local imports
 import { ECustomImageAttributeNames } from "../types";
 import type { Pixel, TCustomImageAttributes, TCustomImageSize } from "../types";

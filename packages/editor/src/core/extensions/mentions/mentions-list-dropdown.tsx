@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { FloatingOverlay } from "@floating-ui/react";
 import type { SuggestionProps } from "@tiptap/suggestion";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { debounce } from "lodash-es";
 // plane utils
-import { useOutsideClickDetector } from "@plane/hooks";
-import { cn } from "@plane/utils";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { cn } from "@operis/utils";
 // helpers
 import { DROPDOWN_NAVIGATION_KEYS, getNextValidIndex } from "@/helpers/tippy";
 // types

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useMemo } from "react";
 import { observer } from "mobx-react";
 import { Ellipsis } from "lucide-react";
@@ -14,10 +8,10 @@ import {
   WORKSPACE_SIDEBAR_STATIC_NAVIGATION_ITEMS,
   WORKSPACE_SIDEBAR_STATIC_NAVIGATION_ITEMS_LINKS,
   WORKSPACE_SIDEBAR_STATIC_PINNED_NAVIGATION_ITEMS_LINKS,
-} from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { ChevronRightIcon } from "@plane/propel/icons";
-import { cn } from "@plane/utils";
+} from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { ChevronRightIcon } from "@operis/propel/icons";
+import { cn } from "@operis/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // store hooks

@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Links, Meta, Outlet, Scripts } from "react-router";
-import { DEFAULT_LOCALE } from "@plane/i18n";
+import { DEFAULT_LOCALE } from "@operis/i18n";
 // assets
 import appleTouchIcon from "@/app/assets/favicon/apple-touch-icon.png?url";
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";

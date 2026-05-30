@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { CopyIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IApiToken } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { CopyIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IApiToken } from "@operis/types";
 // ui
-import { renderFormattedDate, renderFormattedTime, copyTextToClipboard } from "@plane/utils";
+import { renderFormattedDate, renderFormattedTime, copyTextToClipboard } from "@operis/utils";
 // helpers
 // types
 import { usePlatformOS } from "@/hooks/use-platform-os";

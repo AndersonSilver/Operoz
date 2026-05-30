@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { Circle } from "lucide-react";
-import { ChevronDownIcon, ChevronUpIcon } from "@plane/propel/icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@operis/propel/icons";
 // mobx
 
 interface IHeaderSubGroupByCard {

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { BarChart } from "@plane/propel/charts/bar-chart";
-import { EmptyStateCompact } from "@plane/propel/empty-state";
-import type { IUserProfileData } from "@plane/types";
-import { Loader, Card } from "@plane/ui";
-import { capitalizeFirstLetter } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { BarChart } from "@operis/propel/charts/bar-chart";
+import { EmptyStateCompact } from "@operis/propel/empty-state";
+import type { IUserProfileData } from "@operis/types";
+import { Loader, Card } from "@operis/ui";
+import { capitalizeFirstLetter } from "@operis/utils";
 
 type Props = {
   userProfile: IUserProfileData | undefined;

@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EUserPermissionsLevel, WORK_ITEM_TRACKER_ELEMENTS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { EmptyStateDetailed } from "@plane/propel/empty-state";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { ISearchIssueResponse } from "@plane/types";
-import { EIssuesStoreType, EUserProjectRoles } from "@plane/types";
+import { EUserPermissionsLevel, WORK_ITEM_TRACKER_ELEMENTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { EmptyStateDetailed } from "@operis/propel/empty-state";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { ISearchIssueResponse } from "@operis/types";
+import { EIssuesStoreType, EUserProjectRoles } from "@operis/types";
 // components
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";

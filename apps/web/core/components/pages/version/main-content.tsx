@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { EyeIcon, TriangleAlert } from "lucide-react";
 // plane imports
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TPageVersion } from "@plane/types";
-import { renderFormattedDate, renderFormattedTime } from "@plane/utils";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TPageVersion } from "@operis/types";
+import { renderFormattedDate, renderFormattedTime } from "@operis/utils";
 // helpers
 import type { EPageStoreType } from "@/plane-web/hooks/store";
 // local imports

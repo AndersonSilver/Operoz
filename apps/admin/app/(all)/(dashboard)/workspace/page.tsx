@@ -5,11 +5,11 @@ import Link from "next/link";
 import useSWR from "swr";
 import { Loader as LoaderIcon } from "lucide-react";
 // types
-import { Button, getButtonStyling } from "@plane/propel/button";
-import { setPromiseToast } from "@plane/propel/toast";
-import type { TInstanceConfigurationKeys } from "@plane/types";
-import { Loader, ToggleSwitch } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { Button, getButtonStyling } from "@operis/propel/button";
+import { setPromiseToast } from "@operis/propel/toast";
+import type { TInstanceConfigurationKeys } from "@operis/types";
+import { Loader, ToggleSwitch } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { WorkspaceListItem } from "@/components/workspace/list-item";

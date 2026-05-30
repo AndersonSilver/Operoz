@@ -69,9 +69,9 @@ MYIP=192.168.68.169
 docker run --name myaio --rm -it \
     -p 80:80 \
     -e DOMAIN_NAME=${MYIP} \
-    -e DATABASE_URL=postgresql://plane:plane@${MYIP}:15432/plane \
+    -e DATABASE_URL=postgresql://operis:operis@${MYIP}:15432/operis \
     -e REDIS_URL=redis://${MYIP}:16379 \
-    -e AMQP_URL=amqp://plane:plane@${MYIP}:15673/plane \
+    -e AMQP_URL=amqp://operis:operis@${MYIP}:15673/operis \
     -e AWS_REGION=us-east-1 \
     -e AWS_ACCESS_KEY_ID=5MV45J9NF5TEFZWYCRAX \
     -e AWS_SECRET_ACCESS_KEY=7xMqAiAHsf2UUjMH+EwICXlyJL9TO30m8leEaDsL \

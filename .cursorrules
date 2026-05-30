@@ -57,7 +57,7 @@ Respeitar `data-theme` (light, dark, contrastes). Componentes devem funcionar em
 
 ## 3. COMPONENTES
 
-- Reutilizar `@plane/ui`, `@plane/propel` (Button, etc.) antes de criar primitives novas.
+- Reutilizar `@operis/ui`, `@operis/propel` (Button, etc.) antes de criar primitives novas.
 - Seguir padrões de `apps/web/core/components/board/` e features Operis existentes.
 
 ## 4. CÓDIGO

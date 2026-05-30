@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { TLogoProps } from "@plane/types";
-import { sanitizeHTML } from "@plane/utils";
+import type { TLogoProps } from "@operis/types";
+import { sanitizeHTML } from "@operis/utils";
 // types
 import type { TCalloutBlockAttributes, TCalloutBlockEmojiAttributes, TCalloutBlockIconAttributes } from "./types";
 import { ECalloutAttributeNames } from "./types";

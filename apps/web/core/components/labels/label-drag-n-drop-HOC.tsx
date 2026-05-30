@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MutableRefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -14,10 +8,10 @@ import { attachInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree
 import { observer } from "mobx-react";
 import { createRoot } from "react-dom/client";
 // types
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import type { IIssueLabel, InstructionType } from "@plane/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import type { IIssueLabel, InstructionType } from "@operis/types";
 // ui
-import { DropIndicator } from "@plane/ui";
+import { DropIndicator } from "@operis/ui";
 // components
 import { useUserPermissions } from "@/hooks/store/user";
 import { LabelName } from "./label-block/label-name";

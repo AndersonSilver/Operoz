@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useCallback, useMemo } from "react";
 // types
 import { useParams } from "next/navigation";
-import type { TSupportedFilterTypeForUpdate } from "@plane/constants";
-import { EDraftIssuePaginationType } from "@plane/constants";
+import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
+import { EDraftIssuePaginationType } from "@operis/constants";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
@@ -19,8 +13,8 @@ import type {
   TLoader,
   TProfileViews,
   TSupportedFilterForUpdate,
-} from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+} from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 import { useIssues } from "./store/use-issues";
 
 export interface IssueActions {

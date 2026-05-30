@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, SIDEBAR_TRACKER_ELEMENTS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { AddWorkItemIcon } from "@plane/propel/icons";
-import type { TIssue } from "@plane/types";
+import { EUserPermissions, EUserPermissionsLevel, SIDEBAR_TRACKER_ELEMENTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { AddWorkItemIcon } from "@operis/propel/icons";
+import type { TIssue } from "@operis/types";
 // components
 import { CreateUpdateIssueModal } from "@/components/issues/issue-modal/modal";
 import { SidebarAddButton } from "@/components/sidebar/add-button";

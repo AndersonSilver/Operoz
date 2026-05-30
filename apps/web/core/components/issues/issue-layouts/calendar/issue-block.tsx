@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { RefObject } from "react";
 import { useState, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 // plane imports
-import { useOutsideClickDetector } from "@plane/hooks";
-import { Popover } from "@plane/propel/popover";
-import type { TIssue } from "@plane/types";
-import { cn } from "@plane/utils";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { Popover } from "@operis/propel/popover";
+import type { TIssue } from "@operis/types";
+import { cn } from "@operis/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";

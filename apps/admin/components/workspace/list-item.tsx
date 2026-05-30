@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 
 // plane internal packages
-import { WEB_BASE_URL } from "@plane/constants";
-import { NewTabIcon } from "@plane/propel/icons";
-import { setPromiseToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import { ToggleSwitch } from "@plane/ui";
-import { getFileURL } from "@plane/utils";
+import { WEB_BASE_URL } from "@operis/constants";
+import { NewTabIcon } from "@operis/propel/icons";
+import { setPromiseToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import { ToggleSwitch } from "@operis/ui";
+import { getFileURL } from "@operis/utils";
 // hooks
 import { useWorkspace } from "@/hooks/store";
 

@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, Fragment, useEffect } from "react";
 import { TwitterPicker } from "react-color";
 import { Controller, useForm } from "react-hook-form";
 import { usePopper } from "react-popper";
 import { Loader } from "lucide-react";
 import { Popover } from "@headlessui/react";
-import { PlusIcon, CloseIcon } from "@plane/propel/icons";
-import type { IIssueLabel } from "@plane/types";
+import { PlusIcon, CloseIcon } from "@operis/propel/icons";
+import type { IIssueLabel } from "@operis/types";
 // hooks
-import { Input } from "@plane/ui";
+import { Input } from "@operis/ui";
 // ui
 // types
 import type { TLabelOperations } from "./root";

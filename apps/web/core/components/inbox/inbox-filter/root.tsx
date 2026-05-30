@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { ListFilter } from "lucide-react";
-import { getButtonStyling } from "@plane/propel/button";
+import { getButtonStyling } from "@operis/propel/button";
 // plane imports
-import { ChevronDownIcon } from "@plane/propel/icons";
-import { cn } from "@plane/utils";
+import { ChevronDownIcon } from "@operis/propel/icons";
+import { cn } from "@operis/utils";
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 // hooks

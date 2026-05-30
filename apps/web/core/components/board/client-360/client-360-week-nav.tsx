@@ -1,22 +1,10 @@
-/**
-
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
-
- * SPDX-License-Identifier: AGPL-3.0-only
-
- * See the LICENSE file for details.
-
- */
-
-
-
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 
-import { IconButton } from "@plane/propel/icon-button";
+import { IconButton } from "@operis/propel/icon-button";
 
-import { cn, renderFormattedDate } from "@plane/utils";
+import { cn, renderFormattedDate } from "@operis/utils";
 
 import { defaultWeekPeriod, shiftWeekPeriod } from "@/components/board/client-360/client-360-utils";
 

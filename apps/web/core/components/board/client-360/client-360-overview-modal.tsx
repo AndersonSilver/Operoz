@@ -1,30 +1,18 @@
-/**
-
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
-
- * SPDX-License-Identifier: AGPL-3.0-only
-
- * See the LICENSE file for details.
-
- */
-
-
-
 import { useState } from "react";
 
 import { Dialog } from "@headlessui/react";
 
 import { LayoutDashboard, X } from "lucide-react";
 
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 
-import { IconButton } from "@plane/propel/icon-button";
+import { IconButton } from "@operis/propel/icon-button";
 
-import { Tooltip } from "@plane/propel/tooltip";
+import { Tooltip } from "@operis/propel/tooltip";
 
-import type { TClient360Client, TClient360Summary } from "@plane/types";
+import type { TClient360Client, TClient360Summary } from "@operis/types";
 
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 
 import { Client360OverviewContent } from "@/components/board/client-360/client-360-overview";
 

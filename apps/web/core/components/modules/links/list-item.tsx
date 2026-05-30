@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 
-import { MODULE_TRACKER_ELEMENTS } from "@plane/constants";
-import { CopyIcon, EditIcon, TrashIcon } from "@plane/propel/icons";
+import { MODULE_TRACKER_ELEMENTS } from "@operis/constants";
+import { CopyIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
 // plane types
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ILinkDetails } from "@plane/types";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ILinkDetails } from "@operis/types";
 // plane ui
-import { getIconForLink, copyTextToClipboard, calculateTimeAgo } from "@plane/utils";
+import { getIconForLink, copyTextToClipboard, calculateTimeAgo } from "@operis/utils";
 // helpers
 //
 // hooks

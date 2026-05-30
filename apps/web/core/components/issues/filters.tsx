@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { ChartNoAxesColumn, SlidersHorizontal } from "lucide-react";
 // plane imports
-import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@plane/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
+import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 // plane web imports

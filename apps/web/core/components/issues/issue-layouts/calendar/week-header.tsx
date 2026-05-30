@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
-import { EStartOfTheWeek } from "@plane/types";
-import { getOrderedDays } from "@plane/utils";
+import { EStartOfTheWeek } from "@operis/types";
+import { getOrderedDays } from "@operis/utils";
 import { DAYS_LIST } from "@/constants/calendar";
 // helpers
 // hooks

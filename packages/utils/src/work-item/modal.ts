@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { set } from "lodash-es";
 // plane imports
-import { DEFAULT_WORK_ITEM_FORM_VALUES } from "@plane/constants";
-import type { IPartialProject, ISearchIssueResponse, IState, TIssue } from "@plane/types";
+import { DEFAULT_WORK_ITEM_FORM_VALUES } from "@operis/constants";
+import type { IPartialProject, ISearchIssueResponse, IState, TIssue } from "@operis/types";
 
 export const getUpdateFormDataForReset = (projectId: string | null | undefined, formData: Partial<TIssue>) => ({
   ...DEFAULT_WORK_ITEM_FORM_VALUES,

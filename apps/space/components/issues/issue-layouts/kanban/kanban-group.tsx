@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MutableRefObject } from "react";
 import { forwardRef, useCallback, useRef, useState } from "react";
 import { observer } from "mobx-react";
@@ -15,8 +9,8 @@ import type {
   TIssueGroupByOptions,
   TPaginationData,
   TLoader,
-} from "@plane/types";
-import { cn } from "@plane/utils";
+} from "@operis/types";
+import { cn } from "@operis/utils";
 // hooks
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 // local imports

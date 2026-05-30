@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 // plane types
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { InstructionType, TSticky } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { InstructionType, TSticky } from "@operis/types";
 // plane utils
-import { isCommentEmpty } from "@plane/utils";
+import { isCommentEmpty } from "@operis/utils";
 // components
 import { STICKY_COLORS_LIST } from "@/components/editor/sticky-editor/color-palette";
 // hooks

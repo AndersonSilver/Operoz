@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { PanelLeft } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { LinkIcon, SearchIcon } from "@plane/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { LinkIcon, SearchIcon } from "@operis/propel/icons";
 // plane imports
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
-import { copyTextToClipboard } from "@plane/utils";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { copyTextToClipboard } from "@operis/utils";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

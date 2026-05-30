@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // icons
-import { DATE_BEFORE_FILTER_OPTIONS } from "@plane/constants";
-import { CloseIcon } from "@plane/propel/icons";
+import { DATE_BEFORE_FILTER_OPTIONS } from "@operis/constants";
+import { CloseIcon } from "@operis/propel/icons";
 // plane constants
-import { renderFormattedDate, capitalizeFirstLetter } from "@plane/utils";
+import { renderFormattedDate, capitalizeFirstLetter } from "@operis/utils";
 // helpers
 type Props = {
   editable: boolean | undefined;

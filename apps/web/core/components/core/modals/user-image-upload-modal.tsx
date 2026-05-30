@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useDropzone } from "react-dropzone";
 // plane imports
-import { ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@plane/constants";
-import { Button } from "@plane/propel/button";
-import { UserCirclePropertyIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { EFileAssetType } from "@plane/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { getAssetIdFromUrl, getFileURL, checkURLValidity } from "@plane/utils";
+import { ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@operis/constants";
+import { Button } from "@operis/propel/button";
+import { UserCirclePropertyIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { EFileAssetType } from "@operis/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { getAssetIdFromUrl, getFileURL, checkURLValidity } from "@operis/utils";
 // services
 import { FileService } from "@/services/file.service";
 const fileService = new FileService();

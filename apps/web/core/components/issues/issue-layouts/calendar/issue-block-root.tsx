@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import { observer } from "mobx-react";
 // plane helpers
-import { useOutsideClickDetector } from "@plane/hooks";
+import { useOutsideClickDetector } from "@operis/hooks";
 // components
-import { cn, renderFormattedPayloadDate } from "@plane/utils";
+import { cn, renderFormattedPayloadDate } from "@operis/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TRenderQuickActions } from "../list/list-view-types";
 import { HIGHLIGHT_CLASS } from "../utils";

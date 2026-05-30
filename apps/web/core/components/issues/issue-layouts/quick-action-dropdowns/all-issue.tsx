@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ARCHIVABLE_STATE_GROUPS } from "@plane/constants";
-import type { TIssue } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
-import { ContextMenu, CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { ARCHIVABLE_STATE_GROUPS } from "@operis/constants";
+import type { TIssue } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
+import { ContextMenu, CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";

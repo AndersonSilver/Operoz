@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { range } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
 import { Eye, EyeOff, RefreshCw } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { CopyIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IWebhook } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { CopyIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IWebhook } from "@operis/types";
 // ui
-import { csvDownload, copyTextToClipboard } from "@plane/utils";
+import { csvDownload, copyTextToClipboard } from "@operis/utils";
 // hooks
 import { useWebhook } from "@/hooks/store/use-webhook";
 import { useWorkspace } from "@/hooks/store/use-workspace";

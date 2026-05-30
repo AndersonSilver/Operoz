@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { useTranslation } from "@plane/i18n";
-import { CloseIcon } from "@plane/propel/icons";
-import type { TModuleDisplayFilters, TModuleFilters } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { CloseIcon } from "@operis/propel/icons";
+import type { TModuleDisplayFilters, TModuleFilters } from "@operis/types";
 // components
-import { Header, EHeaderVariant, Tag } from "@plane/ui";
-import { replaceUnderscoreIfSnakeCase } from "@plane/utils";
+import { Header, EHeaderVariant, Tag } from "@operis/ui";
+import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
 import { AppliedDateFilters, AppliedMembersFilters, AppliedStatusFilters } from "@/components/modules";
 // helpers
 // types

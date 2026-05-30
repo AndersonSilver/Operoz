@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -11,12 +5,12 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 // ui
 import { LogOut } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { Button, getButtonStyling } from "@plane/propel/button";
-import { PlaneLogo } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import { cn } from "@plane/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { Button, getButtonStyling } from "@operis/propel/button";
+import { PlaneLogo } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import { cn } from "@operis/utils";
 // assets
 import WorkSpaceNotAvailable from "@/app/assets/workspace/workspace-not-available.png?url";
 // components

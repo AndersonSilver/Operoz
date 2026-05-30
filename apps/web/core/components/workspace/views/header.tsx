@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
 // plane imports
-import { DEFAULT_GLOBAL_VIEWS_LIST, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { PlusIcon } from "@plane/propel/icons";
-import type { TStaticViewTypes } from "@plane/types";
-import { Header, EHeaderVariant } from "@plane/ui";
+import { DEFAULT_GLOBAL_VIEWS_LIST, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { PlusIcon } from "@operis/propel/icons";
+import type { TStaticViewTypes } from "@operis/types";
+import { Header, EHeaderVariant } from "@operis/ui";
 // hooks
 import { useGlobalView } from "@/hooks/store/use-global-view";
 import { useUserPermissions } from "@/hooks/store/user";

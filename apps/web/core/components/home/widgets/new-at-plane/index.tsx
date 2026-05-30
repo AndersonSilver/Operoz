@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import Link from "next/link";
-import { useTranslation } from "@plane/i18n";
-import type { THomeWidgetProps } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import type { THomeWidgetProps } from "@operis/types";
 import { WidgetSection } from "../shared/widget-section";
 
 const RELEASE_LINKS = [

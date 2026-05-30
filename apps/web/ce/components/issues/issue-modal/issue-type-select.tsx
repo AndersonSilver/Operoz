@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, type Control, type UseFormSetValue, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import { useParams } from "react-router";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import type { TBulkIssueProperties, TIssue } from "@plane/types";
-import { CustomSelect } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import type { TBulkIssueProperties, TIssue } from "@operis/types";
+import { CustomSelect } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { issueFormControlBaseClass, issueFormControlWidthClass, type IssueFormControlWidth } from "./issue-form-field";
 
@@ -25,7 +19,7 @@ export type TIssueTypeSelectProps<T extends Partial<TIssueFields>> = {
   control: Control<T>;
   setValue?: UseFormSetValue<T>;
   projectId: string | null;
-  editorRef?: React.MutableRefObject<import("@plane/editor").EditorRefApi | null>;
+  editorRef?: React.MutableRefObject<import("@operis/editor").EditorRefApi | null>;
   disabled?: boolean;
   variant?: TIssueTypeDropdownVariant;
   placeholder?: string;

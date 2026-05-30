@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 // ui
-import { Button } from "@plane/propel/button";
-import type { IExportData } from "@plane/types";
+import { Button } from "@operis/propel/button";
+import type { IExportData } from "@operis/types";
 // helpers
-import { getDate, renderFormattedDate } from "@plane/utils";
+import { getDate, renderFormattedDate } from "@operis/utils";
 // types
 
 type Props = {

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TClient360DetailResponse } from "@plane/types";
-import { renderFormattedDate } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TClient360DetailResponse } from "@operis/types";
+import { renderFormattedDate } from "@operis/utils";
 import { buildClient360DetailAiPayload } from "@/components/board/client-360/build-client-360-ai-payload";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { AIService } from "@/services/ai.service";

@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef } from "react";
 import { observer } from "mobx-react";
 // types
-import type { IIssueDisplayProperties, TIssue } from "@plane/types";
+import type { IIssueDisplayProperties, TIssue } from "@operis/types";
 // components
 import { SPREADSHEET_COLUMNS } from "@/plane-web/components/issues/issue-layouts/utils";
 import { shouldRenderColumn } from "@/helpers/issue-filter.helper";

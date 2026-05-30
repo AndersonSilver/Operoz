@@ -7,7 +7,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-// Monorepo root — required so Vite can resolve workspace packages (e.g. @plane/propel/dist) outside apps/web
+// Monorepo root — required so Vite can resolve workspace packages (e.g. @operis/propel/dist) outside apps/web
 const workspaceRoot = path.resolve(__dirname, "../..");
 
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
@@ -45,7 +45,7 @@ export default defineConfig(() => ({
   resolve: {
     alias: {
       // Use workspace source so SSR/dev never serves a stale packages/utils/dist (e.g. old isomorphic-dompurify).
-      "@plane/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
+      "@operis/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
       ...prosemirrorAliases,
       // Next.js compatibility shims used within web
       "next/link": path.resolve(__dirname, "app/compat/next/link.tsx"),

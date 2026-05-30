@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 import { mutate } from "swr";
 // types
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { CycleDateCheckData, ICycle, TCycleTabOptions } from "@plane/types";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { CycleDateCheckData, ICycle, TCycleTabOptions } from "@operis/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 // hooks
-import { renderFormattedPayloadDate } from "@plane/utils";
+import { renderFormattedPayloadDate } from "@operis/utils";
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useProject } from "@/hooks/store/use-project";
 import useKeypress from "@/hooks/use-keypress";

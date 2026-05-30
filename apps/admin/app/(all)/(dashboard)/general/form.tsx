@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Telescope } from "lucide-react";
 // plane imports
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IInstance, IInstanceAdmin } from "@plane/types";
-import { Input, ToggleSwitch } from "@plane/ui";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IInstance, IInstanceAdmin } from "@operis/types";
+import { Input, ToggleSwitch } from "@operis/ui";
 // components
 import { ControllerInput } from "@/components/common/controller-input";
 // hooks

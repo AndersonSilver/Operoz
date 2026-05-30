@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 // plane internal packages
-import { Tooltip } from "@plane/propel/tooltip";
-import { cn } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import { cn } from "@operis/utils";
 // hooks
 import { useTheme } from "@/hooks/store";
 import { useSidebarMenu } from "@/hooks/use-sidebar-menu";

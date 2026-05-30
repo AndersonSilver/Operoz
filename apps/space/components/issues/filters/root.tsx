@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { cloneDeep } from "lodash-es";
 import { observer } from "mobx-react";
 import { useRouter } from "next/navigation";
 // constants
-import { ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@plane/constants";
+import { ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@operis/constants";
 // components
 import { FiltersDropdown } from "@/components/issues/filters/helpers/dropdown";
 import { FilterSelection } from "@/components/issues/filters/selection";

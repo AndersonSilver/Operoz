@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Earth } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@plane/constants";
-import { useLocalStorage } from "@plane/hooks";
-import { LockIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IProjectView } from "@plane/types";
-import { EViewAccess } from "@plane/types";
-import { FavoriteStar } from "@plane/ui";
-import { getPublishViewLink } from "@plane/utils";
+import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operis/constants";
+import { useLocalStorage } from "@operis/hooks";
+import { LockIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IProjectView } from "@operis/types";
+import { EViewAccess } from "@operis/types";
+import { FavoriteStar } from "@operis/ui";
+import { getPublishViewLink } from "@operis/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectView } from "@/hooks/store/use-project-view";

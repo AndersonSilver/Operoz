@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Ref } from "react";
 import React, { useCallback, useEffect, useState, useRef, Fragment } from "react";
 import type { Placement } from "@popperjs/core";
@@ -11,12 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 import { usePopper } from "react-popper";
 import { AlertCircle } from "lucide-react";
 import { Popover, Transition } from "@headlessui/react";
-import type { EditorRefApi } from "@plane/editor";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Input } from "@plane/ui";
-import { cn } from "@plane/utils";
+import type { EditorRefApi } from "@operis/editor";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Input } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 import { AIService } from "@/services/ai.service";
 

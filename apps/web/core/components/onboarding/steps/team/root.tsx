@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import type {
@@ -19,14 +13,14 @@ import { usePopper } from "react-popper";
 import { XCircle } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 // plane imports
-import type { EUserPermissions } from "@plane/constants";
-import { ROLE, ROLE_DETAILS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { PlusIcon, CheckIcon, ChevronDownIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { EOnboardingSteps } from "@plane/types";
-import { Input, Spinner } from "@plane/ui";
+import type { EUserPermissions } from "@operis/constants";
+import { ROLE, ROLE_DETAILS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { PlusIcon, CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { EOnboardingSteps } from "@operis/types";
+import { Input, Spinner } from "@operis/ui";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 // services

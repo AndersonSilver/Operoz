@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { clone, update, unset, orderBy, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import { EDraftIssuePaginationType } from "@plane/constants";
+import { EDraftIssuePaginationType } from "@operis/constants";
 import type {
   TWorkspaceDraftIssue,
   TWorkspaceDraftPaginationInfo,
@@ -21,8 +15,8 @@ import type {
   ViewFlags,
   TIssue,
   TBulkOperationsPayload,
-} from "@plane/types";
-import { getCurrentDateTimeInISO, convertToISODateString } from "@plane/utils";
+} from "@operis/types";
+import { getCurrentDateTimeInISO, convertToISODateString } from "@operis/utils";
 // services
 import workspaceDraftService from "@/services/issue/workspace_draft.service";
 // types

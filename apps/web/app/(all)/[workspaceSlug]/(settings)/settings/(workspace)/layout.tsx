@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { Outlet } from "react-router";
@@ -12,8 +6,8 @@ import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view
 import { getWorkspaceActivePath, isBoardDetailSettingsPath, pathnameToAccessKey } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 // plane imports
-import { WORKSPACE_SETTINGS_ACCESS } from "@plane/constants";
-import type { EUserWorkspaceRoles } from "@plane/types";
+import { WORKSPACE_SETTINGS_ACCESS } from "@operis/constants";
+import type { EUserWorkspaceRoles } from "@operis/types";
 // components
 import { WorkspaceSettingsSidebarRoot } from "@/components/settings/workspace/sidebar";
 // hooks

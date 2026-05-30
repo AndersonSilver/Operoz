@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import Link from "next/link";
 import { useParams } from "next/navigation";
 
 // ui
-import { useTranslation } from "@plane/i18n";
-import { UserCirclePropertyIcon, CreateIcon, LayerStackIcon } from "@plane/propel/icons";
-import type { IUserProfileData } from "@plane/types";
-import { Loader, Card, ECardSpacing, ECardDirection } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import { UserCirclePropertyIcon, CreateIcon, LayerStackIcon } from "@operis/propel/icons";
+import type { IUserProfileData } from "@operis/types";
+import { Loader, Card, ECardSpacing, ECardDirection } from "@operis/ui";
 // types
 
 type Props = {

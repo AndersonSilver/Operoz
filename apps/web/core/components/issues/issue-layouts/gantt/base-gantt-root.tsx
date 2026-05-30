@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBlockUpdateData, TIssue } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
-import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@plane/types";
-import { renderFormattedPayloadDate } from "@plane/utils";
+import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBlockUpdateData, TIssue } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
+import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
+import { renderFormattedPayloadDate } from "@operis/utils";
 // components
 import { TimeLineTypeContext } from "@/components/gantt-chart/contexts";
 import { GanttChartRoot } from "@/components/gantt-chart/root";

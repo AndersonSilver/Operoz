@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { Link } from "react-router";
 import { Search } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBoardMember } from "@plane/types";
-import { Avatar, Input, Loader } from "@plane/ui";
-import { getFileURL } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBoardMember } from "@operis/types";
+import { Avatar, Input, Loader } from "@operis/ui";
+import { getFileURL } from "@operis/utils";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardAccess } from "@/hooks/store/use-board-access";
 import { BoardAccessAddMemberModal } from "./board-access-add-member-modal";

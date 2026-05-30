@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRouter } from "next/navigation";
 // types
-import type { TIssue } from "@plane/types";
-import { EIssueServiceType } from "@plane/types";
+import type { TIssue } from "@operis/types";
+import { EIssueServiceType } from "@operis/types";
 // helpers
-import { generateWorkItemLink } from "@plane/utils";
+import { generateWorkItemLink } from "@operis/utils";
 // hooks
 import { useIssueDetail } from "./store/use-issue-detail";
 import { useProject } from "./store/use-project";

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 import { MoveRight } from "lucide-react";
 import { Listbox, Transition } from "@headlessui/react";
 // ui
-import { LinkIcon, CenterPanelIcon, FullScreenPanelIcon, SidePanelIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { LinkIcon, CenterPanelIcon, FullScreenPanelIcon, SidePanelIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 // helpers
 import { copyTextToClipboard } from "@/helpers/string.helper";
 // hooks

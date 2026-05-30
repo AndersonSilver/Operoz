@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { xor } from "lodash-es";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Combobox } from "@headlessui/react";
 // plane ui
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { SearchIcon, CloseIcon } from "@plane/propel/icons";
-import { Checkbox, EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { Checkbox, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { cn } from "@operis/utils";
 // assets
 import darkProjectAsset from "@/app/assets/empty-state/search/project-dark.webp?url";
 import lightProjectAsset from "@/app/assets/empty-state/search/project-light.webp?url";

@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { ImageIcon } from "lucide-react";
 // plane imports
-import { E_PASSWORD_STRENGTH } from "@plane/constants";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IUser } from "@plane/types";
-import { EOnboardingSteps } from "@plane/types";
-import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@plane/utils";
+import { E_PASSWORD_STRENGTH } from "@operis/constants";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IUser } from "@operis/types";
+import { EOnboardingSteps } from "@operis/types";
+import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@operis/utils";
 // components
 import { UserImageUploadModal } from "@/components/core/modals/user-image-upload-modal";
 // hooks

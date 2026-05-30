@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { useTranslation } from "@plane/i18n";
-import type { TCustomFieldType } from "@plane/types";
-import { cn } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import type { TCustomFieldType } from "@operis/types";
+import { cn } from "@operis/ui";
 import { JIRA_CUSTOM_FIELD_TYPES } from "@/constants/board-custom-field-types";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 

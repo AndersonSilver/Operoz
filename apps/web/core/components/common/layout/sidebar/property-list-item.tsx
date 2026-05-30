@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 type TSidebarPropertyListItemProps = {
   icon: React.FC<{ className?: string }>;

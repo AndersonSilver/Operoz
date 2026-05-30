@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareUser } from "lucide-react";
 // plane types
-import { EEstimateSystem } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { MembersPropertyIcon, WorkItemsIcon } from "@plane/propel/icons";
-import type { ICycle } from "@plane/types";
+import { EEstimateSystem } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { MembersPropertyIcon, WorkItemsIcon } from "@operis/propel/icons";
+import type { ICycle } from "@operis/types";
 // plane ui
-import { Avatar, AvatarGroup, TextArea } from "@plane/ui";
+import { Avatar, AvatarGroup, TextArea } from "@operis/ui";
 // helpers
-import { getFileURL } from "@plane/utils";
+import { getFileURL } from "@operis/utils";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useMember } from "@/hooks/store/use-member";

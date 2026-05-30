@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import { EMPTY_OPERATOR_LABEL } from "@plane/constants";
+import { EMPTY_OPERATOR_LABEL } from "@operis/constants";
 import type {
   TSupportedOperators,
   TFilterConfig,
@@ -16,15 +10,15 @@ import type {
   TFilterValue,
   TOperatorSpecificConfigs,
   TAllAvailableOperatorsForDisplay,
-} from "@plane/types";
-import { FILTER_FIELD_TYPE } from "@plane/types";
+} from "@operis/types";
+import { FILTER_FIELD_TYPE } from "@operis/types";
 import {
   getOperatorLabel,
   isDateFilterType,
   getDateOperatorLabel,
   isDateFilterOperator,
   getOperatorForPayload,
-} from "@plane/utils";
+} from "@operis/utils";
 
 type TOperatorOptionForDisplay = {
   value: TAllAvailableOperatorsForDisplay;

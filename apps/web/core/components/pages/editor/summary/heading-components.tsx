@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { IMarking } from "@plane/editor";
-import { cn } from "@plane/utils";
+import type { IMarking } from "@operis/editor";
+import { cn } from "@operis/utils";
 
 export type THeadingComponentProps = {
   marking: IMarking;

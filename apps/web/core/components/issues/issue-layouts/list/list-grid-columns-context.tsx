@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "@plane/hooks";
-import type { IIssueDisplayProperties } from "@plane/types";
+import { useLocalStorage } from "@operis/hooks";
+import type { IIssueDisplayProperties } from "@operis/types";
 import {
   buildListLayoutGridTemplateColumns,
   buildListPropertyColumns,

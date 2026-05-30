@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 
 // icons
-import { CloseIcon } from "@plane/propel/icons";
-import type { IIssueLabel } from "@plane/types";
+import { CloseIcon } from "@operis/propel/icons";
+import type { IIssueLabel } from "@operis/types";
 // types
 
 type Props = {

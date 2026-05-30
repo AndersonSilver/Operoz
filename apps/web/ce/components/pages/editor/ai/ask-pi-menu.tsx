@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { CircleArrowUp, CornerDownRight, RefreshCcw, Sparkles } from "lucide-react";
 // ui
-import { Tooltip } from "@plane/propel/tooltip";
+import { Tooltip } from "@operis/propel/tooltip";
 // components
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 // helpers
 // hooks

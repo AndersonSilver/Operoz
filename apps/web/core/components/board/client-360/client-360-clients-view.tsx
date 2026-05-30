@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import {
   ArrowDown,
@@ -15,11 +9,11 @@ import {
   FileText,
   Headphones,
 } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import type { TClient360Client } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import type { TClient360Client } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";
 import {

@@ -1,24 +1,18 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
 // types
-import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@plane/constants";
-import { Button } from "@plane/propel/button";
-import { GlobeIcon, NewTabIcon, CheckIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TProjectPublishLayouts, TProjectPublishSettings } from "@plane/types";
+import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operis/constants";
+import { Button } from "@operis/propel/button";
+import { GlobeIcon, NewTabIcon, CheckIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TProjectPublishLayouts, TProjectPublishSettings } from "@operis/types";
 // ui
-import { Loader, ToggleSwitch, CustomSelect, ModalCore, EModalWidth } from "@plane/ui";
+import { Loader, ToggleSwitch, CustomSelect, ModalCore, EModalWidth } from "@operis/ui";
 // helpers
-import { copyTextToClipboard } from "@plane/utils";
+import { copyTextToClipboard } from "@operis/utils";
 // hooks
 import { useProjectPublish } from "@/hooks/store/use-project-publish";
 

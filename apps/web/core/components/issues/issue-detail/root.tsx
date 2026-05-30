@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@plane/propel/toast";
-import type { TIssue } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
+import type { TIssue } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 // assets
 import emptyIssue from "@/app/assets/empty-state/issue.svg?url";
 // components

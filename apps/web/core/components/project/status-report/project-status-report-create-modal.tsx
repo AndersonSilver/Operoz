@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { LucideIcon } from "lucide-react";
 import {
   CalendarRange,
@@ -15,12 +9,12 @@ import {
   Layers3,
   Send,
 } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { IconButton } from "@plane/propel/icon-button";
-import type { IModule } from "@plane/types";
-import { CustomSelect, EModalPosition, EModalWidth, ModalCore, TextArea } from "@plane/ui";
-import { cn, renderFormattedPeriodDatesLong } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { IconButton } from "@operis/propel/icon-button";
+import type { IModule } from "@operis/types";
+import { CustomSelect, EModalPosition, EModalWidth, ModalCore, TextArea } from "@operis/ui";
+import { cn, renderFormattedPeriodDatesLong } from "@operis/utils";
 
 type Props = {
   isOpen: boolean;

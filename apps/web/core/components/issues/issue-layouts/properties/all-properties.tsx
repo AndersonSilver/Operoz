@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode, SyntheticEvent } from "react";
 import { useCallback, useMemo } from "react";
 import { xor } from "lodash-es";
@@ -12,11 +6,11 @@ import { useParams } from "next/navigation";
 // icons
 import { Paperclip } from "lucide-react";
 // i18n
-import { useTranslation } from "@plane/i18n";
-import { LinkIcon, StartDatePropertyIcon, ViewsIcon, DueDatePropertyIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TIssue, IIssueDisplayProperties, TIssuePriorities } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { LinkIcon, StartDatePropertyIcon, ViewsIcon, DueDatePropertyIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TIssue, IIssueDisplayProperties, TIssuePriorities } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 // ui
 import {
   cn,
@@ -24,7 +18,7 @@ import {
   renderFormattedPayloadDate,
   generateWorkItemLink,
   shouldHighlightIssueDueDate,
-} from "@plane/utils";
+} from "@operis/utils";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";

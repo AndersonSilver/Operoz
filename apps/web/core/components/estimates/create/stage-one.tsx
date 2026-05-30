@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Info } from "lucide-react";
 // plane imports
-import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TEstimateSystemKeys } from "@plane/types";
+import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TEstimateSystemKeys } from "@operis/types";
 // components
-import { convertMinutesToHoursMinutesString } from "@plane/utils";
+import { convertMinutesToHoursMinutesString } from "@operis/utils";
 // plane web imports
 import { isEstimateSystemEnabled } from "@/plane-web/components/estimates/helper";
 import { UpgradeBadge } from "@/plane-web/components/workspace/upgrade-badge";

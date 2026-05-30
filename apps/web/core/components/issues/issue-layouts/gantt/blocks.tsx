@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { Popover } from "@plane/propel/popover";
-import { Tooltip } from "@plane/propel/tooltip";
-import { ControlLink } from "@plane/ui";
-import { EIssuesStoreType } from "@plane/types";
-import { findTotalDaysInRange, generateWorkItemLink } from "@plane/utils";
+import { Popover } from "@operis/propel/popover";
+import { Tooltip } from "@operis/propel/tooltip";
+import { ControlLink } from "@operis/ui";
+import { EIssuesStoreType } from "@operis/types";
+import { findTotalDaysInRange, generateWorkItemLink } from "@operis/utils";
 // components
 import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
 // hooks

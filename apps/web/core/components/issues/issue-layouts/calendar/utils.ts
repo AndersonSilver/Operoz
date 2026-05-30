@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { addDays } from "date-fns/addDays";
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
-import type { IIssueDisplayFilterOptions, IssuePaginationOptions } from "@plane/types";
-import type { TIssue } from "@plane/types";
-import { getDate, renderFormattedPayloadDate } from "@plane/utils";
+import type { IIssueDisplayFilterOptions, IssuePaginationOptions } from "@operis/types";
+import type { TIssue } from "@operis/types";
+import { getDate, renderFormattedPayloadDate } from "@operis/utils";
 import type { ICalendarStore } from "@/store/issue/issue_calendar_view.store";
 
 type TIssuesFilterWithGet = {

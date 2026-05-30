@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
-import { stringToEmoji } from "@plane/propel/emoji-icon-picker";
-import { EmojiReactionGroup, EmojiReactionPicker } from "@plane/propel/emoji-reaction";
-import type { EmojiReactionType } from "@plane/propel/emoji-reaction";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IUser } from "@plane/types";
+import { stringToEmoji } from "@operis/propel/emoji-icon-picker";
+import { EmojiReactionGroup, EmojiReactionPicker } from "@operis/propel/emoji-reaction";
+import type { EmojiReactionType } from "@operis/propel/emoji-reaction";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IUser } from "@operis/types";
 // hooks
 // ui
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // helpers
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";

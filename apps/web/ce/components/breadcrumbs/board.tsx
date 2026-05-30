@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { Breadcrumbs } from "@plane/ui";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { Breadcrumbs } from "@operis/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";

@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { AlertTriangle } from "lucide-react";
 import { Dialog, Transition } from "@headlessui/react";
-import { Button } from "@plane/propel/button";
+import { Button } from "@operis/propel/button";
 import { useUser } from "@/hooks/store/user";
 import type { Props } from "./confirm-workspace-member-remove";
 

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
@@ -17,15 +11,15 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { FolderPlus } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-import { IS_FAVORITE_MENU_OPEN } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { ChevronRightIcon } from "@plane/propel/icons";
+import { IS_FAVORITE_MENU_OPEN } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { ChevronRightIcon } from "@operis/propel/icons";
 // ui
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IFavorite } from "@plane/types";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IFavorite } from "@operis/types";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import useLocalStorage from "@/hooks/use-local-storage";
@@ -35,7 +29,7 @@ import { FavoriteRoot } from "./favorite-items";
 import type { TargetData } from "./favorites.helpers";
 import { getInstructionFromPayload } from "./favorites.helpers";
 import { NewFavoriteFolder } from "./new-fav-folder";
-import { IconButton } from "@plane/propel/icon-button";
+import { IconButton } from "@operis/propel/icon-button";
 
 export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
   // states

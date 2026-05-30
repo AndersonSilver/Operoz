@@ -1,28 +1,22 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { ETabIndices, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@plane/propel/emoji-icon-picker";
-import { ViewsIcon } from "@plane/propel/icons";
+import { ETabIndices, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
+import { ViewsIcon } from "@operis/propel/icons";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
   IProjectView,
   EIssueLayoutTypes,
   IIssueFilters,
-} from "@plane/types";
-import { EViewAccess, EIssuesStoreType } from "@plane/types";
-import { Input, TextArea } from "@plane/ui";
-import { getComputedDisplayFilters, getComputedDisplayProperties, getTabIndex } from "@plane/utils";
+} from "@operis/types";
+import { EViewAccess, EIssuesStoreType } from "@operis/types";
+import { Input, TextArea } from "@operis/ui";
+import { getComputedDisplayFilters, getComputedDisplayProperties, getTabIndex } from "@operis/utils";
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";

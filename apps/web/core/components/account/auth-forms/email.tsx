@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FormEvent } from "react";
 import { useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // icons
 import { CircleAlert, XCircle } from "lucide-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import type { IEmailCheckData } from "@plane/types";
-import { Input, Spinner } from "@plane/ui";
-import { cn, checkEmailValidity } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import type { IEmailCheckData } from "@operis/types";
+import { Input, Spinner } from "@operis/ui";
+import { cn, checkEmailValidity } from "@operis/utils";
 // helpers
 type TAuthEmailForm = {
   defaultEmail: string;

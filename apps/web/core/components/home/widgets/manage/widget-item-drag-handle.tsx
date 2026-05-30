@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 // ui
-import { DragHandle } from "@plane/ui";
+import { DragHandle } from "@operis/ui";
 // helper
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 type Props = {
   sort_order: number | null;

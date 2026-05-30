@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // hoc/withDockItems.tsx
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { PlaneNewIcon } from "@plane/propel/icons";
+import { PlaneNewIcon } from "@operis/propel/icons";
 import type { AppSidebarItemData } from "@/components/sidebar/sidebar-item";
 import { useWorkspacePaths } from "@/hooks/use-workspace-paths";
 

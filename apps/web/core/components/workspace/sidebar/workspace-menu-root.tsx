@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Fragment, useEffect, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -12,12 +6,12 @@ import { CirclePlus, LogOut, Mails } from "lucide-react";
 // ui
 import { Menu, Transition } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { ChevronDownIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IWorkspace } from "@plane/types";
-import { Loader } from "@plane/ui";
-import { orderWorkspacesList, cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { ChevronDownIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IWorkspace } from "@operis/types";
+import { Loader } from "@operis/ui";
+import { orderWorkspacesList, cn } from "@operis/utils";
 // helpers
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 // hooks

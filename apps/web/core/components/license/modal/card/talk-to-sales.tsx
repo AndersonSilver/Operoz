@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // types
 // plane imports
-import { getButtonStyling } from "@plane/propel/button";
-import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@plane/types";
-import { Loader } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { getButtonStyling } from "@operis/propel/button";
+import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operis/types";
+import { Loader } from "@operis/ui";
+import { cn } from "@operis/utils";
 // local imports
 import { BasePaidPlanCard } from "./base-paid-plan-card";
 

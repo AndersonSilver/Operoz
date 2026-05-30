@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import type { TListGridResizableColumn } from "../properties/list-property-columns";
 
 type Props = {

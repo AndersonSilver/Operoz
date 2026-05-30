@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import {
@@ -15,14 +9,14 @@ import {
   History,
   ScrollText,
 } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { IconButton } from "@plane/propel/icon-button";
-import { Tooltip } from "@plane/propel/tooltip";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBoardStatusReport, IModule, IProject } from "@plane/types";
-import { Avatar, CustomSelect } from "@plane/ui";
-import { cn, getFileURL, renderFormattedDate } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { IconButton } from "@operis/propel/icon-button";
+import { Tooltip } from "@operis/propel/tooltip";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBoardStatusReport, IModule, IProject } from "@operis/types";
+import { Avatar, CustomSelect } from "@operis/ui";
+import { cn, getFileURL, renderFormattedDate } from "@operis/utils";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import { ProjectStatusReportCreateModal } from "@/components/project/status-report/project-status-report-create-modal";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";

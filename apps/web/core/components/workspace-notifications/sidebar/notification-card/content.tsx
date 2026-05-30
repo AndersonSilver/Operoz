@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 // plane imports
-import type { TNotification } from "@plane/types";
+import type { TNotification } from "@operis/types";
 import {
   convertMinutesToHoursMinutesString,
   renderFormattedDate,
   sanitizeCommentForNotification,
   stripAndTruncateHTML,
-} from "@plane/utils";
+} from "@operis/utils";
 // components
 import { LiteTextEditor } from "@/components/editor/lite-text";
 import {

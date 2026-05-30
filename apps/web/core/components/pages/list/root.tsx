@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // types
-import type { TPageNavigationTabs } from "@plane/types";
+import type { TPageNavigationTabs } from "@operis/types";
 // components
 import { ListLayout } from "@/components/core/list";
 // plane web hooks

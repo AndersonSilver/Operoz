@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { ListFilterPlus } from "lucide-react";
 import { Transition } from "@headlessui/react";
 // plane imports
-import { Button } from "@plane/propel/button";
-import type { IFilterInstance } from "@plane/shared-state";
-import type { TExternalFilter, TFilterProperty } from "@plane/types";
-import { cn, EHeaderVariant, Header, Loader } from "@plane/ui";
+import { Button } from "@operis/propel/button";
+import type { IFilterInstance } from "@operis/shared-state";
+import type { TExternalFilter, TFilterProperty } from "@operis/types";
+import { cn, EHeaderVariant, Header, Loader } from "@operis/ui";
 import { BOARD_HUB_GLASS_BAR, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // local imports
 import type { TAddFilterButtonProps } from "./add-filters/button";

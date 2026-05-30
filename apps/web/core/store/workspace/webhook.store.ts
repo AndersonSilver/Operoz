@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // mobx
 import { action, observable, makeObservable, computed, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { IWebhook } from "@plane/types";
+import type { IWebhook } from "@operis/types";
 // services
 import { WebhookService } from "@/services/webhook.service";
 // store

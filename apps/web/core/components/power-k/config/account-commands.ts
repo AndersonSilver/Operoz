@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { LogOut, Mails } from "lucide-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
+import { useTranslation } from "@operis/i18n";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

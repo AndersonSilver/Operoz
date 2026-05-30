@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { memo } from "react";
 import { ALargeSmall, Ban } from "lucide-react";
 import { Popover } from "@headlessui/react";
 // plane editor
-import { COLORS_LIST } from "@plane/editor";
-import type { TEditorCommands } from "@plane/editor";
+import { COLORS_LIST } from "@operis/editor";
+import type { TEditorCommands } from "@operis/editor";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 type Props = {
   handleColorSelect: (

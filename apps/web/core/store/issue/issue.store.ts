@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { set, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { TIssue } from "@plane/types";
+import type { TIssue } from "@operis/types";
 // helpers
-import { getCurrentDateTimeInISO } from "@plane/utils";
+import { getCurrentDateTimeInISO } from "@operis/utils";
 import { rootStore } from "@/lib/store-context";
 // services
 import { IssueService } from "@/services/issue";

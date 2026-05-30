@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import {
   StatePropertyIcon,
@@ -12,11 +6,11 @@ import {
   DueDatePropertyIcon,
   LabelPropertyIcon,
   DuplicatePropertyIcon,
-} from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TInboxDuplicateIssueDetails, TIssue } from "@plane/types";
-import { ControlLink } from "@plane/ui";
-import { getDate, renderFormattedPayloadDate, generateWorkItemLink } from "@plane/utils";
+} from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TInboxDuplicateIssueDetails, TIssue } from "@operis/types";
+import { ControlLink } from "@operis/ui";
+import { getDate, renderFormattedPayloadDate, generateWorkItemLink } from "@operis/utils";
 // components
 import { DateDropdown } from "@/components/dropdowns/date";
 import { IntakeStateDropdown } from "@/components/dropdowns/intake-state/dropdown";

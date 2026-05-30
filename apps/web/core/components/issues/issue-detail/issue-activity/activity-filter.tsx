@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
 // plane imports
-import type { TActivityFilters, TActivityFilterOption } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { IconButton } from "@plane/propel/icon-button";
-import { CheckIcon } from "@plane/propel/icons";
-import { PopoverMenu } from "@plane/ui";
+import type { TActivityFilters, TActivityFilterOption } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { IconButton } from "@operis/propel/icon-button";
+import { CheckIcon } from "@operis/propel/icons";
+import { PopoverMenu } from "@operis/ui";
 // helper
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // constants
 
 type TActivityFilter = {

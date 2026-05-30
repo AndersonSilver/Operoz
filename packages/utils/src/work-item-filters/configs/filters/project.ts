@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { TFilterProperty } from "@plane/types";
-import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@plane/types";
+import type { TFilterProperty } from "@operis/types";
+import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operis/types";
 // local imports
 import type { TCreateFilterConfig, TCreateProjectFilterParams } from "../../../rich-filters";
 import { createFilterConfig, createOperatorConfigEntry, getProjectMultiSelectConfig } from "../../../rich-filters";

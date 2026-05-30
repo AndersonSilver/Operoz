@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { IWorkItemFilterInstance } from "@plane/shared-state";
-import type { EIssuesStoreType } from "@plane/types";
+import type { IWorkItemFilterInstance } from "@operis/shared-state";
+import type { EIssuesStoreType } from "@operis/types";
 // local imports
 import { useWorkItemFilters } from "./use-work-item-filters";
 

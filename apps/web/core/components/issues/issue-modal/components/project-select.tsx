@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@plane/constants";
+import { ETabIndices } from "@operis/constants";
 // types
-import type { TIssue } from "@plane/types";
-import { cn, getTabIndex } from "@plane/utils";
+import type { TIssue } from "@operis/types";
+import { cn, getTabIndex } from "@operis/utils";
 // components
 import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";
 // hooks

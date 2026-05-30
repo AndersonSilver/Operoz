@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 // plane internal
-import { STATE_GROUPS } from "@plane/constants";
-import type { TStateGroups } from "@plane/types";
+import { STATE_GROUPS } from "@operis/constants";
+import type { TStateGroups } from "@operis/types";
 // helpers
 import { getDate } from "@/helpers/date-time.helper";
 

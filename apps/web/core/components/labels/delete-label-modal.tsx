@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // types
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IIssueLabel } from "@plane/types";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IIssueLabel } from "@operis/types";
 // ui
-import { AlertModalCore } from "@plane/ui";
+import { AlertModalCore } from "@operis/ui";
 // hooks
 import { useLabel } from "@/hooks/store/use-label";
 

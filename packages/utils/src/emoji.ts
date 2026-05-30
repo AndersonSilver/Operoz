@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import { RANDOM_EMOJI_CODES } from "@plane/constants";
+import { RANDOM_EMOJI_CODES } from "@operis/constants";
 
 /**
  * Converts a hyphen-separated hexadecimal emoji code to its decimal representation

@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FC } from "react";
 import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TGroupedIssues } from "@plane/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
-import { renderFormattedPayloadDate } from "@plane/utils";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TGroupedIssues } from "@operis/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import { renderFormattedPayloadDate } from "@operis/utils";
 // hooks
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import { useIssues } from "@/hooks/store/use-issues";

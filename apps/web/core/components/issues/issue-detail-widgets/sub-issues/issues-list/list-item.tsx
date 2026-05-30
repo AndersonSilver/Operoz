@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { Link as Loader } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { LinkIcon, EditIcon, TrashIcon, CloseIcon, ChevronRightIcon } from "@plane/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { LinkIcon, EditIcon, TrashIcon, CloseIcon, ChevronRightIcon } from "@operis/propel/icons";
 // plane imports
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TIssue, TIssueServiceType, TSubIssueOperations } from "@plane/types";
-import { EIssueServiceType, EIssuesStoreType } from "@plane/types";
-import { ControlLink, CustomMenu } from "@plane/ui";
-import { cn, generateWorkItemLink } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TIssue, TIssueServiceType, TSubIssueOperations } from "@operis/types";
+import { EIssueServiceType, EIssuesStoreType } from "@operis/types";
+import { ControlLink, CustomMenu } from "@operis/ui";
+import { cn, generateWorkItemLink } from "@operis/utils";
 // helpers
 import { useSubIssueOperations } from "@/components/issues/issue-detail-widgets/sub-issues/helper";
 import { WithDisplayPropertiesHOC } from "@/components/issues/issue-layouts/properties/with-display-properties-HOC";

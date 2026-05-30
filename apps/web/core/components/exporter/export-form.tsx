@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { intersection } from "lodash-es";
 import { observer } from "mobx-react";
@@ -14,14 +8,14 @@ import {
   EUserPermissionsLevel,
   EXPORTERS_LIST,
   // ISSUE_DISPLAY_FILTERS_BY_PAGE,
-} from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-// import { Tooltip } from "@plane/propel/tooltip";
-// import { EIssuesStoreType } from "@plane/types";
-import type { TWorkItemFilterExpression } from "@plane/types";
-import { CustomSearchSelect, CustomSelect } from "@plane/ui";
+} from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+// import { Tooltip } from "@operis/propel/tooltip";
+// import { EIssuesStoreType } from "@operis/types";
+import type { TWorkItemFilterExpression } from "@operis/types";
+import { CustomSearchSelect, CustomSelect } from "@operis/ui";
 // import { WorkspaceLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/workspace-level";
 // import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
 import { useProject } from "@/hooks/store/use-project";

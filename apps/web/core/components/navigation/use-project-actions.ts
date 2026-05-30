@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useState } from "react";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
-import { copyUrlToClipboard } from "@plane/utils";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { copyUrlToClipboard } from "@operis/utils";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
 
 type UseProjectActionsProps = {

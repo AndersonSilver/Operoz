@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import type { EditorRefApi } from "@plane/editor";
-import type { TSticky } from "@plane/types";
-import { cn, isCommentEmpty } from "@plane/utils";
+import type { EditorRefApi } from "@operis/editor";
+import type { TSticky } from "@operis/types";
+import { cn, isCommentEmpty } from "@operis/utils";
 import { StickyEditor } from "@/components/editor/sticky-editor";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";

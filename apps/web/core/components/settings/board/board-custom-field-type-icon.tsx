@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { TCustomFieldType } from "@plane/types";
-import { cn } from "@plane/ui";
+import type { TCustomFieldType } from "@operis/types";
+import { cn } from "@operis/ui";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 
 type Props = {

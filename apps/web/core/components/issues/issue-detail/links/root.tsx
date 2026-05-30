@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useMemo, useState } from "react";
 
-import { PlusIcon } from "@plane/propel/icons";
+import { PlusIcon } from "@operis/propel/icons";
 // plane imports
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TIssueLink } from "@plane/types";
-import { EIssueServiceType } from "@plane/types";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TIssueLink } from "@operis/types";
+import { EIssueServiceType } from "@operis/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // local imports

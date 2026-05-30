@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { CircleX } from "lucide-react";
 // plane constants
-import { FREE_PLAN_UPGRADE_FEATURES } from "@plane/constants";
+import { FREE_PLAN_UPGRADE_FEATURES } from "@operis/constants";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 type FreePlanCardProps = {
   isOnFreePlan: boolean;

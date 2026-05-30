@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef } from "react";
 import { AlertCircle } from "lucide-react";
 // plane imports
-import { ISSUE_ORDER_BY_OPTIONS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import type { TIssueOrderByOptions } from "@plane/types";
+import { ISSUE_ORDER_BY_OPTIONS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import type { TIssueOrderByOptions } from "@operis/types";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // plane web imports
 import { WorkFlowDisabledOverlay } from "@/plane-web/components/workflow";
 

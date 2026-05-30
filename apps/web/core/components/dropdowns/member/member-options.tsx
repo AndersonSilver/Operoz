@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
@@ -12,12 +6,12 @@ import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { CheckIcon, SearchIcon, SuspendedUserIcon } from "@plane/propel/icons";
-import { EPillSize, EPillVariant, Pill } from "@plane/propel/pill";
-import type { IUserLite } from "@plane/types";
-import { Avatar } from "@plane/ui";
-import { cn, getFileURL, sortByCurrentUserThenSelected } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { CheckIcon, SearchIcon, SuspendedUserIcon } from "@operis/propel/icons";
+import { EPillSize, EPillVariant, Pill } from "@operis/propel/pill";
+import type { IUserLite } from "@operis/types";
+import { Avatar } from "@operis/ui";
+import { cn, getFileURL, sortByCurrentUserThenSelected } from "@operis/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser } from "@/hooks/store/user";

@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // external imports
 import { fileTypeFromBuffer } from "file-type";
 // plane imports
-import type { TFileMetaDataLite, TFileSignedURLResponse } from "@plane/types";
-import { DANGEROUS_EXTENSIONS } from "@plane/constants";
+import type { TFileMetaDataLite, TFileSignedURLResponse } from "@operis/types";
+import { DANGEROUS_EXTENSIONS } from "@operis/constants";
 
 /**
  * @description Filename validation - checks for double extensions and dangerous patterns

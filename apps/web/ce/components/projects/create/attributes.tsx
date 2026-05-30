@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Controller, useFormContext } from "react-hook-form";
 // plane imports
-import { NETWORK_CHOICES, ETabIndices } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import type { IProject } from "@plane/types";
-import { CustomSelect } from "@plane/ui";
-import { getTabIndex } from "@plane/utils";
+import { NETWORK_CHOICES, ETabIndices } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import type { IProject } from "@operis/types";
+import { CustomSelect } from "@operis/ui";
+import { getTabIndex } from "@operis/utils";
 // components
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";

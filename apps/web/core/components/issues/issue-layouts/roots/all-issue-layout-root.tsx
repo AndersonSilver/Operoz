@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { GLOBAL_VIEW_TRACKER_ELEMENTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@plane/constants";
-import { EmptyStateDetailed } from "@plane/propel/empty-state";
-import type { EIssueLayoutTypes } from "@plane/types";
-import { EIssuesStoreType, STATIC_VIEW_TYPES } from "@plane/types";
+import { GLOBAL_VIEW_TRACKER_ELEMENTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
+import { EmptyStateDetailed } from "@operis/propel/empty-state";
+import type { EIssueLayoutTypes } from "@operis/types";
+import { EIssuesStoreType, STATIC_VIEW_TYPES } from "@operis/types";
 // assets
 // components
 import { IssuePeekOverview } from "@/components/issues/peek-overview";

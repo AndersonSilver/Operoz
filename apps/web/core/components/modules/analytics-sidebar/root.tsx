@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { startTransition, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { Info, SquareUser } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, EEstimateSystem } from "@plane/constants";
+import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, EEstimateSystem } from "@operis/constants";
 // plane types
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 import {
   PlusIcon,
   MembersPropertyIcon,
@@ -21,14 +15,14 @@ import {
   StartDatePropertyIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-} from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { ILinkDetails, IModule, ModuleLink } from "@plane/types";
+} from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { ILinkDetails, IModule, ModuleLink } from "@operis/types";
 // plane ui
-import { Loader, CustomSelect, TextArea } from "@plane/ui";
+import { Loader, CustomSelect, TextArea } from "@operis/ui";
 // components
 // helpers
-import { getDate, renderFormattedPayloadDate } from "@plane/utils";
+import { getDate, renderFormattedPayloadDate } from "@operis/utils";
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { CreateUpdateModuleLinkModal, ModuleAnalyticsProgress, ModuleLinksList } from "@/components/modules";

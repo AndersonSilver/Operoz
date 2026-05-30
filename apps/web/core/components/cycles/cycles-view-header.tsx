@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
 // plane imports
-import { useOutsideClickDetector } from "@plane/hooks";
-import { IconButton } from "@plane/propel/icon-button";
-import { useTranslation } from "@plane/i18n";
-import { SearchIcon, CloseIcon } from "@plane/propel/icons";
-import type { TCycleFilters } from "@plane/types";
-import { cn, calculateTotalFilters } from "@plane/utils";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { IconButton } from "@operis/propel/icon-button";
+import { useTranslation } from "@operis/i18n";
+import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import type { TCycleFilters } from "@operis/types";
+import { cn, calculateTotalFilters } from "@operis/utils";
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 // hooks

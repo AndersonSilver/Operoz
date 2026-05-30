@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
@@ -12,10 +6,10 @@ import { usePopper } from "react-popper";
 // components
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // icon
-import { CheckIcon, CycleGroupIcon, CycleIcon, SearchIcon } from "@plane/propel/icons";
-import type { TCycleGroups } from "@plane/types";
+import { CheckIcon, CycleGroupIcon, CycleIcon, SearchIcon } from "@operis/propel/icons";
+import type { TCycleGroups } from "@operis/types";
 // ui
 // store hooks
 import { useCycle } from "@/hooks/store/use-cycle";

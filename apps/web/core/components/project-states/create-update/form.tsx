@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 import { TwitterPicker } from "react-color";
-import { Button } from "@plane/propel/button";
-import type { IState } from "@plane/types";
-import { Popover, Input, TextArea } from "@plane/ui";
+import { Button } from "@operis/propel/button";
+import type { IState } from "@operis/types";
+import { Popover, Input, TextArea } from "@operis/ui";
 
 type TStateForm = {
   data: Partial<IState>;

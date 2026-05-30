@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Braces, FileText, Printer, RefreshCw } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import { LogoSpinner } from "@/components/common/logo-spinner";
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import { ProjectStatusReportService } from "@/services/project/project-status-report.service";
 
 const service = new ProjectStatusReportService();

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 // plane imports
-import { ROLE } from "@plane/constants";
-import { Button } from "@plane/propel/button";
-import type { IWorkspaceMemberInvitation } from "@plane/types";
-import { Checkbox, Spinner } from "@plane/ui";
-import { truncateText } from "@plane/utils";
+import { ROLE } from "@operis/constants";
+import { Button } from "@operis/propel/button";
+import type { IWorkspaceMemberInvitation } from "@operis/types";
+import { Checkbox, Spinner } from "@operis/ui";
+import { truncateText } from "@operis/utils";
 // constants
 import { WorkspaceLogo } from "@/components/workspace/logo";
 // hooks

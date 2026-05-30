@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
-import { EAuthModes, EAuthSteps } from "@plane/constants";
-import type { IEmailCheckData } from "@plane/types";
+import { EAuthModes, EAuthSteps } from "@operis/constants";
+import type { IEmailCheckData } from "@operis/types";
 // helpers
 import type { TAuthErrorInfo } from "@/helpers/authentication.helper";
 import { authErrorHandler } from "@/helpers/authentication.helper";

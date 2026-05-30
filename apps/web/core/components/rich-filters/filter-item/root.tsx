@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { IFilterInstance } from "@plane/shared-state";
+import type { IFilterInstance } from "@operis/shared-state";
 import type {
   SingleOrArray,
   TExternalFilter,
@@ -15,9 +9,9 @@ import type {
   TFilterValue,
   TFilterConditionNodeForDisplay,
   TAllAvailableOperatorsForDisplay,
-} from "@plane/types";
-import { CustomSearchSelect } from "@plane/ui";
-import { cn, getOperatorForPayload } from "@plane/utils";
+} from "@operis/types";
+import { CustomSearchSelect } from "@operis/ui";
+import { cn, getOperatorForPayload } from "@operis/utils";
 // local imports
 import { FilterValueInput } from "../filter-value-input/root";
 import { COMMON_FILTER_ITEM_BORDER_CLASSNAME } from "../shared";

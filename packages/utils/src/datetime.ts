@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import {
   differenceInDays,
   format,
@@ -20,7 +14,7 @@ import { isNumber } from "lodash-es";
 
 const USER_LANGUAGE_STORAGE_KEY = "userLanguage";
 
-/** Matches @plane/i18n DEFAULT_LOCALE when nothing is stored yet. */
+/** Matches @operis/i18n DEFAULT_LOCALE when nothing is stored yet. */
 const DEFAULT_DATE_FNS_LOCALE = ptBR;
 
 function getDateFnsLocale() {

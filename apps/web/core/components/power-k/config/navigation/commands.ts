@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { BarChart2, Briefcase, FileText, Home, Inbox, Layers, PenSquare, Settings } from "lucide-react";
 // plane imports
-import { EUserPermissionsLevel } from "@plane/constants";
-import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@plane/propel/icons";
-import type { ICycle, IModule, IPartialProject, IProjectView, IWorkspace } from "@plane/types";
-import { EUserProjectRoles, EUserWorkspaceRoles } from "@plane/types";
+import { EUserPermissionsLevel } from "@operis/constants";
+import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@operis/propel/icons";
+import type { ICycle, IModule, IPartialProject, IProjectView, IWorkspace } from "@operis/types";
+import { EUserProjectRoles, EUserWorkspaceRoles } from "@operis/types";
 // components
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 import { handlePowerKNavigate } from "@/components/power-k/utils/navigation";

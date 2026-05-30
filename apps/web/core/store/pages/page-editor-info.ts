@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { action, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import type { EditorRefApi, TEditorAsset } from "@plane/editor";
+import type { EditorRefApi, TEditorAsset } from "@operis/editor";
 
 export type TPageEditorInstance = {
   // observables

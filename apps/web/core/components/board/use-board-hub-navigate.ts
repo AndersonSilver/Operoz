@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { startTransition } from "react";
 import { useNavigate } from "react-router";
 import { ensureTrailingSlash } from "@/app/compat/next/helper";

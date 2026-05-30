@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "operis": {
+      "url": "https://mcp.SUA-EMPRESA.com/mcp",
+      "headers": {
+        "Authorization": "Bearer COLE_O_TOKEN_PESSOAL_DO_OPERIS"
+      }
+    }
+  }
+}

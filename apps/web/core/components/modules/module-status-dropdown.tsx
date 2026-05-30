@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
-import { MODULE_STATUS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import type { TModuleStatus } from "@plane/propel/icons";
-import { ModuleStatusIcon } from "@plane/propel/icons";
-import type { IModule } from "@plane/types";
-import { CustomSelect } from "@plane/ui";
+import { MODULE_STATUS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import type { TModuleStatus } from "@operis/propel/icons";
+import { ModuleStatusIcon } from "@operis/propel/icons";
+import type { IModule } from "@operis/types";
+import { CustomSelect } from "@operis/ui";
 
 type Props = {
   isDisabled: boolean;

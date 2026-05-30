@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import type { TIssue } from "@plane/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import type { TIssue } from "@operis/types";
 import { useUserPermissions } from "@/hooks/store/user";
 import { AllIssueQuickActions } from "../../quick-action-dropdowns";
 import { BaseKanBanRoot } from "../base-kanban-root";

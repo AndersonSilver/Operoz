@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { useOutsideClickDetector } from "@plane/hooks";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { IconButton } from "@plane/propel/icon-button";
-import { EditIcon, ChevronDownIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IUserProfileProjectSegregation } from "@plane/types";
-import { Loader } from "@plane/ui";
-import { cn, renderFormattedDate, getFileURL } from "@plane/utils";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { IconButton } from "@operis/propel/icon-button";
+import { EditIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IUserProfileProjectSegregation } from "@operis/types";
+import { Loader } from "@operis/ui";
+import { cn, renderFormattedDate, getFileURL } from "@operis/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 // hooks

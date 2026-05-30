@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ETabIndices } from "@plane/constants";
-import type { EditorRefApi } from "@plane/editor";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { TIssue } from "@plane/types";
-import { ToggleSwitch } from "@plane/ui";
-import { renderFormattedPayloadDate, getTabIndex } from "@plane/utils";
+import { ETabIndices } from "@operis/constants";
+import type { EditorRefApi } from "@operis/editor";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TIssue } from "@operis/types";
+import { ToggleSwitch } from "@operis/ui";
+import { renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";

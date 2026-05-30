@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -16,15 +10,15 @@ import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { ModuleIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@plane/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
-import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@plane/ui";
-import { cn } from "@plane/utils";
+} from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { ModuleIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
@@ -51,7 +45,7 @@ import useLocalStorage from "@/hooks/use-local-storage";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web imports
 import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
-import { IconButton } from "@plane/propel/icon-button";
+import { IconButton } from "@operis/propel/icon-button";
 
 export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
   const parentRef = useRef<HTMLDivElement>(null);

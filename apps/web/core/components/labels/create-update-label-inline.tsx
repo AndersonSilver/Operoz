@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { forwardRef, useEffect } from "react";
 import { observer } from "mobx-react";
 import { TwitterPicker } from "react-color";
@@ -11,12 +5,12 @@ import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 import { Popover, Transition } from "@headlessui/react";
 // plane imports
-import { getRandomLabelColor, LABEL_COLOR_OPTIONS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IIssueLabel } from "@plane/types";
-import { Input } from "@plane/ui";
+import { getRandomLabelColor, LABEL_COLOR_OPTIONS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IIssueLabel } from "@operis/types";
+import { Input } from "@operis/ui";
 
 // error codes
 const errorCodes = {

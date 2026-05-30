@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import type {
   DropTargetRecord,
@@ -16,10 +10,10 @@ import { useTheme } from "next-themes";
 import Masonry from "react-masonry-component";
 
 // plane imports
-import { EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { PlusIcon } from "@plane/propel/icons";
-import { EUserWorkspaceRoles } from "@plane/types";
+import { EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { PlusIcon } from "@operis/propel/icons";
+import { EUserWorkspaceRoles } from "@operis/types";
 // assets
 import darkStickiesAsset from "@/app/assets/empty-state/stickies/stickies-dark.webp?url";
 import lightStickiesAsset from "@/app/assets/empty-state/stickies/stickies-light.webp?url";

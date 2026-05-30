@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 //
-import type { ChartDataType } from "@plane/types";
+import type { ChartDataType } from "@operis/types";
 import { quarters } from "../data";
 import { getNumberOfDaysBetweenTwoDates } from "./helpers";
 import type { IMonthBlock } from "./month-view";

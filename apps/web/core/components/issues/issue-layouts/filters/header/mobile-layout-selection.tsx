@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { ISSUE_LAYOUTS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { ChevronDownIcon } from "@plane/propel/icons";
-import type { EIssueLayoutTypes } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
+import { ISSUE_LAYOUTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { ChevronDownIcon } from "@operis/propel/icons";
+import type { EIssueLayoutTypes } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
 import { IssueLayoutIcon } from "../../layout-icon";
 
 export function MobileLayoutSelection({

@@ -2,8 +2,8 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { setPromiseToast } from "@plane/propel/toast";
-import { Loader, ToggleSwitch } from "@plane/ui";
+import { setPromiseToast } from "@operis/propel/toast";
+import { Loader, ToggleSwitch } from "@operis/ui";
 // assets
 import GoogleLogo from "@/app/assets/logos/google-logo.svg?url";
 // components

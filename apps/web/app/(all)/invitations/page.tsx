@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
@@ -11,14 +5,14 @@ import Link from "next/link";
 import useSWR, { mutate } from "swr";
 import { CheckCircle2 } from "lucide-react";
 // plane imports
-import { ROLE } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import { ROLE } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // types
-import { Button } from "@plane/propel/button";
-import { PlaneLogo } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IWorkspaceMemberInvitation } from "@plane/types";
-import { truncateText } from "@plane/utils";
+import { Button } from "@operis/propel/button";
+import { PlaneLogo } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IWorkspaceMemberInvitation } from "@operis/types";
+import { truncateText } from "@operis/utils";
 // assets
 import emptyInvitation from "@/app/assets/empty-state/invitation.svg?url";
 // components

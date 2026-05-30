@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
-import { Tooltip } from "@plane/propel/tooltip";
+import { Tooltip } from "@operis/propel/tooltip";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

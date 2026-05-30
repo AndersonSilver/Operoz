@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@plane/i18n";
-import { CycleIcon } from "@plane/propel/icons";
-import type { ICycle, THomeWidgetProps } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { CycleIcon } from "@operis/propel/icons";
+import type { ICycle, THomeWidgetProps } from "@operis/types";
 
 type ICycleWithStats = ICycle & {
   total_issues?: number;

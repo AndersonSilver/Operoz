@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
 export const isBoardPermissionDeniedError = (error: unknown): boolean => {

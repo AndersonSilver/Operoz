@@ -1,28 +1,22 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@plane/constants";
+import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
 // plane i18n
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // icons
-import { ChevronDownIcon } from "@plane/propel/icons";
+import { ChevronDownIcon } from "@operis/propel/icons";
 // types
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
   TIssueLayouts,
   EIssueLayoutTypes,
-} from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+} from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 // ui
-import { CustomMenu } from "@plane/ui";
+import { CustomMenu } from "@operis/ui";
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";

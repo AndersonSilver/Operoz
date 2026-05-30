@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Hocuspocus } from "@hocuspocus/server";
-import { createRealtimeEvent } from "@plane/editor";
-import { logger } from "@plane/logger";
+import { createRealtimeEvent } from "@operis/editor";
+import { logger } from "@operis/logger";
 import type { HocusPocusServerContext } from "@/types";
 import { broadcastMessageToPage } from "./broadcast-message";
 

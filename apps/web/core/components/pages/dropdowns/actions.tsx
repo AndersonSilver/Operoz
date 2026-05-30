@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ArchiveRestoreIcon, FileOutput, LockKeyhole, LockKeyholeOpen } from "lucide-react";
 // constants
-import { EPageAccess } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import { EPageAccess } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // plane editor
-import { LinkIcon, CopyIcon, LockIcon, NewTabIcon, ArchiveIcon, TrashIcon, GlobeIcon } from "@plane/propel/icons";
+import { LinkIcon, CopyIcon, LockIcon, NewTabIcon, ArchiveIcon, TrashIcon, GlobeIcon } from "@operis/propel/icons";
 // plane ui
-import type { TContextMenuItem } from "@plane/ui";
-import { ContextMenu, CustomMenu } from "@plane/ui";
+import type { TContextMenuItem } from "@operis/ui";
+import { ContextMenu, CustomMenu } from "@operis/ui";
 // components
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import { DeletePageModal } from "@/components/pages/modals/delete-page-modal";
 // hooks
 import { usePageOperations } from "@/hooks/use-page-operations";

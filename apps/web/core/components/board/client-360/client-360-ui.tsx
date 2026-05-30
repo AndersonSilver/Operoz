@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { LucideIcon } from "lucide-react";
 import { Check, ListFilter } from "lucide-react";
 import type { ReactNode } from "react";
-import { useTranslation } from "@plane/i18n";
-import { IconButton } from "@plane/propel/icon-button";
-import { Tooltip } from "@plane/propel/tooltip";
-import { CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { IconButton } from "@operis/propel/icon-button";
+import { Tooltip } from "@operis/propel/tooltip";
+import { CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 import {
   CLIENT_360_FILTER_OPTIONS,
   type Client360FilterKey,

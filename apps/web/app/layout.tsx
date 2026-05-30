@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import Script from "next/script";
 
 // styles
 import "@/styles/globals.css";
 
-import { SITE_DESCRIPTION, SITE_NAME } from "@plane/constants";
-import { DEFAULT_LOCALE } from "@plane/i18n";
+import { SITE_DESCRIPTION, SITE_NAME } from "@operis/constants";
+import { DEFAULT_LOCALE } from "@operis/i18n";
 
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 // assets
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";

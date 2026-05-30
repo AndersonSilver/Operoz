@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -16,17 +10,17 @@ import {
   EUserPermissionsLevel,
   ISSUE_DISPLAY_FILTERS_BY_PAGE,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@plane/constants";
-import { usePlatformOS } from "@plane/hooks";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { IconButton } from "@plane/propel/icon-button";
-import { CycleIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@plane/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
-import { Breadcrumbs, BreadcrumbNavigationSearchDropdown, Header } from "@plane/ui";
-import { cn } from "@plane/utils";
+} from "@operis/constants";
+import { usePlatformOS } from "@operis/hooks";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { IconButton } from "@operis/propel/icon-button";
+import { CycleIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import { Breadcrumbs, BreadcrumbNavigationSearchDropdown, Header } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";

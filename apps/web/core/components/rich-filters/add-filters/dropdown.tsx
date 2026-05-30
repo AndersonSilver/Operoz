@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
-import type { IFilterInstance } from "@plane/shared-state";
-import type { TExternalFilter, TFilterProperty, TSupportedOperators } from "@plane/types";
-import { CustomSearchSelect } from "@plane/ui";
-import { getOperatorForPayload } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import type { IFilterInstance } from "@operis/shared-state";
+import type { TExternalFilter, TFilterProperty, TSupportedOperators } from "@operis/types";
+import { CustomSearchSelect } from "@operis/ui";
+import { getOperatorForPayload } from "@operis/utils";
 
 export type TAddFilterDropdownProps<P extends TFilterProperty, E extends TExternalFilter> = {
   customButton: React.ReactNode;

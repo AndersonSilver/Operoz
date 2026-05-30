@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { MoveRight } from "lucide-react";
-import { Tooltip } from "@plane/propel/tooltip";
-import { Loader } from "@plane/ui";
+import { Tooltip } from "@operis/propel/tooltip";
+import { Loader } from "@operis/ui";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

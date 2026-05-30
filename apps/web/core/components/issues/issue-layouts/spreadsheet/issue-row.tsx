@@ -1,25 +1,19 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Dispatch, MouseEvent, MutableRefObject, SetStateAction } from "react";
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
-import { SPREADSHEET_SELECT_GROUP } from "@plane/constants";
+import { SPREADSHEET_SELECT_GROUP } from "@operis/constants";
 // plane helpers
-import { useOutsideClickDetector } from "@plane/hooks";
-import { ChevronRightIcon } from "@plane/propel/icons";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { ChevronRightIcon } from "@operis/propel/icons";
 // types
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IIssueDisplayProperties, TIssue } from "@plane/types";
-import { EIssueServiceType } from "@plane/types";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IIssueDisplayProperties, TIssue } from "@operis/types";
+import { EIssueServiceType } from "@operis/types";
 // ui
-import { ControlLink, Row } from "@plane/ui";
-import { cn, generateWorkItemLink } from "@plane/utils";
+import { ControlLink, Row } from "@operis/ui";
+import { cn, generateWorkItemLink } from "@operis/utils";
 // components
 import { MultipleSelectEntityAction } from "@/components/core/multiple-select";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";

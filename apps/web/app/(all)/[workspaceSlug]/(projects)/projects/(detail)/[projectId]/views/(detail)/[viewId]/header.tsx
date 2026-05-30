@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
@@ -15,13 +9,13 @@ import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@plane/constants";
-import { Button } from "@plane/propel/button";
-import { LockIcon, ViewsIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@plane/types";
-import { EIssuesStoreType, EViewAccess, EIssueLayoutTypes } from "@plane/types";
-import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@plane/ui";
+} from "@operis/constants";
+import { Button } from "@operis/propel/button";
+import { LockIcon, ViewsIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import { EIssuesStoreType, EViewAccess, EIssueLayoutTypes } from "@operis/types";
+import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@operis/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SwitcherIcon, SwitcherLabel } from "@/components/common/switcher-label";

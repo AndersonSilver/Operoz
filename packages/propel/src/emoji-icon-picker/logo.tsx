@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // Due to some weird issue with the import order, the import of useFontFaceObserver
 // should be after the imported here rather than some below helper functions as it is in the original file
 
 import useFontFaceObserver from "use-font-face-observer";
 // plane imports
-import type { TLogoProps } from "@plane/types";
+import type { TLogoProps } from "@operis/types";
 // local imports
 import { getEmojiSize, stringToEmoji } from "./helper";
 import { LUCIDE_ICONS_LIST } from "./lucide-icons";

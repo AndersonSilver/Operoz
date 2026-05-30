@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import type { TDisplayConfig } from "@plane/editor";
-import type { JSONContent, TPageVersion } from "@plane/types";
-import { Loader } from "@plane/ui";
-import { isJSONContentEmpty } from "@plane/utils";
+import type { TDisplayConfig } from "@operis/editor";
+import type { JSONContent, TPageVersion } from "@operis/types";
+import { Loader } from "@operis/ui";
+import { isJSONContentEmpty } from "@operis/utils";
 // components
 import { DocumentEditor } from "@/components/editor/document/editor";
 // hooks

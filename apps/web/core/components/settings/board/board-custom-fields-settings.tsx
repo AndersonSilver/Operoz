@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { ChevronDown, ChevronUp, MoreHorizontal, Plus, Search } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBoardCustomField, TBoardFieldFormSpan } from "@plane/types";
-import { CustomMenu, Input, Loader } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBoardCustomField, TBoardFieldFormSpan } from "@operis/types";
+import { CustomMenu, Input, Loader } from "@operis/ui";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldAddModal } from "./board-custom-field-add-modal";

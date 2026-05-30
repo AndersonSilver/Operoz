@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // helpers
-import type { IWebhook, IWorkspace } from "@plane/types";
-import { renderFormattedPayloadDate } from "@plane/utils";
+import type { IWebhook, IWorkspace } from "@operis/types";
+import { renderFormattedPayloadDate } from "@operis/utils";
 // types
 
 export const getCurrentHookAsCSV = (

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
@@ -14,8 +8,8 @@ import type {
   IBlockUpdateDependencyData,
   IGanttBlock,
   TGanttViews,
-} from "@plane/types";
-import { cn, getDate } from "@plane/utils";
+} from "@operis/types";
+import { cn, getDate } from "@operis/utils";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 import { GanttChartSidebar, MonthChartView, QuarterChartView, WeekChartView } from "@/components/gantt-chart";

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import {
   autoUpdate,
   flip,
@@ -21,7 +15,7 @@ import { ExternalLink, FileCode2, SlidersHorizontal } from "lucide-react";
 import type { ChangeEvent, CSSProperties, MouseEvent, PointerEvent } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 // plane imports
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // constants
 import { ACCEPTED_HTML_DOCUMENT_MIME_TYPES } from "@/constants/config";
 import { CORE_EXTENSIONS } from "@/constants/extension";

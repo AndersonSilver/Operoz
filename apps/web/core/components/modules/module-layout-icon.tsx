@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import * as React from "react";
-import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@plane/propel/icons";
-import type { TModuleLayoutOptions } from "@plane/types";
-import { cn } from "@plane/utils";
+import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operis/propel/icons";
+import type { TModuleLayoutOptions } from "@operis/types";
+import { cn } from "@operis/utils";
 
 interface ILayoutIcon {
   className?: string;

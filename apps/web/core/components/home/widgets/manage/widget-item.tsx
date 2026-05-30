@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
@@ -19,12 +13,12 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
 // plane types
-import { useTranslation } from "@plane/i18n";
-import type { InstructionType } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import type { InstructionType } from "@operis/types";
 // plane ui
-import { DropIndicator, ToggleSwitch } from "@plane/ui";
+import { DropIndicator, ToggleSwitch } from "@operis/ui";
 // plane utils
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { useHome } from "@/hooks/store/use-home";
 import { HOME_WIDGETS_LIST } from "../../home-dashboard-widgets";

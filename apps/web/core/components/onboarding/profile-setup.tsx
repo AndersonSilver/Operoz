@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
-import { E_PASSWORD_STRENGTH } from "@plane/constants";
+import { E_PASSWORD_STRENGTH } from "@operis/constants";
 // types
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IUser, TUserProfile, TOnboardingSteps } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IUser, TUserProfile, TOnboardingSteps } from "@operis/types";
 // ui
-import { Input, PasswordStrengthIndicator, Spinner } from "@plane/ui";
+import { Input, PasswordStrengthIndicator, Spinner } from "@operis/ui";
 // components
-import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@plane/utils";
+import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@operis/utils";
 import { UserImageUploadModal } from "@/components/core/modals/user-image-upload-modal";
 // hooks
 import { useUser, useUserProfile } from "@/hooks/store/user";

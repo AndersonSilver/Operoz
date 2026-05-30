@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import useSWR from "swr";
 // plane imports
-import { GROUP_CHOICES } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import type { IUserStateDistribution, TStateGroups } from "@plane/types";
-import { ContentWrapper } from "@plane/ui";
+import { GROUP_CHOICES } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import type { IUserStateDistribution, TStateGroups } from "@operis/types";
+import { ContentWrapper } from "@operis/ui";
 // components
 import { PageHead } from "@/components/core/page-title";
 import { ProfileActivity } from "@/components/profile/overview/activity";

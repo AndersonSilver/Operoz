@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observable, action, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TCreateModalStoreTypes, TCreatePageModal } from "@plane/constants";
-import { DEFAULT_CREATE_PAGE_MODAL_DATA, EPageAccess } from "@plane/constants";
-import type { TProfileSettingsTabs } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import type { TCreateModalStoreTypes, TCreatePageModal } from "@operis/constants";
+import { DEFAULT_CREATE_PAGE_MODAL_DATA, EPageAccess } from "@operis/constants";
+import type { TProfileSettingsTabs } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 // lib
 import { store } from "@/lib/store-context";
 

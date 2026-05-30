@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // types
-import type { WeekMonthDataType, ChartDataType, TGanttViews } from "@plane/types";
-import { EStartOfTheWeek } from "@plane/types";
+import type { WeekMonthDataType, ChartDataType, TGanttViews } from "@operis/types";
+import { EStartOfTheWeek } from "@operis/types";
 
 // constants
 export const generateWeeks = (startOfWeek: EStartOfTheWeek = EStartOfTheWeek.SUNDAY): WeekMonthDataType[] => [

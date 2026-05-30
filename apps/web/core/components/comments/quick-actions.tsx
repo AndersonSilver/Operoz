@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
 // plane imports
-import { EIssueCommentAccessSpecifier } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { IconButton } from "@plane/propel/icon-button";
-import { LinkIcon, GlobeIcon, LockIcon, EditIcon, TrashIcon } from "@plane/propel/icons";
-import type { TIssueComment, TCommentsOperations } from "@plane/types";
-import type { TContextMenuItem } from "@plane/ui";
-import { CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { EIssueCommentAccessSpecifier } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { IconButton } from "@operis/propel/icon-button";
+import { LinkIcon, GlobeIcon, LockIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
+import type { TIssueComment, TCommentsOperations } from "@operis/types";
+import type { TContextMenuItem } from "@operis/ui";
+import { CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 // hooks
 import { useUser } from "@/hooks/store/user";
 import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";

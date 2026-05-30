@@ -1,27 +1,21 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useRef } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { EditorRefApi } from "@plane/editor";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { CopyIcon, ChevronLeftIcon, ChevronRightIcon } from "@plane/propel/icons";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TDescriptionVersion } from "@plane/types";
-import { Avatar, EModalPosition, EModalWidth, Loader, ModalCore } from "@plane/ui";
-import { calculateTimeAgo, cn, getFileURL } from "@plane/utils";
+import type { EditorRefApi } from "@operis/editor";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { CopyIcon, ChevronLeftIcon, ChevronRightIcon } from "@operis/propel/icons";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TDescriptionVersion } from "@operis/types";
+import { Avatar, EModalPosition, EModalWidth, Loader, ModalCore } from "@operis/ui";
+import { calculateTimeAgo, cn, getFileURL } from "@operis/utils";
 // components
 import { RichTextEditor } from "@/components/editor/rich-text";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-import { IconButton } from "@plane/propel/icon-button";
+import { IconButton } from "@operis/propel/icon-button";
 
 type Props = {
   activeVersionDescription: string | undefined;

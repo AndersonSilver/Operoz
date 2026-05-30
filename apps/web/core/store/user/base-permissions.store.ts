@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { unset, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TUserPermissions, TUserPermissionsLevel } from "@plane/constants";
+import type { TUserPermissions, TUserPermissionsLevel } from "@operis/constants";
 import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORKSPACE_SIDEBAR_DYNAMIC_NAVIGATION_ITEMS_LINKS,
-} from "@plane/constants";
-import type { EUserProjectRoles, IUserProjectsRole, IWorkspaceMemberMe, TProjectMembership } from "@plane/types";
-import { EUserWorkspaceRoles } from "@plane/types";
+} from "@operis/constants";
+import type { EUserProjectRoles, IUserProjectsRole, IWorkspaceMemberMe, TProjectMembership } from "@operis/types";
+import { EUserWorkspaceRoles } from "@operis/types";
 // plane web imports
 import { WorkspaceService } from "@/services/workspace.service";
 import type { RootStore } from "@/plane-web/store/root.store";

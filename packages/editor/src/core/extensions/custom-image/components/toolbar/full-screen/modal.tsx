@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Download, Minus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { NewTabIcon, PlusIcon, CloseIcon } from "@plane/propel/icons";
+import { NewTabIcon, PlusIcon, CloseIcon } from "@operis/propel/icons";
 // plane imports
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2;

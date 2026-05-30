@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { autorun, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-import type { IBoardModule, TIssue } from "@plane/types";
+import type { IBoardModule, TIssue } from "@operis/types";
 import type { RootStore } from "@/plane-web/store/root.store";
 import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
 import { BaseTimeLineStore } from "@/plane-web/store/timeline/base-timeline.store";

@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useBoardLayout } from "@/components/board/board-layout-context";
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@plane/constants";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
 import { KanbanLayoutLoader } from "@/components/ui/loader/layouts/kanban-layout-loader";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import { WorkspaceKanbanRoot } from "@/components/issues/issue-layouts/kanban/roots/workspace-root";

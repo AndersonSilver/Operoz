@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // react
 import React from "react";
 // react-hook-form
 import type { Control, UseFormWatch } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { MODULE_STATUS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { StatePropertyIcon } from "@plane/propel/icons";
-import type { IModule } from "@plane/types";
+import { MODULE_STATUS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { StatePropertyIcon } from "@operis/propel/icons";
+import type { IModule } from "@operis/types";
 // ui
-import { CustomSelect } from "@plane/ui";
+import { CustomSelect } from "@operis/ui";
 // types
 // common
 // constants

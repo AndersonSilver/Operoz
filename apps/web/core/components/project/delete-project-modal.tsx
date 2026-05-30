@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { AlertTriangle } from "lucide-react";
 // Plane imports
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IProject } from "@plane/types";
-import { Input, EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IProject } from "@operis/types";
+import { Input, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";

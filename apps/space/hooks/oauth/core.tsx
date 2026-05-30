@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
-import { API_BASE_URL } from "@plane/constants";
-import type { TOAuthConfigs, TOAuthOption } from "@plane/types";
+import { API_BASE_URL } from "@operis/constants";
+import type { TOAuthConfigs, TOAuthOption } from "@operis/types";
 // assets
 import giteaLogo from "@/app/assets/logos/gitea-logo.svg?url";
 import githubLightLogo from "@/app/assets/logos/github-black.png?url";

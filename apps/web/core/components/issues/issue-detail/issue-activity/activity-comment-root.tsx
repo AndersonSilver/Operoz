@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // plane imports
-import type { E_SORT_ORDER, TActivityFilters, EActivityFilterType } from "@plane/constants";
-import { BASE_ACTIVITY_FILTER_TYPES, filterActivityOnSelectedFilters } from "@plane/constants";
-import type { TCommentsOperations } from "@plane/types";
+import type { E_SORT_ORDER, TActivityFilters, EActivityFilterType } from "@operis/constants";
+import { BASE_ACTIVITY_FILTER_TYPES, filterActivityOnSelectedFilters } from "@operis/constants";
+import type { TCommentsOperations } from "@operis/types";
 // components
 import { CommentCard } from "@/components/comments/card/root";
 // hooks

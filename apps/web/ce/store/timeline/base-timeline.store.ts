@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { isEqual, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
@@ -14,8 +8,8 @@ import type {
   IGanttBlock,
   TGanttViews,
   EGanttBlockType,
-} from "@plane/types";
-import { renderFormattedPayloadDate } from "@plane/utils";
+} from "@operis/types";
+import { renderFormattedPayloadDate } from "@operis/utils";
 import { currentViewDataWithView } from "@/components/gantt-chart/data";
 import {
   getDateFromPositionOnGantt,

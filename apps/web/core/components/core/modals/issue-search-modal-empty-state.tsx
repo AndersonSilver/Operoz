@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { useTheme } from "next-themes";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import type { ISearchIssueResponse } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import type { ISearchIssueResponse } from "@operis/types";
 // assets
 import darkIssuesAsset from "@/app/assets/empty-state/search/issues-dark.webp?url";
 import lightIssuesAsset from "@/app/assets/empty-state/search/issues-light.webp?url";

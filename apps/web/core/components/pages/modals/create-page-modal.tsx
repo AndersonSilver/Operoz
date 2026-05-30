@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 // constants
-import type { EPageAccess } from "@plane/constants";
-import type { TPage } from "@plane/types";
+import type { EPageAccess } from "@operis/constants";
+import type { TPage } from "@operis/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
 // plane web hooks

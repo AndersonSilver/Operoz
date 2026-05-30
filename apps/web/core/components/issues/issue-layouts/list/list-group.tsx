@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MutableRefObject } from "react";
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { observer } from "mobx-react";
 // plane imports
-import { DRAG_ALLOWED_GROUPS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import { DRAG_ALLOWED_GROUPS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type {
   IGroupByColumn,
   TIssueMap,
@@ -21,10 +15,10 @@ import type {
   TIssue,
   IIssueDisplayProperties,
   TIssueKanbanFilters,
-} from "@plane/types";
-import { EIssueLayoutTypes } from "@plane/types";
-import { Row } from "@plane/ui";
-import { cn } from "@plane/utils";
+} from "@operis/types";
+import { EIssueLayoutTypes } from "@operis/types";
+import { Row } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { ListLoaderItemRow } from "@/components/ui/loader/layouts/list-layout-loader";
 // hooks

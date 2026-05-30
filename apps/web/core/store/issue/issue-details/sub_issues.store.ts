@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { pull, concat, uniq, set, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
@@ -16,7 +10,7 @@ import type {
   TSubIssuesStateDistribution,
   TIssueServiceType,
   TLoader,
-} from "@plane/types";
+} from "@operis/types";
 // services
 import { IssueService } from "@/services/issue";
 // store

@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { FileText } from "lucide-react";
 import { useParams } from "react-router";
-import { useTranslation } from "@plane/i18n";
-import { Breadcrumbs, Header } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import { Breadcrumbs, Header } from "@operis/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";

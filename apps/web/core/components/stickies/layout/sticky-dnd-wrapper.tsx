@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
@@ -19,7 +13,7 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { createRoot } from "react-dom/client";
 // plane types
-import type { InstructionType } from "@plane/types";
+import type { InstructionType } from "@operis/types";
 // components
 import { StickyNote } from "../sticky";
 // helpers

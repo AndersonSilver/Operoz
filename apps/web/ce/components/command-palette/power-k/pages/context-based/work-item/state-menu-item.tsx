@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // plane types
-import { StateGroupIcon } from "@plane/propel/icons";
-import type { IState } from "@plane/types";
+import { StateGroupIcon } from "@operis/propel/icons";
+import type { IState } from "@operis/types";
 // components
 import { PowerKModalCommandItem } from "@/components/power-k/ui/modal/command-item";
 

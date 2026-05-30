@@ -112,7 +112,7 @@ Workspace (empresa)
 - Não alterar sidebar ainda
 - Não alterar API
 
-**Como validar:** build de `@plane/types` e `@plane/i18n`; app igual à atual.
+**Como validar:** build de `@operis/types` e `@operis/i18n`; app igual à atual.
 
 **PARAR → pedir OK para Etapa 2**
 

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MouseEvent } from "react";
 import React, { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
@@ -11,15 +5,15 @@ import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Eye, ArrowRight, CalendarDays } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@plane/constants";
-import { useLocalStorage } from "@plane/hooks";
-import { useTranslation } from "@plane/i18n";
-import { TransferIcon, WorkItemsIcon, MembersPropertyIcon } from "@plane/propel/icons";
-import { setPromiseToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ICycle, TCycleGroups } from "@plane/types";
-import { Avatar, AvatarGroup, FavoriteStar } from "@plane/ui";
-import { getDate, getFileURL, generateQueryParams } from "@plane/utils";
+import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operis/constants";
+import { useLocalStorage } from "@operis/hooks";
+import { useTranslation } from "@operis/i18n";
+import { TransferIcon, WorkItemsIcon, MembersPropertyIcon } from "@operis/propel/icons";
+import { setPromiseToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ICycle, TCycleGroups } from "@operis/types";
+import { Avatar, AvatarGroup, FavoriteStar } from "@operis/ui";
+import { getDate, getFileURL, generateQueryParams } from "@operis/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { XCircle } from "lucide-react";
 // plane imports
-import { PROFILE_SETTINGS_TRACKER_ELEMENTS } from "@plane/constants";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IApiToken } from "@plane/types";
-import { renderFormattedDate, calculateTimeAgo, renderFormattedTime } from "@plane/utils";
+import { PROFILE_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IApiToken } from "@operis/types";
+import { renderFormattedDate, calculateTimeAgo, renderFormattedTime } from "@operis/utils";
 // components
 import { DeleteApiTokenModal } from "@/components/api-token/delete-token-modal";
 // hooks

@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { CircleUserRound } from "lucide-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@plane/propel/toast";
-import { EFileAssetType } from "@plane/types";
-import type { IUser, TUserProfile } from "@plane/types";
-import { Input } from "@plane/ui";
-import { getFileURL } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
+import { EFileAssetType } from "@operis/types";
+import type { IUser, TUserProfile } from "@operis/types";
+import { Input } from "@operis/ui";
+import { getFileURL } from "@operis/utils";
 // components
 import { DeactivateAccountModal } from "@/components/account/deactivate-account-modal";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";
@@ -29,7 +23,7 @@ import { handleCoverImageChange } from "@/helpers/cover-image.helper";
 import { useInstance } from "@/hooks/store/use-instance";
 import { useUser, useUserProfile } from "@/hooks/store/user";
 // utils
-import { validatePersonName, validateDisplayName } from "@plane/utils";
+import { validatePersonName, validateDisplayName } from "@operis/utils";
 
 type TUserProfileForm = {
   avatar_url: string;

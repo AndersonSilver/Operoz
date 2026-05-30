@@ -81,7 +81,7 @@ Usar utilitários existentes do monorepo quando houver; não criar formatadores 
 - Metadados visíveis no painel direito no detalhe.
 - **100% tokens Operis** para cor e fundo.
 - Copy em português; produto **Operis OS**.
-- Reutilizar `@plane/ui` / `@plane/propel` quando existir equivalente.
+- Reutilizar `@operis/ui` / `@operis/propel` quando existir equivalente.
 
 ## Quando aplicar
 

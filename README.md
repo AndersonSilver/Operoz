@@ -65,9 +65,30 @@ Getting started with Plane is simple. Choose the setup that works best for you:
 - **Analytics**
   Access real-time insights across all your Plane data. Visualize trends, remove blockers, and keep your projects moving forward.
 
-## 🛠️ Local development
+## 🛠️ Desenvolvimento local (Operis)
 
-See [CONTRIBUTING](./CONTRIBUTING.md)
+Na raiz do repositório:
+
+```bash
+./setup.sh
+docker compose -f docker-compose-local.yml up -d
+pnpm dev
+```
+
+- Primeiro acesso ao admin: http://localhost:3001/god-mode/
+- App: http://localhost:3000
+
+Infra Docker local: serviços `operis-db`, `operis-redis`, `operis-mq`, `operis-minio` e base `operis` (utilizador/credenciais Postgres e RabbitMQ).
+
+Backend Python: `apps/api/operis/`. Frontend/monorepo: pacotes **`@operis/*`** (`pnpm dev` / Turbo).
+
+### MCP (agentes IA)
+
+Servidor MCP em [`mcp-server/`](./mcp-server/README.md) — 32 ferramentas para API v1 + boards. Ver [`docs/operis-mcp.md`](./docs/operis-mcp.md).
+
+Se migraste de nomes `plane-*`, recria volumes: `docker compose -f docker-compose-local.yml down -v` antes do `up -d`.
+
+Requisitos: Node.js ≥ 22.18, pnpm 10.32, Docker.
 
 ## ⚙️ Built with
 

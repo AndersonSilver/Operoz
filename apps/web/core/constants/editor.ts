@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Styles } from "@react-pdf/renderer";
 import { StyleSheet } from "@react-pdf/renderer";
 import type { LucideIcon } from "lucide-react";
@@ -32,9 +26,9 @@ import {
   Underline,
 } from "lucide-react";
 // plane imports
-import type { TCommandExtraProps, TEditorCommands, TEditorFontStyle } from "@plane/editor";
-import { MonospaceIcon, SansSerifIcon, SerifIcon } from "@plane/propel/icons";
-import { convertRemToPixel } from "@plane/utils";
+import type { TCommandExtraProps, TEditorCommands, TEditorFontStyle } from "@operis/editor";
+import { MonospaceIcon, SansSerifIcon, SerifIcon } from "@operis/propel/icons";
+import { convertRemToPixel } from "@operis/utils";
 
 type TEditorTypes = "lite" | "document" | "sticky";
 

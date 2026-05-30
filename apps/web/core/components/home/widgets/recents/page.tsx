@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRouter } from "next/navigation";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { PageIcon } from "@plane/propel/icons";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { PageIcon } from "@operis/propel/icons";
 // plane import
-import type { TActivityEntityData, TPageEntityData } from "@plane/types";
-import { Avatar } from "@plane/ui";
-import { calculateTimeAgo, getFileURL, getPageName } from "@plane/utils";
+import type { TActivityEntityData, TPageEntityData } from "@operis/types";
+import { Avatar } from "@operis/ui";
+import { calculateTimeAgo, getFileURL, getPageName } from "@operis/utils";
 import { ListItem } from "@/components/core/list";
 // hooks
 import { useMember } from "@/hooks/store/use-member";

@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useRef, useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareStackIcon } from "lucide-react";
-import { CopyIcon, EditIcon, TrashIcon } from "@plane/propel/icons";
+import { CopyIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
 // plane utils
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TWorkspaceDraftIssue } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
-import type { TContextMenuItem } from "@plane/ui";
-import { Row } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TWorkspaceDraftIssue } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
+import type { TContextMenuItem } from "@operis/ui";
+import { Row } from "@operis/ui";
+import { cn } from "@operis/utils";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useProject } from "@/hooks/store/use-project";

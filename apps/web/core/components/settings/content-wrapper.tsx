@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import { ScrollArea } from "@plane/propel/scrollarea";
-import { cn } from "@plane/utils";
+import { ScrollArea } from "@operis/propel/scrollarea";
+import { cn } from "@operis/utils";
 // components
 import { AppHeader } from "@/components/core/app-header";
 

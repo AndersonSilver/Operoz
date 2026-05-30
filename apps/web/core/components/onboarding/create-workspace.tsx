@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // constants
-import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@plane/constants";
+import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operis/constants";
 // types
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IUser, IWorkspace, TOnboardingSteps } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IUser, IWorkspace, TOnboardingSteps } from "@operis/types";
 // ui
-import { CustomSelect, Input, Spinner } from "@plane/ui";
-import { validateWorkspaceName, validateSlug } from "@plane/utils";
+import { CustomSelect, Input, Spinner } from "@operis/ui";
+import { validateWorkspaceName, validateSlug } from "@operis/utils";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserProfile, useUserSettings } from "@/hooks/store/user";

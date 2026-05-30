@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FC, ReactNode } from "react";
 import { Network } from "lucide-react";
 // types
-import { Tooltip } from "@plane/propel/tooltip";
-import type { TWorkspaceBaseActivity } from "@plane/types";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { TWorkspaceBaseActivity } from "@operis/types";
 // ui
 // helpers
-import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@plane/utils";
+import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operis/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // local components

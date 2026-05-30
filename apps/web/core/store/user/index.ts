@@ -1,8 +1,8 @@
 import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction, computed } from "mobx";
 // plane imports
-import { EUserPermissions, API_BASE_URL } from "@plane/constants";
-import type { IUser, TUserPermissions } from "@plane/types";
+import { EUserPermissions, API_BASE_URL } from "@operis/constants";
+import type { IUser, TUserPermissions } from "@operis/types";
 // plane web imports
 import type { RootStore } from "@/plane-web/store/root.store";
 import type { IUserPermissionStore } from "@/plane-web/store/user/permission.store";

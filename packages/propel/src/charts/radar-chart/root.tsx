@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import {
   PolarGrid,
@@ -14,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import type { TRadarChartProps } from "@plane/types";
+import type { TRadarChartProps } from "@operis/types";
 import { getLegendProps } from "../components/legend";
 import { CustomRadarAxisTick } from "../components/tick";
 import { CustomTooltip } from "../components/tooltip";

@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MutableRefObject } from "react";
 import React, { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
@@ -11,12 +5,12 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { attachInstruction, extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree-item";
 import { observer } from "mobx-react";
 // plane helpers
-import { useOutsideClickDetector } from "@plane/hooks";
+import { useOutsideClickDetector } from "@operis/hooks";
 // types
-import type { IIssueDisplayProperties, TIssue, TIssueMap } from "@plane/types";
-import { EIssueServiceType } from "@plane/types";
+import type { IIssueDisplayProperties, TIssue, TIssueMap } from "@operis/types";
+import { EIssueServiceType } from "@operis/types";
 // components
-import { DropIndicator } from "@plane/ui";
+import { DropIndicator } from "@operis/ui";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { ListLoaderItemRow } from "@/components/ui/loader/layouts/list-layout-loader";
 // hooks

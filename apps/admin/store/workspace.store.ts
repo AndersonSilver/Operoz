@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { set } from "lodash-es";
 import { action, observable, runInAction, makeObservable, computed } from "mobx";
 // plane imports
-import { InstanceWorkspaceService } from "@plane/services";
-import type { IWorkspace, TLoader, TPaginationInfo } from "@plane/types";
+import { InstanceWorkspaceService } from "@operis/services";
+import type { IWorkspace, TLoader, TPaginationInfo } from "@operis/types";
 // root store
 import type { RootStore } from "@/store/root.store";
 

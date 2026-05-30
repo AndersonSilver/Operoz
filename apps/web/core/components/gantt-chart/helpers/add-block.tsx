@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { addDays } from "date-fns";
 import { observer } from "mobx-react";
-import { PlusIcon } from "@plane/propel/icons";
+import { PlusIcon } from "@operis/propel/icons";
 // ui
-import { Tooltip } from "@plane/propel/tooltip";
-import type { IBlockUpdateData, IGanttBlock } from "@plane/types";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { IBlockUpdateData, IGanttBlock } from "@operis/types";
 // helpers
-import { renderFormattedDate, renderFormattedPayloadDate } from "@plane/utils";
+import { renderFormattedDate, renderFormattedPayloadDate } from "@operis/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";

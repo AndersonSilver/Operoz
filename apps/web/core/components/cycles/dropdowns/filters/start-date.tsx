@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // constants
-import { DATE_AFTER_FILTER_OPTIONS } from "@plane/constants";
+import { DATE_AFTER_FILTER_OPTIONS } from "@operis/constants";
 // components
-import { isInDateFormat } from "@plane/utils";
+import { isInDateFormat } from "@operis/utils";
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 

@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // plane imports
-import { EUserPermissionsLevel, PROJECT_SETTINGS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import { EUserPermissionsLevel, PROJECT_SETTINGS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";
 import { PowerKSettingsMenu } from "@/components/power-k/menus/settings";
