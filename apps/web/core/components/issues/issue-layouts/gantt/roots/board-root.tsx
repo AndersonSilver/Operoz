@@ -57,6 +57,7 @@ type Props = {
 };
 
 const boardService = new BoardService();
+const EMPTY_ISSUE_IDS: string[] = [];
 
 export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const { viewId, workItemsFilter } = props;
@@ -74,6 +75,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const [projectDropdownOpen, setProjectDropdownOpen] = useState(false);
   const [projectSearch, setProjectSearch] = useState("");
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const projectSearchInputRef = useRef<HTMLInputElement>(null);
   const { initGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.GROUPED);
   const {
     collapsedProjectIds,
@@ -87,7 +89,11 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
   const appliedDisplayFilters = issuesFilter.issueFilters?.displayFilters;
-  const issueIds = (issues.groupedIssueIds?.[ALL_ISSUES] as string[]) ?? [];
+  const groupedIssueIds = issues.groupedIssueIds;
+  const issueIds = useMemo(() => {
+    const ids = groupedIssueIds?.[ALL_ISSUES] as string[] | undefined;
+    return ids ?? EMPTY_ISSUE_IDS;
+  }, [groupedIssueIds]);
   const nextPageResults = issues.getPaginationData(undefined, undefined)?.nextPageResults;
 
   const getIssueById = issues.rootIssueStore.issues.getIssueById;
@@ -244,7 +250,6 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
         });
       };
 
-      const getIssueById = issues.rootIssueStore.issues.getIssueById;
       const updatesByProject: Record<string, typeof issueUpdates> = {};
 
       for (const update of issueUpdates) {
@@ -260,7 +265,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
         )
       ).catch(onError);
     },
-    [issues, t, workspaceSlug]
+    [getIssueById, issues, t, workspaceSlug]
   );
 
   const blockToRender = useCallback((data: TIssue | TBoardProjectGanttRow | TBoardModuleGanttRow) => {
@@ -303,6 +308,11 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
         isEpic={false}
       />
     ) : undefined;
+
+  useEffect(() => {
+    if (!projectDropdownOpen) return;
+    projectSearchInputRef.current?.focus();
+  }, [projectDropdownOpen]);
 
   // Close project dropdown when clicking outside
   useEffect(() => {
@@ -407,12 +417,12 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                 <div className="absolute left-0 top-full z-20 mt-1 w-72 rounded-md border border-subtle bg-surface-1 shadow-lg">
                   <div className="p-2">
                     <input
+                      ref={projectSearchInputRef}
                       type="text"
                       value={projectSearch}
                       onChange={(e) => setProjectSearch(e.target.value)}
                       placeholder="Pesquisar filtros Projeto..."
                       className="w-full rounded-md border border-subtle bg-layer-1 px-3 py-1.5 text-12 text-primary placeholder:text-tertiary focus:outline-none focus:ring-1 focus:ring-accent-primary"
-                      autoFocus
                     />
                   </div>
                   <div className="max-h-64 overflow-y-auto">
