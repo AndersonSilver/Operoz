@@ -59,12 +59,13 @@ class TestProjectAPIPost(TestProjectBase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     @pytest.mark.django_db
-    def test_create_project_valid_data(self, session_client, workspace, create_user):
+    def test_create_project_valid_data(self, session_client, workspace, workspace_board, create_user):
         url = self.get_project_url(workspace.slug)
 
         project_data = {
             "name": "New Project Test",
             "identifier": "NPT",
+            "board_id": str(workspace_board.id),
         }
 
         user = create_user
@@ -97,7 +98,7 @@ class TestProjectAPIPost(TestProjectBase):
         assert set(state_names) == set(expected_states)
 
     @pytest.mark.django_db
-    def test_create_project_with_project_lead(self, session_client, workspace, create_user):
+    def test_create_project_with_project_lead(self, session_client, workspace, workspace_board, create_user):
         """Test creating project with a different project lead"""
         # Create another user to be project lead
         project_lead = User.objects.create_user(email="lead@example.com", username="projectlead")
@@ -110,6 +111,7 @@ class TestProjectAPIPost(TestProjectBase):
             "name": "Project with Lead",
             "identifier": "PWL",
             "project_lead": project_lead.id,
+            "board_id": str(workspace_board.id),
         }
 
         response = session_client.post(url, project_data, format="json")
@@ -156,7 +158,20 @@ class TestProjectAPIPost(TestProjectBase):
         assert response.status_code == status.HTTP_401_UNAUTHORIZED
 
     @pytest.mark.django_db
-    def test_create_project_duplicate_name(self, session_client, workspace, create_user):
+    def test_create_project_without_board_id(self, session_client, workspace, create_user):
+        url = self.get_project_url(workspace.slug)
+
+        response = session_client.post(
+            url,
+            {"name": "No Board Project", "identifier": "NBP"},
+            format="json",
+        )
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "BOARD_ID_REQUIRED" in response.data.get("board_id", [])
+
+    @pytest.mark.django_db
+    def test_create_project_duplicate_name(self, session_client, workspace, workspace_board, create_user):
         """Test creating project with duplicate name"""
         # Create first project
         Project.objects.create(name="Duplicate Name", identifier="DN1", workspace=workspace)
@@ -165,6 +180,7 @@ class TestProjectAPIPost(TestProjectBase):
         project_data = {
             "name": "Duplicate Name",
             "identifier": "DN2",
+            "board_id": str(workspace_board.id),
         }
 
         response = session_client.post(url, project_data, format="json")
@@ -172,7 +188,7 @@ class TestProjectAPIPost(TestProjectBase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     @pytest.mark.django_db
-    def test_create_project_duplicate_identifier(self, session_client, workspace, create_user):
+    def test_create_project_duplicate_identifier(self, session_client, workspace, workspace_board, create_user):
         """Test creating project with duplicate identifier"""
         Project.objects.create(name="First Project", identifier="DUP", workspace=workspace)
 
@@ -180,11 +196,28 @@ class TestProjectAPIPost(TestProjectBase):
         project_data = {
             "name": "Second Project",
             "identifier": "DUP",
+            "board_id": str(workspace_board.id),
         }
 
         response = session_client.post(url, project_data, format="json")
 
         assert response.status_code == status.HTTP_400_BAD_REQUEST
+
+    @pytest.mark.django_db
+    def test_patch_project_cannot_clear_board_id(self, session_client, workspace, workspace_board, create_user):
+        project = Project.objects.create(
+            name="Boarded Project",
+            identifier="BP",
+            workspace=workspace,
+            board=workspace_board,
+        )
+        ProjectMember.objects.create(project=project, member=create_user, role=20)
+
+        url = self.get_project_url(workspace.slug, pk=project.id)
+        response = session_client.patch(url, {"board_id": None}, format="json")
+
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "BOARD_ID_CANNOT_BE_NULL" in response.data.get("board_id", [])
 
     @pytest.mark.django_db
     def test_create_project_missing_required_fields(self, session_client, workspace, create_user):
@@ -200,12 +233,13 @@ class TestProjectAPIPost(TestProjectBase):
         assert response.status_code == status.HTTP_400_BAD_REQUEST
 
     @pytest.mark.django_db
-    def test_create_project_with_all_optional_fields(self, session_client, workspace, create_user):
+    def test_create_project_with_all_optional_fields(self, session_client, workspace, workspace_board, create_user):
         """Test creating project with all optional fields"""
         url = self.get_project_url(workspace.slug)
         project_data = {
             "name": "Full Project",
             "identifier": "FP",
+            "board_id": str(workspace_board.id),
             "description": "A comprehensive test project",
             "network": 2,
             "cycle_view": True,

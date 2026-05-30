@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
@@ -43,7 +37,7 @@ export const links: LinksFunction = () => [
 
 export function Layout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="pt-BR" suppressHydrationWarning>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -88,10 +82,24 @@ export function HydrateFallback() {
   );
 }
 
-export function ErrorBoundary({ error: _error }: Route.ErrorBoundaryProps) {
+export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
+  const message =
+    error instanceof Error
+      ? error.message
+      : typeof error === "string"
+        ? error
+        : error != null && typeof (error as { message?: string }).message === "string"
+          ? (error as { message: string }).message
+          : String(error);
+
   return (
-    <div>
-      <p>Something went wrong.</p>
+    <div className="p-6 text-primary">
+      <p className="font-medium">Something went wrong.</p>
+      {import.meta.env.DEV && (
+        <pre className="mt-4 max-h-48 overflow-auto rounded border border-subtle-1 bg-layer-1 p-3 text-12 text-secondary">
+          {message}
+        </pre>
+      )}
     </div>
   );
 }

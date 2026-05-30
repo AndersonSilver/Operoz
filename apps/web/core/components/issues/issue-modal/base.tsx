@@ -85,11 +85,9 @@ export const CreateUpdateIssueModalBase = observer(function CreateUpdateIssueMod
   const projectId = data?.project_id ?? routerProjectId?.toString() ?? projectIdFromRouter;
 
   const fetchIssueDetail = async (issueId: string | undefined) => {
-    setDescription(undefined);
     if (!workspaceSlug) return;
 
     if (!projectId || issueId === undefined || !fetchIssueDetails) {
-      // Set description to the issue description from the props if available
       setDescription(data?.description_html || "<p></p>");
       return;
     }
@@ -98,31 +96,23 @@ export const CreateUpdateIssueModalBase = observer(function CreateUpdateIssueMod
   };
 
   useEffect(() => {
-    // fetching issue details
-    if (isOpen) fetchIssueDetail(data?.id ?? data?.sourceIssueId);
-
-    // if modal is closed, reset active project to null
-    // and return to avoid activeProjectId being set to some other project
     if (!isOpen) {
       setActiveProjectId(null);
+      setDescription(undefined);
       return;
     }
 
-    // if data is present, set active project to the project of the
-    // issue. This has more priority than the project in the url.
-    if (data && data.project_id) {
+    setDescription((prev) => prev ?? data?.description_html ?? "<p></p>");
+
+    if (data?.project_id) {
       setActiveProjectId(data.project_id);
-      return;
+    } else if (allowedProjectIds && allowedProjectIds.length > 0) {
+      setActiveProjectId((current) => current ?? projectId?.toString() ?? allowedProjectIds[0]);
     }
 
-    // if data is not present, set active project to the first project in the allowedProjectIds array
-    if (allowedProjectIds && allowedProjectIds.length > 0 && !activeProjectId)
-      setActiveProjectId(projectId?.toString() ?? allowedProjectIds?.[0]);
-
-    // clearing up the description state when we leave the component
-    return () => setDescription(undefined);
+    fetchIssueDetail(data?.id ?? data?.sourceIssueId);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [data?.project_id, data?.id, data?.sourceIssueId, projectId, isOpen, activeProjectId]);
+  }, [data?.project_id, data?.id, data?.sourceIssueId, projectId, isOpen]);
 
   const addIssueToCycle = async (issue: TIssue, cycleId: string) => {
     if (!workspaceSlug || !issue.project_id) return;
@@ -416,8 +406,8 @@ export const CreateUpdateIssueModalBase = observer(function CreateUpdateIssueMod
     <ModalCore
       isOpen={isOpen}
       position={EModalPosition.TOP}
-      width={isDuplicateModalOpen ? EModalWidth.VIXL : EModalWidth.XXXXL}
-      className="rounded-lg !bg-transparent shadow-none transition-[width] ease-linear"
+      width={isDuplicateModalOpen ? EModalWidth.VIXL : EModalWidth.XXXL}
+      className="mx-auto rounded-lg !max-w-[42rem] !bg-transparent shadow-none transition-[width] ease-linear"
     >
       {withDraftIssueWrapper ? (
         <DraftIssueLayout {...commonIssueModalProps} changesMade={changesMade} onChange={handleFormChange} />

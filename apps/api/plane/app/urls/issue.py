@@ -29,6 +29,7 @@ from plane.app.views import (
     IssueBulkUpdateDateEndpoint,
     IssueVersionEndpoint,
     WorkItemDescriptionVersionEndpoint,
+    IssueCustomFieldValueEndpoint,
     IssueMetaEndpoint,
     IssueDetailIdentifierEndpoint,
 )
@@ -277,6 +278,11 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/issues/<uuid:issue_id>/meta/",
         IssueMetaEndpoint.as_view(),
         name="issue-meta",
+    ),
+    path(
+        "workspaces/<str:slug>/issues/<uuid:issue_id>/custom-fields/",
+        IssueCustomFieldValueEndpoint.as_view(),
+        name="issue-custom-fields",
     ),
     path(
         "workspaces/<str:slug>/work-items/<str:project_identifier>-<str:issue_identifier>/",

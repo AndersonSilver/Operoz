@@ -19,6 +19,7 @@ export * from "./core-without-props";
 export * from "./custom-color";
 export * from "./enter-key";
 export * from "./extensions";
+export * from "./html-document";
 export * from "./headings-list";
 export * from "./horizontal-rule";
 export * from "./keymap";

@@ -11,17 +11,25 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import type { EIssuesStoreType } from "@plane/types";
+import { EIssueFilterType } from "@plane/constants";
+import type { TIssueKanbanFilters } from "@plane/types";
+import { EIssuesStoreType } from "@plane/types";
 import { EIssueServiceType, EIssueLayoutTypes } from "@plane/types";
 //hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useKanbanView } from "@/hooks/store/use-kanban-view";
+import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { useBoardIssueCapabilities, useCanEditIssueOnProject } from "@/hooks/use-board-issue-capabilities";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useGroupIssuesDragNDrop } from "@/hooks/use-group-dragndrop";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
+import {
+  MODULE_KANBAN_GROUP_BY,
+  useBoardAlignedDisplayProperties,
+} from "../list-display-properties";
+import type { IBoardIssuesFilter } from "@/store/issue/board/filter.store";
 // store
 // ui
 // types
@@ -39,6 +47,8 @@ export type KanbanStoreType =
   | EIssuesStoreType.CYCLE
   | EIssuesStoreType.PROJECT_VIEW
   | EIssuesStoreType.PROFILE
+  | EIssuesStoreType.GLOBAL
+  | EIssuesStoreType.BOARD
   | EIssuesStoreType.TEAM
   | EIssuesStoreType.TEAM_VIEW
   | EIssuesStoreType.EPIC;
@@ -62,10 +72,20 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
     isEpic = false,
   } = props;
   // router
-  const { workspaceSlug, projectId } = useParams();
+  const { workspaceSlug, projectId, boardSlug } = useParams();
   // store hooks
   const storeType = useIssueStoreType() as KanbanStoreType;
+  const canEditIssueOnProject = useCanEditIssueOnProject();
+  const projectIdStr = projectId?.toString();
+  const { isCreatingAllowed } = useBoardIssueCapabilities(projectIdStr);
   const { allowPermissions } = useUserPermissions();
+  const canCreateIssues = projectIdStr
+    ? isCreatingAllowed
+    : allowPermissions(
+        [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+        EUserPermissionsLevel.PROJECT,
+        workspaceSlug?.toString()
+      );
   const { issueMap, issuesFilter, issues } = useIssues(storeType);
   const {
     issue: { getIssueById },
@@ -88,16 +108,30 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
   const { isDragging } = useKanbanView();
 
   const displayFilters = issuesFilter?.issueFilters?.displayFilters;
-  const displayProperties = issuesFilter?.issueFilters?.displayProperties;
+  const displayProperties = useBoardAlignedDisplayProperties(viewId);
 
   const sub_group_by = displayFilters?.sub_group_by;
-  const group_by = displayFilters?.group_by;
+  const group_by =
+    storeType === EIssuesStoreType.MODULE
+      ? displayFilters?.group_by ?? MODULE_KANBAN_GROUP_BY
+      : displayFilters?.group_by;
 
   const orderBy = displayFilters?.order_by;
 
+  const kanbanFetchReady =
+    (storeType !== EIssuesStoreType.BOARD && storeType !== EIssuesStoreType.MODULE) ||
+    displayFilters?.layout === EIssueLayoutTypes.KANBAN;
+
   useEffect(() => {
-    fetchIssues("init-loader", { canGroup: true, perPageCount: sub_group_by ? 10 : 30 }, viewId);
-  }, [fetchIssues, storeType, group_by, sub_group_by, viewId]);
+    if (!kanbanFetchReady) return;
+    // Board hub loads issues in BoardViewsLayoutRoot before mounting kanban.
+    if (storeType === EIssuesStoreType.BOARD) return;
+    if (storeType === EIssuesStoreType.MODULE || storeType === EIssuesStoreType.PROJECT) return;
+
+    void fetchIssues("init-loader", { canGroup: true, perPageCount: sub_group_by ? 10 : 30 }, viewId).catch(() => {
+      // Errors are handled in the issues store; avoid uncaught rejections blocking the layout.
+    });
+  }, [kanbanFetchReady, fetchIssues, storeType, group_by, sub_group_by, viewId]);
 
   const fetchMoreIssues = useCallback(
     (groupId?: string, subgroupId?: string) => {
@@ -114,6 +148,7 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
 
   const KanBanView = sub_group_by ? KanBanSwimLanes : KanBan;
 
+  const isModuleBoard = storeType === EIssuesStoreType.MODULE;
   const { enableInlineEditing, enableQuickAdd, enableIssueCreation } = issues?.viewFlags || {};
 
   const scrollableContainerRef = useRef<HTMLDivElement | null>(null);
@@ -122,21 +157,17 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
   const [draggedIssueId, setDraggedIssueId] = useState<string | undefined>(undefined);
   const [deleteIssueModal, setDeleteIssueModal] = useState(false);
 
-  const isEditingAllowed = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.PROJECT
-  );
-
   const handleOnDrop = useGroupIssuesDragNDrop(storeType, orderBy, group_by, sub_group_by);
 
   const canEditProperties = useCallback(
     (projectId: string | undefined) => {
-      const isEditingAllowedBasedOnProject =
-        canEditPropertiesBasedOnProject && projectId ? canEditPropertiesBasedOnProject(projectId) : isEditingAllowed;
-
-      return enableInlineEditing && isEditingAllowedBasedOnProject;
+      if (!enableInlineEditing || !projectId) return false;
+      if (canEditPropertiesBasedOnProject) {
+        return canEditPropertiesBasedOnProject(projectId);
+      }
+      return canEditIssueOnProject(projectId);
     },
-    [canEditPropertiesBasedOnProject, enableInlineEditing, isEditingAllowed]
+    [canEditPropertiesBasedOnProject, canEditIssueOnProject, enableInlineEditing]
   );
 
   // Enable Auto Scroll for Main Kanban
@@ -216,19 +247,30 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
 
   const handleCollapsedGroups = useCallback(
     (toggle: "group_by" | "sub_group_by", value: string) => {
-      if (workspaceSlug) {
-        let collapsedGroups = issuesFilter?.issueFilters?.kanbanFilters?.[toggle] || [];
-        if (collapsedGroups.includes(value)) {
-          collapsedGroups = collapsedGroups.filter((_value) => _value != value);
-        } else {
-          collapsedGroups.push(value);
-        }
-        updateFilters(projectId?.toString() ?? "", EIssueFilterType.KANBAN_FILTERS, {
-          [toggle]: collapsedGroups,
-        });
+      if (!workspaceSlug) return;
+
+      let collapsedGroups = issuesFilter?.issueFilters?.kanbanFilters?.[toggle] || [];
+      if (collapsedGroups.includes(value)) {
+        collapsedGroups = collapsedGroups.filter((_value) => _value !== value);
+      } else {
+        collapsedGroups = [...collapsedGroups, value];
+      }
+
+      const payload = { [toggle]: collapsedGroups } as TIssueKanbanFilters;
+
+      if (storeType === EIssuesStoreType.BOARD && boardSlug) {
+        (issuesFilter as IBoardIssuesFilter).updateFilters(
+          workspaceSlug.toString(),
+          undefined,
+          EIssueFilterType.KANBAN_FILTERS,
+          payload,
+          boardSlug.toString()
+        );
+      } else {
+        updateFilters(projectId?.toString() ?? "", EIssueFilterType.KANBAN_FILTERS, payload);
       }
     },
-    [workspaceSlug, issuesFilter, projectId, updateFilters]
+    [workspaceSlug, issuesFilter, projectId, boardSlug, storeType, updateFilters]
   );
 
   const collapsedGroups = issuesFilter?.issueFilters?.kanbanFilters || { group_by: [], sub_group_by: [] };
@@ -271,17 +313,19 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
                 groupedIssueIds={groupedIssueIds ?? {}}
                 getGroupIssueCount={issues.getGroupIssueCount}
                 displayProperties={displayProperties}
-                sub_group_by={sub_group_by}
+                sub_group_by={sub_group_by ?? null}
                 group_by={group_by}
                 orderBy={orderBy}
                 updateIssue={updateIssue}
                 quickActions={renderQuickActions}
                 handleCollapsedGroups={handleCollapsedGroups}
                 collapsedGroups={collapsedGroups}
-                enableQuickIssueCreate={enableQuickAdd}
-                showEmptyGroup={userDisplayFilters?.show_empty_groups ?? true}
+                enableQuickIssueCreate={!isModuleBoard && enableQuickAdd}
+                showEmptyGroup={isModuleBoard ? true : (userDisplayFilters?.show_empty_groups ?? true)}
                 quickAddCallback={quickAddIssue}
-                disableIssueCreation={!enableIssueCreation || !isEditingAllowed || isCompletedCycle}
+                disableIssueCreation={
+                  isModuleBoard || !enableIssueCreation || !canCreateIssues || isCompletedCycle
+                }
                 canEditProperties={canEditProperties}
                 addIssuesToView={addIssuesToView}
                 scrollableContainerRef={scrollableContainerRef}

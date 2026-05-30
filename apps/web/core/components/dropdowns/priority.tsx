@@ -89,7 +89,7 @@ function BorderButton(props: ButtonProps) {
     >
       <div
         className={cn(
-          "flex h-full items-center gap-1.5 rounded-sm border-[0.5px] px-2 py-0.5",
+          "flex h-full w-full items-center justify-start gap-1.5 rounded-sm border-[0.5px] px-2 py-0.5 text-left",
           priorityClasses[priority ?? "none"],
           {
             // compact the icons if text is hidden
@@ -264,7 +264,7 @@ function TransparentButton(props: ButtonProps) {
     >
       <div
         className={cn(
-          "flex h-full w-full items-center gap-1.5 rounded-sm px-2 hover:bg-layer-transparent-hover",
+          "flex h-full w-full items-center justify-start gap-1.5 rounded-sm px-2 text-left hover:bg-layer-transparent-hover",
           {
             // compact the icons if text is hidden
             "px-0.5": hideText,
@@ -463,7 +463,7 @@ export function PriorityDropdown(props: Props) {
       renderByDefault={renderByDefault}
     >
       {isOpen && (
-        <Combobox.Options className="fixed z-10" static>
+        <Combobox.Options className="fixed z-50" static>
           <div
             className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
             ref={setPopperElement}

@@ -3,6 +3,7 @@
 # See the LICENSE file for details.
 
 from .analytic import urlpatterns as analytic_urls
+from .board import urlpatterns as board_urls
 from .api import urlpatterns as api_urls
 from .asset import urlpatterns as asset_urls
 from .cycle import urlpatterns as cycle_urls
@@ -22,9 +23,11 @@ from .webhook import urlpatterns as webhook_urls
 from .workspace import urlpatterns as workspace_urls
 from .timezone import urlpatterns as timezone_urls
 from .exporter import urlpatterns as exporter_urls
+from .jira_ops import urlpatterns as jira_ops_urls
 
 urlpatterns = [
     *analytic_urls,
+    *board_urls,
     *asset_urls,
     *cycle_urls,
     *estimate_urls,
@@ -44,4 +47,5 @@ urlpatterns = [
     *webhook_urls,
     *timezone_urls,
     *exporter_urls,
+    *jira_ops_urls,
 ]

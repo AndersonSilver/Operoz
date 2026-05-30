@@ -62,6 +62,7 @@ export interface IBaseTimelineStore {
     ignoreDependencies?: boolean
   ) => IBlockUpdateDependencyData[];
   updateBlockPosition: (id: string, deltaLeft: number, deltaWidth: number, ignoreDependencies?: boolean) => void;
+  setBlockPosition: (id: string, marginLeft: number, width: number) => void;
   getNumberOfDaysFromPosition: (position: number | undefined) => number | undefined;
   setIsDragging: (isDragging: boolean) => void;
   initGantt: () => void;
@@ -78,11 +79,13 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
   currentView: TGanttViews = "week";
   currentViewData: ChartDataType | undefined = undefined;
   activeBlockId: string | null = null;
-  renderView: any = [];
+  renderView: any = undefined;
 
   rootStore: RootStore;
 
   isDependencyEnabled = false;
+
+  private lastBlockDataResolver: ((id: string) => BlockData | undefined | null) | null = null;
 
   constructor(_rootStore: RootStore) {
     makeObservable(this, {
@@ -149,6 +152,12 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
     runInAction(() => {
       this.currentViewData = data;
     });
+    queueMicrotask(() => this.refreshBlockPositions());
+  };
+
+  refreshBlockPositions = () => {
+    if (!this.lastBlockDataResolver || !this.blockIds?.length || !this.currentViewData || this.isDragging) return;
+    this.updateBlocks(this.lastBlockDataResolver);
   };
 
   /**
@@ -175,8 +184,6 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
 
     runInAction(() => {
       this.currentViewData = newCurrentViewData;
-      this.blocksMap = {};
-      this.blockIds = undefined;
     });
   };
 
@@ -191,6 +198,8 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
   updateBlocks(getDataById: (id: string) => BlockData | undefined | null, type?: EGanttBlockType, index?: number) {
     if (!this.blockIds || !Array.isArray(this.blockIds) || this.isDragging) return true;
 
+    this.lastBlockDataResolver = getDataById;
+
     const updatedBlockMaps: { path: string[]; value: any }[] = [];
     const newBlocks: IGanttBlock[] = [];
 
@@ -201,7 +210,7 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
 
       const block: IGanttBlock = {
         data: blockData,
-        id: blockData?.id,
+        id: blockId,
         name: blockData.name,
         sort_order: blockData?.sort_order ?? undefined,
         start_date: blockData?.start_date ?? undefined,
@@ -337,6 +346,19 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
       set(this.blocksMap, [id, "position"], {
         marginLeft: newMarginLeft ?? currBlock.position?.marginLeft,
         width: newWidth ?? currBlock.position?.width,
+      });
+    });
+  });
+
+  setBlockPosition = action((id: string, marginLeft: number, width: number) => {
+    const currBlock = this.blocksMap[id];
+
+    if (!currBlock) return;
+
+    runInAction(() => {
+      set(this.blocksMap, [id, "position"], {
+        marginLeft,
+        width,
       });
     });
   });

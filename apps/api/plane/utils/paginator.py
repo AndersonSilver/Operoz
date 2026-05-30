@@ -111,7 +111,7 @@ class OffsetPaginator:
         self.key = (
             order_by
             if order_by is None or isinstance(order_by, (list, tuple, set))
-            else (order_by[1::] if order_by.startswith("-") else order_by,)
+            else ((order_by[1::],) if order_by.startswith("-") else (order_by,))
         )
         # Set desc to true when `-` exists in the order by
         self.desc = True if order_by and order_by.startswith("-") else False
@@ -278,12 +278,13 @@ class GroupedOffsetPaginator(OffsetPaginator):
         # Optionally, calculate the total count and max_hits if needed
         # This might require adjustments based on specific use cases
         if results:
-            max_hits = math.ceil(
+            group_counts = (
                 queryset.values(self.group_by_field_name)
                 .annotate(count=Count("id", filter=self.count_filter, distinct=True))
-                .order_by("-count")[0]["count"]
-                / limit
+                .order_by("-count")
             )
+            max_group_count = group_counts[0]["count"] if group_counts else 0
+            max_hits = math.ceil(max_group_count / limit) if max_group_count else 0
         else:
             max_hits = 0
         return CursorResult(
@@ -483,12 +484,13 @@ class SubGroupedOffsetPaginator(OffsetPaginator):
         # Optionally, calculate the total count and max_hits if needed
         # This might require adjustments based on specific use cases
         if results:
-            max_hits = math.ceil(
+            group_counts = (
                 queryset.values(self.group_by_field_name)
                 .annotate(count=Count("id", filter=self.count_filter, distinct=True))
-                .order_by("-count")[0]["count"]
-                / limit
+                .order_by("-count")
             )
+            max_group_count = group_counts[0]["count"] if group_counts else 0
+            max_hits = math.ceil(max_group_count / limit) if max_group_count else 0
         else:
             max_hits = 0
         return CursorResult(

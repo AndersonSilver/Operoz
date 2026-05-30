@@ -14,7 +14,11 @@ import { CycleIssuesMobileHeader } from "./mobile-header";
 export default function ProjectCycleIssuesLayout() {
   return (
     <>
-      <AppHeader header={<CycleIssuesHeader />} mobileHeader={<CycleIssuesMobileHeader />} />
+      <AppHeader
+        header={<CycleIssuesHeader />}
+        mobileHeader={<CycleIssuesMobileHeader />}
+        rowClassName="!h-auto min-h-11 items-stretch"
+      />
       <ContentWrapper>
         <Outlet />
       </ContentWrapper>

@@ -65,20 +65,33 @@ export function ModuleForm(props: Props) {
 
   const { t } = useTranslation();
 
-  const handleCreateUpdateModule = async (formData: Partial<IModule>) => {
-    await handleFormSubmit(formData, dirtyFields);
+  const getFormValues = (module?: IModule): Partial<IModule> => ({
+    ...defaultValues,
+    project_id: module?.project_id ?? projectId,
+    name: module?.name ?? "",
+    description: module?.description ?? "",
+    status: module?.status ?? "backlog",
+    lead_id: module?.lead_id ?? null,
+    member_ids: module?.member_ids ?? [],
+    start_date: module?.start_date ?? null,
+    target_date: module?.target_date ?? null,
+  });
 
-    reset({
-      ...defaultValues,
-    });
+  const handleCreateUpdateModule = async (formData: Partial<IModule>) => {
+    await handleFormSubmit(
+      {
+        ...formData,
+        member_ids: formData.member_ids ?? [],
+      },
+      dirtyFields
+    );
+
+    reset(getFormValues());
   };
 
   useEffect(() => {
-    reset({
-      ...defaultValues,
-      ...data,
-    });
-  }, [data, reset]);
+    reset(getFormValues(data));
+  }, [data, projectId, reset]);
 
   return (
     <form onSubmit={handleSubmit(handleCreateUpdateModule)}>

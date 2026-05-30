@@ -10,7 +10,7 @@ import { observable, action, makeObservable, runInAction, computed, reaction } f
 import { computedFn } from "mobx-utils";
 import type { ICalendarPayload, ICalendarWeek } from "@plane/types";
 import { EStartOfTheWeek } from "@plane/types";
-import { generateCalendarData, getWeekNumberOfDate } from "@plane/utils";
+import { generateCalendarData, getWeekNumberOfDate, renderFormattedPayloadDate } from "@plane/utils";
 // types
 import type { IIssueRootStore } from "./root.store";
 
@@ -35,6 +35,7 @@ export interface ICalendarStore {
   activeWeekNumber: number;
   allDaysOfActiveWeek: ICalendarWeek | undefined;
   getStartAndEndDate: (layout: "week" | "month") => { startDate: string; endDate: string } | undefined;
+  getMonthDateRange: (activeMonthDate: Date) => { startDate: string; endDate: string } | undefined;
 }
 
 export class CalendarStore implements ICalendarStore {
@@ -148,6 +149,19 @@ export class CalendarStore implements ICalendarStore {
     return monthData[weekKey];
   }
 
+  getMonthDateRange = (activeMonthDate: Date) => {
+    const year = activeMonthDate.getFullYear();
+    const month = activeMonthDate.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startDate = renderFormattedPayloadDate(firstDay);
+    const endDate = renderFormattedPayloadDate(lastDay);
+
+    if (!startDate || !endDate) return undefined;
+
+    return { startDate, endDate };
+  };
+
   getStartAndEndDate = computedFn((layout: "week" | "month") => {
     switch (layout) {
       case "week": {
@@ -156,10 +170,18 @@ export class CalendarStore implements ICalendarStore {
         return { startDate: dates[0], endDate: dates[dates.length - 1] };
       }
       case "month": {
-        if (!this.allWeeksOfActiveMonth) return;
+        if (!this.allWeeksOfActiveMonth) {
+          return this.getMonthDateRange(this.calendarFilters.activeMonthDate);
+        }
         const weeks = Object.keys(this.allWeeksOfActiveMonth);
+        if (!weeks.length) return this.getMonthDateRange(this.calendarFilters.activeMonthDate);
+
         const firstWeekDates = Object.keys(this.allWeeksOfActiveMonth[weeks[0]]);
         const lastWeekDates = Object.keys(this.allWeeksOfActiveMonth[weeks[weeks.length - 1]]);
+
+        if (!firstWeekDates.length || !lastWeekDates.length) {
+          return this.getMonthDateRange(this.calendarFilters.activeMonthDate);
+        }
 
         return { startDate: firstWeekDates[0], endDate: lastWeekDates[lastWeekDates.length - 1] };
       }

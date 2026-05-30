@@ -9,6 +9,7 @@ import { autorun } from "mobx";
 import type { RootStore } from "@/plane-web/store/root.store";
 import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
 import { BaseTimeLineStore } from "@/plane-web/store/timeline/base-timeline.store";
+import { trackGanttIssueFields } from "./track-gantt-issue-fields";
 
 export interface IIssuesTimeLineStore extends IBaseTimelineStore {
   isDependencyEnabled: boolean;
@@ -19,8 +20,12 @@ export class IssuesTimeLineStore extends BaseTimeLineStore implements IIssuesTim
     super(_rootStore);
 
     autorun(() => {
-      const getIssueById = this.rootStore.issue.issues.getIssueById;
-      this.updateBlocks(getIssueById);
+      const { issuesMap, getIssueById } = this.rootStore.issue.issues;
+      // Observe issuesMap so blocks refresh when issues load after blockIds are set.
+      void Object.keys(issuesMap).length;
+      trackGanttIssueFields(this.blockIds, getIssueById);
+      if (!this.blockIds?.length) return;
+      queueMicrotask(() => this.updateBlocks(getIssueById));
     });
   }
 }

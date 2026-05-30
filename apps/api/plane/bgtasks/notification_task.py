@@ -30,6 +30,13 @@ from django.db.models import Subquery
 from celery import shared_task
 from bs4 import BeautifulSoup
 
+from plane.bgtasks.email_notification_task import stack_email_notification
+
+# Activity fields Plane historically skipped for subscriber issue notifications (unless workspace enables extended).
+SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS = frozenset(
+    ("cycles", "modules", "reaction", "vote", "draft", "intake")
+)
+
 
 # =========== Issue Description Html Parsing and notification Functions ======================
 
@@ -202,21 +209,24 @@ def notifications(
         issue_activities_created = (
             json.loads(issue_activities_created) if issue_activities_created is not None else None
         )
-        if type not in [
-            "cycle.activity.created",
-            "cycle.activity.deleted",
-            "module.activity.created",
-            "module.activity.deleted",
-            "issue_reaction.activity.created",
-            "issue_reaction.activity.deleted",
-            "comment_reaction.activity.created",
-            "comment_reaction.activity.deleted",
-            "issue_vote.activity.created",
-            "issue_vote.activity.deleted",
-            "issue_draft.activity.created",
-            "issue_draft.activity.updated",
-            "issue_draft.activity.deleted",
-        ]:
+        if issue_activities_created:
+            project = Project.objects.select_related("workspace").filter(pk=project_id).first()
+            if project is None:
+                return
+            workspace = project.workspace
+
+            activities_for_notifications = (
+                issue_activities_created
+                if workspace.issue_notify_email_include_extended_activities
+                else [
+                    a
+                    for a in issue_activities_created
+                    if a.get("field") not in SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS
+                ]
+            )
+            if not activities_for_notifications:
+                return
+
             # Create Notifications
             bulk_notifications = []
             bulk_email_logs = []
@@ -288,6 +298,8 @@ def notifications(
             )
 
             issue = Issue.objects.filter(pk=issue_id).first()
+            if issue is None:
+                return
 
             if subscriber:
                 # add the user to issue subscriber
@@ -298,38 +310,59 @@ def notifications(
                 except Exception:
                     pass
 
-            project = Project.objects.get(pk=project_id)
-
             issue_assignees = IssueAssignee.objects.filter(
                 issue_id=issue_id,
                 project_id=project_id,
                 assignee__in=Subquery(project_members),
             ).values_list("assignee", flat=True)
+            assignee_set = set(issue_assignees)
+            project_member_set = set(project_members)
 
-            issue_subscribers = list(set(issue_subscribers) - {uuid.UUID(actor_id)})
+            try:
+                actor_uuid = uuid.UUID(str(actor_id))
+            except ValueError:
+                actor_uuid = None
+            actor_only = {actor_uuid} if actor_uuid else set()
+            if workspace.issue_notify_assignees_always_email:
+                # Include assignees and issue creator (when still a project member). UI "owner" is often
+                # created_by without IssueAssignee rows; they were missing from this list before.
+                recipients = set(issue_subscribers) | assignee_set
+                cb = issue.created_by_id
+                if cb and cb in project_member_set:
+                    recipients.add(cb)
+                issue_subscribers = list(recipients - actor_only)
+            else:
+                issue_subscribers = list(set(issue_subscribers) - actor_only)
 
             for subscriber in issue_subscribers:
                 if issue.created_by_id and issue.created_by_id == subscriber:
                     sender = "in_app:issue_activities:created"
-                elif subscriber in issue_assignees and issue.created_by_id not in issue_assignees:
+                elif subscriber in assignee_set and issue.created_by_id not in assignee_set:
                     sender = "in_app:issue_activities:assigned"
                 else:
                     sender = "in_app:issue_activities:subscribed"
 
                 preference = UserNotificationPreference.objects.get(user_id=subscriber)
+                is_assignee = subscriber in assignee_set
+                is_issue_creator = bool(issue.created_by_id and issue.created_by_id == subscriber)
 
-                for issue_activity in issue_activities_created:
-                    # If activity done in blocking then blocked by email should not go
-                    if issue_activity.get("issue_detail").get("id") != issue_id:
+                for issue_activity in activities_for_notifications:
+                    issue_detail = issue_activity.get("issue_detail")
+                    if issue_detail is not None and str(issue_detail.get("id")) != str(issue_id):
                         continue
 
-                    # Do not send notification for description update
-                    if issue_activity.get("field") == "description":
+                    if (
+                        not workspace.issue_notify_email_include_description_changes
+                        and issue_activity.get("field") == "description"
+                    ):
                         continue
 
-                    # Check if the value should be sent or not
                     send_email = False
-                    if issue_activity.get("field") == "state" and preference.state_change:
+                    if workspace.issue_notify_assignees_always_email and (
+                        is_assignee or is_issue_creator
+                    ):
+                        send_email = True
+                    elif issue_activity.get("field") == "state" and preference.state_change:
                         send_email = True
                     elif (
                         issue_activity.get("field") == "state"
@@ -345,8 +378,6 @@ def notifications(
                         send_email = True
                     elif preference.property_change:
                         send_email = True
-                    else:
-                        send_email = False
 
                     # If activity is of issue comment fetch the comment
                     issue_comment = (
@@ -465,7 +496,7 @@ def notifications(
             for mention_id in comment_mentions:
                 if mention_id != actor_id:
                     preference = UserNotificationPreference.objects.get(user_id=mention_id)
-                    for issue_activity in issue_activities_created:
+                    for issue_activity in activities_for_notifications:
                         notification = create_mention_notification(
                             project=project,
                             issue=issue,
@@ -556,13 +587,13 @@ def notifications(
                                         "new_value": str(last_activity.new_value),
                                         "old_value": str(last_activity.old_value),
                                         "old_identifier": (
-                                            str(issue_activity.get("old_identifier"))
-                                            if issue_activity.get("old_identifier")
+                                            str(last_activity.old_identifier)
+                                            if last_activity.old_identifier
                                             else None
                                         ),
                                         "new_identifier": (
-                                            str(issue_activity.get("new_identifier"))
-                                            if issue_activity.get("new_identifier")
+                                            str(last_activity.new_identifier)
+                                            if last_activity.new_identifier
                                             else None
                                         ),
                                     },
@@ -573,7 +604,7 @@ def notifications(
                             bulk_email_logs.append(
                                 EmailNotificationLog(
                                     triggered_by_id=actor_id,
-                                    receiver_id=subscriber,
+                                    receiver_id=mention_id,
                                     entity_identifier=issue_id,
                                     entity_name="issue",
                                     data={
@@ -593,13 +624,13 @@ def notifications(
                                             "new_value": str(last_activity.new_value),
                                             "old_value": str(last_activity.old_value),
                                             "old_identifier": (
-                                                str(issue_activity.get("old_identifier"))
-                                                if issue_activity.get("old_identifier")
+                                                str(last_activity.old_identifier)
+                                                if last_activity.old_identifier
                                                 else None
                                             ),
                                             "new_identifier": (
-                                                str(issue_activity.get("new_identifier"))
-                                                if issue_activity.get("new_identifier")
+                                                str(last_activity.new_identifier)
+                                                if last_activity.new_identifier
                                                 else None
                                             ),
                                             "activity_time": str(last_activity.created_at),
@@ -608,7 +639,7 @@ def notifications(
                                 )
                             )
                     else:
-                        for issue_activity in issue_activities_created:
+                        for issue_activity in activities_for_notifications:
                             notification = create_mention_notification(
                                 project=project,
                                 issue=issue,
@@ -622,7 +653,7 @@ def notifications(
                                 bulk_email_logs.append(
                                     EmailNotificationLog(
                                         triggered_by_id=actor_id,
-                                        receiver_id=subscriber,
+                                        receiver_id=mention_id,
                                         entity_identifier=issue_id,
                                         entity_name="issue",
                                         data={
@@ -668,6 +699,8 @@ def notifications(
             # Bulk create notifications
             Notification.objects.bulk_create(bulk_notifications, batch_size=100)
             EmailNotificationLog.objects.bulk_create(bulk_email_logs, batch_size=100, ignore_conflicts=True)
+            if workspace.issue_notify_email_dispatch_immediately:
+                stack_email_notification.delay()
         return
     except Exception as e:
         print(e)

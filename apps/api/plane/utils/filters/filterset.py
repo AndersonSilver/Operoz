@@ -70,7 +70,9 @@ class BaseFilterSet(FilterSet):
             if name not in provided_filters:
                 continue
 
-            f = self.filters[name]
+            f = self.filters.get(name)
+            if f is None:
+                continue
 
             # Build the Q object for this filter
             if f.method is not None:

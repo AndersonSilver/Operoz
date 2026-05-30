@@ -47,6 +47,7 @@ export interface AnalyticsTab {
 }
 export type TAnalyticsFilterParams = {
   project_ids?: string;
+  board_id?: string;
   cycle_id?: string;
   module_id?: string;
 };

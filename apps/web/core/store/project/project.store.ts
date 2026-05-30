@@ -34,6 +34,8 @@ export interface IProjectStore {
   archivedProjectIds: string[] | undefined;
   totalProjectIds: string[] | undefined;
   joinedProjectIds: string[];
+  unassignedProjectIds: string[];
+  getProjectIdsForBoard: (boardId: string) => string[];
   favoriteProjectIds: string[];
   currentProjectDetails: TProject | undefined;
   currentProjectNextSequenceId: number | undefined;
@@ -113,6 +115,7 @@ export class ProjectStore implements IProjectStore {
       totalProjectIds: computed,
       currentProjectDetails: computed,
       joinedProjectIds: computed,
+      unassignedProjectIds: computed,
       favoriteProjectIds: computed,
       currentProjectNextSequenceId: computed,
       // helper actions
@@ -248,6 +251,17 @@ export class ProjectStore implements IProjectStore {
       .map((project) => project.id);
     return projectIds;
   }
+
+  /**
+   * Joined projects without a board (legacy — D10).
+   */
+  get unassignedProjectIds() {
+    return this.joinedProjectIds.filter((projectId) => !this.projectMap[projectId]?.board_id);
+  }
+
+  getProjectIdsForBoard = computedFn((boardId: string) =>
+    this.joinedProjectIds.filter((projectId) => this.projectMap[projectId]?.board_id === boardId)
+  );
 
   /**
    * Returns favorite project IDs belong to the current workspace
@@ -457,7 +471,8 @@ export class ProjectStore implements IProjectStore {
   addProjectToFavorites = async (workspaceSlug: string, projectId: string) => {
     try {
       const currentProject = this.getProjectById(projectId);
-      if (currentProject.is_favorite) return;
+      if (!currentProject) return;
+      if (currentProject.is_favorite || this.rootStore.favorite.entityMap[projectId]) return;
       runInAction(() => {
         set(this.projectMap, [projectId, "is_favorite"], true);
       });
@@ -486,7 +501,8 @@ export class ProjectStore implements IProjectStore {
   removeProjectFromFavorites = async (workspaceSlug: string, projectId: string) => {
     try {
       const currentProject = this.getProjectById(projectId);
-      if (!currentProject.is_favorite) return;
+      if (!currentProject) return;
+      if (!currentProject.is_favorite && !this.rootStore.favorite.entityMap[projectId]) return;
       runInAction(() => {
         set(this.projectMap, [projectId, "is_favorite"], false);
       });

@@ -146,9 +146,12 @@ def get_analytics_filters(
             - analytics_date_range: Date range filters for analytics comparison
             - chart_period_range: Date range for chart visualization
     """
-    # Get project IDs from request
-    if project_ids and isinstance(project_ids, str):
-        project_ids = [str(project_id) for project_id in project_ids.split(",")]
+    # Get project IDs from request (None = no filter; "" or [] = explicit empty scope)
+    if project_ids is not None:
+        if isinstance(project_ids, str):
+            project_ids = [str(project_id) for project_id in project_ids.split(",") if project_id]
+        elif isinstance(project_ids, list):
+            project_ids = [str(project_id) for project_id in project_ids if project_id]
 
     # Base filters for workspace and user
     base_filters = {
@@ -168,8 +171,8 @@ def get_analytics_filters(
         "archived_at__isnull": True,
     }
 
-    # Add project IDs to filters if provided
-    if project_ids:
+    # Add project IDs to filters when explicitly scoped (including empty board)
+    if project_ids is not None:
         base_filters["project_id__in"] = project_ids
         project_filters["id__in"] = project_ids
 

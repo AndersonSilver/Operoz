@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+export * from "./api-error";
 export * from "./array";
 export * from "./attachment";
 export * from "./auth";
@@ -26,6 +27,7 @@ export * from "./module";
 export * from "./notification";
 export * from "./page";
 export * from "./permission";
+export * from "./board";
 export * from "./project-views";
 export * from "./project";
 export * from "./rich-filters";

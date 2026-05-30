@@ -9,26 +9,31 @@ import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EIssueGroupByToServerOptions, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TGroupedIssues } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
+import { renderFormattedPayloadDate } from "@plane/utils";
 // hooks
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import { useIssues } from "@/hooks/store/use-issues";
-import { useUserPermissions } from "@/hooks/store/user";
+import { useCanEditIssueOnProject } from "@/hooks/use-board-issue-capabilities";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
 // types
 import type { IQuickActionProps } from "../list/list-view-types";
 import { CalendarChart } from "./calendar";
-import { handleDragDrop } from "./utils";
+import {
+  buildCalendarDateUpdatePayload,
+  getCalendarPaginationOptions,
+  resolveLayoutDisplayFilters,
+} from "./utils";
 
 export type CalendarStoreType =
   | EIssuesStoreType.PROJECT
   | EIssuesStoreType.MODULE
   | EIssuesStoreType.CYCLE
   | EIssuesStoreType.PROJECT_VIEW
+  | EIssuesStoreType.BOARD
   | EIssuesStoreType.TEAM
   | EIssuesStoreType.TEAM_VIEW
   | EIssuesStoreType.EPIC;
@@ -53,12 +58,11 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
   } = props;
 
   // router
-  const { workspaceSlug } = useParams();
+  const { workspaceSlug, projectId: routerProjectId } = useParams();
 
   // hooks
   const fallbackStoreType = useIssueStoreType() as CalendarStoreType;
   const storeType = isEpic ? EIssuesStoreType.EPIC : fallbackStoreType;
-  const { allowPermissions } = useUserPermissions();
   const { issues, issuesFilter, issueMap } = useIssues(storeType);
   const {
     fetchIssues,
@@ -72,37 +76,65 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
     updateFilters,
   } = useIssuesActions(storeType);
 
+  const canEditIssueOnProject = useCanEditIssueOnProject();
   const issueCalendarView = useCalendarView();
-
-  const isEditingAllowed = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.PROJECT
-  );
 
   const { enableInlineEditing } = issues?.viewFlags || {};
 
-  const displayFilters = issuesFilter.issueFilters?.displayFilters;
+  const filterEntityId =
+    viewId ??
+    (storeType === EIssuesStoreType.PROJECT ? routerProjectId?.toString() : undefined);
+  const displayFilters = resolveLayoutDisplayFilters(issuesFilter, filterEntityId);
 
   const groupedIssueIds = (issues.groupedIssueIds ?? {}) as TGroupedIssues;
 
   const layout = displayFilters?.calendar?.layout ?? "month";
-  const { startDate, endDate } = issueCalendarView.getStartAndEndDate(layout) ?? {};
+  const calendarFetchReady =
+    (storeType !== EIssuesStoreType.BOARD && storeType !== EIssuesStoreType.MODULE) ||
+    displayFilters?.layout === EIssueLayoutTypes.CALENDAR;
+
+  const { startDate, endDate } =
+    issueCalendarView.getStartAndEndDate(layout) ??
+    issueCalendarView.getMonthDateRange(issueCalendarView.calendarFilters.activeMonthDate);
 
   useEffect(() => {
-    if (startDate && endDate && layout) {
-      fetchIssues(
-        "init-loader",
-        {
-          canGroup: true,
-          perPageCount: layout === "month" ? 4 : 30,
-          before: endDate,
-          after: startDate,
-          groupedBy: EIssueGroupByToServerOptions["target_date"],
-        },
-        viewId
-      );
+    issueCalendarView.regenerateCalendar();
+  }, [issueCalendarView]);
+
+  useEffect(() => {
+    if (displayFilters?.layout !== EIssueLayoutTypes.CALENDAR) return;
+    issueCalendarView.updateCalendarPayload(issueCalendarView.calendarFilters.activeMonthDate);
+  }, [displayFilters?.layout, issueCalendarView.calendarFilters.activeMonthDate, issueCalendarView]);
+
+  useEffect(() => {
+    // Módulo e projeto fazem fetch no layout-root (moduleId/projectId da URL).
+    if (
+      storeType === EIssuesStoreType.MODULE ||
+      storeType === EIssuesStoreType.PROJECT
+    ) {
+      return;
     }
-  }, [fetchIssues, storeType, startDate, endDate, layout, viewId]);
+
+    if (!calendarFetchReady) return;
+
+    const paginationOptions = getCalendarPaginationOptions(issueCalendarView, layout);
+    if (!paginationOptions) return;
+
+    void fetchIssues("init-loader", paginationOptions, viewId).catch(() => {
+      // Errors are handled in the issues store; avoid uncaught rejections blocking the layout.
+    });
+  }, [
+    calendarFetchReady,
+    displayFilters?.layout,
+    fetchIssues,
+    issueCalendarView,
+    issueCalendarView.calendarFilters.activeMonthDate,
+    layout,
+    startDate,
+    endDate,
+    storeType,
+    viewId,
+  ]);
 
   const handleDragAndDrop = async (
     issueId: string | undefined,
@@ -110,22 +142,41 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
     sourceDate: string | undefined,
     destinationDate: string | undefined
   ) => {
-    if (!issueId || !destinationDate || !sourceDate || !issueProjectId) return;
+    if (!issueId || !destinationDate || !issueProjectId) return;
 
-    await handleDragDrop(
-      issueId,
-      sourceDate,
-      destinationDate,
-      workspaceSlug?.toString(),
-      issueProjectId,
-      updateIssue
-    ).catch((err) => {
+    const issueDetails = issues.rootIssueStore.issues.getIssueById(issueId);
+    const resolvedProjectId = issueProjectId ?? issueDetails?.project_id;
+    const resolvedSourceDate =
+      sourceDate ??
+      (issueDetails?.target_date ? renderFormattedPayloadDate(issueDetails.target_date) : undefined);
+
+    if (!resolvedProjectId || !resolvedSourceDate) return;
+
+    const slug = Array.isArray(workspaceSlug) ? workspaceSlug[0] : workspaceSlug?.toString();
+    if (!slug) return;
+
+    const datePayload = buildCalendarDateUpdatePayload(resolvedSourceDate, destinationDate, issueDetails);
+
+    if (!datePayload) {
       setToast({
         title: "Error!",
         type: TOAST_TYPE.ERROR,
-        message: err?.detail ?? "Failed to perform this action",
+        message: "Could not move this work item to the selected date.",
       });
-    });
+      return;
+    }
+
+    try {
+      if (!updateIssue) return;
+      await updateIssue(resolvedProjectId, issueId, datePayload);
+    } catch (err: unknown) {
+      const error = err as { detail?: string; message?: string };
+      setToast({
+        title: "Error!",
+        type: TOAST_TYPE.ERROR,
+        message: error?.detail ?? error?.message ?? "Failed to perform this action",
+      });
+    }
   };
 
   const loadMoreIssues = useCallback(
@@ -147,12 +198,13 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
 
   const canEditProperties = useCallback(
     (projectId: string | undefined) => {
-      const isEditingAllowedBasedOnProject =
-        canEditPropertiesBasedOnProject && projectId ? canEditPropertiesBasedOnProject(projectId) : isEditingAllowed;
-
-      return enableInlineEditing && isEditingAllowedBasedOnProject;
+      if (!enableInlineEditing || !projectId) return false;
+      if (canEditPropertiesBasedOnProject) {
+        return canEditPropertiesBasedOnProject(projectId);
+      }
+      return canEditIssueOnProject(projectId);
     },
-    [canEditPropertiesBasedOnProject, enableInlineEditing, isEditingAllowed]
+    [canEditPropertiesBasedOnProject, canEditIssueOnProject, enableInlineEditing]
   );
 
   return (
@@ -162,7 +214,7 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
           issuesFilterStore={issuesFilter}
           issues={issueMap}
           groupedIssueIds={groupedIssueIds}
-          layout={displayFilters?.calendar?.layout}
+          layout={layout}
           showWeekends={displayFilters?.calendar?.show_weekends ?? false}
           issueCalendarView={issueCalendarView}
           quickActions={({ issue, parentRef, customActionButton, placement }) => (

@@ -8,6 +8,7 @@ import type { Editor } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 // constants
 import { ACCEPTED_ATTACHMENT_MIME_TYPES, ACCEPTED_IMAGE_MIME_TYPES } from "@/constants/config";
+import { isLikelyHtmlFile } from "@/extensions/html-document/utils";
 // types
 import type { TEditorCommands, TExtensions } from "@/types";
 
@@ -97,7 +98,7 @@ type InsertFilesSafelyArgs = {
   event: "insert" | "drop";
   files: File[];
   initialPos: number;
-  type?: Extract<TEditorCommands, "attachment" | "image">;
+  type?: Extract<TEditorCommands, "attachment" | "image" | "html-document">;
 };
 
 export const insertFilesSafely = async (args: InsertFilesSafelyArgs) => {
@@ -109,19 +110,26 @@ export const insertFilesSafely = async (args: InsertFilesSafelyArgs) => {
     const docSize = editor.state.doc.content.size;
     pos = Math.min(pos, docSize);
 
-    let fileType: "image" | "attachment" | null = null;
+    let fileType: "image" | "attachment" | "html-document" | null = null;
 
     try {
       if (type) {
-        if (["image", "attachment"].includes(type)) fileType = type;
+        if (["image", "attachment", "html-document"].includes(type)) fileType = type;
         else throw new Error("Wrong file type passed");
       } else {
         if (ACCEPTED_IMAGE_MIME_TYPES.includes(file.type)) fileType = "image";
+        else if (isLikelyHtmlFile(file)) fileType = "html-document";
         else if (ACCEPTED_ATTACHMENT_MIME_TYPES.includes(file.type)) fileType = "attachment";
       }
       // insert file depending on the type at the current position
       if (fileType === "image" && !disabledExtensions?.includes("image")) {
         editor.commands.insertImageComponent({
+          file,
+          pos,
+          event,
+        });
+      } else if (fileType === "html-document") {
+        editor.commands.insertHtmlDocumentEmbed({
           file,
           pos,
           event,

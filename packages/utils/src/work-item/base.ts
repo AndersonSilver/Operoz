@@ -111,12 +111,16 @@ export const handleIssueQueryParamsByLayout = (
     | "draft_issues"
     | "team_issues"
     | "team_project_work_items"
+    | "board_backlog"
 ): TIssueParams[] | null => {
   const queryParams: TIssueParams[] = ["filters"];
 
   if (!layout) return null;
 
-  const currentViewLayoutOptions = ISSUE_DISPLAY_FILTERS_BY_PAGE[viewType].layoutOptions[layout];
+  const pageFilters = ISSUE_DISPLAY_FILTERS_BY_PAGE[viewType];
+  const currentViewLayoutOptions = pageFilters?.layoutOptions?.[layout];
+
+  if (!currentViewLayoutOptions?.display_filters) return null;
 
   // add display filters query params
   Object.keys(currentViewLayoutOptions.display_filters).forEach((option) => {
@@ -124,7 +128,7 @@ export const handleIssueQueryParamsByLayout = (
   });
 
   // add extra options query params
-  if (currentViewLayoutOptions.extra_options.access) {
+  if (currentViewLayoutOptions.extra_options?.access) {
     currentViewLayoutOptions.extra_options.values.forEach((option) => {
       queryParams.push(option);
     });

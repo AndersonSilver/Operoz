@@ -22,6 +22,8 @@ import { NewTabIcon, WorkItemsIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
 import { EIssuesStoreType } from "@plane/types";
 import { Breadcrumbs, Header } from "@plane/ui";
+import { cn } from "@plane/utils";
+import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { CountChip } from "@/components/common/count-chip";
@@ -54,6 +56,7 @@ export const IssuesHeader = observer(function IssuesHeader() {
   const { toggleCreateIssueModal } = useCommandPalette();
   const { allowPermissions } = useUserPermissions();
   const { isMobile } = usePlatformOS();
+  const hasBoardWallpaper = useBoardHubHasBackground();
 
   const SPACE_APP_URL = (SPACE_BASE_URL.trim() === "" ? window.location.origin : SPACE_BASE_URL) + SPACE_BASE_PATH;
   const publishedURL = `${SPACE_APP_URL}/issues/${currentProjectDetails?.anchor}`;
@@ -65,7 +68,7 @@ export const IssuesHeader = observer(function IssuesHeader() {
   );
 
   return (
-    <Header>
+    <Header className={cn(hasBoardWallpaper && "!bg-transparent")}>
       <Header.LeftItem>
         <div className="flex items-center gap-2.5">
           <Breadcrumbs onBack={() => router.back()} isLoading={loader === "init-loader"} className="flex-grow-0">
@@ -108,27 +111,30 @@ export const IssuesHeader = observer(function IssuesHeader() {
         )}
       </Header.LeftItem>
       <Header.RightItem>
-        <div className="hidden gap-2 md:flex">
-          <HeaderFilters
-            projectId={projectId}
-            currentProjectDetails={currentProjectDetails}
-            workspaceSlug={workspaceSlug}
-            canUserCreateIssue={canUserCreateIssue}
-          />
+        <div className={cn("flex items-center gap-2", hasBoardWallpaper && BOARD_HUB_TOOLBAR_CLUSTER)}>
+          <div className="hidden items-center gap-2 md:flex">
+            <HeaderFilters
+              projectId={projectId}
+              currentProjectDetails={currentProjectDetails}
+              workspaceSlug={workspaceSlug}
+              canUserCreateIssue={canUserCreateIssue}
+            />
+          </div>
+          {canUserCreateIssue ? (
+            <Button
+              variant="primary"
+              size="lg"
+              className="shrink-0"
+              onClick={() => {
+                toggleCreateIssueModal(true, EIssuesStoreType.PROJECT);
+              }}
+              data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.WORK_ITEMS}
+            >
+              <div className="block sm:hidden">{t("issue.label", { count: 1 })}</div>
+              <div className="hidden sm:block">{t("issue.add.label")}</div>
+            </Button>
+          ) : null}
         </div>
-        {canUserCreateIssue && (
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => {
-              toggleCreateIssueModal(true, EIssuesStoreType.PROJECT);
-            }}
-            data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.WORK_ITEMS}
-          >
-            <div className="block sm:hidden">{t("issue.label", { count: 1 })}</div>
-            <div className="hidden sm:block">{t("issue.add.label")}</div>
-          </Button>
-        )}
       </Header.RightItem>
     </Header>
   );

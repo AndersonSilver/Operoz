@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import React from "react";
+import React, { forwardRef } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal, Star } from "lucide-react";
 // plane imports
@@ -15,15 +15,17 @@ import { CustomMenu } from "@plane/ui";
 import { cn } from "@plane/utils";
 
 type Props = {
-  ref: React.MutableRefObject<HTMLDivElement | null>;
   isMenuActive: boolean;
   favorite: IFavorite;
   onChange: (value: boolean) => void;
   handleRemoveFromFavorites: (favorite: IFavorite) => void;
 };
 
-export const FavoriteItemQuickAction = observer(function FavoriteItemQuickAction(props: Props) {
-  const { ref, isMenuActive, onChange, handleRemoveFromFavorites, favorite } = props;
+export const FavoriteItemQuickAction = observer(
+  forwardRef<HTMLSpanElement, Props>(function FavoriteItemQuickAction(
+    { isMenuActive, onChange, handleRemoveFromFavorites, favorite },
+    ref
+  ) {
   // translation
   const { t } = useTranslation();
 
@@ -53,4 +55,5 @@ export const FavoriteItemQuickAction = observer(function FavoriteItemQuickAction
       </CustomMenu.MenuItem>
     </CustomMenu>
   );
-});
+  })
+);

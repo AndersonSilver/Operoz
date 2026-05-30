@@ -6,6 +6,7 @@
 
 // plane imports
 import { API_BASE_URL } from "@plane/constants";
+import { isAxiosCancelError } from "@plane/utils";
 import { EIssueServiceType } from "@plane/types";
 import type {
   TIssueParams,
@@ -73,6 +74,7 @@ export class IssueService extends APIService {
     )
       .then((response) => response?.data)
       .catch((error) => {
+        if (isAxiosCancelError(error)) throw error;
         throw error?.response?.data;
       });
   }
@@ -247,7 +249,7 @@ export class IssueService extends APIService {
     return this.post(`/api/workspaces/${workspaceSlug}/projects/${projectId}/issue-dates/`, { updates })
       .then((response) => response?.data)
       .catch((error) => {
-        throw error?.response?.data;
+        throw error?.response?.data ?? error ?? new Error("Failed to update issue dates");
       });
   }
 

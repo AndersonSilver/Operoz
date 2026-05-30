@@ -15,8 +15,9 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
-import { BLOCK_HEIGHT, SIDEBAR_WIDTH } from "../constants";
-import { ChartAddBlock } from "../helpers";
+import { useGanttSidebarWidth } from "../contexts/gantt-sidebar-width";
+import { BLOCK_HEIGHT } from "../constants";
+import { ChartAddBlock, UnscheduledBlockRow } from "../helpers";
 
 type Props = {
   blockId: string;
@@ -35,6 +36,7 @@ export const BlockRow = observer(function BlockRow(props: Props) {
   const [isBlockHiddenOnLeft, setIsBlockHiddenOnLeft] = useState(false);
   // store hooks
   const { getBlockById, updateActiveBlockId, isBlockActive } = useTimeLineChartStore();
+  const { sidebarWidth } = useGanttSidebarWidth();
   const { getIsIssuePeeked } = useIssueDetail();
 
   const block = getBlockById(blockId);
@@ -60,7 +62,7 @@ export const BlockRow = observer(function BlockRow(props: Props) {
       },
       {
         root: intersectionRoot,
-        rootMargin: `0px 0px 0px -${SIDEBAR_WIDTH}px`,
+        rootMargin: `0px 0px 0px -${sidebarWidth}px`,
       }
     );
 
@@ -81,7 +83,7 @@ export const BlockRow = observer(function BlockRow(props: Props) {
 
   return (
     <div
-      className="relative w-max min-w-full"
+      className="group/gantt-row relative w-max min-w-full"
       onMouseEnter={() => updateActiveBlockId(blockId)}
       onMouseLeave={() => updateActiveBlockId(null)}
       style={{
@@ -103,7 +105,7 @@ export const BlockRow = observer(function BlockRow(props: Props) {
                 type="button"
                 className="sticky z-[5] grid h-8 w-8 translate-y-1.5 cursor-pointer place-items-center rounded-sm border border-strong bg-layer-1 text-secondary hover:text-primary"
                 style={{
-                  left: `${SIDEBAR_WIDTH + 4}px`,
+                  left: `${sidebarWidth + 4}px`,
                 }}
                 onClick={() => handleScrollToBlock(block)}
               >
@@ -114,7 +116,12 @@ export const BlockRow = observer(function BlockRow(props: Props) {
                 />
               </button>
             )
-          : enableAddBlock && <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />}
+          : (
+            <>
+              <UnscheduledBlockRow />
+              {enableAddBlock && <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />}
+            </>
+          )}
       </div>
     </div>
   );

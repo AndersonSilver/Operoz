@@ -4,13 +4,16 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 // components
 import type { IBlockUpdateData, IBlockUpdateDependencyData } from "@plane/types";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 import { ChartViewRoot } from "./chart/root";
+import { GanttSidebarWidthProvider } from "./contexts";
+import { resolveGanttChartViewScope } from "./helpers/gantt-chart-view-preference";
 
 type GanttChartRootProps = {
   border?: boolean;
@@ -64,14 +67,34 @@ export const GanttChartRoot = observer(function GanttChartRoot(props: GanttChart
   } = props;
 
   const { setBlockIds } = useTimeLineChartStore();
+  const {
+    workspaceSlug: routerWorkspaceSlug,
+    boardSlug: routerBoardSlug,
+    projectId: routerProjectId,
+    moduleId: routerModuleId,
+    cycleId: routerCycleId,
+  } = useParams();
+
+  const workspaceSlug = routerWorkspaceSlug?.toString();
+  const ganttViewScope = useMemo(
+    () =>
+      resolveGanttChartViewScope({
+        boardSlug: routerBoardSlug?.toString(),
+        projectId: routerProjectId?.toString(),
+        moduleId: routerModuleId?.toString(),
+        cycleId: routerCycleId?.toString(),
+      }),
+    [routerBoardSlug, routerProjectId, routerModuleId, routerCycleId]
+  );
 
   // update the timeline store with updated blockIds
   useEffect(() => {
-    setBlockIds(blockIds);
-  }, [blockIds]);
+    queueMicrotask(() => setBlockIds(blockIds));
+  }, [blockIds, setBlockIds]);
 
   return (
-    <ChartViewRoot
+    <GanttSidebarWidthProvider workspaceSlug={workspaceSlug} scope={ganttViewScope}>
+      <ChartViewRoot
       border={border}
       title={title}
       blockIds={blockIds}
@@ -95,5 +118,6 @@ export const GanttChartRoot = observer(function GanttChartRoot(props: GanttChart
       updateBlockDates={updateBlockDates}
       isEpic={isEpic}
     />
+    </GanttSidebarWidthProvider>
   );
 });

@@ -7,6 +7,7 @@
 import type { Editor } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { TableMap } from "@tiptap/pm/tables";
+import type { Mapping } from "@tiptap/pm/transform";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import { ReactRenderer } from "@tiptap/react";
 // extensions
@@ -50,7 +51,7 @@ export const TableRowDragHandlePlugin = (editor: Editor): Plugin<TableRowDragHan
 
         // Only do position-based stale check if structure hasn't changed
         if (!isStale) {
-          const mapped = prev.decorations?.map(tr.mapping, tr.doc);
+          const mapped = prev.decorations?.map(tr.mapping as Mapping, tr.doc);
           for (let row = 0; row < tableMap.height; row++) {
             const pos = getTableCellWidgetDecorationPos(table, tableMap, row * tableMap.width);
             if (mapped?.find(pos, pos + 1)?.length !== 1) {
@@ -61,7 +62,7 @@ export const TableRowDragHandlePlugin = (editor: Editor): Plugin<TableRowDragHan
         }
 
         if (!isStale) {
-          const mapped = prev.decorations?.map(tr.mapping, tr.doc);
+          const mapped = prev.decorations?.map(tr.mapping as Mapping, tr.doc);
           return {
             decorations: mapped,
             tableHeight: tableMap.height,

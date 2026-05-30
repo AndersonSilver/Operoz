@@ -23,6 +23,11 @@ from plane.db.models import IssueComment, ProjectMember, CommentReaction, Projec
 from plane.bgtasks.issue_activities_task import issue_activity
 from plane.utils.host import base_host
 from plane.bgtasks.webhook_task import model_activity
+from plane.utils.board_permission_enforcement import (
+    deny_board_permission,
+    deny_for_comment_mutation,
+    get_project_for_enforcement,
+)
 
 
 class IssueCommentViewSet(BaseViewSet):
@@ -62,7 +67,9 @@ class IssueCommentViewSet(BaseViewSet):
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def create(self, request, slug, project_id, issue_id):
-        project = Project.objects.get(pk=project_id)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.comments.add"):
+            return denied
         issue = Issue.objects.get(pk=issue_id)
         if (
             ProjectMember.objects.filter(
@@ -109,6 +116,11 @@ class IssueCommentViewSet(BaseViewSet):
     @allow_permission(allowed_roles=[ROLE.ADMIN], creator=True, model=IssueComment)
     def partial_update(self, request, slug, project_id, issue_id, pk):
         issue_comment = IssueComment.objects.get(workspace__slug=slug, project_id=project_id, issue_id=issue_id, pk=pk)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_comment_mutation(
+            request.user, project, actor_id=issue_comment.actor_id, is_delete=False
+        ):
+            return denied
         requested_data = json.dumps(self.request.data, cls=DjangoJSONEncoder)
         current_instance = json.dumps(IssueCommentSerializer(issue_comment).data, cls=DjangoJSONEncoder)
         serializer = IssueCommentSerializer(issue_comment, data=request.data, partial=True)
@@ -144,6 +156,11 @@ class IssueCommentViewSet(BaseViewSet):
     @allow_permission(allowed_roles=[ROLE.ADMIN], creator=True, model=IssueComment)
     def destroy(self, request, slug, project_id, issue_id, pk):
         issue_comment = IssueComment.objects.get(workspace__slug=slug, project_id=project_id, issue_id=issue_id, pk=pk)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_comment_mutation(
+            request.user, project, actor_id=issue_comment.actor_id, is_delete=True
+        ):
+            return denied
         current_instance = json.dumps(IssueCommentSerializer(issue_comment).data, cls=DjangoJSONEncoder)
         issue_comment.delete()
         issue_activity.delay(

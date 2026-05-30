@@ -79,14 +79,17 @@ export class UserService extends APIService {
 
   /**
    * Retrieves the current instance admin details
-   * @returns {Promise<IUser>} Promise resolving to the current instance admin details
-   * @throws {Error} If the API request fails
+   * @returns Current admin user, or `undefined` when not authenticated (401)
+   * @throws On other HTTP errors or network failure
    */
-  async adminDetails(): Promise<IUser> {
-    return this.get("/api/instances/admins/me/")
-      .then((response) => response?.data)
-      .catch((error) => {
-        throw error?.response?.data;
-      });
+  async adminDetails(): Promise<IUser | undefined> {
+    const response = await this.get("/api/instances/admins/me/", { validateStatus: () => true });
+    if (response.status === 401) {
+      return undefined;
+    }
+    if (response.status >= 400) {
+      throw response.data;
+    }
+    return response.data;
   }
 }

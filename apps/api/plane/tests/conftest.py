@@ -138,3 +138,14 @@ def workspace(create_user):
     WorkspaceMember.objects.create(workspace=created_workspace, member=create_user, role=20)
 
     return created_workspace
+
+
+@pytest.fixture
+def workspace_board(workspace):
+    from plane.db.models import Board
+
+    return Board.objects.create(
+        name="Test Board",
+        slug="test-board",
+        workspace=workspace,
+    )

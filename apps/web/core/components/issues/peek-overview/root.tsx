@@ -43,7 +43,7 @@ export const IssuePeekOverview = observer(function IssuePeekOverview(props: IWor
   const {
     peekIssue,
     setPeekIssue,
-    issue: { fetchIssue },
+    issue: { fetchIssue, getIssueById },
     fetchActivities,
   } = useIssueDetail();
   const issueStoreType = useIssueStoreType();
@@ -71,7 +71,9 @@ export const IssuePeekOverview = observer(function IssuePeekOverview(props: IWor
           setError(false);
           await fetchIssue(workspaceSlug, projectId, issueId);
         } catch (error) {
-          setError(true);
+          if (!getIssueById(issueId)) {
+            setError(true);
+          }
           console.error("Error fetching the parent issue", error);
         }
       },
@@ -212,7 +214,7 @@ export const IssuePeekOverview = observer(function IssuePeekOverview(props: IWor
       },
     }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [fetchIssue, is_draft, issues, fetchActivities, pathname, removeRoutePeekId, restoreIssue]
+    [fetchIssue, getIssueById, is_draft, issues, fetchActivities, pathname, removeRoutePeekId, restoreIssue]
   );
 
   const { isLoading } = useSWR(

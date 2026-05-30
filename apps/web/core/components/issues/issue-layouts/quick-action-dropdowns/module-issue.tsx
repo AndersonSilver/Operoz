@@ -18,7 +18,7 @@ import { cn } from "@plane/utils";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-import { useUserPermissions } from "@/hooks/store/user";
+import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
 // plane-web components
 import { DuplicateWorkItemModal } from "@/plane-web/components/issues/issue-layouts/quick-action-dropdowns/duplicate-modal";
 // helper
@@ -52,18 +52,16 @@ export const ModuleIssueQuickActions = observer(function ModuleIssueQuickActions
   const { workspaceSlug, moduleId } = useParams();
   // store hooks
   const { issuesFilter } = useIssues(EIssuesStoreType.MODULE);
-  const { allowPermissions } = useUserPermissions();
+  const { isEditingAllowed, isDeletingAllowed } = useBoardIssueCapabilities(issue.project_id ?? undefined, {
+    readOnly,
+  });
   const { getStateById } = useProjectState();
   const { getProjectIdentifierById } = useProject();
   // derived values
   const stateDetails = getStateById(issue.state_id);
   const projectIdentifier = getProjectIdentifierById(issue?.project_id);
-  // auth
-  const isEditingAllowed =
-    allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.PROJECT) && !readOnly;
   const isArchivingAllowed = handleArchive && isEditingAllowed;
   const isInArchivableGroup = !!stateDetails && ARCHIVABLE_STATE_GROUPS.includes(stateDetails?.group);
-  const isDeletingAllowed = isEditingAllowed;
 
   const activeLayout = `${issuesFilter.issueFilters?.displayFilters?.layout} layout`;
 

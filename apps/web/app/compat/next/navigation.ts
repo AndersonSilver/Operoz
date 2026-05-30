@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useMemo } from "react";
+import { startTransition, useMemo } from "react";
 import { useLocation, useNavigate, useParams as useParamsRR, useSearchParams as useSearchParamsRR } from "react-router";
 import { ensureTrailingSlash } from "./helper";
 
@@ -13,18 +13,24 @@ export function useRouter() {
   return useMemo(
     () => ({
       push: (to: string) => {
-        // Defer navigation to avoid state updates during render
-        setTimeout(() => navigate(ensureTrailingSlash(to)), 0);
+        startTransition(() => {
+          navigate(ensureTrailingSlash(to));
+        });
       },
       replace: (to: string) => {
-        // Defer navigation to avoid state updates during render
-        setTimeout(() => navigate(ensureTrailingSlash(to), { replace: true }), 0);
+        startTransition(() => {
+          navigate(ensureTrailingSlash(to), { replace: true });
+        });
       },
       back: () => {
-        setTimeout(() => navigate(-1), 0);
+        startTransition(() => {
+          navigate(-1);
+        });
       },
       forward: () => {
-        setTimeout(() => navigate(1), 0);
+        startTransition(() => {
+          navigate(1);
+        });
       },
       refresh: () => {
         location.reload();

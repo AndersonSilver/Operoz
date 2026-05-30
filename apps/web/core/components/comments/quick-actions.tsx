@@ -18,6 +18,7 @@ import { CustomMenu } from "@plane/ui";
 import { cn } from "@plane/utils";
 // hooks
 import { useUser } from "@/hooks/store/user";
+import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
 
 type TCommentCard = {
   activityOperations: TCommentsOperations;
@@ -25,16 +26,17 @@ type TCommentCard = {
   setEditMode: () => void;
   showAccessSpecifier: boolean;
   showCopyLinkOption: boolean;
+  projectId?: string;
 };
 
 export const CommentQuickActions = observer(function CommentQuickActions(props: TCommentCard) {
-  const { activityOperations, comment, setEditMode, showAccessSpecifier, showCopyLinkOption } = props;
+  const { activityOperations, comment, setEditMode, showAccessSpecifier, showCopyLinkOption, projectId } = props;
   // store hooks
   const { data: currentUser } = useUser();
+  const { canEditComment, canDeleteComment } = useBoardIssueCapabilities(projectId);
   // derived values
-  const isAuthor = currentUser?.id === comment.actor;
-  const canEdit = isAuthor;
-  const canDelete = isAuthor;
+  const canEdit = canEditComment(comment.actor);
+  const canDelete = canDeleteComment(comment.actor);
   // translation
   const { t } = useTranslation();
 

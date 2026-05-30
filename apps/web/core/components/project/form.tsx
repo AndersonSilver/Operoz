@@ -4,8 +4,8 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useEffect, useRef, useState } from "react";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Info } from "lucide-react";
 import { NETWORK_CHOICES } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
@@ -30,6 +30,15 @@ import { usePlatformOS } from "@/hooks/use-platform-os";
 // services
 import { ProjectService } from "@/services/project";
 // local imports
+import { BoardSelectField } from "@/components/board/board-select-field";
+import {
+  ProjectBoardLayoutSection,
+  type TProjectLayoutHandlers,
+} from "@/components/project/project-board-layout-section";
+import { validateProjectLayoutRequired } from "@/components/project/project-layout-validation";
+import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
+import { useBoard } from "@/hooks/store/use-board";
+import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { ProjectNetworkIcon } from "./project-network-icon";
 
 export interface IProjectDetailsForm {
@@ -46,39 +55,46 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
   // states
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [useLayoutForm, setUseLayoutForm] = useState(false);
+  const layoutHandlersRef = useRef<TProjectLayoutHandlers | null>(null);
   // store hooks
   const { updateProject } = useProject();
+  const { getBoardById } = useBoard();
+  const { getBoardProjectFieldLayout } = useBoardCustomField();
   const { isMobile } = usePlatformOS();
 
   // form info
+  const methods = useForm<IProject>({
+    defaultValues: {
+      ...project,
+      workspace: (project.workspace as IWorkspace).id,
+      board_id: project.board_id ?? "",
+    },
+  });
+
   const {
     handleSubmit,
     watch,
     control,
     setValue,
     setError,
+    trigger,
     reset,
     formState: { errors },
-    getValues,
-  } = useForm<IProject>({
-    defaultValues: {
-      ...project,
-      workspace: (project.workspace as IWorkspace).id,
-    },
-  });
+  } = methods;
   // derived values
   const currentNetwork = NETWORK_CHOICES.find((n) => n.key === project?.network);
   const coverImage = watch("cover_image_url");
 
+  // Sincroniza só ao trocar de projeto — evita reset quando o store atualiza o mesmo projeto.
   useEffect(() => {
-    if (project && projectId !== getValues("id")) {
-      reset({
-        ...project,
-        workspace: (project.workspace as IWorkspace).id,
-      });
-    }
+    reset({
+      ...project,
+      workspace: (project.workspace as IWorkspace).id,
+      board_id: project.board_id ?? "",
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [project, projectId]);
+  }, [projectId]);
 
   // handlers
   const handleIdentifierChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -91,7 +107,10 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
   const handleUpdateChange = async (payload: Partial<IProject>) => {
     if (!workspaceSlug || !project) return;
     return updateProject(workspaceSlug.toString(), project.id, payload)
-      .then(() => {
+      .then(async () => {
+        if (layoutHandlersRef.current) {
+          await layoutHandlersRef.current.save();
+        }
         setToast({
           type: TOAST_TYPE.SUCCESS,
           title: t("toast.success"),
@@ -143,16 +162,45 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
 
   const onSubmit = async (formData: IProject) => {
     if (!workspaceSlug) return;
+    if (useLayoutForm && project.board_id) {
+      const boardSlug = getBoardById(project.board_id)?.slug;
+      const layout = boardSlug ? getBoardProjectFieldLayout(workspaceSlug, boardSlug) : [];
+      const validation = validateProjectLayoutRequired({
+        layout,
+        formData,
+        customFieldValues: layoutHandlersRef.current?.getCustomFieldValues() ?? {},
+        skipSystemKeys: ["name", "identifier"],
+        requiredMessage: t("field_is_required"),
+      });
+      if (!validation.ok) {
+        validation.fieldErrors.forEach(({ name, message }) => setError(name, { type: "manual", message }));
+        await trigger(validation.fieldErrors.map(({ name }) => name));
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: validation.missingCustom
+            ? t("boards.settings.project_schema.required_custom_missing")
+            : t("boards.settings.project_schema.required_fields_missing"),
+        });
+        return;
+      }
+    }
     setIsLoading(true);
     const payload: Partial<IProject> = {
       name: formData.name,
       network: formData.network,
       identifier: formData.identifier,
       description: formData.description,
-
+      project_lead: formData.project_lead,
+      responsible_stakeholder: formData.responsible_stakeholder,
+      default_assignee: formData.default_assignee,
       logo_props: formData.logo_props,
       timezone: formData.timezone,
     };
+
+    if (ENABLE_WORKSPACE_BOARDS && formData.board_id) {
+      payload.board_id = formData.board_id;
+    }
 
     // Handle cover image changes
     try {
@@ -191,6 +239,7 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
   };
 
   return (
+    <FormProvider {...methods}>
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="relative h-44 w-full">
         <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
@@ -265,6 +314,8 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-8">
+        {!useLayoutForm && (
+        <>
         <div className="flex flex-col gap-1">
           <h4 className="text-13">{t("common.project_name")}</h4>
           <Controller
@@ -294,6 +345,43 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
           />
           <span className="text-11 text-danger-primary">{errors?.name?.message}</span>
         </div>
+        <div className="flex flex-col gap-1">
+          <h4 className="text-13">{t("project.responsible_stakeholder")}</h4>
+          <Controller
+            control={control}
+            name="responsible_stakeholder"
+            render={({ field: { value, onChange } }) => (
+              <Input
+                id="responsible_stakeholder"
+                name="responsible_stakeholder"
+                type="text"
+                value={value ?? ""}
+                onChange={onChange}
+                className="rounded-md !p-3 font-medium"
+                placeholder={t("project.responsible_stakeholder_placeholder")}
+                disabled={!isAdmin}
+              />
+            )}
+          />
+        </div>
+        </>
+        )}
+        {ENABLE_WORKSPACE_BOARDS && isAdmin && (
+          <BoardSelectField required={Boolean(project.board_id)} />
+        )}
+        {project.board_id && (
+          <ProjectBoardLayoutSection
+            workspaceSlug={workspaceSlug}
+            project={project}
+            isAdmin={isAdmin}
+            onHandlersReady={(handlers) => {
+              layoutHandlersRef.current = handlers;
+              setUseLayoutForm(Boolean(handlers));
+            }}
+          />
+        )}
+        {!useLayoutForm && (
+        <>
         <div className="flex flex-col gap-1">
           <h4 className="text-13">{t("description")}</h4>
           <Controller
@@ -427,6 +515,8 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
             {errors.timezone && <span className="text-11 text-danger-primary">{errors.timezone.message}</span>}
           </div>
         </div>
+        </>
+        )}
         <div className="flex items-center justify-between py-2">
           <>
             <Button variant="primary" size="lg" type="submit" loading={isLoading} disabled={!isAdmin}>
@@ -439,5 +529,6 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
         </div>
       </div>
     </form>
+    </FormProvider>
   );
 }

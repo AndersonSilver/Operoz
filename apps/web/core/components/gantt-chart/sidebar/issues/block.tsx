@@ -5,6 +5,7 @@
  */
 
 import { observer } from "mobx-react";
+import { useTranslation } from "@plane/i18n";
 // plane imports
 import type { IGanttBlock } from "@plane/types";
 import { Row } from "@plane/ui";
@@ -29,6 +30,7 @@ type Props = {
 
 export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Props) {
   const { block, enableSelection, isDragging, selectionHelpers, isEpic = false } = props;
+  const { t } = useTranslation();
   // store hooks
   const { updateActiveBlockId, isBlockActive, getNumberOfDaysFromPosition } = useTimeLineChartStore();
   const { getIsIssuePeeked } = useIssueDetail();
@@ -41,6 +43,8 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
   const isIssueSelected = selectionHelpers?.getIsEntitySelected(block.id);
   const isIssueFocused = selectionHelpers?.getIsEntityActive(block.id);
   const isBlockHoveredOn = isBlockActive(block.id);
+
+  const scheduleHint = `${t("issue.add.start_date")} · ${t("issue.add.due_date")}`;
 
   return (
     <div
@@ -80,17 +84,21 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
             />
           </div>
         )}
-        <div className="flex h-full flex-grow items-center justify-between gap-2 truncate">
-          <div className="flex-grow truncate">
+        <div className="flex h-full min-w-0 flex-grow items-center justify-between gap-2">
+          <div className="min-w-0 flex-grow">
             <IssueGanttSidebarBlock issueId={block.data.id} isEpic={isEpic} />
           </div>
-          {duration && (
-            <div className="flex-shrink-0 text-13 text-secondary">
+          <div className="flex-shrink-0 text-13 text-secondary">
+            {isBlockComplete && duration ? (
               <span>
                 {duration} day{duration > 1 ? "s" : ""}
               </span>
-            </div>
-          )}
+            ) : (
+              <span className="text-tertiary" title={scheduleHint}>
+                —
+              </span>
+            )}
+          </div>
         </div>
       </Row>
     </div>

@@ -4,23 +4,32 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // hooks
 import { useInstance, useTheme, useUser } from "@/hooks/store";
 
 export const UserProvider = observer(function UserProvider({ children }: React.PropsWithChildren) {
-  // hooks
   const { isSidebarCollapsed, toggleSidebar } = useTheme();
-  const { currentUser, fetchCurrentUser } = useUser();
+  const { currentUser, fetchCurrentUser, isUserLoggedIn } = useUser();
   const { fetchInstanceAdmins } = useInstance();
 
-  useSWR("CURRENT_USER", () => fetchCurrentUser(), {
+  const loadCurrentUser = useCallback(() => fetchCurrentUser(), [fetchCurrentUser]);
+  useSWR("CURRENT_USER", loadCurrentUser, {
     shouldRetryOnError: false,
+    errorRetryCount: 0,
+    revalidateOnReconnect: false,
+    dedupingInterval: 5000,
   });
 
-  useSWR("INSTANCE_ADMINS", () => fetchInstanceAdmins());
+  const loadInstanceAdmins = useCallback(() => fetchInstanceAdmins(), [fetchInstanceAdmins]);
+  useSWR(isUserLoggedIn === true ? "INSTANCE_ADMINS" : null, loadInstanceAdmins, {
+    shouldRetryOnError: false,
+    errorRetryCount: 0,
+    revalidateOnReconnect: false,
+    dedupingInterval: 5000,
+  });
 
   useEffect(() => {
     const localValue = localStorage && localStorage.getItem("god_mode_sidebar_collapsed");

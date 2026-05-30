@@ -22,6 +22,7 @@ import {
   Heading6,
   Image,
   Italic,
+  Link2,
   List,
   ListOrdered,
   ListTodo,
@@ -174,9 +175,109 @@ export const IMAGE_ITEM = {
   extraProps: {},
 } as ToolbarMenuItem<"image">;
 
+export const LINK_ITEM: ToolbarMenuItem<"link"> = {
+  itemKey: "link",
+  renderKey: "link",
+  name: "Link",
+  icon: Link2,
+  editors: ["lite", "document"],
+};
+
+export const TABLE_ITEM: ToolbarMenuItem<"table"> = {
+  itemKey: "table",
+  renderKey: "table",
+  name: "Table",
+  icon: Table,
+  editors: ["document"],
+};
+
 const COMPLEX_ITEMS: ToolbarMenuItem<"table" | "image">[] = [
-  { itemKey: "table", renderKey: "table", name: "Table", icon: Table, editors: ["document"] },
+  TABLE_ITEM,
   IMAGE_ITEM,
+];
+
+/** Cores de texto/fundo do editor (chaves usadas em executeMenuItemCommand). */
+export const ISSUE_MODAL_EDITOR_COLORS: {
+  key: string;
+  label: string;
+  textColor: string;
+  backgroundColor: string;
+}[] = [
+  {
+    key: "gray",
+    label: "Gray",
+    textColor: "var(--editor-colors-gray-text)",
+    backgroundColor: "var(--editor-colors-gray-background)",
+  },
+  {
+    key: "peach",
+    label: "Peach",
+    textColor: "var(--editor-colors-peach-text)",
+    backgroundColor: "var(--editor-colors-peach-background)",
+  },
+  {
+    key: "pink",
+    label: "Pink",
+    textColor: "var(--editor-colors-pink-text)",
+    backgroundColor: "var(--editor-colors-pink-background)",
+  },
+  {
+    key: "orange",
+    label: "Orange",
+    textColor: "var(--editor-colors-orange-text)",
+    backgroundColor: "var(--editor-colors-orange-background)",
+  },
+  {
+    key: "green",
+    label: "Green",
+    textColor: "var(--editor-colors-green-text)",
+    backgroundColor: "var(--editor-colors-green-background)",
+  },
+  {
+    key: "light-blue",
+    label: "Light blue",
+    textColor: "var(--editor-colors-light-blue-text)",
+    backgroundColor: "var(--editor-colors-light-blue-background)",
+  },
+  {
+    key: "dark-blue",
+    label: "Dark blue",
+    textColor: "var(--editor-colors-dark-blue-text)",
+    backgroundColor: "var(--editor-colors-dark-blue-background)",
+  },
+  {
+    key: "purple",
+    label: "Purple",
+    textColor: "var(--editor-colors-purple-text)",
+    backgroundColor: "var(--editor-colors-purple-background)",
+  },
+];
+
+export const ISSUE_MODAL_TOOLBAR_GROUPS: {
+  key: string;
+  items: ToolbarMenuItem[];
+}[] = [
+  {
+    key: "typography",
+    items: TYPOGRAPHY_ITEMS.filter((item) => ["text", "h1", "h2", "h3"].includes(item.itemKey)),
+  },
+  {
+    key: "marks",
+    items: BASIC_MARK_ITEMS,
+  },
+  {
+    key: "lists",
+    items: LIST_ITEMS,
+  },
+  {
+    key: "insert",
+    items: [
+      LINK_ITEM,
+      IMAGE_ITEM,
+      TABLE_ITEM,
+      ...USER_ACTION_ITEMS,
+    ],
+  },
 ];
 
 export const TOOLBAR_ITEMS: {

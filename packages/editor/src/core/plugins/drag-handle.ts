@@ -27,6 +27,7 @@ const generalSelectors = [
   ".issue-embed",
   ".image-component",
   ".image-upload-component",
+  ".html-document-embed-root",
   ".editor-callout-component",
   ".editor-embed-component",
   ".editor-drawio-component",

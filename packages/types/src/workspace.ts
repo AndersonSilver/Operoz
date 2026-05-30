@@ -34,6 +34,11 @@ export interface IWorkspace {
   total_projects?: number;
   role: number;
   timezone: string;
+  /** God Mode — issue notification overrides (API returns when listing instance workspaces). */
+  issue_notify_assignees_always_email?: boolean;
+  issue_notify_email_include_extended_activities?: boolean;
+  issue_notify_email_include_description_changes?: boolean;
+  issue_notify_email_dispatch_immediately?: boolean;
 }
 
 export interface IWorkspaceLite {

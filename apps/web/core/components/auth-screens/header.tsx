@@ -40,24 +40,23 @@ export const AuthHeader = observer(function AuthHeader({ type }: AuthHeaderProps
   // derived values
   const enableSignUpConfig = config?.enable_signup ?? false;
 
+  // Por agora: sem link "Inscrever-se" / "New to Plane? Sign up" no sign-in (fork interno).
+  const additionalAction =
+    type === EAuthModes.SIGN_UP && enableSignUpConfig ? (
+      <div className="flex flex-col items-end text-center text-13 font-medium text-tertiary sm:flex-row sm:items-center sm:gap-2">
+        <span className="text-body-sm-regular text-tertiary">{t(authContentMap[type].text)}</span>
+        <Link
+          data-ph-element={AUTH_TRACKER_ELEMENTS.NAVIGATE_TO_SIGN_UP}
+          href={authContentMap[type].linkHref}
+          className="text-body-sm-semibold text-accent-primary hover:underline"
+        >
+          {t(authContentMap[type].linkText)}
+        </Link>
+      </div>
+    ) : undefined;
+
   return (
-    <AuthHeaderBase
-      pageTitle={t(authContentMap[type].pageTitle)}
-      additionalAction={
-        enableSignUpConfig && (
-          <div className="flex flex-col items-end text-center text-13 font-medium text-tertiary sm:flex-row sm:items-center sm:gap-2">
-            <span className="text-body-sm-regular text-tertiary">{t(authContentMap[type].text)}</span>
-            <Link
-              data-ph-element={AUTH_TRACKER_ELEMENTS.NAVIGATE_TO_SIGN_UP}
-              href={authContentMap[type].linkHref}
-              className="text-body-sm-semibold text-accent-primary hover:underline"
-            >
-              {t(authContentMap[type].linkText)}
-            </Link>
-          </div>
-        )
-      }
-    />
+    <AuthHeaderBase pageTitle={t(authContentMap[type].pageTitle)} additionalAction={additionalAction} />
   );
 });
 
@@ -71,9 +70,9 @@ export function AuthHeaderBase(props: TAuthHeaderBase) {
   return (
     <>
       <PageHead title={pageTitle + " - Plane"} />
-      <div className="sticky top-0 flex w-full flex-shrink-0 items-center justify-between gap-6">
-        <Link href="/">
-          <PlaneLockup height={20} width={95} className="text-primary" />
+      <div className="flex w-full flex-shrink-0 items-center justify-between gap-6 pb-2 pt-0 sm:pb-3">
+        <Link href="/" className="rounded-lg outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-1">
+          <PlaneLockup className="h-10 w-auto max-w-[min(88vw,300px)] sm:h-11 sm:max-w-[340px]" />
         </Link>
         {additionalAction}
       </div>

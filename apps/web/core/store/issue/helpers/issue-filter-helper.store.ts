@@ -114,8 +114,10 @@ export class IssueFilterHelperStore implements IIssueFilterHelperStore {
           : nonEmptyArrayValue;
     });
 
-    // work item filters
-    if (richFilters) issueFiltersParams.filters = JSON.stringify(richFilters);
+    // work item filters (omit empty expression — avoids invalid API filter payloads)
+    if (richFilters && Object.keys(richFilters).length > 0) {
+      issueFiltersParams.filters = JSON.stringify(richFilters);
+    }
 
     if (displayFilters?.layout) issueFiltersParams.layout = displayFilters?.layout;
 
@@ -265,10 +267,10 @@ export class IssueFilterHelperStore implements IIssueFilterHelperStore {
    * @returns
    */
   getShouldReFetchIssues = (displayFilters: IIssueDisplayFilterOptions) => {
-    const NON_SERVER_DISPLAY_FILTERS = ["order_by", "sub_issue", "type"];
+    const REFETCH_DISPLAY_FILTERS = ["order_by", "sub_issue", "type"];
     const displayFilterKeys = Object.keys(displayFilters);
 
-    return NON_SERVER_DISPLAY_FILTERS.some((serverDisplayfilter: string) =>
+    return REFETCH_DISPLAY_FILTERS.some((serverDisplayfilter: string) =>
       displayFilterKeys.includes(serverDisplayfilter)
     );
   };

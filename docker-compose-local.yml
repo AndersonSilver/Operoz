@@ -7,7 +7,8 @@ services:
     volumes:
       - redisdata:/data
     ports:
-      - "6379:6379"
+      # Use 16379 on host if another process already binds 6379 (containers still use 6379 internally).
+      - "16379:6379"
 
   plane-mq:
     image: rabbitmq:3.13.6-management-alpine
@@ -70,6 +71,10 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: unless-stopped
+    # Evita "[Errno -2] Name does not resolve" ao contactar SMTP (ex.: Resend) no Docker Desktop Windows.
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - dev_env
     volumes:
@@ -81,6 +86,15 @@ services:
       - plane-db
       - plane-redis
       - plane-mq
+      - plane-minio
+    environment:
+      # Prefer instance_configurations (God mode) over host env; Windows SKIP_ENV_VAR=0 breaks OAuth flags.
+      SKIP_ENV_VAR: "1"
+      # Inside Docker, localhost is not MinIO; boto3 must use the compose service name.
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      # Host browser uploads go directly to MinIO (no /uploads proxy on :8000 in local compose).
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
     ports:
       - "8000:8000"
 
@@ -91,6 +105,9 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - dev_env
     volumes:
@@ -102,6 +119,11 @@ services:
       - api
       - plane-db
       - plane-redis
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
   beat-worker:
     build:
@@ -110,6 +132,9 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - dev_env
     volumes:
@@ -121,6 +146,11 @@ services:
       - api
       - plane-db
       - plane-redis
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
   migrator:
     build:
@@ -129,6 +159,9 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: "no"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
     networks:
       - dev_env
     volumes:
@@ -139,6 +172,12 @@ services:
     depends_on:
       - plane-db
       - plane-redis
+      - plane-minio
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
 volumes:
   redisdata:

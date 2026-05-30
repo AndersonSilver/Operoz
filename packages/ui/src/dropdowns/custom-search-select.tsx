@@ -41,6 +41,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
     value,
     tabIndex,
     noResultsMessage = "No matches found",
+    searchPlaceholder = "Search",
     defaultOpen = false,
   } = props;
   const [query, setQuery] = useState("");
@@ -105,7 +106,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                   ref={setReferenceElement}
                   type="button"
                   className={cn(
-                    "flex w-full items-center justify-between gap-1 text-11",
+                    "flex w-auto max-w-none shrink-0 items-center justify-between gap-1 text-11",
                     {
                       "cursor-not-allowed text-secondary": disabled,
                       "cursor-pointer hover:bg-layer-transparent-hover": !disabled,
@@ -159,7 +160,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                         className="w-full bg-transparent py-1 text-11 text-secondary placeholder:text-placeholder focus:outline-none"
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
-                        placeholder="Search"
+                        placeholder={searchPlaceholder}
                         displayValue={(assigned: any) => assigned?.name}
                       />
                     </div>

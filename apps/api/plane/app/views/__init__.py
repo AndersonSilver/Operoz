@@ -10,6 +10,13 @@ from .project.base import (
     DeployBoardViewSet,
     ProjectArchiveUnarchiveEndpoint,
 )
+from .project.custom_fields import ProjectCustomFieldEndpoint
+from .project.custom_field_values import (
+    BoardProjectFormLayoutEndpoint,
+    ProjectCustomFieldValueEndpoint,
+    ProjectFormLayoutEndpoint,
+)
+from .project.issue_types import ProjectIssueTypeEndpoint
 
 from .project.invite import (
     UserProjectInvitationsViewset,
@@ -82,6 +89,40 @@ from .workspace.module import WorkspaceModulesEndpoint
 from .workspace.cycle import WorkspaceCyclesEndpoint
 from .workspace.quick_link import QuickLinkViewSet
 from .workspace.sticky import WorkspaceStickyViewSet
+from .workspace.jira_sync import WorkspaceJiraOpsSyncEndpoint, WorkspaceJiraOpsSyncPreviewEndpoint
+from .workspace.jira_oauth import (
+    JiraOpsOAuthCallbackEndpoint,
+    WorkspaceJiraOpsJiraProjectsEndpoint,
+    WorkspaceJiraOpsOAuthCompleteEndpoint,
+    WorkspaceJiraOpsOAuthSitesEndpoint,
+    WorkspaceJiraOpsOAuthStartEndpoint,
+)
+from .board import (
+    BoardCustomFieldBulkAddEndpoint,
+    BoardCustomFieldDetailEndpoint,
+    BoardCustomFieldEndpoint,
+    BoardIssueTypeDetailEndpoint,
+    BoardIssueTypeEndpoint,
+    BoardIssuesViewSet,
+    BoardMemberDetailEndpoint,
+    BoardMemberEndpoint,
+    BoardClient360ViewSet,
+    BoardMetaViewSet,
+    BoardModulesViewSet,
+    BoardPermissionCatalogEndpoint,
+    ProjectBoardPermissionsEndpoint,
+    BoardStatusReportDetailEndpoint,
+    BoardStatusReportEndpoint,
+    BoardStatusReportExportEndpoint,
+    BoardProjectFieldLayoutDetailEndpoint,
+    BoardProjectFieldLayoutEndpoint,
+    BoardRoleDetailEndpoint,
+    BoardRoleDuplicateEndpoint,
+    BoardRoleEndpoint,
+    BoardViewSet,
+    WorkspaceCustomFieldDetailEndpoint,
+    WorkspaceCustomFieldEndpoint,
+)
 
 from .state.base import StateViewSet, IntakeStateEndpoint
 from .view.base import (
@@ -150,6 +191,7 @@ from .issue.reaction import IssueReactionViewSet
 
 from .issue.sub_issue import SubIssuesEndpoint
 
+from .issue.custom_fields import IssueCustomFieldValueEndpoint
 from .issue.subscriber import IssueSubscriberViewSet
 
 from .issue.version import IssueVersionEndpoint, WorkItemDescriptionVersionEndpoint

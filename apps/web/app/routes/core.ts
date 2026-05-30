@@ -114,6 +114,44 @@ export const coreRoutes: RouteConfigEntry[] = [
           ),
         ]),
 
+        // Boards directory (lista de espaços / boards)
+        layout("./(all)/[workspaceSlug]/(projects)/boards/list-layout.tsx", [
+          route(":workspaceSlug/boards", "./(all)/[workspaceSlug]/(projects)/boards/page.tsx"),
+        ]),
+
+        // Board hub (um board)
+        layout("./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/layout.tsx", [
+          route(":workspaceSlug/boards/:boardSlug", "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/page.tsx"),
+          route(
+            ":workspaceSlug/boards/:boardSlug/backlog",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/backlog/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/list",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/list/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/views",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/views/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/timeline",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/timeline/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/calendar",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/calendar/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/clientes",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/clientes/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/boards/:boardSlug/clientes/:projectId",
+            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/clientes/[projectId]/page.tsx"
+          ),
+        ]),
+
         // Archived Projects
         layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/archives/layout.tsx", [
           route(
@@ -209,6 +247,19 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/pages/(list)/page.tsx"
             ),
           ]),
+
+          // Status Report
+          layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/status-report/layout.tsx", [
+            route(
+              ":workspaceSlug/projects/:projectId/status-report/:reportId",
+              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/status-report/[reportId]/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/projects/:projectId/status-report",
+              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/status-report/page.tsx"
+            ),
+          ]),
+
           // Intake list
           layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/intake/layout.tsx", [
             route(
@@ -267,13 +318,63 @@ export const coreRoutes: RouteConfigEntry[] = [
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/members/page.tsx"
           ),
           route(
-            ":workspaceSlug/settings/billing",
-            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/billing/page.tsx"
-          ),
-          route(
             ":workspaceSlug/settings/exports",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/exports/page.tsx"
           ),
+          route(
+            ":workspaceSlug/settings/boards",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/boards/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/settings/jira",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/jira/page.tsx"
+          ),
+          layout("./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/layout.tsx", [
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/acesso",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/acesso/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/notificacoes",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/notificacoes/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/notificacoes/auditoria-email",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/notificacoes/auditoria-email/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/campos",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/campos/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/tipos",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/tipos/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/tipos/projeto",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/tipos/projeto/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/funcoes",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/funcoes/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/quadro",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/quadro/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/cronograma",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/cronograma/page.tsx"
+            ),
+          ]),
           route(
             ":workspaceSlug/settings/webhooks",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/webhooks/page.tsx"

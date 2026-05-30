@@ -17,6 +17,7 @@ import { cn } from "@plane/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
+import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
 // plane-web components
 import { DuplicateWorkItemModal } from "@/plane-web/components/issues/issue-layouts/quick-action-dropdowns";
 // helper
@@ -51,7 +52,9 @@ export const AllIssueQuickActions = observer(function AllIssueQuickActions(props
   const { getProjectIdentifierById } = useProject();
   // derived values
   const stateDetails = getStateById(issue.state_id);
-  const isEditingAllowed = !readOnly;
+  const { isEditingAllowed, isDeletingAllowed } = useBoardIssueCapabilities(issue.project_id ?? undefined, {
+    readOnly,
+  });
   const projectIdentifier = getProjectIdentifierById(issue?.project_id);
   // auth
   const isArchivingAllowed = handleArchive && isEditingAllowed;
@@ -74,7 +77,7 @@ export const AllIssueQuickActions = observer(function AllIssueQuickActions(props
     activeLayout: "Global issues",
     isEditingAllowed,
     isArchivingAllowed,
-    isDeletingAllowed: isEditingAllowed,
+    isDeletingAllowed,
     isInArchivableGroup,
     setIssueToEdit,
     setCreateUpdateIssueModal,

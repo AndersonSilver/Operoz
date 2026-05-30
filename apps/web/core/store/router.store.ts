@@ -28,6 +28,7 @@ export interface IRouterStore {
   inboxId: string | undefined;
   webhookId: string | undefined;
   epicId: string | undefined;
+  boardSlug: string | undefined;
 }
 
 export class RouterStore implements IRouterStore {
@@ -55,6 +56,7 @@ export class RouterStore implements IRouterStore {
       inboxId: computed,
       webhookId: computed,
       epicId: computed,
+      boardSlug: computed,
     });
   }
 
@@ -178,5 +180,9 @@ export class RouterStore implements IRouterStore {
    */
   get epicId() {
     return this.query?.epicId?.toString();
+  }
+
+  get boardSlug() {
+    return this.query?.boardSlug?.toString();
   }
 }

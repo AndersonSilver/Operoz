@@ -4,30 +4,39 @@
  * See the LICENSE file for details.
  */
 
-import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
 import { EIssuesStoreType } from "@plane/types";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
-// local imports
-import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
-import { BaseListRoot } from "../base-list-root";
+// local imports — mesmo root da lista do board (WorkspaceListRoot)
+import { WorkspaceListRoot } from "./workspace-root";
 
 export const ModuleListLayout = observer(function ModuleListLayout() {
   const { workspaceSlug, projectId, moduleId } = useParams();
-
   const { issues } = useIssues(EIssuesStoreType.MODULE);
 
+  const workspaceSlugStr = workspaceSlug?.toString();
+  const moduleIdStr = moduleId?.toString();
+
+  if (!workspaceSlugStr || !moduleIdStr) return null;
+
   return (
-    <BaseListRoot
-      QuickActions={ModuleIssueQuickActions}
+    <WorkspaceListRoot
+      isLoading={false}
+      workspaceSlug={workspaceSlugStr}
+      globalViewId={moduleIdStr}
+      issuesLoading={false}
       addIssuesToView={(issueIds: string[]) => {
-        if (!workspaceSlug || !projectId || !moduleId) throw new Error();
-        return issues.addIssuesToModule(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), issueIds);
+        if (!projectId) throw new Error();
+        return issues.addIssuesToModule(
+          workspaceSlugStr,
+          projectId.toString(),
+          moduleIdStr,
+          issueIds
+        );
       }}
-      viewId={moduleId?.toString()}
     />
   );
 });

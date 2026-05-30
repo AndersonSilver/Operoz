@@ -36,6 +36,12 @@ from plane.app.views import (
     WorkspaceHomePreferenceViewSet,
     WorkspaceStickyViewSet,
     WorkspaceUserPreferenceViewSet,
+    WorkspaceJiraOpsSyncEndpoint,
+    WorkspaceJiraOpsSyncPreviewEndpoint,
+    WorkspaceJiraOpsOAuthStartEndpoint,
+    WorkspaceJiraOpsOAuthSitesEndpoint,
+    WorkspaceJiraOpsOAuthCompleteEndpoint,
+    WorkspaceJiraOpsJiraProjectsEndpoint,
 )
 
 
@@ -256,5 +262,35 @@ urlpatterns = [
         "workspaces/<str:slug>/sidebar-preferences/",
         WorkspaceUserPreferenceViewSet.as_view(),
         name="workspace-user-preference",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/",
+        WorkspaceJiraOpsSyncEndpoint.as_view(),
+        name="workspace-jira-ops-sync",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/start/",
+        WorkspaceJiraOpsOAuthStartEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-start",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/sites/",
+        WorkspaceJiraOpsOAuthSitesEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-sites",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/complete/",
+        WorkspaceJiraOpsOAuthCompleteEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-complete",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/jira-projects/",
+        WorkspaceJiraOpsJiraProjectsEndpoint.as_view(),
+        name="workspace-jira-ops-jira-projects",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/preview/",
+        WorkspaceJiraOpsSyncPreviewEndpoint.as_view(),
+        name="workspace-jira-ops-sync-preview",
     ),
 ]

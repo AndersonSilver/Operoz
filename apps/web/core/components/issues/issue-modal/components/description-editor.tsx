@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
@@ -17,10 +17,15 @@ import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import type { TIssue } from "@plane/types";
 import { EFileAssetType } from "@plane/types";
 import { Loader } from "@plane/ui";
-import { getDescriptionPlaceholderI18n, getTabIndex } from "@plane/utils";
+import { cn, getDescriptionPlaceholderI18n, getTabIndex, isEditorEmpty } from "@plane/utils";
 // components
-import { GptAssistantPopover } from "@/components/core/modals/gpt-assistant-popover";
+import { GptAssistantPanel, GptAssistantPopover } from "@/components/core/modals/gpt-assistant-popover";
 import { RichTextEditor } from "@/components/editor/rich-text";
+import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/components/issue-modal-editor-toolbar";
+import {
+  issueFormControlBorderClass,
+  issueFormControlFocusWithinClass,
+} from "@/plane-web/components/issues/issue-modal/issue-form-field";
 // helpers
 // hooks
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
@@ -52,6 +57,8 @@ type TIssueDescriptionEditorProps = {
   handleGptAssistantClose: () => void;
   onAssetUpload: (assetId: string) => void;
   onClose: () => void;
+  /** Barra superior estilo criar item (comandos, @, IA). */
+  variant?: "default" | "create-modal";
 };
 
 export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(props: TIssueDescriptionEditorProps) {
@@ -72,11 +79,15 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
     handleGptAssistantClose,
     onAssetUpload,
     onClose,
+    variant = "default",
   } = props;
   // i18n
   const { t } = useTranslation();
   // states
   const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
+  const [isEditorReady, setIsEditorReady] = useState(false);
+  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
+  const syncedDescriptionRef = useRef<string | undefined>(undefined);
   // store hooks
   const { getWorkspaceBySlug } = useWorkspace();
   const workspaceId = getWorkspaceBySlug(workspaceSlug?.toString())?.id ?? "";
@@ -88,22 +99,31 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
   const { getIndex } = getTabIndex(ETabIndices.ISSUE_FORM, isMobile);
 
   useEffect(() => {
-    if (descriptionHtmlData) handleDescriptionHTMLDataChange(descriptionHtmlData);
+    if (descriptionHtmlData === undefined) {
+      syncedDescriptionRef.current = undefined;
+      return;
+    }
+    if (syncedDescriptionRef.current === descriptionHtmlData) return;
+    syncedDescriptionRef.current = descriptionHtmlData;
+    handleDescriptionHTMLDataChange(descriptionHtmlData);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [descriptionHtmlData]);
 
-  const handleKeyDown = (event: KeyboardEvent) => {
-    if (editorRef.current?.isEditorReadyToDiscard()) {
-      onClose();
-    } else {
-      setToast({
-        type: TOAST_TYPE.ERROR,
-        title: "Error!",
-        message: "Editor is still processing changes. Please wait before proceeding.",
-      });
-      event.preventDefault(); // Prevent default action if editor is not ready to discard
-    }
-  };
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (editorRef.current?.isEditorReadyToDiscard()) {
+        onClose();
+      } else {
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: "Error!",
+          message: "Editor is still processing changes. Please wait before proceeding.",
+        });
+        event.preventDefault();
+      }
+    },
+    [editorRef, onClose]
+  );
 
   useKeypress("Escape", handleKeyDown);
 
@@ -153,8 +173,142 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
       .finally(() => setIAmFeelingLucky(false));
   };
 
+  const isCreateModal = variant === "create-modal";
+
+  const handleToolbarEditorReady = useCallback(
+    (ready: boolean) => {
+      if (!ready) {
+        setIsEditorReady(false);
+        return;
+      }
+      // Aguarda o ref do editor estar disponível (onCreate dispara antes do imperative handle).
+      requestAnimationFrame(() => {
+        if (editorRef.current) setIsEditorReady(true);
+      });
+    },
+    [editorRef]
+  );
+
+  useEffect(() => {
+    if (!gptAssistantModal) setIsAiPanelOpen(false);
+  }, [gptAssistantModal]);
+
+  const handleToggleAiPanel = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = !isAiPanelOpen;
+      setIsAiPanelOpen(next);
+      setGptAssistantModal(next);
+    },
+    [isAiPanelOpen, setGptAssistantModal]
+  );
+
+  const handleCloseAiPanel = useCallback(() => {
+    setIsAiPanelOpen(false);
+    setGptAssistantModal(false);
+    handleGptAssistantClose();
+  }, [handleGptAssistantClose, setGptAssistantModal]);
+
+  const aiActions = (
+    <>
+      {issueName && issueName.trim() !== "" && config?.has_llm_configured && (
+        <button
+          type="button"
+          className={`flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 text-secondary hover:bg-layer-1 ${
+            iAmFeelingLucky ? "cursor-wait" : ""
+          }`}
+          onClick={handleAutoGenerateDescription}
+          disabled={iAmFeelingLucky}
+          tabIndex={getIndex("feeling_lucky")}
+        >
+          {iAmFeelingLucky ? (
+            "…"
+          ) : (
+            <>
+              <Sparkle className="size-3.5" />
+              {t("issue_modal_ai_lucky")}
+            </>
+          )}
+        </button>
+      )}
+      {config?.has_llm_configured && projectId &&
+        (isCreateModal ? (
+          <button
+            type="button"
+            className={cn(
+              "flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 hover:bg-layer-1",
+              isAiPanelOpen ? "bg-layer-1 text-primary" : "text-secondary"
+            )}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={handleToggleAiPanel}
+            tabIndex={-1}
+            aria-expanded={isAiPanelOpen}
+          >
+            <Sparkle className="size-3.5" />
+            {t("issue_modal_ai_assistant")}
+          </button>
+        ) : (
+          <GptAssistantPopover
+            isOpen={gptAssistantModal}
+            handleClose={() => {
+              setGptAssistantModal((prevData) => !prevData);
+              handleGptAssistantClose();
+            }}
+            onResponse={(response) => {
+              handleAiAssistance(response);
+            }}
+            placement="top-end"
+            button={
+              <button
+                type="button"
+                className="flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 text-secondary hover:bg-layer-1"
+                onClick={() => setGptAssistantModal((prevData) => !prevData)}
+                tabIndex={-1}
+              >
+                <Sparkle className="size-3.5" />
+                {t("issue_modal_ai_assistant")}
+              </button>
+            }
+            workspaceId={workspaceId}
+            workspaceSlug={workspaceSlug}
+            projectId={projectId}
+          />
+        ))}
+    </>
+  );
+
   return (
-    <div className="relative rounded-lg border-[0.5px] border-subtle-1 bg-layer-2">
+    <div
+      className={cn(
+        cn(
+          "relative rounded-[3px] bg-layer-2 shadow-sm transition-[border-color,box-shadow]",
+          issueFormControlBorderClass,
+          issueFormControlFocusWithinClass
+        ),
+        isCreateModal && "min-h-[140px] overflow-visible",
+        !isCreateModal && "overflow-hidden"
+      )}
+    >
+      {isCreateModal && (
+        <div
+          className="relative z-0 overflow-visible border-b border-subtle bg-layer-1"
+          data-prevent-outside-click
+        >
+          <IssueModalEditorToolbar editorRef={editorRef} editorReady={isEditorReady} endSlot={aiActions} />
+          {isAiPanelOpen && projectId && (
+            <GptAssistantPanel
+              isOpen
+              variant="inline"
+              onClose={handleCloseAiPanel}
+              onResponse={handleAiAssistance}
+              workspaceId={workspaceId}
+              workspaceSlug={workspaceSlug}
+              projectId={projectId}
+            />
+          )}
+        </div>
+      )}
       {descriptionHtmlData === undefined || !projectId ? (
         <Loader className="max-h-64 min-h-[120px] space-y-2 overflow-hidden rounded-md border border-subtle p-3 py-2 pt-3">
           <Loader.Item width="100%" height="26px" />
@@ -176,7 +330,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
           </div>
         </Loader>
       ) : (
-        <>
+        <div className={cn(isCreateModal && "overflow-hidden")}>
           <Controller
             name="description_html"
             control={control}
@@ -186,6 +340,8 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                 id="issue-modal-editor"
                 initialValue={value ?? ""}
                 value={descriptionHtmlData}
+                bubbleMenuEnabled={!isCreateModal}
+                disabledExtensions={isCreateModal ? ["editorSideMenu"] : []}
                 workspaceSlug={workspaceSlug?.toString()}
                 workspaceId={workspaceId}
                 projectId={projectId}
@@ -196,14 +352,22 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                 onEnterKeyPress={() => submitBtnRef?.current?.click()}
                 ref={editorRef}
                 tabIndex={getIndex("description_html")}
-                placeholder={(isFocused, description) => t(getDescriptionPlaceholderI18n(isFocused, description))}
+                placeholder={(isFocused, description) =>
+                  isCreateModal
+                    ? isFocused || !isEditorEmpty(description)
+                      ? t("issue_modal_description_placeholder_active")
+                      : t("issue_modal_description_placeholder")
+                    : t(getDescriptionPlaceholderI18n(isFocused, description))
+                }
+                dragDropEnabled={!isCreateModal}
+                handleEditorReady={handleToolbarEditorReady}
                 searchMentionCallback={async (payload) =>
                   await workspaceService.searchEntity(workspaceSlug?.toString() ?? "", {
                     ...payload,
                     project_id: projectId?.toString() ?? "",
                   })
                 }
-                containerClassName="pt-3 min-h-[120px]"
+                containerClassName={cn("min-h-[100px] pl-3 pt-2", isCreateModal && "pb-2")}
                 uploadFile={async (blockId, file) => {
                   try {
                     const { asset_id } = await uploadEditorAsset({
@@ -243,56 +407,10 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
               />
             )}
           />
-          <div className="border-0.5 z-10 flex items-center justify-end gap-2 p-3">
-            {issueName && issueName.trim() !== "" && config?.has_llm_configured && (
-              <button
-                type="button"
-                className={`flex items-center gap-1 rounded-sm bg-surface-2 px-1.5 py-1 text-caption-sm-regular hover:bg-layer-1 ${
-                  iAmFeelingLucky ? "cursor-wait" : ""
-                }`}
-                onClick={handleAutoGenerateDescription}
-                disabled={iAmFeelingLucky}
-                tabIndex={getIndex("feeling_lucky")}
-              >
-                {iAmFeelingLucky ? (
-                  "Generating response"
-                ) : (
-                  <>
-                    <Sparkle className="h-3.5 w-3.5" />I{"'"}m feeling lucky
-                  </>
-                )}
-              </button>
-            )}
-            {config?.has_llm_configured && projectId && (
-              <GptAssistantPopover
-                isOpen={gptAssistantModal}
-                handleClose={() => {
-                  setGptAssistantModal((prevData) => !prevData);
-                  // this is done so that the title do not reset after gpt popover closed
-                  handleGptAssistantClose();
-                }}
-                onResponse={(response) => {
-                  handleAiAssistance(response);
-                }}
-                placement="top-end"
-                button={
-                  <button
-                    type="button"
-                    className="flex items-center gap-1 rounded-sm bg-surface-2 px-1.5 py-1 text-caption-sm-regular hover:bg-layer-1"
-                    onClick={() => setGptAssistantModal((prevData) => !prevData)}
-                    tabIndex={-1}
-                  >
-                    <Sparkle className="h-4 w-4" />
-                    AI
-                  </button>
-                }
-                workspaceId={workspaceId}
-                workspaceSlug={workspaceSlug}
-                projectId={projectId}
-              />
-            )}
-          </div>
-        </>
+          {!isCreateModal && (
+            <div className="z-10 flex items-center justify-end gap-2 border-t border-subtle p-2">{aiActions}</div>
+          )}
+        </div>
       )}
     </div>
   );

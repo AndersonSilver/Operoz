@@ -14,6 +14,7 @@ export interface IBaseAnalyticsStore {
   //observables
   currentTab: TAnalyticsTabsBase;
   selectedProjects: string[];
+  selectedBoardId: string | null;
   selectedDuration: DurationType;
   selectedCycle: string;
   selectedModule: string;
@@ -24,6 +25,7 @@ export interface IBaseAnalyticsStore {
 
   //actions
   updateSelectedProjects: (projects: string[]) => void;
+  updateSelectedBoard: (boardId: string | null) => void;
   updateSelectedDuration: (duration: DurationType) => void;
   updateSelectedCycle: (cycle: string) => void;
   updateSelectedModule: (module: string) => void;
@@ -35,6 +37,7 @@ export abstract class BaseAnalyticsStore implements IBaseAnalyticsStore {
   //observables
   currentTab: TAnalyticsTabsBase = "overview";
   selectedProjects: string[] = [];
+  selectedBoardId: string | null = null;
   selectedDuration: DurationType = "last_30_days";
   selectedCycle: string = "";
   selectedModule: string = "";
@@ -46,6 +49,7 @@ export abstract class BaseAnalyticsStore implements IBaseAnalyticsStore {
       currentTab: observable.ref,
       selectedDuration: observable.ref,
       selectedProjects: observable,
+      selectedBoardId: observable.ref,
       selectedCycle: observable.ref,
       selectedModule: observable.ref,
       isPeekView: observable.ref,
@@ -54,6 +58,7 @@ export abstract class BaseAnalyticsStore implements IBaseAnalyticsStore {
       selectedDurationLabel: computed,
       // actions
       updateSelectedProjects: action,
+      updateSelectedBoard: action,
       updateSelectedDuration: action,
       updateSelectedCycle: action,
       updateSelectedModule: action,
@@ -70,11 +75,23 @@ export abstract class BaseAnalyticsStore implements IBaseAnalyticsStore {
     try {
       runInAction(() => {
         this.selectedProjects = projects;
+        if (projects.length > 0) {
+          this.selectedBoardId = null;
+        }
       });
     } catch (error) {
       console.error("Failed to update selected project");
       throw error;
     }
+  };
+
+  updateSelectedBoard = (boardId: string | null) => {
+    runInAction(() => {
+      this.selectedBoardId = boardId;
+      if (boardId) {
+        this.selectedProjects = [];
+      }
+    });
   };
 
   updateSelectedDuration = (duration: DurationType) => {

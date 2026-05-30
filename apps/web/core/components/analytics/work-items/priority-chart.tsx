@@ -22,6 +22,7 @@ import type { TBarItem, TChart, TChartDatum, ChartXAxisProperty, ChartYAxisMetri
 // plane web components
 import { generateExtendedColors, parseChartData } from "@/components/chart/utils";
 // hooks
+import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { AnalyticsService } from "@/services/analytics.service";
@@ -53,28 +54,21 @@ const PriorityChart = observer(function PriorityChart(props: Props) {
   const { x_axis, y_axis, group_by } = props;
   const { t } = useTranslation();
   // store hooks
-  const { selectedDuration, selectedProjects, selectedCycle, selectedModule, isPeekView, isEpic } = useAnalytics();
+  const { selectedDuration, isPeekView } = useAnalytics();
+  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams(props);
   const { workspaceStates } = useProjectState();
   const { resolvedTheme } = useTheme();
   // router
-  const params = useParams();
-  const workspaceSlug = params.workspaceSlug.toString();
+  const routeParams = useParams();
+  const workspaceSlug = routeParams.workspaceSlug.toString();
 
   const { data: priorityChartData, isLoading: priorityChartLoading } = useSWR(
-    `customized-insights-chart-${workspaceSlug}-${selectedDuration}-
-    ${selectedProjects}-${selectedCycle}-${selectedModule}-${props.x_axis}-${props.y_axis}-${props.group_by}-${isPeekView}-${isEpic}`,
+    `customized-insights-chart-${workspaceSlug}-${selectedDuration}-${cacheKey}-${props.x_axis}-${props.y_axis}-${props.group_by}-${isPeekView}`,
     () =>
       analyticsService.getAdvanceAnalyticsCharts<TChart>(
         workspaceSlug,
         "custom-work-items",
-        {
-          // date_filter: selectedDuration,
-          ...(selectedProjects?.length > 0 && { project_ids: selectedProjects?.join(",") }),
-          ...(selectedCycle ? { cycle_id: selectedCycle } : {}),
-          ...(selectedModule ? { module_id: selectedModule } : {}),
-          ...(isEpic ? { epic: true } : {}),
-          ...props,
-        },
+        analyticsParams,
         isPeekView
       )
   );

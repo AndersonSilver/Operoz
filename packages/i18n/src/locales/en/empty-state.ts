@@ -194,5 +194,10 @@ export default {
       description: "Automate notifications to external services when project events occur.",
       cta_primary: "Add webhook",
     },
+    boards: {
+      title: "No boards yet",
+      description: "Create boards to group projects by team or area.",
+      cta_primary: "Create board",
+    },
   },
 } as const;

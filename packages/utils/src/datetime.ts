@@ -4,8 +4,39 @@
  * See the LICENSE file for details.
  */
 
-import { differenceInDays, format, formatDistanceToNow, isAfter, isEqual, isValid, parseISO } from "date-fns";
+import {
+  differenceInDays,
+  format,
+  formatDistanceToNow,
+  getISOWeek,
+  getISOWeekYear,
+  isAfter,
+  isEqual,
+  isValid,
+  parseISO,
+} from "date-fns";
+import { enUS, ptBR } from "date-fns/locale";
 import { isNumber } from "lodash-es";
+
+const USER_LANGUAGE_STORAGE_KEY = "userLanguage";
+
+/** Matches @plane/i18n DEFAULT_LOCALE when nothing is stored yet. */
+const DEFAULT_DATE_FNS_LOCALE = ptBR;
+
+function getDateFnsLocale() {
+  if (typeof window === "undefined") {
+    return DEFAULT_DATE_FNS_LOCALE;
+  }
+  const stored = window.localStorage.getItem(USER_LANGUAGE_STORAGE_KEY);
+  if (!stored || stored === "pt-BR") {
+    return ptBR;
+  }
+  return enUS;
+}
+
+function getDistanceLocale() {
+  return getDateFnsLocale();
+}
 
 // Format Date Helpers
 /**
@@ -26,15 +57,66 @@ export const renderFormattedDate = (
   if (!parsedDate) return;
   // Check if the parsed date is valid before formatting
   if (!isValid(parsedDate)) return; // Return null for invalid dates
+  const locale = getDateFnsLocale();
   let formattedDate;
   try {
     // Format the date in the format provided or default format (MMM dd, yyyy)
-    formattedDate = format(parsedDate, formatToken);
+    formattedDate = format(parsedDate, formatToken, { locale });
   } catch (_e) {
     // Format the date in format (MMM dd, yyyy) in case of any error
-    formattedDate = format(parsedDate, "MMM dd, yyyy");
+    formattedDate = format(parsedDate, "MMM dd, yyyy", { locale });
   }
   return formattedDate;
+};
+
+/** Capitalizes month names after Portuguese "de" (e.g. "de maio" → "de Maio"). */
+const capitalizePortugueseMonth = (text: string): string =>
+  text.replace(/\bde ([\p{L}]+)/gu, (_, month: string) => `de ${month.charAt(0).toUpperCase()}${month.slice(1)}`);
+
+/**
+ * Date with full month name (pt-BR: "25 de Maio de 2026"; en: "May 25, 2026").
+ */
+export const renderFormattedDateLong = (date: string | Date | undefined | null): string | undefined => {
+  const parsedDate = getDate(date);
+  if (!parsedDate || !isValid(parsedDate)) return undefined;
+
+  const locale = getDateFnsLocale();
+  const isPt = locale === ptBR;
+  const token = isPt ? "d 'de' MMMM 'de' yyyy" : "MMMM d, yyyy";
+  const formatted = format(parsedDate, token, { locale });
+  return isPt ? capitalizePortugueseMonth(formatted) : formatted;
+};
+
+/**
+ * Period range with full month names for UI copy (status report modal, etc.).
+ */
+export const renderFormattedPeriodDatesLong = (start: string, end: string): string => {
+  const startDate = getDate(start);
+  const endDate = getDate(end);
+  if (!startDate || !endDate || !isValid(startDate) || !isValid(endDate)) {
+    return `${start} — ${end}`;
+  }
+
+  const locale = getDateFnsLocale();
+  if (locale !== ptBR) {
+    const startLabel = renderFormattedDateLong(start);
+    const endLabel = renderFormattedDateLong(end);
+    return `${startLabel ?? start} — ${endLabel ?? end}`;
+  }
+
+  const startYear = startDate.getFullYear();
+  const endYear = endDate.getFullYear();
+  const startMonth = startDate.getMonth();
+  const endMonth = endDate.getMonth();
+
+  if (startYear === endYear && startMonth === endMonth) {
+    const monthYear = capitalizePortugueseMonth(format(startDate, "MMMM 'de' yyyy", { locale }));
+    return `${format(startDate, "d", { locale })} à ${format(endDate, "d", { locale })} de ${monthYear}`;
+  }
+
+  const startLabel = renderFormattedDateLong(start);
+  const endLabel = renderFormattedDateLong(end);
+  return `${startLabel ?? start} à ${endLabel ?? end}`;
 };
 
 /**
@@ -53,6 +135,59 @@ export const renderFormattedDateWithoutYear = (date: string | Date): string => {
   // Format the date in short format (MMM dd)
   const formattedDate = format(parsedDate, "MMM dd");
   return formattedDate;
+};
+
+/**
+ * Compact date range for tables and lists (locale-aware).
+ * @example renderFormattedPeriodRange("2026-05-18", "2026-05-24") // "18–24 mai 2026" (pt-BR)
+ */
+export const renderFormattedPeriodRange = (start: string, end: string): string => {
+  const startDate = getDate(start);
+  const endDate = getDate(end);
+  if (!startDate || !endDate || !isValid(startDate) || !isValid(endDate)) {
+    return `${start} — ${end}`;
+  }
+
+  const locale = getDateFnsLocale();
+  const startYear = startDate.getFullYear();
+  const endYear = endDate.getFullYear();
+  const startMonth = startDate.getMonth();
+  const endMonth = endDate.getMonth();
+
+  if (startYear === endYear && startMonth === endMonth) {
+    return `${format(startDate, "d", { locale })}–${format(endDate, "d MMM yyyy", { locale })}`;
+  }
+
+  if (startYear === endYear) {
+    return `${format(startDate, "d MMM", { locale })} – ${format(endDate, "d MMM yyyy", { locale })}`;
+  }
+
+  return `${format(startDate, "d MMM yyyy", { locale })} – ${format(endDate, "d MMM yyyy", { locale })}`;
+};
+
+export type ReportPeriodISOWeekInfo = {
+  startWeek: number;
+  endWeek: number;
+  startYear: number;
+  endYear: number;
+};
+
+/**
+ * ISO week numbers for a status-report period (Monday-based week, locale-independent).
+ */
+export const getReportPeriodISOWeekInfo = (start: string, end: string): ReportPeriodISOWeekInfo | null => {
+  const startDate = getDate(start);
+  const endDate = getDate(end);
+  if (!startDate || !endDate || !isValid(startDate) || !isValid(endDate)) {
+    return null;
+  }
+
+  return {
+    startWeek: getISOWeek(startDate),
+    endWeek: getISOWeek(endDate),
+    startYear: getISOWeekYear(startDate),
+    endYear: getISOWeekYear(endDate),
+  };
 };
 
 /**
@@ -175,7 +310,7 @@ export const calculateTimeAgo = (time: string | number | Date | null): string =>
   // return if undefined
   if (!parsedTime) return ""; // Return empty string for invalid dates
   // Format the time in the form of amount of time passed since the event happened
-  const distance = formatDistanceToNow(parsedTime, { addSuffix: true });
+  const distance = formatDistanceToNow(parsedTime, { addSuffix: true, locale: getDistanceLocale() });
   return distance;
 };
 
@@ -493,6 +628,8 @@ export const formatDateRange = (
   parsedStartDate: Date | null | undefined,
   parsedEndDate: Date | null | undefined
 ): string => {
+  const locale = getDateFnsLocale();
+
   // If no dates are provided
   if (!parsedStartDate && !parsedEndDate) {
     return "";
@@ -500,12 +637,12 @@ export const formatDateRange = (
 
   // If only start date is provided
   if (parsedStartDate && !parsedEndDate) {
-    return format(parsedStartDate, "MMM dd, yyyy");
+    return format(parsedStartDate, "MMM dd, yyyy", { locale });
   }
 
   // If only end date is provided
   if (!parsedStartDate && parsedEndDate) {
-    return format(parsedEndDate, "MMM dd, yyyy");
+    return format(parsedEndDate, "MMM dd, yyyy", { locale });
   }
 
   // If both dates are provided
@@ -517,21 +654,21 @@ export const formatDateRange = (
 
     // Same year, same month
     if (startYear === endYear && startMonth === endMonth) {
-      const startDay = format(parsedStartDate, "dd");
-      const endDay = format(parsedEndDate, "dd");
-      return `${format(parsedStartDate, "MMM")} ${startDay} - ${endDay}, ${startYear}`;
+      const startDay = format(parsedStartDate, "dd", { locale });
+      const endDay = format(parsedEndDate, "dd", { locale });
+      return `${format(parsedStartDate, "MMM", { locale })} ${startDay} - ${endDay}, ${startYear}`;
     }
 
     // Same year, different month
     if (startYear === endYear) {
-      const startFormatted = format(parsedStartDate, "MMM dd");
-      const endFormatted = format(parsedEndDate, "MMM dd");
+      const startFormatted = format(parsedStartDate, "MMM dd", { locale });
+      const endFormatted = format(parsedEndDate, "MMM dd", { locale });
       return `${startFormatted} - ${endFormatted}, ${startYear}`;
     }
 
     // Different year
-    const startFormatted = format(parsedStartDate, "MMM dd, yyyy");
-    const endFormatted = format(parsedEndDate, "MMM dd, yyyy");
+    const startFormatted = format(parsedStartDate, "MMM dd, yyyy", { locale });
+    const endFormatted = format(parsedEndDate, "MMM dd, yyyy", { locale });
     return `${startFormatted} - ${endFormatted}`;
   }
 

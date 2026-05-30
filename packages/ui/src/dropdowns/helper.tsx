@@ -72,6 +72,7 @@ interface CustomSearchSelectProps {
   onChange: any;
   onClose?: () => void;
   noResultsMessage?: string;
+  searchPlaceholder?: string;
   options?: ICustomSearchSelectOption[];
 }
 

@@ -8,12 +8,15 @@
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // local imports
 import type { TPowerKNavigationCommandKeys } from "./commands";
+import { usePowerKBoardNavigationCommands } from "./board-commands";
 import { usePowerKNavigationCommandsRecord } from "./commands";
 
 export const usePowerKNavigationCommands = (): TPowerKCommandConfig[] => {
   const optionsList: Record<TPowerKNavigationCommandKeys, TPowerKCommandConfig> = usePowerKNavigationCommandsRecord();
+  const boardCommands = usePowerKBoardNavigationCommands();
 
   return [
+    ...boardCommands,
     // Open actions from lowest to highest scope
     optionsList["open_project_cycle"],
     optionsList["open_project_module"],

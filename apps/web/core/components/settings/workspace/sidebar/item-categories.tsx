@@ -9,6 +9,7 @@ import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
 // plane imports
 import { EUserPermissionsLevel, GROUPED_WORKSPACE_SETTINGS, WORKSPACE_SETTINGS_CATEGORIES } from "@plane/constants";
+import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useTranslation } from "@plane/i18n";
 import { joinUrlPath } from "@plane/utils";
 // components
@@ -31,9 +32,10 @@ export const WorkspaceSettingsSidebarItemCategories = observer(function Workspac
     <div className="mt-3 flex flex-col divide-y divide-subtle px-3">
       {WORKSPACE_SETTINGS_CATEGORIES.map((category) => {
         const categoryItems = GROUPED_WORKSPACE_SETTINGS[category];
-        const accessibleItems = categoryItems.filter((item) =>
-          allowPermissions(item.access, EUserPermissionsLevel.WORKSPACE, workspaceSlug)
-        );
+        const accessibleItems = categoryItems.filter((item) => {
+          if (item.key === "boards" && !ENABLE_WORKSPACE_BOARDS) return false;
+          return allowPermissions(item.access, EUserPermissionsLevel.WORKSPACE, workspaceSlug);
+        });
 
         if (accessibleItems.length === 0) return null;
 

@@ -66,6 +66,7 @@ export const isWorkspaceLevel = (type: EIssuesStoreType) =>
   [
     EIssuesStoreType.PROFILE,
     EIssuesStoreType.GLOBAL,
+    EIssuesStoreType.BOARD,
     EIssuesStoreType.TEAM,
     EIssuesStoreType.TEAM_VIEW,
     EIssuesStoreType.TEAM_PROJECT_WORK_ITEMS,
@@ -129,11 +130,14 @@ export const getGroupByColumns = ({
 };
 
 const getProjectColumns = (): IGroupByColumn[] | undefined => {
-  const { joinedProjectIds: projectIds, projectMap } = store.projectRoot.project;
+  const { joinedProjectIds: projectIds, projectMap, getProjectIdsForBoard } = store.projectRoot.project;
+  const boardSlug = store.router.boardSlug;
+  const board = boardSlug ? store.boardStore.getBoardBySlug(boardSlug) : undefined;
+  const scopedProjectIds = board ? getProjectIdsForBoard(board.id) : projectIds;
   // Return undefined if no project ids
-  if (!projectIds) return;
+  if (!scopedProjectIds?.length) return;
   // Map project ids to project columns
-  return projectIds
+  return scopedProjectIds
     .map((projectId: string) => {
       const project = projectMap[projectId];
       if (!project) return;
@@ -208,9 +212,13 @@ const getModuleColumns = (): IGroupByColumn[] | undefined => {
   return modules;
 };
 
-const getStateColumns = ({ projectId }: TGetColumns): IGroupByColumn[] | undefined => {
-  const { getProjectStates, projectStates } = store.state;
-  const _states = projectId ? getProjectStates(projectId) : projectStates;
+const getStateColumns = ({ projectId, isWorkspaceLevel }: TGetColumns): IGroupByColumn[] | undefined => {
+  const { getProjectStates, projectStates, workspaceStates } = store.state;
+  const _states = projectId
+    ? getProjectStates(projectId)
+    : isWorkspaceLevel
+      ? workspaceStates
+      : projectStates;
   if (!_states) return;
   // map project states to group by columns
   return _states.map((state) => ({
@@ -680,6 +688,9 @@ export function getApproximateCardHeight(displayProperties: IIssueDisplayPropert
  * @param backgroundColor
  * @returns
  */
+// Jira-style purple bar color for gantt blocks
+const GANTT_BAR_COLOR = "#7C3AED";
+
 export const getBlockViewDetails = (
   block: { start_date: string | undefined | null; target_date: string | undefined | null } | undefined | null,
   backgroundColor: string
@@ -687,18 +698,21 @@ export const getBlockViewDetails = (
   const isBlockVisibleOnChart = block?.start_date || block?.target_date;
   const isBlockComplete = block?.start_date && block?.target_date;
 
+  // Use Jira-style purple color; fall back to state color if purple not available
+  const barColor = GANTT_BAR_COLOR || backgroundColor;
+
   let message;
   const blockStyle: CSSProperties = {
-    backgroundColor,
+    backgroundColor: barColor,
   };
 
   if (isBlockVisibleOnChart && !isBlockComplete) {
     if (block?.start_date) {
       message = `From ${renderFormattedDate(block.start_date)}`;
-      blockStyle.maskImage = `linear-gradient(to right, ${backgroundColor} 50%, transparent 95%)`;
+      blockStyle.maskImage = `linear-gradient(to right, ${barColor} 50%, transparent 95%)`;
     } else if (block?.target_date) {
       message = `Till ${renderFormattedDate(block.target_date)}`;
-      blockStyle.maskImage = `linear-gradient(to left, ${backgroundColor} 50%, transparent 95%)`;
+      blockStyle.maskImage = `linear-gradient(to left, ${barColor} 50%, transparent 95%)`;
     }
   } else if (isBlockComplete) {
     message = `${renderFormattedDate(block?.start_date)} to ${renderFormattedDate(block?.target_date)}`;

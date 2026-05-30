@@ -22,6 +22,7 @@ from plane.db.models import (
     Workspace,
     ProjectMember,
 )
+from plane.utils.analytics_filters import resolve_analytics_project_ids
 from plane.utils.build_chart import build_analytics_chart
 from plane.utils.date_utils import (
     get_analytics_filters,
@@ -31,12 +32,17 @@ from plane.utils.date_utils import (
 class AdvanceAnalyticsBaseView(BaseAPIView):
     def initialize_workspace(self, slug: str, type: str) -> None:
         self._workspace_slug = slug
+        self._resolved_project_ids = resolve_analytics_project_ids(
+            slug=slug,
+            project_ids=self.request.GET.get("project_ids", None),
+            board_id=self.request.GET.get("board_id", None),
+        )
         self.filters = get_analytics_filters(
             slug=slug,
             type=type,
             user=self.request.user,
             date_filter=self.request.GET.get("date_filter", None),
-            project_ids=self.request.GET.get("project_ids", None),
+            project_ids=self._resolved_project_ids,
         )
 
 
@@ -68,9 +74,8 @@ class AdvanceAnalyticsEndpoint(AdvanceAnalyticsBaseView):
             workspace__slug=self._workspace_slug, is_active=True, member__is_bot=False
         )
 
-        if self.request.GET.get("project_ids", None):
-            project_ids = self.request.GET.get("project_ids", None)
-            project_ids = [str(project_id) for project_id in project_ids.split(",")]
+        if self._resolved_project_ids is not None:
+            project_ids = [str(project_id) for project_id in self._resolved_project_ids.split(",") if project_id]
             members_query = ProjectMember.objects.filter(
                 project_id__in=project_ids, is_active=True, member__is_bot=False
             )

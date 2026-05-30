@@ -10,6 +10,7 @@ import type { ADDITIONAL_EXTENSIONS } from "@plane/utils";
 import { CORE_EXTENSIONS } from "@plane/utils";
 // extensions
 import { getImageBlockId } from "@/extensions/custom-image/utils";
+import { getHtmlDocumentBlockId } from "@/extensions/html-document/utils";
 // plane editor imports
 import { ADDITIONAL_ASSETS_META_DATA_RECORD } from "@/plane-editor/constants/assets";
 // types
@@ -40,6 +41,17 @@ export const CORE_ASSETS_META_DATA_RECORD: Partial<
       size: 0,
       src: attrs?.src,
       type: CORE_EXTENSIONS.CUSTOM_IMAGE,
+    };
+  },
+  [CORE_EXTENSIONS.HTML_DOCUMENT_EMBED]: (attrs) => {
+    if (!attrs?.src) return;
+    return {
+      href: `#${getHtmlDocumentBlockId(attrs?.id ?? "")}`,
+      id: attrs?.id,
+      name: (attrs?.title as string | undefined) ?? `html-${attrs?.id}`,
+      size: 0,
+      src: attrs?.src,
+      type: CORE_EXTENSIONS.HTML_DOCUMENT_EMBED,
     };
   },
   ...ADDITIONAL_ASSETS_META_DATA_RECORD,

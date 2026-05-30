@@ -7,6 +7,7 @@
 // types
 import { API_BASE_URL } from "@plane/constants";
 import type { IModule, ILinkDetails, ModuleLink, TIssuesResponse } from "@plane/types";
+import { isAxiosCancelError } from "@plane/utils";
 // services
 import { APIService } from "@/services/api.service";
 
@@ -92,6 +93,7 @@ export class ModuleService extends APIService {
     )
       .then((response) => response?.data)
       .catch((error) => {
+        if (isAxiosCancelError(error)) throw error;
         throw error?.response?.data;
       });
   }

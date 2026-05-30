@@ -5,18 +5,13 @@
  */
 
 import { Outlet } from "react-router";
-import { AppHeader } from "@/components/core/app-header";
-import { ContentWrapper } from "@/components/core/content-wrapper";
-// local components
+import { ProjectViewShell } from "@/components/project/project-view-shell";
 import { ProjectViewIssuesHeader } from "./[viewId]/header";
 
 export default function ProjectViewIssuesLayout() {
   return (
-    <>
-      <AppHeader header={<ProjectViewIssuesHeader />} />
-      <ContentWrapper>
-        <Outlet />
-      </ContentWrapper>
-    </>
+    <ProjectViewShell header={<ProjectViewIssuesHeader />}>
+      <Outlet />
+    </ProjectViewShell>
   );
 }

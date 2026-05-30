@@ -15,6 +15,7 @@ import {
   Heading5,
   Heading6,
   ImageIcon,
+  FileCode2,
   List,
   ListOrdered,
   ListTodo,
@@ -36,6 +37,7 @@ import {
   toggleHeading,
   toggleTextColor,
   toggleBackgroundColor,
+  insertHtmlDocument,
   insertImage,
   insertCallout,
   setText,
@@ -301,6 +303,18 @@ export const getSlashCommandFilteredSections =
         pushAfter: "code",
       });
     }
+
+    internalAdditionalOptions.push({
+      commandKey: "html-document",
+      key: "html-document",
+      title: "HTML document",
+      icon: <FileCode2 className="size-3.5" />,
+      description: "Embed an uploaded HTML file",
+      searchTerms: ["html", "htm", "embed", "document", "upload"],
+      command: ({ editor, range }: CommandProps) => insertHtmlDocument({ editor, event: "insert", range }),
+      section: "general",
+      pushAfter: "image",
+    });
 
     [
       ...internalAdditionalOptions,

@@ -14,7 +14,7 @@ import { observer } from "mobx-react";
 import { useParams, useRouter } from "next/navigation";
 import { createRoot } from "react-dom/client";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
-import { Settings, Share2, LogOut, MoreHorizontal } from "lucide-react";
+import { Settings, Share2, LogOut, MoreHorizontal, Star } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@plane/constants";
@@ -29,8 +29,12 @@ import { cn } from "@plane/utils";
 // components
 import { DEFAULT_TAB_KEY, getTabUrl } from "@/components/navigation/tab-navigation-utils";
 import { useTabPreferences } from "@/components/navigation/use-tab-preferences";
+import { MoveProjectBoardModal } from "@/components/board/move-project-board-modal";
 import { LeaveProjectModal } from "@/components/project/leave-project-modal";
+import { ProjectFavoriteStar } from "@/components/project/project-favorite-star";
 import { PublishProjectModal } from "@/components/project/publish-project/modal";
+import { useProjectFavorite } from "@/hooks/use-project-favorite";
+import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
@@ -57,6 +61,11 @@ type Props = {
   disableDrop?: boolean;
   isLastChild: boolean;
   renderInExtendedSidebar?: boolean;
+  /** Dentro da árvore Boards → Projetos: mostra atribuir/mover board e indentação extra */
+  showBoardActions?: boolean;
+  nestedUnderBoard?: boolean;
+  /** Agrupa DnD na sidebar (ex.: projetos só reordenam dentro do mesmo board) */
+  dragInstanceId?: string;
 };
 
 export const SidebarProjectsListItem = observer(function SidebarProjectsListItem(props: Props) {
@@ -69,6 +78,9 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
     handleOnProjectDrop,
     projectListType,
     renderInExtendedSidebar = false,
+    showBoardActions = false,
+    nestedUnderBoard = false,
+    dragInstanceId = "PROJECTS",
   } = props;
   // store hooks
   const { t } = useTranslation();
@@ -82,6 +94,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
   // states
   const [leaveProjectModalOpen, setLeaveProjectModal] = useState(false);
   const [publishModalOpen, setPublishModal] = useState(false);
+  const [isMoveBoardModalOpen, setIsMoveBoardModalOpen] = useState(false);
   const [isMenuActive, setIsMenuActive] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const isProjectListOpen = getIsProjectListOpen(projectId);
@@ -146,7 +159,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
         element,
         canDrag: () => !disableDrag,
         dragHandle: dragHandleElement ?? undefined,
-        getInitialData: () => ({ id: projectId, dragInstanceId: "PROJECTS" }),
+        getInitialData: () => ({ id: projectId, dragInstanceId }),
         onDragStart: () => {
           setIsDragging(true);
         },
@@ -176,7 +189,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
       dropTargetForElements({
         element,
         canDrop: ({ source }) =>
-          !disableDrop && source?.data?.id !== projectId && source?.data?.dragInstanceId === "PROJECTS",
+          !disableDrop && source?.data?.id !== projectId && source?.data?.dragInstanceId === dragInstanceId,
         getData: ({ input, element }) => {
           const data = { id: projectId };
 
@@ -222,7 +235,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
         },
       })
     );
-  }, [projectId, isLastChild, projectListType, handleOnProjectDrop]);
+  }, [projectId, isLastChild, projectListType, handleOnProjectDrop, disableDrag, disableDrop, dragInstanceId]);
 
   useEffect(() => {
     if (isMenuActive) toggleAnySidebarDropdown(true);
@@ -261,26 +274,62 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
   if (!project) return null;
 
   const isAccordionMode = projectPreferences.navigationMode === "ACCORDION";
+  const showProjectSubNav = isAccordionMode || nestedUnderBoard;
 
   const handleItemClick = () => {
-    if (projectPreferences.navigationMode === "ACCORDION") {
+    if (showProjectSubNav) {
       setIsProjectListOpen(!isProjectListOpen);
     } else {
       router.push(defaultTabUrl);
     }
     // close the extended sidebar if it is open
-    if (isExtendedProjectSidebarOpened && !isAccordionMode) {
+    if (isExtendedProjectSidebarOpened && !showProjectSubNav) {
       toggleExtendedProjectSidebar(false);
     }
   };
 
-  const shouldHighlightProject = URLProjectId === project?.id && projectPreferences.navigationMode !== "ACCORDION";
+  const shouldHighlightProject = URLProjectId === project?.id && !showProjectSubNav;
+
+  const projectNameClassName = "min-w-0 flex-1 truncate text-13 font-medium text-secondary";
+
+  const projectNameLabel = (
+    <Tooltip isMobile={isMobile} tooltipContent={project.name} position="right">
+      <p className={projectNameClassName}>{project.name}</p>
+    </Tooltip>
+  );
+
+  const canManageBoard =
+    ENABLE_WORKSPACE_BOARDS &&
+    showBoardActions &&
+    Boolean(workspaceSlug) &&
+    (allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlug.toString(), projectId) ||
+      allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE, workspaceSlug.toString()));
+
+  const { canFavorite, isFavorite, handleAddToFavorites, handleRemoveFromFavorites } = useProjectFavorite(
+    workspaceSlug?.toString(),
+    projectId
+  );
 
   return (
     <>
+      {canManageBoard && workspaceSlug && (
+        <MoveProjectBoardModal
+          workspaceSlug={workspaceSlug.toString()}
+          projectId={projectId}
+          projectName={project.name}
+          currentBoardId={project.board_id}
+          isOpen={isMoveBoardModalOpen}
+          onClose={() => setIsMoveBoardModalOpen(false)}
+        />
+      )}
       <PublishProjectModal isOpen={publishModalOpen} projectId={projectId} onClose={() => setPublishModal(false)} />
       <LeaveProjectModal project={project} isOpen={leaveProjectModalOpen} onClose={() => setLeaveProjectModal(false)} />
-      <Disclosure key={`${project.id}_${URLProjectId}`} defaultOpen={isProjectListOpen} as="div">
+      <Disclosure
+        key={`${project.id}_${URLProjectId}`}
+        defaultOpen={isProjectListOpen}
+        as="div"
+        className={cn(nestedUnderBoard && "pl-2")}
+      >
         <div
           id={`sidebar-${projectId}-${projectListType}`}
           className={cn("relative", {
@@ -325,33 +374,57 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               </Tooltip>
             )}
             <>
-              <ControlLink href={defaultTabUrl} className="flex flex-grow truncate" onClick={handleItemClick}>
-                {isAccordionMode ? (
+              <ControlLink
+                href={defaultTabUrl}
+                className={cn("flex min-w-0 flex-grow", nestedUnderBoard ? "" : "truncate")}
+                onClick={handleItemClick}
+              >
+                {showProjectSubNav ? (
                   <Disclosure.Button
                     as="button"
                     type="button"
-                    className={cn("flex w-full flex-grow items-center gap-1.5 text-left select-none", {})}
+                    className={cn(
+                      "flex w-full min-w-0 flex-grow gap-1.5 text-left select-none",
+                      nestedUnderBoard ? "items-start" : "items-center"
+                    )}
                     aria-label={
                       isProjectListOpen
                         ? t("aria_labels.projects_sidebar.close_project_menu")
                         : t("aria_labels.projects_sidebar.open_project_menu")
                     }
                   >
-                    <div className="grid size-4 flex-shrink-0 place-items-center">
+                    <div className="grid size-4 shrink-0 place-items-center">
                       <Logo logo={project.logo_props} size={16} />
                     </div>
-                    <p className="truncate text-13 font-medium text-secondary">{project.name}</p>
+                    {projectNameLabel}
                   </Disclosure.Button>
                 ) : (
-                  <div className="flex w-full flex-grow items-center gap-1.5 text-left select-none">
-                    <div className="grid size-4 flex-shrink-0 place-items-center">
+                  <div
+                    className={cn(
+                      "flex w-full min-w-0 flex-grow gap-1.5 text-left select-none",
+                      nestedUnderBoard ? "items-start" : "items-center"
+                    )}
+                  >
+                    <div className="grid size-4 shrink-0 place-items-center">
                       <Logo logo={project.logo_props} size={16} />
                     </div>
-                    <p className="truncate text-13 font-medium text-secondary">{project.name}</p>
+                    {projectNameLabel}
                   </div>
                 )}
               </ControlLink>
               <div className="flex items-center gap-1">
+                <ProjectFavoriteStar
+                  workspaceSlug={workspaceSlug?.toString()}
+                  projectId={projectId}
+                  className={cn(
+                    "pointer-events-none opacity-0 group-hover/project-item:pointer-events-auto group-hover/project-item:opacity-100",
+                    {
+                      "pointer-events-auto opacity-100": isMenuActive || isFavorite,
+                    }
+                  )}
+                  buttonClassName="size-6"
+                  iconClassName="size-3.5"
+                />
                 <CustomMenu
                   customButton={
                     <IconButton
@@ -376,21 +449,25 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                   closeOnSelect
                   onMenuClose={() => setIsMenuActive(false)}
                 >
-                  {/* TODO: Removed is_favorite logic due to the optimization in projects API */}
-                  {/* {isAuthorized && (
+                  {canManageBoard && (
+                    <CustomMenu.MenuItem onClick={() => setIsMoveBoardModalOpen(true)}>
+                      {!project.board_id ? t("boards.assign_to_board") : t("boards.move_to_board")}
+                    </CustomMenu.MenuItem>
+                  )}
+                  {canFavorite && (
                     <CustomMenu.MenuItem
-                      onClick={project.is_favorite ? handleRemoveFromFavorites : handleAddToFavorites}
+                      onClick={isFavorite ? handleRemoveFromFavorites : handleAddToFavorites}
                     >
                       <span className="flex items-center justify-start gap-2">
                         <Star
-                          className={cn("h-3.5 w-3.5 ", {
-                            "fill-yellow-500 stroke-yellow-500": project.is_favorite,
+                          className={cn("h-3.5 w-3.5", {
+                            "fill-yellow-500 stroke-yellow-500": isFavorite,
                           })}
                         />
-                        <span>{project.is_favorite ? t("remove_from_favorites") : t("add_to_favorites")}</span>
+                        <span>{isFavorite ? t("remove_from_favorites") : t("add_to_favorites")}</span>
                       </span>
                     </CustomMenu.MenuItem>
-                  )} */}
+                  )}
 
                   {/* publish project settings */}
                   {isAdmin && (
@@ -444,14 +521,15 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                     </CustomMenu.MenuItem>
                   )}
                 </CustomMenu>
-                {isAccordionMode && (
+                {showProjectSubNav && (
                   <IconButton
                     variant="ghost"
                     size="sm"
                     icon={ChevronRightIcon}
                     onClick={() => setIsProjectListOpen(!isProjectListOpen)}
-                    className={cn("hidden text-placeholder group-hover/project-item:inline-flex", {
-                      "inline-flex": isMenuActive,
+                    className={cn("text-placeholder", {
+                      "inline-flex": nestedUnderBoard || isMenuActive,
+                      "hidden group-hover/project-item:inline-flex": !nestedUnderBoard,
                     })}
                     iconClassName={cn("transition-transform", {
                       "rotate-90": isProjectListOpen,
@@ -466,7 +544,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               </div>
             </>
           </div>
-          {isAccordionMode && (
+          {showProjectSubNav && (
             <Transition
               show={isProjectListOpen}
               enter="transition duration-100 ease-out"

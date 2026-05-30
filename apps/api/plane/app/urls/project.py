@@ -4,7 +4,18 @@
 
 from django.urls import path
 
+from plane.app.views.board.project_permissions import ProjectBoardPermissionsEndpoint
+from plane.app.views.project.status_reports import (
+    ProjectStatusReportDetailEndpoint,
+    ProjectStatusReportEndpoint,
+    ProjectStatusReportExportEndpoint,
+)
+from plane.app.views.project.status_report_preview import ProjectStatusReportPreviewEndpoint
 from plane.app.views import (
+    ProjectCustomFieldEndpoint,
+    ProjectCustomFieldValueEndpoint,
+    ProjectFormLayoutEndpoint,
+    ProjectIssueTypeEndpoint,
     ProjectViewSet,
     DeployBoardViewSet,
     ProjectInvitationsViewset,
@@ -43,6 +54,26 @@ urlpatterns = [
             }
         ),
         name="project",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/issue-types/",
+        ProjectIssueTypeEndpoint.as_view(),
+        name="project-issue-types",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/custom-fields/",
+        ProjectCustomFieldEndpoint.as_view(),
+        name="project-custom-fields",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/form-layout/",
+        ProjectFormLayoutEndpoint.as_view(),
+        name="project-form-layout",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/custom-field-values/",
+        ProjectCustomFieldValueEndpoint.as_view(),
+        name="project-custom-field-values",
     ),
     path(
         "workspaces/<str:slug>/project-identifiers/",
@@ -128,5 +159,30 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/preferences/member/<uuid:member_id>/",
         ProjectMemberPreferenceEndpoint.as_view(),
         name="project-member-preference",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/board-permissions/",
+        ProjectBoardPermissionsEndpoint.as_view(),
+        name="project-board-permissions",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/status-reports/",
+        ProjectStatusReportEndpoint.as_view(),
+        name="project-status-reports",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/status-reports/<uuid:pk>/",
+        ProjectStatusReportDetailEndpoint.as_view(),
+        name="project-status-report",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/status-reports/<uuid:pk>/export/",
+        ProjectStatusReportExportEndpoint.as_view(),
+        name="project-status-report-export",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/status-reports/<uuid:pk>/preview/",
+        ProjectStatusReportPreviewEndpoint.as_view(),
+        name="project-status-report-preview",
     ),
 ]

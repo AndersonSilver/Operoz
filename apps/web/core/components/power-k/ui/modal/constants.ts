@@ -20,6 +20,9 @@ export const POWER_K_MODAL_PAGE_DETAILS: Record<TPowerKPageType, TPowerKModalPag
   "open-project": {
     i18n_placeholder: "power_k.page_placeholders.open_project",
   },
+  "open-board": {
+    i18n_placeholder: "power_k.page_placeholders.open_board",
+  },
   "open-workspace-setting": {
     i18n_placeholder: "power_k.page_placeholders.open_workspace_setting",
   },

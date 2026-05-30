@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
 
 import { useState } from "react";
 import { observer } from "mobx-react";
@@ -125,8 +120,8 @@ const WorkspaceManagementPage = observer(function WorkspaceManagementPage(_props
                   )}
                 </div>
                 <div className={cn("text-11 leading-5 font-regular text-tertiary")}>
-                  You can&apos;t yet delete workspaces and you can only go to the workspace if you are an Admin or a
-                  Member.
+                  Per-workspace issue email options can be toggled below. You can&apos;t yet delete workspaces and you
+                  can only open a workspace if you are an Admin or a Member.
                 </div>
               </div>
               <div className="flex items-center gap-2">

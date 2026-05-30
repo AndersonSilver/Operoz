@@ -12,6 +12,7 @@ import type { EIssueLayoutTypes } from "@plane/types";
 import { cn } from "@plane/utils";
 // components
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";
+import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 
@@ -25,6 +26,7 @@ export function LayoutSelection(props: Props) {
   const { layouts, onChange, selectedLayout } = props;
   const { isMobile } = usePlatformOS();
   const { t } = useTranslation();
+  const hasBoardWallpaper = useBoardHubHasBackground();
   const handleOnChange = (layoutKey: EIssueLayoutTypes) => {
     if (selectedLayout !== layoutKey) {
       onChange(layoutKey);
@@ -32,7 +34,12 @@ export function LayoutSelection(props: Props) {
   };
 
   return (
-    <div className="flex items-center gap-1 rounded-md bg-layer-3 p-1">
+    <div
+      className={cn(
+        "flex items-center gap-0.5 rounded-md p-0.5",
+        hasBoardWallpaper ? "bg-layer-2/80" : "gap-1 bg-layer-3 p-1"
+      )}
+    >
       {ISSUE_LAYOUTS.filter((l) => layouts.includes(l.key)).map((layout) => (
         <Tooltip key={layout.key} tooltipContent={t(layout.i18n_title)} isMobile={isMobile}>
           <button

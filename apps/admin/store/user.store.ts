@@ -80,19 +80,23 @@ export class UserStore implements IUserStore {
       }
       return currentUser;
     } catch (error: any) {
-      this.isLoading = false;
-      this.isUserLoggedIn = false;
-      if (error.status === 403)
-        this.userStatus = {
-          status: EUserStatus.AUTHENTICATION_NOT_DONE,
-          message: error?.message || "",
-        };
-      else
-        this.userStatus = {
-          status: EUserStatus.ERROR,
-          message: error?.message || "",
-        };
-      throw error;
+      // Stay inside runInAction: async boundaries leave MobX actions after the first `await`.
+      runInAction(() => {
+        this.isLoading = false;
+        this.isUserLoggedIn = false;
+        const status = error?.status ?? error?.status_code;
+        if (status === 403)
+          this.userStatus = {
+            status: EUserStatus.AUTHENTICATION_NOT_DONE,
+            message: error?.message || "",
+          };
+        else
+          this.userStatus = {
+            status: EUserStatus.ERROR,
+            message: typeof error?.detail === "string" ? error.detail : error?.message || "",
+          };
+      });
+      return undefined;
     }
   };
 

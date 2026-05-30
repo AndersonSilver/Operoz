@@ -31,10 +31,13 @@ import {
   WORKSPACE_STATES,
   WORKSPACE_SIDEBAR_PREFERENCES,
   WORKSPACE_PROJECT_NAVIGATION_PREFERENCES,
+  WORKSPACE_BOARDS,
 } from "@/constants/fetch-keys";
+import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { useMember } from "@/hooks/store/use-member";
+import { useBoard } from "@/hooks/store/use-board";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -53,6 +56,7 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
   // store hooks
   const { signOut, data: currentUser } = useUser();
   const { fetchPartialProjects } = useProject();
+  const { fetchBoards } = useBoard();
   const { fetchFavorite } = useFavorite();
   const {
     workspace: { fetchWorkspaceMembers },
@@ -89,6 +93,15 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
     workspaceSlug && currentWorkspace ? WORKSPACE_PARTIAL_PROJECTS(workspaceSlug.toString()) : null,
     workspaceSlug && currentWorkspace ? () => fetchPartialProjects(workspaceSlug.toString()) : null,
     { revalidateIfStale: false, revalidateOnFocus: false }
+  );
+  useSWR(
+    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace
+      ? WORKSPACE_BOARDS(workspaceSlug.toString())
+      : null,
+    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace
+      ? () => fetchBoards(workspaceSlug.toString())
+      : null,
+    { revalidateIfStale: false, revalidateOnFocus: false, shouldRetryOnError: false }
   );
   // fetch workspace members
   useSWR(

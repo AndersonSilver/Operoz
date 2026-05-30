@@ -6,7 +6,8 @@
 
 import { useParams } from "next/navigation";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { EIssuesStoreType, TIssue, TIssueGroupByOptions, TIssueOrderByOptions } from "@plane/types";
+import { EIssuesStoreType } from "@plane/types";
+import type { TIssue, TIssueGroupByOptions, TIssueOrderByOptions } from "@plane/types";
 import type { GroupDropLocation } from "@/components/issues/issue-layouts/utils";
 import { handleGroupDragDrop } from "@/components/issues/issue-layouts/utils";
 import { ISSUE_FILTER_DEFAULT_DATA } from "@/store/issue/helpers/base-issues.store";
@@ -20,6 +21,8 @@ type DNDStoreType =
   | EIssuesStoreType.CYCLE
   | EIssuesStoreType.PROJECT_VIEW
   | EIssuesStoreType.PROFILE
+  | EIssuesStoreType.GLOBAL
+  | EIssuesStoreType.BOARD
   | EIssuesStoreType.ARCHIVED
   | EIssuesStoreType.WORKSPACE_DRAFT
   | EIssuesStoreType.TEAM
@@ -40,8 +43,11 @@ export const useGroupIssuesDragNDrop = (
   } = useIssueDetail();
   const { updateIssue } = useIssuesActions(storeType);
   const {
-    issues: { getIssueIds, addCycleToIssue, removeCycleFromIssue, changeModulesInIssue },
+    issues: { getIssueIds, addCycleToIssue, removeCycleFromIssue, changeModulesInIssue, moveIssueBetweenGroups },
   } = useIssues(storeType);
+
+  const effectiveGroupBy =
+    storeType === EIssuesStoreType.MODULE ? ("state" as TIssueGroupByOptions) : groupBy;
 
   /**
    * update Issue on Drop, checks if modules or cycles are changed and then calls appropriate functions
@@ -106,13 +112,22 @@ export const useGroupIssuesDragNDrop = (
     )
       return;
 
+    if (
+      source.id &&
+      source.groupId &&
+      destination.groupId &&
+      source.groupId !== destination.groupId
+    ) {
+      moveIssueBetweenGroups(source.id, source.groupId, destination.groupId);
+    }
+
     await handleGroupDragDrop(
       source,
       destination,
       getIssueById,
       getIssueIds,
       updateIssueOnDrop,
-      groupBy,
+      effectiveGroupBy,
       subGroupBy,
       orderBy !== "sort_order"
     ).catch((err) => {

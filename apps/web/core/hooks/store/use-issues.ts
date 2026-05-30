@@ -15,7 +15,9 @@ import type { IProjectEpics, IProjectEpicsFilter } from "@/plane-web/store/issue
 import type { ITeamIssues, ITeamIssuesFilter } from "@/plane-web/store/issue/team";
 import type { ITeamProjectWorkItemsFilter, ITeamProjectWorkItems } from "@/plane-web/store/issue/team-project";
 import type { ITeamViewIssues, ITeamViewIssuesFilter } from "@/plane-web/store/issue/team-views";
+import type { IBoardIssues } from "@/store/issue/board/issue.store";
 import type { IWorkspaceIssues } from "@/plane-web/store/issue/workspace/issue.store";
+import type { IBoardIssuesFilter } from "@/store/issue/board/filter.store";
 import type { IArchivedIssues, IArchivedIssuesFilter } from "@/store/issue/archived";
 import type { ICycleIssues, ICycleIssuesFilter } from "@/store/issue/cycle";
 import type { IModuleIssues, IModuleIssuesFilter } from "@/store/issue/module";
@@ -34,6 +36,10 @@ export type TStoreIssues = {
   [EIssuesStoreType.GLOBAL]: defaultIssueStore & {
     issues: IWorkspaceIssues;
     issuesFilter: IWorkspaceIssuesFilter;
+  };
+  [EIssuesStoreType.BOARD]: defaultIssueStore & {
+    issues: IBoardIssues;
+    issuesFilter: IBoardIssuesFilter;
   };
   [EIssuesStoreType.WORKSPACE_DRAFT]: defaultIssueStore & {
     issues: IWorkspaceDraftIssues;
@@ -99,6 +105,11 @@ export const useIssues = <T extends EIssuesStoreType>(storeType?: T): TStoreIssu
         issues: context.issue.workspaceIssues,
         issuesFilter: context.issue.workspaceIssuesFilter,
       }) as TStoreIssues[T];
+    case EIssuesStoreType.BOARD:
+      return merge(defaultStore, {
+        issues: context.issue.boardIssues,
+        issuesFilter: context.issue.boardIssuesFilter,
+      }) as unknown as TStoreIssues[T];
     case EIssuesStoreType.WORKSPACE_DRAFT:
       return merge(defaultStore, {
         issues: context.issue.workspaceDraftIssues,

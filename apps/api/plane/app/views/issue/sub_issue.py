@@ -28,6 +28,7 @@ from plane.utils.timezone_converter import user_timezone_converter
 from collections import defaultdict
 from plane.utils.host import base_host
 from plane.utils.order_queryset import order_issue_queryset
+from plane.utils.board_permission_enforcement import deny_board_permission, get_project_for_enforcement
 
 
 class SubIssuesEndpoint(BaseAPIView):
@@ -142,6 +143,7 @@ class SubIssuesEndpoint(BaseAPIView):
                 "id",
                 "name",
                 "state_id",
+                "type_id",
                 "sort_order",
                 "completed_at",
                 "estimate_point",
@@ -202,6 +204,9 @@ class SubIssuesEndpoint(BaseAPIView):
 
     # Assign multiple sub issues
     def post(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.link"):
+            return denied
         parent_issue = Issue.issue_objects.get(pk=issue_id)
         sub_issue_ids = request.data.get("sub_issue_ids", [])
 

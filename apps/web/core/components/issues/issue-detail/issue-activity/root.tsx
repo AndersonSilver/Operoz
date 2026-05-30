@@ -21,6 +21,7 @@ import { CommentCreate } from "@/components/comments/comment-create";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
+import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
 // plane web components
 import { ActivityFilterRoot } from "@/plane-web/components/issues/worklog/activity/filter-root";
 import { IssueActivityWorklogCreateButton } from "@/plane-web/components/issues/worklog/activity/worklog-create-button";
@@ -90,17 +91,19 @@ export const IssueActivity = observer(function IssueActivity(props: TIssueActivi
   const activityOperations = useWorkItemCommentOperations(workspaceSlug, projectId, issueId);
 
   const project = getProjectById(projectId);
+  const { canCommentAdd } = useBoardIssueCapabilities(projectId, { readOnly: disabled });
   const renderCommentCreationBox = useMemo(
-    () => (
-      <CommentCreate
-        workspaceSlug={workspaceSlug}
-        entityId={issueId}
-        activityOperations={activityOperations}
-        showToolbarInitially
-        projectId={projectId}
-      />
-    ),
-    [workspaceSlug, issueId, activityOperations, projectId]
+    () =>
+      canCommentAdd ? (
+        <CommentCreate
+          workspaceSlug={workspaceSlug}
+          entityId={issueId}
+          activityOperations={activityOperations}
+          showToolbarInitially
+          projectId={projectId}
+        />
+      ) : null,
+    [canCommentAdd, workspaceSlug, issueId, activityOperations, projectId]
   );
   if (!project) return <></>;
 

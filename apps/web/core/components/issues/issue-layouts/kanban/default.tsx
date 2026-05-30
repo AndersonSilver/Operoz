@@ -6,6 +6,7 @@
 
 import type { MutableRefObject } from "react";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 import type {
   GroupByColumnTypes,
   IGroupByColumn,
@@ -18,8 +19,6 @@ import type {
   TIssueGroupByOptions,
   TIssueOrderByOptions,
 } from "@plane/types";
-// constants
-import { ContentWrapper } from "@plane/ui";
 // components
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { KanbanColumnLoader } from "@/components/ui/loader/layouts/kanban-layout-loader";
@@ -100,6 +99,8 @@ export const KanBan = observer(function KanBan(props: IKanBan) {
   // i18n
   // store hooks
   const storeType = useIssueStoreType();
+  const { projectId: routerProjectId } = useParams();
+  const projectId = routerProjectId?.toString();
   const issueKanBanView = useKanbanView();
   // derived values
   const isDragDisabled = !issueKanBanView?.getCanUserDragDrop(group_by, sub_group_by);
@@ -111,6 +112,7 @@ export const KanBan = observer(function KanBan(props: IKanBan) {
     includeNone: true,
     isWorkspaceLevel: isWorkspaceLevel(storeType),
     isEpic: isEpic,
+    projectId,
   });
 
   if (!list) return null;
@@ -143,14 +145,16 @@ export const KanBan = observer(function KanBan(props: IKanBan) {
   const approximateCardHeight = getApproximateCardHeight(displayProperties);
   const isSubGroup = !!sub_group_id && sub_group_id !== "null";
 
+  const hasSubGroupBy = Boolean(sub_group_by);
+
   return (
-    <ContentWrapper className={`relative flex-row gap-4 !pt-2 !pb-0`}>
+    <div className="relative flex h-full w-max flex-row flex-nowrap gap-4 px-2 pt-2 pb-0">
       {list &&
         list.length > 0 &&
         list.map((subList: IGroupByColumn, groupIndex) => {
           const groupByVisibilityToggle = visibilityGroupBy(subList);
 
-          if (groupByVisibilityToggle.showGroup === false) return <></>;
+          if (groupByVisibilityToggle.showGroup === false) return null;
 
           const issueIds = isSubGroup
             ? ((groupedIssueIds as TSubGroupedIssues)?.[subList.id]?.[sub_group_id] ?? [])
@@ -165,7 +169,7 @@ export const KanBan = observer(function KanBan(props: IKanBan) {
                 groupByVisibilityToggle.showIssues ? `w-[350px]` : ``
               } `}
             >
-              {sub_group_by === null && (
+              {!hasSubGroupBy && (
                 <div className="sticky top-0 z-[2] w-full flex-shrink-0 bg-surface-2 py-1">
                   <HeaderGroupByCard
                     sub_group_by={sub_group_by}
@@ -234,6 +238,6 @@ export const KanBan = observer(function KanBan(props: IKanBan) {
             </div>
           );
         })}
-    </ContentWrapper>
+    </div>
   );
 });

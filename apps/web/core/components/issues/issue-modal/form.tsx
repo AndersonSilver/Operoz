@@ -7,7 +7,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { FormProvider, useForm } from "react-hook-form";
+import { Controller, FormProvider, useForm } from "react-hook-form";
 // editor
 import { ETabIndices, DEFAULT_WORK_ITEM_FORM_VALUES } from "@plane/constants";
 import type { EditorRefApi } from "@plane/editor";
@@ -48,6 +48,15 @@ import { DeDupeButtonRoot } from "@/plane-web/components/de-dupe/de-dupe-button"
 import { DuplicateModalRoot } from "@/plane-web/components/de-dupe/duplicate-modal";
 import { IssueTypeSelect, WorkItemTemplateSelect } from "@/plane-web/components/issues/issue-modal";
 import { WorkItemModalAdditionalProperties } from "@/plane-web/components/issues/issue-modal/modal-additional-properties";
+import {
+  getIssueFormControlClass,
+  issueFormControlBaseClass,
+  issueFormControlWidthClass,
+  IssueFormField,
+  IssueFormSectionDivider,
+} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+import { IssueModalAssigneeField } from "@/plane-web/components/issues/issue-modal/issue-modal-assignee-field";
+import { StateDropdown } from "@/components/dropdowns/state/dropdown";
 import { useDebouncedDuplicateIssues } from "@/plane-web/hooks/use-debounced-duplicate-issues";
 
 export interface IssueFormProps {
@@ -383,41 +392,97 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
             onSubmit={handleSubmit((data) => handleFormSubmit(data))}
             className="flex w-full flex-col"
           >
-            <div className="rounded-t-lg bg-surface-1 p-5">
-              <h3 className="pb-2 text-h4-medium text-secondary">{modalTitle}</h3>
-              <div className="flex items-center justify-between pt-2 pb-4">
-                <div className="flex items-center gap-x-1">
-                  <IssueProjectSelect
-                    control={control}
-                    disabled={!!data?.id || !!data?.sourceIssueId || isProjectSelectionDisabled}
-                    handleFormChange={handleFormChange}
-                  />
-                  {projectId && (
-                    <IssueTypeSelect
+            <div className="rounded-t-lg bg-surface-1 px-6 pt-5 pb-1">
+              <h3 className="text-16 font-semibold text-primary">{modalTitle}</h3>
+              <p className="mt-1 text-11 text-tertiary">
+                {t("issue_modal_required_fields_hint")}{" "}
+                <span className="text-danger-primary">*</span>
+              </p>
+            </div>
+            <div className="vertical-scrollbar scrollbar-sm max-h-[min(72vh,580px)] overflow-y-auto bg-surface-1 px-6 pb-4">
+              <div className="space-y-3">
+                <div className="grid grid-cols-1 gap-x-6 gap-y-3 sm:grid-cols-2">
+                  <IssueFormField label={t("issue_modal_project_label")} controlWidth="medium">
+                    <IssueProjectSelect
                       control={control}
-                      projectId={projectId}
-                      editorRef={editorRef}
-                      disabled={!!data?.sourceIssueId}
+                      disabled={!!data?.id || !!data?.sourceIssueId || isProjectSelectionDisabled}
                       handleFormChange={handleFormChange}
-                      renderChevron
+                      controlWidth="medium"
                     />
-                  )}
-                  {projectId && !data?.id && !data?.sourceIssueId && (
-                    <WorkItemTemplateSelect
-                      projectId={projectId}
-                      typeId={watch("type_id")}
-                      handleModalClose={() => {
-                        if (handleDraftAndClose) {
-                          handleDraftAndClose();
-                        } else {
-                          onClose();
-                        }
-                      }}
-                      handleFormChange={handleFormChange}
-                      renderChevron
-                    />
+                  </IssueFormField>
+                  {projectId && (
+                    <IssueFormField label={t("issue_modal_type_label")} controlWidth="medium">
+                      <IssueTypeSelect
+                        control={control}
+                        setValue={setValue}
+                        projectId={projectId}
+                        editorRef={editorRef}
+                        disabled={!!data?.sourceIssueId}
+                        handleFormChange={handleFormChange}
+                        controlWidth="medium"
+                      />
+                    </IssueFormField>
                   )}
                 </div>
+                {projectId && !data?.id && !data?.sourceIssueId && (
+                  <WorkItemTemplateSelect
+                    projectId={projectId}
+                    typeId={watch("type_id")}
+                    handleModalClose={() => {
+                      if (handleDraftAndClose) {
+                        handleDraftAndClose();
+                      } else {
+                        onClose();
+                      }
+                    }}
+                    handleFormChange={handleFormChange}
+                    renderChevron
+                  />
+                )}
+                {projectId && (
+                  <IssueFormField
+                    label={t("state")}
+                    controlWidth="compact"
+                    hint={!data?.id ? t("issue_modal_initial_state_hint") : undefined}
+                  >
+                    <Controller
+                      control={control}
+                      name="state_id"
+                      render={({ field: { value, onChange } }) => (
+                        <div className={issueFormControlWidthClass.compact}>
+                          <StateDropdown
+                            value={value}
+                            onChange={(stateId) => {
+                              onChange(stateId);
+                              handleFormChange();
+                            }}
+                            projectId={projectId ?? undefined}
+                            buttonVariant="border-with-text"
+                            buttonClassName={cn(issueFormControlBaseClass, "w-full")}
+                            buttonContainerClassName="w-full"
+                            className="w-full"
+                            isForWorkItemCreation={!data?.id}
+                          />
+                        </div>
+                      )}
+                    />
+                  </IssueFormField>
+                )}
+                {watch("parent_id") && selectedParentIssue && (
+                  <IssueParentTag
+                    control={control}
+                    selectedParentIssue={selectedParentIssue}
+                    handleFormChange={handleFormChange}
+                    setSelectedParentIssue={setSelectedParentIssue}
+                  />
+                )}
+                <IssueFormSectionDivider />
+                <IssueTitleInput
+                  control={control}
+                  issueTitleRef={issueTitleRef}
+                  formState={formState}
+                  handleFormChange={handleFormChange}
+                />
                 {duplicateIssues.length > 0 && (
                   <DeDupeButtonRoot
                     workspaceSlug={workspaceSlug?.toString()}
@@ -430,91 +495,75 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
                     handleOnClick={() => handleDuplicateIssueModal(!isDuplicateModalOpen)}
                   />
                 )}
-              </div>
-              {watch("parent_id") && selectedParentIssue && (
-                <div className="pb-4">
-                  <IssueParentTag
+                <IssueFormField label={t("issue_modal_description_label")} controlWidth="full" className="pt-1">
+                  <IssueDescriptionEditor
+                    variant="create-modal"
                     control={control}
+                    isDraft={isDraft}
+                    issueName={watch("name")}
+                    issueId={data?.id}
+                    descriptionHtmlData={data?.description_html}
+                    editorRef={editorRef}
+                    submitBtnRef={submitBtnRef}
+                    gptAssistantModal={gptAssistantModal}
+                    workspaceSlug={workspaceSlug?.toString()}
+                    projectId={projectId}
+                    handleFormChange={handleFormChange}
+                    handleDescriptionHTMLDataChange={(description_html) =>
+                      setValue<"description_html">("description_html", description_html)
+                    }
+                    setGptAssistantModal={setGptAssistantModal}
+                    handleGptAssistantClose={() => undefined}
+                    onAssetUpload={onAssetUpload}
+                    onClose={onClose}
+                  />
+                </IssueFormField>
+                {projectId && (
+                  <IssueModalAssigneeField
+                    control={control}
+                    projectId={projectId}
+                    handleFormChange={handleFormChange}
+                    tabIndex={getIndex("assignee_ids")}
+                  />
+                )}
+                <IssueFormSectionDivider />
+                <div className="grid grid-cols-1 gap-x-8 gap-y-4 sm:grid-cols-2">
+                  <IssueDefaultProperties
+                    layout="grid"
+                    embeddedInGrid
+                    omitState
+                    omitAssignee
+                    control={control}
+                    id={data?.id}
+                    projectId={projectId}
+                    workspaceSlug={workspaceSlug?.toString()}
                     selectedParentIssue={selectedParentIssue}
+                    startDate={watch("start_date")}
+                    targetDate={watch("target_date")}
+                    parentId={watch("parent_id")}
+                    isDraft={isDraft}
                     handleFormChange={handleFormChange}
                     setSelectedParentIssue={setSelectedParentIssue}
                   />
+                  <WorkItemModalAdditionalProperties
+                    layout="grid"
+                    isDraft={isDraft}
+                    workItemId={data?.id ?? data?.sourceIssueId}
+                    projectId={projectId}
+                    workspaceSlug={workspaceSlug?.toString()}
+                  />
                 </div>
-              )}
-              <div className="space-y-1">
-                <IssueTitleInput
-                  control={control}
-                  issueTitleRef={issueTitleRef}
-                  formState={formState}
-                  handleFormChange={handleFormChange}
-                />
               </div>
             </div>
-            <div
-              className={cn(
-                "space-y-3 bg-surface-1 pb-4",
-                activeAdditionalPropertiesLength > 4 &&
-                  "vertical-scrollbar scrollbar-sm max-h-[45vh] overflow-hidden overflow-y-auto"
-              )}
-            >
-              <div className="px-5">
-                <IssueDescriptionEditor
-                  control={control}
-                  isDraft={isDraft}
-                  issueName={watch("name")}
-                  issueId={data?.id}
-                  descriptionHtmlData={data?.description_html}
-                  editorRef={editorRef}
-                  submitBtnRef={submitBtnRef}
-                  gptAssistantModal={gptAssistantModal}
-                  workspaceSlug={workspaceSlug?.toString()}
-                  projectId={projectId}
-                  handleFormChange={handleFormChange}
-                  handleDescriptionHTMLDataChange={(description_html) =>
-                    setValue<"description_html">("description_html", description_html)
-                  }
-                  setGptAssistantModal={setGptAssistantModal}
-                  handleGptAssistantClose={() => reset(getValues())}
-                  onAssetUpload={onAssetUpload}
-                  onClose={onClose}
-                />
-              </div>
-              <WorkItemModalAdditionalProperties
-                isDraft={isDraft}
-                workItemId={data?.id ?? data?.sourceIssueId}
-                projectId={projectId}
-                workspaceSlug={workspaceSlug?.toString()}
-              />
-            </div>
-            <div
-              className={cn(
-                "rounded-b-lg border-t-[0.5px] border-subtle bg-surface-1 px-4 py-3",
-                activeAdditionalPropertiesLength > 0 && "shadow-raised-100"
-              )}
-            >
-              <div className="pb-3">
-                <IssueDefaultProperties
-                  control={control}
-                  id={data?.id}
-                  projectId={projectId}
-                  workspaceSlug={workspaceSlug?.toString()}
-                  selectedParentIssue={selectedParentIssue}
-                  startDate={watch("start_date")}
-                  targetDate={watch("target_date")}
-                  parentId={watch("parent_id")}
-                  isDraft={isDraft}
-                  handleFormChange={handleFormChange}
-                  setSelectedParentIssue={setSelectedParentIssue}
-                />
-              </div>
+            <div className="rounded-b-lg border-t border-subtle bg-surface-1 px-6 py-3">
               {showActionButtons && (
                 <div
-                  className="flex items-center justify-end gap-4 border-t-[0.5px] border-subtle pt-6 pb-3"
+                  className="flex items-center justify-between gap-4"
                   tabIndex={getIndex("create_more")}
                 >
-                  {!data?.id && (
+                  {!data?.id ? (
                     <div
-                      className="inline-flex cursor-pointer items-center gap-1.5"
+                      className="inline-flex cursor-pointer items-center gap-2"
                       onClick={() => onCreateMoreToggleChange(!isCreateMoreToggleEnabled)}
                       onKeyDown={(e) => {
                         if (e.key === "Enter") onCreateMoreToggleChange(!isCreateMoreToggleEnabled);
@@ -522,13 +571,15 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
                       role="button"
                     >
                       <ToggleSwitch value={isCreateMoreToggleEnabled} onChange={() => {}} size="sm" />
-                      <span className="text-caption-sm-regular">{t("create_more")}</span>
+                      <span className="text-12 text-secondary">{t("create_more")}</span>
                     </div>
+                  ) : (
+                    <span />
                   )}
-                  <div className="flex items-center gap-2">
+                  <div className={cn("flex items-center gap-3", data?.id && "ml-auto")}>
                     <div tabIndex={getIndex("discard_button")}>
                       <Button
-                        variant="secondary"
+                        variant="link"
                         size="lg"
                         onClick={() => {
                           if (editorRef.current?.isEditorReadyToDiscard()) {

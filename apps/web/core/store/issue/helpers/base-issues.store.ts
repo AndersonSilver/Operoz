@@ -28,7 +28,7 @@ import type {
 } from "@plane/types";
 import { EIssueServiceType, EIssueLayoutTypes } from "@plane/types";
 // helpers
-import { convertToISODateString } from "@plane/utils";
+import { convertToISODateString, renderFormattedPayloadDate } from "@plane/utils";
 // plane web imports
 import { workItemSortWithOrderByExtended } from "@/plane-web/store/issue/helpers/base-issue.store";
 // services
@@ -89,6 +89,7 @@ export interface IBaseIssuesStore {
 
   addIssueToList: (issueId: string) => void;
   removeIssueFromList: (issueId: string) => void;
+  moveIssueBetweenGroups: (issueId: string, sourceGroupId: string, destinationGroupId: string) => void;
   addIssuesToModule: (
     workspaceSlug: string,
     projectId: string,
@@ -228,6 +229,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
       setLoader: action.bound,
       addIssue: action.bound,
       removeIssueFromList: action.bound,
+      moveIssueBetweenGroups: action.bound,
 
       createIssue: action,
       issueUpdate: action,
@@ -291,11 +293,16 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
     const layout = displayFilters?.layout;
 
-    return layout === EIssueLayoutTypes.CALENDAR
-      ? "target_date"
-      : [EIssueLayoutTypes.LIST, EIssueLayoutTypes.KANBAN]?.includes(layout)
-        ? displayFilters?.group_by
-        : undefined;
+    if (layout === EIssueLayoutTypes.CALENDAR) return "target_date";
+
+    if (![EIssueLayoutTypes.LIST, EIssueLayoutTypes.KANBAN].includes(layout)) return;
+
+    // Módulo no quadro: sempre agrupar por estado (colunas = state_id do projeto).
+    if (layout === EIssueLayoutTypes.KANBAN && this.rootIssueStore.moduleId) {
+      return displayFilters.group_by === "state_detail.group" ? "state" : (displayFilters.group_by ?? "state");
+    }
+
+    return displayFilters?.group_by;
   }
 
   // current Sub group by value
@@ -305,6 +312,14 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
     return displayFilters?.layout === "kanban" ? displayFilters?.sub_group_by : undefined;
   }
+
+  /** Calendar groups must use yyyy-MM-dd keys so drag-and-drop can move issues between days. */
+  resolveIssueGroupId = (groupId: string) => {
+    if (this.groupBy !== "target_date") return groupId;
+    if (groupId === ALL_ISSUES || groupId === "None") return groupId;
+
+    return renderFormattedPayloadDate(groupId) ?? groupId;
+  };
 
   getIssueIds = (groupId?: string, subGroupId?: string) => {
     const groupedIssueIds = this.groupedIssueIds;
@@ -1155,12 +1170,11 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
       this.groupedIssueIds = undefined;
       this.issuePaginationData = {};
       this.groupedIssueCount = {};
+      this.loader = {};
       if (shouldClearPaginationOptions) {
         this.paginationOptions = undefined;
       }
     });
-    this.controller.abort();
-    this.controller = new AbortController();
   }
 
   /**
@@ -1181,6 +1195,53 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
   removeIssueFromList(issueId: string) {
     const issue = this.rootIssueStore.issues.getIssueById(issueId);
     this.updateIssueList(undefined, issue, EIssueGroupedAction.DELETE);
+  }
+
+  /**
+   * Atualização otimista ao arrastar entre colunas do kanban (substitui groupedIssueIds para forçar re-render).
+   */
+  moveIssueBetweenGroups(issueId: string, sourceGroupId: string, destinationGroupId: string) {
+    if (!this.groupedIssueIds || !issueId || sourceGroupId === destinationGroupId) return;
+
+    const fromKey = this.resolveIssueGroupId(sourceGroupId);
+    const toKey = this.resolveIssueGroupId(destinationGroupId);
+    const hadInSource =
+      Array.isArray(this.groupedIssueIds[fromKey]) && this.groupedIssueIds[fromKey].includes(issueId);
+
+    runInAction(() => {
+      const nextGrouped: TGroupedIssues = {};
+
+      for (const key of Object.keys(this.groupedIssueIds!)) {
+        const ids = this.groupedIssueIds![key];
+        if (Array.isArray(ids)) {
+          nextGrouped[key] = ids.filter((id) => id !== issueId);
+        }
+      }
+
+      const destinationIds = [...(nextGrouped[toKey] ?? [])];
+      if (!destinationIds.includes(issueId)) destinationIds.push(issueId);
+      nextGrouped[toKey] = this.issuesSortWithOrderBy(destinationIds, this.orderBy);
+
+      this.groupedIssueIds = nextGrouped;
+
+      if (hadInSource) {
+        const sourceCount = get(this.groupedIssueCount, fromKey);
+        if (typeof sourceCount === "number") {
+          set(this.groupedIssueCount, fromKey, Math.max(0, sourceCount - 1));
+        }
+      }
+      const destCount = get(this.groupedIssueCount, toKey);
+      if (typeof destCount === "number") {
+        set(this.groupedIssueCount, toKey, destCount + 1);
+      } else {
+        set(this.groupedIssueCount, toKey, 1);
+      }
+
+      const issue = this.rootIssueStore.issues.getIssueById(issueId);
+      if (issue) {
+        this.rootIssueStore.issues.updateIssue(issueId, { state_id: toKey });
+      }
+    });
   }
 
   /**
@@ -1244,6 +1305,51 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
       // update the respective counts from the accumulation object
       this.updateIssueCount(accumulatedUpdatesForCount);
+
+      // Calendar: remove stale copies when API group keys and normalized keys diverged
+      if (this.groupBy === "target_date" && issue && issueBeforeUpdate && issue.target_date !== issueBeforeUpdate.target_date) {
+        const previousKeys = new Set<string>();
+
+        if (this.groupedIssueIds) {
+          for (const key of Object.keys(this.groupedIssueIds)) {
+            if (key === ALL_ISSUES) continue;
+            const ids = this.groupedIssueIds[key];
+            if (Array.isArray(ids) && ids.includes(issueId)) previousKeys.add(key);
+          }
+        }
+
+        const nextKey = this.resolveIssueGroupId(issue.target_date ?? "");
+
+        for (const key of previousKeys) {
+          if (key === nextKey) continue;
+          update(this, ["groupedIssueIds", key], (issueIds: string[] = []) => pull(issueIds, issueId));
+        }
+      }
+
+      // Kanban (state): garantir que o cartão muda de coluna na hora após drag ou PATCH.
+      if (
+        this.groupBy === "state" &&
+        issue?.state_id &&
+        issueBeforeUpdate?.state_id &&
+        issue.state_id !== issueBeforeUpdate.state_id &&
+        this.groupedIssueIds
+      ) {
+        const nextStateId = issue.state_id;
+
+        for (const key of Object.keys(this.groupedIssueIds)) {
+          if (key === ALL_ISSUES) continue;
+          const ids = this.groupedIssueIds[key];
+          if (!Array.isArray(ids) || !ids.includes(issueId)) continue;
+
+          if (key === nextStateId) continue;
+
+          update(this, ["groupedIssueIds", key], (issueIds: string[] = []) => pull(issueIds, issueId));
+        }
+
+        update(this, ["groupedIssueIds", nextStateId], (issueIds: string[] = []) =>
+          this.issuesSortWithOrderBy(uniq(concat(issueIds ?? [], issueId)), this.orderBy)
+        );
+      }
     });
   }
 
@@ -1271,6 +1377,62 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
     //if is an array then it's an ungrouped response. return values with groupId as ALL_ISSUES
     if (Array.isArray(issueResult)) {
+      const groupKey = this.issueGroupKey;
+      const isMultiValueGroupKey =
+        groupKey === "label_ids" || groupKey === "assignee_ids" || groupKey === "module_ids";
+      const isCalendarTargetDateGroup =
+        issueResponse.grouped_by === "target_date" ||
+        this.groupBy === "target_date" ||
+        this.paginationOptions?.groupedBy === "target_date";
+
+      // Calendário: API pode devolver lista plana com grouped_by target_date.
+      if (isCalendarTargetDateGroup) {
+        const issueList = issueResult;
+        const groupedIssues: TGroupedIssues = {};
+        const groupedIssueCount: TGroupedIssueCount = {
+          [ALL_ISSUES]: issueResponse.total_count,
+        };
+
+        for (const issue of issueList) {
+          const rawGroupId = issue.target_date ?? issue.start_date;
+          const groupId =
+            rawGroupId === null || rawGroupId === undefined || rawGroupId === ""
+              ? "None"
+              : this.resolveIssueGroupId(String(rawGroupId));
+
+          if (!groupedIssues[groupId]) groupedIssues[groupId] = [];
+          groupedIssues[groupId].push(issue.id);
+          groupedIssueCount[groupId] = (groupedIssueCount[groupId] ?? 0) + 1;
+        }
+
+        return { issueList, groupedIssues, groupedIssueCount };
+      }
+
+      // Fallback: API devolveu lista plana mas o layout pede agrupamento (ex.: board kanban).
+      if (this.groupBy && groupKey && !isMultiValueGroupKey) {
+        const issueList = issueResult;
+        const groupedIssues: TGroupedIssues = {};
+        const groupedIssueCount: TGroupedIssueCount = {
+          [ALL_ISSUES]: issueResponse.total_count,
+        };
+
+        for (const issue of issueList) {
+          const rawGroupId = issue[groupKey];
+          const groupId =
+            rawGroupId === null || rawGroupId === undefined || rawGroupId === ""
+              ? "None"
+              : this.resolveIssueGroupId(String(rawGroupId));
+
+          if (!groupedIssues[groupId]) {
+            groupedIssues[groupId] = [];
+          }
+          groupedIssues[groupId].push(issue.id);
+          groupedIssueCount[groupId] = (groupedIssueCount[groupId] ?? 0) + 1;
+        }
+
+        return { issueList, groupedIssues, groupedIssueCount };
+      }
+
       return {
         issueList: issueResult,
         groupedIssues: {
@@ -1289,8 +1451,48 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
     // update total issue count to ALL_ISSUES
     set(groupedIssueCount, [ALL_ISSUES], issueResponse.total_count);
 
+    // API returned grouped payload but display filters may not have group_by yet (race on layout switch).
+    // When the server already grouped the response, keep per-group keys instead of ALL_ISSUES.
+    const isServerGrouped = Boolean(issueResponse.grouped_by);
+
+    if (!this.groupBy && !this.subGroupBy && !isServerGrouped) {
+      const flattenedIssues: TIssue[] = [];
+
+      for (const groupId in issueResult) {
+        const groupIssuesObject = issueResult[groupId];
+        const groupIssueResult = groupIssuesObject?.results;
+
+        if (!groupIssueResult) continue;
+
+        if (Array.isArray(groupIssueResult)) {
+          flattenedIssues.push(...groupIssueResult);
+          continue;
+        }
+
+        for (const subGroupId in groupIssueResult) {
+          const subGroupIssuesObject = groupIssueResult[subGroupId];
+          const subGroupIssueResult = subGroupIssuesObject?.results;
+
+          if (Array.isArray(subGroupIssueResult)) {
+            flattenedIssues.push(...subGroupIssueResult);
+          }
+        }
+      }
+
+      return {
+        issueList: flattenedIssues,
+        groupedIssues: {
+          [ALL_ISSUES]: flattenedIssues.map((issue) => issue.id),
+        },
+        groupedIssueCount: {
+          [ALL_ISSUES]: issueResponse.total_count,
+        },
+      };
+    }
+
     // loop through all the groupIds from issue Result
     for (const groupId in issueResult) {
+      const normalizedGroupId = this.resolveIssueGroupId(groupId);
       const groupIssuesObject = issueResult[groupId];
       const groupIssueResult = groupIssuesObject?.results;
 
@@ -1298,7 +1500,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
       if (!groupIssueResult) continue;
 
       // set grouped Issue count of the current groupId
-      set(groupedIssueCount, [groupId], groupIssuesObject.total_results);
+      set(groupedIssueCount, [normalizedGroupId], groupIssuesObject.total_results);
 
       // if groupIssueResult, the it is not subGrouped
       if (Array.isArray(groupIssueResult)) {
@@ -1307,7 +1509,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
         // set the issue Ids to the groupId path
         set(
           groupedIssues,
-          [groupId],
+          [normalizedGroupId],
           groupIssueResult.map((issue) => issue.id)
         );
         continue;
@@ -1322,7 +1524,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
         if (!subGroupIssueResult) continue;
 
         // set sub grouped Issue count of the current groupId
-        set(groupedIssueCount, [getGroupKey(groupId, subGroupId)], subGroupIssuesObject.total_results);
+        set(groupedIssueCount, [getGroupKey(normalizedGroupId, subGroupId)], subGroupIssuesObject.total_results);
 
         if (Array.isArray(subGroupIssueResult)) {
           // add the result to issueList
@@ -1330,7 +1532,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
           // set the issue Ids to the [groupId, subGroupId] path
           set(
             groupedIssues,
-            [groupId, subGroupId],
+            [normalizedGroupId, subGroupId],
             subGroupIssueResult.map((issue) => issue.id)
           );
 
@@ -1361,13 +1563,13 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
     if (groupId && groupedIssues[ALL_ISSUES] && Array.isArray(groupedIssues[ALL_ISSUES])) {
       const issueGroup = groupedIssues[ALL_ISSUES];
       const issueGroupCount = groupedIssueCount[ALL_ISSUES];
-      const issuesPath = [groupId];
+      const issuesPath = [this.resolveIssueGroupId(groupId)];
       // issuesPath is the path for the issue List in the Grouped Issue List
       // issuePath is either [groupId] for grouped pagination or [groupId, subGroupId] for subGrouped pagination
       if (subGroupId) issuesPath.push(subGroupId);
 
       // update the issue Count of the particular group/subGroup
-      set(this.groupedIssueCount, [getGroupKey(groupId, subGroupId)], issueGroupCount);
+      set(this.groupedIssueCount, [getGroupKey(issuesPath[0], subGroupId)], issueGroupCount);
 
       // update the issue list in the issuePath
       this.updateIssueGroup(issueGroup, issuesPath);
@@ -1380,14 +1582,15 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
     // loop through the groups of groupedIssues.
     for (const groupId in groupedIssues) {
+      const normalizedGroupId = this.resolveIssueGroupId(groupId);
       const issueGroup = groupedIssues[groupId];
       const issueGroupCount = groupedIssueCount[groupId];
 
       // update the groupId's issue count
-      set(this.groupedIssueCount, [groupId], issueGroupCount);
+      set(this.groupedIssueCount, [normalizedGroupId], issueGroupCount);
 
       // This updates the group issue list in the store, if the issueGroup is a string
-      const storeUpdated = this.updateIssueGroup(issueGroup, [groupId]);
+      const storeUpdated = this.updateIssueGroup(issueGroup, [normalizedGroupId]);
       // if issueGroup is indeed a string, continue
       if (storeUpdated) continue;
 
@@ -1397,9 +1600,9 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
         const issueSubGroupCount = groupedIssueCount[getGroupKey(groupId, subGroupId)];
 
         // update the subGroupId's issue count
-        set(this.groupedIssueCount, [getGroupKey(groupId, subGroupId)], issueSubGroupCount);
+        set(this.groupedIssueCount, [getGroupKey(normalizedGroupId, subGroupId)], issueSubGroupCount);
         // This updates the subgroup issue list in the store
-        this.updateIssueGroup(issueSubGroup, [groupId, subGroupId]);
+        this.updateIssueGroup(issueSubGroup, [normalizedGroupId, subGroupId]);
       }
     }
   }
@@ -1636,6 +1839,10 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
     if (!value || isEmpty(value)) return ["None"];
     // if array return the array
     if (Array.isArray(value)) return value;
+
+    if (groupByKey === "target_date") {
+      return [renderFormattedPayloadDate(value) ?? String(value)];
+    }
 
     return this.getDefaultGroupValue(issueObject, value, groupByKey);
   };

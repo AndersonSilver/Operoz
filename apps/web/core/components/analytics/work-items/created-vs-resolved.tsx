@@ -15,6 +15,7 @@ import { EmptyStateCompact } from "@plane/propel/empty-state";
 import type { IChartResponse, TChartData } from "@plane/types";
 import { renderFormattedDate } from "@plane/utils";
 // hooks
+import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // services
 import { AnalyticsService } from "@/services/analytics.service";
@@ -24,31 +25,18 @@ import { ChartLoader } from "../loaders";
 
 const analyticsService = new AnalyticsService();
 const CreatedVsResolved = observer(function CreatedVsResolved() {
-  const {
-    selectedDuration,
-    selectedDurationLabel,
-    selectedProjects,
-    selectedCycle,
-    selectedModule,
-    isPeekView,
-    isEpic,
-  } = useAnalytics();
-  const params = useParams();
+  const { selectedDuration, selectedDurationLabel, isPeekView, isEpic } = useAnalytics();
+  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams();
+  const routeParams = useParams();
   const { t } = useTranslation();
-  const workspaceSlug = params.workspaceSlug.toString();
+  const workspaceSlug = routeParams.workspaceSlug.toString();
   const { data: createdVsResolvedData, isLoading: isCreatedVsResolvedLoading } = useSWR(
-    `created-vs-resolved-${workspaceSlug}-${selectedDuration}-${selectedProjects}-${selectedCycle}-${selectedModule}-${isPeekView}-${isEpic}`,
+    `created-vs-resolved-${workspaceSlug}-${selectedDuration}-${cacheKey}-${isPeekView}`,
     () =>
       analyticsService.getAdvanceAnalyticsCharts<IChartResponse>(
         workspaceSlug,
         "work-items",
-        {
-          // date_filter: selectedDuration,
-          ...(selectedProjects?.length > 0 && { project_ids: selectedProjects?.join(",") }),
-          ...(selectedCycle ? { cycle_id: selectedCycle } : {}),
-          ...(selectedModule ? { module_id: selectedModule } : {}),
-          ...(isEpic ? { epic: true } : {}),
-        },
+        analyticsParams,
         isPeekView
       )
   );

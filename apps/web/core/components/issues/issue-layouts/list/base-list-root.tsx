@@ -9,14 +9,14 @@ import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
+import { EIssueFilterType } from "@plane/constants";
 // types
-import type { EIssuesStoreType, GroupByColumnTypes, TGroupedIssues, TIssueKanbanFilters } from "@plane/types";
-import { EIssueLayoutTypes } from "@plane/types";
+import type { GroupByColumnTypes, TGroupedIssues, TIssueKanbanFilters } from "@plane/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
 // constants
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
-import { useUserPermissions } from "@/hooks/store/user";
+import { useBoardIssueCapabilities, useCanEditIssueOnProject } from "@/hooks/use-board-issue-capabilities";
 // hooks
 import { useGroupIssuesDragNDrop } from "@/hooks/use-group-dragndrop";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
@@ -58,6 +58,8 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
   } = props;
   // router
   const storeType = useIssueStoreType() as ListStoreType;
+  const { workspaceSlug, projectId } = useParams();
+  const projectIdStr = projectId?.toString();
   //stores
   const { issuesFilter, issues } = useIssues(storeType);
   const {
@@ -70,9 +72,9 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
     archiveIssue,
     restoreIssue,
   } = useIssuesActions(storeType);
-  // mobx store
-  const { allowPermissions } = useUserPermissions();
-  const { issueMap } = useIssues();
+  const canEditIssueOnProject = useCanEditIssueOnProject();
+  const { isCreatingAllowed } = useBoardIssueCapabilities(projectIdStr);
+  const { issueMap } = useIssues(storeType);
 
   const displayFilters = issuesFilter?.issueFilters?.displayFilters;
   const displayProperties = issuesFilter?.issueFilters?.displayProperties;
@@ -80,32 +82,34 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
 
   const group_by = (displayFilters?.group_by || null) as GroupByColumnTypes | null;
   const showEmptyGroup = displayFilters?.show_empty_groups ?? false;
-
-  const { workspaceSlug, projectId } = useParams();
+  const filtersReady =
+    (storeType !== EIssuesStoreType.MODULE && storeType !== EIssuesStoreType.PROJECT) ||
+    Boolean(issuesFilter?.issueFilters?.displayFilters?.layout);
   const { updateFilters } = useIssuesActions(storeType);
   const collapsedGroups =
     issuesFilter?.issueFilters?.kanbanFilters || ({ group_by: [], sub_group_by: [] } as TIssueKanbanFilters);
 
   useEffect(() => {
-    fetchIssues("init-loader", { canGroup: true, perPageCount: group_by ? 50 : 100 }, viewId);
-  }, [fetchIssues, storeType, group_by, viewId]);
+    if (storeType === EIssuesStoreType.MODULE || storeType === EIssuesStoreType.PROJECT) return;
+    if (!filtersReady) return;
+
+    void fetchIssues("init-loader", { canGroup: true, perPageCount: group_by ? 50 : 100 }, viewId).catch(() => {
+      // Errors are handled in the issues store; avoid uncaught rejections blocking the layout.
+    });
+  }, [fetchIssues, storeType, group_by, viewId, displayFilters?.layout, orderBy, filtersReady]);
 
   const groupedIssueIds = issues?.groupedIssueIds as TGroupedIssues | undefined;
-  // auth
-  const isEditingAllowed = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.PROJECT
-  );
   const { enableInlineEditing, enableQuickAdd, enableIssueCreation } = issues?.viewFlags || {};
 
   const canEditProperties = useCallback(
     (projectId: string | undefined) => {
-      const isEditingAllowedBasedOnProject =
-        canEditPropertiesBasedOnProject && projectId ? canEditPropertiesBasedOnProject(projectId) : isEditingAllowed;
-
-      return !!enableInlineEditing && isEditingAllowedBasedOnProject;
+      if (!enableInlineEditing || !projectId) return false;
+      if (canEditPropertiesBasedOnProject) {
+        return canEditPropertiesBasedOnProject(projectId);
+      }
+      return canEditIssueOnProject(projectId);
     },
-    [canEditPropertiesBasedOnProject, enableInlineEditing, isEditingAllowed]
+    [canEditPropertiesBasedOnProject, canEditIssueOnProject, enableInlineEditing]
   );
 
   const handleOnDrop = useGroupIssuesDragNDrop(storeType, orderBy, group_by);
@@ -168,7 +172,7 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
           quickAddCallback={quickAddIssue}
           enableIssueQuickAdd={!!enableQuickAdd}
           canEditProperties={canEditProperties}
-          disableIssueCreation={!enableIssueCreation || !isEditingAllowed}
+          disableIssueCreation={!enableIssueCreation || !isCreatingAllowed}
           addIssuesToView={addIssuesToView}
           isCompletedCycle={isCompletedCycle}
           handleOnDrop={handleOnDrop}

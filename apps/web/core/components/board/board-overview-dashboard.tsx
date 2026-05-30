@@ -1,0 +1,381 @@
+/**
+ * Copyright (c) 2023-present Plane Software, Inc. and contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * See the LICENSE file for details.
+ */
+
+import { useMemo } from "react";
+import {
+  CheckCircle2,
+  ClipboardList,
+  Pencil,
+  Save,
+} from "lucide-react";
+import { ISSUE_PRIORITY_FILTERS } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
+import { PieChart } from "@plane/propel/charts/pie-chart";
+import { EmptyStateCompact } from "@plane/propel/empty-state";
+import type { IBoardMeta } from "@plane/types";
+import { Avatar } from "@plane/ui";
+import { calculateTimeAgo, cn, getFileURL } from "@plane/utils";
+import { Client360BreakdownRow } from "@/components/board/client-360/client-360-ui";
+import { useAppRouter } from "@/hooks/use-app-router";
+
+const PRIORITY_ORDER = ["urgent", "high", "medium", "low", "none"] as const;
+
+const PRIORITY_BAR_COLORS: Record<string, string> = {
+  urgent: "var(--color-priority-urgent)",
+  high: "var(--color-priority-high)",
+  medium: "var(--color-priority-medium)",
+  low: "var(--color-priority-low)",
+  none: "var(--color-priority-none)",
+};
+
+function GlassCard({
+  title,
+  children,
+  className,
+}: {
+  title: string;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <section
+      className={cn(
+        "flex flex-col overflow-hidden rounded-lg border border-subtle/80 bg-layer-1/80 shadow-sm backdrop-blur-sm",
+        className
+      )}
+    >
+      <header className="border-b border-subtle/60 px-4 py-3">
+        <h2 className="text-13 font-semibold text-primary">{title}</h2>
+      </header>
+      <div className="flex min-h-0 flex-1 flex-col p-4">{children}</div>
+    </section>
+  );
+}
+
+function KpiCard({
+  icon: Icon,
+  label,
+  value,
+  iconClassName,
+}: {
+  icon: typeof CheckCircle2;
+  label: string;
+  value: number;
+  iconClassName: string;
+}) {
+  return (
+    <div className="flex min-w-[200px] flex-1 items-start gap-3 rounded-lg border border-subtle/80 bg-layer-1/80 p-4 shadow-sm backdrop-blur-sm">
+      <span className={cn("grid size-9 shrink-0 place-items-center rounded-md border border-subtle bg-layer-2", iconClassName)}>
+        <Icon className="size-4.5" strokeWidth={1.75} />
+      </span>
+      <div className="min-w-0">
+        <p className="text-20 font-semibold tabular-nums leading-tight text-primary">{value}</p>
+        <p className="mt-1 text-12 leading-snug text-secondary">{label}</p>
+      </div>
+    </div>
+  );
+}
+
+export function BoardOverviewKpiStrip({ meta }: { meta: IBoardMeta }) {
+  const { t } = useTranslation();
+  const activity = meta.activity_last_7_days;
+
+  return (
+    <div className="flex flex-wrap gap-3">
+      <KpiCard
+        icon={CheckCircle2}
+        value={activity.completed}
+        label={t("boards.overview_kpi_completed_7d")}
+        iconClassName="text-success-primary"
+      />
+      <KpiCard
+        icon={Pencil}
+        value={activity.updated}
+        label={t("boards.overview_kpi_updated_7d")}
+        iconClassName="text-accent-primary"
+      />
+      <KpiCard
+        icon={ClipboardList}
+        value={activity.created}
+        label={t("boards.overview_kpi_created_7d")}
+        iconClassName="text-info-primary"
+      />
+      <KpiCard
+        icon={Save}
+        value={meta.due_soon}
+        label={t("boards.overview_kpi_due_soon")}
+        iconClassName="text-warning-primary"
+      />
+    </div>
+  );
+}
+
+export function BoardOverviewStatusChart({ meta }: { meta: IBoardMeta }) {
+  const { t } = useTranslation();
+  const total = meta.total_issues;
+
+  const chartData = useMemo(
+    () =>
+      meta.state_distribution.map((row) => ({
+        id: row.state_id ?? row.state_name,
+        key: row.state_id ?? row.state_name,
+        value: row.count,
+        name: row.state_name,
+        color: row.state_color,
+      })),
+    [meta.state_distribution]
+  );
+
+  if (!total) {
+    return (
+      <EmptyStateCompact
+        assetKey="work-items"
+        assetClassName="size-16"
+        title={t("boards.overview_status_empty")}
+      />
+    );
+  }
+
+  return (
+    <div className="grid min-h-[260px] grid-cols-1 gap-4 md:grid-cols-2">
+      <div className="relative h-[220px] w-full">
+        <PieChart
+          className="size-full"
+          dataKey="value"
+          margin={{ top: 0, right: 0, bottom: 0, left: 0 }}
+          data={chartData}
+          cells={chartData.map((row) => ({ key: row.key, fill: row.color }))}
+          showTooltip
+          tooltipLabel={t("boards.overview_chart_count")}
+          paddingAngle={3}
+          cornerRadius={3}
+          innerRadius="58%"
+          outerRadius="88%"
+          showLabel={false}
+        />
+        <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
+          <span className="text-22 font-semibold tabular-nums text-primary">{total}</span>
+          <span className="mt-0.5 max-w-[7rem] text-11 leading-tight text-tertiary">
+            {t("boards.overview_status_total")}
+          </span>
+        </div>
+      </div>
+      <ul className="flex max-h-[220px] flex-col gap-2 overflow-y-auto pr-1">
+        {meta.state_distribution.map((row) => (
+          <li key={row.state_id ?? row.state_name} className="flex items-center justify-between gap-2 text-12">
+            <span className="flex min-w-0 items-center gap-2 text-secondary">
+              <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: row.state_color }} />
+              <span className="truncate uppercase tracking-wide">{row.state_name}</span>
+            </span>
+            <span className="shrink-0 tabular-nums font-medium text-primary">{row.count}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+export function BoardOverviewPriorityChart({ meta }: { meta: IBoardMeta }) {
+  const { t } = useTranslation();
+
+  const rows = useMemo(() => {
+    const byKey = Object.fromEntries(meta.priority_distribution.map((r) => [r.priority, r.count]));
+    return PRIORITY_ORDER.map((key) => ({
+      key,
+      count: byKey[key] ?? 0,
+      label: t(ISSUE_PRIORITY_FILTERS.find((p) => p.key === key)?.titleTranslationKey ?? "common.none"),
+      color: PRIORITY_BAR_COLORS[key],
+    }));
+  }, [meta.priority_distribution, t]);
+
+  const max = Math.max(...rows.map((r) => r.count), 1);
+
+  if (!meta.total_issues) {
+    return (
+      <EmptyStateCompact
+        assetKey="priority"
+        assetClassName="size-16"
+        title={t("boards.overview_priority_empty")}
+      />
+    );
+  }
+
+  return (
+    <div className="flex h-[220px] items-end justify-between gap-2 px-1 pt-2">
+      {rows.map((row) => {
+        const heightPct = row.count > 0 ? Math.max((row.count / max) * 100, 8) : 4;
+        return (
+          <div key={row.key} className="flex min-w-0 flex-1 flex-col items-center gap-2">
+            <span className="text-11 tabular-nums text-tertiary">{row.count || ""}</span>
+            <div className="flex w-full max-w-[3.5rem] flex-1 items-end justify-center">
+              <div
+                className="w-full min-h-[4px] rounded-t-sm transition-all"
+                style={{ height: `${heightPct}%`, backgroundColor: row.color, opacity: row.count ? 0.9 : 0.2 }}
+                title={`${row.label}: ${row.count}`}
+              />
+            </div>
+            <span className="max-w-full truncate text-center text-10 text-tertiary">{row.label}</span>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+export function BoardOverviewTypeChart({ meta }: { meta: IBoardMeta }) {
+  const { t } = useTranslation();
+  const total = meta.total_issues;
+
+  if (!total || meta.type_distribution.length === 0) {
+    return (
+      <EmptyStateCompact
+        assetKey="work-items"
+        assetClassName="size-16"
+        title={t("boards.overview_types_empty")}
+      />
+    );
+  }
+
+  return (
+    <div className="flex flex-col gap-3">
+      {meta.type_distribution.slice(0, 8).map((row, index) => (
+        <Client360BreakdownRow
+          key={row.type_id ?? row.type_name}
+          label={row.type_name}
+          value={row.count}
+          total={total}
+          tone={index % 2 === 0 ? "accent" : "info"}
+        />
+      ))}
+    </div>
+  );
+}
+
+function formatActivityMessage(
+  verb: string,
+  field: string | null,
+  t: ReturnType<typeof useTranslation>["t"]
+): string {
+  if (verb === "created") return t("boards.overview_activity_created");
+  if (verb === "deleted") return t("boards.overview_activity_deleted");
+  if (field === "state") return t("boards.overview_activity_state");
+  if (field === "priority") return t("boards.overview_activity_priority");
+  if (field === "assignees") return t("boards.overview_activity_assignees");
+  if (field === "target_date") return t("boards.overview_activity_target_date");
+  return t("boards.overview_activity_updated");
+}
+
+export function BoardOverviewRecentActivity({
+  meta,
+  workspaceSlug,
+}: {
+  meta: IBoardMeta;
+  workspaceSlug: string;
+}) {
+  const { t } = useTranslation();
+  const router = useAppRouter();
+
+  if (meta.recent_activity.length === 0) {
+    return (
+      <EmptyStateCompact
+        assetKey="activity"
+        assetClassName="size-16"
+        title={t("boards.overview_activity_empty")}
+      />
+    );
+  }
+
+  return (
+    <ul className="max-h-[280px] space-y-3 overflow-y-auto pr-1">
+      {meta.recent_activity.map((item) => {
+        const issue = item.issue;
+        const identifier = issue
+          ? `${issue.project_identifier}-${issue.sequence_id}`
+          : null;
+        const action = formatActivityMessage(item.verb, item.field, t);
+
+        return (
+          <li key={item.id} className="flex gap-2.5 text-12">
+            {item.actor ? (
+              <Avatar
+                name={item.actor.display_name}
+                src={getFileURL(item.actor.avatar_url)}
+                size="sm"
+                showTooltip={false}
+              />
+            ) : (
+              <span className="size-6 shrink-0 rounded-full bg-layer-2" />
+            )}
+            <div className="min-w-0 flex-1">
+              <p className="leading-snug text-secondary">
+                {item.actor ? (
+                  <span className="font-medium text-primary">{item.actor.display_name}</span>
+                ) : (
+                  <span className="font-medium text-primary">{t("boards.overview_activity_system")}</span>
+                )}{" "}
+                {action}
+                {issue ? (
+                  <>
+                    {" "}
+                    <button
+                      type="button"
+                      className="font-medium text-accent-primary hover:underline"
+                      onClick={() =>
+                        router.push(
+                          `/${workspaceSlug}/projects/${issue.project_id}/issues/${issue.id}`
+                        )
+                      }
+                    >
+                      {identifier}
+                    </button>
+                    <span className="text-tertiary"> · {issue.name}</span>
+                  </>
+                ) : null}
+              </p>
+              <p className="mt-0.5 text-11 text-placeholder">
+                {calculateTimeAgo(item.created_at)}
+              </p>
+            </div>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
+export function BoardOverviewDashboard({
+  meta,
+  workspaceSlug,
+}: {
+  meta: IBoardMeta;
+  workspaceSlug: string;
+}) {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex flex-col gap-4">
+      <BoardOverviewKpiStrip meta={meta} />
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <GlassCard title={t("boards.overview_status_title")}>
+          <BoardOverviewStatusChart meta={meta} />
+        </GlassCard>
+
+        <GlassCard title={t("boards.overview_activity_title")}>
+          <BoardOverviewRecentActivity meta={meta} workspaceSlug={workspaceSlug} />
+        </GlassCard>
+
+        <GlassCard title={t("boards.overview_priority_title")}>
+          <BoardOverviewPriorityChart meta={meta} />
+        </GlassCard>
+
+        <GlassCard title={t("boards.overview_types_title")}>
+          <BoardOverviewTypeChart meta={meta} />
+        </GlassCard>
+      </div>
+    </div>
+  );
+}

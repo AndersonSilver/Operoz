@@ -4,7 +4,9 @@
  * See the LICENSE file for details.
  */
 
+import { useMemo } from "react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
+import { useTranslation } from "@plane/i18n";
 // plane imports
 import { getButtonStyling } from "@plane/propel/button";
 // types
@@ -18,19 +20,21 @@ type Props = {
   sortKey: TPageFiltersSortKey;
 };
 
-const PAGE_SORTING_KEY_OPTIONS: {
-  key: TPageFiltersSortKey;
-  label: string;
-}[] = [
-  { key: "name", label: "Name" },
-  { key: "created_at", label: "Date created" },
-  { key: "updated_at", label: "Date modified" },
-];
-
 export function PageOrderByDropdown(props: Props) {
+  const { t } = useTranslation();
   const { onChange, sortBy, sortKey } = props;
 
-  const orderByDetails = PAGE_SORTING_KEY_OPTIONS.find((option) => sortKey === option.key);
+  const pageSortingKeyOptions = useMemo(
+    () =>
+      [
+        { key: "name" as const, label: t("project_page.sort.name") },
+        { key: "created_at" as const, label: t("project_page.sort.date_created") },
+        { key: "updated_at" as const, label: t("project_page.sort.date_modified") },
+      ] satisfies { key: TPageFiltersSortKey; label: string }[],
+    [t]
+  );
+
+  const orderByDetails = pageSortingKeyOptions.find((option) => sortKey === option.key);
   const isDescending = sortBy === "desc";
 
   return (
@@ -45,7 +49,7 @@ export function PageOrderByDropdown(props: Props) {
       maxHeight="lg"
       closeOnSelect
     >
-      {PAGE_SORTING_KEY_OPTIONS.map((option) => (
+      {pageSortingKeyOptions.map((option) => (
         <CustomMenu.MenuItem
           key={option.key}
           className="flex items-center justify-between gap-2"
@@ -69,7 +73,7 @@ export function PageOrderByDropdown(props: Props) {
             });
         }}
       >
-        Ascending
+        {t("project_page.sort.ascending")}
         {!isDescending && <CheckIcon className="h-3 w-3" />}
       </CustomMenu.MenuItem>
       <CustomMenu.MenuItem
@@ -81,7 +85,7 @@ export function PageOrderByDropdown(props: Props) {
             });
         }}
       >
-        Descending
+        {t("project_page.sort.descending")}
         {isDescending && <CheckIcon className="h-3 w-3" />}
       </CustomMenu.MenuItem>
     </CustomMenu>

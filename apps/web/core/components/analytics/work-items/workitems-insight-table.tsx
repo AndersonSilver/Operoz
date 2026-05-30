@@ -19,6 +19,7 @@ import type { AnalyticsTableDataMap, WorkItemInsightColumns } from "@plane/types
 import { Avatar } from "@plane/ui";
 import { getFileURL } from "@plane/utils";
 // hooks
+import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 import { useProject } from "@/hooks/store/use-project";
 import { AnalyticsService } from "@/services/analytics.service";
@@ -46,20 +47,15 @@ const WorkItemsInsightTable = observer(function WorkItemsInsightTable() {
   const { t } = useTranslation();
   // store hooks
   const { getProjectById } = useProject();
-  const { selectedDuration, selectedProjects, selectedCycle, selectedModule, isPeekView, isEpic } = useAnalytics();
+  const { selectedDuration, isPeekView } = useAnalytics();
+  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams();
   const { data: workItemsData, isLoading } = useSWR(
-    `insights-table-work-items-${workspaceSlug}-${selectedDuration}-${selectedProjects}-${selectedCycle}-${selectedModule}-${isPeekView}-${isEpic}`,
+    `insights-table-work-items-${workspaceSlug}-${selectedDuration}-${cacheKey}-${isPeekView}`,
     () =>
       analyticsService.getAdvanceAnalyticsStats<WorkItemInsightColumns[]>(
         workspaceSlug,
         "work-items",
-        {
-          // date_filter: selectedDuration,
-          ...(selectedProjects?.length > 0 ? { project_ids: selectedProjects.join(",") } : {}),
-          ...(selectedCycle ? { cycle_id: selectedCycle } : {}),
-          ...(selectedModule ? { module_id: selectedModule } : {}),
-          ...(isEpic ? { epic: true } : {}),
-        },
+        analyticsParams,
         isPeekView
       )
   );

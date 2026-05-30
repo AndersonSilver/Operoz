@@ -20,8 +20,12 @@ import type {
   TWorkItemFilterExpression,
   TSupportedFilterForUpdate,
 } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@plane/types";
 import { handleIssueQueryParamsByLayout } from "@plane/utils";
+import {
+  MODULE_KANBAN_GROUP_BY,
+  resolveBoardListDisplayProperties,
+} from "@/components/issues/issue-layouts/list-display-properties";
 import { IssueFiltersService } from "@/services/issue_filter.service";
 import type { IBaseIssueFilterStore } from "../helpers/issue-filter-helper.store";
 import { IssueFilterHelperStore } from "../helpers/issue-filter-helper.store";
@@ -104,7 +108,10 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
 
     const _filters: IIssueFilters = this.computedIssueFilters(displayFilters);
 
-    return _filters;
+    return {
+      ..._filters,
+      displayProperties: resolveBoardListDisplayProperties(_filters.displayProperties),
+    };
   }
 
   getAppliedFilters(moduleId: string) {
@@ -149,8 +156,61 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     const _filters = await this.issueFilterService.fetchModuleIssueFilters(workspaceSlug, projectId, moduleId);
 
     const richFilters: TWorkItemFilterExpression = _filters?.rich_filters;
-    const displayFilters: IIssueDisplayFilterOptions = this.computedDisplayFilters(_filters?.display_filters);
-    const displayProperties: IIssueDisplayProperties = this.computedDisplayProperties(_filters?.display_properties);
+    let displayFilters = this.computedDisplayFilters(_filters?.display_filters, {
+      order_by: "-created_at",
+    });
+    const rawDisplayProperties = this.computedDisplayProperties(_filters?.display_properties);
+    const displayProperties = resolveBoardListDisplayProperties(rawDisplayProperties);
+    const hadNoVisibleColumns =
+      _filters?.display_properties != null && !Object.values(rawDisplayProperties).some(Boolean);
+
+    if (displayFilters.order_by === "sort_order") {
+      displayFilters = { ...displayFilters, order_by: "-created_at" };
+    }
+
+    const hadListGroupedByState =
+      displayFilters.layout === EIssueLayoutTypes.LIST && displayFilters.group_by != null;
+    const hadCalendarGroupedByState =
+      displayFilters.layout === EIssueLayoutTypes.CALENDAR && displayFilters.group_by != null;
+
+    // Lista do board: um único bloco "All work items" (sem agrupar por estado).
+    if (displayFilters.layout === EIssueLayoutTypes.LIST) {
+      displayFilters = {
+        ...displayFilters,
+        group_by: null,
+        sub_group_by: null,
+        show_empty_groups: false,
+      };
+    }
+
+    const hadKanbanWrongGroupBy =
+      displayFilters.layout === EIssueLayoutTypes.KANBAN &&
+      displayFilters.group_by !== MODULE_KANBAN_GROUP_BY;
+    const hadKanbanEmptyGroupsHidden =
+      displayFilters.layout === EIssueLayoutTypes.KANBAN && displayFilters.show_empty_groups === false;
+
+    // Quadro: coluna por estado; colunas vazias visíveis para permitir arrastar.
+    if (displayFilters.layout === EIssueLayoutTypes.KANBAN) {
+      displayFilters = {
+        ...displayFilters,
+        group_by: MODULE_KANBAN_GROUP_BY,
+        sub_group_by: null,
+        show_empty_groups: true,
+      };
+    }
+
+    // Calendário do board: fetch por intervalo de datas (group_by limpo no display).
+    if (displayFilters.layout === EIssueLayoutTypes.CALENDAR) {
+      displayFilters = {
+        ...displayFilters,
+        group_by: null,
+        sub_group_by: null,
+        calendar: {
+          layout: displayFilters.calendar?.layout ?? "month",
+          show_weekends: displayFilters.calendar?.show_weekends ?? false,
+        },
+      };
+    }
 
     // fetching the kanban toggle helpers in the local storage
     const kanbanFilters = {
@@ -175,6 +235,28 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
       set(this.filters, [moduleId, "displayProperties"], displayProperties);
       set(this.filters, [moduleId, "kanbanFilters"], kanbanFilters);
     });
+
+    if (
+      hadNoVisibleColumns ||
+      hadListGroupedByState ||
+      hadCalendarGroupedByState ||
+      hadKanbanWrongGroupBy ||
+      hadKanbanEmptyGroupsHidden
+    ) {
+      try {
+        await this.issueFilterService.patchModuleIssueFilters(workspaceSlug, projectId, moduleId, {
+          ...(hadNoVisibleColumns ? { display_properties: displayProperties } : {}),
+          ...(hadListGroupedByState ||
+          hadCalendarGroupedByState ||
+          hadKanbanWrongGroupBy ||
+          hadKanbanEmptyGroupsHidden
+            ? { display_filters: displayFilters }
+            : {}),
+        });
+      } catch (error) {
+        console.warn("could not persist module list filters", error);
+      }
+    }
   };
 
   /**
@@ -224,6 +306,39 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
           const updatedDisplayFilters = filters as IIssueDisplayFilterOptions;
           _filters.displayFilters = { ..._filters.displayFilters, ...updatedDisplayFilters };
 
+          // Ao mudar para lista, igual ao board: sem agrupamento por estado.
+          if (updatedDisplayFilters.layout === EIssueLayoutTypes.LIST) {
+            _filters.displayFilters.group_by = null;
+            _filters.displayFilters.sub_group_by = null;
+            _filters.displayFilters.show_empty_groups = false;
+            updatedDisplayFilters.group_by = null;
+            updatedDisplayFilters.sub_group_by = null;
+            updatedDisplayFilters.show_empty_groups = false;
+          }
+
+          // Quadro: uma coluna por estado do fluxo do projeto.
+          if (updatedDisplayFilters.layout === EIssueLayoutTypes.KANBAN) {
+            _filters.displayFilters.group_by = MODULE_KANBAN_GROUP_BY;
+            _filters.displayFilters.sub_group_by = null;
+            _filters.displayFilters.show_empty_groups = true;
+            updatedDisplayFilters.group_by = MODULE_KANBAN_GROUP_BY;
+            updatedDisplayFilters.sub_group_by = null;
+            updatedDisplayFilters.show_empty_groups = true;
+          }
+
+          // Calendário: layout mensal/semanal; fetch usa target_date no pedido.
+          if (updatedDisplayFilters.layout === EIssueLayoutTypes.CALENDAR) {
+            _filters.displayFilters.group_by = null;
+            _filters.displayFilters.sub_group_by = null;
+            _filters.displayFilters.calendar = {
+              layout: _filters.displayFilters.calendar?.layout ?? "month",
+              show_weekends: _filters.displayFilters.calendar?.show_weekends ?? false,
+            };
+            updatedDisplayFilters.group_by = null;
+            updatedDisplayFilters.sub_group_by = null;
+            updatedDisplayFilters.calendar = _filters.displayFilters.calendar;
+          }
+
           // set sub_group_by to null if group_by is set to null
           if (_filters.displayFilters.group_by === null) {
             _filters.displayFilters.sub_group_by = null;
@@ -237,12 +352,6 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
             _filters.displayFilters.sub_group_by = null;
             updatedDisplayFilters.sub_group_by = null;
           }
-          // set group_by to state if layout is switched to kanban and group_by is null
-          if (_filters.displayFilters.layout === "kanban" && _filters.displayFilters.group_by === null) {
-            _filters.displayFilters.group_by = "state";
-            updatedDisplayFilters.group_by = "state";
-          }
-
           runInAction(() => {
             Object.keys(updatedDisplayFilters).forEach((_key) => {
               set(
@@ -254,7 +363,13 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
           });
 
           if (this.getShouldClearIssues(updatedDisplayFilters)) {
-            this.rootIssueStore.moduleIssues.clear(true); // clear issues for local store when some filters like layout changes
+            runInAction(() => {
+              this.rootIssueStore.moduleIssues.groupedIssueIds = undefined;
+              this.rootIssueStore.moduleIssues.issuePaginationData = {};
+              this.rootIssueStore.moduleIssues.groupedIssueCount = {};
+              this.rootIssueStore.moduleIssues.paginationOptions = undefined;
+              this.rootIssueStore.moduleIssues.loader = {};
+            });
           }
 
           if (this.getShouldReFetchIssues(updatedDisplayFilters)) {

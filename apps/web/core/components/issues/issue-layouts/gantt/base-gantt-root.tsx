@@ -11,7 +11,8 @@ import { useParams } from "next/navigation";
 import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { EIssuesStoreType, IBlockUpdateData, TIssue } from "@plane/types";
+import type { IBlockUpdateData, TIssue } from "@plane/types";
+import { EIssuesStoreType } from "@plane/types";
 import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@plane/types";
 import { renderFormattedPayloadDate } from "@plane/utils";
 // components
@@ -42,6 +43,7 @@ export type GanttStoreType =
   | EIssuesStoreType.MODULE
   | EIssuesStoreType.CYCLE
   | EIssuesStoreType.PROJECT_VIEW
+  | EIssuesStoreType.BOARD
   | EIssuesStoreType.EPIC;
 
 export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRoot) {
@@ -58,6 +60,8 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
   const { allowPermissions } = useUserPermissions();
 
   const appliedDisplayFilters = issuesFilter.issueFilters?.displayFilters;
+  const boardGanttReady =
+    storeType !== EIssuesStoreType.BOARD || appliedDisplayFilters?.layout === EIssueLayoutTypes.GANTT;
   // plane web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
   // derived values
@@ -65,11 +69,15 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
   targetDate.setDate(targetDate.getDate() + 1);
 
   useEffect(() => {
+    if (!boardGanttReady) return;
+    if (storeType === EIssuesStoreType.BOARD) return;
+    if (storeType === EIssuesStoreType.MODULE || storeType === EIssuesStoreType.PROJECT) return;
     fetchIssues("init-loader", { canGroup: false, perPageCount: 100 }, viewId);
-  }, [fetchIssues, storeType, viewId]);
+  }, [boardGanttReady, fetchIssues, storeType, viewId]);
 
   useEffect(() => {
     initGantt();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const issuesIds = (issues.groupedIssueIds?.[ALL_ISSUES] as string[]) ?? [];
@@ -90,7 +98,41 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
     updateIssue && (await updateIssue(issue.project_id, issue.id, payload));
   };
 
-  const isAllowed = allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.PROJECT);
+  const canEditIssue = useCallback(
+    (issueId: string) => {
+      const slug = workspaceSlug?.toString();
+      if (!slug) return false;
+
+      const issueProjectId =
+        storeType === EIssuesStoreType.BOARD
+          ? issues.rootIssueStore.issues.getIssueById(issueId)?.project_id
+          : projectId?.toString();
+
+      if (!issueProjectId) return false;
+
+      return allowPermissions(
+        [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+        EUserPermissionsLevel.PROJECT,
+        slug,
+        issueProjectId
+      );
+    },
+    [allowPermissions, issues.rootIssueStore.issues, projectId, storeType, workspaceSlug]
+  );
+
+  const isAllowed =
+    storeType === EIssuesStoreType.BOARD
+      ? allowPermissions(
+          [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+          EUserPermissionsLevel.WORKSPACE,
+          workspaceSlug?.toString()
+        )
+      : allowPermissions(
+          [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+          EUserPermissionsLevel.PROJECT,
+          workspaceSlug?.toString(),
+          projectId?.toString()
+        );
   const updateBlockDates = useCallback(
     (
       updates: {
@@ -98,15 +140,40 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
         start_date?: string;
         target_date?: string;
       }[]
-    ) =>
-      issues.updateIssueDates(workspaceSlug.toString(), updates, projectId.toString()).catch(() => {
+    ) => {
+      if (!workspaceSlug) return Promise.resolve();
+
+      const onError = () => {
         setToast({
           type: TOAST_TYPE.ERROR,
           title: t("toast.error"),
           message: "Error while updating work item dates, Please try again Later",
         });
-      }),
-    [issues, projectId, workspaceSlug]
+      };
+
+      if (storeType === EIssuesStoreType.BOARD) {
+        const getIssueById = issues.rootIssueStore.issues.getIssueById;
+        const updatesByProject: Record<string, typeof updates> = {};
+
+        for (const update of updates) {
+          const projectIdForIssue = getIssueById(update.id)?.project_id;
+          if (!projectIdForIssue) continue;
+          if (!updatesByProject[projectIdForIssue]) updatesByProject[projectIdForIssue] = [];
+          updatesByProject[projectIdForIssue].push(update);
+        }
+
+        return Promise.all(
+          Object.entries(updatesByProject).map(([projectIdForIssue, projectUpdates]) =>
+            issues.updateIssueDates(workspaceSlug.toString(), projectUpdates, projectIdForIssue)
+          )
+        ).catch(onError);
+      }
+
+      if (!projectId) return Promise.resolve();
+
+      return issues.updateIssueDates(workspaceSlug.toString(), updates, projectId.toString()).catch(onError);
+    },
+    [issues, projectId, storeType, t, workspaceSlug]
   );
 
   const quickAdd =
@@ -136,10 +203,10 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
             blockUpdateHandler={updateIssueBlockStructure}
             blockToRender={(data: TIssue) => <IssueGanttBlock issueId={data.id} isEpic={isEpic} />}
             sidebarToRender={(props) => <IssueGanttSidebar {...props} showAllBlocks isEpic={isEpic} />}
-            enableBlockLeftResize={isAllowed}
-            enableBlockRightResize={isAllowed}
-            enableBlockMove={isAllowed}
-            enableReorder={appliedDisplayFilters?.order_by === "sort_order" && isAllowed}
+            enableBlockLeftResize={canEditIssue}
+            enableBlockRightResize={canEditIssue}
+            enableBlockMove={canEditIssue}
+            enableReorder={appliedDisplayFilters?.order_by === "sort_order" ? canEditIssue : false}
             enableAddBlock={isAllowed}
             enableSelection={isBulkOperationsEnabled && isAllowed}
             quickAdd={quickAdd}

@@ -7,6 +7,7 @@
 import type { Editor } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { TableMap } from "@tiptap/pm/tables";
+import type { Mapping } from "@tiptap/pm/transform";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import { ReactRenderer } from "@tiptap/react";
 // extensions
@@ -61,7 +62,7 @@ export const TableColumnDragHandlePlugin = (editor: Editor): Plugin<TableColumnD
         }
 
         if (!isStale) {
-          const mapped = prev.decorations?.map(tr.mapping, tr.doc);
+          const mapped = prev.decorations?.map(tr.mapping as Mapping, tr.doc);
           return {
             decorations: mapped,
             tableWidth: tableMap.width,

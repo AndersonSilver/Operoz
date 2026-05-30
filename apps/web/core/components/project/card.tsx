@@ -57,12 +57,9 @@ export const ProjectCard = observer(function ProjectCard(props: Props) {
   const { isMobile } = usePlatformOS();
   // derived values
   const projectMembersIds = project.members;
-  const shouldRenderFavorite = allowPermissions(
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-    EUserPermissionsLevel.WORKSPACE
-  );
   // auth
   const isMemberOfProject = !!project.member_role;
+  const shouldRenderFavorite = isMemberOfProject;
   const hasAdminRole = project.member_role === EUserPermissions.ADMIN;
   const hasMemberRole = project.member_role === EUserPermissions.MEMBER;
   // archive

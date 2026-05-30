@@ -11,7 +11,8 @@ import type { IBlockUpdateDependencyData, IGanttBlock } from "@plane/types";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
-import { DEFAULT_BLOCK_WIDTH, SIDEBAR_WIDTH } from "../../constants";
+import { useGanttSidebarWidth } from "../../contexts/gantt-sidebar-width";
+import { DEFAULT_BLOCK_WIDTH } from "../../constants";
 
 export const useGanttResizable = (
   block: IGanttBlock,
@@ -28,7 +29,8 @@ export const useGanttResizable = (
   const ganttContainerDimensions = useRef<DOMRect | undefined>();
   const currMouseEvent = useRef<MouseEvent | undefined>();
   // states
-  const { currentViewData, updateBlockPosition, setIsDragging, getUpdatedPositionAfterDrag } = useTimeLineChartStore();
+  const { currentViewData, setBlockPosition, setIsDragging, getUpdatedPositionAfterDrag } = useTimeLineChartStore();
+  const { sidebarWidth } = useGanttSidebarWidth();
   const [isMoving, setIsMoving] = useState<"left" | "right" | "move" | undefined>();
 
   // handle block resize from the left end
@@ -46,7 +48,7 @@ export const useGanttResizable = (
     ganttContainerDimensions.current = ganttContainerElement.getBoundingClientRect();
 
     const dayWidth = currentViewData.data.dayWidth;
-    const mouseX = e.clientX - ganttContainerDimensions.current.left - SIDEBAR_WIDTH + ganttContainerElement.scrollLeft;
+    const mouseX = e.clientX - ganttContainerDimensions.current.left - sidebarWidth + ganttContainerElement.scrollLeft;
 
     // record position on drag start
     initialPositionRef.current = {
@@ -68,7 +70,7 @@ export const useGanttResizable = (
 
       const { left: containerLeft } = ganttContainerDimensions.current;
 
-      const mouseX = e.clientX - containerLeft - SIDEBAR_WIDTH + ganttContainerElement.scrollLeft;
+      const mouseX = e.clientX - containerLeft - sidebarWidth + ganttContainerElement.scrollLeft;
 
       let width = initialPositionRef.current.width;
       let marginLeft = initialPositionRef.current.marginLeft;
@@ -105,11 +107,7 @@ export const useGanttResizable = (
       resizableDiv.style.width = `${width}px`;
       resizableDiv.style.marginLeft = `${marginLeft}px`;
 
-      const deltaLeft = Math.round((marginLeft - (block.position?.marginLeft ?? 0)) / dayWidth) * dayWidth;
-      const deltaWidth = Math.round((width - (block.position?.width ?? 0)) / dayWidth) * dayWidth;
-
-      // call update blockPosition
-      if (deltaWidth || deltaLeft) updateBlockPosition(block.id, deltaLeft, deltaWidth);
+      setBlockPosition(block.id, marginLeft, width);
     };
 
     // remove event listeners and call updateBlockDates

@@ -24,3 +24,6 @@ export const BUTTON_VARIANTS_WITH_TEXT: TButtonVariants[] = [
   "background-with-text",
   "transparent-with-text",
 ];
+
+/** Acima de toolbars fixas no modal (ex.: editor de descrição). */
+export const DROPDOWN_COMBOBOX_OPTIONS_CLASS = "fixed z-50";

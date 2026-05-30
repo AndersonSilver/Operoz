@@ -10,11 +10,13 @@ import { cn } from "@plane/utils";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
-import { HEADER_HEIGHT, SIDEBAR_WIDTH } from "../../constants";
+import { useGanttSidebarWidth } from "../../contexts/gantt-sidebar-width";
+import { HEADER_HEIGHT } from "../../constants";
 import type { IWeekBlock } from "../../views";
 
 export const WeekChartView = observer(function WeekChartView(_props: any) {
   const { currentViewData, renderView } = useTimeLineChartStore();
+  const { sidebarWidth } = useGanttSidebarWidth();
   const weekBlocks: IWeekBlock[] = renderView;
 
   return (
@@ -22,7 +24,7 @@ export const WeekChartView = observer(function WeekChartView(_props: any) {
       {currentViewData &&
         weekBlocks?.map((block, rootIndex) => (
           <div
-            key={`month-${block?.startDate.toString()}-${block?.endDate.toString()}`}
+            key={`week-${block.startDate.getTime()}-${block.endDate.getTime()}`}
             className="relative flex flex-col outline-[0.25px] outline-subtle-1"
           >
             {/** Header Div */}
@@ -37,7 +39,7 @@ export const WeekChartView = observer(function WeekChartView(_props: any) {
                 <div
                   className="sticky z-[1] m-1 flex items-center bg-surface-1 px-3 py-1 text-13 font-regular whitespace-nowrap text-secondary capitalize"
                   style={{
-                    left: `${SIDEBAR_WIDTH}px`,
+                    left: `${sidebarWidth}px`,
                   }}
                 >
                   {block?.title}
@@ -52,14 +54,13 @@ export const WeekChartView = observer(function WeekChartView(_props: any) {
                   <div
                     key={`sub-title-${rootIndex}-${index}`}
                     className={cn(
-                      "flex flex-shrink-0 justify-between p-1 text-center capitalize outline-[0.25px] outline-subtle-1",
+                      "flex flex-shrink-0 items-center justify-center p-1 text-center capitalize outline-[0.25px] outline-subtle-1",
                       {
                         "bg-accent-primary/20": weekDay.today,
                       }
                     )}
                     style={{ width: `${currentViewData?.data.dayWidth}px` }}
                   >
-                    <div className="space-x-1 text-11 font-medium text-placeholder">{weekDay.dayData.abbreviation}</div>
                     <div className="space-x-1 text-11 font-medium">
                       <span
                         className={cn({

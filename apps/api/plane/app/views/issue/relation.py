@@ -32,6 +32,7 @@ from plane.db.models import (
 from plane.bgtasks.issue_activities_task import issue_activity
 from plane.utils.issue_relation_mapper import get_actual_relation
 from plane.utils.host import base_host
+from plane.utils.board_permission_enforcement import deny_board_permission, get_project_for_enforcement
 
 
 class IssueRelationViewSet(BaseViewSet):
@@ -215,7 +216,9 @@ class IssueRelationViewSet(BaseViewSet):
             )
 
         issues = request.data.get("issues", [])
-        project = Project.objects.get(pk=project_id)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.link"):
+            return denied
 
         issue_relation = IssueRelation.objects.bulk_create(
             [

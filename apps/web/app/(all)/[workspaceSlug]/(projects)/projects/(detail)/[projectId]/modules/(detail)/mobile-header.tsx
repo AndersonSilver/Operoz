@@ -11,8 +11,8 @@ import { useParams } from "next/navigation";
 import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@plane/constants";
 import { useTranslation } from "@plane/i18n";
 import { CalendarLayoutIcon, BoardLayoutIcon, ListLayoutIcon, ChevronDownIcon } from "@plane/propel/icons";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, EIssueLayoutTypes } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@plane/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
 import { CustomMenu } from "@plane/ui";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
@@ -39,11 +39,13 @@ export const ModuleIssuesMobileHeader = observer(function ModuleIssuesMobileHead
   // store hooks
   const { currentProjectDetails } = useProject();
   const { getModuleById } = useModule();
-  const {
-    issuesFilter: { issueFilters, updateFilters },
-  } = useIssues(EIssuesStoreType.MODULE);
+  const { issuesFilter, updateFilters } = useIssues(EIssuesStoreType.MODULE);
   // derived values
-  const activeLayout = issueFilters?.displayFilters?.layout;
+  const issueFilters = moduleId ? issuesFilter.getIssueFilters(moduleId.toString()) : undefined;
+  const activeLayout = issueFilters?.displayFilters?.layout ?? EIssueLayoutTypes.LIST;
+  const layoutDisplayFiltersOptions =
+    ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] ??
+    ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[EIssueLayoutTypes.LIST];
   const moduleDetails = moduleId ? getModuleById(moduleId.toString()) : undefined;
 
   const handleLayoutChange = useCallback(
@@ -112,9 +114,7 @@ export const ModuleIssuesMobileHeader = observer(function ModuleIssuesMobileHead
             }
           >
             <DisplayFiltersSelection
-              layoutDisplayFiltersOptions={
-                activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
-              }
+              layoutDisplayFiltersOptions={layoutDisplayFiltersOptions}
               displayFilters={issueFilters?.displayFilters ?? {}}
               handleDisplayFiltersUpdate={handleDisplayFilters}
               displayProperties={issueFilters?.displayProperties ?? {}}

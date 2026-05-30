@@ -16,9 +16,10 @@ import type { TIssue } from "@plane/types";
 // ui
 import { Input } from "@plane/ui";
 // helpers
-import { getTabIndex } from "@plane/utils";
+import { cn, getTabIndex } from "@plane/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import { getIssueFormControlClass, IssueFormField } from "@/plane-web/components/issues/issue-modal/issue-form-field";
 
 type TIssueTitleInputProps = {
   control: Control<TIssue>;
@@ -47,7 +48,7 @@ export const IssueTitleInput = observer(function IssueTitleInput(props: TIssueTi
     return undefined;
   };
   return (
-    <div>
+    <IssueFormField label={t("issue_modal_summary_label")} required controlWidth="full">
       <Controller
         control={control}
         name="name"
@@ -71,14 +72,16 @@ export const IssueTitleInput = observer(function IssueTitleInput(props: TIssueTi
             }}
             ref={issueTitleRef || ref}
             hasError={Boolean(errors.name)}
-            placeholder={t("title")}
-            className="w-full text-body-sm-regular"
+            placeholder={t("issue_modal_summary_placeholder")}
+            className={cn(getIssueFormControlClass("full"), "cursor-text")}
             autoFocus
             tabIndex={getIndex("name")}
           />
         )}
       />
-      <span className="text-caption-sm-medium text-danger-primary">{errors?.name?.message}</span>
-    </div>
+      {errors?.name?.message ? (
+        <span className="mt-1 block text-12 text-danger-primary">{errors.name.message}</span>
+      ) : null}
+    </IssueFormField>
   );
 });

@@ -2,6 +2,9 @@
  * Copyright (c) 2023-present Plane Software, Inc. and contributors
  * SPDX-License-Identifier: AGPL-3.0-only
  * See the LICENSE file for details.
+ *
+ * @deprecated Tech4Humans: usar `EIssuesStoreType.BOARD` em `core/store/issue/board/`.
+ * Stubs CE mantidos só para tipos do `root.store`; não usar em features novas.
  */
 
 import type { IProjectIssues } from "@/store/issue/project";

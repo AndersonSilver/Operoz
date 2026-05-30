@@ -24,6 +24,8 @@ type ITooltipProps = {
   side?: TSide;
   align?: TAlign;
   sideOffset?: number;
+  /** Pass `true` only when `children` is a native `<button>`. Defaults to `false`. */
+  nativeButton?: boolean;
 };
 
 export function Tooltip(props: ITooltipProps) {
@@ -40,6 +42,7 @@ export function Tooltip(props: ITooltipProps) {
     sideOffset = 10,
     closeDelay,
     isMobile = false,
+    nativeButton,
   } = props;
   const { finalSide, finalAlign } = React.useMemo(() => {
     if (position) {
@@ -52,7 +55,7 @@ export function Tooltip(props: ITooltipProps) {
   return (
     <BaseTooltip.Provider>
       <BaseTooltip.Root delay={openDelay} closeDelay={closeDelay} disabled={disabled}>
-        <BaseTooltip.Trigger render={children} />
+        <BaseTooltip.Trigger render={children} nativeButton={nativeButton ?? false} />
         <BaseTooltip.Portal>
           <BaseTooltip.Positioner
             className={cn(
@@ -67,15 +70,18 @@ export function Tooltip(props: ITooltipProps) {
             align={finalAlign}
             render={
               <BaseTooltip.Popup>
-                {tooltipHeading && <p className="text-caption-md-medium text-primary">{tooltipHeading}</p>}
+                {/* Use div (not p): tooltipContent is ReactNode and often includes <p>, <div>, or lists — p cannot nest p/block. */}
+                {tooltipHeading && (
+                  <div className="text-caption-md-medium text-primary">{tooltipHeading}</div>
+                )}
                 {tooltipContent && (
-                  <p
+                  <div
                     className={cn("text-caption-sm-regular text-secondary", {
                       "mt-1": tooltipHeading && tooltipHeading !== "",
                     })}
                   >
                     {tooltipContent}
-                  </p>
+                  </div>
                 )}
               </BaseTooltip.Popup>
             }

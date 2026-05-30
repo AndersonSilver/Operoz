@@ -14,6 +14,7 @@ from django.db.models import Max
 from plane.app.serializers.workspace import WorkspaceLiteSerializer
 from plane.app.serializers.user import UserLiteSerializer, UserAdminLiteSerializer
 from plane.db.models import (
+    Board,
     Project,
     ProjectMember,
     ProjectMemberInvite,
@@ -40,8 +41,7 @@ class ProjectSerializer(BaseSerializer):
         project_id = self.instance.id if self.instance else None
         workspace_id = self.context["workspace_id"]
 
-        if re.match(Project.FORBIDDEN_IDENTIFIER_CHARS_PATTERN, name):
-            raise serializers.ValidationError(detail="PROJECT_NAME_CANNOT_CONTAIN_SPECIAL_CHARACTERS")
+        # Display names may include punctuation (e.g. hyphens); identifier validation stays strict below.
 
         project = Project.objects.filter(name=name, workspace_id=workspace_id)
 
@@ -74,16 +74,48 @@ class ProjectSerializer(BaseSerializer):
 
         return identifier
 
-    def validate(self, data):
-        # Validate description content for security
-        if "description_html" in data and data["description_html"]:
-            is_valid, error_msg, sanitized_html = validate_html_content(str(data["description_html"]))
-            # Update the data with sanitized HTML if available
-            if sanitized_html is not None:
-                data["description_html"] = sanitized_html
+    def _resolve_board(self, data, workspace_id):
+        board = data.get("board")
+        if board is not None:
+            return board
 
-            if not is_valid:
-                raise serializers.ValidationError({"error": "html content is not valid"})
+        board_id = self.initial_data.get("board_id")
+        if board_id in (None, ""):
+            return None
+
+        try:
+            return Board.objects.get(pk=board_id, workspace_id=workspace_id, deleted_at__isnull=True)
+        except Board.DoesNotExist:
+            raise serializers.ValidationError({"board_id": "BOARD_NOT_FOUND"})
+
+    def validate(self, data):
+        # Validate description content for security (HTML strings only; ignore structured editor JSON).
+        if "description_html" in data and data["description_html"]:
+            raw = data["description_html"]
+            if isinstance(raw, str):
+                is_valid, error_msg, sanitized_html = validate_html_content(raw)
+                if sanitized_html is not None:
+                    data["description_html"] = sanitized_html
+                if not is_valid:
+                    raise serializers.ValidationError({"error": "html content is not valid"})
+
+        workspace_id = self.context["workspace_id"]
+        board = self._resolve_board(data, workspace_id)
+
+        if board is not None:
+            if board.workspace_id != workspace_id:
+                raise serializers.ValidationError({"board_id": "BOARD_WORKSPACE_MISMATCH"})
+            data["board"] = board
+
+        if self.instance is None:
+            if not board:
+                raise serializers.ValidationError({"board_id": "BOARD_ID_REQUIRED"})
+        elif self.instance.board_id:
+            clearing_board = ("board" in data and data.get("board") is None) or (
+                "board_id" in self.initial_data and self.initial_data.get("board_id") in (None, "")
+            )
+            if clearing_board:
+                raise serializers.ValidationError({"board_id": "BOARD_ID_CANNOT_BE_NULL"})
 
         return data
 
@@ -108,6 +140,7 @@ class ProjectLiteSerializer(BaseSerializer):
             "cover_image_url",
             "logo_props",
             "description",
+            "board_id",
         ]
         read_only_fields = fields
 

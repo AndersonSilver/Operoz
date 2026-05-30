@@ -121,10 +121,10 @@ export const GanttChartMainContent = observer(function GanttChartMainContent(pro
     const calculatedRangeRight = itemsContainerWidth - (scrollLeft + clientWidth);
 
     if (approxRangeRight < clientWidth || calculatedRangeRight < clientWidth) {
-      updateCurrentViewRenderPayload("right", currentView);
+      queueMicrotask(() => updateCurrentViewRenderPayload("right", currentView));
     }
     if (approxRangeLeft < clientWidth) {
-      updateCurrentViewRenderPayload("left", currentView);
+      queueMicrotask(() => updateCurrentViewRenderPayload("left", currentView));
     }
   };
 

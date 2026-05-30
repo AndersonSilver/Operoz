@@ -7,7 +7,7 @@
 export default {
   sidebar: {
     projects: "Projects",
-    pages: "Pages",
+    pages: "Documentation",
     new_work_item: "New work item",
     home: "Home",
     your_work: "Your work",
@@ -18,6 +18,7 @@ export default {
     work_items: "Work items",
     cycles: "Cycles",
     modules: "Modules",
+    status_report: "Status Report",
     intake: "Intake",
     drafts: "Drafts",
     favorites: "Favorites",

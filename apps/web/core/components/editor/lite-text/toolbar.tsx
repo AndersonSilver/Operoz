@@ -146,10 +146,10 @@ export function IssueCommentToolbar(props: Props) {
                   <Tooltip
                     key={item.renderKey}
                     tooltipContent={
-                      <p className="flex flex-col gap-1 text-center text-11">
+                      <div className="flex flex-col gap-1 text-center text-11">
                         <span className="font-medium">{item.name}</span>
                         {item.shortcut && <kbd className="text-placeholder">{item.shortcut.join(" + ")}</kbd>}
-                      </p>
+                      </div>
                     }
                   >
                     <button

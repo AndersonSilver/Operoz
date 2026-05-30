@@ -165,10 +165,12 @@ class Adapter:
                 "image/gif": "gif",
                 "image/webp": "webp",
             }
+            content_type = content_type.split(";")[0].strip().lower()
             extension = extension_map.get(content_type)
-
+            if not extension and content_type.startswith("image/"):
+                extension = extension_map.get(content_type, "jpg")
             if not extension:
-                return None
+                extension = "jpg"
 
             # Download with size limit
             chunks = []
@@ -180,14 +182,16 @@ class Adapter:
                 chunks.append(chunk)
             content = b"".join(chunks)
             file_size = len(content)
+            if file_size == 0:
+                return None
 
             # Generate unique filename
             filename = f"{uuid.uuid4().hex}-user-avatar.{extension}"
 
             storage = S3Storage(request=self.request)
 
-            # Create file-like object
-            file_obj = BytesIO(response.content)
+            # Create file-like object from downloaded bytes (not response.content — empty after iter_content)
+            file_obj = BytesIO(content)
             file_obj.seek(0)
 
             # Upload using boto3 directly
@@ -253,6 +257,36 @@ class Adapter:
             log_exception(e)
             return
 
+    def _oauth_avatar_needs_backfill(self, user) -> bool:
+        avatar = self.user_data.get("user", {}).get("avatar", "")
+        if not avatar:
+            return False
+        if user.avatar and str(user.avatar).startswith("http"):
+            if user.avatar_asset_id and (user.avatar_asset.size or 0) > 0:
+                return False
+            if not user.avatar_asset_id:
+                return False
+        if not user.avatar_asset_id and not user.avatar:
+            return True
+        if user.avatar_asset_id and (user.avatar_asset.size or 0) <= 0:
+            return True
+        return False
+
+    def _backfill_oauth_avatar(self, user):
+        avatar = self.user_data.get("user", {}).get("avatar", "")
+        if not avatar:
+            return user
+        if user.avatar_asset_id and (user.avatar_asset.size or 0) <= 0:
+            self.delete_old_avatar(user=user)
+        avatar_asset = self.download_and_upload_avatar(avatar_url=avatar, user=user)
+        if avatar_asset:
+            user.avatar_asset = avatar_asset
+            user.avatar = avatar
+        elif not user.avatar:
+            user.avatar = avatar
+        user.save()
+        return user
+
     def sync_user_data(self, user):
         # Update user details
         first_name = self.user_data.get("user", {}).get("first_name", "")
@@ -295,7 +329,7 @@ class Adapter:
 
         # Check if the user is present
         user = User.objects.filter(email=email).first()
-        # Check if sign up case or login
+        # Misnamed legacy flag: True = user already existed (OAuth login), False = new signup in this flow
         is_signup = bool(user)
         # If user is not present, create a new user
         if not user:
@@ -341,9 +375,11 @@ class Adapter:
             # Create profile
             Profile.objects.create(user=user)
 
-        # Check if IDP sync is enabled and user is not signing up
-        if self.check_sync_enabled() and not is_signup:
+        # Refresh name/avatar from IdP on OAuth login when ENABLE_*_SYNC is on (not for brand-new users; they set avatar above)
+        if self.check_sync_enabled() and is_signup:
             user = self.sync_user_data(user=user)
+        elif is_signup and self._oauth_avatar_needs_backfill(user):
+            user = self._backfill_oauth_avatar(user)
 
         # Save user data
         user = self.save_user_data(user=user)

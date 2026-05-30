@@ -14,6 +14,8 @@ import type {
   TIssuesResponse,
   TBulkOperationsPayload,
 } from "@plane/types";
+import { EIssueLayoutTypes } from "@plane/types";
+import { getCalendarPaginationOptions } from "@/components/issues/issue-layouts/calendar/utils";
 // helpers
 // base class
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";
@@ -180,6 +182,20 @@ export class ProjectIssues extends BaseIssuesStore implements IProjectIssues {
     projectId: string,
     loadType: TLoader = "mutation"
   ) => {
+    const displayFilters = this.issueFilterStore?.issueFilters?.displayFilters;
+
+    if (displayFilters?.layout === EIssueLayoutTypes.CALENDAR) {
+      const calendarLayout = displayFilters.calendar?.layout ?? "month";
+      const calendarOptions = getCalendarPaginationOptions(
+        this.rootIssueStore.issueCalendarView,
+        calendarLayout
+      );
+
+      if (!calendarOptions) return;
+
+      return await this.fetchIssues(workspaceSlug, projectId, loadType, calendarOptions, false);
+    }
+
     if (!this.paginationOptions) return;
     return await this.fetchIssues(workspaceSlug, projectId, loadType, this.paginationOptions, true);
   };

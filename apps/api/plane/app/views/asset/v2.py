@@ -26,6 +26,69 @@ from plane.utils.path_validator import sanitize_filename
 from plane.bgtasks.storage_metadata_task import get_asset_object_metadata
 from plane.throttles.asset import AssetRateThrottle
 
+ALLOWED_LOGO_COVER_IMAGE_TYPES = frozenset(
+    {
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/jpg",
+        "image/gif",
+    }
+)
+
+# Use string values so membership checks match JSON payload strings reliably (TextChoices quirks across Django versions).
+EDITOR_ASSET_ENTITY_TYPES = frozenset(
+    {
+        FileAsset.EntityTypeContext.ISSUE_ATTACHMENT.value,
+        FileAsset.EntityTypeContext.ISSUE_DESCRIPTION.value,
+        FileAsset.EntityTypeContext.COMMENT_DESCRIPTION.value,
+        FileAsset.EntityTypeContext.PAGE_DESCRIPTION.value,
+        FileAsset.EntityTypeContext.DRAFT_ISSUE_ATTACHMENT.value,
+        FileAsset.EntityTypeContext.DRAFT_ISSUE_DESCRIPTION.value,
+    }
+)
+
+LOGO_COVER_ENTITY_TYPES = frozenset(
+    {
+        FileAsset.EntityTypeContext.WORKSPACE_LOGO.value,
+        FileAsset.EntityTypeContext.PROJECT_COVER.value,
+    }
+)
+
+
+def normalize_upload_mime_type(file_type: str) -> str:
+    """Strip parameters (e.g. charset) and normalize case for allowlist checks."""
+    if not file_type or not isinstance(file_type, str):
+        return ""
+    return file_type.split(";")[0].strip().lower()
+
+
+def validate_scoped_asset_upload(entity_type: str, file_type: str) -> tuple[bool, str]:
+    file_type = normalize_upload_mime_type(file_type)
+    if not file_type:
+        return False, "Invalid file type."
+    if entity_type in LOGO_COVER_ENTITY_TYPES:
+        if file_type not in ALLOWED_LOGO_COVER_IMAGE_TYPES:
+            return False, "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed."
+        return True, ""
+    if entity_type in EDITOR_ASSET_ENTITY_TYPES:
+        if file_type not in settings.ATTACHMENT_MIME_TYPES:
+            return False, "Invalid file type."
+        return True, ""
+    if file_type not in ALLOWED_LOGO_COVER_IMAGE_TYPES:
+        return False, "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed."
+    return True, ""
+
+
+def presigned_url_for_asset_view(storage, asset):
+    content_type = normalize_upload_mime_type(asset.attributes.get("type") or "")
+    disposition = "inline" if content_type in ("text/html", "application/xhtml+xml") else "attachment"
+    return storage.generate_presigned_url(
+        object_name=asset.asset.name,
+        disposition=disposition,
+        filename=asset.attributes.get("name"),
+    )
+
 
 class UserAssetsV2Endpoint(BaseAPIView):
     """This endpoint is used to upload user profile images."""
@@ -315,9 +378,9 @@ class WorkspaceFileAssetEndpoint(BaseAPIView):
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
     def post(self, request, slug):
         name = sanitize_filename(request.data.get("name")) or "unnamed"
-        type = request.data.get("type", "image/jpeg")
+        type = normalize_upload_mime_type(request.data.get("type", "image/jpeg")) or "image/jpeg"
         size = int(request.data.get("size", settings.FILE_SIZE_LIMIT))
-        entity_type = request.data.get("entity_type")
+        entity_type = (request.data.get("entity_type") or "").strip()
         entity_identifier = request.data.get("entity_identifier", False)
 
         # Check if the entity type is allowed
@@ -327,22 +390,9 @@ class WorkspaceFileAssetEndpoint(BaseAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Check if the file type is allowed
-        allowed_types = [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/jpg",
-            "image/gif",
-        ]
-        if type not in allowed_types:
-            return Response(
-                {
-                    "error": "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed.",
-                    "status": False,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        ok_type, type_error = validate_scoped_asset_upload(entity_type, type)
+        if not ok_type:
+            return Response({"error": type_error, "status": False}, status=status.HTTP_400_BAD_REQUEST)
 
         # Get the size limit
         size_limit = min(settings.FILE_SIZE_LIMIT, size)
@@ -424,12 +474,7 @@ class WorkspaceFileAssetEndpoint(BaseAPIView):
 
         # Get the presigned URL
         storage = S3Storage(request=request)
-        # Generate a presigned URL to share an S3 object
-        signed_url = storage.generate_presigned_url(
-            object_name=asset.asset.name,
-            disposition="attachment",
-            filename=asset.attributes.get("name"),
-        )
+        signed_url = presigned_url_for_asset_view(storage, asset)
         # Redirect to the signed URL
         return HttpResponseRedirect(signed_url)
 
@@ -517,9 +562,9 @@ class ProjectAssetEndpoint(BaseAPIView):
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def post(self, request, slug, project_id):
         name = sanitize_filename(request.data.get("name")) or "unnamed"
-        type = request.data.get("type", "image/jpeg")
+        type = normalize_upload_mime_type(request.data.get("type", "image/jpeg")) or "image/jpeg"
         size = int(request.data.get("size", settings.FILE_SIZE_LIMIT))
-        entity_type = request.data.get("entity_type", "")
+        entity_type = (request.data.get("entity_type") or "").strip()
         entity_identifier = request.data.get("entity_identifier")
 
         # Check if the entity type is allowed
@@ -529,22 +574,9 @@ class ProjectAssetEndpoint(BaseAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Check if the file type is allowed
-        allowed_types = [
-            "image/jpeg",
-            "image/png",
-            "image/webp",
-            "image/jpg",
-            "image/gif",
-        ]
-        if type not in allowed_types:
-            return Response(
-                {
-                    "error": "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed.",
-                    "status": False,
-                },
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        ok_type, type_error = validate_scoped_asset_upload(entity_type, type)
+        if not ok_type:
+            return Response({"error": type_error, "status": False}, status=status.HTTP_400_BAD_REQUEST)
 
         # Get the size limit
         size_limit = min(settings.FILE_SIZE_LIMIT, size)
@@ -622,12 +654,7 @@ class ProjectAssetEndpoint(BaseAPIView):
 
         # Get the presigned URL
         storage = S3Storage(request=request)
-        # Generate a presigned URL to share an S3 object
-        signed_url = storage.generate_presigned_url(
-            object_name=asset.asset.name,
-            disposition="attachment",
-            filename=asset.attributes.get("name"),
-        )
+        signed_url = presigned_url_for_asset_view(storage, asset)
         # Redirect to the signed URL
         return HttpResponseRedirect(signed_url)
 

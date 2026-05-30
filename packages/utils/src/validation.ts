@@ -26,12 +26,12 @@
 export const PERSON_NAME_REGEX = /^[\p{L}\s'-]+$/u;
 
 /**
- * Display Name Pattern (for display_name, usernames)
- * Allows: Unicode letters (\p{L}), numbers (\p{N}), underscore, period, hyphen
- * Use case: International usernames like "josé_123", "李明.dev", "müller-2024"
- * Blocks: Spaces and injection-risk characters
+ * Display Name Pattern (for display_name)
+ * Allows: Unicode letters (\p{L}), numbers (\p{N}), spaces, underscore, period, hyphen
+ * Use case: "Anderson Silveira", "josé_123", "李明.dev"
+ * Blocks: Injection-risk characters
  */
-export const DISPLAY_NAME_REGEX = /^[\p{L}\p{N}_.-]+$/u;
+export const DISPLAY_NAME_REGEX = /^[\p{L}\p{N}\s_.-]+$/u;
 
 /**
  * Company/Organization Name Pattern (for company_name, workspace names)
@@ -90,7 +90,7 @@ export const validatePersonName = (name: string): boolean | string => {
  * @example
  * validateDisplayName("john_doe") // returns true
  * validateDisplayName("john.doe-123") // returns true
- * validateDisplayName("john doe") // returns error message (spaces not allowed)
+ * validateDisplayName("Anderson Silveira") // returns true
  * validateDisplayName("john<>doe") // returns error message
  */
 export const validateDisplayName = (displayName: string): boolean | string => {
@@ -107,7 +107,7 @@ export const validateDisplayName = (displayName: string): boolean | string => {
   }
 
   if (!DISPLAY_NAME_REGEX.test(displayName)) {
-    return "Display name can only contain letters, numbers, periods, hyphens, and underscores";
+    return "Display name can only contain letters, numbers, spaces, periods, hyphens, and underscores";
   }
 
   return true;

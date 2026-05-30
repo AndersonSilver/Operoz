@@ -32,6 +32,10 @@ const extractAssetsFromHTMLContent = (htmlContent: string): string[] => {
     const src = component.getAttribute("src");
     if (src) assetSources.add(src);
   });
+  doc.querySelectorAll("html-document-embed").forEach((component) => {
+    const src = component.getAttribute("src");
+    if (src) assetSources.add(src);
+  });
   const additionalAssetIds = extractAdditionalAssetsFromHTMLContent(htmlContent);
   return [...Array.from(assetSources), ...additionalAssetIds];
 };
@@ -50,6 +54,12 @@ const replaceAssetsInHTMLContent = (props: { htmlContent: string; assetMap: Reco
   // replace sources in image components
   const imageComponents = doc.querySelectorAll("image-component");
   imageComponents.forEach((component) => {
+    const oldSrc = component.getAttribute("src");
+    if (oldSrc && assetMap[oldSrc]) {
+      component.setAttribute("src", assetMap[oldSrc]);
+    }
+  });
+  doc.querySelectorAll("html-document-embed").forEach((component) => {
     const oldSrc = component.getAttribute("src");
     if (oldSrc && assetMap[oldSrc]) {
       component.setAttribute("src", assetMap[oldSrc]);

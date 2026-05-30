@@ -53,14 +53,13 @@ export const getWeekNumberByDate = (date: Date) => {
  * @returns
  */
 export const getNumberOfDaysBetweenTwoDates = (startDate: Date, endDate: Date) => {
-  let daysDifference: number = 0;
-  startDate.setHours(0, 0, 0, 0);
-  endDate.setHours(0, 0, 0, 0);
+  const start = new Date(startDate);
+  const end = new Date(endDate);
+  start.setHours(0, 0, 0, 0);
+  end.setHours(0, 0, 0, 0);
 
-  const timeDifference: number = startDate.getTime() - endDate.getTime();
-  daysDifference = Math.round(timeDifference / (1000 * 60 * 60 * 24));
-
-  return daysDifference;
+  const timeDifference = start.getTime() - end.getTime();
+  return Math.round(timeDifference / (1000 * 60 * 60 * 24));
 };
 
 /**

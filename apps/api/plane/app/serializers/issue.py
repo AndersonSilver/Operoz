@@ -38,11 +38,15 @@ from plane.db.models import (
     IssueVote,
     IssueRelation,
     State,
+    ProjectIssueType,
     IssueVersion,
     IssueDescriptionVersion,
     ProjectMember,
     EstimatePoint,
+    IssueType,
+    Project,
 )
+from plane.utils.board_issue_types import get_project_enabled_issue_types
 from plane.utils.content_validator import (
     validate_html_content,
     validate_binary_data,
@@ -97,6 +101,12 @@ class IssueCreateSerializer(BaseSerializer):
         write_only=True,
         required=False,
     )
+    type_id = serializers.PrimaryKeyRelatedField(
+        source="type",
+        queryset=IssueType.objects.filter(is_active=True, deleted_at__isnull=True),
+        required=False,
+        allow_null=True,
+    )
     project_id = serializers.UUIDField(source="project.id", read_only=True)
     workspace_id = serializers.UUIDField(source="workspace.id", read_only=True)
 
@@ -110,6 +120,7 @@ class IssueCreateSerializer(BaseSerializer):
             "updated_by",
             "created_at",
             "updated_at",
+            "type",
         ]
 
     def to_representation(self, instance):
@@ -192,6 +203,20 @@ class IssueCreateSerializer(BaseSerializer):
             ).exists()
         ):
             raise serializers.ValidationError("Estimate point is not valid please pass a valid estimate_point_id")
+
+        issue_type = attrs.get("type")
+        project_id = self.context.get("project_id")
+        if issue_type is not None and project_id:
+            project = Project.objects.filter(pk=project_id).first()
+            if project and project.board_id:
+                if not get_project_enabled_issue_types(project).filter(pk=issue_type.id).exists():
+                    raise serializers.ValidationError({"type_id": "Type is not valid for this project"})
+            elif not ProjectIssueType.objects.filter(
+                project_id=project_id,
+                issue_type_id=issue_type.id,
+                deleted_at__isnull=True,
+            ).exists():
+                raise serializers.ValidationError({"type_id": "Type is not valid for this project"})
 
         return attrs
 
@@ -770,6 +795,7 @@ class IssueSerializer(DynamicBaseSerializer):
     sub_issues_count = serializers.IntegerField(read_only=True)
     attachment_count = serializers.IntegerField(read_only=True)
     link_count = serializers.IntegerField(read_only=True)
+    type_id = serializers.UUIDField(read_only=True, allow_null=True)
 
     class Meta:
         model = Issue
@@ -777,6 +803,7 @@ class IssueSerializer(DynamicBaseSerializer):
             "id",
             "name",
             "state_id",
+            "type_id",
             "sort_order",
             "completed_at",
             "estimate_point",
@@ -834,6 +861,7 @@ class IssueListDetailSerializer(serializers.Serializer):
             "id": instance.id,
             "name": instance.name,
             "state_id": instance.state_id,
+            "type_id": instance.type_id,
             "sort_order": instance.sort_order,
             "completed_at": instance.completed_at,
             "estimate_point": instance.estimate_point_id,

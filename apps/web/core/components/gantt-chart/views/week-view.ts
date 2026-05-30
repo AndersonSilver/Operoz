@@ -5,6 +5,7 @@
  */
 
 //
+import { uniqBy } from "lodash-es";
 import type { ChartDataType } from "@plane/types";
 import { EStartOfTheWeek } from "@plane/types";
 import { months, generateWeeks } from "../data";
@@ -212,7 +213,8 @@ const populateDaysForWeek = (startDate: Date, startOfWeek: EStartOfTheWeek = ESt
  * @param b
  * @returns
  */
-const mergeWeekRenderPayloads = (a: IWeekBlock[], b: IWeekBlock[]) => [...a, ...b];
+const mergeWeekRenderPayloads = (a: IWeekBlock[], b: IWeekBlock[]) =>
+  uniqBy([...a, ...b], (weekBlock) => `${weekBlock.startDate.getTime()}_${weekBlock.endDate.getTime()}`);
 
 export const weekView = {
   generateChart: generateWeekChart,

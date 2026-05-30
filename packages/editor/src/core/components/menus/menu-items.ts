@@ -13,6 +13,7 @@ import {
   Heading3,
   TextQuote,
   ImageIcon,
+  FileCode2,
   TableIcon,
   ListIcon,
   ListOrderedIcon,
@@ -35,6 +36,7 @@ import { CORE_EXTENSIONS } from "@/constants/extension";
 // helpers
 import {
   insertHorizontalRule,
+  insertHtmlDocument,
   insertImage,
   insertTableCommand,
   setLinkEditor,
@@ -198,6 +200,14 @@ export const ImageItem = (editor: Editor): EditorMenuItem<"image"> => ({
   icon: ImageIcon,
 });
 
+export const HtmlDocumentItem = (editor: Editor): EditorMenuItem<"html-document"> => ({
+  key: "html-document",
+  name: "HTML document",
+  isActive: () => editor?.isActive(CORE_EXTENSIONS.HTML_DOCUMENT_EMBED),
+  command: () => insertHtmlDocument({ editor, event: "insert", pos: editor.state.selection.from }),
+  icon: FileCode2,
+});
+
 export const HorizontalRuleItem = (editor: Editor): EditorMenuItem<"divider"> =>
   ({
     key: "divider",
@@ -277,6 +287,7 @@ export const getEditorMenuItems = (editor: Editor | null): EditorMenuItem<TEdito
     QuoteItem(editor),
     TableItem(editor),
     ImageItem(editor),
+    HtmlDocumentItem(editor),
     HorizontalRuleItem(editor),
     LinkItem(editor),
     TextColorItem(editor),

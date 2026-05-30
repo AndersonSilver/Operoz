@@ -14,6 +14,7 @@ import { useTranslation } from "@plane/i18n";
 import type { IAnalyticsResponse, TAnalyticsTabsBase } from "@plane/types";
 import { cn } from "@plane/utils";
 // hooks
+import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // services
 import { AnalyticsService } from "@/services/analytics.service";
@@ -57,23 +58,18 @@ const TotalInsights = observer(function TotalInsights({
   analyticsType: TAnalyticsTabsBase;
   peekView?: boolean;
 }) {
-  const params = useParams();
-  const workspaceSlug = params.workspaceSlug.toString();
+  const routeParams = useParams();
+  const workspaceSlug = routeParams.workspaceSlug.toString();
   const { t } = useTranslation();
-  const { selectedDuration, selectedProjects, selectedCycle, selectedModule, isPeekView, isEpic } = useAnalytics();
+  const { selectedDuration, isPeekView, isEpic } = useAnalytics();
+  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams();
   const { data: totalInsightsData, isLoading } = useSWR(
-    `total-insights-${analyticsType}-${selectedDuration}-${selectedProjects}-${selectedCycle}-${selectedModule}-${isEpic}`,
+    `total-insights-${analyticsType}-${selectedDuration}-${cacheKey}-${isPeekView}`,
     () =>
       analyticsService.getAdvanceAnalytics<IAnalyticsResponse>(
         workspaceSlug,
         analyticsType,
-        {
-          // date_filter: selectedDuration,
-          ...(selectedProjects?.length > 0 ? { project_ids: selectedProjects.join(",") } : {}),
-          ...(selectedCycle ? { cycle_id: selectedCycle } : {}),
-          ...(selectedModule ? { module_id: selectedModule } : {}),
-          ...(isEpic ? { epic: true } : {}),
-        },
+        analyticsParams,
         isPeekView
       )
   );

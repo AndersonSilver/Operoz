@@ -13,6 +13,9 @@ from plane.app.serializers.workspace import WorkspaceHomePreferenceSerializer
 from rest_framework.response import Response
 from rest_framework import status
 
+# Widgets disabled by default for new users
+DEFAULT_DISABLED_WIDGET_KEYS = frozenset({"new_at_plane", "quick_tutorial"})
+
 
 class WorkspaceHomePreferenceViewSet(BaseAPIView):
     model = WorkspaceHomePreference
@@ -25,37 +28,27 @@ class WorkspaceHomePreferenceViewSet(BaseAPIView):
         workspace = Workspace.objects.get(slug=slug)
 
         get_preference = WorkspaceHomePreference.objects.filter(user=request.user, workspace_id=workspace.id)
+        existing_keys = set(get_preference.values_list("key", flat=True))
 
-        create_preference_keys = []
+        keys = [key for key, _ in WorkspaceHomePreference.HomeWidgetKeys.choices]
+        missing_keys = [key for key in keys if key not in existing_keys]
 
-        keys = [
-            key
-            for key, _ in WorkspaceHomePreference.HomeWidgetKeys.choices
-            if key not in ["quick_tutorial", "new_at_plane"]
-        ]
-
-        sort_order_counter = 1
-
-        for preference in keys:
-            if preference not in get_preference.values_list("key", flat=True):
-                create_preference_keys.append(preference)
-
-                sort_order = 1000 - sort_order_counter
-
-                preference = WorkspaceHomePreference.objects.bulk_create(
-                    [
-                        WorkspaceHomePreference(
-                            key=key,
-                            user=request.user,
-                            workspace=workspace,
-                            sort_order=sort_order,
-                        )
-                        for key in create_preference_keys
-                    ],
-                    batch_size=10,
-                    ignore_conflicts=True,
+        if missing_keys:
+            preferences_to_create = [
+                WorkspaceHomePreference(
+                    key=key,
+                    user=request.user,
+                    workspace=workspace,
+                    sort_order=1000 - index,
+                    is_enabled=key not in DEFAULT_DISABLED_WIDGET_KEYS,
                 )
-                sort_order_counter += 1
+                for index, key in enumerate(missing_keys, start=1)
+            ]
+            WorkspaceHomePreference.objects.bulk_create(
+                preferences_to_create,
+                batch_size=10,
+                ignore_conflicts=True,
+            )
 
         preference = WorkspaceHomePreference.objects.filter(user=request.user, workspace_id=workspace.id)
 
@@ -76,4 +69,4 @@ class WorkspaceHomePreferenceViewSet(BaseAPIView):
                 return Response(serializer.data, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        return Response({"detail": "Preference not found"}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"detail": "Preference not found"}, status=status.HTTP_404_NOT_FOUND)

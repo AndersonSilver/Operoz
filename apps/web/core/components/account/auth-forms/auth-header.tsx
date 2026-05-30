@@ -27,29 +27,29 @@ type TAuthHeader = {
 const Titles = {
   [EAuthModes.SIGN_IN]: {
     [EAuthSteps.EMAIL]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Trabalhar em todas as dimensões.",
+      subHeader: "Bem-vindo de volta",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Trabalhar em todas as dimensões.",
+      subHeader: "Bem-vindo de volta",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Work in all dimensions.",
-      subHeader: "Welcome back to Plane.",
+      header: "Trabalhar em todas as dimensões.",
+      subHeader: "Bem-vindo de volta",
     },
   },
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
-      header: "Work in all dimensions.",
+      header: "Trabalhar em todas as dimensões.",
       subHeader: "Create your Plane account.",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Work in all dimensions.",
+      header: "Trabalhar em todas as dimensões.",
       subHeader: "Create your Plane account.",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Work in all dimensions.",
+      header: "Trabalhar em todas as dimensões.",
       subHeader: "Create your Plane account.",
     },
   },
@@ -116,9 +116,11 @@ type TAuthHeaderBase = {
 
 export function AuthHeaderBase(props: TAuthHeaderBase) {
   return (
-    <div className="flex flex-col gap-1">
-      <span className="text-h4-semibold text-primary">{props.header}</span>
-      <span className="text-h4-semibold text-placeholder">{props.subHeader}</span>
+    <div className="flex flex-col gap-2 text-balance">
+      <div className="text-20 font-semibold leading-snug tracking-tight text-primary sm:text-[1.375rem] sm:leading-tight">
+        {props.header}
+      </div>
+      <p className="text-15 font-normal leading-relaxed text-secondary">{props.subHeader}</p>
     </div>
   );
 }

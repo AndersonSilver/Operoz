@@ -4,8 +4,8 @@
  * See the LICENSE file for details.
  */
 
-import sanitizeHtml from "sanitize-html";
 import type { Content, JSONContent } from "@plane/types";
+import striptags from "striptags";
 
 /**
  * @description Adds space between camelCase words
@@ -126,8 +126,7 @@ const text = stripHTML(html);
 console.log(text); // Some text
  */
 export const sanitizeHTML = (htmlString: string) => {
-  const sanitizedText = sanitizeHtml(htmlString, { allowedTags: [] }); // sanitize the string to remove all HTML tags
-  return sanitizedText.trim(); // trim the string to remove leading and trailing whitespaces
+  return striptags(htmlString).trim();
 };
 
 /**
@@ -161,9 +160,8 @@ export const checkEmailValidity = (email: string): boolean => {
 };
 
 export const isEmptyHtmlString = (htmlString: string, allowedHTMLTags: string[] = []) => {
-  // Remove HTML tags using sanitize-html
-  const cleanText = sanitizeHtml(htmlString, { allowedTags: allowedHTMLTags });
-  // Trim the string and check if it's empty
+  const cleanText =
+    allowedHTMLTags.length === 0 ? striptags(htmlString) : striptags(htmlString, allowedHTMLTags);
   return cleanText.trim() === "";
 };
 

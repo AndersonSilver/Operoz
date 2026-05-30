@@ -7,6 +7,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { setToast, TOAST_TYPE } from "@plane/propel/toast";
 import type { IFilterInstance } from "@plane/shared-state";
 import type { TExternalFilter, TFilterProperty, TSupportedOperators } from "@plane/types";
@@ -29,6 +30,7 @@ export const AddFilterDropdown = observer(function AddFilterDropdown<
   E extends TExternalFilter,
 >(props: TAddFilterDropdownProps<P, E>) {
   const { filter, customButton, buttonConfig } = props;
+  const { t } = useTranslation();
   const { className, defaultOpen = false, isDisabled = false } = buttonConfig || {};
 
   // Transform available filter configs to CustomSearchSelect options format
@@ -54,8 +56,8 @@ export const AddFilterDropdown = observer(function AddFilterDropdown<
     ? [
         {
           value: "all_filters_applied",
-          content: <div className="text-placeholder italic">All filters applied</div>,
-          query: "all filters applied",
+          content: <div className="text-placeholder italic">{t("work_item_filters.all_filters_applied")}</div>,
+          query: t("work_item_filters.all_filters_applied").toLowerCase(),
           disabled: true,
         },
       ]
@@ -88,6 +90,7 @@ export const AddFilterDropdown = observer(function AddFilterDropdown<
         disabled={isDisabled}
         customButtonClassName={className}
         customButton={customButton}
+        searchPlaceholder={t("search")}
       />
     </div>
   );

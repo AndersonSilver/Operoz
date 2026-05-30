@@ -21,6 +21,7 @@ from plane.db.models import IssueLink
 from plane.bgtasks.issue_activities_task import issue_activity
 from plane.bgtasks.work_item_link_task import crawl_work_item_link_title
 from plane.utils.host import base_host
+from plane.utils.board_permission_enforcement import deny_board_permission, get_project_for_enforcement
 
 
 class IssueLinkViewSet(BaseViewSet):
@@ -46,6 +47,9 @@ class IssueLinkViewSet(BaseViewSet):
         )
 
     def create(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.link"):
+            return denied
         serializer = IssueLinkSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save(project_id=project_id, issue_id=issue_id)
@@ -96,6 +100,9 @@ class IssueLinkViewSet(BaseViewSet):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def destroy(self, request, slug, project_id, issue_id, pk):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.link"):
+            return denied
         issue_link = IssueLink.objects.get(workspace__slug=slug, project_id=project_id, issue_id=issue_id, pk=pk)
         current_instance = json.dumps(IssueLinkSerializer(issue_link).data, cls=DjangoJSONEncoder)
         issue_activity.delay(

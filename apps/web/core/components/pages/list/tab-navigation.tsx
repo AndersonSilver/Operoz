@@ -5,6 +5,7 @@
  */
 
 import Link from "next/link";
+import { useTranslation } from "@plane/i18n";
 // types
 import type { TPageNavigationTabs } from "@plane/types";
 // helpers
@@ -16,24 +17,15 @@ type TPageTabNavigation = {
   pageType: TPageNavigationTabs;
 };
 
-// pages tab options
-const pageTabs: { key: TPageNavigationTabs; label: string }[] = [
-  {
-    key: "public",
-    label: "Public",
-  },
-  {
-    key: "private",
-    label: "Private",
-  },
-  {
-    key: "archived",
-    label: "Archived",
-  },
-];
-
 export function PageTabNavigation(props: TPageTabNavigation) {
+  const { t } = useTranslation();
   const { workspaceSlug, projectId, pageType } = props;
+
+  const pageTabs: { key: TPageNavigationTabs; label: string }[] = [
+    { key: "public", label: t("project_page.tabs.public") },
+    { key: "private", label: t("project_page.tabs.private") },
+    { key: "archived", label: t("project_page.tabs.archived") },
+  ];
 
   const handleTabClick = (e: React.MouseEvent<HTMLAnchorElement>, tabKey: TPageNavigationTabs) => {
     if (tabKey === pageType) e.preventDefault();

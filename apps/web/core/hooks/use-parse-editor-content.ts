@@ -121,6 +121,25 @@ export const useParseEditorContent = (args: TArgs) => {
           component.replaceWith(img);
         });
       }
+      const htmlDocumentEmbeds = doc.querySelectorAll("html-document-embed");
+      htmlDocumentEmbeds.forEach((component) => {
+        const src = component.getAttribute("src") ?? "";
+        const docTitle = component.getAttribute("title") || "HTML";
+        if (noAssets) {
+          component.remove();
+          return;
+        }
+        const href =
+          getEditorAssetSrc({
+            assetId: src,
+            projectId,
+            workspaceSlug,
+          }) ?? "#";
+        const anchor = doc.createElement("a");
+        anchor.setAttribute("href", href);
+        anchor.textContent = docTitle;
+        component.replaceWith(anchor);
+      });
       // convert all images to base64
       const imgElements = doc.querySelectorAll("img");
       await Promise.all(

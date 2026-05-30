@@ -138,6 +138,24 @@ class Workspace(BaseModel):
     timezone = models.CharField(max_length=255, default="UTC", choices=TIMEZONE_CHOICES)
     background_color = models.CharField(max_length=255, default=get_random_color)
 
+    # Issue notification email overrides (instance admin / God mode — per workspace)
+    issue_notify_assignees_always_email = models.BooleanField(
+        default=False,
+        help_text="Assignees receive email for every issue activity (ignores their email toggles for those events).",
+    )
+    issue_notify_email_include_extended_activities = models.BooleanField(
+        default=False,
+        help_text="Emit issue notifications for module/cycle/reactions/votes/drafts (Plane skips these by default).",
+    )
+    issue_notify_email_include_description_changes = models.BooleanField(
+        default=False,
+        help_text="Notify subscribers/assignees when issue description changes.",
+    )
+    issue_notify_email_dispatch_immediately = models.BooleanField(
+        default=False,
+        help_text="Trigger email queue processing right after logging (instead of waiting for the 5-minute beat).",
+    )
+
     def __str__(self):
         """Return name of the Workspace"""
         return self.name
@@ -375,8 +393,15 @@ class WorkspaceHomePreference(BaseModel):
     """Preference for the home page of a workspace for a user"""
 
     class HomeWidgetKeys(models.TextChoices):
+        HOME_SHORTCUTS = "home_shortcuts", "Home Shortcuts"
+        DAY_SUMMARY = "day_summary", "Day Summary"
+        MY_WORK = "my_work", "My Work"
+        FAVORITE_PROJECTS = "favorite_projects", "Favorite Projects"
         QUICK_LINKS = "quick_links", "Quick Links"
         RECENTS = "recents", "Recents"
+        ACTIVE_CYCLES = "active_cycles", "Active Cycles"
+        NOTIFICATIONS = "notifications", "Notifications"
+        DRAFTS = "drafts", "Drafts"
         MY_STICKIES = "my_stickies", "My Stickies"
         NEW_AT_PLANE = "new_at_plane", "New at Plane"
         QUICK_TUTORIAL = "quick_tutorial", "Quick Tutorial"

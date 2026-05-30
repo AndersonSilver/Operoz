@@ -67,21 +67,14 @@ export function BreadcrumbNavigationSearchDropdown(props: TBreadcrumbNavigationS
                 }
               }}
               className={cn(
-                "group flex h-full cursor-pointer items-center gap-2 rounded-sm rounded-r-none px-1.5 py-1 text-13 font-medium text-tertiary",
+                "group flex h-full max-w-none shrink-0 cursor-pointer items-center gap-2 rounded-sm rounded-r-none px-1.5 py-1 text-13 font-medium text-tertiary",
                 {
                   "hover:bg-layer-1 hover:text-primary": !isLast,
                 }
               )}
             >
-              {shouldTruncate && <div className="flex text-tertiary @4xl:hidden">...</div>}
-              <div
-                className={cn("flex gap-2", {
-                  "hidden items-center gap-2 @4xl:flex": shouldTruncate,
-                })}
-              >
-                {icon && <Breadcrumbs.Icon>{icon}</Breadcrumbs.Icon>}
-                <Breadcrumbs.Label>{title}</Breadcrumbs.Label>
-              </div>
+              {icon && <Breadcrumbs.Icon>{icon}</Breadcrumbs.Icon>}
+              <Breadcrumbs.Label>{title}</Breadcrumbs.Label>
             </button>
           </Tooltip>
           <Breadcrumbs.Separator
@@ -99,9 +92,9 @@ export function BreadcrumbNavigationSearchDropdown(props: TBreadcrumbNavigationS
         </>
       }
       disabled={navigationDisabled}
-      className="h-full rounded-sm"
+      className="h-full w-auto shrink-0 rounded-sm"
       customButtonClassName={cn(
-        "group flex h-full cursor-pointer items-center gap-0.5 rounded-sm outline-none hover:bg-surface-2",
+        "group flex h-full max-w-none shrink-0 cursor-pointer items-center gap-0.5 rounded-sm outline-none hover:bg-surface-2",
         {
           "bg-surface-2": isDropdownOpen,
         }

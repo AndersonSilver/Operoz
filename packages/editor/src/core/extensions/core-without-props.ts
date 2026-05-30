@@ -19,6 +19,7 @@ import { CustomImageExtensionConfig } from "./custom-image/extension-config";
 import { CustomLinkExtension } from "./custom-link";
 import { EmojiExtension } from "./emoji/extension";
 import { CustomHorizontalRule } from "./horizontal-rule";
+import { HtmlDocumentEmbedExtensionConfig } from "./html-document/extension-config";
 import { ImageExtensionConfig } from "./image";
 import { CustomMentionExtensionConfig } from "./mentions/extension-config";
 import { CustomQuoteExtension } from "./quote";
@@ -37,6 +38,7 @@ export const CoreEditorExtensionsWithoutProps = [
   CustomLinkExtension,
   ImageExtensionConfig,
   CustomImageExtensionConfig,
+  HtmlDocumentEmbedExtensionConfig,
   Underline,
   TextStyle,
   TaskList.configure({

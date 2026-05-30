@@ -27,6 +27,29 @@ from plane.license.api.serializers import InstanceConfigurationSerializer
 from plane.license.utils.encryption import encrypt_data
 from plane.utils.cache import cache_response, invalidate_cache
 from plane.license.utils.instance_value import get_email_configuration
+from plane.utils.instance_config_variables import instance_config_variables
+
+
+def _ensure_instance_configuration_rows(keys):
+    """Create missing rows so PATCH can persist (e.g. IS_GOOGLE_ENABLED from God mode)."""
+    for key in keys:
+        if InstanceConfiguration.objects.filter(key=key).exists():
+            continue
+        meta = next((item for item in instance_config_variables if item.get("key") == key), None)
+        if meta:
+            InstanceConfiguration.objects.create(
+                key=key,
+                category=meta["category"],
+                is_encrypted=meta.get("is_encrypted", False),
+                value="",
+            )
+        elif key.startswith("IS_") and key.endswith("_ENABLED"):
+            InstanceConfiguration.objects.create(
+                key=key,
+                category="AUTHENTICATION",
+                is_encrypted=False,
+                value="0",
+            )
 
 
 class InstanceConfigurationEndpoint(BaseAPIView):
@@ -41,6 +64,8 @@ class InstanceConfigurationEndpoint(BaseAPIView):
     @invalidate_cache(path="/api/instances/configurations/", user=False)
     @invalidate_cache(path="/api/instances/", user=False)
     def patch(self, request):
+        _ensure_instance_configuration_rows(request.data.keys())
+
         configurations = InstanceConfiguration.objects.filter(key__in=request.data.keys())
 
         bulk_configurations = []

@@ -13,6 +13,8 @@ import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { ModuleIcon } from "@plane/propel/icons";
 import { Breadcrumbs, Header } from "@plane/ui";
+import { cn } from "@plane/utils";
+import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { ModuleViewHeader } from "@/components/modules";
@@ -35,6 +37,7 @@ export const ModulesListHeader = observer(function ModulesListHeader() {
   const { loader } = useProject();
 
   const { t } = useTranslation();
+  const hasBoardWallpaper = useBoardHubHasBackground();
 
   // auth
   const canUserCreateModule = allowPermissions(
@@ -43,7 +46,7 @@ export const ModulesListHeader = observer(function ModulesListHeader() {
   );
 
   return (
-    <Header>
+    <Header className={cn(hasBoardWallpaper && "!bg-transparent")}>
       <Header.LeftItem>
         <div>
           <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
@@ -51,7 +54,7 @@ export const ModulesListHeader = observer(function ModulesListHeader() {
             <Breadcrumbs.Item
               component={
                 <BreadcrumbLink
-                  label="Modules"
+                  label={t("common.modules")}
                   href={`/${workspaceSlug}/projects/${projectId}/modules/`}
                   icon={<ModuleIcon className="h-4 w-4 text-tertiary" />}
                   isLast
@@ -63,22 +66,23 @@ export const ModulesListHeader = observer(function ModulesListHeader() {
         </div>
       </Header.LeftItem>
       <Header.RightItem>
-        <ModuleViewHeader />
-        {canUserCreateModule ? (
-          <Button
-            variant="primary"
-            data-ph-element={MODULE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
-            onClick={() => {
-              toggleCreateModuleModal(true);
-            }}
-            size="lg"
-          >
-            <div className="block sm:hidden">{t("add")}</div>
-            <div className="hidden sm:block">{t("project_module.add_module")}</div>
-          </Button>
-        ) : (
-          <></>
-        )}
+        <div className={cn("flex items-center gap-2", hasBoardWallpaper && BOARD_HUB_TOOLBAR_CLUSTER)}>
+          <ModuleViewHeader />
+          {canUserCreateModule ? (
+            <Button
+              variant="primary"
+              data-ph-element={MODULE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
+              onClick={() => {
+                toggleCreateModuleModal(true);
+              }}
+              size="lg"
+              className="shrink-0"
+            >
+              <div className="block sm:hidden">{t("add")}</div>
+              <div className="hidden sm:block">{t("project_module.add_module")}</div>
+            </Button>
+          ) : null}
+        </div>
       </Header.RightItem>
     </Header>
   );

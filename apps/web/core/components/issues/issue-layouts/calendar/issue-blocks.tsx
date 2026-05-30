@@ -8,10 +8,11 @@ import { observer } from "mobx-react";
 import { useTranslation } from "@plane/i18n";
 import type { TIssue, TPaginationData } from "@plane/types";
 // components
-import { renderFormattedPayloadDate } from "@plane/utils";
+import { cn, renderFormattedPayloadDate } from "@plane/utils";
 // helpers
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
 import type { TRenderQuickActions } from "../list/list-view-types";
+import { useCalendarDrag } from "./calendar-drag-context";
 import { CalendarIssueBlockRoot } from "./issue-block-root";
 import { CalendarQuickAddIssueActions } from "./quick-add-issue-actions";
 // types
@@ -52,6 +53,7 @@ export const CalendarIssueBlocks = observer(function CalendarIssueBlocks(props: 
   } = props;
   const formattedDatePayload = renderFormattedPayloadDate(date);
   const { t } = useTranslation();
+  const { isCalendarDragging } = useCalendarDrag();
 
   const {
     issues: { getGroupIssueCount, getPaginationData, getIssueLoader },
@@ -71,9 +73,15 @@ export const CalendarIssueBlocks = observer(function CalendarIssueBlocks(props: 
   return (
     <>
       {issueIdList?.map((issueId) => (
-        <div key={issueId} className="relative cursor-pointer p-1 px-2">
+        <div
+          key={issueId}
+          className={cn("relative cursor-pointer p-1 px-2", {
+            "pointer-events-none": isCalendarDragging,
+          })}
+        >
           <CalendarIssueBlockRoot
             issueId={issueId}
+            calendarCellDate={formattedDatePayload}
             quickActions={quickActions}
             isDragDisabled={isDragDisabled || isMobileView}
             canEditProperties={canEditProperties}

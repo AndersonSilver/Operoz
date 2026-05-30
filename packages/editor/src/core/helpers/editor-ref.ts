@@ -19,6 +19,7 @@ import { CORE_EDITOR_META } from "@/constants/meta";
 import type { EditorRefApi, IEditorProps, TEditorCommands } from "@/types";
 // local imports
 import { getParagraphCount } from "./common";
+import { openEmojiPicker } from "./editor-commands";
 import { insertContentAtSavedSelection } from "./insert-content-at-cursor-position";
 import { scrollSummary, scrollToNodeViaDOMCoordinates } from "./scroll-to-node";
 
@@ -249,6 +250,10 @@ export const getEditorRefHelpers = (args: TArgs): EditorRefApi => {
       return () => {
         editor?.off("transaction", callback);
       };
+    },
+    openEmojiPicker: () => {
+      if (!editor) return;
+      openEmojiPicker(editor);
     },
     redo: () => editor?.commands.redo(),
     scrollToNodeViaDOMCoordinates({ pos, behavior = "smooth" }) {

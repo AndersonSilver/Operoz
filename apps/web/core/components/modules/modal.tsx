@@ -103,6 +103,7 @@ export const CreateUpdateModuleModal = observer(function CreateUpdateModuleModal
 
     const payload: Partial<IModule> = {
       ...formData,
+      member_ids: formData.member_ids ?? [],
     };
     if (!data) await handleCreateModule(payload);
     else await handleUpdateModule(payload);

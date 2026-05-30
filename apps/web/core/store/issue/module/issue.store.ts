@@ -5,6 +5,7 @@
  */
 
 import { action, makeObservable, runInAction } from "mobx";
+import { ALL_ISSUES } from "@plane/constants";
 // base class
 import type {
   TIssue,
@@ -14,8 +15,10 @@ import type {
   TIssuesResponse,
   TBulkOperationsPayload,
 } from "@plane/types";
+import { EIssueLayoutTypes } from "@plane/types";
+import { getModuleCalendarPaginationOptions } from "@/components/issues/issue-layouts/calendar/utils";
 // helpers
-import { getDistributionPathsPostUpdate } from "@plane/utils";
+import { getDistributionPathsPostUpdate, isAxiosCancelError } from "@plane/utils";
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";
 import { BaseIssuesStore } from "../helpers/base-issues.store";
 //
@@ -62,6 +65,8 @@ export interface IModuleIssues extends IBaseIssuesStore {
 }
 
 export class ModuleIssues extends BaseIssuesStore implements IModuleIssues {
+  private fetchGeneration = 0;
+
   viewFlags = {
     enableQuickAdd: true,
     enableIssueCreation: true,
@@ -139,26 +144,35 @@ export class ModuleIssues extends BaseIssuesStore implements IModuleIssues {
     moduleId: string,
     isExistingPaginationOptions: boolean = false
   ) => {
+    const fetchEpoch = ++this.fetchGeneration;
+
     try {
-      // set loader and clear store
       runInAction(() => {
         this.setLoader(loadType);
-        this.clear(!isExistingPaginationOptions); // clear while fetching from server.
+        if (!isExistingPaginationOptions) {
+          this.groupedIssueIds = undefined;
+          this.issuePaginationData = {};
+          this.groupedIssueCount = {};
+          this.paginationOptions = undefined;
+        }
       });
 
-      // get params from pagination options
       const params = this.issueFilterStore?.getFilterParams(options, moduleId, undefined, undefined, undefined);
-      // call the fetch issues API with the params
-      const response = await this.issueService.getIssues(workspaceSlug, projectId, params, {
-        signal: this.controller.signal,
-      });
+      const response = await this.issueService.getIssues(workspaceSlug, projectId, params);
 
-      // after fetching issues, call the base method to process the response further
+      if (fetchEpoch !== this.fetchGeneration) return response;
+
       this.onfetchIssues(response, options, workspaceSlug, projectId, moduleId, !isExistingPaginationOptions);
       return response;
     } catch (error) {
-      // set loader to undefined once errored out
-      this.setLoader(undefined);
+      if (fetchEpoch !== this.fetchGeneration || isAxiosCancelError(error)) return;
+
+      runInAction(() => {
+        this.setLoader(undefined);
+        if (this.groupedIssueCount[ALL_ISSUES] === undefined) {
+          this.groupedIssueCount[ALL_ISSUES] = 0;
+        }
+      });
       throw error;
     }
   };
@@ -196,7 +210,6 @@ export class ModuleIssues extends BaseIssuesStore implements IModuleIssues {
         groupId,
         subGroupId
       );
-      // call the fetch issues API with the params for next page in issues
       const response = await this.issueService.getIssues(workspaceSlug, projectId, params);
 
       // after the next page of issues are fetched, call the base method to process the response
@@ -224,7 +237,29 @@ export class ModuleIssues extends BaseIssuesStore implements IModuleIssues {
     loadType: TLoader,
     moduleId: string
   ) => {
-    if (!this.paginationOptions) return;
+    const displayFilters = this.issueFilterStore?.issueFilters?.displayFilters;
+
+    if (displayFilters?.layout === EIssueLayoutTypes.CALENDAR) {
+      return await this.fetchIssues(
+        workspaceSlug,
+        projectId,
+        loadType,
+        getModuleCalendarPaginationOptions(),
+        moduleId,
+        false
+      );
+    }
+
+    if (!this.paginationOptions) {
+      const groupBy = displayFilters?.group_by;
+      return await this.fetchIssues(
+        workspaceSlug,
+        projectId,
+        loadType,
+        { canGroup: true, perPageCount: groupBy ? 50 : 100 },
+        moduleId
+      );
+    }
     return await this.fetchIssues(workspaceSlug, projectId, loadType, this.paginationOptions, moduleId, true);
   };
 

@@ -68,4 +68,34 @@ export class InstanceWorkspaceService extends APIService {
         throw error?.response?.data;
       });
   }
+
+  /**
+   * Updates per-workspace issue email notification flags (instance admin / God Mode).
+   */
+  async patchIssueNotificationFlags(
+    workspaceId: string,
+    data: Partial<
+      Pick<
+        IWorkspace,
+        | "issue_notify_assignees_always_email"
+        | "issue_notify_email_include_extended_activities"
+        | "issue_notify_email_include_description_changes"
+        | "issue_notify_email_dispatch_immediately"
+      >
+    >
+  ): Promise<
+    Pick<
+      IWorkspace,
+      | "issue_notify_assignees_always_email"
+      | "issue_notify_email_include_extended_activities"
+      | "issue_notify_email_include_description_changes"
+      | "issue_notify_email_dispatch_immediately"
+    >
+  > {
+    return this.patch(`/api/instances/workspaces/${workspaceId}/issue-notification-flags/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
 }

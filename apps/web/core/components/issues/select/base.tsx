@@ -165,13 +165,16 @@ export const WorkItemLabelSelectBase = observer(function WorkItemLabelSelectBase
       <button
         type="button"
         ref={setReferenceElement}
-        className={cn("flex h-full cursor-pointer items-center gap-2 text-11", buttonContainerClassName)}
+        className={cn(
+          "flex h-full w-full cursor-pointer items-center justify-start gap-2 text-left text-11",
+          buttonContainerClassName
+        )}
         onClick={handleOnClick}
       >
         {label ? (
           label
         ) : value && value.length > 0 ? (
-          <span className={cn("flex h-full items-center justify-center gap-2 text-11", buttonClassName)}>
+          <span className={cn("flex h-full w-full items-center justify-start gap-2 text-left text-11", buttonClassName)}>
             <IssueLabelsList
               labels={value.map((v) => labelsList?.find((l) => l.id === v)) ?? []}
               length={3}
@@ -181,7 +184,7 @@ export const WorkItemLabelSelectBase = observer(function WorkItemLabelSelectBase
         ) : (
           <div
             className={cn(
-              "flex h-full items-center justify-center gap-1 rounded-sm border-[0.5px] border-strong px-2 py-1 text-11 hover:bg-layer-1",
+              "flex h-full w-full items-center justify-start gap-1 rounded-sm border-[0.5px] border-strong px-2 py-1 text-left text-11 hover:bg-layer-1",
               buttonClassName
             )}
           >
@@ -192,7 +195,7 @@ export const WorkItemLabelSelectBase = observer(function WorkItemLabelSelectBase
       </button>
 
       {isDropdownOpen && (
-        <Combobox.Options className="fixed z-10" static>
+        <Combobox.Options className="fixed z-50" static>
           <div
             className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
             ref={setPopperElement}

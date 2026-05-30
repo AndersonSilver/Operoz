@@ -54,10 +54,12 @@ export function OAuthOptions(props: OAuthOptionsProps) {
       </div>
 
       {showDivider && (
-        <div className="mt-4 flex items-center transition-all duration-300">
-          <hr className="w-full border-strong transition-colors duration-300" />
-          <p className="mx-3 flex-shrink-0 text-center text-13 text-placeholder transition-colors duration-300">or</p>
-          <hr className="w-full border-strong transition-colors duration-300" />
+        <div className="mt-6 flex items-center gap-3 transition-all duration-300">
+          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-subtle" />
+          <p className="flex-shrink-0 rounded-full bg-layer-3 px-3 py-1 text-center text-12 font-medium uppercase tracking-wide text-tertiary">
+            or
+          </p>
+          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-subtle" />
         </div>
       )}
     </div>

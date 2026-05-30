@@ -5,8 +5,10 @@
  */
 
 import React, { useEffect, useState, useCallback } from "react";
+import { FileCode2 } from "lucide-react";
 import type { EditorRefApi } from "@plane/editor";
 // plane imports
+import { useTranslation } from "@plane/i18n";
 import { CheckIcon, ChevronDownIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
 import { CustomMenu } from "@plane/ui";
@@ -33,10 +35,10 @@ const ToolbarButton = React.memo(function ToolbarButton(props: ToolbarButtonProp
   return (
     <Tooltip
       tooltipContent={
-        <p className="flex flex-col gap-1 text-center text-11">
+        <div className="flex flex-col gap-1 text-center text-11">
           <span className="font-medium">{item.name}</span>
           {item.shortcut && <kbd className="text-placeholder">{item.shortcut.join(" + ")}</kbd>}
-        </p>
+        </div>
       }
     >
       <button
@@ -70,6 +72,7 @@ const toolbarItems = TOOLBAR_ITEMS.document;
 
 export function PageToolbar(props: Props) {
   const { editorRef } = props;
+  const { t } = useTranslation();
   // states
   const [activeStates, setActiveStates] = useState<Record<string, boolean>>(() => {
     const initialStates: Record<string, boolean> = {};
@@ -191,6 +194,29 @@ export function PageToolbar(props: Props) {
           ))}
         </div>
       ))}
+      <div className="flex shrink-0 items-center gap-0.5 px-2">
+        <Tooltip
+          tooltipContent={
+            <div className="flex flex-col gap-1 text-center text-11">
+              <span className="font-medium">{t("page_editor.html_document.toolbar")}</span>
+              <span className="text-placeholder">{t("page_editor.html_document.toolbar_hint")}</span>
+            </div>
+          }
+        >
+          <button
+            type="button"
+            onClick={() =>
+              editorRef.executeMenuItemCommand({
+                itemKey: "html-document",
+              })
+            }
+            className="grid size-7 shrink-0 place-items-center rounded-sm text-tertiary hover:bg-layer-transparent-hover"
+            aria-label={t("page_editor.html_document.toolbar")}
+          >
+            <FileCode2 className="size-4" />
+          </button>
+        </Tooltip>
+      </div>
     </div>
   );
 }

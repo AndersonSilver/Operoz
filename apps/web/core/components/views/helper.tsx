@@ -5,6 +5,7 @@
  */
 
 import { EIssueLayoutTypes } from "@plane/types";
+import { WorkspaceListRoot } from "@/components/issues/issue-layouts/list/roots/workspace-root";
 import { WorkspaceSpreadsheetRoot } from "@/components/issues/issue-layouts/spreadsheet/roots/workspace-root";
 import { WorkspaceAdditionalLayouts } from "@/plane-web/components/views/helper";
 
@@ -48,6 +49,15 @@ export function WorkspaceActiveLayout(props: TWorkspaceLayoutProps) {
           routeFilters={routeFilters}
           fetchNextPages={fetchNextPages}
           globalViewsLoading={globalViewsLoading}
+          issuesLoading={issuesLoading}
+        />
+      );
+    case EIssueLayoutTypes.LIST:
+      return (
+        <WorkspaceListRoot
+          isLoading={isLoading}
+          workspaceSlug={workspaceSlug}
+          globalViewId={globalViewId}
           issuesLoading={issuesLoading}
         />
       );

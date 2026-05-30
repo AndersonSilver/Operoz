@@ -46,6 +46,7 @@ import {
 } from "../utils";
 import { IssueBlocksList } from "./blocks-list";
 import { HeaderGroupByCard } from "./headers/group-by-card";
+import { ListPropertiesColumnsHeader } from "./list-properties-columns-header";
 import type { TRenderQuickActions } from "./list-view-types";
 
 interface Props {
@@ -295,7 +296,13 @@ export const ListGroup = observer(function ListGroup(props: Props) {
             isDraggingOverColumn={isDraggingOverColumn}
             isEpic={isEpic}
           />
+          {!group_by && displayProperties && (
+            <div className="min-w-full w-max max-w-none">
+              <ListPropertiesColumnsHeader displayProperties={displayProperties} isEpic={isEpic} />
+            </div>
+          )}
           {groupIssueIds && (
+            <div className="min-w-full w-max max-w-none">
             <IssueBlocksList
               issueIds={groupIssueIds}
               groupId={group.id}
@@ -310,6 +317,7 @@ export const ListGroup = observer(function ListGroup(props: Props) {
               selectionHelpers={selectionHelpers}
               isEpic={isEpic}
             />
+            </div>
           )}
 
           {shouldLoadMore &&

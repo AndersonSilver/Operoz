@@ -56,6 +56,7 @@ export type TEditorCommands =
   | "code"
   | "table"
   | "image"
+  | "html-document"
   | "divider"
   | "link"
   | "issue-embed"
@@ -136,6 +137,7 @@ export type CoreEditorRefApi = {
   onDocumentInfoChange: (callback: (documentInfo: TDocumentInfo) => void) => () => void;
   onHeadingChange: (callback: (headings: IMarking[]) => void) => () => void;
   onStateChange: (callback: () => void) => () => void;
+  openEmojiPicker: () => void;
   redo: () => void;
   scrollSummary: (marking: IMarking) => void;
 

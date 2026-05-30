@@ -47,6 +47,7 @@ export interface IIssueSubIssuesStoreActions {
 
 type TSubIssueHelpersKeys = "issue_visibility" | "preview_loader" | "issue_loader";
 type TSubIssueHelpers = Record<TSubIssueHelpersKeys, string[]>;
+export type TSetSubIssueHelpersMode = "toggle" | "add" | "remove";
 export interface IIssueSubIssuesStore extends IIssueSubIssuesStoreActions {
   // observables
   subIssuesStateDistribution: TIssueSubIssuesStateDistributionMap;
@@ -60,7 +61,12 @@ export interface IIssueSubIssuesStore extends IIssueSubIssuesStoreActions {
   subIssueHelpersByIssueId: (issueId: string) => TSubIssueHelpers;
   // actions
   fetchOtherProjectProperties: (workspaceSlug: string, projectIds: string[]) => Promise<void>;
-  setSubIssueHelpers: (parentIssueId: string, key: TSubIssueHelpersKeys, value: string) => void;
+  setSubIssueHelpers: (
+    parentIssueId: string,
+    key: TSubIssueHelpersKeys,
+    value: string,
+    mode?: TSetSubIssueHelpersMode
+  ) => void;
 }
 
 export class IssueSubIssuesStore implements IIssueSubIssuesStore {
@@ -116,12 +122,25 @@ export class IssueSubIssuesStore implements IIssueSubIssuesStore {
   });
 
   // actions
-  setSubIssueHelpers = (parentIssueId: string, key: TSubIssueHelpersKeys, value: string) => {
+  setSubIssueHelpers = (
+    parentIssueId: string,
+    key: TSubIssueHelpersKeys,
+    value: string,
+    mode: TSetSubIssueHelpersMode = "toggle"
+  ) => {
     if (!parentIssueId || !key || !value) return;
 
     update(this.subIssueHelpers, [parentIssueId, key], (_subIssueHelpers: string[] = []) => {
-      if (_subIssueHelpers.includes(value)) return pull(_subIssueHelpers, value);
-      return concat(_subIssueHelpers, value);
+      const current = [..._subIssueHelpers];
+      if (mode === "add") {
+        if (current.includes(value)) return current;
+        return concat(current, value);
+      }
+      if (mode === "remove") {
+        return current.filter((id) => id !== value);
+      }
+      if (current.includes(value)) return current.filter((id) => id !== value);
+      return concat(current, value);
     });
   };
 

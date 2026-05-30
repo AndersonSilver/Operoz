@@ -16,7 +16,9 @@ import { MultipleSelectGroupAction } from "@/components/core/multiple-select";
 // hooks
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 // constants
-import { GANTT_SELECT_GROUP, HEADER_HEIGHT, SIDEBAR_WIDTH } from "../constants";
+import { useGanttSidebarWidth } from "../contexts/gantt-sidebar-width";
+import { GanttSidebarResizeHandle } from "./gantt-sidebar-resize-handle";
+import { GANTT_SELECT_GROUP, HEADER_HEIGHT } from "../constants";
 
 type Props = {
   blockIds: string[];
@@ -51,14 +53,18 @@ export const GanttChartSidebar = observer(function GanttChartSidebar(props: Prop
   } = props;
 
   const isGroupSelectionEmpty = selectionHelpers.isGroupSelected(GANTT_SELECT_GROUP) === "empty";
+  const { sidebarWidth, isResizing } = useGanttSidebarWidth();
 
   return (
     <Row
       // DO NOT REMOVE THE ID
       id="gantt-sidebar"
-      className="sticky left-0 z-10 h-max min-h-full flex-shrink-0 border-r-[0.5px] border-subtle-1 bg-surface-1"
+      className={cn(
+        "sticky left-0 z-10 h-max min-h-full flex-shrink-0 border-r-[0.5px] border-subtle-1 bg-surface-1",
+        !isResizing && "transition-[width] duration-150 ease-out"
+      )}
       style={{
-        width: `${SIDEBAR_WIDTH}px`,
+        width: `${sidebarWidth}px`,
       }}
       variant={ERowVariant.HUGGING}
     >
@@ -104,6 +110,7 @@ export const GanttChartSidebar = observer(function GanttChartSidebar(props: Prop
             isEpic,
           })}
       </Row>
+      <GanttSidebarResizeHandle />
     </Row>
   );
 });

@@ -1,8 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
 
 import { Fragment, useEffect, useState } from "react";
 import { observer } from "mobx-react";
@@ -77,7 +72,10 @@ export const AdminSidebarDropdown = observer(function AdminSidebarDropdown() {
 
   useEffect(() => {
     if (csrfToken === undefined)
-      void authService.requestCSRFToken().then((data) => data?.csrf_token && setCsrfToken(data.csrf_token));
+      void authService
+        .requestCSRFToken()
+        .then((data) => data?.csrf_token && setCsrfToken(data.csrf_token))
+        .catch(() => {});
   }, [csrfToken]);
 
   return (

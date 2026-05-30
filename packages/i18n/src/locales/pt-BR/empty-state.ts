@@ -95,8 +95,8 @@ export default {
     pages: {
       title: "Documente tudo — de notas a PRDs",
       description:
-        "As páginas permitem que você capture e organize informações em um só lugar. Escreva notas de reuniões, documentação de projetos e PRDs, incorpore itens de trabalho e estruture-os com componentes prontos para uso.",
-      cta_primary: "Criar sua primeira Página",
+        "A documentação permite capturar e organizar informações em um só lugar. Escreva notas de reuniões, docs de projeto e PRDs, incorpore itens de trabalho e estruture com componentes prontos para uso.",
+      cta_primary: "Criar primeira documentação",
     },
     archive_pages: {
       title: "Ainda não há páginas arquivadas",
@@ -203,6 +203,11 @@ export default {
       title: "Ainda não foi adicionado nenhum Webhook",
       description: "Automatize notificações para serviços externos quando ocorrerem eventos do projeto.",
       cta_primary: "Adicionar webhook",
+    },
+    boards: {
+      title: "Nenhum board ainda",
+      description: "Crie boards para agrupar projetos por time ou área.",
+      cta_primary: "Criar board",
     },
   },
 } as const;

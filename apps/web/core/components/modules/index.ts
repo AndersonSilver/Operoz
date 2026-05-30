@@ -15,6 +15,7 @@ export * from "./links";
 export * from "./modal";
 export * from "./modules-list-view";
 export * from "./module-card-item";
+export * from "./module-list-header";
 export * from "./module-list-item";
 export * from "./module-peek-overview";
 export * from "./quick-actions";

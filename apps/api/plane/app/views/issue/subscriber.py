@@ -11,6 +11,7 @@ from .. import BaseViewSet
 from plane.app.serializers import IssueSubscriberSerializer, ProjectMemberLiteSerializer
 from plane.app.permissions import ProjectEntityPermission, ProjectLitePermission
 from plane.db.models import IssueSubscriber, ProjectMember
+from plane.utils.board_permission_enforcement import deny_board_permission, get_project_for_enforcement
 
 
 class IssueSubscriberViewSet(BaseViewSet):
@@ -50,6 +51,9 @@ class IssueSubscriberViewSet(BaseViewSet):
         )
 
     def list(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.watchers.view"):
+            return denied
         members = ProjectMember.objects.filter(
             workspace__slug=slug, project_id=project_id, is_active=True
         ).select_related("member")
@@ -57,6 +61,9 @@ class IssueSubscriberViewSet(BaseViewSet):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def destroy(self, request, slug, project_id, issue_id, subscriber_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.watchers.manage"):
+            return denied
         issue_subscriber = IssueSubscriber.objects.get(
             project=project_id,
             subscriber=subscriber_id,
@@ -67,6 +74,9 @@ class IssueSubscriberViewSet(BaseViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def subscribe(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.watchers.view"):
+            return denied
         if IssueSubscriber.objects.filter(
             issue_id=issue_id,
             subscriber=request.user,

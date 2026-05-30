@@ -51,6 +51,7 @@ export const useIssuesActions = (storeType: EIssuesStoreType): IssueActions => {
   const moduleIssueActions = useModuleIssueActions();
   const projectViewIssueActions = useProjectViewIssueActions();
   const globalIssueActions = useGlobalIssueActions();
+  const boardIssueActions = useBoardIssueActions();
   const profileIssueActions = useProfileIssueActions();
   const archivedIssueActions = useArchivedIssueActions();
   const workspaceDraftIssueActions = useWorkspaceDraftIssueActions();
@@ -68,6 +69,8 @@ export const useIssuesActions = (storeType: EIssuesStoreType): IssueActions => {
       return moduleIssueActions;
     case EIssuesStoreType.GLOBAL:
       return globalIssueActions;
+    case EIssuesStoreType.BOARD:
+      return boardIssueActions;
     case EIssuesStoreType.WORKSPACE_DRAFT:
       //@ts-expect-error type mismatch
       return workspaceDraftIssueActions;
@@ -360,11 +363,18 @@ const useModuleIssueActions = () => {
   const { issues, issuesFilter } = useIssues(EIssuesStoreType.MODULE);
 
   const fetchIssues = useCallback(
-    async (loadType: TLoader, options: IssuePaginationOptions, moduleId?: string) => {
-      if (!workspaceSlug || !projectId || !moduleId) return;
-      return issues.fetchIssues(workspaceSlug.toString(), projectId.toString(), loadType, options, moduleId.toString());
+    async (loadType: TLoader, options: IssuePaginationOptions, viewId?: string) => {
+      const resolvedModuleId = viewId ?? moduleId;
+      if (!workspaceSlug || !projectId || !resolvedModuleId) return;
+      return issues.fetchIssues(
+        workspaceSlug.toString(),
+        projectId.toString(),
+        loadType,
+        options,
+        resolvedModuleId.toString()
+      );
     },
-    [issues.fetchIssues, workspaceSlug, projectId]
+    [issues.fetchIssues, moduleId, workspaceSlug, projectId]
   );
   const fetchNextIssues = useCallback(
     async (groupId?: string, subGroupId?: string) => {
@@ -731,6 +741,76 @@ const useGlobalIssueActions = () => {
       updateFilters,
     }),
     [createIssue, updateIssue, removeIssue, updateFilters]
+  );
+};
+
+const useBoardIssueActions = () => {
+  const { workspaceSlug: routerWorkspaceSlug, boardSlug: routerBoardSlug } = useParams();
+  const workspaceSlug = routerWorkspaceSlug?.toString();
+  const boardSlug = routerBoardSlug?.toString();
+  const { issues, issuesFilter } = useIssues(EIssuesStoreType.BOARD);
+
+  const fetchIssues = useCallback(
+    async (loadType: TLoader, options: IssuePaginationOptions) => {
+      if (!workspaceSlug || !boardSlug) return;
+      return issues.fetchIssues(workspaceSlug, boardSlug, loadType, options);
+    },
+    [issues.fetchIssues, workspaceSlug, boardSlug]
+  );
+  const fetchNextIssues = useCallback(
+    async (groupId?: string, subGroupId?: string) => {
+      if (!workspaceSlug || !boardSlug) return;
+      return issues.fetchNextIssues(workspaceSlug, boardSlug, groupId, subGroupId);
+    },
+    [issues.fetchNextIssues, workspaceSlug, boardSlug]
+  );
+  const createIssue = useCallback(
+    async (projectId: string | undefined | null, data: Partial<TIssue>) => {
+      if (!workspaceSlug || !projectId) return;
+      return await issues.createIssue(workspaceSlug, projectId, data);
+    },
+    [issues.createIssue, workspaceSlug]
+  );
+  const updateIssue = useCallback(
+    async (projectId: string | undefined | null, issueId: string, data: Partial<TIssue>) => {
+      if (!workspaceSlug || !projectId) return;
+      return await issues.updateIssue(workspaceSlug, projectId, issueId, data);
+    },
+    [issues.updateIssue, workspaceSlug]
+  );
+  const removeIssue = useCallback(
+    async (projectId: string | undefined | null, issueId: string) => {
+      if (!workspaceSlug || !projectId) return;
+      return await issues.removeIssue(workspaceSlug, projectId, issueId);
+    },
+    [issues.removeIssue, workspaceSlug]
+  );
+  const archiveIssue = useCallback(
+    async (projectId: string | undefined | null, issueId: string) => {
+      if (!workspaceSlug || !projectId) return;
+      return await issues.archiveIssue(workspaceSlug, projectId, issueId);
+    },
+    [issues.archiveIssue, workspaceSlug]
+  );
+  const updateFilters = useCallback(
+    async (projectId: string, filterType: TSupportedFilterTypeForUpdate, filters: TSupportedFilterForUpdate) => {
+      if (!workspaceSlug || !boardSlug) return;
+      return await issuesFilter.updateFilters(workspaceSlug, projectId, filterType, filters, boardSlug);
+    },
+    [issuesFilter.updateFilters, workspaceSlug, boardSlug]
+  );
+
+  return useMemo(
+    () => ({
+      fetchIssues,
+      fetchNextIssues,
+      createIssue,
+      updateIssue,
+      removeIssue,
+      archiveIssue,
+      updateFilters,
+    }),
+    [fetchIssues, fetchNextIssues, createIssue, updateIssue, removeIssue, archiveIssue, updateFilters]
   );
 };
 

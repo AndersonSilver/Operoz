@@ -1,0 +1,72 @@
+# OPERIS OS — REGRAS DE DESIGN E CÓDIGO
+
+Você é engenheiro frontend principal do **Operis OS**. Toda UI deve usar o **design system do monorepo** (tokens semânticos), com densidade e usabilidade enterprise — **nunca** cores hex fixas de referências externas (ex. paleta Jira).
+
+## 1. CORES E TEMA — OBRIGATÓRIO
+
+Fonte de verdade:
+
+- `packages/tailwind-config/variables.css` — variáveis CSS (claro/escuro/contraste)
+- `packages/tailwind-config/AGENTS.md` — filosofia Canvas / Surface / Layer
+
+### Hierarquia de fundo
+
+| Uso | Classe |
+|-----|--------|
+| Raiz da app (uma vez) | `bg-canvas` |
+| Página / secção principal | `bg-surface-1` (ou `surface-2` / `surface-3` como irmãos) |
+| Cards, linhas, painéis sobre surface | `bg-layer-1` (+ `hover:bg-layer-1-hover`) |
+| Aninhamento mais profundo | `bg-layer-2`, `bg-layer-3` (empilhar em ordem) |
+| Hover em item transparente | `hover:bg-layer-transparent-hover` |
+| Modal backdrop | `bg-backdrop` |
+
+Regra: `surface-1` → `layer-1` para conteúdo; não aninhar `surface` dentro de `surface` (exceto modais noutro plano z-index).
+
+### Texto
+
+- `text-primary` — títulos e conteúdo principal
+- `text-secondary` — descrições
+- `text-tertiary` — metadados, labels
+- `text-placeholder` / `placeholder:text-tertiary` — inputs
+
+### Bordas
+
+- `border-subtle`, `border-subtle-1` — divisores e cards
+- `border-strong` — foco / ênfase
+
+### Marca e semântica
+
+- Ação / links: `text-accent-primary`, `bg-accent-primary`, `border-accent-strong`
+- Sucesso: `text-success-primary`, `bg-success-subtle`
+- Aviso: `text-warning-primary`, `bg-warning-subtle`
+- Perigo / crítico: `text-danger-primary`, `bg-danger-subtle`
+
+**Proibido:** `#0052CC`, `#172B4D`, `#DFE1E6` e similares hardcoded em componentes novos. Se precisar de cor pontual (gráfico), usar `var(--background-color-*)` ou classes Tailwind do tema.
+
+### Temas
+
+Respeitar `data-theme` (light, dark, contrastes). Componentes devem funcionar em modo escuro sem overrides manuais de cor.
+
+## 2. UX E DENSIDADE
+
+- Desktop enterprise: informação densa, legível em jornadas longas.
+- Espaçamento: preferir `p-3`, `p-4`, `gap-2`, `gap-3`; evitar layouts excessivamente arejados.
+- Raio: seguir o produto — `rounded-sm` e `rounded-md` (como em boards e Cliente 360); não «pílulas» grandes.
+- Tipografia: escala existente (`text-11`, `text-12`, `text-13`, `text-16`…).
+- Ícones: `lucide-react`, `size={14}` ou `size={16}`, `strokeWidth={1.75}` onde o código vizinho já usa.
+
+## 3. COMPONENTES
+
+- Reutilizar `@plane/ui`, `@plane/propel` (Button, etc.) antes de criar primitives novas.
+- Seguir padrões de `apps/web/core/components/board/` e features Operis existentes.
+
+## 4. CÓDIGO
+
+- TypeScript estrito: sem `any`; props tipadas.
+- React funcional com hooks.
+- Edição inline (título, campos): `onBlur` quando o fluxo do produto pedir UX tipo issue.
+
+## 5. MARCA
+
+- Produto: **Operis** / **Operis OS**.
+- Respostas ao utilizador em **português**, salvo pedido contrário.

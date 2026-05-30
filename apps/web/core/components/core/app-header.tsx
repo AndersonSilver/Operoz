@@ -10,6 +10,7 @@ import { observer } from "mobx-react";
 import { Row } from "@plane/ui";
 // components
 import { cn } from "@plane/utils";
+import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { ExtendedAppHeader } from "@/plane-web/components/common/extended-app-header";
 
 export interface AppHeaderProps {
@@ -17,14 +18,25 @@ export interface AppHeaderProps {
   mobileHeader?: ReactNode;
   className?: string;
   rowClassName?: string;
+  /** Quando false, a linha do cabeçalho fica transparente (wallpaper do board visível por baixo). */
+  opaque?: boolean;
 }
 
 export const AppHeader = observer(function AppHeader(props: AppHeaderProps) {
-  const { header, mobileHeader, className, rowClassName } = props;
+  const { header, mobileHeader, className, rowClassName, opaque = true } = props;
+  const hasBoardWallpaper = useBoardHubHasBackground();
+  const isTransparentHeader = hasBoardWallpaper || !opaque;
 
   return (
-    <div className={cn("z-[18]", className)}>
-      <Row className={cn("flex h-11 w-full items-center gap-2 border-b border-subtle bg-surface-1", rowClassName)}>
+    <div className={cn("relative z-[2] shrink-0", className)}>
+      <Row
+        className={cn(
+          "flex h-11 w-full min-w-0 items-center gap-2 border-b border-subtle",
+          isTransparentHeader ? "border-subtle/40 bg-transparent" : "bg-surface-1",
+          hasBoardWallpaper && BOARD_HUB_GLASS_HEADER,
+          rowClassName
+        )}
+      >
         <ExtendedAppHeader header={header} />
       </Row>
       {mobileHeader && mobileHeader}

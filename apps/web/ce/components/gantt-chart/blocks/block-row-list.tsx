@@ -4,6 +4,7 @@
  * See the LICENSE file for details.
  */
 
+import React from "react";
 // components
 import type { IBlockUpdateData, IGanttBlock } from "@plane/types";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
@@ -37,7 +38,7 @@ export function GanttChartRowList(props: GanttChartBlocksProps) {
   return (
     <div className="absolute top-0 left-0 w-max min-w-full">
       {blockIds?.map((blockId) => (
-        <>
+        <React.Fragment key={blockId}>
           <RenderIfVisible
             root={ganttContainerRef}
             horizontalOffset={100}
@@ -57,7 +58,7 @@ export function GanttChartRowList(props: GanttChartBlocksProps) {
               ganttContainerRef={ganttContainerRef}
             />
           </RenderIfVisible>
-        </>
+        </React.Fragment>
       ))}
     </div>
   );

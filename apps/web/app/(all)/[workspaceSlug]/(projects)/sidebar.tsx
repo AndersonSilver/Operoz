@@ -11,9 +11,11 @@ import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 // components
 import { SidebarWrapper } from "@/components/sidebar/sidebar-wrapper";
 import { SidebarFavoritesMenu } from "@/components/workspace/sidebar/favorites/favorites-menu";
+import { SidebarBoardsList } from "@/components/workspace/sidebar/boards-list";
 import { SidebarProjectsList } from "@/components/workspace/sidebar/projects-list";
 import { SidebarQuickActions } from "@/components/workspace/sidebar/quick-actions";
 import { SidebarMenuItems } from "@/components/workspace/sidebar/sidebar-menu-items";
+import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -38,10 +40,10 @@ export const AppSidebar = observer(function AppSidebar() {
       <SidebarMenuItems />
       {/* Favorites Menu */}
       {canPerformWorkspaceMemberActions && !isFavoriteEmpty && <SidebarFavoritesMenu />}
-      {/* Teams List */}
-      <SidebarTeamsList />
-      {/* Projects List */}
-      <SidebarProjectsList />
+      {/* Teams List — oculto quando boards mock está ativo */}
+      {!ENABLE_WORKSPACE_BOARDS && <SidebarTeamsList />}
+      {/* Boards (mock) ou Projects List */}
+      {ENABLE_WORKSPACE_BOARDS ? <SidebarBoardsList /> : <SidebarProjectsList />}
     </SidebarWrapper>
   );
 });

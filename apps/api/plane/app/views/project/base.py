@@ -40,6 +40,8 @@ from plane.db.models import (
     WorkspaceMember,
 )
 from plane.db.models.intake import IntakeIssueStatus
+from plane.utils.board_custom_fields import sync_board_custom_fields_to_project
+from plane.utils.board_issue_types import sync_board_issue_types_to_project
 from plane.utils.host import base_host
 
 
@@ -185,6 +187,7 @@ class ProjectViewSet(BaseViewSet):
             "guest_view_all_features",
             "project_lead",
             "network",
+            "board_id",
             "created_at",
             "updated_at",
             "created_by",
@@ -291,6 +294,10 @@ class ProjectViewSet(BaseViewSet):
 
             project = self.get_queryset().filter(pk=serializer.data["id"]).first()
 
+            if project and project.board_id:
+                sync_board_issue_types_to_project(project, request.user)
+                sync_board_custom_fields_to_project(project, request.user)
+
             # Create the model activity
             model_activity.delay(
                 model_name="project",
@@ -333,6 +340,7 @@ class ProjectViewSet(BaseViewSet):
         workspace = Workspace.objects.get(slug=slug)
 
         project = Project.objects.get(pk=pk, workspace__slug=slug)
+        old_board_id = project.board_id
         intake_view = request.data.get("inbox_view", project.intake_view)
         current_instance = json.dumps(ProjectSerializer(project).data, cls=DjangoJSONEncoder)
         if project.archived_at:
@@ -350,6 +358,9 @@ class ProjectViewSet(BaseViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            if serializer.instance.board_id and str(old_board_id) != str(serializer.instance.board_id):
+                sync_board_issue_types_to_project(serializer.instance, request.user)
+                sync_board_custom_fields_to_project(serializer.instance, request.user)
             if intake_view:
                 intake = Intake.objects.filter(project=project, is_default=True).first()
                 if not intake:

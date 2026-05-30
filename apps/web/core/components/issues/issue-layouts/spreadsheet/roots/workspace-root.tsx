@@ -6,6 +6,7 @@
 
 import React, { useCallback } from "react";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 // plane constants
 import { ALL_ISSUES, EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
 import type { IIssueDisplayFilterOptions } from "@plane/types";
@@ -16,10 +17,13 @@ import { SpreadsheetLayoutLoader } from "@/components/ui/loader/layouts/spreadsh
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 import { useUserPermissions } from "@/hooks/store/user";
+import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
 import { useWorkspaceIssueProperties } from "@/hooks/use-workspace-issue-properties";
+import type { IBoardIssuesFilter } from "@/store/issue/board/filter.store";
 // store
 import { IssueLayoutHOC } from "../../issue-layout-HOC";
+import { useBoardAlignedDisplayProperties } from "../../list-display-properties";
 import type { TRenderQuickActions } from "../../list/list-view-types";
 import { SpreadsheetView } from "../spreadsheet-view";
 
@@ -43,16 +47,24 @@ export const WorkspaceSpreadsheetRoot = observer(function WorkspaceSpreadsheetRo
   // Custom hooks
   useWorkspaceIssueProperties(workspaceSlug);
 
-  // Store hooks
+  // Store hooks (GLOBAL ou BOARD conforme IssuesStoreContext / rota)
+  const { projectId: routerProjectId } = useParams();
+  const projectId = routerProjectId?.toString();
+
+  const storeType = useIssueStoreType();
   const {
-    issuesFilter: { filters, updateFilters },
+    issuesFilter,
     issues: { getIssueLoader, getPaginationData, groupedIssueIds },
-  } = useIssues(EIssuesStoreType.GLOBAL);
-  const { updateIssue, removeIssue, archiveIssue } = useIssuesActions(EIssuesStoreType.GLOBAL);
+  } = useIssues(storeType);
+  const { filters } = issuesFilter;
+  const { updateIssue, removeIssue, archiveIssue, updateFilters } = useIssuesActions(storeType);
   const { allowPermissions } = useUserPermissions();
 
   // Derived values
   const issueFilters = globalViewId ? filters?.[globalViewId.toString()] : undefined;
+  const displayProperties = useBoardAlignedDisplayProperties(globalViewId, {
+    layout: EIssueLayoutTypes.SPREADSHEET,
+  });
 
   // Permission checker
   const canEditProperties = useCallback(
@@ -73,15 +85,19 @@ export const WorkspaceSpreadsheetRoot = observer(function WorkspaceSpreadsheetRo
     (updatedDisplayFilter: Partial<IIssueDisplayFilterOptions>) => {
       if (!workspaceSlug || !globalViewId) return;
 
-      updateFilters(
-        workspaceSlug.toString(),
-        undefined,
-        EIssueFilterType.DISPLAY_FILTERS,
-        { ...updatedDisplayFilter },
-        globalViewId.toString()
-      );
+      if (storeType === EIssuesStoreType.BOARD) {
+        (issuesFilter as IBoardIssuesFilter).updateFilters(
+          workspaceSlug.toString(),
+          undefined,
+          EIssueFilterType.DISPLAY_FILTERS,
+          { ...updatedDisplayFilter },
+          globalViewId.toString()
+        );
+      } else {
+        updateFilters(projectId ?? "", EIssueFilterType.DISPLAY_FILTERS, { ...updatedDisplayFilter });
+      }
     },
-    [updateFilters, workspaceSlug, globalViewId]
+    [updateFilters, workspaceSlug, globalViewId, storeType, issuesFilter, projectId]
   );
 
   // Quick actions renderer
@@ -115,7 +131,7 @@ export const WorkspaceSpreadsheetRoot = observer(function WorkspaceSpreadsheetRo
   return (
     <IssueLayoutHOC layout={EIssueLayoutTypes.SPREADSHEET}>
       <SpreadsheetView
-        displayProperties={issueFilters?.displayProperties ?? {}}
+        displayProperties={displayProperties ?? {}}
         displayFilters={issueFilters?.displayFilters ?? {}}
         handleDisplayFilterUpdate={handleDisplayFiltersUpdate}
         issueIds={Array.isArray(issueIds) ? issueIds : []}
@@ -124,7 +140,7 @@ export const WorkspaceSpreadsheetRoot = observer(function WorkspaceSpreadsheetRo
         canEditProperties={canEditProperties}
         canLoadMoreIssues={!!nextPageResults}
         loadMoreIssues={fetchNextPages}
-        isWorkspaceLevel
+        isWorkspaceLevel={storeType === EIssuesStoreType.GLOBAL}
       />
     </IssueLayoutHOC>
   );

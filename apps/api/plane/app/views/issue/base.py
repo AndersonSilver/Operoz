@@ -73,6 +73,11 @@ from plane.utils.issue_filters import issue_filters
 from plane.utils.order_queryset import order_issue_queryset
 from plane.utils.paginator import GroupedOffsetPaginator, SubGroupedOffsetPaginator
 from plane.utils.timezone_converter import user_timezone_converter
+from plane.utils.board_permission_enforcement import (
+    deny_board_permission,
+    deny_for_issue_patch,
+    get_project_for_enforcement,
+)
 
 from .. import BaseAPIView, BaseViewSet
 
@@ -164,6 +169,7 @@ class IssueListEndpoint(BaseAPIView):
                 "id",
                 "name",
                 "state_id",
+                "type_id",
                 "sort_order",
                 "completed_at",
                 "estimate_point",
@@ -391,7 +397,9 @@ class IssueViewSet(BaseViewSet):
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
     def create(self, request, slug, project_id):
-        project = Project.objects.get(pk=project_id)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.create"):
+            return denied
 
         serializer = IssueCreateSerializer(
             data=request.data,
@@ -429,6 +437,7 @@ class IssueViewSet(BaseViewSet):
                     "id",
                     "name",
                     "state_id",
+                    "type_id",
                     "sort_order",
                     "completed_at",
                     "estimate_point",
@@ -614,6 +623,10 @@ class IssueViewSet(BaseViewSet):
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], creator=True, model=Issue)
     def partial_update(self, request, slug, project_id, pk=None):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_issue_patch(request.user, project, request.data):
+            return denied
+
         queryset = self.get_queryset()
         queryset = self.apply_annotations(queryset)
 
@@ -701,8 +714,12 @@ class IssueViewSet(BaseViewSet):
             return Response(status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @allow_permission([ROLE.ADMIN], creator=True, model=Issue)
+    @allow_permission([ROLE.ADMIN, ROLE.MEMBER], creator=True, model=Issue)
     def destroy(self, request, slug, project_id, pk=None):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.delete"):
+            return denied
+
         issue = Issue.objects.get(workspace__slug=slug, project_id=project_id, pk=pk)
 
         issue.delete()
@@ -860,6 +877,7 @@ class IssuePaginatedViewSet(BaseViewSet):
             "id",
             "name",
             "state_id",
+            "type_id",
             "state__group",
             "sort_order",
             "completed_at",

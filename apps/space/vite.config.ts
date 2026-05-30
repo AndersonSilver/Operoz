@@ -1,3 +1,4 @@
+import { createRequire } from "node:module";
 import path from "node:path";
 import * as dotenv from "dotenv";
 import { reactRouter } from "@react-router/dev/vite";
@@ -17,6 +18,20 @@ const viteEnv = Object.keys(process.env)
 
 const basePath = joinUrlPath(process.env.VITE_SPACE_BASE_PATH ?? "", "/") ?? "/";
 
+const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
+const requireEditor = createRequire(editorPkg);
+
+function prosemirrorEsmEntry(moduleName: string): string {
+  return path.join(path.dirname(requireEditor.resolve(moduleName)), "index.js");
+}
+
+const prosemirrorAliases = {
+  "prosemirror-state": prosemirrorEsmEntry("prosemirror-state"),
+  "prosemirror-view": prosemirrorEsmEntry("prosemirror-view"),
+  "prosemirror-model": prosemirrorEsmEntry("prosemirror-model"),
+  "prosemirror-transform": prosemirrorEsmEntry("prosemirror-transform"),
+} as const;
+
 export default defineConfig(() => ({
   base: basePath,
   define: {
@@ -28,6 +43,7 @@ export default defineConfig(() => ({
   plugins: [reactRouter(), tsconfigPaths({ projects: [path.resolve(__dirname, "tsconfig.json")] })],
   resolve: {
     alias: {
+      ...prosemirrorAliases,
       // Next.js compatibility shims used within space
       "next/navigation": path.resolve(__dirname, "app/compat/next/navigation.ts"),
     },

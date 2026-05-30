@@ -87,11 +87,44 @@ const detectMimeTypeFromSignature = async (file: File): Promise<string> => {
  * @param {File} file
  * @returns {Promise<string>} validated and detected MIME type
  */
+const inferMimeTypeFromFilename = (filename: string): string => {
+  const ext = filename.split(".").pop()?.toLowerCase() ?? "";
+  const map: Record<string, string> = {
+    html: "text/html",
+    htm: "text/html",
+    md: "text/markdown",
+    markdown: "text/markdown",
+    txt: "text/plain",
+    csv: "text/csv",
+    json: "application/json",
+    pdf: "application/pdf",
+  };
+  return map[ext] ?? "";
+};
+
 const validateAndDetectFileType = async (file: File): Promise<string> => {
   // Basic filename validation
   const filenameError = validateFilename(file.name);
   if (filenameError) {
     console.warn(`File validation warning: ${filenameError}`);
+  }
+
+  const htmlFromExtension = inferMimeTypeFromFilename(file.name) === "text/html";
+  if (htmlFromExtension) {
+    const fromBrowser = file.type?.trim() ?? "";
+    if (fromBrowser === "text/html" || fromBrowser === "application/xhtml+xml") {
+      return fromBrowser;
+    }
+    try {
+      const signatureType = await detectMimeTypeFromSignature(file);
+      if (signatureType === "text/html" || signatureType === "application/xhtml+xml") {
+        return signatureType;
+      }
+    } catch (_error) {
+      console.warn("Error detecting file type from signature:", _error);
+    }
+    // Magic-byte sniffing is unreliable for HTML; trust .html/.htm for editor/HTML embed uploads.
+    return "text/html";
   }
 
   try {
@@ -103,8 +136,12 @@ const validateAndDetectFileType = async (file: File): Promise<string> => {
     console.warn("Error detecting file type from signature:", _error);
   }
 
-  // fallback for unknown files
-  return "";
+  // fallback: browser-reported MIME, then extension (some browsers leave type empty for .html)
+  const fromBrowser = file.type?.trim() ?? "";
+  if (fromBrowser) return fromBrowser;
+
+  const fromName = inferMimeTypeFromFilename(file.name);
+  return fromName || "";
 };
 
 /**

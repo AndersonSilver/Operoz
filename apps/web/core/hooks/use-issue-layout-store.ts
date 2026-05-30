@@ -13,12 +13,19 @@ export const IssuesStoreContext = createContext<EIssuesStoreType | undefined>(un
 
 export const useIssueStoreType = () => {
   const storeType = useContext(IssuesStoreContext);
-  const { globalViewId, viewId, projectId, cycleId, moduleId, userId, epicId, teamspaceId } = useParams();
+  const { globalViewId, viewId, projectId, cycleId, moduleId, userId, epicId, teamspaceId, boardSlug } = useParams();
 
   // If store type exists in context, use that store type
   if (storeType) return storeType;
 
   // else check the router params to determine the issue store
+  if (boardSlug && typeof window !== "undefined") {
+    const path = window.location.pathname;
+    if (path.includes("/backlog") || path.includes("/list") || path.includes("/views") || path.includes("/timeline")) {
+      return EIssuesStoreType.BOARD;
+    }
+  }
+
   if (globalViewId) return EIssuesStoreType.GLOBAL;
 
   if (userId) return EIssuesStoreType.PROFILE;

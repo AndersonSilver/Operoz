@@ -8,6 +8,7 @@ import type { TLogoProps } from "../common";
 import type { TUserPermissions } from "../enums";
 import type { TStateGroups } from "../state";
 import type { IUser, IUserLite } from "../users";
+import type { IBoardLite } from "../board";
 import type { IWorkspace } from "../workspace";
 
 export enum EUserProjectRoles {
@@ -25,6 +26,8 @@ export interface IPartialProject {
   member_role?: TUserPermissions | EUserProjectRoles | null;
   archived_at: string | null;
   workspace: IWorkspace | string;
+  board_id?: string | null;
+  board?: IBoardLite | null;
   cycle_view: boolean;
   issue_views_view: boolean;
   module_view: boolean;
@@ -32,6 +35,8 @@ export interface IPartialProject {
   inbox_view: boolean;
   guest_view_all_features?: boolean;
   project_lead?: IUserLite | string | null;
+  /** Stakeholder responsável — usado no Status Report (Responsável cliente). */
+  responsible_stakeholder?: string;
   network?: number;
   // Timestamps
   created_at?: Date;

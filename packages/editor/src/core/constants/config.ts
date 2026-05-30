@@ -16,6 +16,8 @@ export const DEFAULT_DISPLAY_CONFIG: TDisplayConfig = {
 
 export const ACCEPTED_IMAGE_MIME_TYPES = ["image/jpeg", "image/jpg", "image/png", "image/webp", "image/gif"];
 
+export const ACCEPTED_HTML_DOCUMENT_MIME_TYPES = ["text/html", "application/xhtml+xml"];
+
 export const ACCEPTED_ATTACHMENT_MIME_TYPES = [
   "image/jpeg",
   "image/png",
@@ -32,6 +34,8 @@ export const ACCEPTED_ATTACHMENT_MIME_TYPES = [
   "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
   "text/plain",
+  "text/html",
+  "application/xhtml+xml",
   "text/markdown",
   "application/rtf",
   "audio/mpeg",

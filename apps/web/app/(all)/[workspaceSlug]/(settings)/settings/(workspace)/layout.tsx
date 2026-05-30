@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { Outlet } from "react-router";
 // components
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
-import { getWorkspaceActivePath, pathnameToAccessKey } from "@/components/settings/helper";
+import { getWorkspaceActivePath, isBoardDetailSettingsPath, pathnameToAccessKey } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 // plane imports
 import { WORKSPACE_SETTINGS_ACCESS } from "@plane/constants";
@@ -37,20 +37,26 @@ const WorkspaceSettingLayout = observer(function WorkspaceSettingLayout({ params
     isAuthorized = WORKSPACE_SETTINGS_ACCESS[accessKey]?.includes(userWorkspaceRole as EUserWorkspaceRoles);
   }
 
+  const hideWorkspaceSidebar = Boolean(pathname && isBoardDetailSettingsPath(pathname));
+
   return (
     <>
-      <SettingsMobileNav
-        hamburgerContent={WorkspaceSettingsSidebarRoot}
-        activePath={getWorkspaceActivePath(pathname) || ""}
-      />
+      {!hideWorkspaceSidebar && (
+        <SettingsMobileNav
+          hamburgerContent={WorkspaceSettingsSidebarRoot}
+          activePath={getWorkspaceActivePath(pathname) || ""}
+        />
+      )}
       <div className="inset-y-0 flex h-full w-full flex-row">
         {workspaceUserInfo && !isAuthorized ? (
           <NotAuthorizedView section="settings" className="h-auto" />
         ) : (
           <div className="relative flex size-full">
-            <div className="hidden h-full md:block">
-              <WorkspaceSettingsSidebarRoot />
-            </div>
+            {!hideWorkspaceSidebar && (
+              <div className="hidden h-full shrink-0 md:block">
+                <WorkspaceSettingsSidebarRoot />
+              </div>
+            )}
             <Outlet />
           </div>
         )}

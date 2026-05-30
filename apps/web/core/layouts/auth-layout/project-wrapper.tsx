@@ -82,7 +82,8 @@ export const ProjectAuthWrapper = observer(function ProjectAuthWrapper(props: IP
   // fetching project details
   const { isLoading: isProjectDetailsLoading, error: projectDetailsError } = useSWR(
     PROJECT_DETAILS(workspaceSlug, projectId),
-    () => fetchProjectDetails(workspaceSlug, projectId)
+    () => fetchProjectDetails(workspaceSlug, projectId),
+    { revalidateIfStale: false, revalidateOnFocus: false, shouldRetryOnError: false }
   );
   // fetching user project member information
   useSWR(PROJECT_ME_INFORMATION(workspaceSlug, projectId), () => fetchUserProjectInfo(workspaceSlug, projectId));

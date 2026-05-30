@@ -9,6 +9,7 @@ import { PowerKOpenProjectCyclesMenu } from "./project-cycles-menu";
 import { PowerKOpenProjectModulesMenu } from "./project-modules-menu";
 import { PowerKOpenProjectSettingsMenu } from "./project-settings-menu";
 import { PowerKOpenProjectViewsMenu } from "./project-views-menu";
+import { PowerKOpenBoardMenu } from "./boards-menu";
 import { PowerKOpenProjectMenu } from "./projects-menu";
 import type { TPowerKOpenEntityActionsProps } from "./shared";
 import { PowerKOpenWorkspaceSettingsMenu } from "./workspace-settings-menu";
@@ -21,6 +22,7 @@ export function PowerKOpenEntityPages(props: TPowerKOpenEntityActionsProps) {
     <>
       {activePage === "open-workspace" && <PowerKOpenWorkspaceMenu handleSelect={handleSelection} />}
       {activePage === "open-project" && <PowerKOpenProjectMenu handleSelect={handleSelection} />}
+      {activePage === "open-board" && <PowerKOpenBoardMenu handleSelect={handleSelection} />}
       {activePage === "open-workspace-setting" && (
         <PowerKOpenWorkspaceSettingsMenu context={context} handleSelect={handleSelection} />
       )}

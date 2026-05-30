@@ -43,7 +43,13 @@ function Breadcrumbs({ className, children, onBack, isLoading = false }: Breadcr
   const childrenArray = React.Children.toArray(children);
 
   return (
-    <div className={cn("flex flex-grow items-center gap-0.5 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "min-w-0 flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:thin]",
+        className
+      )}
+    >
+      <div className="flex w-max max-w-none flex-nowrap items-center gap-0.5">
       {!isSmallScreen && (
         <>
           {childrenArray.map((child, index) => {
@@ -88,6 +94,7 @@ function Breadcrumbs({ className, children, onBack, isLoading = false }: Breadcr
         </>
       )}
       {isSmallScreen && childrenArray.length === 1 && childrenArray}
+      </div>
     </div>
   );
 }
@@ -102,7 +109,7 @@ type BreadcrumbItemProps = {
 function BreadcrumbItem(props: BreadcrumbItemProps) {
   const { component, showSeparator = true, isLast = false } = props;
   return (
-    <div className="flex h-6 items-center gap-0.5">
+    <div className="flex h-6 shrink-0 items-center gap-0.5">
       {component}
       {showSeparator && !isLast && <BreadcrumbSeparator />}
     </div>
@@ -129,7 +136,7 @@ type BreadcrumbLabelProps = {
 function BreadcrumbLabel(props: BreadcrumbLabelProps) {
   const { children, className } = props;
   return (
-    <div className={cn("relative line-clamp-1 block max-w-[150px] truncate overflow-hidden", className)}>
+    <div className={cn("relative whitespace-nowrap", className)}>
       {children}
     </div>
   );

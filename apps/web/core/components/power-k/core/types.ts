@@ -36,6 +36,7 @@ export type TPowerKPageType =
   // open entity based actions
   | "open-workspace"
   | "open-project"
+  | "open-board"
   | "open-workspace-setting"
   | "open-project-cycle"
   | "open-project-module"

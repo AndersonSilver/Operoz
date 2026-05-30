@@ -35,7 +35,7 @@ def forgot_password(first_name, email, uidb64, token, current_site):
             EMAIL_FROM,
         ) = get_email_configuration()
 
-        subject = "A new password to your Plane account has been requested"
+        subject = "Redefinição de senha solicitada na sua conta Tech4Humans"
 
         context = {
             "first_name": first_name,

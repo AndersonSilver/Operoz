@@ -17,6 +17,7 @@ import {
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
 } from "@plane/constants";
+import { useTranslation } from "@plane/i18n";
 import { Button } from "@plane/propel/button";
 import { ModuleIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
@@ -24,9 +25,11 @@ import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDispl
 import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
 import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@plane/ui";
 import { cn } from "@plane/utils";
+import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
+import { CountChip } from "@/components/common/count-chip";
 import { SwitcherLabel } from "@/components/common/switcher-label";
 import {
   DisplayFiltersSelection,
@@ -51,19 +54,16 @@ import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/com
 import { IconButton } from "@plane/propel/icon-button";
 
 export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
-  // refs
   const parentRef = useRef<HTMLDivElement>(null);
-  // states
   const [analyticsModal, setAnalyticsModal] = useState(false);
-  // router
   const router = useAppRouter();
   const { workspaceSlug, projectId, moduleId: routerModuleId } = useParams();
   const moduleId = routerModuleId ? routerModuleId.toString() : undefined;
-  // hooks
   const { isMobile } = usePlatformOS();
-  // store hooks
+  const { t } = useTranslation();
+  const hasBoardWallpaper = useBoardHubHasBackground();
   const {
-    issuesFilter: { issueFilters },
+    issuesFilter,
     issues: { getGroupIssueCount },
   } = useIssues(EIssuesStoreType.MODULE);
   const { updateFilters } = useIssuesActions(EIssuesStoreType.MODULE);
@@ -71,11 +71,13 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
   const { toggleCreateIssueModal } = useCommandPalette();
   const { allowPermissions } = useUserPermissions();
   const { currentProjectDetails, loader } = useProject();
-  // local storage
   const { setValue, storedValue } = useLocalStorage("module_sidebar_collapsed", "false");
-  // derived values
-  const isSidebarCollapsed = storedValue ? (storedValue === "true" ? true : false) : false;
-  const activeLayout = issueFilters?.displayFilters?.layout;
+  const isSidebarCollapsed = storedValue ? storedValue === "true" : false;
+  const issueFilters = moduleId ? issuesFilter.getIssueFilters(moduleId) : undefined;
+  const activeLayout = issueFilters?.displayFilters?.layout ?? EIssueLayoutTypes.LIST;
+  const layoutDisplayFiltersOptions =
+    ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] ??
+    ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[EIssueLayoutTypes.LIST];
   const moduleDetails = moduleId ? getModuleById(moduleId) : undefined;
   const canUserCreateIssue = allowPermissions(
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
@@ -131,21 +133,19 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
         moduleDetails={moduleDetails ?? undefined}
         projectDetails={currentProjectDetails}
       />
-      <Header>
-        <Header.LeftItem>
-          <div className="flex items-center gap-2">
-            <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
+      <Header className={cn(hasBoardWallpaper && "!bg-transparent")}>
+        <Header.LeftItem className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <Breadcrumbs className="min-w-0 flex-1" onBack={router.back} isLoading={loader === "init-loader"}>
               <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
               <Breadcrumbs.Item
                 component={
                   <BreadcrumbLink
-                    label="Modules"
+                    label={t("common.modules")}
                     href={`/${workspaceSlug}/projects/${projectId}/modules/`}
                     icon={<ModuleIcon className="h-4 w-4 text-tertiary" />}
-                    isLast
                   />
                 }
-                isLast
               />
               <Breadcrumbs.Item
                 component={
@@ -160,113 +160,113 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
                     isLast
                   />
                 }
+                isLast
               />
             </Breadcrumbs>
             {workItemsCount && workItemsCount > 0 ? (
               <Tooltip
                 isMobile={isMobile}
-                tooltipContent={`There are ${workItemsCount} ${
-                  workItemsCount > 1 ? "work items" : "work item"
-                } in this module`}
+                tooltipContent={t("project_modules.detail.work_items_count_tooltip", { count: workItemsCount })}
                 position="bottom"
               >
-                <span className="flex flex-shrink-0 cursor-default items-center justify-center rounded-xl bg-accent-primary/20 px-2 text-center text-11 font-semibold text-accent-primary">
-                  {workItemsCount}
-                </span>
+                <CountChip count={workItemsCount} />
               </Tooltip>
             ) : null}
           </div>
         </Header.LeftItem>
-        <Header.RightItem className="items-center">
-          <div className="hidden gap-2 md:flex">
-            <div className="hidden @4xl:flex">
-              <LayoutSelection
-                layouts={[
-                  EIssueLayoutTypes.LIST,
-                  EIssueLayoutTypes.KANBAN,
-                  EIssueLayoutTypes.CALENDAR,
-                  EIssueLayoutTypes.SPREADSHEET,
-                  EIssueLayoutTypes.GANTT,
-                ]}
-                onChange={(layout) => handleLayoutChange(layout)}
-                selectedLayout={activeLayout}
-              />
-            </div>
-            <div className="flex @4xl:hidden">
-              <MobileLayoutSelection
-                layouts={[
-                  EIssueLayoutTypes.LIST,
-                  EIssueLayoutTypes.KANBAN,
-                  EIssueLayoutTypes.CALENDAR,
-                  EIssueLayoutTypes.SPREADSHEET,
-                  EIssueLayoutTypes.GANTT,
-                ]}
-                onChange={(layout) => handleLayoutChange(layout)}
-                activeLayout={activeLayout}
-              />
-            </div>
-            {moduleId && <WorkItemFiltersToggle entityType={EIssuesStoreType.MODULE} entityId={moduleId} />}
-            <FiltersDropdown
-              title="Display"
-              placement="bottom-end"
-              miniIcon={<SlidersHorizontal className="size-3.5" />}
-            >
-              <DisplayFiltersSelection
-                layoutDisplayFiltersOptions={
-                  activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
-                }
-                displayFilters={issueFilters?.displayFilters ?? {}}
-                handleDisplayFiltersUpdate={handleDisplayFilters}
-                displayProperties={issueFilters?.displayProperties ?? {}}
-                handleDisplayPropertiesUpdate={handleDisplayProperties}
-                ignoreGroupedFilters={["module"]}
-                cycleViewDisabled={!currentProjectDetails?.cycle_view}
-                moduleViewDisabled={!currentProjectDetails?.module_view}
-              />
-            </FiltersDropdown>
-          </div>
-
-          {canUserCreateIssue ? (
-            <>
-              <Button className="hidden md:block" onClick={() => setAnalyticsModal(true)} variant="secondary" size="lg">
-                <span className="hidden @4xl:flex">Analytics</span>
-                <span className="@4xl:hidden">
-                  <ChartNoAxesColumn className="size-3.5" />
-                </span>
-              </Button>
-              <Button
-                variant="primary"
-                size="lg"
-                className="hidden sm:flex"
-                onClick={() => {
-                  toggleCreateIssueModal(true, EIssuesStoreType.MODULE);
-                }}
-                data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.MODULE}
+        <Header.RightItem className="shrink-0">
+          <div
+            className={cn(
+              "flex flex-wrap items-center justify-end gap-2",
+              hasBoardWallpaper && BOARD_HUB_TOOLBAR_CLUSTER
+            )}
+          >
+            <div className="hidden items-center gap-2 md:flex">
+              <div className="hidden @4xl:flex">
+                <LayoutSelection
+                  layouts={[
+                    EIssueLayoutTypes.LIST,
+                    EIssueLayoutTypes.KANBAN,
+                    EIssueLayoutTypes.CALENDAR,
+                    EIssueLayoutTypes.SPREADSHEET,
+                    EIssueLayoutTypes.GANTT,
+                  ]}
+                  onChange={(layout) => handleLayoutChange(layout)}
+                  selectedLayout={activeLayout}
+                />
+              </div>
+              <div className="flex @4xl:hidden">
+                <MobileLayoutSelection
+                  layouts={[
+                    EIssueLayoutTypes.LIST,
+                    EIssueLayoutTypes.KANBAN,
+                    EIssueLayoutTypes.CALENDAR,
+                    EIssueLayoutTypes.SPREADSHEET,
+                    EIssueLayoutTypes.GANTT,
+                  ]}
+                  onChange={(layout) => handleLayoutChange(layout)}
+                  activeLayout={activeLayout}
+                />
+              </div>
+              {moduleId && <WorkItemFiltersToggle entityType={EIssuesStoreType.MODULE} entityId={moduleId} />}
+              <FiltersDropdown
+                title={t("common.display")}
+                placement="bottom-end"
+                miniIcon={<SlidersHorizontal className="size-3.5" />}
               >
-                Add work item
-              </Button>
-            </>
-          ) : (
-            <></>
-          )}
-          <IconButton
-            variant="tertiary"
-            size="lg"
-            icon={PanelRight}
-            onClick={toggleSidebar}
-            className={cn({
-              "bg-accent-subtle text-accent-primary": !isSidebarCollapsed,
-            })}
-          />
-          {moduleId && (
-            <ModuleQuickActions
-              parentRef={parentRef}
-              moduleId={moduleId}
-              projectId={projectId.toString()}
-              workspaceSlug={workspaceSlug.toString()}
-              customClassName="flex-shrink-0 flex items-center justify-center bg-layer-1/70 rounded-sm size-[26px]"
+                <DisplayFiltersSelection
+                  layoutDisplayFiltersOptions={layoutDisplayFiltersOptions}
+                  displayFilters={issueFilters?.displayFilters ?? {}}
+                  handleDisplayFiltersUpdate={handleDisplayFilters}
+                  displayProperties={issueFilters?.displayProperties ?? {}}
+                  handleDisplayPropertiesUpdate={handleDisplayProperties}
+                  ignoreGroupedFilters={["module"]}
+                  cycleViewDisabled={!currentProjectDetails?.cycle_view}
+                  moduleViewDisabled={!currentProjectDetails?.module_view}
+                />
+              </FiltersDropdown>
+            </div>
+
+            {canUserCreateIssue ? (
+              <>
+                <Button className="hidden md:flex" onClick={() => setAnalyticsModal(true)} variant="secondary" size="lg">
+                  <span className="hidden @4xl:flex">{t("common.analytics")}</span>
+                  <span className="@4xl:hidden">
+                    <ChartNoAxesColumn className="size-3.5" />
+                  </span>
+                </Button>
+                <Button
+                  variant="primary"
+                  size="lg"
+                  className="hidden sm:flex shrink-0"
+                  onClick={() => {
+                    toggleCreateIssueModal(true, EIssuesStoreType.MODULE);
+                  }}
+                  data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.MODULE}
+                >
+                  {t("issue.add.label")}
+                </Button>
+              </>
+            ) : null}
+            <IconButton
+              variant="tertiary"
+              size="lg"
+              icon={PanelRight}
+              onClick={toggleSidebar}
+              className={cn({
+                "bg-accent-subtle text-accent-primary": !isSidebarCollapsed,
+              })}
             />
-          )}
+            {moduleId && (
+              <ModuleQuickActions
+                parentRef={parentRef}
+                moduleId={moduleId}
+                projectId={projectId.toString()}
+                workspaceSlug={workspaceSlug.toString()}
+                customClassName="flex size-[26px] shrink-0 items-center justify-center rounded-sm bg-layer-1/70"
+              />
+            )}
+          </div>
         </Header.RightItem>
       </Header>
     </>

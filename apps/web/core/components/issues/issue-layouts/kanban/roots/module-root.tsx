@@ -4,31 +4,32 @@
  * See the LICENSE file for details.
  */
 
-import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
 import { EIssuesStoreType } from "@plane/types";
-// hooks
 import { useIssues } from "@/hooks/store/use-issues";
-// local imports
-import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
-import { BaseKanBanRoot } from "../base-kanban-root";
+import { WorkspaceKanbanRoot } from "./workspace-root";
 
 export const ModuleKanBanLayout = observer(function ModuleKanBanLayout() {
   const { workspaceSlug, projectId, moduleId } = useParams();
-
-  // store
   const { issues } = useIssues(EIssuesStoreType.MODULE);
 
+  const moduleIdStr = moduleId?.toString();
+
+  if (!moduleIdStr) return null;
+
   return (
-    <BaseKanBanRoot
-      QuickActions={ModuleIssueQuickActions}
+    <WorkspaceKanbanRoot
+      viewId={moduleIdStr}
       addIssuesToView={(issueIds: string[]) => {
-        if (!workspaceSlug || !projectId || !moduleId) throw new Error();
-        return issues.addIssuesToModule(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), issueIds);
+        if (!workspaceSlug || !projectId) throw new Error();
+        return issues.addIssuesToModule(
+          workspaceSlug.toString(),
+          projectId.toString(),
+          moduleIdStr,
+          issueIds
+        );
       }}
-      viewId={moduleId?.toString()}
     />
   );
 });

@@ -4,10 +4,11 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 // plane constants
 import { ALL_ISSUES } from "@plane/constants";
 // types
@@ -22,9 +23,12 @@ import type {
   IGroupByColumn,
   TIssueKanbanFilters,
 } from "@plane/types";
+import { EIssuesStoreType } from "@plane/types";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 // hooks
+import { useProjectEstimates } from "@/hooks/store/estimates";
+import { useProject } from "@/hooks/store/use-project";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 // plane web components
 import { IssueBulkOperationsRoot } from "@/plane-web/components/issues/bulk-operations";
@@ -34,6 +38,7 @@ import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-sta
 import type { GroupDropLocation } from "../utils";
 import { getGroupByColumns, isWorkspaceLevel, isSubGrouped } from "../utils";
 import { ListGroup } from "./list-group";
+import { ListGridColumnsProvider } from "./list-grid-columns-context";
 import type { TRenderQuickActions } from "./list-view-types";
 
 export interface IList {
@@ -82,8 +87,32 @@ export const List = observer(function List(props: IList) {
   } = props;
 
   const storeType = useIssueStoreType();
+  const { workspaceSlug, projectId: routerProjectId, boardSlug } = useParams();
+  const { currentProjectDetails } = useProject();
+  const { areEstimateEnabledByProjectId } = useProjectEstimates();
   // plane web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
+
+  const useListGridLayout =
+    storeType === EIssuesStoreType.MODULE ||
+    storeType === EIssuesStoreType.PROJECT ||
+    storeType === EIssuesStoreType.BOARD;
+
+  const listGridStorageKey = useMemo(() => {
+    if (!workspaceSlug || !useListGridLayout) return undefined;
+    if (storeType === EIssuesStoreType.BOARD && boardSlug) {
+      return `plane-list-grid-columns:${workspaceSlug}:board:${boardSlug}`;
+    }
+    if (routerProjectId) {
+      const scope = storeType === EIssuesStoreType.MODULE ? "module" : "project";
+      return `plane-list-grid-columns:${workspaceSlug}:${scope}:${routerProjectId}`;
+    }
+    return undefined;
+  }, [workspaceSlug, boardSlug, routerProjectId, storeType, useListGridLayout]);
+
+  const estimateEnabled = Boolean(
+    currentProjectDetails?.id && areEstimateEnabledByProjectId(currentProjectDetails.id)
+  );
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -128,7 +157,7 @@ export const List = observer(function List(props: IList) {
   } else {
     entities = orderedGroups;
   }
-  return (
+  const listContent = (
     <div className="relative flex size-full flex-col">
       {groups && (
         <MultipleSelectGroup
@@ -178,5 +207,21 @@ export const List = observer(function List(props: IList) {
         </MultipleSelectGroup>
       )}
     </div>
+  );
+
+  if (!useListGridLayout || !displayProperties) return listContent;
+
+  return (
+    <ListGridColumnsProvider
+      displayProperties={displayProperties}
+      isEpic={isEpic}
+      crossProject={storeType === EIssuesStoreType.BOARD}
+      showModules={Boolean(currentProjectDetails?.module_view)}
+      showCycles={Boolean(currentProjectDetails?.cycle_view)}
+      showEstimate={estimateEnabled}
+      storageKey={listGridStorageKey}
+    >
+      {listContent}
+    </ListGridColumnsProvider>
   );
 });

@@ -86,7 +86,10 @@ export function InstanceSetupForm() {
 
   useEffect(() => {
     if (csrfToken === undefined)
-      authService.requestCSRFToken().then((data) => data?.csrf_token && setCsrfToken(data.csrf_token));
+      void authService
+        .requestCSRFToken()
+        .then((data) => data?.csrf_token && setCsrfToken(data.csrf_token))
+        .catch(() => {});
   }, [csrfToken]);
 
   useEffect(() => {

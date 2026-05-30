@@ -8,6 +8,7 @@
 
 import { findChildren } from "@tiptap/core";
 import type { Node as ProsemirrorNode } from "@tiptap/pm/model";
+import type { Mapping } from "@tiptap/pm/transform";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 import { Decoration, DecorationSet } from "@tiptap/pm/view";
 import highlight from "highlight.js/lib/core";
@@ -146,7 +147,7 @@ export function LowlightPlugin({
           });
         }
 
-        return decorationSet.map(transaction.mapping, transaction.doc);
+        return decorationSet.map(transaction.mapping as Mapping, transaction.doc);
       },
     },
 

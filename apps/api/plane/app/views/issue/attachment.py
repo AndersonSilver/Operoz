@@ -27,6 +27,11 @@ from plane.settings.storage import S3Storage
 from plane.utils.path_validator import sanitize_filename
 from plane.bgtasks.storage_metadata_task import get_asset_object_metadata
 from plane.utils.host import base_host
+from plane.utils.board_permission_enforcement import (
+    deny_board_permission,
+    deny_for_attachment_delete,
+    get_project_for_enforcement,
+)
 
 
 class IssueAttachmentEndpoint(BaseAPIView):
@@ -36,6 +41,9 @@ class IssueAttachmentEndpoint(BaseAPIView):
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def post(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.attachments.add"):
+            return denied
         serializer = IssueAttachmentSerializer(data=request.data)
         workspace = Workspace.objects.get(slug=slug)
         if serializer.is_valid():
@@ -69,6 +77,11 @@ class IssueAttachmentEndpoint(BaseAPIView):
                 {"error": "Issue attachment not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_attachment_delete(
+            request.user, project, asset_created_by_id=issue_attachment.created_by_id
+        ):
+            return denied
         issue_attachment.asset.delete(save=False)
         issue_attachment.delete()
         issue_activity.delay(
@@ -98,6 +111,9 @@ class IssueAttachmentV2Endpoint(BaseAPIView):
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def post(self, request, slug, project_id, issue_id):
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_board_permission(request.user, project, "items.attachments.add"):
+            return denied
         name = sanitize_filename(request.data.get("name")) or "unnamed"
         type = request.data.get("type", False)
         size = int(request.data.get("size", settings.FILE_SIZE_LIMIT))
@@ -149,6 +165,11 @@ class IssueAttachmentV2Endpoint(BaseAPIView):
     @allow_permission([ROLE.ADMIN], creator=True, model=FileAsset)
     def delete(self, request, slug, project_id, issue_id, pk):
         issue_attachment = FileAsset.objects.get(pk=pk, workspace__slug=slug, project_id=project_id)
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_attachment_delete(
+            request.user, project, asset_created_by_id=issue_attachment.created_by_id
+        ):
+            return denied
         issue_attachment.is_deleted = True
         issue_attachment.deleted_at = timezone.now()
         issue_attachment.save()

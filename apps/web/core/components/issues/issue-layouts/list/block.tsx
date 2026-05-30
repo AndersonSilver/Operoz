@@ -15,7 +15,7 @@ import { ChevronRightIcon } from "@plane/propel/icons";
 import { TOAST_TYPE, setToast } from "@plane/propel/toast";
 import { Tooltip } from "@plane/propel/tooltip";
 import type { TIssue, IIssueDisplayProperties, TIssueMap } from "@plane/types";
-import { EIssueServiceType } from "@plane/types";
+import { EIssueServiceType, EIssuesStoreType } from "@plane/types";
 // ui
 import { Spinner, ControlLink, Row } from "@plane/ui";
 import { cn, generateWorkItemLink } from "@plane/utils";
@@ -29,6 +29,8 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
+import { useListGridColumnsContextOptional } from "./list-grid-columns-context";
 // plane web components
 import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
 import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
@@ -36,6 +38,23 @@ import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-st
 import { WithDisplayPropertiesHOC } from "../properties/with-display-properties-HOC";
 import { calculateIdentifierWidth } from "../utils";
 import type { TRenderQuickActions } from "./list-view-types";
+
+/** Na lista do board, exibe só o nome do card (sem prefixo do projeto/épico no título). */
+function getBoardListIssueTitle(issueName: string, projectName?: string): string {
+  let name = issueName.trim();
+
+  if (projectName) {
+    const project = projectName.trim();
+    if (project && name.startsWith(project)) {
+      name = name.slice(project.length).replace(/^[\s\-–—:]+/, "").trim();
+    }
+  }
+
+  // Remove prefixos do tipo "[ MÓDULO ] - " repetidos no início do título
+  name = name.replace(/^(?:\[[^\]]+\]\s*)+(?:[-–—]\s*)+/, "").trim();
+
+  return name || issueName;
+}
 
 interface IssueBlockProps {
   issueId: string;
@@ -83,7 +102,16 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
   const projectId = routerProjectId?.toString();
   // hooks
   const { sidebarCollapsed: isSidebarCollapsed } = useAppTheme();
-  const { getProjectIdentifierById, currentProjectNextSequenceId } = useProject();
+  const storeType = useIssueStoreType();
+  const useListGridLayout =
+    storeType === EIssuesStoreType.MODULE ||
+    storeType === EIssuesStoreType.PROJECT ||
+    storeType === EIssuesStoreType.BOARD;
+  const useListRowLayout = useListGridLayout;
+  const listGridCtx = useListGridColumnsContextOptional();
+  const useAlignedListGrid = useListGridLayout && !!listGridCtx;
+  const propertiesLayoutVariant = useListGridLayout ? "list-grid" : "flex";
+  const { getProjectIdentifierById, getPartialProjectById, currentProjectNextSequenceId } = useProject();
   const {
     getIsIssuePeeked,
     peekIssue,
@@ -136,6 +164,12 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
   if (!issue) return null;
 
   const projectIdentifier = getProjectIdentifierById(issue.project_id);
+  const isBoardList = storeType === EIssuesStoreType.BOARD;
+  const boardListProjectName =
+    isBoardList && issue.project_id ? getPartialProjectById(issue.project_id)?.name : undefined;
+  const issueDisplayName = isBoardList
+    ? getBoardListIssueTitle(issue.name, boardListProjectName)
+    : issue.name;
   const isIssueSelected = selectionHelpers.getIsEntitySelected(issue.id);
   const isIssueActive = selectionHelpers.getIsEntityActive(issue.id);
   const isSubIssue = nestingLevel !== 0;
@@ -184,17 +218,29 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
       <Row
         ref={issueRef}
         className={cn(
-          "group/list-block relative flex min-h-11 flex-col gap-3 bg-layer-transparent py-3 text-13 transition-colors hover:bg-layer-transparent-hover",
+          "group/list-block relative min-h-11 bg-layer-transparent text-13 transition-colors hover:bg-layer-transparent-hover",
+          useAlignedListGrid
+            ? "grid w-full min-w-max items-center gap-0 py-2.5 pr-3 pl-3"
+            : cn(
+                "flex min-w-full flex-col",
+                useListGridLayout ? "gap-2 py-2.5 sm:flex-row sm:items-center sm:gap-0" : "gap-3 py-3"
+              ),
           {
             "border-accent-strong": getIsIssuePeeked(issue.id) && peekIssue?.nestingLevel === nestingLevel,
             "border-strong-1": isIssueActive,
             "last:border-b-transparent": !getIsIssuePeeked(issue.id) && !isIssueActive,
             "bg-accent-primary/5 hover:bg-accent-primary/10": isIssueSelected,
             "bg-layer-1": isCurrentBlockDragging,
-            "md:flex-row md:items-center": isSidebarCollapsed,
-            "lg:flex-row lg:items-center": !isSidebarCollapsed,
+            "sm:flex-row sm:items-center": useListRowLayout && !useAlignedListGrid && !useListGridLayout,
+            "md:flex-row md:items-center": isSidebarCollapsed && !useListRowLayout && !useAlignedListGrid,
+            "lg:flex-row lg:items-center": !isSidebarCollapsed && !useListRowLayout && !useAlignedListGrid,
           }
         )}
+        style={
+          useAlignedListGrid && listGridCtx
+            ? { gridTemplateColumns: listGridCtx.layoutGridTemplateColumns }
+            : undefined
+        }
         onDragStart={() => {
           if (!isDraggingAllowed) {
             setToast({
@@ -207,8 +253,19 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
           }
         }}
       >
-        <div className="flex w-full gap-2 truncate">
-          <div className="flex flex-grow items-center gap-0.5 truncate">
+        <div
+          className={cn(
+            useAlignedListGrid
+              ? "flex min-w-0 items-center gap-1.5 overflow-hidden pr-3"
+              : cn("flex min-w-0", useListGridLayout ? "flex-1 gap-2 sm:pr-2" : "w-full gap-2")
+          )}
+        >
+          <div
+            className={cn(
+              "flex min-w-0 items-center gap-1.5 overflow-hidden",
+              useAlignedListGrid ? "w-full" : "flex-1"
+            )}
+          >
             <div className="flex items-center gap-1" style={isSubIssue ? { marginLeft } : {}}>
               {/* select checkbox */}
               {projectId && canSelectIssues && !isEpic && (
@@ -276,13 +333,15 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
             </div>
 
             <Tooltip
-              tooltipContent={issue.name}
+              tooltipContent={issueDisplayName}
               isMobile={isMobile}
               position="top-start"
               disabled={isCurrentBlockDragging}
               renderByDefault={false}
             >
-              <p className="cursor-pointer truncate text-body-xs-medium text-primary">{issue.name}</p>
+              <p className="min-w-0 flex-1 cursor-pointer truncate text-body-xs-medium text-primary">
+                {issueDisplayName}
+              </p>
             </Tooltip>
             {isEpic && displayProperties && (
               <WithDisplayPropertiesHOC
@@ -294,7 +353,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
               </WithDisplayPropertiesHOC>
             )}
           </div>
-          {!issue?.tempId && (
+          {!issue?.tempId && !useAlignedListGrid && (
             <div
               className={cn("block rounded-sm border border-strong", {
                 "md:hidden": isSidebarCollapsed,
@@ -308,40 +367,94 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
             </div>
           )}
         </div>
-        <div className="flex flex-shrink-0 items-center gap-2">
-          {!issue?.tempId ? (
-            <>
-              <IssueProperties
-                className={`relative flex flex-wrap ${isSidebarCollapsed ? "md:flex-shrink-0 md:flex-grow" : "lg:flex-shrink-0 lg:flex-grow"} items-center gap-2 whitespace-nowrap`}
-                issue={issue}
-                isReadOnly={!canEditIssueProperties}
-                updateIssue={updateIssue}
-                displayProperties={displayProperties}
-                activeLayout="List"
-                isEpic={isEpic}
-              />
-              <div
-                className={cn("hidden", {
-                  "md:flex": isSidebarCollapsed,
-                  "lg:flex": !isSidebarCollapsed,
-                })}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                {quickActions({
-                  issue,
-                  parentRef: issueRef,
-                })}
-              </div>
-            </>
-          ) : (
-            <div className="h-4 w-4">
-              <Spinner className="h-4 w-4" />
+
+        {useAlignedListGrid ? (
+          <>
+            <div className="min-w-0 border-l border-subtle pl-3">
+              {!issue?.tempId ? (
+                <IssueProperties
+                  className="relative w-full min-w-0"
+                  issue={issue}
+                  isReadOnly={!canEditIssueProperties}
+                  updateIssue={updateIssue}
+                  displayProperties={displayProperties}
+                  activeLayout="List"
+                  isEpic={isEpic}
+                  layoutVariant="list-grid"
+                />
+              ) : (
+                <div className="col-span-full flex justify-center py-1">
+                  <Spinner className="h-4 w-4" />
+                </div>
+              )}
             </div>
-          )}
-        </div>
+            <div
+              className="flex w-8 shrink-0 items-center justify-center"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+              }}
+            >
+              {!issue?.tempId ? (
+                quickActions({ issue, parentRef: issueRef })
+              ) : (
+                <Spinner className="h-4 w-4" />
+              )}
+            </div>
+          </>
+        ) : (
+          <div
+            className={cn(
+              "flex shrink-0 items-center",
+              useListGridLayout
+                ? "w-full gap-2 sm:ml-2 sm:w-auto sm:border-l sm:border-subtle sm:pl-3"
+                : "gap-2"
+            )}
+          >
+            {!issue?.tempId ? (
+              <>
+                <IssueProperties
+                  className={cn(
+                    "relative flex items-center whitespace-nowrap",
+                    useListGridLayout
+                      ? "w-full min-w-0"
+                      : cn(
+                          "flex-wrap gap-2",
+                          isSidebarCollapsed ? "md:flex-shrink-0 md:flex-grow" : "lg:flex-shrink-0 lg:flex-grow"
+                        )
+                  )}
+                  issue={issue}
+                  isReadOnly={!canEditIssueProperties}
+                  updateIssue={updateIssue}
+                  displayProperties={displayProperties}
+                  activeLayout="List"
+                  isEpic={isEpic}
+                  layoutVariant={propertiesLayoutVariant}
+                />
+                <div
+                  className={cn(
+                    useListGridLayout
+                      ? "hidden sm:flex sm:w-8 sm:shrink-0 sm:justify-center"
+                      : cn("hidden", {
+                          "md:flex": isSidebarCollapsed,
+                          "lg:flex": !isSidebarCollapsed,
+                        })
+                  )}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                  }}
+                >
+                  {quickActions({ issue, parentRef: issueRef })}
+                </div>
+              </>
+            ) : (
+              <div className="h-4 w-4">
+                <Spinner className="h-4 w-4" />
+              </div>
+            )}
+          </div>
+        )}
       </Row>
     </ControlLink>
   );

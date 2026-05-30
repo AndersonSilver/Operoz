@@ -11,6 +11,7 @@ import { useTranslation } from "@plane/i18n";
 import { PageIcon } from "@plane/propel/icons";
 // ui
 import { CustomMenu } from "@plane/ui";
+import { cn } from "@plane/utils";
 // components
 import { ProductUpdatesModal } from "@/components/global";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
@@ -33,13 +34,14 @@ export const HelpMenuRoot = observer(function HelpMenuRoot() {
 
       <CustomMenu
         customButton={
-          <AppSidebarItem
-            variant="button"
-            item={{
-              icon: <HelpCircle className="size-5" />,
-              isActive: isNeedHelpOpen,
-            }}
-          />
+          <div
+            className={cn(
+              "group flex flex-col items-center justify-center gap-0.5 text-tertiary",
+              isNeedHelpOpen && "text-secondary"
+            )}
+          >
+            <AppSidebarItem.Icon icon={<HelpCircle className="size-5" />} highlight={isNeedHelpOpen} />
+          </div>
         }
         // customButtonClassName="relative grid place-items-center rounded-md p-1.5 outline-none"
         menuButtonOnClick={() => !isNeedHelpOpen && setIsNeedHelpOpen(true)}

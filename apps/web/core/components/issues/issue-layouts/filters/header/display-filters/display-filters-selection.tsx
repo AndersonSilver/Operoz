@@ -58,8 +58,16 @@ export const DisplayFiltersSelection = observer(function DisplayFiltersSelection
     ignoreGroupedFilters.push("module");
   }
 
+  if (!layoutDisplayFiltersOptions) {
+    return (
+      <div className="px-3 py-4 text-caption-sm-regular text-tertiary">
+        A carregar opções de exibição…
+      </div>
+    );
+  }
+
   return (
-    <div className="vertical-scrollbar relative scrollbar-sm h-full w-full divide-y divide-subtle-1 overflow-hidden overflow-y-auto px-2.5">
+    <div className="vertical-scrollbar scrollbar-sm max-h-[min(28rem,65vh)] w-full divide-y divide-subtle-1 overflow-y-auto px-2.5 py-1">
       {/* display properties */}
       {layoutDisplayFiltersOptions?.display_properties && layoutDisplayFiltersOptions.display_properties.length > 0 && (
         <div className="py-2">

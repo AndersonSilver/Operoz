@@ -18,6 +18,7 @@ from plane.license.api.views import (
     InstanceAdminUserSessionEndpoint,
     InstanceWorkSpaceAvailabilityCheckEndpoint,
     InstanceWorkSpaceEndpoint,
+    InstanceWorkspaceIssueNotificationFlagsEndpoint,
 )
 
 urlpatterns = [
@@ -71,4 +72,9 @@ urlpatterns = [
         name="instance-workspace-availability",
     ),
     path("workspaces/", InstanceWorkSpaceEndpoint.as_view(), name="instance-workspace"),
+    path(
+        "workspaces/<uuid:workspace_id>/issue-notification-flags/",
+        InstanceWorkspaceIssueNotificationFlagsEndpoint.as_view(),
+        name="instance-workspace-issue-notification-flags",
+    ),
 ]

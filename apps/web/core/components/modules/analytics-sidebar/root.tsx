@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useEffect, useState } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
@@ -77,9 +77,11 @@ export const ModuleAnalyticsSidebar = observer(function ModuleAnalyticsSidebar(p
     defaultValues,
   });
 
-  const submitChanges = async (data: Partial<IModule>) => {
+  const submitChanges = (data: Partial<IModule>) => {
     if (!workspaceSlug || !projectId || !moduleId) return;
-    await updateModuleDetails(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), data);
+    startTransition(() => {
+      void updateModuleDetails(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), data);
+    });
   };
 
   const handleCreateLink = async (formData: ModuleLink) => {
@@ -128,6 +130,8 @@ export const ModuleAnalyticsSidebar = observer(function ModuleAnalyticsSidebar(p
     if (moduleDetails)
       reset({
         ...moduleDetails,
+        lead_id: moduleDetails.lead_id ?? "",
+        member_ids: moduleDetails.member_ids ?? [],
       });
   }, [moduleDetails, reset]);
 

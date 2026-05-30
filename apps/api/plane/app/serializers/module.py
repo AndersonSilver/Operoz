@@ -31,6 +31,8 @@ class ModuleWriteSerializer(BaseSerializer):
         child=serializers.PrimaryKeyRelatedField(queryset=User.objects.all()),
         write_only=True,
         required=False,
+        allow_null=True,
+        allow_empty=True,
     )
 
     class Meta:
@@ -53,6 +55,8 @@ class ModuleWriteSerializer(BaseSerializer):
         return data
 
     def validate(self, data):
+        if data.get("member_ids") is None:
+            data["member_ids"] = []
         if (
             data.get("start_date", None) is not None
             and data.get("target_date", None) is not None

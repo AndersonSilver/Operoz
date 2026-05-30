@@ -6,7 +6,7 @@
 
 import { enableStaticRendering } from "mobx-react";
 // plane imports
-import { FALLBACK_LANGUAGE, LANGUAGE_STORAGE_KEY } from "@plane/i18n";
+import { DEFAULT_LOCALE, LANGUAGE_STORAGE_KEY } from "@plane/i18n";
 import type { IWorkItemFilterStore } from "@plane/shared-state";
 import { WorkItemFilterStore } from "@plane/shared-state";
 // plane web store
@@ -67,6 +67,20 @@ import type { IThemeStore } from "./theme.store";
 import { ThemeStore } from "./theme.store";
 import type { IUserStore } from "./user";
 import { UserStore } from "./user";
+import type {
+  IBoardAccessStore,
+  IBoardCustomFieldStore,
+  IBoardIssueTypeStore,
+  IBoardPermissionsStore,
+  IBoardStore,
+} from "./board";
+import {
+  BoardAccessStore,
+  BoardCustomFieldStore,
+  BoardIssueTypeStore,
+  BoardPermissionsStore,
+  BoardStore,
+} from "./board";
 import type { IWorkspaceRootStore } from "./workspace";
 
 enableStaticRendering(typeof window === "undefined");
@@ -101,6 +115,11 @@ export class CoreRootStore {
   editorAssetStore: IEditorAssetStore;
   workItemFilters: IWorkItemFilterStore;
   powerK: IPowerKStore;
+  boardStore: IBoardStore;
+  boardIssueTypeStore: IBoardIssueTypeStore;
+  boardCustomFieldStore: IBoardCustomFieldStore;
+  boardAccessStore: IBoardAccessStore;
+  boardPermissionsStore: IBoardPermissionsStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -132,12 +151,17 @@ export class CoreRootStore {
     this.analytics = new AnalyticsStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.boardStore = new BoardStore(this);
+    this.boardIssueTypeStore = new BoardIssueTypeStore();
+    this.boardCustomFieldStore = new BoardCustomFieldStore();
+    this.boardAccessStore = new BoardAccessStore();
+    this.boardPermissionsStore = new BoardPermissionsStore();
   }
 
   resetOnSignOut() {
     // handling the system theme when user logged out from the app
     localStorage.setItem("theme", "system");
-    localStorage.setItem(LANGUAGE_STORAGE_KEY, FALLBACK_LANGUAGE);
+    localStorage.setItem(LANGUAGE_STORAGE_KEY, DEFAULT_LOCALE);
     this.router = new RouterStore();
     this.commandPalette = new CommandPaletteStore();
     this.instance = new InstanceStore();
@@ -165,5 +189,10 @@ export class CoreRootStore {
     this.editorAssetStore = new EditorAssetStore();
     this.workItemFilters = new WorkItemFilterStore();
     this.powerK = new PowerKStore();
+    this.boardStore = new BoardStore(this);
+    this.boardIssueTypeStore = new BoardIssueTypeStore();
+    this.boardCustomFieldStore = new BoardCustomFieldStore();
+    this.boardAccessStore = new BoardAccessStore();
+    this.boardPermissionsStore = new BoardPermissionsStore();
   }
 }

@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import { useRef, useState } from "react";
+import { startTransition, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "@plane/i18n";
@@ -69,8 +69,11 @@ export const MemberDropdownBase = observer(function MemberDropdownBase(props: TM
   // states
   const [isOpen, setIsOpen] = useState(false);
 
+  // Headless UI Combobox calls `.some()` on value when `multiple` is true; single-select must not pass `null`.
+  const comboboxValue = multiple ? (Array.isArray(value) ? value : []) : value || undefined;
+
   const comboboxProps = {
-    value,
+    value: comboboxValue,
     onChange,
     disabled,
     multiple,
@@ -84,8 +87,10 @@ export const MemberDropdownBase = observer(function MemberDropdownBase(props: TM
   });
 
   const dropdownOnChange = (val: string & string[]) => {
-    onChange(val);
-    if (!multiple) handleClose();
+    startTransition(() => {
+      onChange(val);
+      if (!multiple) handleClose();
+    });
   };
 
   const getDisplayName = (value: string | string[] | null, showUserDetails: boolean, placeholder: string = "") => {

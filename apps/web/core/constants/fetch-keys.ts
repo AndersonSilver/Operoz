@@ -58,6 +58,8 @@ export const USER_WORKSPACES_LIST = "USER_WORKSPACES_LIST";
 export const WORKSPACE_PARTIAL_PROJECTS = (workspaceSlug: string) =>
   `WORKSPACE_PARTIAL_PROJECTS_${workspaceSlug.toUpperCase()}`;
 
+export const WORKSPACE_BOARDS = (workspaceSlug: string) => `WORKSPACE_BOARDS_${workspaceSlug.toUpperCase()}`;
+
 export const WORKSPACE_MEMBERS = (workspaceSlug: string) => `WORKSPACE_MEMBERS_${workspaceSlug.toUpperCase()}`;
 
 export const WORKSPACE_MODULES = (workspaceSlug: string) => `WORKSPACE_MODULES_${workspaceSlug.toUpperCase()}`;

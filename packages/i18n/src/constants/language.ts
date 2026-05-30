@@ -8,6 +8,9 @@ import type { TLanguage, ILanguageOption } from "../types";
 
 export const FALLBACK_LANGUAGE: TLanguage = "en";
 
+/** Default UI language when the user has not chosen one (localStorage empty). */
+export const DEFAULT_LOCALE: TLanguage = "pt-BR";
+
 export const SUPPORTED_LANGUAGES: ILanguageOption[] = [
   { label: "English", value: "en" },
   { label: "Français", value: "fr" },

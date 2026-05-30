@@ -51,12 +51,15 @@ function RenderIfVisible(props: Props) {
       const observer = new IntersectionObserver(
         (entries) => {
           //DO no remove comments for future
+          const isIntersecting = entries[entries.length - 1].isIntersecting;
+          const updateVisibility = () => setShouldVisible(isIntersecting);
+
           if (typeof window !== undefined && window.requestIdleCallback && useIdletime) {
-            window.requestIdleCallback(() => setShouldVisible(entries[entries.length - 1].isIntersecting), {
+            window.requestIdleCallback(updateVisibility, {
               timeout: 300,
             });
           } else {
-            setShouldVisible(entries[entries.length - 1].isIntersecting);
+            queueMicrotask(updateVisibility);
           }
         },
         {

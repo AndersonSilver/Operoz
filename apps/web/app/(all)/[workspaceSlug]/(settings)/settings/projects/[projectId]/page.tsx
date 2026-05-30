@@ -24,20 +24,21 @@ function ProjectSettingsPage({ params }: Route.ComponentProps) {
   // router
   const { workspaceSlug, projectId } = params;
   // store hooks
-  const { currentProjectDetails } = useProject();
+  const { getProjectById } = useProject();
+  const projectDetails = getProjectById(projectId);
   const { allowPermissions } = useUserPermissions();
   // derived values
   const isAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlug, projectId);
 
-  const pageTitle = currentProjectDetails?.name ? `${currentProjectDetails?.name} - General Settings` : undefined;
+  const pageTitle = projectDetails?.name ? `${projectDetails.name} - General Settings` : undefined;
 
   return (
     <SettingsContentWrapper header={<GeneralProjectSettingsHeader />}>
       <PageHead title={pageTitle} />
       <div className={`w-full ${isAdmin ? "" : "opacity-60"}`}>
-        {currentProjectDetails ? (
+        {projectDetails ? (
           <ProjectDetailsForm
-            project={currentProjectDetails}
+            project={projectDetails}
             workspaceSlug={workspaceSlug}
             projectId={projectId}
             isAdmin={isAdmin}

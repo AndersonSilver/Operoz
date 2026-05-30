@@ -12,21 +12,27 @@ import { Controller } from "react-hook-form";
 import { ETabIndices } from "@plane/constants";
 // types
 import type { TIssue } from "@plane/types";
-import { getTabIndex } from "@plane/utils";
+import { cn, getTabIndex } from "@plane/utils";
 // components
 import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";
 // hooks
 import { useIssueModal } from "@/hooks/context/use-issue-modal";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import {
+  issueFormControlBaseClass,
+  issueFormControlWidthClass,
+  type IssueFormControlWidth,
+} from "@/plane-web/components/issues/issue-modal/issue-form-field";
 
 type TIssueProjectSelectProps = {
   control: Control<TIssue>;
   disabled?: boolean;
   handleFormChange: () => void;
+  controlWidth?: IssueFormControlWidth;
 };
 
 export const IssueProjectSelect = observer(function IssueProjectSelect(props: TIssueProjectSelectProps) {
-  const { control, disabled = false, handleFormChange } = props;
+  const { control, disabled = false, handleFormChange, controlWidth = "medium" } = props;
   // store hooks
   const { isMobile } = usePlatformOS();
   // context hooks
@@ -42,7 +48,7 @@ export const IssueProjectSelect = observer(function IssueProjectSelect(props: TI
         required: true,
       }}
       render={({ field: { value, onChange } }) => (
-        <div className="h-7">
+        <div className={cn(issueFormControlWidthClass[controlWidth])}>
           <ProjectDropdown
             value={value}
             onChange={(projectId) => {
@@ -51,6 +57,9 @@ export const IssueProjectSelect = observer(function IssueProjectSelect(props: TI
             }}
             multiple={false}
             buttonVariant="border-with-text"
+            buttonClassName={cn(issueFormControlBaseClass, "w-full")}
+            buttonContainerClassName="w-full"
+            className="w-full"
             renderCondition={(projectId) => allowedProjectIds.includes(projectId)}
             tabIndex={getIndex("project_id")}
             disabled={disabled}

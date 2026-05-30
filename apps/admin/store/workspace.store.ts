@@ -27,6 +27,18 @@ export interface IWorkspaceStore {
   fetchNextWorkspaces: () => Promise<IWorkspace[]>;
   // curd actions
   createWorkspace: (data: IWorkspace) => Promise<IWorkspace>;
+  patchWorkspaceIssueNotificationFlags: (
+    workspaceId: string,
+    data: Partial<
+      Pick<
+        IWorkspace,
+        | "issue_notify_assignees_always_email"
+        | "issue_notify_email_include_extended_activities"
+        | "issue_notify_email_include_description_changes"
+        | "issue_notify_email_dispatch_immediately"
+      >
+    >
+  ) => Promise<void>;
 }
 
 export class WorkspaceStore implements IWorkspaceStore {
@@ -53,6 +65,7 @@ export class WorkspaceStore implements IWorkspaceStore {
       fetchNextWorkspaces: action,
       // curd actions
       createWorkspace: action,
+      patchWorkspaceIssueNotificationFlags: action,
     });
     this.instanceWorkspaceService = new InstanceWorkspaceService();
   }
@@ -148,6 +161,38 @@ export class WorkspaceStore implements IWorkspaceStore {
       return workspace;
     } catch (error) {
       console.error("Error creating workspace", error);
+      throw error;
+    } finally {
+      this.loader = "loaded";
+    }
+  };
+
+  /**
+   * @description PATCH issue notification flags for a workspace (merges into cached workspace).
+   */
+  patchWorkspaceIssueNotificationFlags = async (
+    workspaceId: string,
+    data: Partial<
+      Pick<
+        IWorkspace,
+        | "issue_notify_assignees_always_email"
+        | "issue_notify_email_include_extended_activities"
+        | "issue_notify_email_include_description_changes"
+        | "issue_notify_email_dispatch_immediately"
+      >
+    >
+  ): Promise<void> => {
+    try {
+      this.loader = "mutation";
+      const updated = await this.instanceWorkspaceService.patchIssueNotificationFlags(workspaceId, data);
+      runInAction(() => {
+        const existing = this.workspaces[workspaceId];
+        if (existing) {
+          set(this.workspaces, [workspaceId], { ...existing, ...updated });
+        }
+      });
+    } catch (error) {
+      console.error("Error updating workspace notification flags", error);
       throw error;
     } finally {
       this.loader = "loaded";

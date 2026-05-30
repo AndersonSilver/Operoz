@@ -134,10 +134,10 @@ export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
         onClose={() => setAnalyticsModal(false)}
         cycleDetails={cycleDetails ?? undefined}
       />
-      <Header>
-        <Header.LeftItem>
-          <div className="flex items-center gap-2">
-            <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
+      <Header className="!h-auto !min-h-11 !flex-col !items-stretch !justify-start gap-2 !py-2">
+        <Header.LeftItem className="w-full min-w-0">
+          <div className="flex w-full min-w-0 items-center gap-2">
+            <Breadcrumbs className="min-w-0 flex-1" onBack={router.back} isLoading={loader === "init-loader"}>
               <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
               <Breadcrumbs.Item
                 component={
@@ -183,7 +183,7 @@ export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
             ) : null}
           </div>
         </Header.LeftItem>
-        <Header.RightItem className="items-center">
+        <Header.RightItem className="w-full shrink-0 flex-wrap items-center justify-end">
           <div className="hidden items-center gap-2 md:flex">
             <div className="hidden @4xl:flex">
               <LayoutSelection

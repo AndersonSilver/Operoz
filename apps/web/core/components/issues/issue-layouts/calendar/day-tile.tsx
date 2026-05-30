@@ -14,7 +14,7 @@ import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate 
 // types
 // ui
 // components
-import { cn, renderFormattedPayloadDate } from "@plane/utils";
+import { cn, getDate, renderFormattedPayloadDate } from "@plane/utils";
 import { highlightIssueOnDrop } from "@/components/issues/issue-layouts/utils";
 // helpers
 import { MONTHS_LIST } from "@/constants/calendar";
@@ -25,7 +25,9 @@ import type { IModuleIssuesFilter } from "@/store/issue/module";
 import type { IProjectIssuesFilter } from "@/store/issue/project";
 import type { IProjectViewIssuesFilter } from "@/store/issue/project-views";
 import type { TRenderQuickActions } from "../list/list-view-types";
+import { CALENDAR_DAY_DROP_TYPE, CALENDAR_ISSUE_DRAG_TYPE } from "./calendar-drag-context";
 import { CalendarIssueBlocks } from "./issue-blocks";
+import { buildCalendarDateUpdatePayload } from "./utils";
 
 type Props = {
   issuesFilterStore: IProjectIssuesFilter | IModuleIssuesFilter | ICycleIssuesFilter | IProjectViewIssuesFilter;
@@ -91,7 +93,13 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
     return combine(
       dropTargetForElements({
         element,
-        getData: () => ({ date: formattedDatePayload }),
+        canDrop: ({ source }) => {
+          if (readOnly) return false;
+          const sourceData = source.data as { type?: string; id?: string };
+          return sourceData?.type === CALENDAR_ISSUE_DRAG_TYPE && Boolean(sourceData?.id);
+        },
+        getDropEffect: () => "move",
+        getData: () => ({ date: formattedDatePayload, type: CALENDAR_DAY_DROP_TYPE }),
         onDragEnter: () => {
           setIsDraggingOver(true);
         },
@@ -100,16 +108,26 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
         },
         onDrop: ({ source, self }) => {
           setIsDraggingOver(false);
-          const sourceData = source?.data as { id: string; date: string } | undefined;
+          const sourceData = source?.data as { id: string; date?: string } | undefined;
           const destinationData = self?.data as { date: string } | undefined;
-          if (!sourceData || !destinationData) return;
+          if (!sourceData?.id || !destinationData?.date) return;
 
-          const issueDetails = issues?.[sourceData?.id];
-          if (issueDetails?.start_date) {
-            const issueStartDate = new Date(issueDetails.start_date);
-            const targetDate = new Date(destinationData?.date);
-            const diffInDays = differenceInCalendarDays(targetDate, issueStartDate);
-            if (diffInDays < 0) {
+          const issueDetails = issues?.[sourceData.id];
+          const destinationDate = renderFormattedPayloadDate(destinationData.date) ?? destinationData.date;
+          const sourceDate =
+            renderFormattedPayloadDate(sourceData.date ?? issueDetails?.target_date) ??
+            sourceData.date ??
+            issueDetails?.target_date;
+
+          if (!sourceDate) return;
+
+          const previewPayload = buildCalendarDateUpdatePayload(sourceDate, destinationDate, issueDetails);
+          if (!previewPayload) return;
+
+          if (previewPayload.start_date && previewPayload.target_date) {
+            const issueStartDate = getDate(previewPayload.start_date);
+            const targetDate = getDate(previewPayload.target_date);
+            if (issueStartDate && targetDate && differenceInCalendarDays(targetDate, issueStartDate) < 0) {
               setToast({
                 type: TOAST_TYPE.ERROR,
                 title: "Error!",
@@ -119,17 +137,19 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
             }
           }
 
-          handleDragAndDrop(
-            sourceData?.id,
+          void handleDragAndDrop(
+            sourceData.id,
             issueDetails?.project_id ?? undefined,
-            sourceData?.date,
-            destinationData?.date
-          );
+            sourceDate,
+            destinationDate
+          ).catch(() => {
+            // Errors are surfaced via toast in handleDragAndDrop
+          });
           highlightIssueOnDrop(source?.element?.id, false);
         },
       })
     );
-  }, [dayTileRef?.current, formattedDatePayload]);
+  }, [formattedDatePayload, handleDragAndDrop, issues, readOnly]);
 
   if (!formattedDatePayload) return null;
   const issueIds = groupedIssueIds?.[formattedDatePayload];
@@ -145,7 +165,7 @@ export const CalendarDayTile = observer(function CalendarDayTile(props: Props) {
 
   return (
     <>
-      <div ref={dayTileRef} className="group relative flex h-full w-full flex-col">
+      <div ref={dayTileRef} className="group relative flex h-full min-h-0 w-full flex-col">
         {/* header */}
         <div
           className={`hidden flex-shrink-0 justify-end px-2 py-1.5 text-right text-11 md:flex ${

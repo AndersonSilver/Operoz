@@ -4,18 +4,13 @@
  * See the LICENSE file for details.
  */
 
-import { useTheme } from "next-themes";
-import LogoSpinnerDark from "@/app/assets/images/logo-spinner-dark.gif?url";
-import LogoSpinnerLight from "@/app/assets/images/logo-spinner-light.gif?url";
+import { Loader2 } from "lucide-react";
 
 export function LogoSpinner() {
-  const { resolvedTheme } = useTheme();
-
-  const logoSrc = resolvedTheme === "dark" ? LogoSpinnerLight : LogoSpinnerDark;
-
   return (
-    <div className="flex items-center justify-center">
-      <img src={logoSrc} alt="logo" className="h-6 w-auto sm:h-11" />
+    <div className="flex items-center justify-center" role="status" aria-live="polite">
+      <Loader2 className="size-7 shrink-0 animate-spin text-accent-primary sm:size-10" strokeWidth={2.25} aria-hidden />
+      <span className="sr-only">Loading</span>
     </div>
   );
 }

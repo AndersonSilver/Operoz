@@ -4,7 +4,7 @@
  * See the LICENSE file for details.
  */
 
-import type { SyntheticEvent } from "react";
+import type { ReactNode, SyntheticEvent } from "react";
 import { useCallback, useMemo } from "react";
 import { xor } from "lodash-es";
 import { observer } from "mobx-react";
@@ -16,6 +16,7 @@ import { useTranslation } from "@plane/i18n";
 import { LinkIcon, StartDatePropertyIcon, ViewsIcon, DueDatePropertyIcon } from "@plane/propel/icons";
 import { Tooltip } from "@plane/propel/tooltip";
 import type { TIssue, IIssueDisplayProperties, TIssuePriorities } from "@plane/types";
+import { EIssuesStoreType } from "@plane/types";
 // ui
 import {
   cn,
@@ -41,12 +42,22 @@ import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
+import { useListGridColumnsContextOptional } from "../list/list-grid-columns-context";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web components
 import { WorkItemLayoutAdditionalProperties } from "@/plane-web/components/issues/issue-layouts/additional-properties";
 // local components
 import { IssuePropertyLabels } from "./labels";
+import {
+  buildListPropertyColumns,
+  buildListPropertyGridTemplateColumns,
+  getListPropertyColumnMeta,
+  type TListPropertyColumn,
+} from "./list-property-columns";
+import { ListPropertyGridCell } from "./list-property-grid-cell";
 import { WithDisplayPropertiesHOC } from "./with-display-properties-HOC";
+
+export type TIssuePropertiesLayoutVariant = "flex" | "list-grid";
 
 export interface IIssueProperties {
   issue: TIssue;
@@ -56,10 +67,19 @@ export interface IIssueProperties {
   className: string;
   activeLayout: string;
   isEpic?: boolean;
+  layoutVariant?: TIssuePropertiesLayoutVariant;
 }
 
 export const IssueProperties = observer(function IssueProperties(props: IIssueProperties) {
-  const { issue, updateIssue, displayProperties, isReadOnly, className, isEpic = false } = props;
+  const {
+    issue,
+    updateIssue,
+    displayProperties,
+    isReadOnly,
+    className,
+    isEpic = false,
+    layoutVariant = "flex",
+  } = props;
   // i18n
   const { t } = useTranslation();
   // store hooks
@@ -191,27 +211,94 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
     e.preventDefault();
   };
 
-  return (
-    <div className={className}>
+  const listGridCtx = useListGridColumnsContextOptional();
+  const isCrossProjectList = storeType === EIssuesStoreType.BOARD;
+
+  const estimateEnabled = Boolean(
+    issue.project_id && areEstimateEnabledByProjectId(issue.project_id)
+  );
+
+  const useListGrid = layoutVariant === "list-grid";
+
+  const listColumns = useMemo(() => {
+    if (!useListGrid) return null;
+
+    if (listGridCtx) return listGridCtx.columns;
+
+    return buildListPropertyColumns({
+      displayProperties,
+      isEpic,
+      showModules: Boolean(projectDetails?.module_view),
+      showCycles: Boolean(projectDetails?.cycle_view),
+      showEstimate: estimateEnabled,
+      crossProject: isCrossProjectList,
+    });
+  }, [useListGrid, listGridCtx, displayProperties, isEpic, projectDetails, estimateEnabled, isCrossProjectList]);
+
+  const listGridStyle = useMemo(() => {
+    if (!listColumns?.length) return undefined;
+
+    return {
+      display: "grid" as const,
+      gridTemplateColumns: listGridCtx
+        ? listGridCtx.propertyGridTemplateColumns
+        : buildListPropertyGridTemplateColumns(listColumns, listGridCtx?.columnWidthsPx),
+      columnGap: "0.75rem",
+      alignItems: "center" as const,
+      width: "100%",
+    };
+  }, [listColumns, listGridCtx]);
+
+  const wrapListCell = (
+    column: TListPropertyColumn,
+    content: ReactNode,
+    options?: { isEmpty?: boolean }
+  ) => {
+    if (layoutVariant !== "list-grid") return content;
+    if (!listColumns?.includes(column)) return null;
+
+    const { align } = getListPropertyColumnMeta(column);
+
+    return (
+      <ListPropertyGridCell isEmpty={options?.isEmpty} align={align}>
+        {content}
+      </ListPropertyGridCell>
+    );
+  };
+
+  const propertyCells = (
+    <>
       {/* basic properties */}
       {/* state */}
-      <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="state">
-        <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
-          <StateDropdown
-            buttonContainerClassName="truncate max-w-40"
-            value={issue.state_id}
-            onChange={handleState}
-            projectId={issue.project_id}
-            disabled={isReadOnly}
-            buttonVariant="border-with-text"
-            renderByDefault={isMobile}
-            showTooltip
-          />
-        </div>
-      </WithDisplayPropertiesHOC>
+      {wrapListCell(
+        "state",
+        <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="state">
+          <div
+            className={cn("h-5 w-full min-w-0", layoutVariant === "list-grid" && "max-w-full")}
+            onFocus={handleEventPropagation}
+            onClick={handleEventPropagation}
+          >
+            <StateDropdown
+              buttonContainerClassName={cn(
+                "truncate",
+                layoutVariant === "list-grid" ? "max-w-full w-full" : "max-w-40"
+              )}
+              value={issue.state_id}
+              onChange={handleState}
+              projectId={issue.project_id}
+              disabled={isReadOnly}
+              buttonVariant="border-with-text"
+              renderByDefault={isMobile}
+              showTooltip
+            />
+          </div>
+        </WithDisplayPropertiesHOC>
+      )}
 
       {/* priority */}
-      <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="priority">
+      {wrapListCell(
+        "priority",
+        <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="priority">
         <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
           <PriorityDropdown
             value={issue?.priority}
@@ -223,8 +310,12 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
           />
         </div>
       </WithDisplayPropertiesHOC>
+      )}
 
       {/* merged dates */}
+      {wrapListCell(
+        "dates",
+        <>
       <WithDisplayPropertiesHOC
         displayProperties={displayProperties}
         displayPropertyKey={["start_date", "due_date"]}
@@ -308,9 +399,19 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
           />
         </div>
       </WithDisplayPropertiesHOC>
+        </>,
+        {
+          isEmpty:
+            !isDateRangeEnabled &&
+            !issue.start_date &&
+            !issue.target_date,
+        }
+      )}
 
       {/* assignee */}
-      <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="assignee">
+      {wrapListCell(
+        "assignee",
+        <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="assignee">
         <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
           <MemberDropdown
             projectId={issue?.project_id}
@@ -328,71 +429,87 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
           />
         </div>
       </WithDisplayPropertiesHOC>
+      )}
 
-      <>
-        {!isEpic && (
-          <>
-            {/* modules */}
-            {projectDetails?.module_view && (
-              <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="modules">
-                <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
-                  <ModuleDropdown
-                    buttonContainerClassName="truncate max-w-40"
-                    projectId={issue?.project_id}
-                    value={issue?.module_ids ?? []}
-                    onChange={handleModule}
-                    disabled={isReadOnly}
-                    renderByDefault={isMobile}
-                    multiple
-                    buttonVariant="border-with-text"
-                    showCount
-                    showTooltip
-                  />
-                </div>
-              </WithDisplayPropertiesHOC>
-            )}
-
-            {/* cycles */}
-            {projectDetails?.cycle_view && (
-              <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="cycle">
-                <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
-                  <CycleDropdown
-                    buttonContainerClassName="truncate max-w-40"
-                    projectId={issue?.project_id}
-                    value={issue?.cycle_id}
-                    onChange={handleCycle}
-                    disabled={isReadOnly}
-                    buttonVariant="border-with-text"
-                    renderByDefault={isMobile}
-                    showTooltip
-                  />
-                </div>
-              </WithDisplayPropertiesHOC>
-            )}
-          </>
+      {!isEpic &&
+        wrapListCell(
+          "modules",
+          projectDetails?.module_view ? (
+            <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="modules">
+              <div
+                className={cn("h-5 min-w-0 max-w-full overflow-hidden", useListGrid && "w-full")}
+                onFocus={handleEventPropagation}
+                onClick={handleEventPropagation}
+              >
+                <ModuleDropdown
+                  buttonContainerClassName={cn("truncate", useListGrid ? "max-w-full w-full min-w-0" : "max-w-40")}
+                  projectId={issue?.project_id}
+                  value={issue?.module_ids ?? []}
+                  onChange={handleModule}
+                  disabled={isReadOnly}
+                  renderByDefault={isMobile}
+                  multiple
+                  buttonVariant="border-with-text"
+                  showCount
+                  showTooltip
+                />
+              </div>
+            </WithDisplayPropertiesHOC>
+          ) : null,
+          { isEmpty: !projectDetails?.module_view }
         )}
-      </>
 
-      {/* estimates */}
-      {projectId && areEstimateEnabledByProjectId(projectId?.toString()) && (
-        <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="estimate">
-          <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
-            <EstimateDropdown
-              value={issue.estimate_point ?? undefined}
-              onChange={handleEstimate}
-              projectId={issue.project_id}
-              disabled={isReadOnly}
-              buttonVariant="border-with-text"
-              renderByDefault={isMobile}
-              showTooltip
-            />
-          </div>
-        </WithDisplayPropertiesHOC>
+      {!isEpic &&
+        wrapListCell(
+          "cycle",
+          projectDetails?.cycle_view ? (
+            <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="cycle">
+              <div
+                className={cn("h-5 min-w-0 max-w-full overflow-hidden", useListGrid && "w-full")}
+                onFocus={handleEventPropagation}
+                onClick={handleEventPropagation}
+              >
+                <CycleDropdown
+                  buttonContainerClassName={cn("truncate", useListGrid ? "max-w-full w-full min-w-0" : "max-w-40")}
+                  projectId={issue?.project_id}
+                  value={issue?.cycle_id}
+                  onChange={handleCycle}
+                  disabled={isReadOnly}
+                  buttonVariant="border-with-text"
+                  renderByDefault={isMobile}
+                  showTooltip
+                />
+              </div>
+            </WithDisplayPropertiesHOC>
+          ) : null,
+          { isEmpty: !projectDetails?.cycle_view }
+        )}
+
+      {wrapListCell(
+        "estimate",
+        estimateEnabled ? (
+          <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="estimate">
+            <div className="h-5" onFocus={handleEventPropagation} onClick={handleEventPropagation}>
+              <EstimateDropdown
+                value={issue.estimate_point ?? undefined}
+                onChange={handleEstimate}
+                projectId={issue.project_id}
+                disabled={isReadOnly}
+                buttonVariant="border-with-text"
+                renderByDefault={isMobile}
+                showTooltip
+              />
+            </div>
+          </WithDisplayPropertiesHOC>
+        ) : null,
+        { isEmpty: !estimateEnabled }
       )}
 
       {/* extra render properties */}
       {/* sub-issues */}
-      {!isEpic && (
+      {!isEpic &&
+        wrapListCell(
+          "sub_issue_count",
         <WithDisplayPropertiesHOC
           displayProperties={displayProperties}
           displayPropertyKey="sub_issue_count"
@@ -422,10 +539,13 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
               <div className="text-caption-sm-regular">{subIssueCount}</div>
             </div>
           </Tooltip>
-        </WithDisplayPropertiesHOC>
-      )}
+        </WithDisplayPropertiesHOC>,
+          { isEmpty: !subIssueCount }
+        )}
 
       {/* attachments */}
+      {wrapListCell(
+        "attachment_count",
       <WithDisplayPropertiesHOC
         displayProperties={displayProperties}
         displayPropertyKey="attachment_count"
@@ -446,9 +566,13 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
             <div className="text-caption-sm-regular">{issue.attachment_count}</div>
           </div>
         </Tooltip>
-      </WithDisplayPropertiesHOC>
+      </WithDisplayPropertiesHOC>,
+        { isEmpty: !issue.attachment_count }
+      )}
 
       {/* link */}
+      {wrapListCell(
+        "link",
       <WithDisplayPropertiesHOC
         displayProperties={displayProperties}
         displayPropertyKey="link"
@@ -469,12 +593,13 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
             <div className="text-caption-sm-regular">{issue.link_count}</div>
           </div>
         </Tooltip>
-      </WithDisplayPropertiesHOC>
-
-      {/* Additional Properties */}
-      <WorkItemLayoutAdditionalProperties displayProperties={displayProperties} issue={issue} />
+      </WithDisplayPropertiesHOC>,
+        { isEmpty: !issue.link_count }
+      )}
 
       {/* label */}
+      {wrapListCell(
+        "labels",
       <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="labels">
         <IssuePropertyLabels
           projectId={issue?.project_id || null}
@@ -487,6 +612,17 @@ export const IssueProperties = observer(function IssueProperties(props: IIssuePr
           maxRender={3}
         />
       </WithDisplayPropertiesHOC>
+      )}
+
+      {layoutVariant === "flex" && (
+        <WorkItemLayoutAdditionalProperties displayProperties={displayProperties} issue={issue} />
+      )}
+    </>
+  );
+
+  return (
+    <div className={cn(className, useListGrid && "w-full min-w-0")} style={listGridStyle}>
+      {propertyCells}
     </div>
   );
 });

@@ -19,7 +19,8 @@ export const MarkdownClipboardPlugin = (args: TArgs): Plugin => {
   const { editor, getEditorMetaData } = args;
 
   return new Plugin({
-    key: new PluginKey("markdownClipboard"),
+    // Must differ from tiptap-markdown's MarkdownClipboard (same PluginKey would crash the editor).
+    key: new PluginKey("planeMarkdownClipboard"),
     props: {
       handleDOMEvents: {
         copy: (view, event) => {

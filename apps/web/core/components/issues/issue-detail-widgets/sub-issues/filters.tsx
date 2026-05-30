@@ -29,10 +29,11 @@ type TSubIssueFiltersProps = {
   memberIds: string[] | undefined;
   states?: IState[];
   availableFilters: (keyof IIssueFilterOptions)[];
+  projectId?: string;
 };
 
 export const SubIssueFilters = observer(function SubIssueFilters(props: TSubIssueFiltersProps) {
-  const { handleFiltersUpdate, filters, memberIds, states, availableFilters } = props;
+  const { handleFiltersUpdate, filters, memberIds, states, availableFilters, projectId } = props;
   // plane hooks
   const { t } = useTranslation();
   // states
@@ -129,6 +130,7 @@ export const SubIssueFilters = observer(function SubIssueFilters(props: TSubIssu
                   appliedFilters={filters.issue_type ?? null}
                   handleUpdate={(val) => handleFiltersUpdate("issue_type", val)}
                   searchQuery={filtersSearchQuery}
+                  projectId={projectId}
                 />
               </div>
             )}

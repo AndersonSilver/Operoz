@@ -102,26 +102,27 @@ export class InstanceStore implements IInstanceStore {
   fetchInstanceInfo = async () => {
     try {
       if (this.instance === undefined) this.isLoading = true;
-      this.error = undefined;
       const instanceInfo = await this.instanceService.info();
       // handling the new user popup toggle
       if (this.instance === undefined && !instanceInfo?.instance?.workspaces_exist)
         this.store.theme.toggleNewUserPopup();
       runInAction(() => {
-        // console.log("instanceInfo: ", instanceInfo);
         this.isLoading = false;
+        this.error = undefined;
         this.instance = instanceInfo.instance;
         this.config = instanceInfo.config;
       });
       return instanceInfo;
     } catch (error) {
       console.error("Error fetching the instance info");
-      this.isLoading = false;
-      this.error = { message: "Failed to fetch the instance info" };
-      this.instanceStatus = {
-        status: EInstanceStatus.ERROR,
-      };
-      throw error;
+      runInAction(() => {
+        this.isLoading = false;
+        this.error = { message: "Failed to fetch the instance info" };
+        this.instanceStatus = {
+          status: EInstanceStatus.ERROR,
+        };
+      });
+      return undefined;
     }
   };
 
@@ -156,7 +157,7 @@ export class InstanceStore implements IInstanceStore {
       return instanceAdmins;
     } catch (error) {
       console.error("Error fetching the instance admins");
-      throw error;
+      return undefined;
     }
   };
 
@@ -171,7 +172,7 @@ export class InstanceStore implements IInstanceStore {
       return instanceConfigurations;
     } catch (error) {
       console.error("Error fetching the instance configurations");
-      throw error;
+      return undefined;
     }
   };
 
@@ -183,11 +184,13 @@ export class InstanceStore implements IInstanceStore {
     try {
       const response = await this.instanceService.updateConfigurations(data);
       runInAction(() => {
-        this.instanceConfigurations = this.instanceConfigurations?.map((config) => {
-          const item = response.find((item) => item.key === config.key);
-          if (item) return item;
-          return config;
-        });
+        const current = [...(this.instanceConfigurations ?? [])];
+        for (const item of response) {
+          const idx = current.findIndex((c) => c.key === item.key);
+          if (idx >= 0) current[idx] = item;
+          else current.push(item);
+        }
+        this.instanceConfigurations = current;
       });
       return response;
     } catch (error) {

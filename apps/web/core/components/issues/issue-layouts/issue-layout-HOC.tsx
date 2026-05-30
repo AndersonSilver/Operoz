@@ -48,13 +48,14 @@ export const IssueLayoutHOC = observer(function IssueLayoutHOC(props: Props) {
   const storeType = useIssueStoreType();
   const { issues } = useIssues(storeType);
 
-  const issueCount = issues.getGroupIssueCount(undefined, undefined, false);
+  const isInitialLoading = issues?.getIssueLoader() === "init-loader";
+  const issueCount = issues.getGroupIssueCount(undefined, undefined, false) ?? 0;
 
-  if (issues?.getIssueLoader() === "init-loader" || issueCount === undefined) {
+  if (isInitialLoading) {
     return <ActiveLoader layout={layout} />;
   }
 
-  if (issues.getGroupIssueCount(undefined, undefined, false) === 0 && layout !== EIssueLayoutTypes.CALENDAR) {
+  if (issueCount === 0 && layout !== EIssueLayoutTypes.CALENDAR) {
     return <IssueLayoutEmptyState storeType={storeType} />;
   }
 

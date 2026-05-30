@@ -239,7 +239,7 @@ MEDIA_ROOT = "mediafiles"
 MEDIA_URL = "/media/"
 
 # Internationalization
-LANGUAGE_CODE = "en-us"
+LANGUAGE_CODE = "pt-br"
 USE_I18N = True
 USE_L10N = True
 
@@ -268,7 +268,9 @@ AWS_QUERYSTRING_AUTH = False
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", None) or os.environ.get("MINIO_ENDPOINT_URL", None)
 if AWS_S3_ENDPOINT_URL and USE_MINIO:
-    parsed_url = urlparse(os.environ.get("WEB_URL", "http://localhost"))
+    # Optional browser-reachable MinIO URL (local dev without reverse proxy on the API port).
+    _public_minio = os.environ.get("MINIO_PUBLIC_ENDPOINT_URL", "").strip()
+    parsed_url = urlparse(_public_minio if _public_minio else os.environ.get("WEB_URL", "http://localhost"))
     AWS_S3_CUSTOM_DOMAIN = f"{parsed_url.netloc}/{AWS_STORAGE_BUCKET_NAME}"
     AWS_S3_URL_PROTOCOL = f"{parsed_url.scheme}:"
 
@@ -295,6 +297,7 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 CELERY_IMPORTS = (
     # scheduled tasks
     "plane.bgtasks.issue_automation_task",
+    "plane.bgtasks.jira_ops_sync_task",
     "plane.bgtasks.exporter_expired_task",
     "plane.bgtasks.file_asset_task",
     "plane.bgtasks.email_notification_task",
@@ -313,6 +316,18 @@ FILE_SIZE_LIMIT = int(os.environ.get("FILE_SIZE_LIMIT", 5242880))
 UNSPLASH_ACCESS_KEY = os.environ.get("UNSPLASH_ACCESS_KEY")
 # Github Access Token
 GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", False)
+
+# Jira OPS → Operis (fallback legado; preferir configuração por workspace)
+JIRA_OPS_CLOUD_ID = os.environ.get("JIRA_OPS_CLOUD_ID", "")
+JIRA_OPS_EMAIL = os.environ.get("JIRA_OPS_EMAIL", "")
+JIRA_OPS_API_TOKEN = os.environ.get("JIRA_OPS_API_TOKEN", "")
+JIRA_OPS_PROJECT_KEY = os.environ.get("JIRA_OPS_PROJECT_KEY", "OPS")
+JIRA_OPS_BOARD_SLUG = os.environ.get("JIRA_OPS_BOARD_SLUG", "squad-as-a-services")
+
+# OAuth Atlassian (login na UI — Configurações → Jira OPS)
+ATLASSIAN_OAUTH_CLIENT_ID = os.environ.get("ATLASSIAN_OAUTH_CLIENT_ID", "")
+ATLASSIAN_OAUTH_CLIENT_SECRET = os.environ.get("ATLASSIAN_OAUTH_CLIENT_SECRET", "")
+ATLASSIAN_OAUTH_REDIRECT_URI = os.environ.get("ATLASSIAN_OAUTH_REDIRECT_URI", "")
 
 # Analytics
 ANALYTICS_SECRET_KEY = os.environ.get("ANALYTICS_SECRET_KEY", False)
@@ -463,6 +478,8 @@ ATTACHMENT_MIME_TYPES = [
     "text/javascript",
     "application/json",
     "text/xml",
+    "text/html",
+    "application/xhtml+xml",
     "text/csv",
     "application/xml",
     # SQL

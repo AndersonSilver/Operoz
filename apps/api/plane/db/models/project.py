@@ -10,6 +10,7 @@ from enum import Enum
 # Django imports
 from django.conf import settings
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 
@@ -73,6 +74,13 @@ class Project(BaseModel):
     description_html = models.JSONField(verbose_name="Project Description HTML", blank=True, null=True)
     network = models.PositiveSmallIntegerField(default=2, choices=NETWORK_CHOICES)
     workspace = models.ForeignKey("db.WorkSpace", on_delete=models.CASCADE, related_name="workspace_project")
+    board = models.ForeignKey(
+        "db.Board",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="board_projects",
+    )
     identifier = models.CharField(max_length=12, verbose_name="Project Identifier", db_index=True)
     default_assignee = models.ForeignKey(
         settings.AUTH_USER_MODEL,
@@ -87,6 +95,12 @@ class Project(BaseModel):
         related_name="project_lead",
         null=True,
         blank=True,
+    )
+    responsible_stakeholder = models.CharField(
+        max_length=255,
+        blank=True,
+        default="",
+        verbose_name="Stakeholder responsável",
     )
     emoji = models.CharField(max_length=255, null=True, blank=True)
     icon_prop = models.JSONField(null=True)
@@ -165,7 +179,7 @@ class Project(BaseModel):
         ordering = ("-created_at",)
 
     def save(self, *args, **kwargs):
-        from plane.db.models import Workspace
+        from plane.db.models import Board, Workspace
 
         self.identifier = self.identifier.strip().upper()
         is_creating = self._state.adding
@@ -173,6 +187,15 @@ class Project(BaseModel):
         if is_creating and not self.is_timezone_provided:
             workspace = Workspace.objects.get(id=self.workspace_id)
             self.timezone = workspace.timezone
+
+        if self.board_id:
+            board_workspace_id = (
+                self.board.workspace_id
+                if hasattr(self.board, "workspace_id")
+                else Board.objects.values_list("workspace_id", flat=True).get(pk=self.board_id)
+            )
+            if board_workspace_id != self.workspace_id:
+                raise ValidationError("Board must belong to the same workspace as the project.")
 
         return super().save(*args, **kwargs)
 

@@ -141,13 +141,16 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     @property
     def avatar_url(self):
-        # Return the logo asset url if it exists
+        # OAuth providers keep the original picture URL in `avatar`; custom uploads use `avatar_asset` only.
+        if self.avatar and str(self.avatar).startswith("http"):
+            return self.avatar
+
         if self.avatar_asset:
             return self.avatar_asset.asset_url
 
-        # Return the logo url if it exists
         if self.avatar:
             return self.avatar
+
         return None
 
     @property

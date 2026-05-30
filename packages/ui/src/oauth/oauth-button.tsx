@@ -23,7 +23,7 @@ const OAuthButton = React.forwardRef(function OAuthButton(
     <button
       ref={ref}
       className={cn(
-        "bg-onboarding-background-200 hover:bg-onboarding-background-300 flex h-9 w-full items-center justify-center gap-2 rounded-md border border-strong px-4 py-2.5 text-13 font-medium text-primary duration-300",
+        "flex h-11 w-full items-center justify-center gap-2 rounded-lg border border-subtle bg-layer-2 px-4 py-2.5 text-13 font-medium text-primary shadow-sm transition-all duration-300 hover:border-strong hover:bg-layer-2-hover hover:shadow-md active:scale-[0.99]",
         className
       )}
       {...rest}

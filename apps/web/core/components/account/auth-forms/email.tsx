@@ -49,15 +49,18 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-4">
-      <div className="space-y-1">
-        <label htmlFor="email" className="text-13 font-medium text-tertiary">
+    <form onSubmit={handleFormSubmit} className="space-y-5">
+      <div className="flex flex-col gap-3">
+        <label htmlFor="email" className="text-13 font-medium text-secondary">
           {t("auth.common.email.label")}
         </label>
         <div
           className={cn(
-            `relative flex items-center rounded-md border bg-surface-1`,
-            !isFocused && Boolean(emailError?.email) ? `border-danger-strong` : `border-strong`
+            "relative flex items-center rounded-lg border bg-layer-1 transition-colors duration-150",
+            "border-subtle focus-within:border-accent-primary focus-within:ring-1 focus-within:ring-accent-primary/25",
+            !isFocused && Boolean(emailError?.email)
+              ? "border-danger-strong focus-within:border-danger-strong focus-within:ring-1 focus-within:ring-danger-primary/30"
+              : "hover:bg-layer-2"
           )}
           onFocus={() => {
             setIsFocused(true);
@@ -73,7 +76,7 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("auth.common.email.placeholder")}
-            className={`h-10 w-full border-0 disable-autofill-style placeholder:text-placeholder autofill:bg-danger-primary focus:bg-none active:bg-transparent`}
+            className="h-11 w-full rounded-lg border-0 bg-transparent disable-autofill-style placeholder:text-placeholder autofill:bg-transparent focus:bg-transparent active:bg-transparent"
             autoComplete="off"
             autoFocus
             ref={inputRef}
@@ -100,7 +103,13 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
           </p>
         )}
       </div>
-      <Button type="submit" variant="primary" className="w-full" size="xl" disabled={isButtonDisabled}>
+      <Button
+        type="submit"
+        variant="primary"
+        className="h-11 w-full rounded-lg text-body-sm-semibold shadow-sm transition-[transform,box-shadow] hover:shadow-md active:scale-[0.99] disabled:shadow-none"
+        size="xl"
+        disabled={isButtonDisabled}
+      >
         {isSubmitting ? <Spinner height="20px" width="20px" /> : t("common.continue")}
       </Button>
     </form>

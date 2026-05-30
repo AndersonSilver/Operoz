@@ -17,7 +17,7 @@ import { ComboDropDown, Spinner } from "@plane/ui";
 import { cn } from "@plane/utils";
 // components
 import { DropdownButton } from "@/components/dropdowns/buttons";
-import { BUTTON_VARIANTS_WITH_TEXT } from "@/components/dropdowns/constants";
+import { BUTTON_VARIANTS_WITH_TEXT, DROPDOWN_COMBOBOX_OPTIONS_CLASS } from "@/components/dropdowns/constants";
 import type { TDropdownProps } from "@/components/dropdowns/types";
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
@@ -216,7 +216,7 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
       renderByDefault={renderByDefault}
     >
       {isOpen && (
-        <Combobox.Options className="fixed z-10" static>
+        <Combobox.Options className={DROPDOWN_COMBOBOX_OPTIONS_CLASS} static>
           <div
             className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
             ref={setPopperElement}

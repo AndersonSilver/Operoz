@@ -6,6 +6,9 @@ from .analytic import AnalyticView
 from .api import APIActivityLog, APIToken
 from .asset import FileAsset
 from .base import BaseModel
+from .board import Board
+from .board_status_report import BoardStatusReport
+from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
 from .cycle import Cycle, CycleIssue, CycleUserProperties
 from .deploy_board import DeployBoard
 from .draft import (
@@ -76,10 +79,26 @@ from .workspace import (
     WorkspaceHomePreference,
     WorkspaceUserPreference,
 )
+from .workspace_jira_ops import WorkspaceJiraOpsConfig
 
 from .favorite import UserFavorite
 
-from .issue_type import IssueType
+from .issue_type import IssueType, ProjectIssueType
+from .board_issue_type import BoardIssueType
+from .custom_field import (
+    BoardCustomField,
+    BoardProjectFieldLayout,
+    BoardProjectFieldSection,
+    BoardProjectFieldSource,
+    BoardStandardField,
+    CustomFieldType,
+    IssueCustomFieldValue,
+    ProjectCustomField,
+    ProjectCustomFieldValue,
+    ProjectStandardFieldKey,
+    StandardFieldKey,
+    WorkspaceCustomField,
+)
 
 from .recent_visit import UserRecentVisit
 

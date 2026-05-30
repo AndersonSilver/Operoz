@@ -13,6 +13,7 @@ import { Button } from "@plane/propel/button";
 import type { IFilterInstance } from "@plane/shared-state";
 import type { TExternalFilter, TFilterProperty } from "@plane/types";
 import { cn, EHeaderVariant, Header, Loader } from "@plane/ui";
+import { BOARD_HUB_GLASS_BAR, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // local imports
 import type { TAddFilterButtonProps } from "./add-filters/button";
 import { AddFilterButton } from "./add-filters/button";
@@ -43,6 +44,7 @@ export const FiltersRow = observer(function FiltersRow<K extends TFilterProperty
   // states
   const [isUpdating, setIsUpdating] = useState(false);
   // derived values
+  const hasBoardWallpaper = useBoardHubHasBackground();
   const disabledAllOperations = disabledAllOperationsProp || !filter.configManager.areConfigsReady;
   const hasAnyConditions = filter.allConditionsForDisplay.length > 0;
   const hasAvailableOperations =
@@ -125,8 +127,13 @@ export const FiltersRow = observer(function FiltersRow<K extends TFilterProperty
   );
 
   const mainContent = (
-    <div className="flex w-full items-start gap-2 rounded-lg bg-layer-1 px-4 py-2">
-      <div className="flex w-full flex-wrap items-center gap-2">{leftContent}</div>
+    <div
+      className={cn(
+        "flex w-full items-center gap-2",
+        hasBoardWallpaper ? "px-3 py-2" : "items-start rounded-lg bg-layer-1 px-4 py-2"
+      )}
+    >
+      <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">{leftContent}</div>
       <div
         className={cn("flex items-center gap-2 border-l border-subtle pl-4", {
           "border-l-transparent pl-0": !hasAvailableOperations,
@@ -142,7 +149,13 @@ export const FiltersRow = observer(function FiltersRow<K extends TFilterProperty
   );
 
   const HeaderVariant = (
-    <Header variant={EHeaderVariant.TERNARY} className="min-h-11 bg-surface-1 !px-3">
+    <Header
+      variant={EHeaderVariant.TERNARY}
+      className={cn(
+        "min-h-10 !px-0",
+        hasBoardWallpaper ? cn("!bg-transparent", BOARD_HUB_GLASS_BAR) : "bg-surface-1 !px-3"
+      )}
+    >
       {mainContent}
     </Header>
   );

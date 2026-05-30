@@ -7,12 +7,13 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db import IntegrityError
 from django.db.models import OuterRef, Func, F
+from django.shortcuts import get_object_or_404
 
 # Module imports
 from plane.app.views.base import BaseAPIView
 from plane.license.api.permissions import InstanceAdminPermission
 from plane.db.models import Workspace, WorkspaceMember, Project
-from plane.license.api.serializers import WorkspaceSerializer
+from plane.license.api.serializers import WorkspaceSerializer, WorkspaceIssueNotificationFlagsSerializer
 from plane.utils.constants import RESTRICTED_WORKSPACE_SLUGS
 
 
@@ -108,3 +109,16 @@ class InstanceWorkSpaceEndpoint(BaseAPIView):
                     {"slug": "The workspace with the slug already exists"},
                     status=status.HTTP_409_CONFLICT,
                 )
+
+
+class InstanceWorkspaceIssueNotificationFlagsEndpoint(BaseAPIView):
+    """PATCH issue/email notification flags for a single workspace (instance admin)."""
+
+    permission_classes = [InstanceAdminPermission]
+
+    def patch(self, request, workspace_id):
+        workspace = get_object_or_404(Workspace, pk=workspace_id)
+        serializer = WorkspaceIssueNotificationFlagsSerializer(workspace, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
