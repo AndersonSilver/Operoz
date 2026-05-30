@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { RefObject } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { GANTT_TIMELINE_TYPE } from "@plane/types";
-import type { IBlockUpdateData } from "@plane/types";
-import { Loader } from "@plane/ui";
+import { GANTT_TIMELINE_TYPE } from "@operis/types";
+import type { IBlockUpdateData } from "@operis/types";
+import { Loader } from "@operis/ui";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import {
   isBoardModuleBlockId,

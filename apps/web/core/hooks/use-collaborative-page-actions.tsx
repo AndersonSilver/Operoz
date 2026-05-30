@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, useEffect, useCallback, useMemo } from "react";
-import type { TDocumentEventsServer } from "@plane/editor";
-import type { TDocumentEventsClient } from "@plane/editor/lib";
-import { DocumentCollaborativeEvents, getServerEventName } from "@plane/editor/lib";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import type { TDocumentEventsServer } from "@operis/editor";
+import type { TDocumentEventsClient } from "@operis/editor/lib";
+import { DocumentCollaborativeEvents, getServerEventName } from "@operis/editor/lib";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

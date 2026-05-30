@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { WEBSITE_URL } from "@plane/constants";
+import { WEBSITE_URL } from "@operis/constants";
 // assets
-import { PlaneLogo } from "@plane/propel/icons";
+import { PlaneLogo } from "@operis/propel/icons";
 
 type TPoweredBy = {
   disabled?: boolean;

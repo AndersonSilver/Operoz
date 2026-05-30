@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { makeAutoObservable, runInAction } from "mobx";
-import type { IProjectBoardPermissions } from "@plane/types";
+import type { IProjectBoardPermissions } from "@operis/types";
 import { BoardPermissionsService } from "@/services/board/board-permissions.service";
 import { canPerformBoardPermission } from "@/utils/board-permissions";
 

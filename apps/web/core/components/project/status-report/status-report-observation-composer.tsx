@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef, useState } from "react";
-import type { EditorRefApi } from "@plane/editor";
-import type { useTranslation } from "@plane/i18n";
-import { EFileAssetType } from "@plane/types";
-import { cn, isEditorEmpty } from "@plane/utils";
+import type { EditorRefApi } from "@operis/editor";
+import type { useTranslation } from "@operis/i18n";
+import { EFileAssetType } from "@operis/types";
+import { cn, isEditorEmpty } from "@operis/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/components/issue-modal-editor-toolbar";
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";

@@ -1,5 +1,5 @@
 services:
-  plane-redis:
+  operis-redis:
     image: valkey/valkey:7.2.11-alpine
     restart: unless-stopped
     networks:
@@ -10,7 +10,7 @@ services:
       # Use 16379 on host if another process already binds 6379 (containers still use 6379 internally).
       - "16379:6379"
 
-  plane-mq:
+  operis-mq:
     image: rabbitmq:3.13.6-management-alpine
     restart: unless-stopped
     networks:
@@ -24,7 +24,7 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
       RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
 
-  plane-minio:
+  operis-minio:
     image: minio/minio
     restart: unless-stopped
     networks:
@@ -49,7 +49,7 @@ services:
       - "9000:9000"
       - "9090:9090"
 
-  plane-db:
+  operis-db:
     image: postgres:15.7-alpine
     restart: unless-stopped
     networks:
@@ -83,15 +83,15 @@ services:
     env_file:
       - ./apps/api/.env
     depends_on:
-      - plane-db
-      - plane-redis
-      - plane-mq
-      - plane-minio
+      - operis-db
+      - operis-redis
+      - operis-mq
+      - operis-minio
     environment:
       # Prefer instance_configurations (God mode) over host env; Windows SKIP_ENV_VAR=0 breaks OAuth flags.
       SKIP_ENV_VAR: "1"
       # Inside Docker, localhost is not MinIO; boto3 must use the compose service name.
-      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
       USE_MINIO: "1"
       # Host browser uploads go directly to MinIO (no /uploads proxy on :8000 in local compose).
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -117,11 +117,11 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - plane-db
-      - plane-redis
+      - operis-db
+      - operis-redis
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -144,11 +144,11 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - plane-db
-      - plane-redis
+      - operis-db
+      - operis-redis
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -166,16 +166,16 @@ services:
       - dev_env
     volumes:
       - ./apps/api:/code
-    command: ./bin/docker-entrypoint-migrator.sh --settings=plane.settings.local
+    command: ./bin/docker-entrypoint-migrator.sh --settings=operis.settings.local
     env_file:
       - ./apps/api/.env
     depends_on:
-      - plane-db
-      - plane-redis
-      - plane-minio
+      - operis-db
+      - operis-redis
+      - operis-minio
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 

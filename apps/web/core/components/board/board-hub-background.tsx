@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Image, X } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { IconButton } from "@plane/propel/icon-button";
-import { Tooltip } from "@plane/propel/tooltip";
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { IconButton } from "@operis/propel/icon-button";
+import { Tooltip } from "@operis/propel/tooltip";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { cn } from "@operis/utils";
 import {
   GANTT_BACKGROUND_PRESETS,
   getSavedGanttChartBackground,

@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // types
-import { API_BASE_URL } from "@plane/constants";
-import type { IModule, ILinkDetails, ModuleLink, TIssuesResponse } from "@plane/types";
-import { isAxiosCancelError } from "@plane/utils";
+import { API_BASE_URL } from "@operis/constants";
+import type { IModule, ILinkDetails, ModuleLink, TIssuesResponse } from "@operis/types";
+import { isAxiosCancelError } from "@operis/utils";
 // services
 import { APIService } from "@/services/api.service";
 

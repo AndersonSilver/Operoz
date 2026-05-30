@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Connection, Extension, Hocuspocus, onConfigurePayload } from "@hocuspocus/server";
-import { logger } from "@plane/logger";
+import { logger } from "@operis/logger";
 import { Redis } from "@/extensions/redis";
 import { AdminCommand, CloseCode, getForceCloseMessage, isForceCloseCommand } from "@/types/admin-commands";
 import type { ForceCloseReason, ClientForceCloseMessage, ForceCloseCommandData } from "@/types/admin-commands";

@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import type { TNotificationTab } from "@plane/constants";
-import { NOTIFICATION_TABS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Header, Row, ERowVariant, EHeaderVariant, ContentWrapper } from "@plane/ui";
-import { cn, getNumberCount } from "@plane/utils";
+import type { TNotificationTab } from "@operis/constants";
+import { NOTIFICATION_TABS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Header, Row, ERowVariant, EHeaderVariant, ContentWrapper } from "@operis/ui";
+import { cn, getNumberCount } from "@operis/utils";
 // components
 import { CountChip } from "@/components/common/count-chip";
 // hooks

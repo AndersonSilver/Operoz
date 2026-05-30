@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 // plane package imports
-import { ModalPortal, EPortalWidth, EPortalPosition } from "@plane/propel/portal";
-import type { ICycle, IModule, IProject } from "@plane/types";
+import { ModalPortal, EPortalWidth, EPortalPosition } from "@operis/propel/portal";
+import type { ICycle, IModule, IProject } from "@operis/types";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // plane web components
 import { WorkItemsModalMainContent } from "./content";

@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 // plane constants
-import type { EIssueCommentAccessSpecifier } from "@plane/constants";
+import type { EIssueCommentAccessSpecifier } from "@operis/constants";
 // plane editor
-import { LiteTextEditorWithRef } from "@plane/editor";
-import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@plane/editor";
+import { LiteTextEditorWithRef } from "@operis/editor";
+import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operis/editor";
 // components
-import type { TSticky } from "@plane/types";
+import type { TSticky } from "@operis/types";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { useEditorConfig } from "@/hooks/editor";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";

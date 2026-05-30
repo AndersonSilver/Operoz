@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { action, makeObservable, runInAction } from "mobx";
 // base class
 import type {
@@ -13,7 +7,7 @@ import type {
   IssuePaginationOptions,
   TIssuesResponse,
   TBulkOperationsPayload,
-} from "@plane/types";
+} from "@operis/types";
 // services
 // types
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";

@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { isEqual, concat, get, indexOf, isEmpty, orderBy, pull, set, uniq, update, clone } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane constants
-import { ALL_ISSUES, ISSUE_PRIORITIES } from "@plane/constants";
+import { ALL_ISSUES, ISSUE_PRIORITIES } from "@operis/constants";
 // types
 import type {
   TIssue,
@@ -25,10 +19,10 @@ import type {
   TPaginationData,
   TBulkOperationsPayload,
   IBlockUpdateDependencyData,
-} from "@plane/types";
-import { EIssueServiceType, EIssueLayoutTypes } from "@plane/types";
+} from "@operis/types";
+import { EIssueServiceType, EIssueLayoutTypes } from "@operis/types";
 // helpers
-import { convertToISODateString, renderFormattedPayloadDate } from "@plane/utils";
+import { convertToISODateString, renderFormattedPayloadDate } from "@operis/utils";
 // plane web imports
 import { workItemSortWithOrderByExtended } from "@/plane-web/store/issue/helpers/base-issue.store";
 // services

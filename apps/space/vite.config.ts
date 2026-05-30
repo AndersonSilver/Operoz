@@ -4,7 +4,7 @@ import * as dotenv from "dotenv";
 import { reactRouter } from "@react-router/dev/vite";
 import { defineConfig } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { joinUrlPath } from "@plane/utils";
+import { joinUrlPath } from "@operis/utils";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 

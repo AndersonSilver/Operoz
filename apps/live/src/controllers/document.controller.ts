@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Request, Response } from "express";
 import { z } from "zod";
 // helpers
-import { Controller, Post } from "@plane/decorators";
-import { convertHTMLDocumentToAllFormats } from "@plane/editor";
+import { Controller, Post } from "@operis/decorators";
+import { convertHTMLDocumentToAllFormats } from "@operis/editor";
 // logger
-import { logger } from "@plane/logger";
+import { logger } from "@operis/logger";
 import type { TConvertDocumentRequestBody } from "@/types";
 
 // Define the schema with more robust validation

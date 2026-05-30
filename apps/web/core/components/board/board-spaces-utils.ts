@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { IBoard, TBoardSpaceType } from "@plane/types";
+import type { IBoard, TBoardSpaceType } from "@operis/types";
 
 export function getBoardIdentifier(board: Pick<IBoard, "identifier" | "slug">): string {
   const id = board.identifier?.trim();

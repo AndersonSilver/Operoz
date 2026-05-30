@@ -482,4 +482,4 @@ MV? Automação Fase 1 (este documento)  ← início após PRD estável
 - [Plano board config / fases](./tech4humans-board-config-mvp3-plano.md)
 - [Rebranding (Kortex → Operis)](./tech4humans-rebranding-remocao-plane.md)
 - Código Status Report + IA: `apps/web/core/components/project/status-report/`
-- Webhooks API: `apps/api/plane/app/views/webhook/`
+- Webhooks API: `apps/api/operis/app/views/webhook/`

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 // plane imports
-import { MODULE_STATUS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { ModuleStatusIcon } from "@plane/propel/icons";
-import type { TModuleStatus } from "@plane/types";
+import { MODULE_STATUS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { ModuleStatusIcon } from "@operis/propel/icons";
+import type { TModuleStatus } from "@operis/types";
 // local imports
 import { PowerKModalCommandItem } from "../../../modal/command-item";
 

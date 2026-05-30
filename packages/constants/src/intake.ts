@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { TInboxIssueStatus } from "@plane/types";
-import { EInboxIssueStatus } from "@plane/types";
+import type { TInboxIssueStatus } from "@operis/types";
+import { EInboxIssueStatus } from "@operis/types";
 
 export const INBOX_STATUS: {
   key: string;

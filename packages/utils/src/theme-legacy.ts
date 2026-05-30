@@ -1,10 +1,4 @@
 /**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-/**
  * Legacy Theme System
  *
  * This file contains the old 5-color theme system for backward compatibility.
@@ -19,7 +13,7 @@
  * - migrateLegacyTheme: Converts old 5-color theme to new 2-color system
  *
  * For new implementations:
- * - Use: import { applyCustomTheme, clearCustomTheme } from '@plane/utils/theme'
+ * - Use: import { applyCustomTheme, clearCustomTheme } from '@operis/utils/theme'
  * - See: packages/utils/src/theme/theme-application.ts
  */
 

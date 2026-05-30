@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Hocuspocus } from "@hocuspocus/server";
 import type { Request } from "express";
 import type WebSocket from "ws";
 // plane imports
-import { Controller, WebSocket as WSDecorator } from "@plane/decorators";
-import { logger } from "@plane/logger";
+import { Controller, WebSocket as WSDecorator } from "@operis/decorators";
+import { logger } from "@operis/logger";
 
 @Controller("/collaboration")
 export class CollaborationController {

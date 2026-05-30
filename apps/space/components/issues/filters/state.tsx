@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // ui
-import { EIconSize } from "@plane/constants";
-import { StateGroupIcon } from "@plane/propel/icons";
-import { Loader } from "@plane/ui";
+import { EIconSize } from "@operis/constants";
+import { StateGroupIcon } from "@operis/propel/icons";
+import { Loader } from "@operis/ui";
 // hooks
 import { useStates } from "@/hooks/store/use-state";
 // local imports

@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 
 // icons
-import { EIconSize } from "@plane/constants";
-import { CloseIcon, StateGroupIcon } from "@plane/propel/icons";
-import type { TStateGroups } from "@plane/types";
+import { EIconSize } from "@operis/constants";
+import { CloseIcon, StateGroupIcon } from "@operis/propel/icons";
+import type { TStateGroups } from "@operis/types";
 
 type Props = {
   handleRemove: (val: string) => void;

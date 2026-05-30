@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
-import { useTranslation } from "@plane/i18n";
-import { getButtonStyling } from "@plane/propel/button";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { ChevronDownIcon } from "@plane/propel/icons";
-import { CustomSelect } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { getButtonStyling } from "@operis/propel/button";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { ChevronDownIcon } from "@operis/propel/icons";
+import { CustomSelect } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { useBoard } from "@/hooks/store/use-board";
 
 type Props = {

@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
 // plane package imports
-import type { ICycle, IModule, IProject } from "@plane/types";
-import { Spinner } from "@plane/ui";
+import type { ICycle, IModule, IProject } from "@operis/types";
+import { Spinner } from "@operis/ui";
 // hooks
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // plane web components

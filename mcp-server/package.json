@@ -1,0 +1,32 @@
+{
+  "name": "@operis/mcp-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "MCP server for Operis — workspaces, projects, work items, boards, cycles, modules",
+  "type": "module",
+  "bin": {
+    "operis-mcp": "./dist/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "start:http": "node dist/http.js",
+    "dev": "tsx src/index.ts",
+    "dev:http": "tsx src/http.ts",
+    "check:types": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.12.1",
+    "express": "^5.2.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.0",
+    "@types/node": "^22.12.0",
+    "tsx": "^4.19.3",
+    "typescript": "^5.8.3"
+  }
+}

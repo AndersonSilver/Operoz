@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // types
-import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@plane/types";
-import type { TContextMenuItem } from "@plane/ui";
+import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@operis/types";
+import type { TContextMenuItem } from "@operis/ui";
 // hooks
 import { useQuickActionsFactory } from "@/plane-web/components/common/quick-actions-factory";
 

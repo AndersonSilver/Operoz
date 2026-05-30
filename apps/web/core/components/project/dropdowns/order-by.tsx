@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { ArrowDownWideNarrow } from "lucide-react";
 // plane imports
-import { PROJECT_ORDER_BY_OPTIONS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { getButtonStyling } from "@plane/propel/button";
-import { CheckIcon } from "@plane/propel/icons";
-import type { TProjectOrderByOptions } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
+import { PROJECT_ORDER_BY_OPTIONS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { getButtonStyling } from "@operis/propel/button";
+import { CheckIcon } from "@operis/propel/icons";
+import type { TProjectOrderByOptions } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
 
 type Props = {
   onChange: (value: TProjectOrderByOptions) => void;

@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Search, ChevronDown, Check, X, ListFilterPlus } from "lucide-react";
-import type { IWorkItemFilterInstance } from "@plane/shared-state";
-import { cn } from "@plane/utils";
+import type { IWorkItemFilterInstance } from "@operis/shared-state";
+import { cn } from "@operis/utils";
 import useSWR from "swr";
-import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBlockUpdateData, TIssue } from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
-import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@plane/types";
-import { renderFormattedPayloadDate } from "@plane/utils";
+import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBlockUpdateData, TIssue } from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
+import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
+import { renderFormattedPayloadDate } from "@operis/utils";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardModuleGanttBlock } from "@/components/board/gantt/board-module-gantt-block";
 import { BoardProjectGanttBlock } from "@/components/board/gantt/board-project-gantt-block";

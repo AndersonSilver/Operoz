@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { BoardHubTabNav } from "@/components/board/board-hub-tabs";
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 import { BoardHubBackgroundPicker, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { BoardOverviewHeaderMenu } from "@/components/board/board-overview-header-menu";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import type { IBoard } from "@plane/types";
-import { Header } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import type { IBoard } from "@operis/types";
+import { Header } from "@operis/ui";
+import { cn } from "@operis/utils";
 
 type Props = {
   board?: IBoard;

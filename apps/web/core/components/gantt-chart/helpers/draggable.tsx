@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { RefObject } from "react";
 import React from "react";
 import { observer } from "mobx-react";
 // hooks
-import type { IGanttBlock } from "@plane/types";
+import type { IGanttBlock } from "@operis/types";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 //  Plane-web
 import { LeftDependencyDraggable, RightDependencyDraggable } from "@/plane-web/components/gantt-chart";
 //

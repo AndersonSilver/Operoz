@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState } from "react";
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // plane imports
-import { PlusIcon } from "@plane/propel/icons";
-import { setPromiseToast } from "@plane/propel/toast";
-import type { ISearchIssueResponse, TIssue } from "@plane/types";
-import { EIssueLayoutTypes } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { PlusIcon } from "@operis/propel/icons";
+import { setPromiseToast } from "@operis/propel/toast";
+import type { ISearchIssueResponse, TIssue } from "@operis/types";
+import { EIssueLayoutTypes } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 // hooks

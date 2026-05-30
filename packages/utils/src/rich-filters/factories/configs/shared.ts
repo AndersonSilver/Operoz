@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type {
   FILTER_FIELD_TYPE,
   TBaseFilterFieldConfig,
@@ -18,7 +12,7 @@ import type {
   TSupportedFilterFieldConfigs,
   TSupportedOperators,
   TOperatorSpecificConfigs,
-} from "@plane/types";
+} from "@operis/types";
 
 /**
  * Helper to create a type-safe filter config

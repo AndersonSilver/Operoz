@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { IBoard } from "@plane/types";
+import type { IBoard } from "@operis/types";
 
 /**
  * Computes a new sort_order when reordering boards in the workspace sidebar.

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { ModuleStatusIcon } from "@plane/propel/icons";
-import type { IGanttBlock } from "@plane/types";
-import { Row } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { ModuleStatusIcon } from "@operis/propel/icons";
+import type { IGanttBlock } from "@operis/types";
+import { Row } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardGanttRowIcon } from "@/components/board/gantt/board-gantt-row-icon";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";

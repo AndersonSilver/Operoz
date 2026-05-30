@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { IBoardCustomField } from "@plane/types";
+import type { IBoardCustomField } from "@operis/types";
 
 type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 

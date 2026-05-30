@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { action, observable, runInAction, makeObservable } from "mobx";
 // plane internal packages
-import type { TUserStatus } from "@plane/constants";
-import { EUserStatus } from "@plane/constants";
-import { AuthService, UserService } from "@plane/services";
-import type { IUser } from "@plane/types";
+import type { TUserStatus } from "@operis/constants";
+import { EUserStatus } from "@operis/constants";
+import { AuthService, UserService } from "@operis/services";
+import type { IUser } from "@operis/types";
 // root store
 import type { RootStore } from "@/store/root.store";
 

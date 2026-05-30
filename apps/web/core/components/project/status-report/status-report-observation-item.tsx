@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { X } from "lucide-react";
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import { isObservationHtml } from "@/components/project/status-report/observation-content";
 import { ObservationHtmlView } from "@/components/project/status-report/observation-html-view";
 

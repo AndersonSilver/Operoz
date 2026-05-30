@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import type {
@@ -18,9 +12,9 @@ import { attachInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree
 import { observer } from "mobx-react";
 import { createRoot } from "react-dom/client";
 // plane imports
-import { useOutsideClickDetector } from "@plane/hooks";
-import type { IFavorite, InstructionType } from "@plane/types";
-import { DropIndicator } from "@plane/ui";
+import { useOutsideClickDetector } from "@operis/hooks";
+import type { IFavorite, InstructionType } from "@operis/types";
+import { DropIndicator } from "@operis/ui";
 // hooks
 import { useFavoriteItemDetails } from "@/hooks/use-favorite-item-details";
 // local imports

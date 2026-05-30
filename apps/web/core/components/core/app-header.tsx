@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { Row } from "@plane/ui";
+import { Row } from "@operis/ui";
 // components
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { ExtendedAppHeader } from "@/plane-web/components/common/extended-app-header";
 

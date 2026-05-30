@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, useMemo, useCallback, useEffect } from "react";
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // hooks
-import { CloseIcon, SearchIcon } from "@plane/propel/icons";
-import { useTranslation } from "@plane/i18n";
-import { cn } from "@plane/utils";
+import { CloseIcon, SearchIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { cn } from "@operis/utils";
 // power-k
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 import { ProjectsAppPowerKCommandsList } from "@/components/power-k/ui/modal/commands-list";

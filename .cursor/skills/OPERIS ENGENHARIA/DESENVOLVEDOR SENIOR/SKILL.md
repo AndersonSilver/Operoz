@@ -22,11 +22,11 @@ Skill de **execução técnica**. Antes de escrever código, raciocinar como arq
 
 | Camada | Onde | Responsabilidade |
 |--------|------|------------------|
-| API REST | `apps/api/plane/app/views/` | HTTP, permissões, orquestração fina |
-| Regras de negócio | `apps/api/plane/utils/` | Agregações, export, invariantes reutilizáveis |
-| Modelos | `apps/api/plane/db/models/` | Persistência, relações |
-| Serializers | `apps/api/plane/app/serializers/` | Validação entrada/saída |
-| URLs board | `apps/api/plane/app/urls/board.py` | Rotas `workspaces/<slug>/boards/<board_slug>/…` |
+| API REST | `apps/api/operis/app/views/` | HTTP, permissões, orquestração fina |
+| Regras de negócio | `apps/api/operis/utils/` | Agregações, export, invariantes reutilizáveis |
+| Modelos | `apps/api/operis/db/models/` | Persistência, relações |
+| Serializers | `apps/api/operis/app/serializers/` | Validação entrada/saída |
+| URLs board | `apps/api/operis/app/urls/board.py` | Rotas `workspaces/<slug>/boards/<board_slug>/…` |
 | Tipos partilhados | `packages/types/src/` | Contratos FE/BE |
 | Serviços FE | `apps/web/core/services/` | Chamadas API tipadas |
 | UI board Operis | `apps/web/core/components/board/` | Componentes, rotas hub |
@@ -47,23 +47,9 @@ Documentação interna: `docs/operis-*`, `docs/tech4humans-*`, `docs/arquitetura
 - Diff pequeno, legível, mesmo estilo do ficheiro vizinho.
 - Sem `any` em TypeScript; validação explícita em serializers Django.
 
-### Cabeçalho de copyright upstream (proibido no Operis)
+### Cabeçalhos de copyright
 
-Ao abrir ou editar um ficheiro, se existir **no topo** o bloco abaixo (herança do fork), **remover por completo** nesse diff. **Jamais** acrescentar este bloco — nem em ficheiros novos, nem ao copiar código de outro sítio.
-
-```text
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-```
-
-Regras:
-
-- **Ficheiro novo** (`.ts`, `.tsx`, `.py`, etc.): começar direto no código ou com comentário mínimo Operis se a equipa definir um cabeçalho próprio — **nunca** o bloco acima.
-- **Ficheiro existente** que ainda tenha o bloco: apagar as linhas do cabeçalho ao tocar no ficheiro (mesmo que a tarefa seja noutra linha), salvo o utilizador pedir explicitamente para não alterar cabeçalhos.
-- Não substituir por outro copyright longo sem pedido; o objetivo é código limpo para **Operis**, sem marca upstream no topo dos fontes que criamos ou mantemos.
+Os blocos upstream `Copyright … Plane Software` + `SPDX-License-Identifier` foram **removidos em massa** do monorepo (mai/2026). **Não** voltar a acrescentar esse cabeçalho em ficheiros novos ou copiados. Licença do projeto: `LICENSE.txt` (AGPL) na raiz.
 
 ### 5. Verificar
 
@@ -137,7 +123,7 @@ Workspace
 - [ ] Sem segredos no diff
 - [ ] Sem bypass de `deleted_at` / `archived_at` sem regra de negócio
 - [ ] FE não assume permissão que a API nega (esconder ação se capability false)
-- [ ] Nenhum cabeçalho copyright Plane Software no topo dos ficheiros tocados
+- [ ] Sem cabeçalho copyright upstream reintroduzido nos ficheiros tocados
 
 ---
 
@@ -168,7 +154,7 @@ Exemplo de referência: `client_360.py` + `client_360.py` (utils).
 
 ### O que evitar
 
-- Cabeçalho `Plane Software, Inc.` / `SPDX-License-Identifier: AGPL-3.0-only` em qualquer ficheiro novo ou editado.
+- Reintroduzir cabeçalho `Plane Software` / `SPDX-License-Identifier` por ficheiro (removido globalmente).
 - Lógica de negócio crítica só no frontend.
 - Endpoints «admin» sem verificação de papel.
 - Copiar código de outro módulo sem adaptar filtros de permissão.

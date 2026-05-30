@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams, useRouter } from "next/navigation";
 import { MoreHorizontal, ArchiveIcon, Settings } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 // plane imports
-import { EUserPermissionsLevel } from "@plane/constants";
-import { useOutsideClickDetector } from "@plane/hooks";
-import { useTranslation } from "@plane/i18n";
-import { ChevronRightIcon } from "@plane/propel/icons";
-import { EUserWorkspaceRoles } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { EUserPermissionsLevel } from "@operis/constants";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { useTranslation } from "@operis/i18n";
+import { ChevronRightIcon } from "@operis/propel/icons";
+import { EUserWorkspaceRoles } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
+import { cn } from "@operis/utils";
 // store hooks
 import { useUserPermissions } from "@/hooks/store/user";
 

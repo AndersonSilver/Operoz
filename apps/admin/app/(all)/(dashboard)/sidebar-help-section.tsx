@@ -4,11 +4,11 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { HelpCircle, MessageSquare, MoveLeft } from "lucide-react";
 import { Transition } from "@headlessui/react";
-import { WEB_BASE_URL } from "@plane/constants";
+import { WEB_BASE_URL } from "@operis/constants";
 // plane internal packages
-import { GithubIcon, NewTabIcon, PageIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import { cn } from "@plane/utils";
+import { GithubIcon, NewTabIcon, PageIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import { cn } from "@operis/utils";
 // hooks
 import { useInstance, useTheme } from "@/hooks/store";
 // assets

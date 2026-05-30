@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { KeyRound, Mails } from "lucide-react";
 // types
 import type {
   TCoreInstanceAuthenticationModeKeys,
   TGetBaseAuthenticationModeProps,
   TInstanceAuthenticationModes,
-} from "@plane/types";
+} from "@operis/types";
 // assets
 import giteaLogo from "@/app/assets/logos/gitea-logo.svg?url";
 import githubLightModeImage from "@/app/assets/logos/github-black.png?url";

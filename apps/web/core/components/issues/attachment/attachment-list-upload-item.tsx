@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // ui
-import { Tooltip } from "@plane/propel/tooltip";
-import { CircularProgressIndicator } from "@plane/ui";
+import { Tooltip } from "@operis/propel/tooltip";
+import { CircularProgressIndicator } from "@operis/ui";
 // components
-import { getFileExtension } from "@plane/utils";
+import { getFileExtension } from "@operis/utils";
 import { getFileIcon } from "@/components/icons";
 // helpers
 // hooks

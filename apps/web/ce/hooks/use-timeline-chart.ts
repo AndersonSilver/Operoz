@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // types
-import type { TTimelineTypeCore } from "@plane/types";
-import { GANTT_TIMELINE_TYPE } from "@plane/types";
+import type { TTimelineTypeCore } from "@operis/types";
+import { GANTT_TIMELINE_TYPE } from "@operis/types";
 // Plane-web
 
 import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useMemo, useRef } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { ALL_ISSUES } from "@plane/constants";
+import { ALL_ISSUES } from "@operis/constants";
 // types
 import type {
   GroupByColumnTypes,
@@ -22,8 +16,8 @@ import type {
   TIssueOrderByOptions,
   IGroupByColumn,
   TIssueKanbanFilters,
-} from "@plane/types";
-import { EIssuesStoreType } from "@plane/types";
+} from "@operis/types";
+import { EIssuesStoreType } from "@operis/types";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 // hooks

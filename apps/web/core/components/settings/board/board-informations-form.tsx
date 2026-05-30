@@ -1,19 +1,13 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState, type ReactNode } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ImageIcon } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Button } from "@plane/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@plane/propel/emoji-icon-picker";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import type { IBoard, IUserLite, TBoardFormData, TLogoProps } from "@plane/types";
-import { Input, TextArea, cn } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Button } from "@operis/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import type { IBoard, IUserLite, TBoardFormData, TLogoProps } from "@operis/types";
+import { Input, TextArea, cn } from "@operis/ui";
 import { WorkspaceMemberSelect } from "@/components/workspace/workspace-member-select";
 import { useBoard } from "@/hooks/store/use-board";
 import { useUserPermissions } from "@/hooks/store/user";

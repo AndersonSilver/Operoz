@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { NETWORK_CHOICES } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import type { IBoardProjectFieldLayout, IProject, TProjectStandardFieldKey } from "@plane/types";
-import { CustomSelect, Input, TextArea } from "@plane/ui";
-import { cn, projectIdentifierSanitizer } from "@plane/utils";
+import { NETWORK_CHOICES } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import type { IBoardProjectFieldLayout, IProject, TProjectStandardFieldKey } from "@operis/types";
+import { CustomSelect, Input, TextArea } from "@operis/ui";
+import { cn, projectIdentifierSanitizer } from "@operis/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";
 import { TimezoneSelect } from "@/components/global";
@@ -21,8 +15,8 @@ import {
   issueFormControlBaseClass,
   IssueFormField,
 } from "@/plane-web/components/issues/issue-modal/issue-form-field";
-import type { IProjectCustomFieldLite } from "@plane/types";
-import type { TCustomFieldValue } from "@plane/types";
+import type { IProjectCustomFieldLite } from "@operis/types";
+import type { TCustomFieldValue } from "@operis/types";
 import { projectFieldRequiredRules } from "./project-layout-validation";
 import {
   ProjectFormFieldError,

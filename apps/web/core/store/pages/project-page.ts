@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { computed, makeObservable } from "mobx";
 import { computedFn } from "mobx-utils";
 // constants
-import { EPageAccess, EUserPermissions } from "@plane/constants";
-import type { TPage } from "@plane/types";
+import { EPageAccess, EUserPermissions } from "@operis/constants";
+import type { TPage } from "@operis/types";
 // plane web store
 import type { RootStore } from "@/plane-web/store/root.store";
 // services

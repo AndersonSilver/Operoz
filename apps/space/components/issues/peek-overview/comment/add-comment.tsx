@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm, Controller } from "react-hook-form";
 // plane imports
-import type { EditorRefApi } from "@plane/editor";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { SitesFileService } from "@plane/services";
-import type { TIssuePublicComment } from "@plane/types";
+import type { EditorRefApi } from "@operis/editor";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { SitesFileService } from "@operis/services";
+import type { TIssuePublicComment } from "@operis/types";
 // editor components
 import { LiteTextEditor } from "@/components/editor/lite-text-editor";
 // hooks

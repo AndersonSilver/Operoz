@@ -89,10 +89,10 @@ flowchart TB
   end
 
   subgraph packages [Monorepo packages]
-    TYPES["@plane/types"]
-    CONST["@plane/constants"]
-    SVC["@plane/services - parcial"]
-    I18N["@plane/i18n"]
+    TYPES["@operis/types"]
+    CONST["@operis/constants"]
+    SVC["@operis/services - parcial"]
+    I18N["@operis/i18n"]
   end
 
   subgraph api [apps/api]
@@ -127,7 +127,7 @@ flowchart TB
 
 4. **Agregação cross-project** — Para MVP-2, copiar padrão de `WorkspaceViewIssuesViewSet` (`GET /workspaces/{slug}/issues/`) com filtro extra `project__board_id`.
 
-5. **Serviços web** — CRUD de board em `apps/web/core/services/board/` (padrão `project.service.ts`), não em `@plane/services` (projetos também estão só no web).
+5. **Serviços web** — CRUD de board em `apps/web/core/services/board/` (padrão `project.service.ts`), não em `@operis/services` (projetos também estão só no web).
 
 6. **Não estender stubs CE `team*`** — `ce/store/issue/team*` declara «will never be used»; criar `EIssuesStoreType.BOARD` + stores em `core/store/issue/board/`.
 
@@ -137,7 +137,7 @@ flowchart TB
 
 ### 4.1 Tabela `boards`
 
-**Ficheiro novo:** `apps/api/plane/db/models/board.py`
+**Ficheiro novo:** `apps/api/operis/db/models/board.py`
 
 | Coluna | Tipo | Notas |
 |--------|------|--------|
@@ -161,11 +161,11 @@ models.UniqueConstraint(
 )
 ```
 
-**Slug:** reutilizar `slug_validator` de `apps/api/plane/db/models/workspace.py` (linha 114).
+**Slug:** reutilizar `slug_validator` de `apps/api/operis/db/models/workspace.py` (linha 114).
 
 ### 4.2 Alteração `projects`
 
-**Ficheiro:** `apps/api/plane/db/models/project.py`
+**Ficheiro:** `apps/api/operis/db/models/project.py`
 
 ```python
 board = models.ForeignKey(
@@ -188,7 +188,7 @@ board = models.ForeignKey(
 | 1 | `0123_board_and_project_board_id.py` | `CreateModel(Board)` + `AddField(project.board)` |
 | 2 | — | **Sem** `RunPython` em massa (D10) |
 
-**Export:** `apps/api/plane/db/models/__init__.py` — adicionar `Board`.
+**Export:** `apps/api/operis/db/models/__init__.py` — adicionar `Board`.
 
 ### 4.4 O que NÃO criar no MVP
 
@@ -204,9 +204,9 @@ board = models.ForeignKey(
 
 ### 5.1 Rotas novas
 
-**Ficheiro novo:** `apps/api/plane/app/urls/board.py`
+**Ficheiro novo:** `apps/api/operis/app/urls/board.py`
 
-Registrar em `apps/api/plane/app/urls/__init__.py`.
+Registrar em `apps/api/operis/app/urls/__init__.py`.
 
 | Método | Path | View | Permissão |
 |--------|------|------|-----------|
@@ -221,7 +221,7 @@ Registrar em `apps/api/plane/app/urls/__init__.py`.
 
 ### 5.2 Alterações em projetos (validado — `ProjectViewSet`)
 
-**Ficheiro:** `apps/api/plane/app/views/project/base.py`
+**Ficheiro:** `apps/api/operis/app/views/project/base.py`
 
 | Método | Alteração |
 |--------|-----------|
@@ -229,14 +229,14 @@ Registrar em `apps/api/plane/app/urls/__init__.py`.
 | `create` | Exigir `board_id`; validar board no workspace |
 | `partial_update` | Aceitar `board_id`; bloquear `null` se já tinha board (D2b) |
 
-**Serializers:** `apps/api/plane/app/serializers/project.py`
+**Serializers:** `apps/api/operis/app/serializers/project.py`
 
 - `BoardLiteSerializer` (id, name, slug, logo_props)
 - Incluir `board_id` + `board` nested em `ProjectListSerializer` / `ProjectSerializer`
 
 ### 5.3 Board issues agregados (MVP-2)
 
-**Padrão validado:** `WorkspaceViewIssuesViewSet` em `apps/api/plane/app/views/view/base.py` (linha 138+)
+**Padrão validado:** `WorkspaceViewIssuesViewSet` em `apps/api/operis/app/views/view/base.py` (linha 138+)
 
 | Aspecto | Workspace global | Board (novo) |
 |---------|------------------|--------------|
@@ -246,14 +246,14 @@ Registrar em `apps/api/plane/app/urls/__init__.py`.
 | Filtros | `IssueFilterSet`, `issue_filters` | **Reutilizar igual** |
 | Serializer | `ViewIssueListSerializer` | **Reutilizar igual** |
 
-**Ficheiro novo:** `apps/api/plane/app/views/board/issues.py` — classe `BoardIssuesEndpoint(BaseAPIView)` ou método no `BoardViewSet`.
+**Ficheiro novo:** `apps/api/operis/app/views/board/issues.py` — classe `BoardIssuesEndpoint(BaseAPIView)` ou método no `BoardViewSet`.
 
 ### 5.4 Analytics (D8 — MVP-1)
 
 **Validado:**
 
-- Filtros: `apps/api/plane/utils/date_utils.py` → `get_analytics_filters(..., project_ids=...)`
-- Views: `apps/api/plane/app/views/analytic/advance.py`
+- Filtros: `apps/api/operis/utils/date_utils.py` → `get_analytics_filters(..., project_ids=...)`
+- Views: `apps/api/operis/app/views/analytic/advance.py`
 - Front: `apps/web/core/services/analytics.service.ts` + `TAnalyticsFilterParams` em `packages/types/src/analytics.ts` (hoje só `project_ids`, `cycle_id`, `module_id`)
 
 **Alteração:**
@@ -265,7 +265,7 @@ Registrar em `apps/api/plane/app/urls/__init__.py`.
 
 ### 5.5 Webhooks (opcional MVP-1, recomendado)
 
-**Ficheiro:** `apps/api/plane/bgtasks/webhook_task.py`
+**Ficheiro:** `apps/api/operis/bgtasks/webhook_task.py`
 
 - Adicionar `"board": BoardSerializer` em `SERIALIZER_MAPPER` / `MODEL_MAPPER`
 - Flag `board` em `db/models/webhook.py` + migração
@@ -281,7 +281,7 @@ Referência de create: `ProjectViewSet.create` linha ~290 e `ModuleViewSet.creat
 | Lista com permissões projeto | `ProjectViewSet.list` | `app/views/project/base.py` |
 | Issues cross-project | `WorkspaceViewIssuesViewSet` | `app/views/view/base.py` |
 
-**Export views:** `apps/api/plane/app/views/__init__.py`
+**Export views:** `apps/api/operis/app/views/__init__.py`
 
 ---
 
@@ -316,7 +316,7 @@ Referência de create: `ProjectViewSet.create` linha ~290 e `ModuleViewSet.creat
 
 ### 6.3 Implementação de permissões (sem novo nível `BOARD`)
 
-**Validado:** `allow_permission` em `apps/api/plane/app/permissions/base.py` só tem `WORKSPACE` e `PROJECT` (default).
+**Validado:** `allow_permission` em `apps/api/operis/app/permissions/base.py` só tem `WORKSPACE` e `PROJECT` (default).
 
 Para Boards no MVP:
 
@@ -571,7 +571,7 @@ python manage.py shell
 ```
 
 ```python
-from plane.db.models import Board, Project, Workspace
+from operis.db.models import Board, Project, Workspace
 w = Workspace.objects.get(slug="tech4humans")  # ajustar slug
 b = Board.objects.create(workspace=w, name="Test Board", slug="test-board", created_by_id=...)
 p = Project.objects.filter(workspace=w).first()
@@ -637,7 +637,7 @@ pnpm dev
 
 ### 11.1 Backend (Django)
 
-**Local sugerido:** `apps/api/plane/tests/contract/app/test_boards.py` (seguir padrão existente em `tests/`).
+**Local sugerido:** `apps/api/operis/tests/contract/app/test_boards.py` (seguir padrão existente em `tests/`).
 
 | Caso | Assert |
 |------|--------|
@@ -701,7 +701,7 @@ Variável ambiente `ENABLE_WORKSPACE_BOARDS=true` — guard em URLs/views se rol
 | Reativar `Team` / teamspace CE | `Team` sem API; `teamspace-list.tsx` return null | Novo modelo `Board` |
 | `EIssuesStoreType.TEAM` | Stubs em `ce/store/issue/team` | Criar `BOARD`, não TEAM |
 | Board como `ProjectBaseModel` | Module usa `project` FK obrigatório | Board só `workspace` FK |
-| Serviço só em `@plane/services` | `ProjectService` está em `apps/web/core/services` | Board service no web |
+| Serviço só em `@operis/services` | `ProjectService` está em `apps/web/core/services` | Board service no web |
 | Esquecer guest em issues agregados | `WorkspaceViewIssuesViewSet._get_project_permission_filters` | Copiar método integralmente |
 | Analytics sem `project_ids` | `get_analytics_filters` linha 172-174 | Resolver board → project_ids |
 
@@ -713,18 +713,18 @@ Variável ambiente `ENABLE_WORKSPACE_BOARDS=true` — guard em URLs/views se rol
 
 | Tópico | Caminho |
 |--------|---------|
-| Project CRUD | `apps/api/plane/app/views/project/base.py` |
-| Project serializers | `apps/api/plane/app/serializers/project.py` |
-| Project model | `apps/api/plane/db/models/project.py` |
-| Workspace model + slug | `apps/api/plane/db/models/workspace.py` |
-| Permissões | `apps/api/plane/app/permissions/base.py` |
-| Issues cross-workspace | `apps/api/plane/app/views/view/base.py` (`WorkspaceViewIssuesViewSet`) |
-| Workspace issues URL | `apps/api/plane/app/urls/views.py` (linha 52) |
-| Analytics filters | `apps/api/plane/app/utils/date_utils.py` |
-| Webhooks | `apps/api/plane/bgtasks/webhook_task.py` |
-| Sticky ViewSet template | `apps/api/plane/app/views/workspace/sticky.py` |
-| Team legado (não usar) | `apps/api/plane/db/models/workspace.py` (`Team` linha 279) |
-| Migrações | `apps/api/plane/db/migrations/0122_*.py` |
+| Project CRUD | `apps/api/operis/app/views/project/base.py` |
+| Project serializers | `apps/api/operis/app/serializers/project.py` |
+| Project model | `apps/api/operis/db/models/project.py` |
+| Workspace model + slug | `apps/api/operis/db/models/workspace.py` |
+| Permissões | `apps/api/operis/app/permissions/base.py` |
+| Issues cross-workspace | `apps/api/operis/app/views/view/base.py` (`WorkspaceViewIssuesViewSet`) |
+| Workspace issues URL | `apps/api/operis/app/urls/views.py` (linha 52) |
+| Analytics filters | `apps/api/operis/app/utils/date_utils.py` |
+| Webhooks | `apps/api/operis/bgtasks/webhook_task.py` |
+| Sticky ViewSet template | `apps/api/operis/app/views/workspace/sticky.py` |
+| Team legado (não usar) | `apps/api/operis/db/models/workspace.py` (`Team` linha 279) |
+| Migrações | `apps/api/operis/db/migrations/0122_*.py` |
 
 ### Frontend
 

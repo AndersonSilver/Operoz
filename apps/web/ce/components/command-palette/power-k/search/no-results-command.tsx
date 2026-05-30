@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Command } from "cmdk";
-import { useTranslation } from "@plane/i18n";
-import { SearchIcon } from "@plane/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { SearchIcon } from "@operis/propel/icons";
 // plane imports
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";

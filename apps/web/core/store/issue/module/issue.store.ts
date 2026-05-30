@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { action, makeObservable, runInAction } from "mobx";
-import { ALL_ISSUES } from "@plane/constants";
+import { ALL_ISSUES } from "@operis/constants";
 // base class
 import type {
   TIssue,
@@ -14,11 +8,11 @@ import type {
   IssuePaginationOptions,
   TIssuesResponse,
   TBulkOperationsPayload,
-} from "@plane/types";
-import { EIssueLayoutTypes } from "@plane/types";
+} from "@operis/types";
+import { EIssueLayoutTypes } from "@operis/types";
 import { getModuleCalendarPaginationOptions } from "@/components/issues/issue-layouts/calendar/utils";
 // helpers
-import { getDistributionPathsPostUpdate, isAxiosCancelError } from "@plane/utils";
+import { getDistributionPathsPostUpdate, isAxiosCancelError } from "@operis/utils";
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";
 import { BaseIssuesStore } from "../helpers/base-issues.store";
 //

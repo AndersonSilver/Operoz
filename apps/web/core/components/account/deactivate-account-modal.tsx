@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // ui
-import { Button } from "@plane/propel/button";
-import { TrashIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+import { Button } from "@operis/propel/button";
+import { TrashIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 // hooks
 import { useUser } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";

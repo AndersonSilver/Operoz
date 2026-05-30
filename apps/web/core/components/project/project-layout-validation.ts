@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { IBoardProjectFieldLayout, IProject, TCustomFieldValue, TProjectStandardFieldKey } from "@plane/types";
+import type { IBoardProjectFieldLayout, IProject, TCustomFieldValue, TProjectStandardFieldKey } from "@operis/types";
 
 export function isEmptyCustomFieldValue(val: TCustomFieldValue | undefined): boolean {
   if (val === undefined || val === null || val === "") return true;

@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { MARKETING_PLANE_ONE_PAGE_LINK } from "@plane/constants";
-import { getButtonStyling } from "@plane/propel/button";
-import { cn } from "@plane/utils";
+import { MARKETING_PLANE_ONE_PAGE_LINK } from "@operis/constants";
+import { getButtonStyling } from "@operis/propel/button";
+import { cn } from "@operis/utils";
 
 type Props = {
   className?: string;

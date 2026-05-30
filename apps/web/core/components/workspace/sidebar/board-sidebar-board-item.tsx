@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
@@ -11,17 +5,17 @@ import { attachInstruction, extractInstruction } from "@atlaskit/pragmatic-drag-
 import { observer } from "mobx-react";
 import { Transition } from "@headlessui/react";
 import { MoreHorizontal } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { IconButton } from "@plane/propel/icon-button";
-import { ChevronRightIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IBoard } from "@plane/types";
-import { Tooltip } from "@plane/propel/tooltip";
-import { CustomMenu, DragHandle, DropIndicator } from "@plane/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { IconButton } from "@operis/propel/icon-button";
+import { ChevronRightIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IBoard } from "@operis/types";
+import { Tooltip } from "@operis/propel/tooltip";
+import { CustomMenu, DragHandle, DropIndicator } from "@operis/ui";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-import { cn, copyUrlToClipboard } from "@plane/utils";
+import { cn, copyUrlToClipboard } from "@operis/utils";
 import { ArchiveBoardModal } from "@/components/board/archive-board-modal";
 import { EditBoardModal } from "@/components/board/edit-board-modal";
 import { CreateProjectModal } from "@/components/project/create-project-modal";

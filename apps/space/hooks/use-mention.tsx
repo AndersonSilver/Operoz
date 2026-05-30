@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef, useEffect } from "react";
 import useSWR from "swr";
 // plane imports
-import { UserService } from "@plane/services";
-import type { IUser } from "@plane/types";
+import { UserService } from "@operis/services";
+import type { IUser } from "@operis/types";
 
 export const useMention = () => {
   const userService = new UserService();

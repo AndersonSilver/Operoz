@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FC, ReactNode } from "react";
 import {
   RotateCcw,
@@ -38,7 +32,7 @@ import {
   PriorityPropertyIcon,
   StartDatePropertyIcon,
   StatePropertyIcon,
-} from "@plane/propel/icons";
+} from "@operis/propel/icons";
 import { store } from "@/lib/store-context";
 import type { TProjectActivity } from "@/plane-web/types";
 

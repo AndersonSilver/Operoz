@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import { API_BASE_URL } from "@plane/constants";
-import { isAxiosCancelError } from "@plane/utils";
-import { EIssueServiceType } from "@plane/types";
+import { API_BASE_URL } from "@operis/constants";
+import { isAxiosCancelError } from "@operis/utils";
+import { EIssueServiceType } from "@operis/types";
 import type {
   TIssueParams,
   IIssueDisplayProperties,
@@ -18,7 +12,7 @@ import type {
   TIssueServiceType,
   TIssuesResponse,
   TIssueSubIssues,
-} from "@plane/types";
+} from "@operis/types";
 // services
 import { APIService } from "@/services/api.service";
 

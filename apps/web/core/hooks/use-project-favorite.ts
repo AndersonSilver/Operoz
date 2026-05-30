@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { IS_FAVORITE_MENU_OPEN } from "@plane/constants";
-import { useLocalStorage } from "@plane/hooks";
-import { setPromiseToast } from "@plane/propel/toast";
+import { IS_FAVORITE_MENU_OPEN } from "@operis/constants";
+import { useLocalStorage } from "@operis/hooks";
+import { setPromiseToast } from "@operis/propel/toast";
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { useProject } from "@/hooks/store/use-project";
 

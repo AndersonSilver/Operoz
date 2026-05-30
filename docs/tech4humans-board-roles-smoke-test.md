@@ -83,7 +83,7 @@ Ver funções atribuídas a um e-mail:
 
 ```bash
 docker compose -f docker-compose-local.yml exec api python manage.py shell -c "
-from plane.db.models import Board, BoardMemberRole, User
+from operis.db.models import Board, BoardMemberRole, User
 board = Board.objects.get(slug='SEU_BOARD')
 u = User.objects.get(email='email@exemplo.com')
 for m in BoardMemberRole.objects.filter(board=board, user=u, deleted_at__isnull=True).select_related('role'):

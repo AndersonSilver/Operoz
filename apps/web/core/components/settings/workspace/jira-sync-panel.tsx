@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "react-router";
@@ -26,14 +20,14 @@ import {
   ShieldCheck,
   Upload,
 } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Badge } from "@plane/propel/badge";
-import { Button } from "@plane/propel/button";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
-import { CustomSelect, Input } from "@plane/ui";
-import { calculateTimeAgo, cn } from "@plane/utils";
-import type { IBoard } from "@plane/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Badge } from "@operis/propel/badge";
+import { Button } from "@operis/propel/button";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { CustomSelect, Input } from "@operis/ui";
+import { calculateTimeAgo, cn } from "@operis/utils";
+import type { IBoard } from "@operis/types";
 import type {
   TJiraOpsImportPreview,
   TJiraOpsSyncPhase,

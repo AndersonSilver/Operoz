@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type {
   SingleOrArray,
   TFilterConditionNodeForDisplay,
   TFilterProperty,
   TFilterValue,
   TSupportedFilterFieldConfigs,
-} from "@plane/types";
+} from "@operis/types";
 
 export const COMMON_FILTER_ITEM_BORDER_CLASSNAME = "border-r border-subtle-1";
 

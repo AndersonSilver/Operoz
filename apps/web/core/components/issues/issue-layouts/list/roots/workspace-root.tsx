@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import type { GroupByColumnTypes, TGroupedIssues, TIssue, TIssueKanbanFilters } from "@plane/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@plane/types";
+import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import type { GroupByColumnTypes, TGroupedIssues, TIssue, TIssueKanbanFilters } from "@operis/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
 import { AllIssueQuickActions } from "@/components/issues/issue-layouts/quick-action-dropdowns";
 import { ListLayoutLoader } from "@/components/ui/loader/layouts/list-layout-loader";
 import { useIssues } from "@/hooks/store/use-issues";

@@ -104,7 +104,7 @@ plane/
 │   ├── space/        # Publicação / visão pública de projetos
 │   ├── live/         # Servidor Hocuspocus (Yjs) — edição colaborativa
 │   └── proxy/        # Caddy — reverse proxy + TLS (Community Edition)
-├── packages/         # Bibliotecas partilhadas (@plane/types, ui, i18n, editor, …)
+├── packages/         # Bibliotecas partilhadas (@operis/types, ui, i18n, editor, …)
 ├── deployments/
 │   ├── cli/community/    # Docker Compose / Swarm (imagens makeplane/*)
 │   ├── kubernetes/community/  # Helm (Artifact Hub: makeplane/plane-ce)
@@ -136,15 +136,15 @@ Definição canónica: `docker-compose.yml` (build a partir do código) e `deplo
 | **worker** | mesma imagem do api | — | Celery worker |
 | **beat-worker** | mesma imagem do api | — | Celery Beat (tarefas agendadas) |
 | **migrator** | mesma imagem do api | — | Migrações Django (job único no deploy) |
-| **plane-db** | `postgres:15.7-alpine` | 5432 | Base de dados |
-| **plane-redis** | `valkey/valkey:7.2.11-alpine` | 6379 | Cache, extensões live |
-| **plane-mq** | `rabbitmq:3.13-management-alpine` | 5672, 15672 | Broker Celery |
-| **plane-minio** | `minio/minio` | 9000, 9090 | Object storage (opcional se usar Blob/S3) |
+| **operis-db** | `postgres:15.7-alpine` | 5432 | Base de dados |
+| **operis-redis** | `valkey/valkey:7.2.11-alpine` | 6379 | Cache, extensões live |
+| **operis-mq** | `rabbitmq:3.13-management-alpine` | 5672, 15672 | Broker Celery |
+| **operis-minio** | `minio/minio` | 9000, 9090 | Object storage (opcional se usar Blob/S3) |
 
 ### 4.1 Ordem de arranque e dependências
 
 ```
-plane-db, plane-redis, plane-mq  →  api  →  worker, beat-worker
+operis-db, operis-redis, operis-mq  →  api  →  worker, beat-worker
                               ↘  migrator (após DB)
 web, admin, space, live  →  dependem de api (e web para space/admin)
 proxy  →  web, api, space, admin, live
@@ -176,7 +176,7 @@ Ficheiro: `apps/proxy/Caddyfile.ce`
 | `/api/*` | `api:8000` | API REST |
 | `/auth/*` | `api:8000` | OAuth / sessão |
 | `/static/*` | `api:8000` | Assets Django |
-| `/{BUCKET_NAME}/*` | `plane-minio:9000` | Uploads (quando MinIO integrado no proxy) |
+| `/{BUCKET_NAME}/*` | `operis-minio:9000` | Uploads (quando MinIO integrado no proxy) |
 
 **Variáveis do proxy:** `SITE_ADDRESS`, `CERT_EMAIL`, `CERT_ACME_CA`, `CERT_ACME_DNS`, `TRUSTED_PROXIES`, `FILE_SIZE_LIMIT`, `BUCKET_NAME`.
 
@@ -188,8 +188,8 @@ Em **Azure**, é comum colocar **Application Gateway** ou **Front Door** à fren
 
 ### 6.1 Stack Django
 
-- **Framework:** Django + DRF (`apps/api/plane/`).
-- **Apps principais:** `plane.app` (domínio), `plane.db` (modelos), `plane.bgtasks` (Celery), `plane.authentication`, `plane.license`, `plane.analytics`, `plane.space`.
+- **Framework:** Django + DRF (`apps/api/operis/`).
+- **Apps principais:** `operis.app` (domínio), `plane.db` (modelos), `plane.bgtasks` (Celery), `plane.authentication`, `plane.license`, `plane.analytics`, `plane.space`.
 - **Autenticação:** sessão/cookies + adaptadores OAuth (configurável na instância).
 - **Idioma default nas settings:** `pt-br` (`plane/settings/common.py`).
 
@@ -202,7 +202,7 @@ Padrão hierárquico (exemplos):
 - Projeto: `/api/workspaces/{slug}/projects/{project_id}/`
 - Issues: `.../projects/{id}/issues/`
 
-Documentação OpenAPI interna: `apps/api/plane/utils/openapi/`.
+Documentação OpenAPI interna: `apps/api/operis/utils/openapi/`.
 
 ### 6.3 Tarefas em background (Celery)
 

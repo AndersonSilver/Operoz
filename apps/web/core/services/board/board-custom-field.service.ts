@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { API_BASE_URL } from "@plane/constants";
+import { API_BASE_URL } from "@operis/constants";
 import type {
   IBoardCustomField,
   IBoardProjectFieldLayout,
@@ -18,7 +12,7 @@ import type {
   TBoardProjectFieldSection,
   TWorkspaceCustomFieldFormData,
   TWorkspaceCustomFieldUpdateData,
-} from "@plane/types";
+} from "@operis/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardCustomFieldService extends APIService {

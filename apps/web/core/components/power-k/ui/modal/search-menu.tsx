@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 // plane imports
-import { WORKSPACE_DEFAULT_SEARCH_RESULT } from "@plane/constants";
-import type { IWorkspaceSearchResults } from "@plane/types";
-import { cn } from "@plane/utils";
+import { WORKSPACE_DEFAULT_SEARCH_RESULT } from "@operis/constants";
+import type { IWorkspaceSearchResults } from "@operis/types";
+import { cn } from "@operis/utils";
 // hooks
 import { usePowerK } from "@/hooks/store/use-power-k";
 import useDebounce from "@/hooks/use-debounce";

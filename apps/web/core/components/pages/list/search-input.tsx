@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useRef, useState } from "react";
 // plane imports
-import { useOutsideClickDetector } from "@plane/hooks";
-import { IconButton } from "@plane/propel/icon-button";
-import { SearchIcon, CloseIcon } from "@plane/propel/icons";
-import { cn } from "@plane/utils";
+import { useOutsideClickDetector } from "@operis/hooks";
+import { IconButton } from "@operis/propel/icon-button";
+import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { cn } from "@operis/utils";
 
 type Props = {
   searchQuery: string;

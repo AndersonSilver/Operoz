@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { useMemo, useState } from "react";
@@ -27,14 +21,14 @@ import {
   Trash2,
   Undo2,
 } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { IconButton } from "@plane/propel/icon-button";
-import { Tooltip } from "@plane/propel/tooltip";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import type { IProject, TStatusReportExportFormat } from "@plane/types";
-import { AlertModalCore, CustomMenu } from "@plane/ui";
-import { cn, renderFormattedPeriodDatesLong } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { IconButton } from "@operis/propel/icon-button";
+import { Tooltip } from "@operis/propel/tooltip";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { IProject, TStatusReportExportFormat } from "@operis/types";
+import { AlertModalCore, CustomMenu } from "@operis/ui";
+import { cn, renderFormattedPeriodDatesLong } from "@operis/utils";
 import { buildExecutiveSummaryAiPayload } from "@/components/project/status-report/build-executive-summary-ai-payload";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";

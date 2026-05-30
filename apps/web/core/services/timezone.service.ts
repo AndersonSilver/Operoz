@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { API_BASE_URL } from "@plane/constants";
-import type { TTimezones } from "@plane/types";
+import { API_BASE_URL } from "@operis/constants";
+import type { TTimezones } from "@operis/types";
 // helpers
 // api services
 import { APIService } from "@/services/api.service";

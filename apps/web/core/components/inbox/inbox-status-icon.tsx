@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { AlertTriangle, CheckCircle2, Clock, XCircle } from "lucide-react";
-import { CopyIcon } from "@plane/propel/icons";
-import type { TInboxIssueStatus } from "@plane/types";
-import { EInboxIssueStatus } from "@plane/types";
-import { cn } from "@plane/utils";
+import { CopyIcon } from "@operis/propel/icons";
+import type { TInboxIssueStatus } from "@operis/types";
+import { EInboxIssueStatus } from "@operis/types";
+import { cn } from "@operis/utils";
 
 export const ICON_PROPERTIES = {
   [EInboxIssueStatus.PENDING]: {

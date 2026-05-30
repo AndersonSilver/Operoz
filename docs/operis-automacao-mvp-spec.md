@@ -399,7 +399,7 @@ Fila dedicada recomendada: `automation` (configurar em `CELERY_TASK_ROUTES`).
 
 **Base:** `/api/workspaces/{slug}/boards/{board_slug}/automation/`
 
-**Permissão:** leitura/escrita exige `board.administer` ou workspace admin — reutilizar `allow_workspace_or_board_admin` de `plane.app.permissions.board_access`.
+**Permissão:** leitura/escrita exige `board.administer` ou workspace admin — reutilizar `allow_workspace_or_board_admin` de `operis.app.permissions.board_access`.
 
 | Método | Path | Descrição |
 |--------|------|-----------|
@@ -566,10 +566,10 @@ Antes de Sprint A, validar no fork:
 | Área | Caminho |
 |------|---------|
 | Plano produto | `docs/operis-automacao-mvp-plano.md` |
-| Permissão board admin | `apps/api/plane/app/permissions/board_access.py` |
-| Board roles | `apps/api/plane/utils/board_roles.py` |
-| Webhooks (padrão HTTP) | `apps/api/plane/bgtasks/webhook_task.py` |
-| IA workspace | `apps/api/plane/app/views/external/base.py` |
+| Permissão board admin | `apps/api/operis/app/permissions/board_access.py` |
+| Board roles | `apps/api/operis/utils/board_roles.py` |
+| Webhooks (padrão HTTP) | `apps/api/operis/bgtasks/webhook_task.py` |
+| IA workspace | `apps/api/operis/app/views/external/base.py` |
 | UI placeholder | `apps/web/.../settings/boards/[boardSlug]/automacao/page.tsx` |
 | Nav automação | `apps/web/core/constants/board-settings.ts` |
 

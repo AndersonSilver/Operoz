@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState, useRef } from "react";
 import { Rocket } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // types
-import { Button } from "@plane/propel/button";
-import { SearchIcon, CloseIcon } from "@plane/propel/icons";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ISearchIssueResponse, TProjectIssuesSearchParams } from "@plane/types";
+import { Button } from "@operis/propel/button";
+import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ISearchIssueResponse, TProjectIssuesSearchParams } from "@operis/types";
 // ui
-import { Loader, ToggleSwitch, EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { generateWorkItemLink, getTabIndex } from "@plane/utils";
+import { Loader, ToggleSwitch, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { generateWorkItemLink, getTabIndex } from "@operis/utils";
 // helpers
 // hooks
 import useDebounce from "@/hooks/use-debounce";

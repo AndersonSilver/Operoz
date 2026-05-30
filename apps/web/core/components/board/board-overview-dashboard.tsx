@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 import {
   CheckCircle2,
@@ -11,13 +5,13 @@ import {
   Pencil,
   Save,
 } from "lucide-react";
-import { ISSUE_PRIORITY_FILTERS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { PieChart } from "@plane/propel/charts/pie-chart";
-import { EmptyStateCompact } from "@plane/propel/empty-state";
-import type { IBoardMeta } from "@plane/types";
-import { Avatar } from "@plane/ui";
-import { calculateTimeAgo, cn, getFileURL } from "@plane/utils";
+import { ISSUE_PRIORITY_FILTERS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { PieChart } from "@operis/propel/charts/pie-chart";
+import { EmptyStateCompact } from "@operis/propel/empty-state";
+import type { IBoardMeta } from "@operis/types";
+import { Avatar } from "@operis/ui";
+import { calculateTimeAgo, cn, getFileURL } from "@operis/utils";
 import { Client360BreakdownRow } from "@/components/board/client-360/client-360-ui";
 import { useAppRouter } from "@/hooks/use-app-router";
 

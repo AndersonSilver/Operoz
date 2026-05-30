@@ -141,7 +141,7 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 | Área | Ideia |
 |------|--------|
 | Entidade | `PRD` ligado a `board_id` e/ou `project_id` |
-| Conteúdo | Editor rich text (reutilizar `@plane/editor` / Pages) |
+| Conteúdo | Editor rich text (reutilizar `@operis/editor` / Pages) |
 | Secções | Objetivo, requisitos, fora de escopo, critérios de aceite, ligação a cards |
 | Ligação | Cards referenciam PRD; filtro «cards deste PRD» |
 | Permissões | Editar: ADMIN + MEMBER (definir); ver: GUEST se projeto público |
@@ -192,8 +192,8 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 |------|--------|---------|-------|
 | **MV6.1** | Marca visível: i18n, `SITE_NAME`, logos, favicon, emails, remover links `plane.so` | 1–3 dias | Baixo |
 | **MV6.2** | Instância self-hosted: nome/logo em God Mode | 1–2 dias | Baixo |
-| **MV6.3** | (Opcional) Renomear pacotes npm `@plane/*` → `@kortex/*` | 1–2 semanas | Médio |
-| **Fora do MVP** | Pacote Python `plane/`, Docker `plane-db`, pasta monorepo | — | Alto — adiar |
+| **MV6.3** | (Opcional) Renomear pacotes npm `@operis/*` → `@kortex/*` | 1–2 semanas | Médio |
+| **Fora do MVP** | Pacote Python `plane/`, Docker `operis-db`, pasta monorepo | — | Alto — adiar |
 
 ### Critérios de aceite MV6 (mínimo para fechar MVP)
 
@@ -203,7 +203,7 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 - [ ] `pnpm dev` + smoke Boards + Status Report sem regressão (checklist §8 do doc de rebranding).
 - [ ] Licença AGPL e copyright upstream **mantidos** no código (obrigação legal).
 
-**Estimativa MV6.1+6.2:** ~1 semana. **+ MV6.3** se quiseres terminal sem `@plane`: +1–2 semanas.
+**Estimativa MV6.1+6.2:** ~1 semana. Pacotes npm já renomeados para `@operis/*` (mai/2026).
 
 ---
 

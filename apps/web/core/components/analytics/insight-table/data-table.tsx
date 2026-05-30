@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import * as React from "react";
 import type {
   ColumnDef,
@@ -22,12 +16,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { useTranslation } from "@plane/i18n";
-import { EmptyStateCompact } from "@plane/propel/empty-state";
-import { SearchIcon, CloseIcon } from "@plane/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { EmptyStateCompact } from "@operis/propel/empty-state";
+import { SearchIcon, CloseIcon } from "@operis/propel/icons";
 // plane package imports
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@plane/propel/table";
-import { cn } from "@plane/utils";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operis/propel/table";
+import { cn } from "@operis/utils";
 // plane web components
 
 interface DataTableProps<TData, TValue> {

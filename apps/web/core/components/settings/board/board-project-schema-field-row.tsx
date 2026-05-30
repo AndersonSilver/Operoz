@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { ChevronDown, ChevronUp, MoreHorizontal } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import type { IBoardProjectFieldLayout, TBoardFieldFormSpan } from "@plane/types";
-import { CustomMenu, ToggleSwitch } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import type { IBoardProjectFieldLayout, TBoardFieldFormSpan } from "@operis/types";
+import { CustomMenu, ToggleSwitch } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 import { getBoardProjectFieldDisplayName } from "./board-project-field-display";
 import { isProjectStandardLayoutField } from "./board-project-schema-constants";

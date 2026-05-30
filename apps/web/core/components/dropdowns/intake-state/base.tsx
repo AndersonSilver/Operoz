@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { SearchIcon, IntakeStateGroupIcon, ChevronDownIcon } from "@plane/propel/icons";
-import type { IIntakeState } from "@plane/types";
-import { ComboDropDown, Spinner } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import { SearchIcon, IntakeStateGroupIcon, ChevronDownIcon } from "@operis/propel/icons";
+import type { IIntakeState } from "@operis/types";
+import { ComboDropDown, Spinner } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { DropdownButton } from "@/components/dropdowns/buttons";
 import { BUTTON_VARIANTS_WITH_TEXT } from "@/components/dropdowns/constants";

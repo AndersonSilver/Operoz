@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { SingleOrArray, TFilterValue } from "@plane/types";
+import type { SingleOrArray, TFilterValue } from "@operis/types";
 
 /**
  * Converts any value to a non-null array for UI components that expect arrays

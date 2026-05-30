@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { RANDOM_EMOJI_CODES } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { Button } from "@plane/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@plane/propel/emoji-icon-picker";
-import { CloseIcon } from "@plane/propel/icons";
-import type { TBoardFormData, TLogoProps } from "@plane/types";
-import { Input, TextArea } from "@plane/ui";
-import { validateSlug } from "@plane/utils";
+import { RANDOM_EMOJI_CODES } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Button } from "@operis/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
+import { CloseIcon } from "@operis/propel/icons";
+import type { TBoardFormData, TLogoProps } from "@operis/types";
+import { Input, TextArea } from "@operis/ui";
+import { validateSlug } from "@operis/utils";
 import { useBoard } from "@/hooks/store/use-board";
 import { boardSlugFromName } from "./board-slug";
 

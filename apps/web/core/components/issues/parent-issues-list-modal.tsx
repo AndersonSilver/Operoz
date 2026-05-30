@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 // icons
@@ -11,13 +5,13 @@ import { Rocket } from "lucide-react";
 // headless ui
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@plane/i18n";
-import { SearchIcon } from "@plane/propel/icons";
+import { useTranslation } from "@operis/i18n";
+import { SearchIcon } from "@operis/propel/icons";
 // types
-import type { ISearchIssueResponse } from "@plane/types";
+import type { ISearchIssueResponse } from "@operis/types";
 // ui
-import { Loader, EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
-import { generateWorkItemLink, getTabIndex } from "@plane/utils";
+import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { generateWorkItemLink, getTabIndex } from "@operis/utils";
 // components
 import { IssueSearchModalEmptyState } from "@/components/core/modals/issue-search-modal-empty-state";
 // helpers

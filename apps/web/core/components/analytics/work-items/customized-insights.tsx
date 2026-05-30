@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 // plane package imports
-import { useTranslation } from "@plane/i18n";
-import type { IAnalyticsParams } from "@plane/types";
-import { ChartXAxisProperty, ChartYAxisMetric } from "@plane/types";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import type { IAnalyticsParams } from "@operis/types";
+import { ChartXAxisProperty, ChartYAxisMetric } from "@operis/types";
+import { cn } from "@operis/utils";
 // plane web components
 import AnalyticsSectionWrapper from "../analytics-section-wrapper";
 import { AnalyticsSelectParams } from "../select/analytics-params";

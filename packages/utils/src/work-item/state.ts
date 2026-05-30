@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { TDraggableData } from "@plane/constants";
-import { STATE_GROUPS } from "@plane/constants";
-import type { IState, IStateResponse } from "@plane/types";
+import type { TDraggableData } from "@operis/constants";
+import { STATE_GROUPS } from "@operis/constants";
+import type { IState, IStateResponse } from "@operis/types";
 
 export const orderStateGroups = (unorderedStateGroups: IStateResponse | undefined): IStateResponse | undefined => {
   if (!unorderedStateGroups) return undefined;

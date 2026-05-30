@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useTheme as useNextTheme } from "next-themes";
 // ui
-import { Button, getButtonStyling } from "@plane/propel/button";
-import { resolveGeneralTheme } from "@plane/utils";
+import { Button, getButtonStyling } from "@operis/propel/button";
+import { resolveGeneralTheme } from "@operis/utils";
 // hooks
 import TakeoffIconDark from "@/app/assets/logos/takeoff-icon-dark.svg?url";
 import TakeoffIconLight from "@/app/assets/logos/takeoff-icon-light.svg?url";

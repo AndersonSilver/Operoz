@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
-import { useTranslation } from "@plane/i18n";
-import { Logo } from "@plane/propel/emoji-icon-picker";
-import { Breadcrumbs } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import { Logo } from "@operis/propel/emoji-icon-picker";
+import { Breadcrumbs } from "@operis/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SettingsPageHeader } from "@/components/settings/page-header";
 import type { TBoardSettingsNavItem } from "@/constants/board-settings";
-import type { TLogoProps } from "@plane/types";
+import type { TLogoProps } from "@operis/types";
 import { BOARD_SETTINGS_ICONS } from "./sidebar/item-icon";
 
 type Props = {

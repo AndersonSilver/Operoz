@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useMemo } from "react";
 // plane imports
-import type { EventToPayloadMap } from "@plane/editor";
-import { setToast, TOAST_TYPE } from "@plane/propel/toast";
+import type { EventToPayloadMap } from "@operis/editor";
+import { setToast, TOAST_TYPE } from "@operis/propel/toast";
 // types
-import type { IUserLite } from "@plane/types";
+import type { IUserLite } from "@operis/types";
 // components
 import type { TEditorBodyHandlers } from "@/components/pages/editor/editor-body";
 // hooks

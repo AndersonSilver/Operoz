@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import * as React from "react";
 import { useState } from "react";
-import { Tooltip } from "@plane/propel/tooltip";
-import type { ICustomSearchSelectOption } from "@plane/types";
+import { Tooltip } from "@operis/propel/tooltip";
+import type { ICustomSearchSelectOption } from "@operis/types";
 import { CustomSearchSelect } from "../dropdowns";
 import { cn } from "../utils";
 import { Breadcrumbs } from "./breadcrumbs";

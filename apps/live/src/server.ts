@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Server as HttpServer } from "http";
 import type { Hocuspocus } from "@hocuspocus/server";
 import compression from "compression";
@@ -13,8 +7,8 @@ import express from "express";
 import expressWs from "express-ws";
 import helmet from "helmet";
 // plane imports
-import { registerController } from "@plane/decorators";
-import { logger, loggerMiddleware } from "@plane/logger";
+import { registerController } from "@operis/decorators";
+import { logger, loggerMiddleware } from "@operis/logger";
 // controllers
 import { CONTROLLERS } from "@/controllers";
 // env

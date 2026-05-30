@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { update, concat, set, sortBy } from "lodash-es";
 import { action, computed, observable, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { IModule, ILinkDetails, TModulePlotType } from "@plane/types";
-import type { DistributionUpdates } from "@plane/utils";
-import { updateDistribution, orderModules, shouldFilterModule } from "@plane/utils";
+import type { IModule, ILinkDetails, TModulePlotType } from "@operis/types";
+import type { DistributionUpdates } from "@operis/utils";
+import { updateDistribution, orderModules, shouldFilterModule } from "@operis/utils";
 // helpers
 // services
 import { ModuleService } from "@/services/module.service";

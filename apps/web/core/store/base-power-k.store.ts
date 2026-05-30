@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observable, action, makeObservable } from "mobx";
 // plane imports
-import type { EIssuesStoreType } from "@plane/types";
+import type { EIssuesStoreType } from "@operis/types";
 // components
 import type { IPowerKCommandRegistry } from "@/components/power-k/core/registry";
 import { PowerKCommandRegistry } from "@/components/power-k/core/registry";

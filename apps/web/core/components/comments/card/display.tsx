@@ -1,27 +1,21 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 // plane imports
-import type { EditorRefApi } from "@plane/editor";
-import { useHashScroll } from "@plane/hooks";
-import { GlobeIcon, LockIcon } from "@plane/propel/icons";
-import { EIssueCommentAccessSpecifier } from "@plane/types";
-import type { TCommentsOperations, TIssueComment } from "@plane/types";
-import { calculateTimeAgo, cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@plane/utils";
+import type { EditorRefApi } from "@operis/editor";
+import { useHashScroll } from "@operis/hooks";
+import { GlobeIcon, LockIcon } from "@operis/propel/icons";
+import { EIssueCommentAccessSpecifier } from "@operis/types";
+import type { TCommentsOperations, TIssueComment } from "@operis/types";
+import { calculateTimeAgo, cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@operis/utils";
 // components
 import { LiteTextEditor } from "@/components/editor/lite-text";
 // local imports
 import { CommentReactions } from "../comment-reaction";
 import { CommentCardEditForm } from "./edit-form";
-import { EmojiReactionButton, EmojiReactionPicker } from "@plane/propel/emoji-reaction";
-import { Avatar, Tooltip } from "@plane/ui";
+import { EmojiReactionButton, EmojiReactionPicker } from "@operis/propel/emoji-reaction";
+import { Avatar, Tooltip } from "@operis/ui";
 import { useMember } from "@/hooks/store/use-member";
 
 export type TCommentCardDisplayProps = {

@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { USER_TRACKER_ELEMENTS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import { USER_TRACKER_ELEMENTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // ui
-import { getButtonStyling } from "@plane/propel/button";
-import { PlaneLogo } from "@plane/propel/icons";
+import { getButtonStyling } from "@operis/propel/button";
+import { PlaneLogo } from "@operis/propel/icons";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 export function ProductUpdatesFooter() {
   const { t } = useTranslation();

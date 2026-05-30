@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { forwardRef } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal, Star } from "lucide-react";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import type { IFavorite } from "@plane/types";
-import { CustomMenu } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import type { IFavorite } from "@operis/types";
+import { CustomMenu } from "@operis/ui";
 // helpers
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 
 type Props = {
   isMenuActive: boolean;

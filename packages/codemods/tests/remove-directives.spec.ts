@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { describe, it, expect } from "vitest";
 import { applyTransform } from "@hypermod/utils";
 import * as transformer from "../remove-directives";
@@ -153,7 +147,7 @@ describe("remove-directives", () => {
       "use-client";
       import type { FC } from "react";
       // types
-      import type { TDeDupeIssue } from "@plane/types";
+      import type { TDeDupeIssue } from "@operis/types";
 
       type TDuplicateModalRootProps = {
         workspaceSlug: string;
@@ -172,7 +166,7 @@ describe("remove-directives", () => {
     expect(result).toMatchInlineSnapshot(`
       "import type { FC } from "react";
             // types
-            import type { TDeDupeIssue } from "@plane/types";
+            import type { TDeDupeIssue } from "@operis/types";
 
             type TDuplicateModalRootProps = {
               workspaceSlug: string;
@@ -195,7 +189,7 @@ describe("remove-directives", () => {
       import type { FC } from "react";
       import { useState } from "react";
       // plane imports
-      import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+      import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 
       export function MyComponent() {
         return <div>Hello</div>;
@@ -208,7 +202,7 @@ describe("remove-directives", () => {
       "import type { FC } from "react";
             import { useState } from "react";
             // plane imports
-            import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+            import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 
             export function MyComponent() {
               return <div>Hello</div>;
@@ -248,7 +242,7 @@ describe("remove-directives", () => {
       import type { FC } from "react";
       import { useState } from "react";
       // plane imports
-      import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+      import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
       // hooks
       import useKeypress from "@/hooks/use-keypress";
       // local imports
@@ -273,7 +267,7 @@ describe("remove-directives", () => {
       "import type { FC } from "react";
             import { useState } from "react";
             // plane imports
-            import { EModalPosition, EModalWidth, ModalCore } from "@plane/ui";
+            import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
             // hooks
             import useKeypress from "@/hooks/use-keypress";
             // local imports

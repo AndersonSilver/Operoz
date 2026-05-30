@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 import { Circle } from "lucide-react";
-import { ChevronDownIcon, ChevronUpIcon } from "@plane/propel/icons";
+import { ChevronDownIcon, ChevronUpIcon } from "@operis/propel/icons";
 // Plane
-import type { TIssueGroupByOptions, TIssueKanbanFilters } from "@plane/types";
+import type { TIssueGroupByOptions, TIssueKanbanFilters } from "@operis/types";
 // Plane-web
 import { WorkFlowGroupTree } from "@/plane-web/components/workflow";
 // mobx

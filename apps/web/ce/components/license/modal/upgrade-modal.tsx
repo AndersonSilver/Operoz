@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // plane imports
 import {
@@ -14,10 +8,10 @@ import {
   SUBSCRIPTION_REDIRECTION_URLS,
   SUBSCRIPTION_WEBPAGE_URLS,
   TALK_TO_SALES_URL,
-} from "@plane/constants";
-import { EProductSubscriptionEnum } from "@plane/types";
-import { EModalWidth, ModalCore } from "@plane/ui";
-import { cn } from "@plane/utils";
+} from "@operis/constants";
+import { EProductSubscriptionEnum } from "@operis/types";
+import { EModalWidth, ModalCore } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { FreePlanCard, PlanUpgradeCard } from "@/components/license";
 import type { TCheckoutParams } from "@/components/license/modal/card/checkout-button";

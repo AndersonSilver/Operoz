@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useState } from "react";
 import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 import { Minimize2 } from "lucide-react";
 // plane types
-import type { TSticky } from "@plane/types";
+import type { TSticky } from "@operis/types";
 // plane utils
-import { cn } from "@plane/utils";
+import { cn } from "@operis/utils";
 // hooks
 import { useSticky } from "@/hooks/use-stickies";
 // components

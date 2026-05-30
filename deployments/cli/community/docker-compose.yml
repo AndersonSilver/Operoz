@@ -1,16 +1,16 @@
 x-db-env: &db-env
-  PGHOST: ${PGHOST:-plane-db}
-  PGDATABASE: ${PGDATABASE:-plane}
-  POSTGRES_USER: ${POSTGRES_USER:-plane}
-  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-plane}
-  POSTGRES_DB: ${POSTGRES_DB:-plane}
+  PGHOST: ${PGHOST:-operis-db}
+  PGDATABASE: ${PGDATABASE:-operis}
+  POSTGRES_USER: ${POSTGRES_USER:-operis}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-operis}
+  POSTGRES_DB: ${POSTGRES_DB:-operis}
   POSTGRES_PORT: ${POSTGRES_PORT:-5432}
   PGDATA: ${PGDATA:-/var/lib/postgresql/data}
 
 x-redis-env: &redis-env
-  REDIS_HOST: ${REDIS_HOST:-plane-redis}
+  REDIS_HOST: ${REDIS_HOST:-operis-redis}
   REDIS_PORT: ${REDIS_PORT:-6379}
-  REDIS_URL: ${REDIS_URL:-redis://plane-redis:6379/}
+  REDIS_URL: ${REDIS_URL:-redis://operis-redis:6379/}
 
 x-minio-env: &minio-env
   MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-access-key}
@@ -20,7 +20,7 @@ x-aws-s3-env: &aws-s3-env
   AWS_REGION: ${AWS_REGION:-}
   AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
   AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
-  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://plane-minio:9000}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://operis-minio:9000}
   AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
 
 x-proxy-env: &proxy-env
@@ -35,12 +35,12 @@ x-proxy-env: &proxy-env
   SITE_ADDRESS: ${SITE_ADDRESS:-:80}
 
 x-mq-env: &mq-env # RabbitMQ Settings
-  RABBITMQ_HOST: ${RABBITMQ_HOST:-plane-mq}
+  RABBITMQ_HOST: ${RABBITMQ_HOST:-operis-mq}
   RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
-  RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-plane}
-  RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-plane}
-  RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-plane}
-  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-plane}
+  RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-operis}
+  RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD:-operis}
+  RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-operis}
+  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis}
 
 x-live-env: &live-env
   API_BASE_URL: ${API_BASE_URL:-http://api:8000}
@@ -52,9 +52,9 @@ x-app-env: &app-env
   CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
   GUNICORN_WORKERS: 1
   USE_MINIO: ${USE_MINIO:-1}
-  DATABASE_URL: ${DATABASE_URL:-postgresql://plane:plane@plane-db/plane}
+  DATABASE_URL: ${DATABASE_URL:-postgresql://operis:operis@operis-db/operis}
   SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
-  AMQP_URL: ${AMQP_URL:-amqp://plane:plane@plane-mq:5672/plane}
+  AMQP_URL: ${AMQP_URL:-amqp://operis:operis@operis-mq:5672/operis}
   API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
   MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
   LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-2FiJk1U2aiVPEQtzLehYGlTSnTnrs7LW}
@@ -111,13 +111,13 @@ services:
       restart_policy:
         condition: any
     volumes:
-      - logs_api:/code/plane/logs
+      - logs_api:/code/operis/logs
     environment:
       <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env]
     depends_on:
-      - plane-db
-      - plane-redis
-      - plane-mq
+      - operis-db
+      - operis-redis
+      - operis-mq
 
   worker:
     image: makeplane/plane-backend:${APP_RELEASE:-stable}
@@ -127,14 +127,14 @@ services:
       restart_policy:
         condition: any
     volumes:
-      - logs_worker:/code/plane/logs
+      - logs_worker:/code/operis/logs
     environment:
       <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env]
     depends_on:
       - api
-      - plane-db
-      - plane-redis
-      - plane-mq
+      - operis-db
+      - operis-redis
+      - operis-mq
 
   beat-worker:
     image: makeplane/plane-backend:${APP_RELEASE:-stable}
@@ -144,14 +144,14 @@ services:
       restart_policy:
         condition: any
     volumes:
-      - logs_beat-worker:/code/plane/logs
+      - logs_beat-worker:/code/operis/logs
     environment:
       <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env]
     depends_on:
       - api
-      - plane-db
-      - plane-redis
-      - plane-mq
+      - operis-db
+      - operis-redis
+      - operis-mq
 
   migrator:
     image: makeplane/plane-backend:${APP_RELEASE:-stable}
@@ -161,15 +161,15 @@ services:
       restart_policy:
         condition: on-failure
     volumes:
-      - logs_migrator:/code/plane/logs
+      - logs_migrator:/code/operis/logs
     environment:
       <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env]
     depends_on:
-      - plane-db
-      - plane-redis
+      - operis-db
+      - operis-redis
 
   # Comment this if you already have a database running
-  plane-db:
+  operis-db:
     image: postgres:15.7-alpine
     command: postgres -c 'max_connections=1000'
     deploy:
@@ -181,7 +181,7 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  plane-redis:
+  operis-redis:
     image: valkey/valkey:7.2.11-alpine
     deploy:
       replicas: 1
@@ -190,7 +190,7 @@ services:
     volumes:
       - redisdata:/data
 
-  plane-mq:
+  operis-mq:
     image: rabbitmq:3.13.6-management-alpine
     deploy:
       replicas: 1
@@ -202,7 +202,7 @@ services:
       - rabbitmq_data:/var/lib/rabbitmq
 
   # Comment this if you using any external s3 compatible storage
-  plane-minio:
+  operis-minio:
     image: minio/minio:latest
     command: server /export --console-address ":9090"
     deploy:

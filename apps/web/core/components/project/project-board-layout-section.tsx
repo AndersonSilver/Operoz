@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import type { IProject } from "@plane/types";
-import type { TCustomFieldValue } from "@plane/types";
+import type { IProject } from "@operis/types";
+import type { TCustomFieldValue } from "@operis/types";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
 import { BoardProjectDynamicFields } from "./board-project-dynamic-fields";

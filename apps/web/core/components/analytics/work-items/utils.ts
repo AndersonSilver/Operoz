@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane package imports
-import type { ChartYAxisMetric, IState } from "@plane/types";
-import { ChartXAxisProperty } from "@plane/types";
+import type { ChartYAxisMetric, IState } from "@operis/types";
+import { ChartXAxisProperty } from "@operis/types";
 
 interface ParamsProps {
   x_axis: ChartXAxisProperty;

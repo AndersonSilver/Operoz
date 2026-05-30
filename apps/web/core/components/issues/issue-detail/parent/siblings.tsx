@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import type { TIssue } from "@plane/types";
+import type { TIssue } from "@operis/types";
 // components
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { I_THEME_OPTION } from "@plane/constants";
-import { THEME_OPTIONS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import type { I_THEME_OPTION } from "@operis/constants";
+import { THEME_OPTIONS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // constants
-import { CustomSelect } from "@plane/ui";
+import { CustomSelect } from "@operis/ui";
 // ui
 
 type Props = {

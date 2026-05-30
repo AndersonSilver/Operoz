@@ -1,9 +1,3 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
@@ -15,14 +9,14 @@ import {
   SPACE_BASE_PATH,
   SPACE_BASE_URL,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { NewTabIcon, WorkItemsIcon } from "@plane/propel/icons";
-import { Tooltip } from "@plane/propel/tooltip";
-import { EIssuesStoreType } from "@plane/types";
-import { Breadcrumbs, Header } from "@plane/ui";
-import { cn } from "@plane/utils";
+} from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { NewTabIcon, WorkItemsIcon } from "@operis/propel/icons";
+import { Tooltip } from "@operis/propel/tooltip";
+import { EIssuesStoreType } from "@operis/types";
+import { Breadcrumbs, Header } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";

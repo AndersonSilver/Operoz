@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { Tooltip } from "@plane/propel/tooltip";
-import { generateWorkItemLink } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import { generateWorkItemLink } from "@operis/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { usePlatformOS } from "@/hooks/use-platform-os";

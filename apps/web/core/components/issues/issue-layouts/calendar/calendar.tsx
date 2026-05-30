@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 // plane constants
-import type { TSupportedFilterTypeForUpdate } from "@plane/constants";
+import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
 // types
 import type {
   TGroupedIssues,
@@ -18,11 +12,11 @@ import type {
   TPaginationData,
   ICalendarWeek,
   TSupportedFilterForUpdate,
-} from "@plane/types";
-import { EIssueLayoutTypes } from "@plane/types";
+} from "@operis/types";
+import { EIssueLayoutTypes } from "@operis/types";
 // ui
-import { Spinner } from "@plane/ui";
-import { renderFormattedPayloadDate, cn } from "@plane/utils";
+import { Spinner } from "@operis/ui";
+import { renderFormattedPayloadDate, cn } from "@operis/utils";
 // constants
 import { MONTHS_LIST } from "@/constants/calendar";
 // helpers

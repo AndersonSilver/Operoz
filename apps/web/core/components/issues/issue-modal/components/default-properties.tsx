@@ -1,22 +1,16 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, type CSSProperties } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { ETabIndices, EUserPermissions, EUserPermissionsLevel } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { ParentPropertyIcon } from "@plane/propel/icons";
+import { ETabIndices, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { ParentPropertyIcon } from "@operis/propel/icons";
 // types
-import type { IBoardCustomField, ISearchIssueResponse, TIssue, TStandardFieldKey } from "@plane/types";
+import type { IBoardCustomField, ISearchIssueResponse, TIssue, TStandardFieldKey } from "@operis/types";
 // ui
-import { CustomMenu } from "@plane/ui";
-import { cn, getDate, renderFormattedPayloadDate, getTabIndex } from "@plane/utils";
+import { CustomMenu } from "@operis/ui";
+import { cn, getDate, renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";

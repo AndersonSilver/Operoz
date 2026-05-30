@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 // plane imports
-import { START_OF_THE_WEEK_OPTIONS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { EStartOfTheWeek } from "@plane/types";
-import { CustomSelect } from "@plane/ui";
+import { START_OF_THE_WEEK_OPTIONS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { EStartOfTheWeek } from "@operis/types";
+import { CustomSelect } from "@operis/ui";
 // components
 import { SettingsControlItem } from "@/components/settings/control-item";
 // hooks

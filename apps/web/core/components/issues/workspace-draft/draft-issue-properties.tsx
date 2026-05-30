@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
-import { DueDatePropertyIcon, StartDatePropertyIcon } from "@plane/propel/icons";
+import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operis/propel/icons";
 // types
-import type { TIssuePriorities, TWorkspaceDraftIssue } from "@plane/types";
-import { getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@plane/utils";
+import type { TIssuePriorities, TWorkspaceDraftIssue } from "@operis/types";
+import { getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@operis/utils";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";

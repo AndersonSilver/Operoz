@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Disclosure } from "@headlessui/react";
-import { EmptyStateDetailed } from "@plane/propel/empty-state";
+import { EmptyStateDetailed } from "@operis/propel/empty-state";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import type { ICycle } from "@plane/types";
-import { Row } from "@plane/ui";
+import { useTranslation } from "@operis/i18n";
+import type { ICycle } from "@operis/types";
+import { Row } from "@operis/ui";
 // assets
 import darkActiveCycleAsset from "@/app/assets/empty-state/cycle/active-dark.webp?url";
 import lightActiveCycleAsset from "@/app/assets/empty-state/cycle/active-light.webp?url";

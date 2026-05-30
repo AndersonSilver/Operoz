@@ -2,10 +2,10 @@ import path from "node:path";
 import { reactRouter } from "@react-router/dev/vite";
 import { defineConfig, loadEnv } from "vite";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { joinUrlPath } from "@plane/utils";
+import { joinUrlPath } from "@operis/utils";
 
 const envDir = path.resolve(__dirname);
-// Monorepo root (…/plane) — required so Vite can read workspace packages (e.g. @plane/propel/dist) outside apps/admin
+// Monorepo root (…/plane) — required so Vite can read workspace packages (e.g. @operis/propel/dist) outside apps/admin
 const workspaceRoot = path.resolve(__dirname, "../..");
 
 /**
@@ -45,7 +45,7 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         // Use workspace source so SSR/dev never serves a stale packages/utils/dist.
-        "@plane/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
+        "@operis/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
         // Next.js compatibility shims used within admin
         "next/link": path.resolve(__dirname, "app/compat/next/link.tsx"),
         "next/navigation": path.resolve(__dirname, "app/compat/next/navigation.ts"),

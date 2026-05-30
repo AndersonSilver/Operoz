@@ -43,10 +43,10 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 
 ### 2.2 É infraestrutura interna (renomear só com plano explícito)
 
-- Pacotes npm `@plane/*` (~15 pacotes, centenas de imports)
-- Pacote Python Django `apps/api/plane/` (~650 ficheiros)
-- Serviços Docker: `plane-db`, `plane-redis`, `plane-mq`, `plane-minio`
-- Credenciais default em `.env.example`: `POSTGRES_USER=plane`, etc.
+- Pacotes npm `@operis/*` (~15 pacotes, centenas de imports)
+- Pacote Python Django `apps/api/operis/` (~650 ficheiros)
+- Serviços Docker: `operis-db`, `operis-redis`, `operis-mq`, `operis-minio`
+- Credenciais default em `.env.example`: `POSTGRES_USER=operis`, etc.
 - Constantes `PLANE_*` (ex.: `PLANE_COMMUNITY_PRODUCTS`)
 
 ### 2.3 Não confundir com marca (não renomear)
@@ -62,9 +62,9 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 ### 2.4 Licença e copyright (obrigação legal, não é «só marca»)
 
 - `LICENSE` AGPL-3.0
-- Cabeçalhos `Copyright (c) 2023-present Plane Software, Inc.` em milhares de ficheiros TS/Py
+- ~~Cabeçalhos `Copyright (c) 2023-present Plane Software, Inc.`~~ **removidos** do código (mai/2026); mantém-se `LICENSE.txt` AGPL na raiz
 
-**Podes** esconder a marca na UI. **Não deves** apagar o `LICENSE` nem os avisos de copyright do código-fonte que distribuis (fork AGPL). Prática habitual: **manter** headers originais e **adicionar** os teus + ficheiro `NOTICE` com atribuição ao Plane.
+**Operis (mai/2026):** cabeçalhos por ficheiro upstream foram **removidos** do monorepo; a obrigação AGPL continua cumprida via `LICENSE.txt` na raiz e atribuição no repositório. Se redistribuíres binários, valida com assessoria jurídica (ficheiro `NOTICE` opcional com crédito ao fork Plane).
 
 ---
 
@@ -78,7 +78,7 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 | Empty states | `packages/i18n/src/locales/*/empty-state.ts` | Revisar caso a caso |
 | Metadata / SEO | `packages/constants/src/metadata.ts` | `SITE_NAME`, `SITE_URL`, Space/Publish |
 | Pagamentos / links | `packages/constants/src/payment.ts`, `endpoints.ts` | URLs `plane.so` |
-| Layout web | `apps/web/app/layout.tsx`, `root.tsx` | Título hardcoded + imports de `@plane/constants` |
+| Layout web | `apps/web/app/layout.tsx`, `root.tsx` | Título hardcoded + imports de `@operis/constants` |
 | Admin / Space | `apps/admin/app/root.tsx`, `apps/space/app/root.tsx` | Mesmo padrão |
 | Auth | `apps/web/core/components/auth-screens/*`, `account/auth-forms/*` | Texto + logo |
 | OAuth UI | `packages/ui/src/oauth/*` | Botões provedores |
@@ -94,14 +94,14 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 
 ---
 
-### 3.2 Pacotes JavaScript `@plane/*` (risco médio)
+### 3.2 Pacotes JavaScript `@operis/*` (risco médio)
 
 **Pacotes internos** (nome em `packages/*/package.json`):
 
-- `@plane/utils`, `@plane/types`, `@plane/constants`, `@plane/i18n`
-- `@plane/editor`, `@plane/ui`, `@plane/propel`, `@plane/services`
-- `@plane/shared-state`, `@plane/hooks`, `@plane/decorators`, `@plane/logger`
-- `@plane/typescript-config`, `@plane/tailwind-config`, `@plane/codemods`
+- `@operis/utils`, `@operis/types`, `@operis/constants`, `@operis/i18n`
+- `@operis/editor`, `@operis/ui`, `@operis/propel`, `@operis/services`
+- `@operis/shared-state`, `@operis/hooks`, `@operis/decorators`, `@operis/logger`
+- `@operis/typescript-config`, `@operis/tailwind-config`, `@operis/codemods`
 
 **Apps:**
 
@@ -113,15 +113,15 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 | Live | `live` |
 | API (wrapper) | `plane-api` |
 
-**Raiz monorepo:** `"name": "plane"` em `package.json`.
+**Raiz monorepo:** `"name": "operis"` em `package.json`.
 
-**Volume:** imports `@plane/...` em centenas de ficheiros; `pnpm-lock.yaml` com dezenas de entradas.
+**Volume:** imports `@operis/...` em centenas de ficheiros; `pnpm-lock.yaml` com dezenas de entradas.
 
 **Risco ao renomear:** `package.json`, `pnpm-workspace.yaml`, paths TS/Vite, `pnpm install`, build turbo de todas as apps.
 
 ---
 
-### 3.3 Backend Django `apps/api/plane/` (risco alto)
+### 3.3 Backend Django `apps/api/operis/` (feito — renomeado de `plane/`)
 
 | Submódulo | Função |
 |-----------|--------|
@@ -134,7 +134,7 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 | `settings/` | Django settings |
 | `tests/` | Contract + unit |
 
-**Imports:** `from plane.*` em praticamente todo o backend.
+**Imports:** `from operis.*` em praticamente todo o backend.
 
 **Não renomear o pacote Python** sem plano para `INSTALLED_APPS`, Celery, Docker, e **app_label** das migrações Django.
 
@@ -144,15 +144,17 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 
 ### 3.4 Docker e ambiente (risco médio — devops)
 
+**Estado (mai/2026):** renomeação de infra e pacote Python **`operis`** feita (`docker-compose*.yml`, `.env*`, `apps/api/operis/`). Pacotes npm `@operis/*` mantêm-se.
+
 **Ficheiros:** `docker-compose-local.yml`, `apps/api/.env.example`, `deployments/**`, `setup.sh`, `setup.ps1`
 
 | Tipo | Exemplos |
 |------|----------|
-| Nomes de serviço | `plane-db`, `plane-redis`, `plane-mq`, `plane-minio` |
-| Credenciais default | `POSTGRES_USER=plane`, `POSTGRES_DB=plane`, `RABBITMQ_USER=plane` |
-| Scripts deploy | `PLANE_INSTALL_DIR`, `plane.env` em `deployments/cli`, `deployments/swarm` |
+| Nomes de serviço | `operis-db`, `operis-redis`, `operis-mq`, `operis-minio` |
+| Credenciais default | `POSTGRES_USER=operis`, `POSTGRES_DB=operis`, `RABBITMQ_USER=operis` |
+| Scripts deploy | `PLANE_INSTALL_DIR`, `operis.env` em `deployments/cli`, `deployments/swarm` |
 
-**Risco:** volumes Docker existentes (`pgdata`, etc.) — renomear serviços exige alinhar `.env` local e possivelmente recriar containers.
+**Risco:** volumes Docker existentes (`pgdata`, etc.) — após renomear, usar `docker compose … down -v` e subir de novo (dados locais são perdidos).
 
 ---
 
@@ -163,7 +165,7 @@ Muitas ocorrências de `plane` no código **não** são branding. Renomear em ma
 | `README.md`, `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md`, `SECURITY.md` | Upstream makeplane / Plane |
 | `docs/tech4humans-*.md` | Referências históricas ao Plane como produto base |
 | `.github/workflows/*` | CI upstream |
-| `apps/api/plane/tests/TESTING_GUIDE.md` | Guia de testes |
+| `apps/api/operis/tests/TESTING_GUIDE.md` | Guia de testes |
 
 ---
 
@@ -181,10 +183,10 @@ Validar sempre: criar/editar issue com descrição rica e página (Pages).
 
 | Métrica | Valor aproximado (maio/2026) |
 |---------|---------------------------|
-| Ficheiros em `apps/api/plane/` | ~650 |
-| Pacotes `@plane/*` | 15 |
+| Ficheiros em `apps/api/operis/` | ~650 |
+| Pacotes `@operis/*` | 15 |
 | Ficheiros com `\bPlane\b` (marca) | Centenas (muitos são copyright header) |
-| Ficheiros com `plane` case-insensitive | Milhares (inclui `@plane/`, paths, board, planejado) |
+| Ficheiros com `plane` case-insensitive | Milhares (inclui `@operis/`, paths, board, planejado) |
 | URLs `plane.so` / `makeplane` | ~70+ ficheiros em grep de domínio |
 | Templates email | ~15 |
 
@@ -214,7 +216,7 @@ Validar sempre: criar/editar issue com descrição rica e página (Pages).
 5. Templates `apps/api/templates/emails/**/*.html`
 6. Remover ou ocultar links `plane.so`, product updates, upgrade banners CE indesejados
 
-**Não incluir nesta fase:** renomear `@plane/*` ou pacote Python.
+**Não incluir nesta fase:** renomear `@operis/*` ou pacote Python.
 
 ---
 
@@ -226,10 +228,10 @@ Validar sempre: criar/editar issue com descrição rica e página (Pages).
 
 ---
 
-### Fase 3 — Renomear monorepo npm `@plane` → `@kortex` (risco médio, 1–2 semanas) — **opcional no MVP**
+### Fase 3 — Renomear monorepo npm `@plane` → `@operis` — **feito (mai/2026)**
 
 1. Renomear `name` nos 15 `packages/*/package.json` + raiz
-2. Codemod: `@plane/` → `@kortex/` (considerar `packages/codemods`)
+2. Codemod: `@operis/` → `@kortex/` (considerar `packages/codemods`)
 3. Atualizar `pnpm-workspace.yaml`, `turbo.json`, Vite/TS paths
 4. `pnpm install` + `pnpm check` + build `web`, `admin`, `space`, `live`, API
 
@@ -272,7 +274,7 @@ Impacto UX    ████████████  Fases 1–2 (i18n, metadata,
 Esforço       ████          Fases 1–2
 Risco quebra  ██            Fases 1–2
 
-Impacto dev   ████████████  Fase 3 (@plane packages)
+Impacto dev   ████████████  Fase 3 (@operis packages — concluída)
 Esforço       █████████     Fase 3
 Risco quebra  ██████        Fase 3
 
@@ -292,7 +294,7 @@ Para **tirar Plane da cara do produto** sem arriscar entregas em curso:
 1. Executar **Fases 0–2** (MV6.1–6.2) — utilizador passa a ver **Kortex** quase em todo o lado.
 2. **Adiar Fase 3** (`@kortex/*`) para janela com CI verde, se quiseres limpar o terminal.
 3. **Não fazer Fase 4** salvo necessidade forte.
-4. Manter `apps/api/plane/` e `@plane/*` como detalhe interno é aceitável em forks AGPL até MV6.3.
+4. Manter `apps/api/operis/` e `@operis/*` como detalhe interno é aceitável em forks AGPL até MV6.3.
 
 ---
 
@@ -305,7 +307,7 @@ Para **tirar Plane da cara do produto** sem arriscar entregas em curso:
 - [ ] Editor em issue e Pages
 - [ ] Admin god-mode + convite workspace
 - [ ] Email de teste (um template)
-- [ ] Testes API smoke: `apps/api/plane/tests` (subset contract)
+- [ ] Testes API smoke: `apps/api/operis/tests` (subset contract)
 
 ---
 
@@ -316,7 +318,7 @@ Para **tirar Plane da cara do produto** sem arriscar entregas em curso:
 rg '\bPlane\b' plane --glob '!node_modules' --glob '!dist' --glob '!.next'
 
 # Pacotes npm internos
-rg '@plane/' plane --glob '!pnpm-lock.yaml' --count-matches
+rg '@operis/' plane --glob '!pnpm-lock.yaml' --count-matches
 
 # Domínios upstream
 rg -i 'plane\.so|makeplane' plane --glob '!node_modules'
@@ -325,7 +327,7 @@ rg -i 'plane\.so|makeplane' plane --glob '!node_modules'
 rg 'from plane\.|import plane' plane/apps/api --count-matches
 
 # Docker / env
-rg 'plane-db|POSTGRES_USER.*plane' plane --glob '*.yml' --glob '*.env*'
+rg 'operis-db|POSTGRES_USER.*plane' plane --glob '*.yml' --glob '*.env*'
 
 # i18n PT — cuidado com Planejado
 rg 'Plane' plane/packages/i18n/src/locales/pt-BR
@@ -340,7 +342,7 @@ rg 'Plane' plane/packages/i18n/src/locales/pt-BR
 | 0 — Decisões | Pendente | | |
 | 1 — White-label UI | Pendente | | |
 | 2 — Instância | Pendente | | |
-| 3 — npm `@plane` | Pendente | | |
+| 3 — npm `@operis` | Feito (mai/2026) | | |
 | 4 — Python `plane` | Pendente / opcional | | |
 | 5 — Docker | Pendente | | |
 | 6 — Docs/repo | Pendente | | |

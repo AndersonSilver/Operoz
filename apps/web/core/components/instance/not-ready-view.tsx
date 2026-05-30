@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import Link from "next/link";
-import { GOD_MODE_URL } from "@plane/constants";
+import { GOD_MODE_URL } from "@operis/constants";
 // assets
 import GradientLogo from "@/app/assets/auth/gradient-logo.webp?url";
 import GradientBgLogo from "@/app/assets/auth/gradient-bg-logo.webp?url";
 import DefaultLayout from "@/layouts/default-layout";
-import { PlaneLockup } from "@plane/propel/icons";
-import { Button } from "@plane/propel/button";
+import { PlaneLockup } from "@operis/propel/icons";
+import { Button } from "@operis/propel/button";
 
 export function InstanceNotReady() {
   return (

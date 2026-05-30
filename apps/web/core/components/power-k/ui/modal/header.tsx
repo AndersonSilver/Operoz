@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { Command } from "cmdk";
 import { X } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 // plane imports
-import { SearchIcon } from "@plane/propel/icons";
+import { SearchIcon } from "@operis/propel/icons";
 // local imports
 import type { TPowerKContext, TPowerKPageType } from "../../core/types";
 import { POWER_K_MODAL_PAGE_DETAILS } from "./constants";

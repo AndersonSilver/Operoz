@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // plane imports
-import { CloseIcon, SearchIcon } from "@plane/propel/icons";
-import { ScrollArea } from "@plane/propel/scrollarea";
-import { Input } from "@plane/ui";
+import { CloseIcon, SearchIcon } from "@operis/propel/icons";
+import { ScrollArea } from "@operis/propel/scrollarea";
+import { Input } from "@operis/ui";
 // hooks
 import { usePowerK } from "@/hooks/store/use-power-k";
 // local imports

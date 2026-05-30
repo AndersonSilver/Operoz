@@ -1,6 +1,6 @@
 import Link from "next/link";
-import type { TAdminAuthErrorInfo } from "@plane/constants";
-import { SUPPORT_EMAIL, EAdminAuthErrorCodes } from "@plane/constants";
+import type { TAdminAuthErrorInfo } from "@operis/constants";
+import { SUPPORT_EMAIL, EAdminAuthErrorCodes } from "@operis/constants";
 
 export enum EErrorAlertType {
   BANNER_ALERT = "BANNER_ALERT",

@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { TSticky } from "@plane/types";
+import type { TSticky } from "@operis/types";
 
 export const STICKY_COLORS_LIST: {
   key: string;

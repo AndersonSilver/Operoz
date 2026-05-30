@@ -1,4 +1,4 @@
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 
 export function ModuleListHeader() {
   const { t } = useTranslation();

@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import { STATE_GROUPS } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { PieChart } from "@plane/propel/charts/pie-chart";
-import { EmptyStateCompact } from "@plane/propel/empty-state";
-import type { IUserProfileData, IUserStateDistribution } from "@plane/types";
-import { Card } from "@plane/ui";
-import { capitalizeFirstLetter } from "@plane/utils";
+import { STATE_GROUPS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { PieChart } from "@operis/propel/charts/pie-chart";
+import { EmptyStateCompact } from "@operis/propel/empty-state";
+import type { IUserProfileData, IUserStateDistribution } from "@operis/types";
+import { Card } from "@operis/ui";
+import { capitalizeFirstLetter } from "@operis/utils";
 
 type Props = {
   stateDistribution: IUserStateDistribution[];

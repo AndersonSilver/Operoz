@@ -1,17 +1,11 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useState } from "react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // icons
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
-import { Input } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { Input } from "@operis/ui";
+import { cn } from "@operis/utils";
 
 type Props = {
   control: Control<any>;

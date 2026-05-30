@@ -1,15 +1,9 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
-import type { IIssueLabel } from "@plane/types";
+import type { IIssueLabel } from "@operis/types";
 // components
-import { Loader } from "@plane/ui";
+import { Loader } from "@operis/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 // ui

@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { Request, Response, NextFunction } from "express";
-import { logger } from "@plane/logger";
+import { logger } from "@operis/logger";
 import { env } from "@/env";
 
 /**
@@ -21,7 +15,7 @@ import { env } from "@/env";
  *
  * @example
  * ```typescript
- * import { Middleware } from "@plane/decorators";
+ * import { Middleware } from "@operis/decorators";
  * import { requireSecretKey } from "@/lib/auth-middleware";
  *
  * @Get("/protected")

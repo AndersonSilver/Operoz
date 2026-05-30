@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
-import { Row } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { Row } from "@operis/ui";
+import { cn } from "@operis/utils";
 import {
   BoardHubBackgroundContent,
   BoardHubBackgroundLayer,

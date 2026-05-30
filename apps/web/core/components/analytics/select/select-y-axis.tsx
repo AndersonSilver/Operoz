@@ -1,16 +1,10 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EEstimateSystem } from "@plane/constants";
-import { ProjectIcon } from "@plane/propel/icons";
-import type { ChartYAxisMetric } from "@plane/types";
+import { EEstimateSystem } from "@operis/constants";
+import { ProjectIcon } from "@operis/propel/icons";
+import type { ChartYAxisMetric } from "@operis/types";
 // plane package imports
-import { CustomSelect } from "@plane/ui";
+import { CustomSelect } from "@operis/ui";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 // plane web constants

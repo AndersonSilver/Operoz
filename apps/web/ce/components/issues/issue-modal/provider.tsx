@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
-import type { ISearchIssueResponse, TIssue } from "@plane/types";
-import type { IIssueCustomFieldValuePayload } from "@plane/types";
+import type { ISearchIssueResponse, TIssue } from "@operis/types";
+import type { IIssueCustomFieldValuePayload } from "@operis/types";
 import { IssueModalContext } from "@/components/issues/issue-modal/context";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";

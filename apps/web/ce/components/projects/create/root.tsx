@@ -1,18 +1,12 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { FormProvider, useForm } from "react-hook-form";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@plane/i18n";
-import { TOAST_TYPE, setToast } from "@plane/propel/toast";
-import { EFileAssetType } from "@plane/types";
-import type { TCustomFieldValue } from "@plane/types";
+import { useTranslation } from "@operis/i18n";
+import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { EFileAssetType } from "@operis/types";
+import type { TCustomFieldValue } from "@operis/types";
 // components
 import { BoardSelectField } from "@/components/board/board-select-field";
 import { BoardProjectDynamicFields } from "@/components/project/board-project-dynamic-fields";

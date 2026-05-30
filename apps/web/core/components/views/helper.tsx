@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { EIssueLayoutTypes } from "@plane/types";
+import { EIssueLayoutTypes } from "@operis/types";
 import { WorkspaceListRoot } from "@/components/issues/issue-layouts/list/roots/workspace-root";
 import { WorkspaceSpreadsheetRoot } from "@/components/issues/issue-layouts/spreadsheet/roots/workspace-root";
 import { WorkspaceAdditionalLayouts } from "@/plane-web/components/views/helper";

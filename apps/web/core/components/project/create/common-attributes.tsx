@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { ChangeEvent } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 import { Controller, useFormContext } from "react-hook-form";
-import { InfoIcon } from "@plane/propel/icons";
+import { InfoIcon } from "@operis/propel/icons";
 // plane imports
-import { ETabIndices } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
+import { ETabIndices } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // ui
-import { Tooltip } from "@plane/propel/tooltip";
-import { Input, TextArea } from "@plane/ui";
-import { cn, projectIdentifierSanitizer, getTabIndex } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import { Input, TextArea } from "@operis/ui";
+import { cn, projectIdentifierSanitizer, getTabIndex } from "@operis/utils";
 // plane utils
 // helpers
 // plane-web types

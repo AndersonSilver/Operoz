@@ -120,8 +120,8 @@ Referência: capturas Jira «Squad as a Service» (maio/2026) — tabs com ícon
 
 | Necessidade | No Plane hoje | Onde |
 |-------------|---------------|------|
-| Tabs com ícone | `TabNavigationList` / `TabNavigationItem` (`@plane/propel/tab-navigation`) | Navegação de **projeto** (`tab-navigation-root.tsx`) |
-| Ícones de layout | `OverviewIcon`, `ListLayoutIcon`, `BoardLayoutIcon`, `TimelineLayoutIcon`, `CalendarLayoutIcon` | `@plane/propel/icons` |
+| Tabs com ícone | `TabNavigationList` / `TabNavigationItem` (`@operis/propel/tab-navigation`) | Navegação de **projeto** (`tab-navigation-root.tsx`) |
+| Ícones de layout | `OverviewIcon`, `ListLayoutIcon`, `BoardLayoutIcon`, `TimelineLayoutIcon`, `CalendarLayoutIcon` | `@operis/propel/icons` |
 | «Épico» visual | `EpicIcon` (`project.epic`) — **usar para Projeto no board**, não para issue `is_epic` | `packages/propel/src/icons/project/epic-icon.tsx` |
 | Logo de projeto/board | `Logo` + `logo_props` | Já no header do board |
 | Tipo de card na BD | `IssueType.logo_props`, `Issue.type_id` | `plane/db/models/issue_type.py` |
@@ -301,7 +301,7 @@ Referência: capturas Jira «Squad as a Service» (maio/2026) — tabs com ícon
 
 **Implementação sugerida:**
 
-- Novo `apps/api/plane/app/views/board/issues.py` (copiar `WorkspaceViewIssuesViewSet`)
+- Novo `apps/api/operis/app/views/board/issues.py` (copiar `WorkspaceViewIssuesViewSet`)
 - Queryset: `Issue` onde `project__board_id = board.id` + filtros de permissão existentes
 - Manter compat `?board_slug` em workspace issues até M2-3 migrar o front
 

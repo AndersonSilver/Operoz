@@ -1,4 +1,4 @@
-# Plane - local setup on Windows (PowerShell)
+# Operis - setup local no Windows (PowerShell)
 # Same idea as setup.sh: copy .env files, Django SECRET_KEY, pnpm install.
 
 $ErrorActionPreference = "Stop"
@@ -29,7 +29,7 @@ function New-PlaneSecretKey {
 }
 
 Write-Host ""
-Write-Host "Plane - preparando ambiente de desenvolvimento..." -ForegroundColor Cyan
+Write-Host "Operis - preparando ambiente de desenvolvimento..." -ForegroundColor Cyan
 Write-Host ""
 
 $pairs = @(
@@ -47,6 +47,20 @@ foreach ($p in $pairs) {
 }
 
 $apiEnv = Join-Path $root "apps\api\.env"
+$liveEnv = Join-Path $root "apps\live\.env"
+if ($ok -and (Test-Path $apiEnv)) {
+    (Get-Content -LiteralPath $apiEnv) `
+        -replace '^USE_MINIO=0$', 'USE_MINIO=1' `
+        -replace '^MINIO_PUBLIC_ENDPOINT_URL=.*$', 'MINIO_PUBLIC_ENDPOINT_URL="http://localhost:9000"' |
+        Set-Content -LiteralPath $apiEnv
+}
+if ($ok -and (Test-Path $liveEnv)) {
+    (Get-Content -LiteralPath $liveEnv) `
+        -replace '^REDIS_PORT=6379$', 'REDIS_PORT=16379' `
+        -replace 'redis://localhost:6379/', 'redis://localhost:16379/' |
+        Set-Content -LiteralPath $liveEnv
+}
+
 if ($ok -and (Test-Path $apiEnv)) {
     $content = Get-Content -LiteralPath $apiEnv -Raw
     if ($null -eq $content) { $content = "" }

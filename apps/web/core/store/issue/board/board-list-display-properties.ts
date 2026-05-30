@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import { ISSUE_DISPLAY_PROPERTIES_KEYS, SPREADSHEET_PROPERTY_LIST } from "@plane/constants";
-import type { IIssueDisplayProperties } from "@plane/types";
-import { getComputedDisplayProperties } from "@plane/utils";
+import { ISSUE_DISPLAY_PROPERTIES_KEYS, SPREADSHEET_PROPERTY_LIST } from "@operis/constants";
+import type { IIssueDisplayProperties } from "@operis/types";
+import { getComputedDisplayProperties } from "@operis/utils";
 
 /** Colunas visíveis por omissão na lista do board (evita tabela larga demais). */
 const BOARD_LIST_DEFAULT_VISIBLE: Partial<IIssueDisplayProperties> = {

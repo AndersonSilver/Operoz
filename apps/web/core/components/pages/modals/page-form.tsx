@@ -1,23 +1,17 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import type { FormEvent } from "react";
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 
 // plane imports
-import { ETabIndices, EPageAccess } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { Button } from "@plane/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@plane/propel/emoji-icon-picker";
-import { GlobeIcon, LockIcon, PageIcon } from "@plane/propel/icons";
-import type { ISvgIcons } from "@plane/propel/icons";
-import type { TPage } from "@plane/types";
-import { Input } from "@plane/ui";
-import { getTabIndex } from "@plane/utils";
+import { ETabIndices, EPageAccess } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { Button } from "@operis/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
+import { GlobeIcon, LockIcon, PageIcon } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operis/propel/icons";
+import type { TPage } from "@operis/types";
+import { Input } from "@operis/ui";
+import { getTabIndex } from "@operis/utils";
 // components
 import { AccessField } from "@/components/common/access-field";
 // hooks

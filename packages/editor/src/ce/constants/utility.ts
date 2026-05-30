@@ -1,12 +1,6 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 // plane imports
-import type { ADDITIONAL_EXTENSIONS } from "@plane/utils";
-import { CORE_EXTENSIONS } from "@plane/utils";
+import type { ADDITIONAL_EXTENSIONS } from "@operis/utils";
+import { CORE_EXTENSIONS } from "@operis/utils";
 // plane editor imports
 import type { ExtensionFileSetStorageKey } from "@/plane-editor/types/storage";
 

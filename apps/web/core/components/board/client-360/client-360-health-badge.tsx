@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
-import { useTranslation } from "@plane/i18n";
-import type { TClient360Health } from "@plane/types";
-import { cn } from "@plane/utils";
+import { useTranslation } from "@operis/i18n";
+import type { TClient360Health } from "@operis/types";
+import { cn } from "@operis/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 
 type Props = {

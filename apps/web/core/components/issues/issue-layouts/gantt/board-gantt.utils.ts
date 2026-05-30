@@ -1,10 +1,4 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { IBoardModule, TIssue, TPartialProject } from "@plane/types";
+import type { IBoardModule, TIssue, TPartialProject } from "@operis/types";
 
 export const BOARD_PROJECT_BLOCK_PREFIX = "board-project:";
 export const BOARD_MODULE_BLOCK_PREFIX = "board-module:";

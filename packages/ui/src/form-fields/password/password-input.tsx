@@ -1,13 +1,7 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
-import { Tooltip } from "@plane/propel/tooltip";
-import { cn } from "@plane/utils";
+import { Tooltip } from "@operis/propel/tooltip";
+import { cn } from "@operis/utils";
 
 type TPasswordInputProps = {
   id: string;

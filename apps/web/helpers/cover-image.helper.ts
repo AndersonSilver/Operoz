@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
-import type { EFileAssetType } from "@plane/types";
-import { getFileURL } from "@plane/utils";
+import type { EFileAssetType } from "@operis/types";
+import { getFileURL } from "@operis/utils";
 
 import CoverImage1 from "@/app/assets/cover-images/image_1.jpg?url";
 import CoverImage10 from "@/app/assets/cover-images/image_10.jpg?url";

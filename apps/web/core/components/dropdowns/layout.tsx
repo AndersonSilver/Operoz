@@ -1,21 +1,15 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ISSUE_LAYOUT_MAP } from "@plane/constants";
-import { useTranslation } from "@plane/i18n";
-import { CheckIcon } from "@plane/propel/icons";
-import { EIssueLayoutTypes } from "@plane/types";
-import { Dropdown } from "@plane/ui";
-import { cn } from "@plane/utils";
+import { ISSUE_LAYOUT_MAP } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
+import { CheckIcon } from "@operis/propel/icons";
+import { EIssueLayoutTypes } from "@operis/types";
+import { Dropdown } from "@operis/ui";
+import { cn } from "@operis/utils";
 // components
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";
-import { getIconButtonStyling } from "@plane/propel/icon-button";
+import { getIconButtonStyling } from "@operis/propel/icon-button";
 
 type TLayoutDropDown = {
   onChange: (value: EIssueLayoutTypes) => void;

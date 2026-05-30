@@ -1,14 +1,8 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import React from "react";
 import { observer } from "mobx-react";
 // hooks
-import type { TInstanceAuthenticationMethodKeys } from "@plane/types";
-import { ToggleSwitch } from "@plane/ui";
+import type { TInstanceAuthenticationMethodKeys } from "@operis/types";
+import { ToggleSwitch } from "@operis/ui";
 import { useInstance } from "@/hooks/store";
 // ui
 // types

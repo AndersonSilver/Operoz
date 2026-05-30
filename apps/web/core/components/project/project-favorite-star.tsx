@@ -1,11 +1,5 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { observer } from "mobx-react";
-import { FavoriteStar } from "@plane/ui";
+import { FavoriteStar } from "@operis/ui";
 import { useProjectFavorite } from "@/hooks/use-project-favorite";
 
 type Props = {

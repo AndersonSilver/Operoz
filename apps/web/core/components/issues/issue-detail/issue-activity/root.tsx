@@ -1,20 +1,14 @@
-/**
- * Copyright (c) 2023-present Plane Software, Inc. and contributors
- * SPDX-License-Identifier: AGPL-3.0-only
- * See the LICENSE file for details.
- */
-
 import { useMemo } from "react";
 import uniq from "lodash-es/uniq";
 import { observer } from "mobx-react";
 // plane package imports
-import type { TActivityFilters } from "@plane/constants";
-import { E_SORT_ORDER, defaultActivityFilters, EUserPermissions } from "@plane/constants";
-import { useLocalStorage } from "@plane/hooks";
+import type { TActivityFilters } from "@operis/constants";
+import { E_SORT_ORDER, defaultActivityFilters, EUserPermissions } from "@operis/constants";
+import { useLocalStorage } from "@operis/hooks";
 // i18n
-import { useTranslation } from "@plane/i18n";
+import { useTranslation } from "@operis/i18n";
 //types
-import type { TFileSignedURLResponse, TIssueComment } from "@plane/types";
+import type { TFileSignedURLResponse, TIssueComment } from "@operis/types";
 // components
 import { CommentCreate } from "@/components/comments/comment-create";
 // hooks
