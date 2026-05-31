@@ -41,9 +41,12 @@ const viteEnv = Object.keys(process.env)
 
 viteEnv.VITE_ENABLE_BOARDS = process.env.VITE_ENABLE_BOARDS ?? "true";
 
+const enableBoards = process.env.VITE_ENABLE_BOARDS ?? "true";
+
 export default defineConfig(() => ({
   define: {
-    "process.env": JSON.stringify(viteEnv),
+    "process.env": JSON.stringify({ ...viteEnv, VITE_ENABLE_BOARDS: enableBoards }),
+    "import.meta.env.VITE_ENABLE_BOARDS": JSON.stringify(enableBoards),
   },
   build: {
     assetsInlineLimit: 0,
