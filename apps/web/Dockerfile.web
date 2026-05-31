@@ -67,10 +67,15 @@ ENV VITE_SPACE_BASE_PATH=$VITE_SPACE_BASE_PATH
 ARG VITE_WEB_BASE_URL=""
 ENV VITE_WEB_BASE_URL=$VITE_WEB_BASE_URL
 
+# Operis/Tech4Humans: boards sidebar + workspace settings (vite.config bakes VITE_* at build time)
+ARG VITE_ENABLE_BOARDS="true"
+ENV VITE_ENABLE_BOARDS=$VITE_ENABLE_BOARDS
+
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 
-RUN pnpm turbo run build --filter=web
+# --force: evita cache Turbo de build anterior sem VITE_ENABLE_BOARDS no globalEnv
+RUN VITE_ENABLE_BOARDS=true pnpm turbo run build --filter=web --force
 
 # *****************************************************************************
 # STAGE 3: Serve with nginx

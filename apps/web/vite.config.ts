@@ -7,6 +7,11 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
+// Operis: boards ligados por defeito (Dockerfile.web e .env.example); desligar com VITE_ENABLE_BOARDS=false
+if (process.env.VITE_ENABLE_BOARDS === undefined) {
+  process.env.VITE_ENABLE_BOARDS = "true";
+}
+
 // Monorepo root — required so Vite can resolve workspace packages (e.g. @operis/propel/dist) outside apps/web
 const workspaceRoot = path.resolve(__dirname, "../..");
 
@@ -33,6 +38,8 @@ const viteEnv = Object.keys(process.env)
     a[k] = process.env[k] ?? "";
     return a;
   }, {});
+
+viteEnv.VITE_ENABLE_BOARDS = process.env.VITE_ENABLE_BOARDS ?? "true";
 
 export default defineConfig(() => ({
   define: {
