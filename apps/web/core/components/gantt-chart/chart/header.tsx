@@ -5,10 +5,8 @@ import { useTranslation } from "@operis/i18n";
 import type { TGanttViews } from "@operis/types";
 import { Row } from "@operis/ui";
 // components
-import { VIEWS_LIST } from "@/components/gantt-chart/data";
-// helpers
-// hooks
-import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
+import { BOARD_HUB_GANTT_SURFACE, useBoardHubHasBackground } from "@/components/board/board-hub-background";
+import { cn } from "@operis/utils";
 //
 import { GANTT_BREADCRUMBS_HEIGHT } from "../constants";
 
@@ -24,14 +22,15 @@ type Props = {
 
 export const GanttChartHeader = observer(function GanttChartHeader(props: Props) {
   const { t } = useTranslation();
-  const { blockIds, fullScreenMode, handleChartView, handleToday, loaderTitle, toggleFullScreenMode, showToday } =
-    props;
-  // chart hook
-  const { currentView } = useTimeLineChartStore();
+  const { blockIds, fullScreenMode, loaderTitle, toggleFullScreenMode } = props;
+  const hasBoardWallpaper = useBoardHubHasBackground();
 
   return (
     <Row
-      className="relative flex w-full flex-shrink-0 items-center gap-2 bg-surface-1 py-2 whitespace-nowrap"
+      className={cn(
+        "relative flex w-full flex-shrink-0 items-center gap-2 py-2 whitespace-nowrap",
+        hasBoardWallpaper ? BOARD_HUB_GANTT_SURFACE : "bg-surface-1"
+      )}
       style={{ height: `${GANTT_BREADCRUMBS_HEIGHT}px` }}
     >
       <div className="ml-auto text-11 font-medium text-tertiary">

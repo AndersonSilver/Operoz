@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { Row } from "@operis/ui";
 // components
 import { cn } from "@operis/utils";
-import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
+import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { ExtendedAppHeader } from "@/plane-web/components/common/extended-app-header";
 
 export interface AppHeaderProps {
@@ -25,15 +25,14 @@ export const AppHeader = observer(function AppHeader(props: AppHeaderProps) {
     <div className={cn("relative z-[2] shrink-0", className)}>
       <Row
         className={cn(
-          "flex h-11 w-full min-w-0 items-center gap-2 border-b border-subtle",
-          isTransparentHeader ? "border-subtle/40 bg-transparent" : "bg-surface-1",
-          hasBoardWallpaper && BOARD_HUB_GLASS_HEADER,
+          "flex h-11 w-full min-w-0 items-center gap-2",
+          isTransparentHeader ? "border-none bg-transparent" : "border-b border-subtle bg-surface-1",
           rowClassName
         )}
       >
         <ExtendedAppHeader header={header} />
       </Row>
-      {mobileHeader && mobileHeader}
+      {mobileHeader}
     </div>
   );
 });
