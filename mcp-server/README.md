@@ -4,11 +4,11 @@ Servidor [MCP](https://modelcontextprotocol.io) para o **Operis** — expõe wor
 
 ## Autenticação
 
-| Superfície | Prefixo | Auth |
-|------------|---------|------|
-| API v1 | `/api/v1/` | `OPERIS_API_KEY` (header `X-Api-Key`) |
-| API app (web) | `/api/` | Sessão (`operis_sign_in` ou `OPERIS_SESSION_COOKIE`) |
-| Instância | `/api/instances/` | Público (setup) |
+| Superfície    | Prefixo           | Auth                                                 |
+| ------------- | ----------------- | ---------------------------------------------------- |
+| API v1        | `/api/v1/`        | `OPERIS_API_KEY` (header `X-Api-Key`)                |
+| API app (web) | `/api/`           | Sessão (`operis_sign_in` ou `OPERIS_SESSION_COOKIE`) |
+| Instância     | `/api/instances/` | Público (setup)                                      |
 
 **Boards e Cliente 360** usam a API **app** → precisas de sessão ou `operis_sign_in`.
 
@@ -64,7 +64,20 @@ Cada ferramenta mapeia **um endpoint HTTP** (método + path documentado na descr
 
 ## Servidor HTTP (equipa sem clone)
 
-Para ~150 utilizadores Cursor com **um** endpoint central:
+### Docker (VPS / produção)
+
+```bash
+cd deployments/mcp
+cp operis-mcp.env.example operis-mcp.env
+# Edite OPERIS_API_BASE_URL e MCP_ALLOWED_HOSTS
+
+docker compose --env-file operis-mcp.env up -d
+curl -sS http://127.0.0.1:3100/health
+```
+
+Guia completo (NPM, GitHub Actions, Cursor): **[docs/deploy-mcp-vps.md](../docs/deploy-mcp-vps.md)**
+
+### Local (desenvolvimento)
 
 ```bash
 export OPERIS_API_BASE_URL=https://operis.sua-empresa.com
@@ -116,10 +129,10 @@ Modelo de config: [.cursor/mcp.json.enterprise.example](../.cursor/mcp.json.ente
 
 O que muda é **onde cada peça corre**, não o repositório:
 
-| Componente | Onde hospeda | No mesmo repo? |
-|------------|--------------|----------------|
-| API, web, workers (Operis) | Servidor / Docker / K8s | Sim (`apps/`, `packages/`) |
-| **MCP** (`mcp-server/`) | Normalmente **máquina do dev** (Cursor via stdio) | Sim (código versionado junto) |
+| Componente                 | Onde hospeda                                      | No mesmo repo?                |
+| -------------------------- | ------------------------------------------------- | ----------------------------- |
+| API, web, workers (Operis) | Servidor / Docker / K8s                           | Sim (`apps/`, `packages/`)    |
+| **MCP** (`mcp-server/`)    | Normalmente **máquina do dev** (Cursor via stdio) | Sim (código versionado junto) |
 
 Fluxo típico em produção:
 

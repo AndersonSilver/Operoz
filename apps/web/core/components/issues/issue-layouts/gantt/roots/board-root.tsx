@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBlockUpdateData, TIssue } from "@operis/types";
+import type { IBlockUpdateData, IIssueDisplayFilterOptions, TIssue } from "@operis/types";
 import { EIssuesStoreType } from "@operis/types";
 import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
 import { renderFormattedPayloadDate } from "@operis/utils";
@@ -45,13 +45,15 @@ import {
 type Props = {
   viewId: string;
   workItemsFilter?: IWorkItemFilterInstance;
+  /** Filtros já carregados pelo BoardTimelineLayoutRoot (layout gantt); evita fallback ao Quadro. */
+  bootstrapDisplayFilters?: IIssueDisplayFilterOptions;
 };
 
 const boardService = new BoardService();
 const EMPTY_ISSUE_IDS: string[] = [];
 
 export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
-  const { viewId, workItemsFilter } = props;
+  const { viewId, workItemsFilter, bootstrapDisplayFilters } = props;
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
   const { board, workspaceSlug: layoutWorkspaceSlug, boardSlug: layoutBoardSlug } = useBoardLayout();
@@ -74,8 +76,9 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const canEditIssueOnProject = useCanEditIssueOnProject();
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
-  const boardFilterBundle = issuesFilter.getIssueFilters(viewId ?? layoutBoardSlug ?? board?.slug);
-  const appliedDisplayFilters = boardFilterBundle?.displayFilters ?? issuesFilter.issueFilters?.displayFilters;
+  const boardViewId = viewId ?? layoutBoardSlug ?? board?.slug;
+  const boardFilterBundle = issuesFilter.getIssueFilters(boardViewId);
+  const appliedDisplayFilters = boardFilterBundle?.displayFilters ?? bootstrapDisplayFilters;
   const groupedIssueIds = issues.groupedIssueIds;
   const issueIds = useMemo(() => {
     const ids = groupedIssueIds?.[ALL_ISSUES] as string[] | undefined;
