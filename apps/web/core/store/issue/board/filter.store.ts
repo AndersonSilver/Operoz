@@ -103,14 +103,20 @@ export class BoardIssuesFilter extends IssueFilterHelperStore implements IBoardI
     return filteredRouteParams;
   };
 
+  /** boardSlug na rota do hub; fallback à chave em filters quando o router root não expõe o param. */
+  private resolveBoardViewId(): string | undefined {
+    const fromRouter = this.rootIssueStore.rootStore.router.boardSlug;
+    if (fromRouter) return fromRouter;
+    const keys = Object.keys(this.filters);
+    return keys.length > 0 ? keys[keys.length - 1] : undefined;
+  }
+
   get issueFilters() {
-    const viewId = this.rootIssueStore.rootStore.router.boardSlug;
-    return this.getIssueFilters(viewId);
+    return this.getIssueFilters(this.resolveBoardViewId());
   }
 
   get appliedFilters() {
-    const viewId = this.rootIssueStore.rootStore.router.boardSlug;
-    return this.getAppliedFilters(viewId);
+    return this.getAppliedFilters(this.resolveBoardViewId());
   }
 
   getFilterParams = computedFn(
@@ -139,7 +145,7 @@ export class BoardIssuesFilter extends IssueFilterHelperStore implements IBoardI
     // When opening a hub tab (backlog / list / views), honour preferredLayout over saved layout.
     const defaultLayout = options?.preferredLayout
       ? preferredLayout
-      :       savedLayout &&
+      : savedLayout &&
           [
             EIssueLayoutTypes.SPREADSHEET,
             EIssueLayoutTypes.LIST,
@@ -225,9 +231,16 @@ export class BoardIssuesFilter extends IssueFilterHelperStore implements IBoardI
         set(this.filters, [viewId, "richFilters"], filters);
       });
 
-      this.handleIssuesLocalFilters.set(EIssuesStoreType.BOARD, EIssueFilterType.FILTERS, workspaceSlug, viewId, undefined, {
-        rich_filters: filters,
-      });
+      this.handleIssuesLocalFilters.set(
+        EIssuesStoreType.BOARD,
+        EIssueFilterType.FILTERS,
+        workspaceSlug,
+        viewId,
+        undefined,
+        {
+          rich_filters: filters,
+        }
+      );
 
       this.rootIssueStore.boardIssues.fetchIssuesWithExistingPagination(workspaceSlug, viewId, "mutation");
     } catch (error) {

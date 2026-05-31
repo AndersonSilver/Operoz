@@ -1,4 +1,4 @@
-import { Suspense, useMemo, type ReactNode } from "react";
+import { Suspense, useEffect, useMemo, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import { Navigate, Outlet, useParams } from "react-router";
 import useSWR from "swr";
@@ -17,11 +17,21 @@ import { AppHeader } from "@/components/core/app-header";
 import { ContentWrapper } from "@/components/core/content-wrapper";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";
+import { useRouterParams } from "@/hooks/store/use-router-params";
 import { BoardOverviewHeader } from "./header";
 
 function BoardRouteLayout() {
-  const { workspaceSlug = "", boardSlug = "" } = useParams();
+  const params = useParams();
+  const { workspaceSlug = "", boardSlug = "" } = params;
+  const { setQuery, query } = useRouterParams();
   const { fetchBoardDetails, getBoardBySlug } = useBoard();
+
+  // StoreWrapper no root pode não expor boardSlug; sincroniza para issueFilters (quadro/cronograma).
+  useEffect(() => {
+    if (!workspaceSlug || !boardSlug) return;
+    if (query.boardSlug?.toString() === boardSlug && query.workspaceSlug?.toString() === workspaceSlug) return;
+    setQuery({ ...query, workspaceSlug, boardSlug });
+  }, [boardSlug, query, setQuery, workspaceSlug]);
 
   const board = getBoardBySlug(boardSlug);
 
@@ -34,9 +44,7 @@ function BoardRouteLayout() {
   );
 
   const header = useMemo(
-    () => (
-      <BoardOverviewHeader board={board} workspaceSlug={workspaceSlug} boardSlug={boardSlug} />
-    ),
+    () => <BoardOverviewHeader board={board} workspaceSlug={workspaceSlug} boardSlug={boardSlug} />,
     [board, boardSlug, workspaceSlug]
   );
 

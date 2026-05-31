@@ -1,0 +1,171 @@
+# Build da imagem web no GitHub Actions, push para GHCR e deploy no VPS (Operis self-host).
+#
+# Secrets obrigatórios (Settings → Secrets and variables → Actions):
+#   VPS_HOST          — ex. 72.61.51.247
+#   VPS_USER          — ex. root
+#   VPS_SSH_KEY       — chave privada SSH (conteúdo completo do id_rsa)
+#
+# Variables recomendadas (Settings → Variables):
+#   OPERIS_WEB_URL    — https://operis.webcycle.com.br
+#   OPERIS_REPO_PATH  — /root/operis-selfhost/Operis
+#   OPERIS_APP_PATH   — /root/operis-selfhost/plane-app
+#
+# No VPS, operis.env deve usar imagens locais após pull (o script faz docker tag).
+
+name: Deploy Operis
+
+on:
+  push:
+    branches: [preview]
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: "O que publicar"
+        required: true
+        default: web
+        type: choice
+        options:
+          - web
+          - full
+      skip_build:
+        description: "Só redeploy (pula build; usa tag preview já no GHCR)"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: deploy-operis-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  WEB_IMAGE_NAME: ghcr.io/${{ github.repository }}/plane-frontend
+
+jobs:
+  build-web:
+    if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push plane-frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile.web
+          push: true
+          tags: |
+            ${{ env.WEB_IMAGE_NAME }}:preview
+            ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
+          build-args: |
+            VITE_ENABLE_BOARDS=true
+            VITE_API_BASE_URL=${{ vars.OPERIS_WEB_URL || 'https://operis.webcycle.com.br' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-full:
+    if: ${{ !inputs.skip_build && github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: plane-backend
+            context: apps/api
+            file: Dockerfile.api
+          - service: plane-space
+            context: .
+            file: apps/space/Dockerfile.space
+          - service: plane-admin
+            context: .
+            file: apps/admin/Dockerfile.admin
+          - service: plane-live
+            context: .
+            file: apps/live/Dockerfile.live
+          - service: plane-proxy
+            context: apps/proxy
+            file: Dockerfile.ce
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: true
+          tags: |
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:preview
+            ghcr.io/${{ github.repository }}/${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: [build-web, build-full]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy web on VPS
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          OPERIS_WEB_URL: ${{ vars.OPERIS_WEB_URL || 'https://operis.webcycle.com.br' }}
+          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
+          OPERIS_APP_PATH: ${{ vars.OPERIS_APP_PATH || '/root/operis-selfhost/plane-app' }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GHCR_TOKEN,WEB_IMAGE,OPERIS_WEB_URL,OPERIS_REPO_PATH,OPERIS_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-web.sh
+
+      - name: Deploy full stack on VPS
+        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full' }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_PREFIX: ghcr.io/${{ github.repository }}
+          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
+          OPERIS_APP_PATH: ${{ vars.OPERIS_APP_PATH || '/root/operis-selfhost/plane-app' }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GHCR_TOKEN,IMAGE_PREFIX,OPERIS_REPO_PATH,OPERIS_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-full.sh
