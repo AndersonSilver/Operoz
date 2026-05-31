@@ -20,10 +20,7 @@ import { GanttChartRoot } from "@/components/gantt-chart/root";
 import { BoardGroupedGanttSidebar } from "@/components/gantt-chart/sidebar/board-grouped/sidebar";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
-import {
-  useCanEditIssueOnProject,
-  usePrefetchBoardProjectPermissions,
-} from "@/hooks/use-board-issue-capabilities";
+import { useCanEditIssueOnProject, usePrefetchBoardProjectPermissions } from "@/hooks/use-board-issue-capabilities";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useBoardGroupedTimelineStore } from "@/hooks/store/use-board-grouped-timeline";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
@@ -71,18 +68,14 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const projectSearchInputRef = useRef<HTMLInputElement>(null);
   const { initGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.GROUPED);
-  const {
-    collapsedProjectIds,
-    collapsedModuleIds,
-    setBoardModules,
-    beginCollapseScope,
-    registerCollapsedDefaults,
-  } = useBoardGroupedTimelineStore();
+  const { collapsedProjectIds, collapsedModuleIds, setBoardModules, beginCollapseScope, registerCollapsedDefaults } =
+    useBoardGroupedTimelineStore();
   const { allowPermissions } = useUserPermissions();
   const canEditIssueOnProject = useCanEditIssueOnProject();
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
-  const appliedDisplayFilters = issuesFilter.issueFilters?.displayFilters;
+  const boardFilterBundle = issuesFilter.getIssueFilters(viewId ?? layoutBoardSlug ?? board?.slug);
+  const appliedDisplayFilters = boardFilterBundle?.displayFilters ?? issuesFilter.issueFilters?.displayFilters;
   const groupedIssueIds = issues.groupedIssueIds;
   const issueIds = useMemo(() => {
     const ids = groupedIssueIds?.[ALL_ISSUES] as string[] | undefined;
@@ -106,10 +99,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
     { revalidateOnFocus: false, shouldRetryOnError: false }
   );
 
-  const modulesByProject = useMemo(
-    () => groupBoardModulesByProject(boardModules ?? []),
-    [boardModules]
-  );
+  const modulesByProject = useMemo(() => groupBoardModulesByProject(boardModules ?? []), [boardModules]);
 
   useEffect(() => {
     setBoardModules(boardModules ?? []);
@@ -173,7 +163,15 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
         modulesByProject,
         collapsedModuleIds
       ),
-    [timelineProjectIds, filteredIssueIds, getIssueById, collapsedProjectIds, getPartialProjectById, modulesByProject, collapsedModuleIds]
+    [
+      timelineProjectIds,
+      filteredIssueIds,
+      getIssueById,
+      collapsedProjectIds,
+      getPartialProjectById,
+      modulesByProject,
+      collapsedModuleIds,
+    ]
   );
 
   useEffect(() => {
@@ -262,32 +260,35 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
     [getIssueById, issues, t, workspaceSlug]
   );
 
-  const blockToRender = useCallback((data: TIssue | TBoardProjectGanttRow | TBoardModuleGanttRow) => {
-    if ("isBoardProjectRow" in data && data.isBoardProjectRow) {
-      return (
-        <BoardProjectGanttBlock
-          projectId={data.id}
-          name={data.name}
-          startDate={data.start_date}
-          targetDate={data.target_date}
-        />
-      );
-    }
+  const blockToRender = useCallback(
+    (data: TIssue | TBoardProjectGanttRow | TBoardModuleGanttRow) => {
+      if ("isBoardProjectRow" in data && data.isBoardProjectRow) {
+        return (
+          <BoardProjectGanttBlock
+            projectId={data.id}
+            name={data.name}
+            startDate={data.start_date}
+            targetDate={data.target_date}
+          />
+        );
+      }
 
-    if ("isBoardModuleRow" in data && data.isBoardModuleRow) {
-      const moduleMeta = boardModules?.find((m) => m.id === data.id);
-      return (
-        <BoardModuleGanttBlock
-          name={data.name}
-          status={moduleMeta?.status}
-          startDate={data.start_date}
-          targetDate={data.target_date}
-        />
-      );
-    }
+      if ("isBoardModuleRow" in data && data.isBoardModuleRow) {
+        const moduleMeta = boardModules?.find((m) => m.id === data.id);
+        return (
+          <BoardModuleGanttBlock
+            name={data.name}
+            status={moduleMeta?.status}
+            startDate={data.start_date}
+            targetDate={data.target_date}
+          />
+        );
+      }
 
-    return <IssueGanttBlock issueId={data.id} />;
-  }, [boardModules]);
+      return <IssueGanttBlock issueId={data.id} />;
+    },
+    [boardModules]
+  );
 
   const quickAdd =
     issues.viewFlags.enableIssueCreation && isWorkspaceEditor ? (
@@ -338,18 +339,18 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   return (
     <IssueLayoutHOC layout={EIssueLayoutTypes.GANTT}>
       <TimeLineTypeContext.Provider value={GANTT_TIMELINE_TYPE.GROUPED}>
-        <div className="h-full w-full flex flex-col">
+        <div className="flex h-full w-full flex-col">
           {/** Jira-style toolbar: search + project filter */}
-          <div className="flex flex-shrink-0 items-center gap-2 border-b border-subtle px-3 py-2 bg-surface-1">
+          <div className="flex flex-shrink-0 items-center gap-2 border-b border-subtle bg-surface-1 px-3 py-2">
             {/** Search bar */}
             <div className="relative flex items-center">
-              <Search className="absolute left-2.5 h-3.5 w-3.5 text-tertiary pointer-events-none" />
+              <Search className="pointer-events-none absolute left-2.5 h-3.5 w-3.5 text-tertiary" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Pesquisar linha do..."
-                className="h-8 w-52 rounded-md border border-subtle bg-layer-1 pl-8 pr-3 text-12 text-primary placeholder:text-tertiary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+                className="focus:ring-accent-primary h-8 w-52 rounded-md border border-subtle bg-layer-1 pr-3 pl-8 text-12 text-primary placeholder:text-tertiary focus:ring-1 focus:outline-none"
               />
               {searchQuery && (
                 <button
@@ -408,7 +409,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
               </button>
 
               {projectDropdownOpen && (
-                <div className="absolute left-0 top-full z-20 mt-1 w-72 rounded-md border border-subtle bg-surface-1 shadow-lg">
+                <div className="shadow-lg absolute top-full left-0 z-20 mt-1 w-72 rounded-md border border-subtle bg-surface-1">
                   <div className="p-2">
                     <input
                       ref={projectSearchInputRef}
@@ -416,7 +417,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                       value={projectSearch}
                       onChange={(e) => setProjectSearch(e.target.value)}
                       placeholder="Pesquisar filtros Projeto..."
-                      className="w-full rounded-md border border-subtle bg-layer-1 px-3 py-1.5 text-12 text-primary placeholder:text-tertiary focus:outline-none focus:ring-1 focus:ring-accent-primary"
+                      className="focus:ring-accent-primary w-full rounded-md border border-subtle bg-layer-1 px-3 py-1.5 text-12 text-primary placeholder:text-tertiary focus:ring-1 focus:outline-none"
                     />
                   </div>
                   <div className="max-h-64 overflow-y-auto">
@@ -430,10 +431,12 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                           onClick={() => toggleProject(projectId)}
                           className="flex w-full items-center gap-2 px-3 py-2 text-13 text-primary hover:bg-layer-2"
                         >
-                          <div className={cn(
-                            "flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border",
-                            isSelected ? "border-accent-primary bg-accent-primary" : "border-subtle"
-                          )}>
+                          <div
+                            className={cn(
+                              "flex h-4 w-4 flex-shrink-0 items-center justify-center rounded border",
+                              isSelected ? "border-accent-primary bg-accent-primary" : "border-subtle"
+                            )}
+                          >
                             {isSelected && <Check className="h-3 w-3 text-on-color" />}
                           </div>
                           <span className="truncate">{project?.name ?? projectId}</span>
@@ -472,9 +475,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
               enableBlockLeftResize={canEditIssue}
               enableBlockRightResize={canEditIssue}
               enableBlockMove={canEditIssue}
-              enableReorder={(blockId) =>
-                canEditIssue(blockId) && appliedDisplayFilters?.order_by === "sort_order"
-              }
+              enableReorder={(blockId) => canEditIssue(blockId) && appliedDisplayFilters?.order_by === "sort_order"}
               enableAddBlock={(blockId) => canEditIssue(blockId)}
               enableSelection={(blockId) => isBulkOperationsEnabled && canEditIssue(blockId)}
               quickAdd={quickAdd}

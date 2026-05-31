@@ -19,10 +19,7 @@ import { useUserPermissions } from "@/hooks/store/user";
 import { useGroupIssuesDragNDrop } from "@/hooks/use-group-dragndrop";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
-import {
-  MODULE_KANBAN_GROUP_BY,
-  useBoardAlignedDisplayProperties,
-} from "../list-display-properties";
+import { MODULE_KANBAN_GROUP_BY, useBoardAlignedDisplayProperties } from "../list-display-properties";
 import type { IBoardIssuesFilter } from "@/store/issue/board/filter.store";
 // store
 // ui
@@ -66,11 +63,11 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
     isEpic = false,
   } = props;
   // router
-  const { workspaceSlug, projectId, boardSlug } = useParams();
+  const { workspaceSlug, projectId: routerProjectId, boardSlug } = useParams();
   // store hooks
   const storeType = useIssueStoreType() as KanbanStoreType;
   const canEditIssueOnProject = useCanEditIssueOnProject();
-  const projectIdStr = projectId?.toString();
+  const projectIdStr = routerProjectId?.toString();
   const { isCreatingAllowed } = useBoardIssueCapabilities(projectIdStr);
   const { allowPermissions } = useUserPermissions();
   const canCreateIssues = projectIdStr
@@ -101,13 +98,18 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
 
   const { isDragging } = useKanbanView();
 
-  const displayFilters = issuesFilter?.issueFilters?.displayFilters;
-  const displayProperties = useBoardAlignedDisplayProperties(viewId);
+  const boardViewId = storeType === EIssuesStoreType.BOARD ? (viewId ?? boardSlug?.toString()) : viewId;
+  const boardFilterBundle =
+    storeType === EIssuesStoreType.BOARD && boardViewId
+      ? (issuesFilter as IBoardIssuesFilter).getIssueFilters(boardViewId)
+      : undefined;
+  const displayFilters = boardFilterBundle?.displayFilters ?? issuesFilter?.issueFilters?.displayFilters;
+  const displayProperties = useBoardAlignedDisplayProperties(viewId ?? boardViewId);
 
   const sub_group_by = displayFilters?.sub_group_by;
   const group_by =
     storeType === EIssuesStoreType.MODULE
-      ? displayFilters?.group_by ?? MODULE_KANBAN_GROUP_BY
+      ? (displayFilters?.group_by ?? MODULE_KANBAN_GROUP_BY)
       : displayFilters?.group_by;
 
   const orderBy = displayFilters?.order_by;
@@ -133,7 +135,7 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
         fetchNextIssues(groupId, subgroupId);
       }
     },
-    [fetchNextIssues]
+    [fetchNextIssues, issues]
   );
 
   const groupedIssueIds = issues?.groupedIssueIds;
@@ -261,10 +263,10 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
           boardSlug.toString()
         );
       } else {
-        updateFilters(projectId?.toString() ?? "", EIssueFilterType.KANBAN_FILTERS, payload);
+        updateFilters(routerProjectId?.toString() ?? "", EIssueFilterType.KANBAN_FILTERS, payload);
       }
     },
-    [workspaceSlug, issuesFilter, projectId, boardSlug, storeType, updateFilters]
+    [workspaceSlug, issuesFilter, routerProjectId, boardSlug, storeType, updateFilters]
   );
 
   const collapsedGroups = issuesFilter?.issueFilters?.kanbanFilters || { group_by: [], sub_group_by: [] };
@@ -317,9 +319,7 @@ export const BaseKanBanRoot = observer(function BaseKanBanRoot(props: IBaseKanBa
                 enableQuickIssueCreate={!isModuleBoard && enableQuickAdd}
                 showEmptyGroup={isModuleBoard ? true : (userDisplayFilters?.show_empty_groups ?? true)}
                 quickAddCallback={quickAddIssue}
-                disableIssueCreation={
-                  isModuleBoard || !enableIssueCreation || !canCreateIssues || isCompletedCycle
-                }
+                disableIssueCreation={isModuleBoard || !enableIssueCreation || !canCreateIssues || isCompletedCycle}
                 canEditProperties={canEditProperties}
                 addIssuesToView={addIssuesToView}
                 scrollableContainerRef={scrollableContainerRef}
