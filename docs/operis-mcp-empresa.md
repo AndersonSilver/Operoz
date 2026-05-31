@@ -22,10 +22,10 @@ flowchart LR
   C1 -.->|opcional: UI| API
 ```
 
-| Camada | O que hospedas | Quem usa |
-|--------|----------------|----------|
-| **Operis** | `https://operis.sua-empresa.com` | Todos (web) |
-| **MCP** | `https://mcp.sua-empresa.com/mcp` (recomendado) ou pacote interno via `npx` | Só quem usa Cursor |
+| Camada     | O que hospedas                                                              | Quem usa           |
+| ---------- | --------------------------------------------------------------------------- | ------------------ |
+| **Operis** | `https://operis.sua-empresa.com`                                            | Todos (web)        |
+| **MCP**    | `https://mcp.sua-empresa.com/mcp` (recomendado) ou pacote interno via `npx` | Só quem usa Cursor |
 
 O código do MCP continua **no mesmo repositório** que o Operis; em produção corres **uma imagem Docker** `operis-mcp` (só `mcp-server/`), não o monorepo inteiro nos PCs.
 
@@ -82,9 +82,13 @@ Ou, com imagem Docker publicada internamente:
     "operis": {
       "command": "docker",
       "args": [
-        "run", "-i", "--rm",
-        "-e", "OPERIS_API_BASE_URL=https://operis.sua-empresa.com",
-        "-e", "OPERIS_API_KEY",
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "OPERIS_API_BASE_URL=https://operis.sua-empresa.com",
+        "-e",
+        "OPERIS_API_KEY",
         "registry.sua-empresa.com/operis-mcp:1.0.0"
       ],
       "env": {
@@ -97,16 +101,16 @@ Ou, com imagem Docker publicada internamente:
 
 ## Mapeamento: o que pedem no Cursor → ferramentas MCP
 
-| Pedido habitual | Ferramenta MCP | API | Auth |
-|-----------------|----------------|-----|------|
-| **Tarefa / card / issue** | `operis_create_work_item`, `operis_update_work_item`, … | v1 `/api/v1/` | Token API |
-| **Projeto (cliente)** | `operis_create_project`, … | v1 | Token API |
-| **Estados, labels, ciclos** | `operis_list_states`, … | v1 | Token API |
-| **Board Operis** | `operis_list_boards`, `operis_create_board`, … | app `/api/` | **Sessão** hoje |
-| **Cliente 360** | `operis_board_client_360_*` | app | Sessão |
-| **PRD / doc** | `operis_create_page`, `operis_update_page_description`, … | app | Sessão |
-| **Status report** | `operis_create_board_status_report`, `operis_create_project_status_report`, … | app | Sessão |
-| Qualquer endpoint novo | `operis_api_v1_request` / `operis_api_app_request` | v1 / app | Token / sessão |
+| Pedido habitual             | Ferramenta MCP                                                                | API           | Auth            |
+| --------------------------- | ----------------------------------------------------------------------------- | ------------- | --------------- |
+| **Tarefa / card / issue**   | `operis_create_work_item`, `operis_update_work_item`, …                       | v1 `/api/v1/` | Token API       |
+| **Projeto (cliente)**       | `operis_create_project`, …                                                    | v1            | Token API       |
+| **Estados, labels, ciclos** | `operis_list_states`, …                                                       | v1            | Token API       |
+| **Board Operis**            | `operis_list_boards`, `operis_create_board`, …                                | app `/api/`   | **Sessão** hoje |
+| **Cliente 360**             | `operis_board_client_360_*`                                                   | app           | Sessão          |
+| **PRD / doc**               | `operis_create_page`, `operis_update_page_description`, …                     | app           | Sessão          |
+| **Status report**           | `operis_create_board_status_report`, `operis_create_project_status_report`, … | app           | Sessão          |
+| Qualquer endpoint novo      | `operis_api_v1_request` / `operis_api_app_request`                            | v1 / app      | Token / sessão  |
 
 ### Limitação importante (boards + documentos)
 
@@ -134,24 +138,23 @@ via `operis_api_app_request`.
 
 ## Segurança (150 pessoas)
 
-| Regra | Motivo |
-|-------|--------|
-| **1 token = 1 pessoa** | Auditoria e revogação |
-| MCP atrás de **HTTPS** + VPN ou IP allowlist | Tokens não trafegam em claro |
-| Não commitar tokens no Git | Usar `~/.cursor/mcp.json` ou gestor de segredos |
-| Rotacionar tokens ao sair colaborador | Mesmo fluxo que API keys |
-| Aprovar servidor MCP no Cursor (Settings → MCP) | Política de segurança do Cursor |
+| Regra                                           | Motivo                                          |
+| ----------------------------------------------- | ----------------------------------------------- |
+| **1 token = 1 pessoa**                          | Auditoria e revogação                           |
+| MCP atrás de **HTTPS** + VPN ou IP allowlist    | Tokens não trafegam em claro                    |
+| Não commitar tokens no Git                      | Usar `~/.cursor/mcp.json` ou gestor de segredos |
+| Rotacionar tokens ao sair colaborador           | Mesmo fluxo que API keys                        |
+| Aprovar servidor MCP no Cursor (Settings → MCP) | Política de segurança do Cursor                 |
 
 ## Deploy do MCP na infra (resumo)
 
-1. Build: `cd mcp-server && npm ci && npm run build`
-2. Variáveis do **servidor** (não do utilizador):
-   - `OPERIS_API_BASE_URL=https://operis.sua-empresa.com`
-   - `MCP_HTTP_PORT=3100`
-   - `MCP_HTTP_HOST=0.0.0.0`
-   - `MCP_ALLOWED_HOSTS=mcp.sua-empresa.com` (proteção DNS rebinding)
-3. Reverse proxy (nginx/Caddy) → `https://mcp.sua-empresa.com` → container `:3100`
-4. Documentação interna: link + modelo `mcp.json` + como criar token
+**Guia completo:** [deploy-mcp-vps.md](./deploy-mcp-vps.md) (Dockerfile, compose, NPM, GitHub Actions).
+
+1. Imagem: `mcp-server/Dockerfile` ou GHCR `operis-mcp:preview`
+2. `deployments/mcp/docker-compose.yml` + `operis-mcp.env` (sem tokens de utilizador)
+3. Variáveis do **servidor**: `OPERIS_API_BASE_URL`, `MCP_ALLOWED_HOSTS`
+4. NPM → `https://mcp.sua-empresa.com` → porta `3100`
+5. Cada pessoa: token no `~/.cursor/mcp.json` (modelo `.cursor/mcp.json.enterprise.example`)
 
 ## Rollout sugerido
 
@@ -162,12 +165,12 @@ via `operis_api_app_request`.
 
 ## Estado atual do repositório
 
-| Item | Estado |
-|------|--------|
-| MCP stdio (dev / Opção B) | ✅ `npm run start` |
-| 379 ferramentas (API v1 + app completa) | ✅ |
-| MCP HTTP para equipa sem clone | ✅ `npm run start:http` (ver `mcp-server/`) |
-| Ferramentas PRD / páginas dedicadas | ✅ |
-| Boards só com token (sem sessão) | 🔜 requer API ou proxy de sessão |
+| Item                                    | Estado                                               |
+| --------------------------------------- | ---------------------------------------------------- |
+| MCP stdio (dev / Opção B)               | ✅ `npm run start`                                   |
+| 379 ferramentas (API v1 + app completa) | ✅                                                   |
+| MCP HTTP para equipa sem clone          | ✅ Docker + [deploy-mcp-vps.md](./deploy-mcp-vps.md) |
+| Ferramentas PRD / páginas dedicadas     | ✅                                                   |
+| Boards só com token (sem sessão)        | 🔜 requer API ou proxy de sessão                     |
 
 Ver também: [mcp-server/README.md](../mcp-server/README.md), [operis-mcp.md](./operis-mcp.md).

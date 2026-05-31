@@ -1,7 +1,7 @@
 {
   "mcpServers": {
     "operis": {
-      "url": "https://mcp.SUA-EMPRESA.com/mcp",
+      "url": "https://mcp.operis.webcycle.com.br/mcp",
       "headers": {
         "Authorization": "Bearer COLE_O_TOKEN_PESSOAL_DO_OPERIS"
       }

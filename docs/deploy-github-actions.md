@@ -13,6 +13,10 @@ Scripts VPS: [`.github/scripts/`](../.github/scripts/)
    - `docker pull` da imagem no GHCR.
    - `docker tag` → `myoperis/plane-frontend:stable` (compatível com o `plane-app` atual).
    - `docker compose up -d --force-recreate web`.
+3. **MCP** (mesmo workflow):
+   - Build `operis-mcp` → GHCR.
+   - `vps-deploy-mcp.sh` sobe `deployments/mcp/docker-compose.yml`.
+   - Guia NPM + Cursor: [deploy-mcp-vps.md](./deploy-mcp-vps.md).
 
 Build no GitHub evita 20–40 min de CPU no VPS a cada deploy.
 
@@ -53,6 +57,7 @@ Build no GitHub evita 20–40 min de CPU no VPS a cada deploy.
 | Input        | Uso                                                          |
 | ------------ | ------------------------------------------------------------ |
 | `web`        | Só frontend (padrão no push)                                 |
+| `mcp`        | Só MCP HTTP (porta 3100)                                     |
 | `full`       | Build + deploy api, space, admin, live, proxy (demora muito) |
 | `skip_build` | Só puxa `:preview` já publicada e recria contentores         |
 
