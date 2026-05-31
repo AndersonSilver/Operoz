@@ -26,6 +26,7 @@ on:
         type: choice
         options:
           - web
+          - mcp
           - full
       skip_build:
         description: "Só redeploy (pula build; usa tag preview já no GHCR)"
@@ -54,7 +55,7 @@ jobs:
 
   build-web:
     needs: meta
-    if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+    if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' || inputs.deploy_target == 'mcp') }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -62,6 +63,7 @@ jobs:
       packages: write
     env:
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operis-mcp
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -77,6 +79,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push plane-frontend
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -88,6 +91,19 @@ jobs:
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=${{ vars.OPERIS_WEB_URL || 'https://operis.webcycle.com.br' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push operis-mcp
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: mcp-server
+          file: mcp-server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.MCP_IMAGE_NAME }}:preview
+            ${{ env.MCP_IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -149,6 +165,7 @@ jobs:
       packages: read
     env:
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operis-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
     steps:
       - name: Checkout
@@ -171,6 +188,23 @@ jobs:
           key: ${{ secrets.VPS_SSH_KEY }}
           envs: GHCR_TOKEN,WEB_IMAGE,OPERIS_WEB_URL,OPERIS_REPO_PATH,OPERIS_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-web.sh
+
+      - name: Deploy MCP on VPS
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
+          OPERIS_MCP_ENV: ${{ vars.OPERIS_MCP_ENV || '' }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          envs: GHCR_TOKEN,MCP_IMAGE,OPERIS_REPO_PATH,OPERIS_MCP_ENV,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-mcp.sh
 
       - name: Deploy full stack on VPS
         if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full' }}

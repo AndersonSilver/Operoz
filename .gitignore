@@ -112,3 +112,6 @@ temp/
 scripts/
 !.github/scripts/
 !.github/scripts/**
+
+# MCP na VPS (segredos locais)
+deployments/mcp/operis-mcp.env
