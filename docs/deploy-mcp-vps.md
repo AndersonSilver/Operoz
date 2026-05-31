@@ -113,12 +113,12 @@ Variable opcional: `OPERIS_MCP_ENV` = caminho absoluto do `operis-mcp.env` na VP
 
 ## Troubleshooting
 
-| Problema                   | Solução                                                                           |
-| -------------------------- | --------------------------------------------------------------------------------- |
-| NPM não alcança o MCP      | Use `172.17.0.1:3100` ou publique `0.0.0.0:3100`                                  |
-| `401` no Cursor            | Token em falta ou inválido no header                                              |
-| `Invalid Host`             | `MCP_ALLOWED_HOSTS` deve incluir o domínio do proxy                               |
-| Health OK mas `/mcp` falha | Websockets no NPM; testar `mcp-remote`                                            |
-| Boards no MCP              | API app ainda exige sessão — ver [operis-mcp-empresa.md](./operis-mcp-empresa.md) |
+| Problema                     | Solução                                                                           |
+| ---------------------------- | --------------------------------------------------------------------------------- |
+| NPM 502 / connection refused | `MCP_PUBLISH=0.0.0.0:3100`; `docker logs operis-mcp`; `ss -tlnp \| grep 3100`     |
+| `401` no Cursor              | Token em falta ou inválido no header                                              |
+| `Invalid Host`               | `MCP_ALLOWED_HOSTS` deve incluir o domínio do proxy                               |
+| Health OK mas `/mcp` falha   | Websockets no NPM; testar `mcp-remote`                                            |
+| Boards no MCP                | API app ainda exige sessão — ver [operis-mcp-empresa.md](./operis-mcp-empresa.md) |
 
 Ver também: [deploy-github-actions.md](./deploy-github-actions.md), [operis-mcp-empresa.md](./operis-mcp-empresa.md).

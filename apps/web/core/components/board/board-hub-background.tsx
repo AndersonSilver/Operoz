@@ -23,12 +23,10 @@ export function isBoardHubImmersivePath(pathname: string) {
 }
 
 /** Painel com vidro fosco sobre o wallpaper (estilo Jira). */
-export const BOARD_HUB_GLASS_PANEL =
-  "rounded-lg border border-subtle/60 bg-layer-1/75 shadow-sm backdrop-blur-md";
+export const BOARD_HUB_GLASS_PANEL = "rounded-lg border border-subtle/50 bg-layer-1/60 shadow-sm backdrop-blur-md";
 
 /** Barra de filtros / toolbar sobre wallpaper. */
-export const BOARD_HUB_GLASS_BAR =
-  "border-subtle/50 bg-layer-1/55 backdrop-blur-md";
+export const BOARD_HUB_GLASS_BAR = "border-subtle/40 bg-layer-1/45 backdrop-blur-md";
 
 /** Cabeçalho do hub (breadcrumbs + abas) sobre wallpaper. */
 export const BOARD_HUB_GLASS_HEADER =
@@ -36,7 +34,30 @@ export const BOARD_HUB_GLASS_HEADER =
 
 /** Agrupa layout, filtros, exibir e ações no header do projeto. */
 export const BOARD_HUB_TOOLBAR_CLUSTER =
-  "flex shrink-0 flex-wrap items-center justify-end gap-1.5 rounded-md border border-subtle/50 bg-layer-1/70 p-1 shadow-sm backdrop-blur-md";
+  "flex shrink-0 flex-wrap items-center justify-end gap-1.5 rounded-md border border-subtle/50 bg-layer-1/60 p-1 shadow-sm backdrop-blur-md";
+
+/** Legibilidade do texto branco sobre presets claros (oceano, aurora, etc.). */
+export const BOARD_HUB_IMMERSIVE_TEXT_SHADOW = "[text-shadow:0_1px_2px_rgba(0,0,0,0.72),0_0_14px_rgba(0,0,0,0.48)]";
+
+/** Separador abaixo das abas — fino e estável em telas retina. */
+export const BOARD_HUB_TAB_DIVIDER = "h-px scale-y-50 bg-white/90";
+
+/** Moldura do conteúdo (cronograma, resumo) sobre wallpaper. */
+export const BOARD_HUB_CONTENT_PANEL_IMMERSIVE =
+  "rounded-lg border border-subtle/40 bg-layer-1/55 shadow-sm backdrop-blur-md";
+
+/** Superfícies internas do Gantt (sidebar, chart) sobre wallpaper. */
+export const BOARD_HUB_GANTT_SURFACE = "border-subtle/40 bg-layer-1/50 backdrop-blur-md";
+
+/** Gradiente entre header com foto e área de trabalho. */
+export function BoardHubHeaderContentFade() {
+  return (
+    <div
+      className="pointer-events-none relative z-[2] h-14 w-full shrink-0 bg-gradient-to-b from-transparent via-black/20 to-surface-1/75"
+      aria-hidden
+    />
+  );
+}
 
 type BoardHubBackgroundContextValue = {
   value: GanttChartBackgroundValue;
@@ -118,24 +139,23 @@ export function BoardHubBackgroundLayer() {
         className="pointer-events-none absolute inset-0 z-0 bg-gradient-to-b from-black/20 via-black/35 to-black/50"
         aria-hidden
       />
-      <div
-        className="pointer-events-none absolute inset-0 z-0 bg-surface-1/15"
-        aria-hidden
-      />
+      <div className="pointer-events-none absolute inset-0 z-0 bg-surface-1/15" aria-hidden />
     </>
   );
 }
 
 export function BoardHubBackgroundContent({ children }: { children: ReactNode }) {
-  return (
-    <div className="relative z-[1] flex h-full min-h-0 w-full flex-col overflow-hidden">{children}</div>
-  );
+  return <div className="relative z-[1] flex h-full min-h-0 w-full flex-col overflow-hidden">{children}</div>;
 }
 
-export function BoardHubBackgroundPicker({ className }: { className?: string }) {
+type BoardHubBackgroundModalProps = {
+  isOpen: boolean;
+  onClose: () => void;
+};
+
+export function BoardHubBackgroundModal({ isOpen, onClose }: BoardHubBackgroundModalProps) {
   const { t } = useTranslation();
   const { value, applyBackground } = useBoardHubBackgroundContext();
-  const [isOpen, setIsOpen] = useState(false);
   const [customUrl, setCustomUrl] = useState(value.type === "custom" ? value.url : "");
 
   useEffect(() => {
@@ -144,26 +164,106 @@ export function BoardHubBackgroundPicker({ className }: { className?: string }) 
     }
   }, [isOpen, value]);
 
-  const label = t("boards.board_bg_button");
-
   const selectPreset = (preset: GanttBackgroundPresetId) => {
     applyBackground({ type: "preset", preset });
-    setIsOpen(false);
+    onClose();
   };
 
   const selectNone = () => {
     applyBackground({ type: "none" });
-    setIsOpen(false);
+    onClose();
   };
 
   const applyCustomUrl = () => {
     const url = customUrl.trim();
     if (!url) return;
     applyBackground({ type: "custom", url });
-    setIsOpen(false);
+    onClose();
   };
 
   const isPresetActive = (preset: GanttBackgroundPresetId) => value.type === "preset" && value.preset === preset;
+
+  return (
+    <ModalCore
+      isOpen={isOpen}
+      handleClose={onClose}
+      position={EModalPosition.CENTER}
+      width={EModalWidth.LG}
+      className="overflow-hidden"
+    >
+      <div className="flex flex-col gap-4 p-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <h2 className="text-16 font-semibold text-primary">{t("boards.board_bg_title")}</h2>
+            <p className="mt-0.5 text-13 text-tertiary">{t("boards.board_bg_subtitle")}</p>
+          </div>
+          <IconButton variant="ghost" size="sm" icon={X} aria-label={t("close")} onClick={onClose} />
+        </div>
+
+        <button
+          type="button"
+          onClick={selectNone}
+          className={cn(
+            "rounded-md border px-3 py-2.5 text-left text-13 transition-colors",
+            value.type === "none"
+              ? "border-accent-primary bg-accent-primary/10 text-primary"
+              : "border-subtle bg-layer-2 text-secondary hover:border-strong"
+          )}
+        >
+          {t("boards.board_bg_none")}
+        </button>
+
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          {PRESET_ORDER.map((preset) => {
+            const { url, labelKey } = GANTT_BACKGROUND_PRESETS[preset];
+            const active = isPresetActive(preset);
+            return (
+              <button
+                key={preset}
+                type="button"
+                onClick={() => selectPreset(preset)}
+                className={cn(
+                  "group overflow-hidden rounded-md border text-left transition-all",
+                  active ? "border-accent-primary ring-accent-primary/30 ring-1" : "border-subtle hover:border-strong"
+                )}
+              >
+                <div className="aspect-[4/3] w-full bg-cover bg-center" style={{ backgroundImage: `url("${url}")` }} />
+                <span className="block px-2 py-1.5 text-12 font-medium text-secondary group-hover:text-primary">
+                  {t(labelKey)}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="flex flex-col gap-2 border-t border-subtle pt-4">
+          <label className="text-12 font-medium text-secondary" htmlFor="board-bg-url">
+            {t("boards.board_bg_custom_label")}
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <input
+              id="board-bg-url"
+              type="url"
+              value={customUrl}
+              onChange={(e) => setCustomUrl(e.target.value)}
+              placeholder="https://…"
+              className="min-w-[200px] flex-1 rounded-sm border border-subtle bg-layer-2 px-3 py-2 text-13 text-primary placeholder:text-tertiary focus:border-strong focus:outline-none"
+            />
+            <Button variant="secondary" size="base" onClick={applyCustomUrl} disabled={!customUrl.trim()}>
+              {t("boards.board_bg_apply")}
+            </Button>
+          </div>
+        </div>
+      </div>
+    </ModalCore>
+  );
+}
+
+export function BoardHubBackgroundPicker({ className }: { className?: string }) {
+  const { t } = useTranslation();
+  const { value } = useBoardHubBackgroundContext();
+  const [isOpen, setIsOpen] = useState(false);
+  const label = t("boards.board_bg_button");
 
   return (
     <>
@@ -179,82 +279,7 @@ export function BoardHubBackgroundPicker({ className }: { className?: string }) 
           />
         </span>
       </Tooltip>
-
-      <ModalCore
-        isOpen={isOpen}
-        handleClose={() => setIsOpen(false)}
-        position={EModalPosition.CENTER}
-        width={EModalWidth.LG}
-        className="overflow-hidden"
-      >
-        <div className="flex flex-col gap-4 p-5">
-          <div className="flex items-start justify-between gap-3">
-            <div>
-              <h2 className="text-16 font-semibold text-primary">{t("boards.board_bg_title")}</h2>
-              <p className="mt-0.5 text-13 text-tertiary">{t("boards.board_bg_subtitle")}</p>
-            </div>
-            <IconButton variant="ghost" size="sm" icon={X} aria-label={t("close")} onClick={() => setIsOpen(false)} />
-          </div>
-
-          <button
-            type="button"
-            onClick={selectNone}
-            className={cn(
-              "rounded-md border px-3 py-2.5 text-left text-13 transition-colors",
-              value.type === "none"
-                ? "border-accent-primary bg-accent-primary/10 text-primary"
-                : "border-subtle bg-layer-2 text-secondary hover:border-strong"
-            )}
-          >
-            {t("boards.board_bg_none")}
-          </button>
-
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {PRESET_ORDER.map((preset) => {
-              const { url, labelKey } = GANTT_BACKGROUND_PRESETS[preset];
-              const active = isPresetActive(preset);
-              return (
-                <button
-                  key={preset}
-                  type="button"
-                  onClick={() => selectPreset(preset)}
-                  className={cn(
-                    "group overflow-hidden rounded-md border text-left transition-all",
-                    active ? "border-accent-primary ring-1 ring-accent-primary/30" : "border-subtle hover:border-strong"
-                  )}
-                >
-                  <div
-                    className="aspect-[4/3] w-full bg-cover bg-center"
-                    style={{ backgroundImage: `url("${url}")` }}
-                  />
-                  <span className="block px-2 py-1.5 text-12 font-medium text-secondary group-hover:text-primary">
-                    {t(labelKey)}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          <div className="flex flex-col gap-2 border-t border-subtle pt-4">
-            <label className="text-12 font-medium text-secondary" htmlFor="board-bg-url">
-              {t("boards.board_bg_custom_label")}
-            </label>
-            <div className="flex flex-wrap gap-2">
-              <input
-                id="board-bg-url"
-                type="url"
-                value={customUrl}
-                onChange={(e) => setCustomUrl(e.target.value)}
-                placeholder="https://…"
-                className="min-w-[200px] flex-1 rounded-sm border border-subtle bg-layer-2 px-3 py-2 text-13 text-primary placeholder:text-tertiary focus:border-strong focus:outline-none"
-              />
-              <Button variant="secondary" size="base" onClick={applyCustomUrl} disabled={!customUrl.trim()}>
-                {t("boards.board_bg_apply")}
-              </Button>
-            </div>
-          </div>
-        </div>
-      </ModalCore>
+      <BoardHubBackgroundModal isOpen={isOpen} onClose={() => setIsOpen(false)} />
     </>
   );
 }

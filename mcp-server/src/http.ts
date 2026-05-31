@@ -1,6 +1,8 @@
 #!/usr/bin/env node
+/* oxlint-disable no-async-endpoint-handlers -- Express 5 / handlers com await explícito */
+/* oxlint-disable eslint-plugin-unicorn(prefer-add-event-listener) -- SDK transport.onclose */
 import { randomUUID } from "node:crypto";
-import type { Request, Response } from "express";
+import express, { type Request, type Response } from "express";
 
 import { createMcpExpressApp } from "@modelcontextprotocol/sdk/server/express.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
@@ -19,7 +21,9 @@ type SessionState = {
 const baseConfig = loadConfig();
 const port = Number(process.env.MCP_HTTP_PORT ?? "3100");
 const host = process.env.MCP_HTTP_HOST ?? "127.0.0.1";
-const allowedHosts = process.env.MCP_ALLOWED_HOSTS?.split(",").map((h) => h.trim()).filter(Boolean);
+const allowedHosts = process.env.MCP_ALLOWED_HOSTS?.split(",")
+  .map((h) => h.trim())
+  .filter(Boolean);
 
 const transports: Record<string, SessionState> = {};
 
@@ -44,11 +48,7 @@ async function mcpPostHandler(req: Request, res: Response) {
     if (!sid && isInitializeRequest(req.body)) {
       const userConfig = configFromRequest(req, baseConfig);
       if (!userConfig.apiKey && !userConfig.sessionCookie) {
-        reject(
-          res,
-          401,
-          "Credenciais em falta. Envie Authorization: Bearer <token> ou X-Api-Key (token Operis).",
-        );
+        reject(res, 401, "Credenciais em falta. Envie Authorization: Bearer <token> ou X-Api-Key (token Operis).");
         return;
       }
 
@@ -93,19 +93,23 @@ async function mcpGetHandler(req: Request, res: Response) {
 }
 
 async function main() {
-  const app = createMcpExpressApp({
-    host,
-    ...(allowedHosts?.length ? { allowedHosts } : {}),
-  });
+  const listenHost = host === "0.0.0.0" ? "0.0.0.0" : host;
 
-  app.post("/mcp", mcpPostHandler);
-  app.get("/mcp", mcpGetHandler);
-  app.get("/health", (_req: Request, res: Response) => {
+  const root = express();
+  root.get("/health", (_req: Request, res: Response) => {
     res.json({ ok: true, service: "operis-mcp", operis: baseConfig.baseUrl });
   });
 
-  app.listen(port, host, () => {
-    console.error(`Operis MCP HTTP em http://${host}:${port}/mcp → ${baseConfig.baseUrl}`);
+  const mcpApp = createMcpExpressApp({
+    host: listenHost,
+    ...(allowedHosts?.length ? { allowedHosts } : {}),
+  });
+  mcpApp.post("/mcp", mcpPostHandler);
+  mcpApp.get("/mcp", mcpGetHandler);
+  root.use(mcpApp);
+
+  root.listen(port, listenHost, () => {
+    console.error(`Operis MCP HTTP em http://${listenHost}:${port}/mcp → ${baseConfig.baseUrl}`);
   });
 }
 

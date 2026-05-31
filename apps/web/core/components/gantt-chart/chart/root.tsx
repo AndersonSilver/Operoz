@@ -8,7 +8,7 @@ import { useTranslation } from "@operis/i18n";
 // components
 import type { ChartDataType, IBlockUpdateData, IBlockUpdateDependencyData, TGanttViews } from "@operis/types";
 import { cn } from "@operis/utils";
-import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
+import { useBoardHubHasBackground, BOARD_HUB_GANTT_SURFACE } from "@/components/board/board-hub-background";
 import { GanttChartHeader, GanttChartMainContent } from "@/components/gantt-chart";
 import {
   getSavedGanttChartView,
@@ -59,7 +59,7 @@ const timelineViewHelpers = {
 
 export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRootProps) {
   const {
-    border,
+    border: _border,
     title,
     blockIds,
     loadMoreBlocks,
@@ -122,19 +122,22 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
     [routerBoardSlug, routerProjectId, routerModuleId, routerCycleId]
   );
 
-  const scrollGanttToDate = useCallback((currentState: ChartDataType, date: Date) => {
-    const scrollContainer = document.querySelector("#gantt-container") as HTMLDivElement | null;
-    if (!scrollContainer) return;
+  const scrollGanttToDate = useCallback(
+    (currentState: ChartDataType, date: Date) => {
+      const scrollContainer = document.querySelector("#gantt-container") as HTMLDivElement | null;
+      if (!scrollContainer) return;
 
-    const clientVisibleWidth = scrollContainer.clientWidth;
-    const daysDifference = getNumberOfDaysBetweenTwoDates(currentState.data.startDate, date);
-    const scrollWidth =
-      Math.abs(daysDifference) * currentState.data.dayWidth -
-      (clientVisibleWidth / 2 - currentState.data.dayWidth) +
-      sidebarWidth / 2;
+      const clientVisibleWidth = scrollContainer.clientWidth;
+      const daysDifference = getNumberOfDaysBetweenTwoDates(currentState.data.startDate, date);
+      const scrollWidth =
+        Math.abs(daysDifference) * currentState.data.dayWidth -
+        (clientVisibleWidth / 2 - currentState.data.dayWidth) +
+        sidebarWidth / 2;
 
-    scrollContainer.scrollLeft = Math.max(0, scrollWidth);
-  }, [sidebarWidth]);
+      scrollContainer.scrollLeft = Math.max(0, scrollWidth);
+    },
+    [sidebarWidth]
+  );
 
   const updateItemsContainerWidth = useCallback((width: number) => {
     const scrollContainer = document.querySelector("#gantt-container") as HTMLDivElement;
@@ -161,12 +164,7 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
       if (selectedCurrentViewData === undefined) return;
 
       const currentViewHelpers = timelineViewHelpers[selectedCurrentView];
-      const currentRender = currentViewHelpers.generateChart(
-        selectedCurrentViewData,
-        side,
-        targetDate,
-        startOfWeek
-      );
+      const currentRender = currentViewHelpers.generateChart(selectedCurrentViewData, side, targetDate, startOfWeek);
       const mergeRenderPayloads = currentViewHelpers.mergeRenderPayloads as (
         a: IWeekBlock[] | IMonthView | IMonthBlock[],
         b: IWeekBlock[] | IMonthView | IMonthBlock[]
@@ -177,18 +175,14 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
 
         if (side === "left") {
           updateCurrentView(selectedCurrentView);
-          updateRenderView(
-            renderView ? mergeRenderPayloads(currentRender.payload, renderView) : currentRender.payload
-          );
+          updateRenderView(renderView ? mergeRenderPayloads(currentRender.payload, renderView) : currentRender.payload);
           updateItemsContainerWidth(currentRender.scrollWidth);
           if (!targetDate) updateCurrentLeftScrollPosition(currentRender.scrollWidth);
           updateAllBlocksOnChartChangeWhileDragging(currentRender.scrollWidth);
           setItemsContainerWidth((prev) => prev + currentRender.scrollWidth);
         } else if (side === "right") {
           updateCurrentView(view);
-          updateRenderView(
-            renderView ? mergeRenderPayloads(renderView, currentRender.payload) : currentRender.payload
-          );
+          updateRenderView(renderView ? mergeRenderPayloads(renderView, currentRender.payload) : currentRender.payload);
           setItemsContainerWidth((prev) => prev + currentRender.scrollWidth);
         } else {
           updateCurrentView(view);
@@ -278,10 +272,11 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
 
   const content = (
     <div
-      className={cn("relative flex h-full flex-col rounded-xs shadow select-none", {
+      className={cn("shadow relative flex h-full flex-col rounded-xs select-none", {
         "inset-0 z-[25] bg-surface-1": fullScreenMode,
-        "border-[0.5px] border-subtle bg-surface-1": !fullScreenMode && hasBoardWallpaper,
-        "border-[0.5px] border-subtle bg-surface-1/90 backdrop-blur-sm": !fullScreenMode && !hasBoardWallpaper,
+        "border-[0.5px]": !fullScreenMode,
+        [BOARD_HUB_GANTT_SURFACE]: !fullScreenMode && hasBoardWallpaper,
+        "border-subtle bg-surface-1/90 backdrop-blur-sm": !fullScreenMode && !hasBoardWallpaper,
       })}
     >
       <GanttChartHeader
@@ -316,7 +311,6 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
         updateBlockDates={updateBlockDates}
         isEpic={isEpic}
       />
-
     </div>
   );
 
@@ -325,7 +319,7 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
   const floatingBar = createPortal(
     <div
       style={{ position: "fixed", bottom: "16px", right: "16px", zIndex: 9999 }}
-      className="flex items-center gap-0.5 rounded-lg border border-subtle bg-surface-1 px-2 py-1.5 shadow-lg"
+      className="shadow-lg flex items-center gap-0.5 rounded-lg border border-subtle bg-surface-1 px-2 py-1.5"
     >
       {!isViewControlsCollapsed && (
         <>
@@ -338,7 +332,7 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
               {t("common.today")}
             </button>
           )}
-          {showToday && <div className="mx-1 h-4 w-px bg-subtle" />}
+          {showToday && <div className="bg-subtle mx-1 h-4 w-px" />}
           {VIEWS_LIST.map((chartView: any) => (
             <button
               key={chartView?.key}
@@ -354,7 +348,7 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
               {t(chartView?.i18n_title)}
             </button>
           ))}
-          <div className="mx-1 h-4 w-px bg-subtle" />
+          <div className="bg-subtle mx-1 h-4 w-px" />
         </>
       )}
       <button
@@ -363,11 +357,7 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
         className="flex items-center justify-center rounded-md p-1 text-secondary transition-all hover:bg-layer-transparent-hover"
         onClick={() => setIsViewControlsCollapsed((v) => !v)}
       >
-        {isViewControlsCollapsed ? (
-          <ChevronLeft className="h-3.5 w-3.5" />
-        ) : (
-          <ChevronRight className="h-3.5 w-3.5" />
-        )}
+        {isViewControlsCollapsed ? <ChevronLeft className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
       </button>
     </div>,
     document.body
