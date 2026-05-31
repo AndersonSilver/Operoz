@@ -79,6 +79,7 @@ package-lock.json
 
 # lock files
 package-lock.json
+!mcp-server/package-lock.json
 
 
 

@@ -94,7 +94,11 @@ export const BoardTimelineLayoutRoot = observer(function BoardTimelineLayoutRoot
         {({ filter: boardWorkItemsFilter }) => (
           <BoardHubContentPanel>
             <div className="min-h-0 flex-1">
-              <BoardGanttRoot viewId={boardSlug} workItemsFilter={boardWorkItemsFilter} />
+              <BoardGanttRoot
+                viewId={boardSlug}
+                workItemsFilter={boardWorkItemsFilter}
+                bootstrapDisplayFilters={workItemFilters?.displayFilters}
+              />
             </div>
             <IssuePeekOverview />
           </BoardHubContentPanel>

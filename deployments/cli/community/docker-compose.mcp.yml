@@ -1,0 +1,31 @@
+# Overlay opcional: MCP no mesmo projeto compose que api/web.
+# Uso em plane-app:
+#   docker compose -f docker-compose.yaml -f .../docker-compose.mcp.yml --env-file operis.env --env-file operis-mcp.env up -d mcp
+#
+# Requer ficheiro operis-mcp.env (ver deployments/mcp/operis-mcp.env.example)
+
+services:
+  mcp:
+    image: ${MCP_IMAGE:-myoperis/operis-mcp:stable}
+    container_name: operis-mcp
+    restart: unless-stopped
+    ports:
+      - "${MCP_PUBLISH:-127.0.0.1:3100}:3100"
+    environment:
+      OPERIS_API_BASE_URL: ${MCP_OPERIS_API_BASE_URL:-http://api:8000}
+      MCP_HTTP_HOST: "0.0.0.0"
+      MCP_HTTP_PORT: "3100"
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-}
+    depends_on:
+      - api
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "fetch('http://127.0.0.1:3100/health').then((r)=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))",
+        ]
+      interval: 30s
+      timeout: 5s
+      retries: 3
