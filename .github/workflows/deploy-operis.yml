@@ -9,8 +9,9 @@
 #   OPERIS_WEB_URL    — https://operis.webcycle.com.br
 #   OPERIS_REPO_PATH  — /root/operis-selfhost/Operis
 #   OPERIS_APP_PATH   — /root/operis-selfhost/plane-app
+#   OPERIS_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operis-runner.sh)
 #
-# No VPS, operis.env deve usar imagens locais após pull (o script faz docker tag).
+# SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall Hostinger.
 
 name: Deploy Operis
 
@@ -22,7 +23,7 @@ on:
       deploy_target:
         description: "O que publicar"
         required: true
-        default: web
+        default: full
         type: choice
         options:
           - web
@@ -40,18 +41,30 @@ concurrency:
 
 env:
   REGISTRY: ghcr.io
+  SSH_TIMEOUT: 180s
+  SSH_COMMAND_TIMEOUT: 45m
 
 jobs:
   meta:
     runs-on: ubuntu-latest
     outputs:
       image_repo: ${{ steps.lower.outputs.image_repo }}
+      use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
     steps:
       - name: GHCR exige nome do repositório em minúsculas
         id: lower
         run: echo "image_repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Modo de deploy
+        id: mode
+        run: |
+          if [[ "${{ vars.OPERIS_SELF_HOSTED_RUNNER }}" == "true" ]]; then
+            echo "use_self_hosted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "use_self_hosted=false" >> "$GITHUB_OUTPUT"
+          fi
 
   build-web:
     needs: meta
@@ -109,7 +122,11 @@ jobs:
 
   build-full:
     needs: meta
-    if: ${{ !inputs.skip_build && github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full' }}
+    if: >-
+      ${{ !inputs.skip_build && (
+        (github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full') ||
+        (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-full]'))
+      ) }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     permissions:
@@ -158,8 +175,8 @@ jobs:
   deploy:
     needs: [meta, build-web, build-full]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 30
+    runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
+    timeout-minutes: 45
     permissions:
       contents: read
       packages: read
@@ -167,35 +184,71 @@ jobs:
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operis-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
+      OPERIS_APP_PATH: ${{ vars.OPERIS_APP_PATH || '/root/operis-selfhost/plane-app' }}
+      GIT_BRANCH: preview
+      GITHUB_ACTOR: ${{ github.actor }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Deploy web on VPS
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
+      - name: Preflight SSH (só modo remoto)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
+        run: |
+          set +e
+          nc -zv -w 15 "${{ secrets.VPS_HOST }}" 22
+          code=$?
+          if [[ $code -ne 0 ]]; then
+            echo "::error::Porta 22 inacessível a partir do runner GitHub (timeout/firewall Hostinger)."
+            echo "Soluções: (1) abrir SSH no firewall do painel Hostinger para 0.0.0.0/0"
+            echo "          (2) instalar runner no VPS: .github/scripts/install-operis-runner.sh"
+            echo "          (3) variável OPERIS_SELF_HOSTED_RUNNER=true"
+            exit 1
+          fi
+
+      - name: Deploy web (runner local)
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        env:
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          OPERIS_WEB_URL: ${{ vars.OPERIS_WEB_URL || 'https://operis.webcycle.com.br' }}
+        run: bash .github/scripts/vps-deploy-web.sh
+
+      - name: Deploy web on VPS (SSH)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
           OPERIS_WEB_URL: ${{ vars.OPERIS_WEB_URL || 'https://operis.webcycle.com.br' }}
-          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
-          OPERIS_APP_PATH: ${{ vars.OPERIS_APP_PATH || '/root/operis-selfhost/plane-app' }}
+          OPERIS_REPO_PATH: ${{ env.OPERIS_REPO_PATH }}
+          OPERIS_APP_PATH: ${{ env.OPERIS_APP_PATH }}
           GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
           envs: GHCR_TOKEN,WEB_IMAGE,OPERIS_WEB_URL,OPERIS_REPO_PATH,OPERIS_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-web.sh
 
-      - name: Deploy MCP on VPS
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
+      - name: Deploy MCP (runner local)
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
+        env:
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          OPERIS_MCP_ENV: ${{ vars.OPERIS_MCP_ENV || '' }}
+        run: bash .github/scripts/vps-deploy-mcp.sh
+
+      - name: Deploy MCP on VPS (SSH)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
-          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
+          OPERIS_REPO_PATH: ${{ env.OPERIS_REPO_PATH }}
           OPERIS_MCP_ENV: ${{ vars.OPERIS_MCP_ENV || '' }}
           GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
@@ -203,22 +256,42 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
           envs: GHCR_TOKEN,MCP_IMAGE,OPERIS_REPO_PATH,OPERIS_MCP_ENV,GIT_BRANCH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-mcp.sh
 
-      - name: Deploy full stack on VPS
-        if: ${{ github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full' }}
+      - name: Deploy full stack (runner local)
+        if: >-
+          ${{ needs.meta.outputs.use_self_hosted == 'true' && (
+            (github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full') ||
+            (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-full]'))
+          ) }}
+        env:
+          IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+        run: bash .github/scripts/vps-deploy-full.sh
+
+      - name: Deploy full stack on VPS (SSH)
+        if: >-
+          ${{ needs.meta.outputs.use_self_hosted != 'true' && (
+            (github.event_name == 'workflow_dispatch' && inputs.deploy_target == 'full') ||
+            (github.event_name == 'push' && contains(github.event.head_commit.message, '[deploy-full]'))
+          ) }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
-          OPERIS_REPO_PATH: ${{ vars.OPERIS_REPO_PATH || '/root/operis-selfhost/Operis' }}
-          OPERIS_APP_PATH: ${{ vars.OPERIS_APP_PATH || '/root/operis-selfhost/plane-app' }}
+          OPERIS_REPO_PATH: ${{ env.OPERIS_REPO_PATH }}
+          OPERIS_APP_PATH: ${{ env.OPERIS_APP_PATH }}
           GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
           key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
           envs: GHCR_TOKEN,IMAGE_PREFIX,OPERIS_REPO_PATH,OPERIS_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-full.sh
