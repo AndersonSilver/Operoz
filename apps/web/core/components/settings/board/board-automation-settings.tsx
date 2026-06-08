@@ -23,11 +23,13 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
   const [rules, setRules] = useState<IBoardAutomationRule[]>([]);
   const [catalog, setCatalog] = useState<TAutomationCatalog | null>(null);
   const [loading, setLoading] = useState(true);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [editingRule, setEditingRule] = useState<IBoardAutomationRule | null>(null);
   const [creating, setCreating] = useState(false);
 
   const load = async () => {
     setLoading(true);
+    setLoadFailed(false);
     try {
       const [rulesData, catalogData] = await Promise.all([
         boardService.getAutomationRules(workspaceSlug, board.slug),
@@ -36,6 +38,7 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
       setRules(rulesData);
       setCatalog(catalogData);
     } catch {
+      setLoadFailed(true);
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
@@ -131,11 +134,26 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
     }
   };
 
-  if (loading || !catalog) {
+  if (loading) {
     return (
       <div className="flex min-h-[240px] items-center justify-center gap-2 text-13 text-tertiary">
         <Loader />
         {t("loading")}
+      </div>
+    );
+  }
+
+  if (loadFailed || !catalog) {
+    return (
+      <div className="flex min-h-[240px] flex-col items-center justify-center gap-3 text-center text-13 text-tertiary">
+        <p>{t("something_went_wrong")}</p>
+        <button
+          type="button"
+          className="text-accent-primary hover:underline"
+          onClick={() => void load()}
+        >
+          {t("refresh")}
+        </button>
       </div>
     );
   }
