@@ -1,27 +1,21 @@
-import { Fragment, useEffect, type ReactNode } from "react";
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNode, type RefObject } from "react";
 import { observer } from "mobx-react";
-import Link from "next/link";
-// icons
-import { CirclePlus, LogOut, Mails } from "lucide-react";
-// ui
+import { ChevronDown, CirclePlus, LogOut, Mails, Settings, UserPlus } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-// plane imports
+import { EUserPermissions } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IWorkspace } from "@operis/types";
 import { Loader } from "@operis/ui";
 import { orderWorkspacesList, cn } from "@operis/utils";
-// helpers
-import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
-// hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserProfile } from "@/hooks/store/user";
 import { useInstance } from "@/hooks/store/use-instance";
-// components
 import { WorkspaceLogo } from "../logo";
-import SidebarDropdownItem from "./dropdown-item";
+import { WorkspaceMenuLinkItem } from "./workspace-menu-link-item";
+import { WorkspaceMenuRow } from "./workspace-menu-row";
+import { getOtherWorkspaces, hasAmbiguousWorkspaceNames } from "./workspace-menu-utils";
 
 type WorkspaceMenuRootProps = {
   variant: "sidebar" | "top-navigation";
@@ -37,18 +31,57 @@ function WorkspaceMenuDropdownSync({ open, children }: { open: boolean; children
   return <>{children}</>;
 }
 
-export const WorkspaceMenuRoot = observer(function WorkspaceMenuRoot(props: WorkspaceMenuRootProps) {
-  const { variant } = props;
-  // store hooks
+function useSidebarDropdownPosition(open: boolean, anchorRef: RefObject<HTMLButtonElement | null>) {
+  const [style, setStyle] = useState<CSSProperties>();
+
+  useEffect(() => {
+    if (!open || !anchorRef.current) {
+      setStyle(undefined);
+      return;
+    }
+
+    const update = () => {
+      const rect = anchorRef.current?.getBoundingClientRect();
+      if (!rect) return;
+      setStyle({
+        position: "fixed",
+        top: rect.bottom + 4,
+        left: rect.left,
+        width: rect.width,
+        maxHeight: `calc(100vh - ${rect.bottom + 8}px)`,
+        zIndex: 50,
+      });
+    };
+
+    update();
+    window.addEventListener("resize", update);
+    window.addEventListener("scroll", update, true);
+    return () => {
+      window.removeEventListener("resize", update);
+      window.removeEventListener("scroll", update, true);
+    };
+  }, [anchorRef, open]);
+
+  return style;
+}
+
+type WorkspaceMenuPanelProps = {
+  variant: WorkspaceMenuRootProps["variant"];
+  open: boolean;
+  close: () => void;
+};
+
+const WorkspaceMenuPanel = observer(function WorkspaceMenuPanel(props: WorkspaceMenuPanelProps) {
+  const { variant, open, close } = props;
+  const isSidebar = variant === "sidebar";
+  const sidebarMenuButtonRef = useRef<HTMLButtonElement>(null);
+  const sidebarDropdownStyle = useSidebarDropdownPosition(open, sidebarMenuButtonRef);
   const { toggleSidebar } = useAppTheme();
   const { config } = useInstance();
-  const { data: currentUser } = useUser();
   const { signOut } = useUser();
   const { updateUserProfile } = useUserProfile();
   const { currentWorkspace: activeWorkspace, workspaces } = useWorkspace();
-  // derived values
   const isWorkspaceCreationDisabled = config?.is_workspace_creation_disabled ?? false;
-  // translation
   const { t } = useTranslation();
 
   const handleWorkspaceNavigation = (workspace: IWorkspace) => updateUserProfile({ last_workspace_id: workspace?.id });
@@ -64,160 +97,146 @@ export const WorkspaceMenuRoot = observer(function WorkspaceMenuRoot(props: Work
   };
 
   const handleItemClick = () => {
-    if (window.innerWidth < 768) {
-      toggleSidebar();
-    }
+    if (window.innerWidth < 768) toggleSidebar();
+    close();
   };
+
   const workspacesList = orderWorkspacesList(Object.values(workspaces ?? {}));
-  // TODO: fix workspaces list scroll
+  const otherWorkspaces = getOtherWorkspaces(workspacesList, activeWorkspace?.id);
+  const showWorkspaceSlug = workspacesList.length > 1 || hasAmbiguousWorkspaceNames(workspacesList);
+  const canOpenSettings =
+    activeWorkspace &&
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER].includes(activeWorkspace.role);
+  const canInvite = activeWorkspace && [EUserPermissions.ADMIN].includes(activeWorkspace.role);
+
+  return (
+    <WorkspaceMenuDropdownSync open={open}>
+      <Menu.Button
+        ref={isSidebar ? sidebarMenuButtonRef : undefined}
+        className={cn(
+          "group/menu-button flex w-full items-center gap-2 text-left transition-colors focus:outline-none",
+          isSidebar
+            ? "rounded-md px-2 py-1.5 hover:bg-layer-transparent-hover"
+            : "max-w-48 flex-grow justify-between truncate rounded-sm p-1 text-13 font-medium text-secondary hover:bg-layer-1",
+          isSidebar && open && "bg-layer-transparent-active"
+        )}
+        aria-label={t("aria_labels.projects_sidebar.open_workspace_switcher")}
+      >
+        <WorkspaceLogo
+          logo={activeWorkspace?.logo_url}
+          name={activeWorkspace?.name}
+          classNames={cn("shrink-0 rounded-md border border-subtle", isSidebar ? "size-6" : "size-7")}
+        />
+        <div className="min-w-0 flex-1">
+          <p className={cn("truncate font-medium text-primary", isSidebar ? "text-13" : "text-14")}>
+            {activeWorkspace?.name ?? t("loading")}
+          </p>
+        </div>
+        <ChevronDown
+          className={cn("shrink-0 text-tertiary transition-transform", isSidebar ? "size-3.5" : "size-4", {
+            "rotate-180": open,
+          })}
+          strokeWidth={1.75}
+        />
+      </Menu.Button>
+
+      <Transition
+        as={Fragment}
+        enter="transition ease-out duration-100"
+        enterFrom="opacity-0 scale-95"
+        enterTo="opacity-100 scale-100"
+        leave="transition ease-in duration-75"
+        leaveFrom="opacity-100 scale-100"
+        leaveTo="opacity-0 scale-95"
+      >
+        <Menu.Items as={Fragment}>
+          <div
+            style={isSidebar ? sidebarDropdownStyle : undefined}
+            className={cn(
+              "flex flex-col overflow-hidden rounded-lg border border-subtle bg-surface-1 py-1 shadow-raised-200 outline-none",
+              isSidebar ? "min-h-0" : "fixed top-10 left-4 z-21 mt-1 w-[15rem]"
+            )}
+          >
+            {otherWorkspaces.length > 0 ? (
+              <div className="vertical-scrollbar scrollbar-sm min-h-0 max-h-40 flex-1 overflow-y-auto py-0.5">
+                <p className="px-2.5 pt-1.5 pb-1 text-11 font-medium text-tertiary">
+                  {t("workspace_switcher.switch_to")}
+                </p>
+                {otherWorkspaces.map((workspace) => (
+                  <WorkspaceMenuRow
+                    key={workspace.id}
+                    workspace={workspace}
+                    showSlug={showWorkspaceSlug}
+                    onSelect={(ws) => {
+                      handleWorkspaceNavigation(ws);
+                      handleItemClick();
+                    }}
+                  />
+                ))}
+              </div>
+            ) : workspacesList.length === 0 ? (
+              <div className="px-2.5 py-2">
+                <Loader className="space-y-2">
+                  <Loader.Item height="28px" />
+                </Loader>
+              </div>
+            ) : null}
+
+            {activeWorkspace && (canOpenSettings || canInvite) && (
+              <div className="border-t border-subtle py-1">
+                {canOpenSettings && (
+                  <WorkspaceMenuLinkItem
+                    href={`/${activeWorkspace.slug}/settings`}
+                    icon={Settings}
+                    label={t("settings")}
+                    onClick={handleItemClick}
+                  />
+                )}
+                {canInvite && (
+                  <WorkspaceMenuLinkItem
+                    href={`/${activeWorkspace.slug}/settings/members`}
+                    icon={UserPlus}
+                    label={t("project_settings.members.invite_members.title")}
+                    onClick={handleItemClick}
+                  />
+                )}
+              </div>
+            )}
+
+            <div className="border-t border-subtle py-1">
+              {!isWorkspaceCreationDisabled && (
+                <WorkspaceMenuLinkItem
+                  href="/create-workspace"
+                  icon={CirclePlus}
+                  label={t("create_workspace")}
+                  onClick={handleItemClick}
+                />
+              )}
+              <WorkspaceMenuLinkItem
+                href="/invitations"
+                icon={Mails}
+                label={t("workspace_invites")}
+                onClick={handleItemClick}
+              />
+              <WorkspaceMenuLinkItem icon={LogOut} label={t("sign_out")} onClick={handleSignOut} variant="danger" />
+            </div>
+          </div>
+        </Menu.Items>
+      </Transition>
+    </WorkspaceMenuDropdownSync>
+  );
+});
+
+export const WorkspaceMenuRoot = observer(function WorkspaceMenuRoot(props: WorkspaceMenuRootProps) {
+  const { variant } = props;
 
   return (
     <Menu
       as="div"
-      className={cn("relative flex h-full w-fit max-w-48 truncate whitespace-nowrap", {
-        "w-full justify-center text-center": variant === "sidebar",
-        "flex-grow justify-stretch truncate text-left": variant === "top-navigation",
-      })}
+      className={cn("relative", variant === "sidebar" ? "w-full" : "w-fit max-w-48 flex-grow")}
     >
       {({ open, close }: { open: boolean; close: () => void }) => (
-        <WorkspaceMenuDropdownSync open={open}>
-          <>
-            {variant === "sidebar" && (
-              <Menu.Button
-                className={cn("flex size-8 w-full items-center justify-center rounded-md", {
-                  "bg-layer-1": open,
-                })}
-              >
-                <AppSidebarItem
-                  variant="static"
-                  item={{
-                    icon: (
-                      <WorkspaceLogo
-                        logo={activeWorkspace?.logo_url}
-                        name={activeWorkspace?.name}
-                        classNames="size-8 rounded-md border border-subtle"
-                      />
-                    ),
-                  }}
-                />
-              </Menu.Button>
-            )}
-            {variant === "top-navigation" && (
-              <Menu.Button
-                className={cn(
-                  "group/menu-button flex flex-grow items-center justify-between gap-1 truncate rounded-sm p-1 text-13 font-medium text-secondary hover:bg-layer-1 focus:outline-none",
-                  {
-                    "bg-layer-1": open,
-                  }
-                )}
-                aria-label={t("aria_labels.projects_sidebar.open_workspace_switcher")}
-              >
-                <div className="flex flex-grow items-center gap-2 truncate">
-                  <WorkspaceLogo
-                    logo={activeWorkspace?.logo_url}
-                    name={activeWorkspace?.name}
-                    classNames="border border-subtle rounded-md size-7"
-                  />
-                  <h4 className="truncate text-14 font-medium text-primary">{activeWorkspace?.name ?? t("loading")}</h4>
-                </div>
-                <ChevronDownIcon
-                  className={cn("size-4 flex-shrink-0 text-placeholder duration-300", {
-                    "rotate-180": open,
-                  })}
-                />
-              </Menu.Button>
-            )}
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="trnsform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items as={Fragment}>
-                <div
-                  className={cn(
-                    "fixed z-21 mt-1 flex w-[19rem] origin-top-left flex-col divide-y divide-subtle rounded-md border-[0.5px] border-strong bg-surface-1 shadow-raised-200 outline-none",
-                    {
-                      "top-11 left-14": variant === "sidebar",
-                      "top-10 left-4": variant === "top-navigation",
-                    }
-                  )}
-                >
-                  <div className="vertical-scrollbar flex scrollbar-sm max-h-96 flex-col items-start justify-start overflow-x-hidden overflow-y-scroll">
-                    <span className="sticky top-0 z-21 h-full w-full flex-shrink-0 truncate rounded-md bg-surface-1 px-4 pt-3 pb-1 text-left text-13 font-medium text-placeholder">
-                      {currentUser?.email}
-                    </span>
-                    {workspacesList ? (
-                      <div className="flex size-full flex-col items-start justify-start">
-                        {(activeWorkspace
-                          ? [
-                              activeWorkspace,
-                              ...workspacesList.filter((workspace) => workspace.id !== activeWorkspace?.id),
-                            ]
-                          : workspacesList
-                        ).map((workspace) => (
-                          <SidebarDropdownItem
-                            key={workspace.id}
-                            workspace={workspace}
-                            activeWorkspace={activeWorkspace}
-                            handleItemClick={handleItemClick}
-                            handleWorkspaceNavigation={handleWorkspaceNavigation}
-                            handleClose={close}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <div className="w-full">
-                        <Loader className="space-y-2">
-                          <Loader.Item height="30px" />
-                          <Loader.Item height="30px" />
-                        </Loader>
-                      </div>
-                    )}
-                  </div>
-                  <div className="flex w-full flex-col items-start justify-start gap-2 px-4 py-2 text-13">
-                    {!isWorkspaceCreationDisabled && (
-                      <Link href="/create-workspace" className="w-full">
-                        <Menu.Item
-                          as="div"
-                          className="flex items-center gap-2 rounded-sm px-2 py-1 text-13 font-medium text-secondary hover:bg-layer-transparent-hover"
-                        >
-                          <CirclePlus className="size-4 flex-shrink-0" />
-                          {t("create_workspace")}
-                        </Menu.Item>
-                      </Link>
-                    )}
-
-                    <Link href="/invitations" className="w-full" onClick={handleItemClick}>
-                      <Menu.Item
-                        as="div"
-                        className="flex items-center gap-2 rounded-sm px-2 py-1 text-13 font-medium text-secondary hover:bg-layer-transparent-hover"
-                      >
-                        <Mails className="h-4 w-4 flex-shrink-0" />
-                        {t("workspace_invites")}
-                      </Menu.Item>
-                    </Link>
-
-                    <div className="w-full">
-                      <Menu.Item
-                        as="button"
-                        type="button"
-                        className="flex w-full items-center gap-2 rounded-sm px-2 py-1 text-13 font-medium text-danger-primary hover:bg-layer-transparent-hover"
-                        onClick={handleSignOut}
-                      >
-                        <LogOut className="size-4 flex-shrink-0" />
-                        {t("sign_out")}
-                      </Menu.Item>
-                    </div>
-                  </div>
-                </div>
-              </Menu.Items>
-            </Transition>
-          </>
-        </WorkspaceMenuDropdownSync>
+        <WorkspaceMenuPanel variant={variant} open={open} close={close} />
       )}
     </Menu>
   );

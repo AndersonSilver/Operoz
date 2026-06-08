@@ -14,7 +14,9 @@ import { ActiveCycleStats } from "@/components/cycles/active-cycle/cycle-stats";
 import { ActiveCycleProductivity } from "@/components/cycles/active-cycle/productivity";
 import { ActiveCycleProgress } from "@/components/cycles/active-cycle/progress";
 import useCyclesDetails from "@/components/cycles/active-cycle/use-cycles-details";
+import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
 import { CycleListGroupHeader } from "@/components/cycles/list/cycle-list-group-header";
+import { cn } from "@operis/utils";
 import { CyclesListItem } from "@/components/cycles/list/cycles-list-item";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
@@ -50,12 +52,14 @@ const ActiveCyclesComponent = observer(function ActiveCyclesComponent({
 
   if (!cycleId || !activeCycle) {
     return (
-      <EmptyStateDetailed
-        assetKey="cycle"
-        title={t("project_cycles.empty_state.active.title")}
-        description={t("project_cycles.empty_state.active.description")}
-        rootClassName="py-10 h-auto"
-      />
+      <div className="flex justify-center border-t border-subtle/40 bg-layer-2/20 px-4 py-8 md:py-10">
+        <EmptyStateDetailed
+          assetKey="cycle"
+          title={t("project_cycles.empty_state.active.title")}
+          description={t("project_cycles.empty_state.active.description")}
+          rootClassName="h-auto max-w-md py-4"
+        />
+      </div>
     );
   }
 
@@ -68,8 +72,8 @@ const ActiveCyclesComponent = observer(function ActiveCyclesComponent({
         projectId={projectId}
         className="!border-b-transparent"
       />
-      <Row className="bg-surface-1 pt-3 pb-6">
-        <div className="grid grid-cols-1 gap-3 bg-surface-1 lg:grid-cols-2 xl:grid-cols-3">
+      <Row className="border-t border-subtle/40 bg-layer-2/25 px-3 py-4 md:px-4 md:py-5">
+        <div className="grid w-full grid-cols-1 gap-3 lg:grid-cols-2 xl:grid-cols-3">
           <ActiveCycleProgress
             handleFiltersUpdate={handleFiltersUpdate}
             projectId={projectId}
@@ -115,7 +119,7 @@ export const ActiveCycleRoot = observer(function ActiveCycleRoot(props: IActiveC
         <Disclosure as="div" className="flex flex-shrink-0 flex-col" defaultOpen>
           {({ open }) => (
             <>
-              <Disclosure.Button className="sticky top-0 z-[2] w-full flex-shrink-0 cursor-pointer border-b border-subtle bg-layer-1">
+              <Disclosure.Button className={cn("cursor-pointer", BOARD_HUB_CYCLE_SECTION_HEADER)}>
                 <CycleListGroupHeader title={t("project_cycles.active_cycle.label")} type="current" isExpanded={open} />
               </Disclosure.Button>
               <Disclosure.Panel>

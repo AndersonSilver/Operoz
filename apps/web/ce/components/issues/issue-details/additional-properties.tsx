@@ -1,5 +1,4 @@
-import React from "react";
-// plane imports
+import { WorkItemCustomFieldsProperties } from "./work-item-custom-fields-properties";
 
 export type TWorkItemAdditionalSidebarProperties = {
   workItemId: string;
@@ -10,6 +9,16 @@ export type TWorkItemAdditionalSidebarProperties = {
   isPeekView?: boolean;
 };
 
-export function WorkItemAdditionalSidebarProperties(_props: TWorkItemAdditionalSidebarProperties) {
-  return <></>;
+export function WorkItemAdditionalSidebarProperties(props: TWorkItemAdditionalSidebarProperties) {
+  const { workItemId, projectId, workspaceSlug, isEditable } = props;
+
+  return (
+    <WorkItemCustomFieldsProperties
+      workspaceSlug={workspaceSlug}
+      projectId={projectId}
+      issueId={workItemId}
+      isEditable={isEditable}
+      layout="sidebar"
+    />
+  );
 }

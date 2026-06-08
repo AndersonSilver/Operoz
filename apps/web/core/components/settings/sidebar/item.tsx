@@ -1,9 +1,13 @@
 import React from "react";
 import Link from "next/link";
-// plane imports
 import { cn } from "@operis/utils";
 import type { LucideIcon } from "lucide-react";
 import type { ISvgIcons } from "@operis/propel/icons";
+import {
+  SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS,
+  sidebarNavIconClass,
+  sidebarNavItemClass,
+} from "@/components/sidebar/sidebar-styles";
 
 type Props = {
   isActive: boolean;
@@ -18,23 +22,22 @@ type Props = {
 
 export function SettingsSidebarItem(props: Props) {
   const { as, isActive, label } = props;
-  // common class
-  const className = cn(
-    "flex items-center gap-2 rounded-lg px-2 py-1.5 text-left text-body-sm-medium text-secondary transition-colors",
-    {
-      "bg-layer-transparent-selected text-primary": isActive,
-      "hover:bg-layer-transparent-hover": !isActive,
-    }
-  );
-  // common content
+  const className = cn(sidebarNavItemClass(isActive), "group/nav");
+
+  const iconNode = "iconNode" in props ? props.iconNode : null;
+  const Icon = "icon" in props ? props.icon : null;
+
   const content = (
     <>
-      {"icon" in props ? (
-        <span className="grid size-4 shrink-0 place-items-center">{<props.icon className="size-3.5" />}</span>
-      ) : (
-        props.iconNode
-      )}
-      <span className="truncate">{label}</span>
+      {isActive ? <span className={SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS} aria-hidden /> : null}
+      {Icon ? (
+        <span className={sidebarNavIconClass(isActive)}>
+          <Icon className="size-3.5" strokeWidth={1.75} />
+        </span>
+      ) : iconNode ? (
+        <span className={sidebarNavIconClass(isActive)}>{iconNode}</span>
+      ) : null}
+      <span className="min-w-0 flex-1 truncate text-13 font-medium">{label}</span>
     </>
   );
 

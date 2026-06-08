@@ -9,6 +9,7 @@ import { useTranslation } from "@operis/i18n";
 import { joinUrlPath } from "@operis/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
+import { sidebarNavIconClass } from "@/components/sidebar/sidebar-styles";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
@@ -61,12 +62,14 @@ export const SidebarItemBase = observer(function SidebarItemBase({
     item.key === "your_work" && data?.id ? joinUrlPath(slug, item.href, data?.id) : joinUrlPath(slug, item.href);
   const icon = getSidebarNavigationItemIcon(item.key);
 
+  const isActive = item.highlight(pathname, itemHref);
+
   return (
     <Link href={itemHref} onClick={handleLinkClick}>
-      <SidebarNavItem isActive={item.highlight(pathname, itemHref)}>
-        <div className="flex items-center gap-1.5 py-[1px]">
-          {icon}
-          <p className="text-13 leading-5 font-medium">{t(item.labelTranslationKey)}</p>
+      <SidebarNavItem isActive={isActive}>
+        <div className="flex min-w-0 flex-1 items-center gap-2 py-[1px]">
+          <span className={sidebarNavIconClass(isActive)}>{icon}</span>
+          <p className="truncate text-13 leading-5 font-medium">{t(item.labelTranslationKey)}</p>
         </div>
         {additionalRender?.(item.key, slug)}
       </SidebarNavItem>

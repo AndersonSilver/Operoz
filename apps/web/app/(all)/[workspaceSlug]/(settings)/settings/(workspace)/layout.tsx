@@ -9,7 +9,9 @@ import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 import { WORKSPACE_SETTINGS_ACCESS } from "@operis/constants";
 import type { EUserWorkspaceRoles } from "@operis/types";
 // components
+import { AuxiliaryCollapsibleSidebar } from "@/components/sidebar/auxiliary-collapsible-sidebar";
 import { WorkspaceSettingsSidebarRoot } from "@/components/settings/workspace/sidebar";
+import { SETTINGS_SIDEBAR_WIDTH } from "@/constants/collapsible-sidebar";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
 
@@ -41,18 +43,22 @@ const WorkspaceSettingLayout = observer(function WorkspaceSettingLayout({ params
           activePath={getWorkspaceActivePath(pathname) || ""}
         />
       )}
-      <div className="inset-y-0 flex h-full w-full flex-row">
+      <div className="flex h-full w-full min-w-0 flex-row">
         {workspaceUserInfo && !isAuthorized ? (
           <NotAuthorizedView section="settings" className="h-auto" />
         ) : (
-          <div className="relative flex size-full">
+          <>
             {!hideWorkspaceSidebar && (
               <div className="hidden h-full shrink-0 md:block">
-                <WorkspaceSettingsSidebarRoot />
+                <AuxiliaryCollapsibleSidebar storageKey="workspace_settings_sidebar_pinned" width={SETTINGS_SIDEBAR_WIDTH}>
+                  <WorkspaceSettingsSidebarRoot className="h-full border-r-0" />
+                </AuxiliaryCollapsibleSidebar>
               </div>
             )}
-            <Outlet />
-          </div>
+            <main className="min-w-0 flex-1 overflow-hidden">
+              <Outlet />
+            </main>
+          </>
         )}
       </div>
     </>

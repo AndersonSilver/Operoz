@@ -13,10 +13,18 @@ export interface IThemeStore {
   epicDetailSidebarCollapsed: boolean | undefined;
   initiativesSidebarCollapsed: boolean | undefined;
   projectOverviewSidebarCollapsed: boolean | undefined;
+  /** Sidebars auxiliares (settings, inbox): fixas só após clique. */
+  auxiliarySidebarStorageKey: string | null;
+  auxiliarySidebarPinned: boolean | undefined;
+  auxiliarySidebarPeek: boolean | undefined;
   // actions
   toggleAnySidebarDropdown: (open?: boolean) => void;
   toggleSidebar: (collapsed?: boolean) => void;
   toggleSidebarPeek: (peek?: boolean) => void;
+  setSidebarPeek: (peek: boolean) => void;
+  bindAuxiliarySidebar: (storageKey: string) => void;
+  toggleAuxiliarySidebarPinned: (pinned?: boolean) => void;
+  setAuxiliarySidebarPeek: (peek: boolean) => void;
   toggleExtendedSidebar: (collapsed?: boolean) => void;
   toggleExtendedProjectSidebar: (collapsed?: boolean) => void;
   toggleProfileSidebar: (collapsed?: boolean) => void;
@@ -40,6 +48,9 @@ export class ThemeStore implements IThemeStore {
   epicDetailSidebarCollapsed: boolean | undefined = undefined;
   initiativesSidebarCollapsed: boolean | undefined = undefined;
   projectOverviewSidebarCollapsed: boolean | undefined = undefined;
+  auxiliarySidebarStorageKey: string | null = null;
+  auxiliarySidebarPinned: boolean | undefined = undefined;
+  auxiliarySidebarPeek: boolean | undefined = undefined;
 
   constructor() {
     makeObservable(this, {
@@ -55,10 +66,17 @@ export class ThemeStore implements IThemeStore {
       epicDetailSidebarCollapsed: observable.ref,
       initiativesSidebarCollapsed: observable.ref,
       projectOverviewSidebarCollapsed: observable.ref,
+      auxiliarySidebarStorageKey: observable.ref,
+      auxiliarySidebarPinned: observable.ref,
+      auxiliarySidebarPeek: observable.ref,
       // action
       toggleAnySidebarDropdown: action,
       toggleSidebar: action,
       toggleSidebarPeek: action,
+      setSidebarPeek: action,
+      bindAuxiliarySidebar: action,
+      toggleAuxiliarySidebarPinned: action,
+      setAuxiliarySidebarPeek: action,
       toggleExtendedSidebar: action,
       toggleExtendedProjectSidebar: action,
       toggleProfileSidebar: action,
@@ -101,6 +119,42 @@ export class ThemeStore implements IThemeStore {
     } else {
       this.sidebarPeek = peek;
     }
+  };
+
+  setSidebarPeek = (peek: boolean) => {
+    if (!this.sidebarCollapsed && peek) return;
+    this.sidebarPeek = peek;
+  };
+
+  bindAuxiliarySidebar = (storageKey: string) => {
+    if (this.auxiliarySidebarStorageKey !== storageKey) {
+      this.auxiliarySidebarStorageKey = storageKey;
+      const stored = localStorage.getItem(storageKey);
+      this.auxiliarySidebarPinned = stored === "true";
+      this.auxiliarySidebarPeek = false;
+      return;
+    }
+    if (this.auxiliarySidebarPinned === undefined) {
+      const stored = localStorage.getItem(storageKey);
+      this.auxiliarySidebarPinned = stored === "true";
+    }
+  };
+
+  toggleAuxiliarySidebarPinned = (pinned?: boolean) => {
+    const current = this.auxiliarySidebarPinned ?? false;
+    const next = pinned ?? !current;
+    this.auxiliarySidebarPinned = next;
+    if (next) {
+      this.auxiliarySidebarPeek = false;
+    }
+    if (this.auxiliarySidebarStorageKey) {
+      localStorage.setItem(this.auxiliarySidebarStorageKey, String(next));
+    }
+  };
+
+  setAuxiliarySidebarPeek = (peek: boolean) => {
+    if (this.auxiliarySidebarPinned && peek) return;
+    this.auxiliarySidebarPeek = peek;
   };
 
   /**

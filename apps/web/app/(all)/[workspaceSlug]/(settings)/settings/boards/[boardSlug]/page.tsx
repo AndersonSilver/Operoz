@@ -6,7 +6,7 @@ import { PageHead } from "@/components/core/page-title";
 import { BoardInformationsForm } from "@/components/settings/board/board-informations-form";
 import { BoardSettingsPageHeader } from "@/components/settings/board/board-settings-page-header";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
-import { BoardInformationsHeading } from "@/components/settings/board/board-informations-heading";
+import "@/components/settings/board/board-informations-settings.css";
 import { BOARD_SETTINGS_NAV } from "@/constants/board-settings";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import type { Route } from "./+types/page";
@@ -30,6 +30,7 @@ function BoardInformationsSettingsPage({ params }: Route.ComponentProps) {
 
   return (
     <SettingsContentWrapper
+      hugging
       header={
         <BoardSettingsPageHeader
           workspaceSlug={workspaceSlug}
@@ -42,8 +43,11 @@ function BoardInformationsSettingsPage({ params }: Route.ComponentProps) {
       }
     >
       <PageHead title={pageTitle} />
-      <BoardInformationsHeading board={board} />
-      <BoardInformationsForm workspaceSlug={workspaceSlug} board={board} />
+      <div className="board-informations-page">
+        <div className="board-informations-stack">
+          <BoardInformationsForm workspaceSlug={workspaceSlug} board={board} />
+        </div>
+      </div>
     </SettingsContentWrapper>
   );
 }

@@ -38,6 +38,7 @@ export interface IWorkspaceRootStore {
   // crud actions
   createWorkspace: (data: Partial<IWorkspace>) => Promise<IWorkspace>;
   updateWorkspace: (workspaceSlug: string, data: Partial<IWorkspace>) => Promise<IWorkspace>;
+  transferWorkspaceOwnership: (workspaceSlug: string, newOwnerId: string) => Promise<IWorkspace>;
   updateWorkspaceLogo: (workspaceSlug: string, logoURL: string) => void;
   deleteWorkspace: (workspaceSlug: string) => Promise<void>;
   fetchSidebarNavigationPreferences: (workspaceSlug: string) => Promise<void>;
@@ -97,6 +98,7 @@ export abstract class BaseWorkspaceRootStore implements IWorkspaceRootStore {
       fetchWorkspaces: action,
       createWorkspace: action,
       updateWorkspace: action,
+      transferWorkspaceOwnership: action,
       updateWorkspaceLogo: action,
       deleteWorkspace: action,
       fetchSidebarNavigationPreferences: action,
@@ -220,6 +222,18 @@ export abstract class BaseWorkspaceRootStore implements IWorkspaceRootStore {
       }
       return res;
     });
+
+  transferWorkspaceOwnership = async (workspaceSlug: string, newOwnerId: string) => {
+    const response = await this.workspaceService.transferWorkspaceOwnership(workspaceSlug, {
+      new_owner_id: newOwnerId,
+    });
+    runInAction(() => {
+      if (response?.id) {
+        set(this.workspaces, [response.id], response);
+      }
+    });
+    return response;
+  };
 
   /**
    * update workspace using the workspace slug and new workspace data

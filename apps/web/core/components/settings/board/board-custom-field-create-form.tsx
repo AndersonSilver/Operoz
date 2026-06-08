@@ -15,14 +15,15 @@ import {
 
 type Props = {
   workspaceSlug: string;
+  boardSlug?: string;
   onCancel: () => void;
   onCreated: (field: IWorkspaceCustomField) => void;
 };
 
 export function BoardCustomFieldCreateForm(props: Props) {
-  const { workspaceSlug, onCancel, onCreated } = props;
+  const { workspaceSlug, boardSlug, onCancel, onCreated } = props;
   const { t } = useTranslation();
-  const { createWorkspaceCustomField } = useBoardCustomField();
+  const { createWorkspaceCustomField, createBoardCustomField } = useBoardCustomField();
   const [options, setOptions] = useState<string[]>([""]);
 
   const {
@@ -60,11 +61,24 @@ export function BoardCustomFieldCreateForm(props: Props) {
         return;
       }
       const settings = fieldTypeNeedsOptions(data.field_type) ? { options } : {};
-      const created = await createWorkspaceCustomField(workspaceSlug, { ...data, settings });
+      const payload = { ...data, settings };
+      const created = boardSlug
+        ? await createBoardCustomField(workspaceSlug, boardSlug, payload).then((boardField) => ({
+            id: boardField.custom_field_id ?? boardField.id,
+            name: boardField.name,
+            key: boardField.key,
+            description: boardField.description,
+            field_type: boardField.field_type,
+            settings: boardField.settings ?? {},
+            is_active: boardField.is_active,
+          }))
+        : await createWorkspaceCustomField(workspaceSlug, payload);
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("boards.settings.fields.create_workspace_success_title"),
-        message: t("boards.settings.fields.create_workspace_success_message", { name: data.name }),
+        message: boardSlug
+          ? t("boards.settings.fields.create_success_message", { name: data.name })
+          : t("boards.settings.fields.create_workspace_success_message", { name: data.name }),
       });
       reset();
       setOptions([""]);

@@ -27,7 +27,36 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
       },
     ],
   },
-  { key: "automation", href: "/automacao", i18n_label: "boards.settings.nav.automation" },
+  {
+    key: "automation",
+    href: "/automacao",
+    i18n_label: "boards.settings.nav.automation",
+    children: [
+      { key: "automation_rules", href: "/automacao", i18n_label: "boards.settings.nav.automation_rules" },
+      { key: "automation_scripts", href: "/automacao/scripts", i18n_label: "boards.settings.nav.automation_scripts" },
+      { key: "automation_emails", href: "/automacao/emails", i18n_label: "boards.settings.nav.automation_emails" },
+      {
+        key: "automation_event_history",
+        href: "/automacao/historico",
+        i18n_label: "boards.settings.nav.automation_event_history",
+      },
+      {
+        key: "automation_metrics",
+        href: "/automacao/metricas",
+        i18n_label: "boards.settings.nav.automation_metrics",
+      },
+      {
+        key: "automation_dead_letters",
+        href: "/automacao/falhas",
+        i18n_label: "boards.settings.nav.automation_dead_letters",
+      },
+      {
+        key: "automation_secrets",
+        href: "/automacao/segredos",
+        i18n_label: "boards.settings.nav.automation_secrets",
+      },
+    ],
+  },
   { key: "fields", href: "/campos", i18n_label: "boards.settings.nav.fields" },
   {
     key: "issue_types",

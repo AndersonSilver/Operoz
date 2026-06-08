@@ -14,6 +14,7 @@ import { ChevronRightIcon } from "@operis/propel/icons";
 import { cn } from "@operis/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
+import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";
 // store hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import useLocalStorage from "@/hooks/use-local-storage";
@@ -96,25 +97,20 @@ export const SidebarMenuItems = observer(function SidebarMenuItems() {
         ))}
       </div>
       <Disclosure as="div" className="flex flex-col" defaultOpen={!!isWorkspaceMenuOpen}>
-        <div className="group flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-placeholder hover:bg-layer-transparent-hover">
-          <Disclosure.Button
-            as="button"
-            type="button"
-            className="flex w-full items-center gap-1 text-left text-13 font-semibold whitespace-nowrap text-placeholder"
-            onClick={() => toggleListDisclosure(!isWorkspaceMenuOpen)}
-            aria-label={t(
-              isWorkspaceMenuOpen
-                ? "aria_labels.app_sidebar.close_workspace_menu"
-                : "aria_labels.app_sidebar.open_workspace_menu"
-            )}
-          >
-            <span className="text-13 font-semibold">{t("workspace")}</span>
-          </Disclosure.Button>
-          <div className="pointer-events-none flex items-center opacity-0 group-hover:pointer-events-auto group-hover:opacity-100">
+        <SidebarSectionHeader
+          label={t("workspace")}
+          isOpen={!!isWorkspaceMenuOpen}
+          onToggle={() => toggleListDisclosure(!isWorkspaceMenuOpen)}
+          toggleAriaLabel={t(
+            isWorkspaceMenuOpen
+              ? "aria_labels.app_sidebar.close_workspace_menu"
+              : "aria_labels.app_sidebar.open_workspace_menu"
+          )}
+          actions={
             <Disclosure.Button
               as="button"
               type="button"
-              className="flex-shrink-0 rounded-sm p-0.5 hover:bg-layer-1"
+              className="rounded-sm p-0.5 text-tertiary hover:bg-layer-transparent-hover hover:text-secondary"
               onClick={() => toggleListDisclosure(!isWorkspaceMenuOpen)}
               aria-label={t(
                 isWorkspaceMenuOpen
@@ -123,13 +119,13 @@ export const SidebarMenuItems = observer(function SidebarMenuItems() {
               )}
             >
               <ChevronRightIcon
-                className={cn("size-3 flex-shrink-0 transition-all", {
+                className={cn("size-3.5 shrink-0 transition-transform duration-150", {
                   "rotate-90": isWorkspaceMenuOpen,
                 })}
               />
             </Disclosure.Button>
-          </div>
-        </div>
+          }
+        />
         <Transition
           show={!!isWorkspaceMenuOpen}
           enter="transition duration-100 ease-out"

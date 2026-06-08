@@ -7,6 +7,7 @@ import { EInboxIssueCurrentTab } from "@operis/types";
 // plane imports
 import { Header, Loader, EHeaderVariant } from "@operis/ui";
 import { cn } from "@operis/utils";
+import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { InboxSidebarLoader } from "@/components/ui/loader/layouts/project-inbox/inbox-sidebar-loader";
 // hooks
@@ -57,6 +58,7 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
     fetchInboxPaginationIssues,
     getAppliedFiltersCount,
   } = useProjectInbox();
+  const hasBoardWallpaper = useBoardHubHasBackground();
   // derived values
   const fetchNextPages = useCallback(() => {
     if (!workspaceSlug || !projectId) return;
@@ -77,9 +79,12 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
   }, [currentTab, filteredInboxIssueIds, inboxIssueId, projectId, router, workspaceSlug]);
 
   return (
-    <div className="h-full w-full flex-shrink-0 border-r border-strong bg-surface-1">
+    <div className="h-full w-full flex-shrink-0">
       <div className="relative flex h-full w-full flex-col overflow-hidden">
-        <Header variant={EHeaderVariant.SECONDARY}>
+        <Header
+          variant={EHeaderVariant.SECONDARY}
+          className={cn(hasBoardWallpaper && cn("!bg-transparent", BOARD_HUB_GLASS_HEADER))}
+        >
           {tabNavigationOptions.map((option) => (
             <div
               key={option?.key}

@@ -1,6 +1,6 @@
 import { useTranslation } from "@operis/i18n";
 import type { IProjectCustomFieldLite, TCustomFieldValue } from "@operis/types";
-import { Input, TextArea, ToggleSwitch } from "@operis/ui";
+import { CustomSearchSelect, Input, TextArea, ToggleSwitch } from "@operis/ui";
 import { cn } from "@operis/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import {
@@ -111,31 +111,37 @@ export function BoardCustomFieldFormField(props: Props) {
     case "multi_select": {
       const options = field.settings?.options ?? [];
       const selected = Array.isArray(value) ? value : typeof value === "string" && value ? [value] : [];
-      const toggleOption = (opt: string) => {
-        const next = selected.includes(opt) ? selected.filter((o) => o !== opt) : [...selected, opt];
-        onChange(next);
-      };
+      const formattedOptions = options.map((opt) => ({
+        value: opt,
+        query: opt.toLowerCase(),
+        content: <span className="truncate">{opt}</span>,
+      }));
+      const selectedSummary =
+        selected.length === 0
+          ? null
+          : selected.length <= 2
+            ? selected.join(", ")
+            : `${selected.slice(0, 2).join(", ")} +${selected.length - 2}`;
+
       return (
         <IssueFormField label={field.name} hint={hint} controlWidth="custom">
-          <div className={cn("w-full overflow-hidden rounded-[3px] bg-layer-2", issueFormControlBorderClass)}>
-            {options.map((opt, index) => (
-              <label
-                key={opt}
-                className={cn(
-                  "flex cursor-pointer items-center gap-3 px-3 py-2.5 text-13 text-primary hover:bg-layer-transparent-hover",
-                  index > 0 && "border-t border-subtle"
-                )}
-              >
-                <input
-                  type="checkbox"
-                  checked={selected.includes(opt)}
-                  onChange={() => toggleOption(opt)}
-                  className="size-4 rounded border-subtle-1 accent-accent-primary"
-                />
-                <span className="truncate">{opt}</span>
-              </label>
-            ))}
-          </div>
+          <CustomSearchSelect
+            multiple
+            input
+            value={selected}
+            onChange={onChange}
+            options={formattedOptions}
+            className="w-full"
+            buttonClassName={cn(getIssueFormControlClass("custom"), "justify-between gap-2")}
+            label={
+              <span className={cn("min-w-0 truncate text-left", !selectedSummary && "text-tertiary")}>
+                {selectedSummary ?? t("boards.settings.fields.select_placeholder")}
+              </span>
+            }
+            searchPlaceholder={t("search")}
+            noResultsMessage={t("no_matching_results")}
+            maxHeight="md"
+          />
         </IssueFormField>
       );
     }

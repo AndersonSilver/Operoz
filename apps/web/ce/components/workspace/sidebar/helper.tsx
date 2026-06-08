@@ -1,38 +1,44 @@
 import {
-  AnalyticsIcon,
-  ArchiveIcon,
-  CycleIcon,
-  DraftIcon,
-  HomeIcon,
-  InboxIcon,
-  MultipleStickyIcon,
-  ProjectIcon,
-  ViewsIcon,
-  YourWorkIcon,
-} from "@operis/propel/icons";
+  Archive,
+  BarChart3,
+  CircleDot,
+  FilePenLine,
+  FolderKanban,
+  Home,
+  Inbox,
+  LayoutGrid,
+  StickyNote,
+  UserRound,
+} from "lucide-react";
 import { cn } from "@operis/utils";
 
+const ICON_CLASS = "size-3.5 shrink-0";
+
 export const getSidebarNavigationItemIcon = (key: string, className: string = "") => {
+  const props = { className: cn(ICON_CLASS, className), strokeWidth: 1.75 as const };
+
   switch (key) {
     case "home":
-      return <HomeIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <Home {...props} />;
     case "inbox":
-      return <InboxIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <Inbox {...props} />;
     case "projects":
-      return <ProjectIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <FolderKanban {...props} />;
     case "views":
-      return <ViewsIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <LayoutGrid {...props} />;
     case "active_cycles":
-      return <CycleIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <CircleDot {...props} />;
     case "analytics":
-      return <AnalyticsIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <BarChart3 {...props} />;
     case "your_work":
-      return <YourWorkIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <UserRound {...props} />;
     case "drafts":
-      return <DraftIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <FilePenLine {...props} />;
     case "archives":
-      return <ArchiveIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <Archive {...props} />;
     case "stickies":
-      return <MultipleStickyIcon className={cn("size-4 flex-shrink-0", className)} />;
+      return <StickyNote {...props} />;
+    default:
+      return null;
   }
 };

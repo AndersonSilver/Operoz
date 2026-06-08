@@ -1,20 +1,18 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { ChevronDown } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
 import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
 import { BOARD_SETTINGS_NAV } from "@/constants/board-settings";
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";
 import { BOARD_SETTINGS_ICONS } from "./item-icon";
+import { BoardSettingsNavGroup } from "./nav-group";
 
 function normalizeSettingsPath(path: string) {
   if (path.length > 1 && path.endsWith("/")) return path.slice(0, -1);
   return path;
 }
 
-/** Só a rota exacta fica activa (evita `/tipos` activo em `/tipos/projeto`). */
 function isBoardSettingsPathActive(pathname: string, basePath: string, href: string) {
   const current = normalizeSettingsPath(pathname);
   const base = normalizeSettingsPath(basePath);
@@ -43,7 +41,7 @@ export const BoardSettingsSidebarItemList = observer(function BoardSettingsSideb
   });
 
   return (
-    <div className="mt-3 flex flex-col px-3">
+    <nav className="flex flex-col gap-0.5 px-2 py-2" aria-label={t("boards.settings.title")}>
       {BOARD_SETTINGS_NAV.map((item) => {
         const Icon = BOARD_SETTINGS_ICONS[item.key];
         const hasChildren = Boolean(item.children?.length);
@@ -65,45 +63,34 @@ export const BoardSettingsSidebarItemList = observer(function BoardSettingsSideb
         const isGroupActive = item.children!.some((child) =>
           isBoardSettingsPathActive(pathname, basePath, child.href)
         );
-        const isExpanded = expanded[item.key] ?? isGroupActive;
+        const isOpen = expanded[item.key] ?? isGroupActive;
 
         return (
-          <div key={item.key} className="flex flex-col">
-            <button
-              type="button"
-              className={cn(
-                "flex w-full items-center gap-2 rounded-lg px-2 py-1.5 text-left text-body-sm-medium text-secondary transition-colors",
-                isGroupActive ? "text-primary" : "hover:bg-layer-transparent-hover"
-              )}
-              onClick={() => setExpanded((prev) => ({ ...prev, [item.key]: !isExpanded }))}
-            >
-              <span className="grid size-4 shrink-0 place-items-center">
-                <Icon className="size-3.5" />
-              </span>
-              <span className="min-w-0 flex-1 truncate">{t(item.i18n_label)}</span>
-              <ChevronDown className={cn("size-3.5 shrink-0 text-tertiary transition-transform", { "rotate-180": isExpanded })} />
-            </button>
-            {isExpanded && (
-              <div className="ml-4 flex flex-col border-l border-subtle pl-2">
-                {item.children!.map((child) => {
-                  const ChildIcon = BOARD_SETTINGS_ICONS[child.key] ?? Icon;
-                  const href = `${basePath}${child.href}/`;
-                  return (
-                    <SettingsSidebarItem
-                      key={child.key}
-                      as="link"
-                      href={href}
-                      isActive={isBoardSettingsPathActive(pathname, basePath, child.href)}
-                      icon={ChildIcon}
-                      label={t(child.i18n_label)}
-                    />
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <BoardSettingsNavGroup
+            key={item.key}
+            label={t(item.i18n_label)}
+            icon={Icon}
+            isOpen={isOpen}
+            isActive={isGroupActive}
+            onToggle={() => setExpanded((prev) => ({ ...prev, [item.key]: !isOpen }))}
+          >
+            {item.children!.map((child) => {
+              const ChildIcon = BOARD_SETTINGS_ICONS[child.key] ?? Icon;
+              const href = `${basePath}${child.href}/`;
+              return (
+                <SettingsSidebarItem
+                  key={child.key}
+                  as="link"
+                  href={href}
+                  isActive={isBoardSettingsPathActive(pathname, basePath, child.href)}
+                  icon={ChildIcon}
+                  label={t(child.i18n_label)}
+                />
+              );
+            })}
+          </BoardSettingsNavGroup>
         );
       })}
-    </div>
+    </nav>
   );
 });

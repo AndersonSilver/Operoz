@@ -19,7 +19,11 @@ import { useMember } from "@/hooks/store/use-member";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
 // plane web components
-import { SendWorkspaceInvitationModal, MembersActivityButton } from "@/plane-web/components/workspace/members";
+import {
+  SendWorkspaceInvitationModal,
+  MembersActivityButton,
+  MembersCsvImportButton,
+} from "@/plane-web/components/workspace/members";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 // local imports
 import type { Route } from "./+types/page";
@@ -132,9 +136,12 @@ const WorkspaceMembersSettingsPage = observer(function WorkspaceMembersSettingsP
             />
             <MembersActivityButton workspaceSlug={workspaceSlug} />
             {canPerformWorkspaceAdminActions && (
-              <Button variant="primary" size="lg" onClick={() => setInviteModal(true)}>
-                {t("workspace_settings.settings.members.add_member")}
-              </Button>
+              <>
+                <MembersCsvImportButton onSubmit={handleWorkspaceInvite} />
+                <Button variant="primary" size="lg" onClick={() => setInviteModal(true)}>
+                  {t("workspace_settings.settings.members.add_member")}
+                </Button>
+              </>
             )}
           </div>
         </div>

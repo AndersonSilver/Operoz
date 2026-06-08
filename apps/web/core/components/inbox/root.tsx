@@ -7,6 +7,12 @@ import { EmptyStateCompact } from "@operis/propel/empty-state";
 import { IntakeIcon } from "@operis/propel/icons";
 import { EInboxIssueCurrentTab } from "@operis/types";
 import { cn } from "@operis/utils";
+import {
+  BOARD_HUB_INTAKE_DETAIL,
+  BOARD_HUB_INTAKE_SIDEBAR,
+  useBoardHubHasBackground,
+} from "@/components/board/board-hub-background";
+import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 // components
 import { InboxContentRoot } from "@/components/inbox/content";
 import { InboxSidebar } from "@/components/inbox/sidebar";
@@ -30,6 +36,9 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
   const { t } = useTranslation();
   // hooks
   const { loader, error, currentTab, currentInboxProjectId, handleCurrentTab, fetchInboxIssues } = useProjectInbox();
+  const insideWorkSurface = useProjectWorkSurface();
+  const hasBoardWallpaper = useBoardHubHasBackground();
+  const useHubChrome = insideWorkSurface || hasBoardWallpaper;
 
   useEffect(() => {
     if (!inboxAccessible || !workspaceSlug || !projectId) return;
@@ -78,10 +87,16 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
           />
         </div>
       )}
-      <div className="flex h-full w-full overflow-hidden bg-surface-1">
+      <div
+        className={cn(
+          "flex h-full w-full overflow-hidden",
+          useHubChrome ? "bg-transparent" : "bg-surface-1"
+        )}
+      >
         <div
           className={cn(
-            "absolute top-[50px] bottom-0 z-10 w-full flex-shrink-0 bg-surface-1 transition-all lg:!relative lg:!top-0 lg:w-2/6",
+            "absolute top-[50px] bottom-0 z-10 w-full flex-shrink-0 transition-all lg:!relative lg:!top-0 lg:w-2/6",
+            useHubChrome ? BOARD_HUB_INTAKE_SIDEBAR : "border-r border-strong bg-surface-1",
             isMobileSidebar ? "translate-x-0" : "-translate-x-full lg:!translate-x-0"
           )}
         >
@@ -94,19 +109,28 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
         </div>
 
         {inboxIssueId ? (
-          <InboxContentRoot
-            setIsMobileSidebar={setIsMobileSidebar}
-            isMobileSidebar={isMobileSidebar}
-            workspaceSlug={workspaceSlug.toString()}
-            projectId={projectId.toString()}
-            inboxIssueId={inboxIssueId.toString()}
-          />
+          <div className={cn("min-w-0 flex-1", useHubChrome && BOARD_HUB_INTAKE_DETAIL)}>
+            <InboxContentRoot
+              setIsMobileSidebar={setIsMobileSidebar}
+              isMobileSidebar={isMobileSidebar}
+              workspaceSlug={workspaceSlug.toString()}
+              projectId={projectId.toString()}
+              inboxIssueId={inboxIssueId.toString()}
+            />
+          </div>
         ) : (
-          <EmptyStateCompact
-            assetKey="intake"
-            title={t("project_empty_state.intake_main.title")}
-            assetClassName="size-20"
-          />
+          <div
+            className={cn(
+              "flex min-w-0 flex-1 items-center justify-center",
+              useHubChrome && BOARD_HUB_INTAKE_DETAIL
+            )}
+          >
+            <EmptyStateCompact
+              assetKey="intake"
+              title={t("project_empty_state.intake_main.title")}
+              assetClassName="size-20"
+            />
+          </div>
         )}
       </div>
     </>

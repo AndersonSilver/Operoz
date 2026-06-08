@@ -10,7 +10,9 @@ import { EFileAssetType } from "@operis/types";
 // plane utils
 import { cn } from "@operis/utils";
 // components
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import { LogoSpinner } from "@/components/common/logo-spinner";
+import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 import { PageHead } from "@/components/core/page-title";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import type { TPageRootConfig, TPageRootHandlers } from "@/components/pages/editor/page-root";
@@ -45,6 +47,7 @@ function PageDetailsPage({ params }: Route.ComponentProps) {
   });
   const { getWorkspaceBySlug } = useWorkspace();
   const { uploadEditorAsset, duplicateEditorAsset } = useEditorAsset();
+  const insideWorkSurface = useProjectWorkSurface();
   // derived values
   const workspaceId = workspaceSlug ? (getWorkspaceBySlug(workspaceSlug)?.id ?? "") : "";
   const { canCurrentUserAccessPage, id, name, updateDescription } = page ?? {};
@@ -173,8 +176,13 @@ function PageDetailsPage({ params }: Route.ComponentProps) {
   return (
     <>
       <PageHead title={name} />
-      <div className="flex h-full flex-col justify-between">
-        <div className="relative flex h-full w-full flex-shrink-0 flex-col overflow-hidden">
+      <div
+        className={cn(
+          "flex h-full min-h-0 flex-col justify-between",
+          insideWorkSurface && BOARD_HUB_PROJECT_WORK_SURFACE_INNER
+        )}
+      >
+        <div className="relative flex h-full min-h-0 w-full flex-shrink-0 flex-col overflow-hidden">
           <PageRoot
             config={pageRootConfig}
             handlers={pageRootHandlers}

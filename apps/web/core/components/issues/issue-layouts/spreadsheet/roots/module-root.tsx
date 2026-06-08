@@ -1,36 +1,30 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssuesStoreType } from "@operis/types";
-import { useIssuesActions } from "@/hooks/use-issues-actions";
-import { WorkspaceSpreadsheetRoot } from "./workspace-root";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useIssues } from "@/hooks/store/use-issues";
+import { useUserPermissions } from "@/hooks/store/user";
+import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
+import { BaseSpreadsheetRoot } from "../base-spreadsheet-root";
 
 export const ModuleSpreadsheetLayout = observer(function ModuleSpreadsheetLayout() {
-  const { workspaceSlug, projectId, moduleId } = useParams();
-  const { fetchNextIssues } = useIssuesActions(EIssuesStoreType.MODULE);
+  const { moduleId } = useParams();
+  const { allowPermissions } = useUserPermissions();
 
-  const workspaceSlugStr = workspaceSlug?.toString();
-  const moduleIdStr = moduleId?.toString();
-  const projectIdStr = projectId?.toString();
+  const isEditingAllowed = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.PROJECT
+  );
 
-  const fetchNextPages = useCallback(() => {
-    if (!workspaceSlugStr || !projectIdStr || !moduleIdStr) return;
-    void fetchNextIssues(workspaceSlugStr, projectIdStr, moduleIdStr);
-  }, [fetchNextIssues, workspaceSlugStr, projectIdStr, moduleIdStr]);
+  const canEditIssueProperties = useCallback(() => isEditingAllowed, [isEditingAllowed]);
 
-  if (!workspaceSlugStr || !moduleIdStr) return null;
+  if (!moduleId) return null;
 
   return (
-    <WorkspaceSpreadsheetRoot
-      isDefaultView={false}
-      isLoading={false}
-      toggleLoading={() => undefined}
-      workspaceSlug={workspaceSlugStr}
-      globalViewId={moduleIdStr}
-      routeFilters={{}}
-      fetchNextPages={fetchNextPages}
-      globalViewsLoading={false}
-      issuesLoading={false}
+    <BaseSpreadsheetRoot
+      QuickActions={ModuleIssueQuickActions}
+      canEditPropertiesBasedOnProject={canEditIssueProperties}
+      viewId={moduleId.toString()}
     />
   );
 });

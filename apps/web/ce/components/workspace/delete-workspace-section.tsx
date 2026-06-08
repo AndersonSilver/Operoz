@@ -7,19 +7,32 @@ import { Button } from "@operis/propel/button";
 import type { IWorkspace } from "@operis/types";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
+import { useUser } from "@/hooks/store/user";
 // local imports
 import { DeleteWorkspaceModal } from "./delete-workspace-modal";
 
 type TDeleteWorkspace = {
   workspace: IWorkspace | null;
+  stacked?: boolean;
+};
+
+const getWorkspaceOwnerId = (workspace: IWorkspace | null): string | undefined => {
+  if (!workspace?.owner) return undefined;
+  return typeof workspace.owner === "string" ? workspace.owner : workspace.owner.id;
 };
 
 export const DeleteWorkspaceSection = observer(function DeleteWorkspaceSection(props: TDeleteWorkspace) {
-  const { workspace } = props;
+  const { workspace, stacked } = props;
   // states
   const [deleteWorkspaceModal, setDeleteWorkspaceModal] = useState(false);
   // translation
   const { t } = useTranslation();
+  const { data: currentUser } = useUser();
+
+  const ownerId = getWorkspaceOwnerId(workspace);
+  const isOwner = !!currentUser?.id && ownerId === currentUser.id;
+
+  if (!workspace || !isOwner) return null;
 
   return (
     <>
@@ -29,6 +42,8 @@ export const DeleteWorkspaceSection = observer(function DeleteWorkspaceSection(p
         onClose={() => setDeleteWorkspaceModal(false)}
       />
       <SettingsBoxedControlItem
+        stacked={stacked}
+        className="border-danger-subtle/25 bg-danger-subtle/5"
         title={t("workspace_settings.settings.general.delete_workspace")}
         description={t("workspace_settings.settings.general.delete_workspace_description")}
         control={

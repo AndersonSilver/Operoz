@@ -6,8 +6,9 @@ import { cn } from "@operis/utils";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
 import { ExportGuide } from "@/components/exporter/guide";
+import { WorkspaceExportsSettingsHero } from "@/components/exporter/workspace-exports-settings-hero";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
-import { SettingsHeading } from "@/components/settings/heading";
+import "@/components/exporter/workspace-exports-settings.css";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -38,14 +39,11 @@ function ExportsPage() {
     <SettingsContentWrapper header={<ExportsWorkspaceSettingsHeader />} hugging>
       <PageHead title={pageTitle} />
       <div
-        className={cn("flex w-full flex-col gap-y-6", {
+        className={cn("flex w-full flex-col gap-6", {
           "opacity-60": !canPerformWorkspaceMemberActions,
         })}
       >
-        <SettingsHeading
-          title={t("workspace_settings.settings.exports.heading")}
-          description={t("workspace_settings.settings.exports.description")}
-        />
+        <WorkspaceExportsSettingsHero />
         <ExportGuide />
       </div>
     </SettingsContentWrapper>

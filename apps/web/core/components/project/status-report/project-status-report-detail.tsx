@@ -34,6 +34,7 @@ import { formatReportWeekLabel } from "@/components/project/status-report/format
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";
 import { useStatusReportCapabilities } from "@/hooks/use-status-report-capabilities";
 import { useWorkspace } from "@/hooks/store/use-workspace";
+import { isObservationHtml } from "@/components/project/status-report/observation-content";
 import { StatusReportObservationComposer } from "@/components/project/status-report/status-report-observation-composer";
 import { StatusReportObservationItem } from "@/components/project/status-report/status-report-observation-item";
 import { ProjectStatusReportPreviewPanel } from "@/components/project/status-report/project-status-report-preview-panel";
@@ -469,7 +470,7 @@ export function ProjectStatusReportDetail(props: Props) {
   );
 
   return (
-    <div className="flex h-full w-full min-w-0 flex-col overflow-hidden bg-layer-1">
+    <div className="flex h-full w-full min-w-0 flex-col overflow-hidden bg-layer-1/90 backdrop-blur-sm">
       {viewMode === "preview" ? (
         <>
           <div className="shrink-0 border-b border-subtle bg-layer-1">
@@ -923,6 +924,28 @@ function removeObservationLineAt(value: string, index: number): string {
   return observationLinesToValue(lines);
 }
 
+function updateObservationLineAt(value: string, index: number, line: string): string {
+  const trimmed = line.trim();
+  if (!trimmed) return value;
+  const lines = parseObservationLines(value);
+  if (index < 0 || index >= lines.length) return value;
+  lines[index] = trimmed;
+  return observationLinesToValue(lines);
+}
+
+function lineToEditorHtml(line: string): string {
+  const trimmed = line.trim();
+  if (!trimmed) return "<p></p>";
+  if (isObservationHtml(trimmed)) return trimmed;
+  const escaped = trimmed
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+  return `<p>${escaped}</p>`;
+}
+
+type ObservationComposerState = { mode: "add" } | { mode: "edit"; index: number };
+
 function renderObservationBoldText(text: string) {
   const segments = text.split(/(\*\*[^*]+\*\*)/g).filter((part) => part.length > 0);
   return segments.map((segment, index) => {
@@ -967,26 +990,37 @@ function ObservationField({
   const Icon = theme.Icon;
   const lines = parseObservationLines(value);
   const lineCount = lines.length;
-  const [showComposer, setShowComposer] = useState(false);
+  const [composerState, setComposerState] = useState<ObservationComposerState | null>(null);
   const canUseRichEditor = Boolean(workspaceId && projectId && reportId);
 
-  const openComposer = () => {
-    setShowComposer(true);
+  const openAddComposer = () => {
+    setComposerState({ mode: "add" });
+  };
+
+  const openEditComposer = (index: number) => {
+    setComposerState({ mode: "edit", index });
   };
 
   const closeComposer = () => {
-    setShowComposer(false);
+    setComposerState(null);
   };
 
   const commitHtml = (html: string) => {
     if (!onChange) return;
     const normalized = html.replace(/\r?\n/g, "").trim();
     if (!normalized) return;
-    onChange(addObservationLine(value, normalized));
+    if (composerState?.mode === "edit") {
+      onChange(updateObservationLineAt(value, composerState.index, normalized));
+    } else {
+      onChange(addObservationLine(value, normalized));
+    }
     closeComposer();
   };
 
   const removeAt = (index: number) => {
+    if (composerState?.mode === "edit" && composerState.index === index) {
+      closeComposer();
+    }
     onChange?.(removeObservationLineAt(value, index));
   };
 
@@ -1003,7 +1037,7 @@ function ObservationField({
         {!readOnly && (
           <button
             type="button"
-            onClick={openComposer}
+            onClick={openAddComposer}
             className="flex shrink-0 items-center gap-1 rounded px-2 py-1 text-caption-sm-regular text-tertiary transition-colors hover:bg-layer-3 hover:text-primary"
           >
             <Plus className="size-3.5" strokeWidth={1.75} />
@@ -1013,7 +1047,7 @@ function ObservationField({
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-3">
-        {lineCount === 0 && !showComposer ? (
+        {lineCount === 0 && !composerState ? (
           <div className="flex flex-1 flex-col items-center justify-center px-2 py-8 text-center">
             <p className="mb-3 max-w-md text-caption-sm-regular leading-relaxed text-tertiary">
               {renderObservationBoldText(emptyHint)}
@@ -1021,7 +1055,7 @@ function ObservationField({
             {!readOnly && (
               <button
                 type="button"
-                onClick={openComposer}
+                onClick={openAddComposer}
                 className="text-body-sm-medium text-accent-primary hover:underline"
               >
                 {t("project.status_report.detail_add_first_item")}
@@ -1031,22 +1065,48 @@ function ObservationField({
         ) : (
           <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain pr-0.5">
             <div className="divide-y divide-subtle">
-              {lines.map((line, index) => (
-                <StatusReportObservationItem
-                  key={`${index}-${line.slice(0, 24)}`}
-                  line={line}
-                  variant={variant}
-                  onRemove={readOnly ? undefined : () => removeAt(index)}
-                />
-              ))}
+              {lines.map((line, index) =>
+                composerState?.mode === "edit" && composerState.index === index ? (
+                  <div key={`edit-${index}`} className="py-2 first:pt-0 last:pb-0">
+                    {canUseRichEditor ? (
+                      <StatusReportObservationComposer
+                        key={`edit-${index}-${line.slice(0, 16)}`}
+                        workspaceSlug={workspaceSlug}
+                        workspaceId={workspaceId}
+                        projectId={projectId}
+                        reportId={reportId}
+                        theme={theme}
+                        composerKey={`edit-${index}`}
+                        initialHtml={lineToEditorHtml(line)}
+                        submitLabel={t("project.status_report.detail_save_item")}
+                        onCommit={commitHtml}
+                        onCancel={closeComposer}
+                        t={t}
+                      />
+                    ) : null}
+                  </div>
+                ) : (
+                  <StatusReportObservationItem
+                    key={`${index}-${line.slice(0, 24)}`}
+                    line={line}
+                    variant={variant}
+                    onEdit={readOnly ? undefined : () => openEditComposer(index)}
+                    onRemove={readOnly ? undefined : () => removeAt(index)}
+                    editLabel={t("project.status_report.detail_edit_item")}
+                    removeLabel={t("remove")}
+                  />
+                )
+              )}
             </div>
-            {showComposer && !readOnly && canUseRichEditor && (
+            {composerState?.mode === "add" && !readOnly && canUseRichEditor && (
               <StatusReportObservationComposer
+                key="add"
                 workspaceSlug={workspaceSlug}
                 workspaceId={workspaceId}
                 projectId={projectId}
                 reportId={reportId}
                 theme={theme}
+                composerKey="add"
                 onCommit={commitHtml}
                 onCancel={closeComposer}
                 t={t}

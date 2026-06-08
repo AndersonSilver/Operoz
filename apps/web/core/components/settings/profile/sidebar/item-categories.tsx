@@ -10,6 +10,7 @@ import type { ISvgIcons } from "@operis/propel/icons";
 import type { TProfileSettingsTabs } from "@operis/types";
 // local imports
 import { SettingsSidebarItem } from "../../sidebar/item";
+import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";
 import { ProfileSettingsSidebarWorkspaceOptions } from "./workspace-options";
 
 const ICONS: Record<TProfileSettingsTabs, LucideIcon | React.FC<ISvgIcons>> = {
@@ -44,7 +45,7 @@ export const ProfileSettingsSidebarItemCategories = observer(function ProfileSet
 
         return (
           <div key={category} className="shrink-0">
-            <div className="p-2 text-caption-md-medium text-tertiary capitalize">{t(category)}</div>
+            <SidebarSectionHeader label={t(category)} className="px-0 pt-2 pb-1 first:pt-0" />
             <div className="flex flex-col">
               {categoryItems.map((item) => (
                 <SettingsSidebarItem

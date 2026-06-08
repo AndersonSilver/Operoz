@@ -96,7 +96,7 @@ function ProjectCyclesPage({ params }: Route.ComponentProps) {
           handleClose={() => setCreateModal(false)}
         />
         {totalCycles === 0 ? (
-          <div className="h-full place-items-center">
+          <div className="flex h-full min-h-[20rem] items-center justify-center p-6">
             <EmptyStateDetailed
               assetKey="cycle"
               title={t("project_empty_state.cycles.title")}

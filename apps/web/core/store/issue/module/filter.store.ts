@@ -30,6 +30,9 @@ import type { IIssueRootStore } from "../root.store";
 // services
 
 export interface IModuleIssuesFilter extends IBaseIssueFilterStore {
+  /** Quando definido, o fetch de itens usa estes módulos (vírgula na API). */
+  scopedModuleIds: string[] | undefined;
+  setScopedModuleIds: (ids: string[] | undefined) => void;
   //helper actions
   getFilterParams: (
     options: IssuePaginationOptions,
@@ -59,6 +62,7 @@ export interface IModuleIssuesFilter extends IBaseIssueFilterStore {
 export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModuleIssuesFilter {
   // observables
   filters: { [moduleId: string]: IIssueFilters } = {};
+  scopedModuleIds: string[] | undefined = undefined;
   // root store
   rootIssueStore: IIssueRootStore;
   // services
@@ -69,12 +73,14 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     makeObservable(this, {
       // observables
       filters: observable,
+      scopedModuleIds: observable.ref,
       // computed
       issueFilters: computed,
       appliedFilters: computed,
       // actions
       fetchFilters: action,
       updateFilters: action,
+      setScopedModuleIds: action,
     });
     // root store
     this.rootIssueStore = _rootStore;
@@ -95,6 +101,12 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
 
     return this.getAppliedFilters(moduleId);
   }
+
+  setScopedModuleIds = (ids: string[] | undefined) => {
+    runInAction(() => {
+      this.scopedModuleIds = ids?.length ? ids : undefined;
+    });
+  };
 
   getIssueFilters(moduleId: string) {
     const displayFilters = this.filters[moduleId] || undefined;
@@ -139,7 +151,10 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
       if (!filterParams) {
         filterParams = {};
       }
-      filterParams["module"] = moduleId;
+      filterParams["module"] =
+        this.scopedModuleIds?.length && this.scopedModuleIds.length > 0
+          ? this.scopedModuleIds.join(",")
+          : moduleId;
 
       const paginationParams = this.getPaginationParams(filterParams, options, cursor, groupId, subGroupId);
       return paginationParams;
@@ -157,6 +172,14 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     const displayProperties = resolveBoardListDisplayProperties(rawDisplayProperties);
     const hadNoVisibleColumns =
       _filters?.display_properties != null && !Object.values(rawDisplayProperties).some(Boolean);
+    const hadListMissingWorkflowColumns =
+      displayFilters.layout === EIssueLayoutTypes.LIST &&
+      (!displayProperties.state ||
+        !displayProperties.priority ||
+        !displayProperties.assignee ||
+        !displayProperties.start_date ||
+        !displayProperties.due_date ||
+        !displayProperties.issue_type);
 
     if (displayFilters.order_by === "sort_order") {
       displayFilters = { ...displayFilters, order_by: "-created_at" };
@@ -232,6 +255,7 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
 
     if (
       hadNoVisibleColumns ||
+      hadListMissingWorkflowColumns ||
       hadListGroupedByState ||
       hadCalendarGroupedByState ||
       hadKanbanWrongGroupBy ||
@@ -239,7 +263,9 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     ) {
       try {
         await this.issueFilterService.patchModuleIssueFilters(workspaceSlug, projectId, moduleId, {
-          ...(hadNoVisibleColumns ? { display_properties: displayProperties } : {}),
+          ...(hadNoVisibleColumns || hadListMissingWorkflowColumns
+            ? { display_properties: displayProperties }
+            : {}),
           ...(hadListGroupedByState ||
           hadCalendarGroupedByState ||
           hadKanbanWrongGroupBy ||

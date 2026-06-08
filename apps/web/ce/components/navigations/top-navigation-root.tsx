@@ -7,6 +7,7 @@ import { HelpMenuRoot } from "@/components/workspace/sidebar/help-section/root";
 import { UserMenuRoot } from "@/components/workspace/sidebar/user-menu-root";
 import { WorkspaceMenuRoot } from "@/components/workspace/sidebar/workspace-menu-root";
 import { useAppRailPreferences } from "@/hooks/use-navigation-preferences";
+import { useWorkspacePaths } from "@/hooks/use-workspace-paths";
 import { Tooltip } from "@operis/propel/tooltip";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 import { AppSidebarToggleButton } from "@/components/sidebar/sidebar-toggle-button";
@@ -21,8 +22,11 @@ export const TopNavigationRoot = observer(function TopNavigationRoot() {
   // store hooks
   const { unreadNotificationsCount, getUnreadNotificationsCount } = useWorkspaceNotifications();
   const { preferences } = useAppRailPreferences();
+  const { isProjectsPath, isNotificationsPath } = useWorkspacePaths();
 
   const showLabel = preferences.displayMode === "icon_with_label";
+  /** Sidebar de projetos já tem mini-card de workspace — evita duplicar no topo. */
+  const hideTopWorkspaceSwitcher = isProjectsPath && !isNotificationsPath;
 
   // Fetch notification count
   useSWR(
@@ -45,7 +49,7 @@ export const TopNavigationRoot = observer(function TopNavigationRoot() {
       {/* Workspace Menu */}
       <div className="flex flex-1 shrink-0 items-center gap-1">
         <AppSidebarToggleButton />
-        <WorkspaceMenuRoot variant="top-navigation" />
+        {!hideTopWorkspaceSwitcher && <WorkspaceMenuRoot variant="top-navigation" />}
       </div>
       {/* Power K Search */}
       <div className="shrink-0">

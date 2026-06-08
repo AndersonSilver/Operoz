@@ -1,0 +1,469 @@
+.board-informations-page {
+  display: flex;
+  width: 100%;
+  justify-content: center;
+}
+
+.board-informations-stack {
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+}
+
+.board-informations-split-grid {
+  position: relative;
+  display: grid;
+  gap: 1.25rem;
+  align-items: stretch;
+  isolation: isolate;
+}
+
+
+@media (min-width: 1024px) {
+  .board-informations-split-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem;
+  }
+}
+
+.board-informations-panel {
+  display: flex;
+  min-height: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle-1);
+  background: var(--bg-layer-1);
+}
+
+.board-informations-identity-panel {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 22%, var(--border-subtle-1));
+  background: linear-gradient(
+    165deg,
+    color-mix(in srgb, var(--bg-accent-subtle) 22%, var(--bg-layer-1)) 0%,
+    var(--bg-layer-1) 48%,
+    color-mix(in srgb, var(--bg-layer-2) 35%, var(--bg-layer-1)) 100%
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 12%, transparent),
+    0 20px 48px -28px color-mix(in srgb, var(--bg-accent-primary) 28%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+}
+
+.board-informations-settings-panel {
+  border-color: color-mix(in srgb, var(--border-subtle-1) 90%, transparent);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--bg-layer-2) 30%, var(--bg-layer-1)),
+    var(--bg-layer-1)
+  );
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 6%, transparent),
+    0 16px 40px -24px color-mix(in srgb, black 45%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 3%, transparent);
+}
+
+.board-informations-panel-header {
+  position: relative;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-bottom: 1px solid color-mix(in srgb, var(--border-subtle-1) 80%, transparent);
+  padding: 1.125rem 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .board-informations-panel-header {
+    padding: 1.125rem 1.5rem;
+  }
+}
+
+.board-informations-panel-header::after {
+  content: "";
+  position: absolute;
+  inset: auto 0 0 1.25rem;
+  width: 2.5rem;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-accent-primary),
+    color-mix(in srgb, var(--bg-accent-primary) 20%, transparent)
+  );
+}
+
+.board-informations-identity-panel .board-informations-panel-header {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-accent-subtle) 45%, transparent),
+    transparent 65%
+  );
+}
+
+.board-informations-settings-panel .board-informations-panel-header {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-success-subtle) 35%, transparent),
+    transparent 65%
+  );
+}
+
+.board-informations-panel-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+.board-informations-panel-footer {
+  margin-top: auto;
+  flex-shrink: 0;
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle-1) 75%, transparent);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--bg-layer-2) 65%, transparent)
+  );
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .board-informations-panel-footer {
+    padding: 1rem 1.5rem;
+  }
+}
+
+.board-informations-section-heading {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.board-informations-section-icon {
+  display: grid;
+  flex-shrink: 0;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--border-subtle-1) 80%, transparent);
+  box-shadow: inset 0 1px 0 color-mix(in srgb, white 6%, transparent);
+}
+
+.board-informations-section-icon[data-tone="accent"] {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-accent-subtle) 70%, var(--bg-surface-1)),
+    color-mix(in srgb, var(--bg-accent-subtle) 25%, var(--bg-surface-1))
+  );
+  color: var(--text-accent-primary);
+}
+
+.board-informations-section-icon[data-tone="success"] {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-success-subtle) 70%, var(--bg-surface-1)),
+    color-mix(in srgb, var(--bg-success-subtle) 25%, var(--bg-surface-1))
+  );
+  color: var(--text-success-primary);
+}
+
+.board-informations-section-icon[data-tone="warning"] {
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-warning-subtle) 70%, var(--bg-surface-1)),
+    color-mix(in srgb, var(--bg-warning-subtle) 25%, var(--bg-surface-1))
+  );
+  color: var(--text-warning-primary);
+}
+
+.board-informations-section-eyebrow {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.board-informations-identity-stage {
+  position: relative;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem 1.5rem 1.75rem;
+  text-align: center;
+}
+
+.board-informations-logo-orbit {
+  position: absolute;
+  top: 2.25rem;
+  width: 8rem;
+  height: 8rem;
+  border-radius: 50%;
+  border: 1px dashed color-mix(in srgb, var(--bg-accent-primary) 28%, transparent);
+  opacity: 0.7;
+  animation: board-informations-orbit 28s linear infinite;
+  pointer-events: none;
+}
+
+.board-informations-logo-glow {
+  position: absolute;
+  top: 3.5rem;
+  width: 5.5rem;
+  height: 5.5rem;
+  border-radius: 1.5rem;
+  background: color-mix(in srgb, var(--bg-accent-primary) 28%, transparent);
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+@keyframes board-informations-orbit {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.board-informations-name-block {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  max-width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.board-informations-slug-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--bg-accent-primary) 20%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 35%, var(--bg-surface-1));
+  padding: 0.2rem 0.625rem;
+  font-family: ui-monospace, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  color: var(--text-accent-primary);
+}
+
+.board-informations-highlight-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.board-informations-highlight-item {
+  display: flex;
+  flex: 1 1 calc(50% - 0.25rem);
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 0;
+  border-radius: 0.625rem;
+  border: 1px solid color-mix(in srgb, var(--bg-accent-primary) 12%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 22%, var(--bg-surface-1));
+  padding: 0.5rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.board-informations-highlight-item:hover {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 28%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 38%, var(--bg-surface-1));
+}
+
+.board-informations-highlight-item:nth-child(3) {
+  flex-basis: 100%;
+}
+
+.board-informations-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border-radius: 0.75rem;
+  border: 1px solid color-mix(in srgb, var(--border-subtle-1) 85%, transparent);
+  background: color-mix(in srgb, var(--bg-layer-2) 45%, transparent);
+  padding: 0.875rem 1rem;
+  transition:
+    border-color 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease;
+}
+
+.board-informations-field-group:focus-within {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 32%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-layer-2) 65%, transparent);
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--bg-accent-primary) 10%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 4%, transparent);
+}
+
+.board-informations-description-textarea {
+  min-height: 9.5rem;
+  padding: 0.5rem 0.5rem 0 0.5rem;
+}
+
+.board-informations-team-divider {
+  position: relative;
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle-1) 80%, transparent);
+  padding-top: 1.5rem;
+}
+
+.board-informations-team-divider::before {
+  content: "";
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 2.75rem;
+  height: 2px;
+  border-radius: 1px;
+  background: linear-gradient(
+    90deg,
+    var(--text-warning-primary),
+    color-mix(in srgb, var(--text-warning-primary) 15%, transparent)
+  );
+}
+
+.board-informations-team-fields {
+  display: grid;
+  gap: 1rem 1.5rem;
+  width: 100%;
+  grid-template-columns: 1fr;
+  align-items: stretch;
+}
+
+@media (min-width: 640px) {
+  .board-informations-team-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem 2rem;
+  }
+}
+
+.board-informations-team-field {
+  display: flex;
+  height: 100%;
+  min-height: 0;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.board-informations-team-field-label {
+  flex: 1 1 auto;
+}
+
+.board-informations-team-field-control {
+  flex-shrink: 0;
+  margin-top: auto;
+}
+
+.board-informations-hero-dot-grid {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--border-subtle-1) 55%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 16px 16px;
+}
+
+.board-informations-logo-btn {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.board-informations-logo-frame {
+  display: flex;
+  width: 4.5rem;
+  height: 4.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 1px solid color-mix(in srgb, var(--bg-accent-primary) 25%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-surface-1) 90%, var(--bg-layer-1));
+  box-shadow:
+    0 0 0 3px color-mix(in srgb, var(--bg-accent-primary) 10%, transparent),
+    0 12px 28px -14px color-mix(in srgb, var(--bg-accent-primary) 35%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 8%, transparent);
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.board-informations-logo-frame-lg {
+  width: 6.25rem;
+  height: 6.25rem;
+  border-radius: 1.375rem;
+}
+
+.board-informations-logo-btn:hover .board-informations-logo-frame,
+.board-informations-logo-btn:focus-visible .board-informations-logo-frame {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 45%, var(--border-subtle-1));
+  box-shadow:
+    0 0 0 4px color-mix(in srgb, var(--bg-accent-primary) 14%, transparent),
+    0 16px 36px -12px color-mix(in srgb, var(--bg-accent-primary) 42%, transparent),
+    inset 0 1px 0 color-mix(in srgb, white 10%, transparent);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.board-informations-logo-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  padding: 0.375rem;
+  text-align: center;
+  background: color-mix(in srgb, var(--bg-accent-primary) 78%, transparent);
+  backdrop-filter: blur(2px);
+  opacity: 0;
+  transition: opacity 200ms ease;
+  pointer-events: none;
+}
+
+.board-informations-logo-frame-lg .board-informations-logo-overlay {
+  border-radius: 1.375rem;
+}
+
+.board-informations-logo-btn:hover .board-informations-logo-overlay,
+.board-informations-logo-btn:focus-visible .board-informations-logo-overlay {
+  opacity: 1;
+}
+
+.board-informations-form-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.board-informations-status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 9999px;
+  padding: 0.3125rem 0.75rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  border: 1px solid transparent;
+}
+
+.board-informations-status-pill[data-state="saved"] {
+  border-color: color-mix(in srgb, var(--bg-success-subtle) 60%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-success-subtle) 45%, transparent);
+  color: var(--text-success-primary);
+}
+
+.board-informations-status-pill[data-state="dirty"] {
+  border-color: color-mix(in srgb, var(--bg-warning-subtle) 60%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-warning-subtle) 45%, transparent);
+  color: var(--text-warning-primary);
+}

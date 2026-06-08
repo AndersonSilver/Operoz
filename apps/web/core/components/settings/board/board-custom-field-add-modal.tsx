@@ -180,6 +180,11 @@ export const BoardCustomFieldAddModal = observer(function BoardCustomFieldAddMod
 
   const handleFieldCreated = async (field: IWorkspaceCustomField) => {
     await fetchWorkspaceCustomFields(workspaceSlug);
+    if (boardSlug) {
+      await fetchBoardCustomFields(workspaceSlug, boardSlug);
+      handleClose();
+      return;
+    }
     setSelected((prev) => new Set([...prev, field.id]));
     setView("list");
   };
@@ -312,6 +317,7 @@ export const BoardCustomFieldAddModal = observer(function BoardCustomFieldAddMod
       ) : (
         <BoardCustomFieldCreateForm
           workspaceSlug={workspaceSlug}
+          boardSlug={boardSlug}
           onCancel={() => setView("list")}
           onCreated={handleFieldCreated}
         />

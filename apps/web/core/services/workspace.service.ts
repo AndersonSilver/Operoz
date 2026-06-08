@@ -69,6 +69,17 @@ export class WorkspaceService extends APIService {
       });
   }
 
+  async transferWorkspaceOwnership(
+    workspaceSlug: string,
+    data: { new_owner_id: string }
+  ): Promise<IWorkspace> {
+    return this.post(`/api/workspaces/${workspaceSlug}/transfer-ownership/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async inviteWorkspace(workspaceSlug: string, data: IWorkspaceBulkInviteFormData): Promise<any> {
     return this.post(`/api/workspaces/${workspaceSlug}/invitations/`, data)
       .then((response) => response?.data)

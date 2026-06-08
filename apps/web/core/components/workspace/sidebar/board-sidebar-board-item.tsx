@@ -13,9 +13,11 @@ import { ChevronRightIcon } from "@operis/propel/icons";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IBoard } from "@operis/types";
 import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu, DragHandle, DropIndicator } from "@operis/ui";
+import { DragHandle, DropIndicator } from "@operis/ui";
+import { SidebarRowQuickMenu } from "@/components/sidebar/sidebar-row-quick-menu";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { cn, copyUrlToClipboard } from "@operis/utils";
+import { SIDEBAR_TREE_CHEVRON_CLASS } from "@/components/sidebar/sidebar-styles";
 import { ArchiveBoardModal } from "@/components/board/archive-board-modal";
 import { EditBoardModal } from "@/components/board/edit-board-modal";
 import { CreateProjectModal } from "@/components/project/create-project-modal";
@@ -143,7 +145,7 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
         {boardInstruction === "DRAG_OVER" && <DropIndicator isVisible />}
         <div
           ref={boardRowRef}
-          className="flex w-full items-center rounded-sm py-0.5 pr-1 pl-1 hover:bg-layer-transparent-hover"
+          className="flex w-full items-center rounded-md py-0.5 pr-1 pl-1 transition-colors hover:bg-accent-subtle/20"
         >
           {enableBoardReorder && isWorkspaceAdmin && (
             <button
@@ -168,27 +170,35 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
             </Tooltip>
           </button>
           {isWorkspaceAdmin && (
-            <CustomMenu
-              menuItemsClassName="z-30"
-              closeOnSelect
-              customButton={
-                <MoreHorizontal
-                  className="hidden h-3.5 w-3.5 shrink-0 text-placeholder group-hover/board-row:block"
-                  aria-hidden
-                />
-              }
-            >
-              <CustomMenu.MenuItem onClick={() => setIsCreateProjectOpen(true)}>{t("boards.add_project")}</CustomMenu.MenuItem>
-              <CustomMenu.MenuItem onClick={() => setIsEditOpen(true)}>{t("boards.edit")}</CustomMenu.MenuItem>
-              <CustomMenu.MenuItem onClick={() => setIsArchiveOpen(true)}>{t("boards.archive")}</CustomMenu.MenuItem>
-            </CustomMenu>
+            <SidebarRowQuickMenu
+              ariaLabel={t("aria_labels.projects_sidebar.toggle_quick_actions_menu")}
+              className="hidden group-hover/board-row:block"
+              trigger={<MoreHorizontal className="size-3.5 shrink-0 text-placeholder" aria-hidden />}
+              items={[
+                {
+                  key: "add_project",
+                  label: t("boards.add_project"),
+                  onClick: () => setIsCreateProjectOpen(true),
+                },
+                {
+                  key: "edit",
+                  label: t("boards.edit"),
+                  onClick: () => setIsEditOpen(true),
+                },
+                {
+                  key: "archive",
+                  label: t("boards.archive"),
+                  onClick: () => setIsArchiveOpen(true),
+                },
+              ]}
+            />
           )}
           <IconButton
             variant="ghost"
             size="sm"
             icon={ChevronRightIcon}
             onClick={onToggle}
-            className="shrink-0 text-placeholder"
+            className={cn("shrink-0 text-secondary", SIDEBAR_TREE_CHEVRON_CLASS, { "opacity-100": isOpen })}
             iconClassName={cn("transition-transform", { "rotate-90": isOpen })}
             aria-label={board.name}
           />
@@ -203,9 +213,9 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
           leaveFrom="opacity-100"
           leaveTo="opacity-0"
         >
-          <div className="flex flex-col">
+          <div className="flex flex-col pl-2">
             {projectIds.length === 0 ? (
-              <p className="py-1.5 pr-2 pl-6 text-11 text-tertiary">{t("boards.empty_projects")}</p>
+              <p className="py-1.5 pr-2 pl-1 text-11 text-tertiary">{t("boards.empty_projects")}</p>
             ) : (
               projectIds.map((projectId, index) => (
                 <SidebarProjectsListItem

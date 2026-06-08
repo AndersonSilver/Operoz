@@ -7,6 +7,7 @@ import { MemberHeaderColumn } from "@/components/project/member-header-column";
 import type { RowData } from "@/components/workspace/settings/member-columns";
 import { AccountTypeColumn, NameColumn } from "@/components/workspace/settings/member-columns";
 import { useMember } from "@/hooks/store/use-member";
+import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import type { IMemberFilters } from "@/store/member/utils";
 
@@ -17,7 +18,12 @@ export const useMemberColumns = () => {
   const { workspaceSlug } = useParams();
 
   const { data: currentUser } = useUser();
+  const { currentWorkspace } = useWorkspace();
   const { allowPermissions } = useUserPermissions();
+  const workspaceOwnerId =
+    currentWorkspace?.owner && typeof currentWorkspace.owner === "object"
+      ? currentWorkspace.owner.id
+      : (currentWorkspace?.owner as string | undefined);
   const {
     workspace: {
       filtersStore: { filters, updateFilters },
@@ -98,7 +104,9 @@ export const useMemberColumns = () => {
           handleDisplayFilterUpdate={handleDisplayFilterUpdate}
         />
       ),
-      tdRender: (rowData: RowData) => <AccountTypeColumn rowData={rowData} workspaceSlug={workspaceSlug} />,
+      tdRender: (rowData: RowData) => (
+        <AccountTypeColumn rowData={rowData} workspaceSlug={workspaceSlug} workspaceOwnerId={workspaceOwnerId} />
+      ),
     },
 
     {

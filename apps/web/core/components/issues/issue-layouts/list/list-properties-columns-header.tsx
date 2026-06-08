@@ -47,7 +47,7 @@ export const ListPropertiesColumnsHeader = observer(function ListPropertiesColum
   return (
     <div
       className={cn(
-        "hidden w-full min-w-max items-center border-b border-subtle bg-layer-2/80 sm:grid",
+        "hidden w-full min-w-0 items-center border-b border-subtle bg-layer-2/80 sm:grid",
         "py-2 pr-3 pl-3"
       )}
       style={{ gridTemplateColumns: layoutGridTemplateColumns }}

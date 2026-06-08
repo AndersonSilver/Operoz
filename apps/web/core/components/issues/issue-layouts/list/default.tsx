@@ -163,7 +163,7 @@ export const List = observer(function List(props: IList) {
             <>
               <div
                 ref={containerRef}
-                className="vertical-scrollbar relative scrollbar-lg size-full overflow-auto bg-surface-1"
+                className="vertical-scrollbar relative scrollbar-lg size-full overflow-auto"
               >
                 {groups.map((group: IGroupByColumn) => (
                   <ListGroup

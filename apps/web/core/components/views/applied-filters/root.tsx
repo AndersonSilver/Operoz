@@ -2,7 +2,7 @@ import { useTranslation } from "@operis/i18n";
 import { CloseIcon } from "@operis/propel/icons";
 // plane imports
 import type { EViewAccess, TViewFilterProps } from "@operis/types";
-import { Tag } from "@operis/ui";
+import { EHeaderVariant, Header, Tag } from "@operis/ui";
 import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
 // components
 import { AppliedDateFilters } from "@/components/common/applied-filters/date";
@@ -15,6 +15,8 @@ type Props = {
   handleClearAllFilters: () => void;
   handleRemoveFilter: (key: keyof TViewFilterProps, value: string | EViewAccess | null) => void;
   alwaysAllowEditing?: boolean;
+  /** Dentro do painel com vidro (lista de visualizações no hub). */
+  appearance?: "default" | "embedded";
 };
 
 const MEMBERS_FILTERS = ["owned_by"];
@@ -22,7 +24,8 @@ const DATE_FILTERS = ["created_at"];
 const VIEW_ACCESS_FILTERS = ["view_type"];
 
 export function ViewAppliedFiltersList(props: Props) {
-  const { appliedFilters, handleClearAllFilters, handleRemoveFilter, alwaysAllowEditing } = props;
+  const { appliedFilters, handleClearAllFilters, handleRemoveFilter, alwaysAllowEditing, appearance = "default" } =
+    props;
   const { t } = useTranslation();
 
   if (!appliedFilters) return null;
@@ -30,8 +33,8 @@ export function ViewAppliedFiltersList(props: Props) {
 
   const isEditingAllowed = alwaysAllowEditing;
 
-  return (
-    <div className="flex flex-wrap items-stretch gap-2 bg-surface-1">
+  const filterTags = (
+    <div className="flex flex-wrap items-stretch gap-2">
       {Object.entries(appliedFilters).map(([key, value]) => {
         const filterKey = key as keyof TViewFilterProps;
 
@@ -84,4 +87,10 @@ export function ViewAppliedFiltersList(props: Props) {
       )}
     </div>
   );
+
+  if (appearance === "embedded") {
+    return <div className="shrink-0 border-b border-subtle/60 px-3 py-2.5">{filterTags}</div>;
+  }
+
+  return <Header variant={EHeaderVariant.TERNARY}>{filterTags}</Header>;
 }

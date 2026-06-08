@@ -1,0 +1,152 @@
+.automation-ops-glow-top {
+  position: relative;
+}
+
+.automation-ops-glow-top::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--bg-accent-primary) 55%, transparent) 35%,
+    color-mix(in srgb, var(--extended-color-purple-500, #8b5cf6) 45%, transparent) 65%,
+    transparent
+  );
+  pointer-events: none;
+}
+
+.automation-ops-metric-grid {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fill, minmax(10.5rem, 1fr));
+}
+
+.automation-ops-metric-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border-subtle-1);
+  background: var(--bg-layer-1);
+  padding: 1rem;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+}
+
+.automation-ops-metric-card:hover {
+  border-color: var(--border-strong-1);
+  box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--bg-accent-primary) 35%, transparent);
+  transform: translateY(-1px);
+}
+
+.automation-ops-metric-card::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 9999px;
+  filter: blur(28px);
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+.automation-ops-metric-card--success::after {
+  background: var(--bg-success-primary);
+}
+
+.automation-ops-metric-card--danger::after {
+  background: var(--bg-danger-primary);
+}
+
+.automation-ops-metric-card--warning::after {
+  background: var(--bg-warning-primary);
+}
+
+.automation-ops-metric-card--accent::after {
+  background: var(--bg-accent-primary);
+}
+
+.automation-ops-metric-card--purple::after {
+  background: var(--extended-color-purple-500, #8b5cf6);
+}
+
+.automation-ops-metric-value {
+  font-size: 1.625rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  font-variant-numeric: tabular-nums;
+}
+
+.automation-ops-bar-track {
+  height: 0.35rem;
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--border-subtle-1) 80%, transparent);
+  overflow: hidden;
+}
+
+.automation-ops-bar-fill {
+  height: 100%;
+  border-radius: inherit;
+  transition: width 0.4s ease;
+}
+
+.automation-ops-secret-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(17rem, 1fr));
+}
+
+.automation-ops-secret-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  border: 1px solid var(--border-subtle-1);
+  background: linear-gradient(
+    145deg,
+    color-mix(in srgb, var(--bg-layer-1) 92%, var(--bg-accent-subtle)) 0%,
+    var(--bg-layer-1) 55%
+  );
+  padding: 1.125rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.automation-ops-secret-card:hover {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 28%, var(--border-subtle-1));
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 12%, transparent),
+    0 12px 32px -20px color-mix(in srgb, var(--bg-accent-primary) 30%, transparent);
+}
+
+.automation-ops-secret-key {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.8125rem;
+}
+
+.automation-ops-ref-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  border-radius: 0.375rem;
+  border: 1px dashed color-mix(in srgb, var(--bg-accent-primary) 35%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 45%, transparent);
+  padding: 0.2rem 0.45rem;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.6875rem;
+  color: var(--text-accent-primary);
+}
+
+.automation-ops-dlq-card {
+  border-radius: 0.875rem;
+  border: 1px solid color-mix(in srgb, var(--bg-danger-primary) 18%, var(--border-subtle-1));
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-danger-subtle) 35%, var(--bg-layer-1)) 0%,
+    var(--bg-layer-1) 50%
+  );
+}

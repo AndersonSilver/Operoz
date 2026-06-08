@@ -8,7 +8,9 @@ import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 import { ProjectAuthWrapper } from "@/layouts/auth-layout/project-wrapper";
 // types
 import type { Route } from "./+types/layout";
+import { AuxiliaryCollapsibleSidebar } from "@/components/sidebar/auxiliary-collapsible-sidebar";
 import { ProjectSettingsSidebarRoot } from "@/components/settings/project/sidebar";
+import { SETTINGS_SIDEBAR_WIDTH } from "@/constants/collapsible-sidebar";
 
 function ProjectDetailSettingsLayout({ params }: Route.ComponentProps) {
   const { workspaceSlug, projectId } = params;
@@ -21,15 +23,20 @@ function ProjectDetailSettingsLayout({ params }: Route.ComponentProps) {
         hamburgerContent={(props) => <ProjectSettingsSidebarRoot {...props} projectId={projectId} />}
         activePath={getProjectActivePath(pathname) || ""}
       />
-      <div className="inset-y-0 flex h-full w-full flex-row">
-        <div className="relative flex size-full">
-          <div className="hidden h-full shrink-0 md:block">
-            <ProjectSettingsSidebarRoot projectId={projectId} />
-          </div>
+      <div className="flex h-full w-full min-w-0 flex-row">
+        <div className="hidden h-full shrink-0 md:block">
+          <AuxiliaryCollapsibleSidebar
+            storageKey={`project_settings_sidebar_pinned_${projectId}`}
+            width={SETTINGS_SIDEBAR_WIDTH}
+          >
+            <ProjectSettingsSidebarRoot projectId={projectId} className="h-full border-r-0" />
+          </AuxiliaryCollapsibleSidebar>
+        </div>
+        <main className="min-w-0 flex-1 overflow-hidden">
           <ProjectAuthWrapper workspaceSlug={workspaceSlug} projectId={projectId}>
             <Outlet />
           </ProjectAuthWrapper>
-        </div>
+        </main>
       </div>
     </>
   );

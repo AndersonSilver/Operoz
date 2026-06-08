@@ -3,7 +3,9 @@ import { observer } from "mobx-react";
 import { Disclosure } from "@headlessui/react";
 // components
 import { useTranslation } from "@operis/i18n";
+import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
 import { ContentWrapper, ERowVariant } from "@operis/ui";
+import { cn } from "@operis/utils";
 import { ListLayout } from "@/components/core/list";
 import { ActiveCycleRoot } from "@/plane-web/components/cycles";
 // local imports
@@ -39,7 +41,7 @@ export const CyclesList = observer(function CyclesList(props: ICyclesList) {
               <Disclosure as="div" className="flex flex-shrink-0 flex-col" defaultOpen>
                 {({ open }) => (
                   <>
-                    <Disclosure.Button className="sticky top-0 z-[2] w-full flex-shrink-0 cursor-pointer border-b border-subtle bg-layer-1">
+                    <Disclosure.Button className={cn("cursor-pointer", BOARD_HUB_CYCLE_SECTION_HEADER)}>
                       <CycleListGroupHeader
                         title={t("project_cycles.upcoming_cycle.label")}
                         type="upcoming"
@@ -58,7 +60,7 @@ export const CyclesList = observer(function CyclesList(props: ICyclesList) {
             <Disclosure as="div" className="flex flex-shrink-0 flex-col pb-7">
               {({ open }) => (
                 <>
-                  <Disclosure.Button className="sticky top-0 z-2 w-full flex-shrink-0 cursor-pointer border-b border-subtle bg-layer-1">
+                  <Disclosure.Button className={cn("cursor-pointer", BOARD_HUB_CYCLE_SECTION_HEADER)}>
                     <CycleListGroupHeader
                       title={t("project_cycles.completed_cycle.label")}
                       type="completed"

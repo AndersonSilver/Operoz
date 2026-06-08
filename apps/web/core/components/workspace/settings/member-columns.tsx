@@ -5,6 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Disclosure } from "@headlessui/react";
 // plane imports
 import { ROLE, EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 import { TrashIcon, SuspendedUserIcon } from "@operis/propel/icons";
 import { Pill, EPillVariant, EPillSize } from "@operis/propel/pill";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
@@ -34,6 +35,7 @@ type NameProps = {
 type AccountTypeProps = {
   rowData: RowData;
   workspaceSlug: string;
+  workspaceOwnerId?: string;
 };
 
 export function NameColumn(props: NameProps) {
@@ -107,7 +109,8 @@ export function NameColumn(props: NameProps) {
 }
 
 export const AccountTypeColumn = observer(function AccountTypeColumn(props: AccountTypeProps) {
-  const { rowData, workspaceSlug } = props;
+  const { rowData, workspaceSlug, workspaceOwnerId } = props;
+  const { t } = useTranslation();
   // form info
   const {
     control,
@@ -123,8 +126,9 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
 
   // derived values
   const isCurrentUser = currentUser?.id === rowData.member.id;
+  const isWorkspaceOwner = workspaceOwnerId === rowData.member.id;
   const isAdminRole = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
-  const isRoleNonEditable = isCurrentUser || !isAdminRole;
+  const isRoleNonEditable = isCurrentUser || !isAdminRole || isWorkspaceOwner;
   const isSuspended = rowData.is_active === false;
 
   return (
@@ -133,6 +137,12 @@ export const AccountTypeColumn = observer(function AccountTypeColumn(props: Acco
         <div className="flex w-32">
           <Pill variant={EPillVariant.DEFAULT} size={EPillSize.SM} className="border-none">
             Suspended
+          </Pill>
+        </div>
+      ) : isWorkspaceOwner ? (
+        <div className="flex w-32">
+          <Pill variant={EPillVariant.DEFAULT} size={EPillSize.SM} className="border-none">
+            {t("workspace_settings.settings.members.owner_role")}
           </Pill>
         </div>
       ) : isRoleNonEditable ? (

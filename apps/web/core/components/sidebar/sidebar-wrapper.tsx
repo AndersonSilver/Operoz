@@ -1,31 +1,27 @@
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
-// plane helpers
 import { useOutsideClickDetector } from "@operis/hooks";
 import { PreferencesIcon } from "@operis/propel/icons";
 import { ScrollArea } from "@operis/propel/scrollarea";
-// components
+import { cn } from "@operis/utils";
 import { CustomizeNavigationDialog } from "@/components/navigation/customize-navigation-dialog";
-// hooks
+import { WorkspaceMenuRoot } from "@/components/workspace/sidebar/workspace-menu-root";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import useSize from "@/hooks/use-window-size";
-import { AppSidebarToggleButton } from "./sidebar-toggle-button";
 import { IconButton } from "@operis/propel/icon-button";
 
 type TSidebarWrapperProps = {
   title: string;
   children: React.ReactNode;
   quickActions?: React.ReactNode;
+  showCustomizeNav?: boolean;
 };
 
 export const SidebarWrapper = observer(function SidebarWrapper(props: TSidebarWrapperProps) {
-  const { title, children, quickActions } = props;
-  // state
+  const { title, children, quickActions, showCustomizeNav = true } = props;
   const [isCustomizeNavDialogOpen, setIsCustomizeNavDialogOpen] = useState(false);
-  // store hooks
   const { toggleSidebar, sidebarCollapsed } = useAppTheme();
   const windowSize = useSize();
-  // refs
   const ref = useRef<HTMLDivElement>(null);
 
   useOutsideClickDetector(ref, () => {
@@ -42,24 +38,25 @@ export const SidebarWrapper = observer(function SidebarWrapper(props: TSidebarWr
   return (
     <>
       <CustomizeNavigationDialog isOpen={isCustomizeNavDialogOpen} onClose={() => setIsCustomizeNavDialogOpen(false)} />
-      <div ref={ref} className="flex h-full w-full animate-fade-in flex-col">
-        <div className="flex flex-col gap-3 px-3">
-          {/* Workspace switcher and settings */}
-
-          <div className="flex items-center justify-between gap-2 px-2">
-            <span className="pt-1 text-16 font-medium text-primary">{title}</span>
-            <div className="flex items-center gap-2">
-              {title === "Projects" && (
-                <IconButton
-                  size="base"
-                  variant="ghost"
-                  icon={PreferencesIcon}
-                  onClick={() => setIsCustomizeNavDialogOpen(true)}
-                />
-              )}
+      <div ref={ref} className="flex h-full w-full animate-fade-in flex-col bg-canvas">
+        <div className="flex flex-col gap-2.5 px-2.5 pt-2 pb-2">
+          <WorkspaceMenuRoot variant="sidebar" />
+          <div className="flex items-center justify-between gap-2 border-b border-subtle/70 px-0.5 pb-2.5">
+            <div className="min-w-0">
+              <p className="text-11 font-medium tracking-wide text-tertiary uppercase">Operoz</p>
+              <p className="truncate text-14 font-semibold text-primary">{title}</p>
             </div>
+            {showCustomizeNav && (
+              <IconButton
+                size="sm"
+                variant="ghost"
+                icon={PreferencesIcon}
+                className="shrink-0 text-tertiary hover:text-secondary"
+                onClick={() => setIsCustomizeNavDialogOpen(true)}
+                aria-label="Personalizar navegação"
+              />
+            )}
           </div>
-          {/* Quick actions */}
           {quickActions}
         </div>
 
@@ -68,7 +65,9 @@ export const SidebarWrapper = observer(function SidebarWrapper(props: TSidebarWr
           scrollType="hover"
           size="sm"
           rootClassName="size-full overflow-x-hidden overflow-y-auto"
-          viewportClassName="flex flex-col gap-3 overflow-x-hidden h-full w-full overflow-y-auto px-3 pt-3 pb-0.5"
+          viewportClassName={cn(
+            "flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto px-2 pb-3"
+          )}
         >
           {children}
         </ScrollArea>

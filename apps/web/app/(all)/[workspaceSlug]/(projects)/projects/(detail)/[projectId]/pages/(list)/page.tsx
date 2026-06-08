@@ -6,7 +6,9 @@ import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import type { TPageNavigationTabs } from "@operis/types";
 import { EUserProjectRoles } from "@operis/types";
+import { cn } from "@operis/utils";
 // assets
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import darkPagesAsset from "@/app/assets/empty-state/disabled-feature/pages-dark.webp?url";
 import lightPagesAsset from "@/app/assets/empty-state/disabled-feature/pages-light.webp?url";
 // components
@@ -69,14 +71,16 @@ function ProjectPagesPage({ params }: Route.ComponentProps) {
   return (
     <>
       <PageHead title={pageTitle} />
-      <PagesListView
-        pageType={pageType}
-        projectId={projectId}
-        storeType={EPageStoreType.PROJECT}
-        workspaceSlug={workspaceSlug}
-      >
-        <PagesListRoot pageType={pageType} storeType={EPageStoreType.PROJECT} />
-      </PagesListView>
+      <div className={cn("flex h-full min-h-0 flex-col", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
+        <PagesListView
+          pageType={pageType}
+          projectId={projectId}
+          storeType={EPageStoreType.PROJECT}
+          workspaceSlug={workspaceSlug}
+        >
+          <PagesListRoot pageType={pageType} storeType={EPageStoreType.PROJECT} />
+        </PagesListView>
+      </div>
     </>
   );
 }

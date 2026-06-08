@@ -1,4 +1,5 @@
-import React, { useCallback, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ListFilter } from "lucide-react";
@@ -22,11 +23,20 @@ import { ModuleFiltersSelection, ModuleOrderByDropdown } from "@/components/modu
 import { useMember } from "@/hooks/store/use-member";
 import { useModuleFilter } from "@/hooks/store/use-module-filter";
 import { usePlatformOS } from "@/hooks/use-platform-os";
+import {
+  PROJECT_HUB_LAYOUT_TOGGLE_GROUP,
+  ProjectHubToolbar,
+  ProjectHubToolbarDivider,
+  ProjectHubToolbarSegment,
+} from "@/components/project/project-hub-toolbar";
 import { ModuleLayoutIcon } from "./module-layout-icon";
 import { IconButton } from "@operis/propel/icon-button";
-// i18n
+type ModuleViewHeaderProps = {
+  trailing?: ReactNode;
+};
 
-export const ModuleViewHeader = observer(function ModuleViewHeader() {
+export const ModuleViewHeader = observer(function ModuleViewHeader(props: ModuleViewHeaderProps) {
+  const { trailing } = props;
   // refs
   const inputRef = useRef<HTMLInputElement>(null);
   // router
@@ -93,50 +103,48 @@ export const ModuleViewHeader = observer(function ModuleViewHeader() {
   const isFiltersApplied = calculateTotalFilters(filters ?? {}) !== 0 || displayFilters?.favorites;
 
   return (
-    <div className="hidden h-full items-center gap-2 self-end sm:flex">
+    <ProjectHubToolbar className="hidden sm:inline-flex">
+      <ProjectHubToolbarSegment>
       <div className="flex items-center">
-        {!isSearchOpen && (
+        {!isSearchOpen ? (
           <IconButton
             variant="ghost"
-            size="lg"
-            className="p- -mr-1"
+            size="sm"
+            className="h-8 w-8 border-0 bg-transparent shadow-none hover:bg-layer-transparent-hover"
             onClick={() => {
               setIsSearchOpen(true);
               inputRef.current?.focus();
             }}
             icon={SearchIcon}
           />
-        )}
-        <div
-          className={cn(
-            "ml-auto flex w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-surface-1 text-placeholder opacity-0 transition-[width] ease-linear",
-            {
-              "w-64 border-subtle px-2.5 py-1.5 opacity-100": isSearchOpen,
-            }
-          )}
-        >
-          <SearchIcon className="h-3.5 w-3.5" />
-          <input
-            ref={inputRef}
-            className="w-full max-w-[234px] border-none bg-transparent text-13 text-primary placeholder:text-placeholder focus:outline-none"
-            placeholder={t("common.search.label")}
-            value={searchQuery}
-            onChange={(e) => updateSearchQuery(e.target.value)}
-            onKeyDown={handleInputKeyDown}
-          />
-          {isSearchOpen && (
+        ) : (
+          <div
+            className={cn(
+              "flex h-8 w-52 items-center gap-1.5 rounded-md border border-subtle/50 bg-layer-2/60 px-2.5",
+              "transition-[width] ease-out"
+            )}
+          >
+            <SearchIcon className="size-3.5 shrink-0 text-tertiary" />
+            <input
+              ref={inputRef}
+              className="w-full border-none bg-transparent text-13 text-primary placeholder:text-placeholder focus:outline-none"
+              placeholder={t("common.search.label")}
+              value={searchQuery}
+              onChange={(e) => updateSearchQuery(e.target.value)}
+              onKeyDown={handleInputKeyDown}
+            />
             <button
               type="button"
-              className="grid place-items-center"
+              className="grid place-items-center text-tertiary hover:text-primary"
               onClick={() => {
-                // updateSearchQuery("");
+                updateSearchQuery("");
                 setIsSearchOpen(false);
               }}
             >
-              <CloseIcon className="h-3 w-3" />
+              <CloseIcon className="size-3" />
             </button>
-          )}
-        </div>
+          </div>
+        )}
       </div>
       <ModuleOrderByDropdown
         value={displayFilters?.order_by}
@@ -148,10 +156,11 @@ export const ModuleViewHeader = observer(function ModuleViewHeader() {
         }}
       />
       <FiltersDropdown
-        icon={<ListFilter className="h-3 w-3" />}
+        icon={<ListFilter className="size-3.5" strokeWidth={1.75} />}
         title={t("common.filters")}
         placement="bottom-end"
         isFiltersApplied={isFiltersApplied}
+        appearance="hub"
       >
         <ModuleFiltersSelection
           displayFilters={displayFilters ?? {}}
@@ -164,15 +173,20 @@ export const ModuleViewHeader = observer(function ModuleViewHeader() {
           memberIds={workspaceMemberIds ?? undefined}
         />
       </FiltersDropdown>
-      <div className="hidden items-center gap-1 rounded-sm bg-layer-3 p-1 md:flex">
+      </ProjectHubToolbarSegment>
+
+      <ProjectHubToolbarDivider />
+
+      <ProjectHubToolbarSegment className="hidden md:flex">
+      <div className={PROJECT_HUB_LAYOUT_TOGGLE_GROUP}>
         {MODULE_VIEW_LAYOUTS.map((layout) => (
           <Tooltip key={layout.key} tooltipContent={t(layout.i18n_title)} isMobile={isMobile}>
             <button
               type="button"
               className={cn(
-                "group grid h-5.5 w-7 place-items-center overflow-hidden rounded-sm transition-all hover:bg-layer-transparent-hover",
+                "group grid h-7 w-8 place-items-center overflow-hidden rounded-md transition-all hover:bg-layer-transparent-hover",
                 {
-                  "bg-layer-transparent-active hover:bg-layer-transparent-active":
+                  "bg-layer-transparent-active shadow-sm ring-1 ring-inset ring-subtle/50 hover:bg-layer-transparent-active":
                     displayFilters?.layout === layout.key,
                 }
               )}
@@ -186,6 +200,14 @@ export const ModuleViewHeader = observer(function ModuleViewHeader() {
           </Tooltip>
         ))}
       </div>
-    </div>
+      </ProjectHubToolbarSegment>
+
+      {trailing ? (
+        <>
+          <ProjectHubToolbarDivider />
+          <ProjectHubToolbarSegment>{trailing}</ProjectHubToolbarSegment>
+        </>
+      ) : null}
+    </ProjectHubToolbar>
   );
 });

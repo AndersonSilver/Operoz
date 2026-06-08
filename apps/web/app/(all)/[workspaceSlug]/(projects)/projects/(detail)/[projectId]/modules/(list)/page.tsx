@@ -1,20 +1,17 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
-// plane imports
 import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import type { TModuleFilters } from "@operis/types";
 import { EUserProjectRoles } from "@operis/types";
-import { calculateTotalFilters } from "@operis/utils";
-// assets
+import { calculateTotalFilters, cn } from "@operis/utils";
 import darkModulesAsset from "@/app/assets/empty-state/disabled-feature/modules-dark.webp?url";
 import lightModulesAsset from "@/app/assets/empty-state/disabled-feature/modules-light.webp?url";
-// components
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import { PageHead } from "@/components/core/page-title";
 import { DetailedEmptyState } from "@/components/empty-state/detailed-empty-state-root";
 import { ModuleAppliedFiltersList, ModulesListView } from "@/components/modules";
-// hooks
 import { useModuleFilter } from "@/hooks/store/use-module-filter";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -22,14 +19,10 @@ import { useAppRouter } from "@/hooks/use-app-router";
 import type { Route } from "./+types/page";
 
 function ProjectModulesPage({ params }: Route.ComponentProps) {
-  // router
   const router = useAppRouter();
   const { workspaceSlug, projectId } = params;
-  // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
   const { t } = useTranslation();
-  // store
   const { getProjectById, currentProjectDetails } = useProject();
   const {
     currentProjectFilters = {},
@@ -39,7 +32,7 @@ function ProjectModulesPage({ params }: Route.ComponentProps) {
     updateDisplayFilters,
   } = useModuleFilter();
   const { allowPermissions } = useUserPermissions();
-  // derived values
+
   const project = getProjectById(projectId);
   const pageTitle = project?.name ? `${project?.name} - Modules` : undefined;
   const canPerformEmptyStateActions = allowPermissions([EUserProjectRoles.ADMIN], EUserPermissionsLevel.PROJECT);
@@ -57,7 +50,9 @@ function ProjectModulesPage({ params }: Route.ComponentProps) {
     [currentProjectFilters, projectId, updateFilters]
   );
 
-  // No access to
+  const hasAppliedFilters =
+    calculateTotalFilters(currentProjectFilters) !== 0 || currentProjectDisplayFilters?.favorites;
+
   if (currentProjectDetails?.module_view === false)
     return (
       <div className="flex h-full w-full items-center justify-center">
@@ -79,9 +74,10 @@ function ProjectModulesPage({ params }: Route.ComponentProps) {
   return (
     <>
       <PageHead title={pageTitle} />
-      <div className="flex h-full w-full flex-col">
-        {(calculateTotalFilters(currentProjectFilters) !== 0 || currentProjectDisplayFilters?.favorites) && (
+      <div className={cn("flex h-full min-h-0 flex-col", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
+        {hasAppliedFilters ? (
           <ModuleAppliedFiltersList
+            appearance="embedded"
             appliedFilters={currentProjectFilters}
             isFavoriteFilterApplied={currentProjectDisplayFilters?.favorites ?? false}
             handleClearAllFilters={() => clearAllFilters(projectId)}
@@ -89,7 +85,7 @@ function ProjectModulesPage({ params }: Route.ComponentProps) {
             handleDisplayFiltersUpdate={(val) => updateDisplayFilters(projectId, val)}
             alwaysAllowEditing
           />
-        )}
+        ) : null}
         <ModulesListView />
       </div>
     </>

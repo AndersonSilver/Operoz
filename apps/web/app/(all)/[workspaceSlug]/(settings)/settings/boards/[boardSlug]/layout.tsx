@@ -6,6 +6,7 @@ import { useTranslation } from "@operis/i18n";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { getBoardActivePath } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
+import { BoardSettingsCollapsibleSidebar } from "@/components/settings/board/sidebar/collapsible-sidebar";
 import { BoardSettingsSidebarRoot } from "@/components/settings/board/sidebar/root";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { BoardSettingsAuthWrapper } from "@/layouts/auth-layout/board-settings-wrapper";
@@ -63,13 +64,13 @@ function BoardDetailSettingsLayout({ params }: Route.ComponentProps) {
           hamburgerContent={(p) => <BoardSettingsSidebarRoot workspaceSlug={workspaceSlug} board={board} {...p} />}
           activePath={activePath}
         />
-        <div className="inset-y-0 flex h-full w-full flex-row">
-          <div className="relative flex size-full">
-            <div className="hidden h-full shrink-0 md:block">
-              <BoardSettingsSidebarRoot workspaceSlug={workspaceSlug} board={board} />
-            </div>
-            <Outlet context={{ board, workspaceSlug, boardSlug }} />
+        <div className="flex h-full w-full min-w-0 flex-row">
+          <div className="hidden h-full shrink-0 md:block">
+            <BoardSettingsCollapsibleSidebar workspaceSlug={workspaceSlug} board={board} />
           </div>
+          <main className="min-w-0 flex-1 overflow-hidden">
+            <Outlet context={{ board, workspaceSlug, boardSlug }} />
+          </main>
         </div>
       </>
     );

@@ -1,9 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { MoreHorizontal } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { IconButton } from "@operis/propel/icon-button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { TContextMenuItem } from "@operis/ui";
 import { ContextMenu, CustomMenu } from "@operis/ui";
@@ -129,10 +127,11 @@ export const ModuleQuickActions = observer(function ModuleQuickActions(props: Pr
       )}
       <ContextMenu parentRef={parentRef} items={CONTEXT_MENU_ITEMS} />
       <CustomMenu
-        customButton={<IconButton variant="tertiary" size="lg" icon={MoreHorizontal} />}
+        ellipsis
         placement="bottom-end"
         closeOnSelect
-        buttonClassName={customClassName}
+        buttonClassName={cn("size-[26px] rounded-sm", customClassName)}
+        ariaLabel="Ações do módulo"
       >
         {MENU_ITEMS.map((item) => {
           if (item.shouldRender === false) return null;

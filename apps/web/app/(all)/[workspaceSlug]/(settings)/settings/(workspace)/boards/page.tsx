@@ -3,13 +3,12 @@ import { observer } from "mobx-react";
 import useSWR from "swr";
 import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
 import { EmptyStateCompact } from "@operis/propel/empty-state";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { CreateBoardModal } from "@/components/board/create-board-modal";
+import { WorkspaceBoardsSettingsHero } from "@/components/board/workspace-boards-settings-hero";
 import { WorkspaceBoardsSettingsList } from "@/components/board/workspace-boards-settings-list";
 import { PageHead } from "@/components/core/page-title";
-import { SettingsHeading } from "@/components/settings/heading";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 import { Loader } from "@operis/ui";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
@@ -18,6 +17,7 @@ import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import type { Route } from "./+types/page";
+import "@/components/board/workspace-boards-settings.css";
 import { BoardsWorkspaceSettingsHeader } from "./header";
 
 function BoardsSettingsPage({ params }: Route.ComponentProps) {
@@ -56,33 +56,28 @@ function BoardsSettingsPage({ params }: Route.ComponentProps) {
   const hasBoards = currentWorkspaceAllBoardIds.length > 0;
 
   return (
-    <SettingsContentWrapper header={<BoardsWorkspaceSettingsHeader />}>
+    <SettingsContentWrapper hugging header={<BoardsWorkspaceSettingsHeader />}>
       <PageHead title={pageTitle} />
-      <div className="w-full">
+      <div className="flex w-full flex-col gap-6">
         <CreateBoardModal
           workspaceSlug={workspaceSlug}
           isOpen={showCreateModal}
           onClose={() => setShowCreateModal(false)}
         />
-        <SettingsHeading
-          title={t("workspace_settings.settings.boards.title")}
-          description={t("workspace_settings.settings.boards.description")}
-          control={
-            <Button variant="primary" size="lg" onClick={() => setShowCreateModal(true)}>
-              {t("workspace_settings.settings.boards.add_board")}
-            </Button>
-          }
-        />
+        <WorkspaceBoardsSettingsHero boardCount={currentWorkspaceAllBoardIds.length} />
         {isLoading ? (
-          <Loader className="mt-8 w-full max-w-md space-y-2">
-            <Loader.Item height="52px" />
-            <Loader.Item height="52px" />
+          <Loader className="workspace-boards-card-grid w-full">
+            <Loader.Item height="220px" />
+            <Loader.Item height="220px" />
+            <Loader.Item height="220px" />
           </Loader>
         ) : hasBoards ? (
-          <WorkspaceBoardsSettingsList workspaceSlug={workspaceSlug} />
+          <WorkspaceBoardsSettingsList
+            workspaceSlug={workspaceSlug}
+            onCreate={() => setShowCreateModal(true)}
+          />
         ) : (
-          <div className="flex h-full w-full flex-col">
-            <div className="flex h-full w-full items-center justify-center">
+          <div className="w-full">
               <EmptyStateCompact
                 assetKey="project"
                 title={t("settings_empty_state.boards.title")}
@@ -94,7 +89,6 @@ function BoardsSettingsPage({ params }: Route.ComponentProps) {
                   },
                 ]}
               />
-            </div>
           </div>
         )}
       </div>

@@ -10,12 +10,14 @@ import { cn } from "@operis/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectView } from "@/hooks/store/use-project-view";
+import { useTranslation } from "@operis/i18n";
 import { FiltersDropdown } from "../issues/issue-layouts/filters";
 import { ViewFiltersSelection } from "./filters/filter-selection";
 import { ViewOrderByDropdown } from "./filters/order-by";
 import { IconButton } from "@operis/propel/icon-button";
 
 export const ViewListHeader = observer(function ViewListHeader() {
+  const { t } = useTranslation();
   // states
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   // refs
@@ -48,13 +50,13 @@ export const ViewListHeader = observer(function ViewListHeader() {
   }, [filters?.searchQuery]);
 
   return (
-    <div className="flex h-full items-center gap-2">
+    <div className="flex h-full items-center gap-1.5">
       <div className="flex items-center">
         {!isSearchOpen && (
           <IconButton
             variant="ghost"
-            size="lg"
-            className="-mr-1"
+            size="sm"
+            className="h-8 w-8 border border-subtle/50 bg-layer-1/50 shadow-sm"
             onClick={() => {
               setIsSearchOpen(true);
               inputRef.current?.focus();
@@ -64,9 +66,9 @@ export const ViewListHeader = observer(function ViewListHeader() {
         )}
         <div
           className={cn(
-            "ml-auto flex w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-surface-1 text-placeholder opacity-0 transition-[width] ease-linear",
+            "ml-auto flex h-8 w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-layer-1/55 text-placeholder opacity-0 shadow-sm backdrop-blur-sm transition-[width] ease-linear",
             {
-              "w-64 border-subtle px-2.5 py-1.5 opacity-100": isSearchOpen,
+              "w-56 border-subtle/50 px-2.5 opacity-100": isSearchOpen,
             }
           )}
         >
@@ -74,7 +76,7 @@ export const ViewListHeader = observer(function ViewListHeader() {
           <input
             ref={inputRef}
             className="w-full max-w-[234px] border-none bg-transparent text-13 text-primary placeholder:text-placeholder focus:outline-none"
-            placeholder="Search"
+            placeholder={t("common.search.label")}
             value={filters?.searchQuery}
             onChange={(e) => updateFilters("searchQuery", e.target.value)}
             onKeyDown={handleInputKeyDown}
@@ -103,10 +105,11 @@ export const ViewListHeader = observer(function ViewListHeader() {
           }}
         />
         <FiltersDropdown
-          icon={<ListFilter className="h-3 w-3" />}
-          title="Filters"
+          icon={<ListFilter className="size-3.5" strokeWidth={1.75} />}
+          title={t("common.filters")}
           placement="bottom-end"
           isFiltersApplied={false}
+          appearance="hub"
         >
           <ViewFiltersSelection
             filters={filters}

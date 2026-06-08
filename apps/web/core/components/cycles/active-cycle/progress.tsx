@@ -10,7 +10,9 @@ import { LinearProgressIndicator, Loader } from "@operis/ui";
 import darkProgressAsset from "@/app/assets/empty-state/active-cycle/progress-dark.webp?url";
 import lightProgressAsset from "@/app/assets/empty-state/active-cycle/progress-light.webp?url";
 // components
+import { BOARD_HUB_CYCLE_METRIC_CARD } from "@/components/board/board-hub-background";
 import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";
+import { cn } from "@operis/utils";
 
 export type ActiveCycleProgressProps = {
   cycle: ICycle | null;
@@ -43,7 +45,7 @@ export const ActiveCycleProgress = observer(function ActiveCycleProgress(props: 
   const resolvedPath = resolvedTheme === "light" ? lightProgressAsset : darkProgressAsset;
 
   return cycle && cycle.hasOwnProperty("started_issues") ? (
-    <div className="flex min-h-[17rem] flex-col gap-5 rounded-lg border border-subtle bg-surface-1 px-3.5 py-4">
+    <div className={cn(BOARD_HUB_CYCLE_METRIC_CARD)}>
       <div className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4">
           <h3 className="text-14 font-semibold text-tertiary">{t("project_cycles.active_cycle.progress")}</h3>
@@ -104,7 +106,7 @@ export const ActiveCycleProgress = observer(function ActiveCycleProgress(props: 
       )}
     </div>
   ) : (
-    <Loader className="flex min-h-[17rem] flex-col gap-5 rounded-lg border border-subtle bg-surface-1">
+    <Loader className={cn(BOARD_HUB_CYCLE_METRIC_CARD)}>
       <Loader.Item width="100%" height="100%" />
     </Loader>
   );

@@ -1,8 +1,12 @@
 import { useMemo } from "react";
+import type { LucideIcon } from "lucide-react";
 import {
+  Activity,
   CheckCircle2,
   ClipboardList,
+  Layers,
   Pencil,
+  PieChart as PieChartIcon,
   Save,
 } from "lucide-react";
 import { ISSUE_PRIORITY_FILTERS } from "@operis/constants";
@@ -13,6 +17,8 @@ import type { IBoardMeta } from "@operis/types";
 import { Avatar } from "@operis/ui";
 import { calculateTimeAgo, cn, getFileURL } from "@operis/utils";
 import { Client360BreakdownRow } from "@/components/board/client-360/client-360-ui";
+import type { Client360Tone } from "@/components/board/client-360/client-360-tokens";
+import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { useAppRouter } from "@/hooks/use-app-router";
 
 const PRIORITY_ORDER = ["urgent", "high", "medium", "low", "none"] as const;
@@ -25,26 +31,33 @@ const PRIORITY_BAR_COLORS: Record<string, string> = {
   none: "var(--color-priority-none)",
 };
 
-function GlassCard({
+/** Cartão sólido — legível sobre wallpaper, sem vidro extra. */
+const OVERVIEW_CARD = "overflow-hidden rounded-lg border border-subtle bg-layer-1 shadow-sm";
+
+function BoardOverviewWidget({
   title,
+  icon: Icon,
+  iconTone = "neutral",
   children,
   className,
 }: {
   title: string;
+  icon: LucideIcon;
+  iconTone?: Client360Tone;
   children: React.ReactNode;
   className?: string;
 }) {
+  const tone = CLIENT_360_TONE[iconTone];
+
   return (
-    <section
-      className={cn(
-        "flex flex-col overflow-hidden rounded-lg border border-subtle/80 bg-layer-1/80 shadow-sm backdrop-blur-sm",
-        className
-      )}
-    >
-      <header className="border-b border-subtle/60 px-4 py-3">
+    <section className={cn(OVERVIEW_CARD, className)}>
+      <header className="flex items-center gap-2.5 border-b border-subtle px-4 py-3">
+        <span className={cn("grid size-7 shrink-0 place-items-center rounded-sm", tone.iconBg)}>
+          <Icon className={cn("size-3.5", tone.icon)} strokeWidth={1.75} aria-hidden />
+        </span>
         <h2 className="text-13 font-semibold text-primary">{title}</h2>
       </header>
-      <div className="flex min-h-0 flex-1 flex-col p-4">{children}</div>
+      <div className="p-4">{children}</div>
     </section>
   );
 }
@@ -61,13 +74,18 @@ function KpiCard({
   iconClassName: string;
 }) {
   return (
-    <div className="flex min-w-[200px] flex-1 items-start gap-3 rounded-lg border border-subtle/80 bg-layer-1/80 p-4 shadow-sm backdrop-blur-sm">
-      <span className={cn("grid size-9 shrink-0 place-items-center rounded-md border border-subtle bg-layer-2", iconClassName)}>
-        <Icon className="size-4.5" strokeWidth={1.75} />
+    <div className={cn(OVERVIEW_CARD, "flex items-start gap-3 p-4")}>
+      <span
+        className={cn(
+          "grid size-8 shrink-0 place-items-center rounded-sm border border-subtle bg-layer-2",
+          iconClassName
+        )}
+      >
+        <Icon className="size-4" strokeWidth={1.75} />
       </span>
       <div className="min-w-0">
         <p className="text-20 font-semibold tabular-nums leading-tight text-primary">{value}</p>
-        <p className="mt-1 text-12 leading-snug text-secondary">{label}</p>
+        <p className="mt-1 text-11 leading-snug text-secondary">{label}</p>
       </div>
     </div>
   );
@@ -78,7 +96,7 @@ export function BoardOverviewKpiStrip({ meta }: { meta: IBoardMeta }) {
   const activity = meta.activity_last_7_days;
 
   return (
-    <div className="flex flex-wrap gap-3">
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
       <KpiCard
         icon={CheckCircle2}
         value={activity.completed}
@@ -354,21 +372,33 @@ export function BoardOverviewDashboard({
       <BoardOverviewKpiStrip meta={meta} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <GlassCard title={t("boards.overview_status_title")}>
+        <BoardOverviewWidget
+          title={t("boards.overview_status_title")}
+          icon={PieChartIcon}
+          iconTone="info"
+        >
           <BoardOverviewStatusChart meta={meta} />
-        </GlassCard>
+        </BoardOverviewWidget>
 
-        <GlassCard title={t("boards.overview_activity_title")}>
+        <BoardOverviewWidget
+          title={t("boards.overview_activity_title")}
+          icon={Activity}
+          iconTone="accent"
+        >
           <BoardOverviewRecentActivity meta={meta} workspaceSlug={workspaceSlug} />
-        </GlassCard>
+        </BoardOverviewWidget>
 
-        <GlassCard title={t("boards.overview_priority_title")}>
+        <BoardOverviewWidget
+          title={t("boards.overview_priority_title")}
+          icon={Layers}
+          iconTone="warning"
+        >
           <BoardOverviewPriorityChart meta={meta} />
-        </GlassCard>
+        </BoardOverviewWidget>
 
-        <GlassCard title={t("boards.overview_types_title")}>
+        <BoardOverviewWidget title={t("boards.overview_types_title")} icon={ClipboardList} iconTone="neutral">
           <BoardOverviewTypeChart meta={meta} />
-        </GlassCard>
+        </BoardOverviewWidget>
       </div>
     </div>
   );
