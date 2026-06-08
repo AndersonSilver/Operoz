@@ -5,6 +5,7 @@ export const ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE = {
   "image/jpg": [],
   "image/png": [],
   "image/webp": [],
+  "image/svg+xml": [".svg"],
 };
 export const ACCEPTED_COVER_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE = {
   "image/jpeg": [],

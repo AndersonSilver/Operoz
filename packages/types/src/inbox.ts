@@ -21,6 +21,7 @@ export enum EInboxIssueStatus {
 export enum EInboxIssueSource {
   IN_APP = "IN_APP",
   FORMS = "FORMS",
+  PUBLIC_FORM = "PUBLIC_FORM",
   EMAIL = "EMAIL",
 }
 

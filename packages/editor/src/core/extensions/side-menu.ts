@@ -5,7 +5,7 @@ import type { EditorView } from "@tiptap/pm/view";
 import { CORE_EXTENSIONS } from "@/constants/extension";
 // plugins
 import { AIHandlePlugin } from "@/plugins/ai-handle";
-import { DragHandlePlugin, nodeDOMAtCoords } from "@/plugins/drag-handle";
+import { BLOCK_DRAG_HANDLE_SELECTORS, DragHandlePlugin, nodeDOMAtCoords } from "@/plugins/drag-handle";
 
 type Props = {
   aiEnabled: boolean;
@@ -58,6 +58,41 @@ const absoluteRect = (node: Element) => {
     top: data.top,
     left: data.left,
     width: data.width,
+    height: data.height,
+  };
+};
+
+const BLOCK_DRAG_HANDLE_TOP_OFFSET = 12;
+
+/** Ancora o handle no cartão interno (HTML, imagem, etc.), não no centro do bloco. */
+const getBlockDragHandleRect = (node: Element) => {
+  const dragAnchor = node.querySelector("[data-drag-handle]");
+  if (dragAnchor instanceof Element) {
+    const anchorRect = absoluteRect(dragAnchor);
+    return {
+      top: anchorRect.top + Math.max(0, (anchorRect.height - 20) / 2),
+      left: anchorRect.left,
+      width: anchorRect.width,
+    };
+  }
+
+  if (node.matches(".html-document-embed-root")) {
+    const card = node.firstElementChild;
+    if (card instanceof Element) {
+      const cardRect = absoluteRect(card);
+      return {
+        top: cardRect.top + BLOCK_DRAG_HANDLE_TOP_OFFSET,
+        left: cardRect.left,
+        width: cardRect.width,
+      };
+    }
+  }
+
+  const rect = absoluteRect(node);
+  return {
+    top: rect.top + BLOCK_DRAG_HANDLE_TOP_OFFSET,
+    left: rect.left,
+    width: rect.width,
   };
 };
 
@@ -78,7 +113,11 @@ const SideMenu = (options: SideMenuPluginProps) => {
     key: new PluginKey("sideMenu"),
     view: (view) => {
       hideSideMenu();
-      view?.dom.parentElement?.appendChild(editorSideMenu);
+      // Fora de ancestrais com backdrop-filter/transform (ex.: cartão vidro do hub),
+      // para position:fixed alinhar com getBoundingClientRect().
+      if (!editorSideMenu.isConnected) {
+        document.body.appendChild(editorSideMenu);
+      }
       // side menu elements' initialization
       if (handlesConfig.ai && !editorSideMenu.querySelector("#ai-handle")) {
         aiHandleView(view, editorSideMenu);
@@ -89,7 +128,10 @@ const SideMenu = (options: SideMenuPluginProps) => {
       }
 
       return {
-        destroy: () => hideSideMenu(),
+        destroy: () => {
+          hideSideMenu();
+          editorSideMenu.remove();
+        },
       };
     },
     props: {
@@ -107,14 +149,21 @@ const SideMenu = (options: SideMenuPluginProps) => {
             return;
           }
 
-          const compStyle = window.getComputedStyle(node);
-          const lineHeight = parseInt(compStyle.lineHeight, 10);
-          const paddingTop = parseInt(compStyle.paddingTop, 10);
+          const isBlockWidget = node.matches(BLOCK_DRAG_HANDLE_SELECTORS);
+          const rect = isBlockWidget ? getBlockDragHandleRect(node) : absoluteRect(node);
 
-          const rect = absoluteRect(node);
+          if (!isBlockWidget) {
+            const compStyle = window.getComputedStyle(node);
+            const lineHeight = parseInt(compStyle.lineHeight, 10);
+            const paddingTop = parseInt(compStyle.paddingTop, 10);
 
-          rect.top += (lineHeight - 20) / 2;
-          rect.top += paddingTop;
+            if (!Number.isNaN(lineHeight)) {
+              rect.top += (lineHeight - 20) / 2;
+            }
+            if (!Number.isNaN(paddingTop)) {
+              rect.top += paddingTop;
+            }
+          }
 
           if (handlesConfig.ai) {
             rect.left -= 20;

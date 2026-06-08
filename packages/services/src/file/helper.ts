@@ -92,6 +92,7 @@ const inferMimeTypeFromFilename = (filename: string): string => {
     csv: "text/csv",
     json: "application/json",
     pdf: "application/pdf",
+    svg: "image/svg+xml",
   };
   return map[ext] ?? "";
 };
@@ -101,6 +102,12 @@ const validateAndDetectFileType = async (file: File): Promise<string> => {
   const filenameError = validateFilename(file.name);
   if (filenameError) {
     console.warn(`File validation warning: ${filenameError}`);
+  }
+
+  if (file.name.toLowerCase().endsWith(".svg")) {
+    const fromBrowser = file.type?.trim() ?? "";
+    if (fromBrowser === "image/svg+xml") return fromBrowser;
+    return "image/svg+xml";
   }
 
   const htmlFromExtension = inferMimeTypeFromFilename(file.name) === "text/html";

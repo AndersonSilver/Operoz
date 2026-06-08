@@ -26,6 +26,7 @@ export type TIssueIdentifierProps = TIssueIdentifierFromStore | TIssueIdentifier
 
 export type TIssueTypeIdentifier = {
   issueTypeId: string;
+  projectId: string;
   size?: TIssueIdentifierSize;
 };
 

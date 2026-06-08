@@ -14,6 +14,7 @@ import {
   Heading6,
   Image,
   Italic,
+  Link2,
   List,
   ListOrdered,
   ListTodo,
@@ -154,9 +155,48 @@ export const USER_ACTION_ITEMS: ToolbarMenuItem<"quote" | "code">[] = [
   { itemKey: "code", renderKey: "code", name: "Code", icon: Code2, editors: ["lite", "document"] },
 ];
 
+export const LINK_ITEM: ToolbarMenuItem<"link"> = {
+  itemKey: "link",
+  renderKey: "link",
+  name: "Link",
+  icon: Link2,
+  editors: ["lite", "document"],
+};
+
+export const TABLE_ITEM: ToolbarMenuItem<"table"> = {
+  itemKey: "table",
+  renderKey: "table",
+  name: "Table",
+  icon: Table,
+  editors: ["document"],
+};
+
 export const COMPLEX_ITEMS: ToolbarMenuItem<"table" | "image">[] = [
-  { itemKey: "table", renderKey: "table", name: "Table", icon: Table, editors: ["document"] },
+  TABLE_ITEM,
   { itemKey: "image", renderKey: "image", name: "Image", icon: Image, editors: ["lite", "document"] },
+];
+
+/** Toolbar fixa (estilo criar card) para formulários públicos e compositores sem upload. */
+export const FORM_RICH_TEXT_TOOLBAR_GROUPS: {
+  key: string;
+  items: ToolbarMenuItem[];
+}[] = [
+  {
+    key: "typography",
+    items: TYPOGRAPHY_ITEMS.filter((item) => ["text", "h1", "h2", "h3"].includes(item.itemKey)),
+  },
+  {
+    key: "marks",
+    items: BASIC_MARK_ITEMS,
+  },
+  {
+    key: "lists",
+    items: LIST_ITEMS,
+  },
+  {
+    key: "insert",
+    items: [LINK_ITEM, TABLE_ITEM, ...USER_ACTION_ITEMS],
+  },
 ];
 
 export const TOOLBAR_ITEMS: {
