@@ -42,7 +42,7 @@ export class IntakeFormService extends APIService {
   }
 
   async destroy(workspaceSlug: string, projectId: string, formId: string): Promise<void> {
-    return this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/intake-forms/${formId}/`).catch(
+    await this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/intake-forms/${formId}/`).catch(
       (err) => {
         throw err?.response?.data;
       }
