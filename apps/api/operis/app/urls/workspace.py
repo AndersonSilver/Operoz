@@ -38,6 +38,7 @@ from operis.app.views import (
     WorkspaceJiraOpsOAuthSitesEndpoint,
     WorkspaceJiraOpsOAuthCompleteEndpoint,
     WorkspaceJiraOpsJiraProjectsEndpoint,
+    WorkspaceTransferOwnershipEndpoint,
 )
 
 
@@ -63,6 +64,11 @@ urlpatterns = [
             }
         ),
         name="workspace",
+    ),
+    path(
+        "workspaces/<str:slug>/transfer-ownership/",
+        WorkspaceTransferOwnershipEndpoint.as_view(),
+        name="workspace-transfer-ownership",
     ),
     path(
         "workspaces/<str:slug>/invitations/",

@@ -69,6 +69,10 @@ app.conf.beat_schedule = {
         "task": "operis.bgtasks.cleanup_task.delete_webhook_logs",
         "schedule": crontab(hour=3, minute=30),  # UTC 03:30
     },
+    "flush-stale-automation-outbox-every-two-minutes": {
+        "task": "operis.bgtasks.automation_task.flush_stale_automation_outbox",
+        "schedule": crontab(minute="*/2"),
+    },
     "check-every-day-to-delete-exporter-history": {
         "task": "operis.bgtasks.exporter_expired_task.delete_old_s3_link",
         "schedule": crontab(hour=3, minute=45),  # UTC 03:45

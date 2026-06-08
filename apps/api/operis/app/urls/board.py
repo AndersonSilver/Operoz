@@ -1,6 +1,24 @@
 from django.urls import path
 
 from operis.app.views import (
+    BoardAutomationCatalogEndpoint,
+    BoardAutomationDeadLetterListEndpoint,
+    BoardAutomationDryRunEndpoint,
+    BoardAutomationMetricsEndpoint,
+    BoardAutomationRuleDetailEndpoint,
+    BoardAutomationRuleListEndpoint,
+    BoardAutomationRulePublishEndpoint,
+    BoardAutomationRuleRevisionListEndpoint,
+    BoardAutomationRuleRevisionRestoreEndpoint,
+    BoardAutomationRunListEndpoint,
+    BoardAutomationSecretDetailEndpoint,
+    BoardAutomationSecretListEndpoint,
+    BoardAutomationValidateEndpoint,
+    BoardAutomationScriptDetailEndpoint,
+    BoardAutomationScriptListEndpoint,
+    BoardAutomationEmailTemplateDetailEndpoint,
+    BoardAutomationEmailTemplateListEndpoint,
+    BoardEmailNotificationAuditEndpoint,
     BoardCustomFieldBulkAddEndpoint,
     BoardCustomFieldDetailEndpoint,
     BoardCustomFieldEndpoint,
@@ -167,5 +185,95 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/status-reports/<uuid:pk>/export/",
         BoardStatusReportExportEndpoint.as_view(),
         name="workspace-board-status-report-export",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/email-notification-logs/",
+        BoardEmailNotificationAuditEndpoint.as_view(),
+        name="workspace-board-email-notification-logs",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/catalog/",
+        BoardAutomationCatalogEndpoint.as_view(),
+        name="workspace-board-automation-catalog",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/",
+        BoardAutomationRuleListEndpoint.as_view(),
+        name="workspace-board-automation-rules",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/<uuid:rule_id>/",
+        BoardAutomationRuleDetailEndpoint.as_view(),
+        name="workspace-board-automation-rule",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/<uuid:rule_id>/publish/",
+        BoardAutomationRulePublishEndpoint.as_view(),
+        name="workspace-board-automation-rule-publish",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/<uuid:rule_id>/revisions/",
+        BoardAutomationRuleRevisionListEndpoint.as_view(),
+        name="workspace-board-automation-rule-revisions",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/<uuid:rule_id>/revisions/<uuid:revision_id>/restore/",
+        BoardAutomationRuleRevisionRestoreEndpoint.as_view(),
+        name="workspace-board-automation-rule-revision-restore",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/validate/",
+        BoardAutomationValidateEndpoint.as_view(),
+        name="workspace-board-automation-validate",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/rules/<uuid:rule_id>/dry-run/",
+        BoardAutomationDryRunEndpoint.as_view(),
+        name="workspace-board-automation-dry-run",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/runs/",
+        BoardAutomationRunListEndpoint.as_view(),
+        name="workspace-board-automation-runs",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/metrics/",
+        BoardAutomationMetricsEndpoint.as_view(),
+        name="workspace-board-automation-metrics",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/dead-letters/",
+        BoardAutomationDeadLetterListEndpoint.as_view(),
+        name="workspace-board-automation-dead-letters",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/secrets/",
+        BoardAutomationSecretListEndpoint.as_view(),
+        name="workspace-board-automation-secrets",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/secrets/<uuid:secret_id>/",
+        BoardAutomationSecretDetailEndpoint.as_view(),
+        name="workspace-board-automation-secret",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/scripts/",
+        BoardAutomationScriptListEndpoint.as_view(),
+        name="workspace-board-automation-scripts",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/scripts/<uuid:script_id>/",
+        BoardAutomationScriptDetailEndpoint.as_view(),
+        name="workspace-board-automation-script",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/email-templates/",
+        BoardAutomationEmailTemplateListEndpoint.as_view(),
+        name="workspace-board-automation-email-templates",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/email-templates/<uuid:template_id>/",
+        BoardAutomationEmailTemplateDetailEndpoint.as_view(),
+        name="workspace-board-automation-email-template",
     ),
 ]

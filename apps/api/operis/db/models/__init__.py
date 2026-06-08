@@ -3,6 +3,15 @@ from .api import APIActivityLog, APIToken
 from .asset import FileAsset
 from .base import BaseModel
 from .board import Board
+from .board_automation import (
+    BoardAutomationDeadLetter,
+    BoardAutomationOutbox,
+    BoardAutomationRule,
+    BoardAutomationRuleRevision,
+    BoardAutomationRun,
+    BoardAutomationSecret,
+)
+from .board_automation_assets import BoardAutomationEmailTemplate, BoardAutomationScript
 from .board_status_report import BoardStatusReport
 from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
 from .cycle import Cycle, CycleIssue, CycleUserProperties
@@ -18,6 +27,7 @@ from .estimate import Estimate, EstimatePoint
 from .exporter import ExporterHistory
 from .importer import Importer
 from .intake import Intake, IntakeIssue
+from .intake_form import IntakeForm
 from .integration import (
     GithubCommentSync,
     GithubIssueSync,

@@ -36,6 +36,7 @@ from operis.app.serializers import (
     IssueSerializer,
     ProjectUserPropertySerializer,
 )
+from operis.automation.hooks import emit_issue_created, emit_issue_updated, serialize_issue_snapshot
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.bgtasks.issue_description_version_task import issue_description_version_task
 from operis.bgtasks.recent_visited_task import recent_visited_task
@@ -479,6 +480,9 @@ class IssueViewSet(BaseViewSet):
                 user_id=request.user.id,
                 is_creating=True,
             )
+            created_issue = Issue.objects.filter(pk=serializer.data["id"]).select_related("project").first()
+            if created_issue:
+                emit_issue_created(created_issue, actor_id=str(request.user.id))
             return Response(issue, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -677,6 +681,16 @@ class IssueViewSet(BaseViewSet):
         serializer = IssueCreateSerializer(issue, data=request.data, partial=True, context={"project_id": project_id})
         if serializer.is_valid():
             serializer.save()
+            updated_issue = Issue.objects.filter(pk=pk).select_related("project").first()
+            if updated_issue:
+                before_snapshot = serialize_issue_snapshot(current_instance)
+                after_snapshot = IssueDetailSerializer(updated_issue).data
+                emit_issue_updated(
+                    updated_issue,
+                    actor_id=str(request.user.id),
+                    before=before_snapshot,
+                    after=after_snapshot,
+                )
             # Check if the update is a migration description update
             is_migration_description_update = skip_activity and is_description_update
             # Log all the updates

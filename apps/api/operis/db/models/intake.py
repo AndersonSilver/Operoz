@@ -33,6 +33,8 @@ class Intake(ProjectBaseModel):
 
 class SourceType(models.TextChoices):
     IN_APP = "IN_APP"
+    PUBLIC_FORM = "PUBLIC_FORM"
+    EMAIL = "EMAIL"
 
 
 class IntakeIssueStatus(models.IntegerChoices):
@@ -68,6 +70,13 @@ class IntakeIssue(ProjectBaseModel):
     external_source = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, blank=True, null=True)
     extra = models.JSONField(default=dict)
+    intake_form = models.ForeignKey(
+        "db.IntakeForm",
+        related_name="submissions",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
 
     class Meta:
         verbose_name = "IntakeIssue"

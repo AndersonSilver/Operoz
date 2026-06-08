@@ -33,6 +33,22 @@ def _board_administer(request, slug: str, board_slug: str) -> bool:
     return permission_granted(keys, "board.administer")
 
 
+def allow_workspace_admin(view_func):
+    """Mutações ao nível do workspace: apenas admin do workspace."""
+
+    @wraps(view_func)
+    def _wrapped(instance, request, *args, **kwargs):
+        slug = kwargs.get("slug")
+        if not slug or not _workspace_admin(request, slug):
+            return Response(
+                {"error": "You don't have the required permissions."},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+        return view_func(instance, request, *args, **kwargs)
+
+    return _wrapped
+
+
 def allow_workspace_or_board_admin(view_func):
     """
     Mutações de settings do board: admin do workspace ou função com board.administer.

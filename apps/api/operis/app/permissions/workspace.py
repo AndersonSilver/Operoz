@@ -36,11 +36,11 @@ class WorkSpaceBasePermission(BasePermission):
 
         # allow only owner to delete the workspace
         if request.method == "DELETE":
-            return WorkspaceMember.objects.filter(
-                member=request.user,
-                workspace__slug=view.workspace_slug,
-                role=Admin,
-                is_active=True,
+            from operis.db.models import Workspace
+
+            return Workspace.objects.filter(
+                slug=view.workspace_slug,
+                owner=request.user,
             ).exists()
 
 

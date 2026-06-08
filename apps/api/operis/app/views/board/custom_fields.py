@@ -2,7 +2,7 @@ from rest_framework import status
 from rest_framework.response import Response
 
 from operis.app.permissions import ROLE, allow_permission
-from operis.app.permissions.board_access import allow_workspace_or_board_admin
+from operis.app.permissions.board_access import allow_workspace_admin, allow_workspace_or_board_admin
 from operis.app.serializers import (
     BoardCustomFieldBulkAddSerializer,
     BoardCustomFieldCreateSerializer,
@@ -38,7 +38,7 @@ class WorkspaceCustomFieldEndpoint(BaseAPIView):
         ).order_by("name")
         return Response(WorkspaceCustomFieldSerializer(fields, many=True).data, status=status.HTTP_200_OK)
 
-    @allow_workspace_or_board_admin
+    @allow_workspace_admin
     def post(self, request, slug):
         workspace = Workspace.objects.get(slug=slug)
         serializer = WorkspaceCustomFieldSerializer(
@@ -108,7 +108,7 @@ class WorkspaceCustomFieldEndpoint(BaseAPIView):
 
 
 class WorkspaceCustomFieldDetailEndpoint(BaseAPIView):
-    @allow_workspace_or_board_admin
+    @allow_workspace_admin
     def patch(self, request, slug, pk):
         field = WorkspaceCustomField.objects.get(
             workspace__slug=slug, pk=pk, deleted_at__isnull=True
@@ -140,7 +140,7 @@ class WorkspaceCustomFieldDetailEndpoint(BaseAPIView):
             return Response(serializer.data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @allow_workspace_or_board_admin
+    @allow_workspace_admin
     def delete(self, request, slug, pk):
         field = WorkspaceCustomField.objects.get(
             workspace__slug=slug, pk=pk, deleted_at__isnull=True

@@ -46,6 +46,7 @@ from operis.app.views.base import BaseAPIView
 from operis.utils.timezone_converter import user_timezone_converter
 from operis.utils.global_paginator import paginate
 from operis.utils.host import base_host
+from operis.automation.hooks import emit_intake_submitted, emit_issue_created
 from operis.db.models.intake import SourceType
 
 
@@ -314,6 +315,13 @@ class IntakeIssueViewSet(BaseViewSet):
                     issue_id=serializer.data["id"],
                     project_id=project_id,
                 )
+            )
+            created_issue = Issue.objects.select_related("project").get(pk=serializer.data["id"])
+            emit_issue_created(created_issue, actor_id=str(request.user.id))
+            emit_intake_submitted(
+                created_issue,
+                actor_id=str(request.user.id),
+                source=SourceType.IN_APP,
             )
             serializer = IntakeIssueDetailSerializer(intake_issue)
             return Response(serializer.data, status=status.HTTP_200_OK)

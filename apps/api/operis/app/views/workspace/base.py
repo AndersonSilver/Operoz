@@ -180,6 +180,11 @@ class WorkSpaceViewSet(BaseViewSet):
     def destroy(self, request, *args, **kwargs):
         # Get the workspace
         workspace = self.get_object()
+        if workspace.owner_id != request.user.id:
+            return Response(
+                {"error": "Only the workspace owner can delete the workspace"},
+                status=status.HTTP_403_FORBIDDEN,
+            )
         self.remove_last_workspace_ids_from_user_settings(workspace.id)
         track_event.delay(
             user_id=request.user.id,
