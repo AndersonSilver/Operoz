@@ -19,8 +19,8 @@ import interVariableWoff2 from "@fontsource-variable/inter/files/inter-latin-wgh
 import "@fontsource/material-symbols-rounded";
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "Plane Publish | Make your Plane boards public with one-click";
-const APP_DESCRIPTION = "Plane Publish is a customer feedback management tool built on top of plane.so";
+const APP_TITLE = "Operoz OS | Torne seus fóruns do Operoz OS públicos com um clique";
+const APP_DESCRIPTION = "Operoz OS Publish é uma ferramenta de gerenciamento de feedback do cliente construída sobre o operoz.com";
 
 export const links: Route.LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },

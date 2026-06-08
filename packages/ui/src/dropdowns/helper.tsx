@@ -15,12 +15,16 @@ type Placement =
   | "right-start"
   | "right-end";
 
+export type TCustomSearchSelectAppearance = "default" | "hub";
+
 export interface IDropdownProps {
   customButtonClassName?: string;
   customButtonTabIndex?: number;
   buttonClassName?: string;
   className?: string;
   customButton?: React.ReactNode;
+  /** Painel e lista no estilo hub (vidro, tipografia 13px). */
+  appearance?: TCustomSearchSelectAppearance;
   disabled?: boolean;
   input?: boolean;
   label?: string | React.ReactNode;

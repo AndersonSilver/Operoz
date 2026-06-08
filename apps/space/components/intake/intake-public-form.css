@@ -1,0 +1,637 @@
+.intake-public-page {
+  position: relative;
+  isolation: isolate;
+  width: 100%;
+  min-height: 100dvh;
+  overflow: hidden;
+  background-color: var(--neutral-300);
+  background-image: linear-gradient(
+    180deg,
+    var(--neutral-100) 0%,
+    var(--neutral-200) 42%,
+    var(--neutral-300) 100%
+  );
+}
+
+.intake-public-page-bg {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+}
+
+.intake-public-page-grid {
+  z-index: 1;
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--brand-500) 52%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--brand-500) 52%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 3rem 3rem;
+  mask-image: radial-gradient(ellipse 88% 72% at 50% 30%, black 12%, transparent 78%);
+  opacity: 0.9;
+}
+
+.intake-public-page-top-glow {
+  z-index: 0;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 10rem;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brand-default) 12%, transparent) 0%,
+    color-mix(in srgb, var(--brand-300) 6%, transparent) 45%,
+    transparent 100%
+  );
+  opacity: 0.85;
+}
+
+.intake-public-page-beam {
+  z-index: 2;
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 100vw;
+  height: 1px;
+  transform: translateX(-50%);
+  background: color-mix(in srgb, var(--brand-default) 85%, transparent);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--brand-default) 25%, transparent);
+  opacity: 0.8;
+}
+
+.intake-public-page-vignette {
+  z-index: 0;
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 92% 82% at 50% 30%,
+    transparent 50%,
+    color-mix(in srgb, var(--neutral-500) 12%, transparent) 100%
+  );
+}
+
+.intake-public-shell {
+  position: relative;
+  z-index: 1;
+  margin-inline: auto;
+  width: 100%;
+  max-width: 42rem;
+  padding: 2.75rem 1rem 4.5rem;
+}
+
+.intake-public-card-stage {
+  position: relative;
+}
+
+.intake-public-card-frame {
+  position: absolute;
+  inset: -0.875rem;
+  pointer-events: none;
+}
+
+.intake-public-frame-corner {
+  position: absolute;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-color: color-mix(in srgb, var(--brand-default) 70%, var(--neutral-700));
+  opacity: 0.7;
+}
+
+.intake-public-frame-corner-tl {
+  top: 0;
+  left: 0;
+  border-top: 1.5px solid;
+  border-left: 1.5px solid;
+}
+
+.intake-public-frame-corner-tr {
+  top: 0;
+  right: 0;
+  border-top: 1.5px solid;
+  border-right: 1.5px solid;
+}
+
+.intake-public-frame-corner-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom: 1.5px solid;
+  border-left: 1.5px solid;
+}
+
+.intake-public-frame-corner-br {
+  bottom: 0;
+  right: 0;
+  border-bottom: 1.5px solid;
+  border-right: 1.5px solid;
+}
+
+@media (min-width: 40rem) {
+  .intake-public-shell {
+    padding: 4rem 1.5rem 5.5rem;
+  }
+}
+
+.intake-public-card {
+  position: relative;
+  z-index: 1;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-surface-1);
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, white 80%, transparent),
+    0 2px 4px color-mix(in srgb, black 4%, transparent),
+    0 16px 40px -12px color-mix(in srgb, black 16%, transparent);
+}
+
+.intake-public-hero {
+  position: relative;
+  border-bottom: 1px solid var(--border-subtle-1);
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--brand-100) 40%, var(--bg-surface-1)) 0%,
+    var(--bg-surface-1) 100%
+  );
+  padding: 1.75rem 1.5rem 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .intake-public-hero {
+    padding: 2rem 2rem 1.75rem;
+  }
+}
+
+.intake-public-hero-accent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--bg-accent-primary) 0%,
+    color-mix(in srgb, var(--bg-accent-primary) 75%, var(--brand-500)) 100%
+  );
+}
+
+.intake-public-hero-top {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.intake-public-hero-icon {
+  display: grid;
+  size: 2.75rem;
+  flex-shrink: 0;
+  place-items: center;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  color: var(--txt-accent-primary);
+}
+
+.intake-public-brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 0.625rem;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-brand::before {
+  content: "";
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-color: var(--bg-accent-primary);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bg-accent-primary) 20%, transparent);
+}
+
+.intake-public-title {
+  margin-top: 0.5rem;
+  font-size: 1.375rem;
+  font-weight: 600;
+  line-height: 1.75rem;
+  letter-spacing: -0.025em;
+  color: var(--txt-primary);
+}
+
+@media (min-width: 40rem) {
+  .intake-public-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+  }
+}
+
+.intake-public-description {
+  margin-top: 0.5rem;
+  max-width: 38rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--txt-secondary);
+}
+
+.intake-public-body {
+  padding: 1.5rem;
+}
+
+@media (min-width: 40rem) {
+  .intake-public-body {
+    padding: 1.75rem 2rem 2rem;
+  }
+}
+
+.intake-public-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.intake-public-field {
+  width: 100%;
+  min-width: 0;
+}
+
+.intake-public-field-label {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--txt-primary);
+}
+
+.intake-public-field-required {
+  color: var(--txt-danger-primary);
+}
+
+.intake-public-field-hint {
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  line-height: 1.125rem;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-control {
+  width: 100%;
+}
+
+.intake-public-control .w-full,
+.intake-public-control input,
+.intake-public-control textarea,
+.intake-public-select {
+  width: 100%;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    background-color 150ms ease;
+}
+
+.intake-public-control textarea,
+.intake-public-textarea {
+  min-height: 7.5rem;
+  resize: vertical;
+}
+
+.intake-public-rich-text {
+  width: 100%;
+  overflow: hidden;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.intake-public-rich-text:focus-within {
+  border-color: color-mix(in srgb, var(--border-accent-subtle) 70%, var(--border-subtle-1));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bg-accent-primary) 14%, transparent);
+}
+
+.intake-public-rich-text-toolbar {
+  border-radius: 0.625rem 0.625rem 0 0;
+}
+
+.intake-public-rich-text-editor {
+  width: 100%;
+}
+
+.intake-public-rich-text .editor-container {
+  min-height: 7.5rem;
+}
+
+.intake-public-control input:focus,
+.intake-public-control textarea:focus,
+.intake-public-select:focus {
+  outline: none;
+  border-color: color-mix(in srgb, var(--border-accent-subtle) 70%, var(--border-subtle-1));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--bg-accent-primary) 14%, transparent);
+}
+
+.intake-public-select {
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--txt-primary);
+}
+
+.intake-public-label-chip {
+  display: inline-flex;
+  align-items: center;
+  border-radius: 9999px;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--txt-secondary);
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.intake-public-label-chip.is-active {
+  border-color: color-mix(in srgb, var(--border-accent-subtle) 55%, var(--border-subtle-1));
+  background-color: color-mix(in srgb, var(--bg-accent-subtle) 45%, var(--bg-layer-1));
+  color: var(--txt-primary);
+}
+
+.intake-public-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.intake-public-checkbox-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.intake-public-checkbox-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  padding: 0.625rem 0.75rem;
+  font-size: 0.8125rem;
+  color: var(--txt-secondary);
+}
+
+.intake-public-divider {
+  margin: 1.5rem 0 1.25rem;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--border-subtle-1) 12%,
+    var(--border-subtle-1) 88%,
+    transparent
+  );
+}
+
+.intake-public-contact {
+  border-radius: 0.875rem;
+  border: 1px dashed color-mix(in srgb, var(--border-subtle-1) 90%, var(--border-accent-subtle));
+  background-color: color-mix(in srgb, var(--bg-layer-1) 65%, var(--bg-surface-1));
+  padding: 1rem;
+}
+
+.intake-public-contact-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--txt-primary);
+}
+
+.intake-public-contact-hint {
+  margin-top: 0.5rem;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-error {
+  margin-top: 1rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-danger-subtle);
+  background-color: var(--bg-danger-subtle);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.8125rem;
+  color: var(--txt-danger-primary);
+}
+
+.intake-public-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border-subtle-1);
+}
+
+@media (min-width: 40rem) {
+  .intake-public-footer {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.intake-public-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.6875rem;
+  line-height: 1rem;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-submit {
+  width: 100%;
+  min-width: 10rem;
+  height: 2.5rem;
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--bg-accent-primary) 25%, transparent);
+}
+
+@media (min-width: 40rem) {
+  .intake-public-submit {
+    width: auto;
+  }
+}
+
+.intake-public-success {
+  overflow: hidden;
+  border-radius: 1.25rem;
+  border: 1px solid color-mix(in srgb, var(--border-success-subtle) 55%, var(--border-subtle-1));
+  background-color: var(--bg-surface-1);
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow:
+    0 1px 2px color-mix(in srgb, black 5%, transparent),
+    0 24px 48px -24px color-mix(in srgb, black 18%, transparent);
+}
+
+.intake-public-success-icon {
+  display: grid;
+  size: 4rem;
+  margin-inline: auto;
+  place-items: center;
+  border-radius: 9999px;
+  background-color: var(--bg-success-subtle);
+  color: var(--txt-success-primary);
+}
+
+.intake-public-success-title {
+  margin-top: 1.25rem;
+  font-size: 1.375rem;
+  font-weight: 700;
+  color: var(--txt-primary);
+}
+
+.intake-public-success-message {
+  margin-top: 0.625rem;
+  margin-inline: auto;
+  max-width: 28rem;
+  font-size: 0.875rem;
+  line-height: 1.375rem;
+  color: var(--txt-secondary);
+}
+
+.intake-public-state-card {
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-surface-1);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 12px 32px -20px color-mix(in srgb, black 20%, transparent);
+}
+
+.intake-public-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.875rem;
+  padding: 4rem 1rem;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-loading-spinner {
+  size: 2rem;
+  border-radius: 9999px;
+  border: 2px solid var(--border-subtle-1);
+  border-top-color: var(--bg-accent-primary);
+  animation: intake-public-spin 0.8s linear infinite;
+}
+
+@keyframes intake-public-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.intake-public-branding {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.6875rem;
+  letter-spacing: 0.02em;
+  color: var(--txt-tertiary);
+}
+
+.intake-public-attachment {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.intake-public-attachment-drop {
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.375rem;
+  border-radius: 0.875rem;
+  border: 1px dashed color-mix(in srgb, var(--border-accent-subtle) 45%, var(--border-subtle-1));
+  background-color: color-mix(in srgb, var(--bg-accent-subtle) 12%, var(--bg-layer-1));
+  padding: 1.25rem 1rem;
+  text-align: center;
+  transition:
+    border-color 150ms ease,
+    background-color 150ms ease;
+}
+
+.intake-public-attachment-drop:hover:not(:disabled) {
+  border-color: color-mix(in srgb, var(--border-accent-subtle) 70%, var(--border-subtle-1));
+  background-color: color-mix(in srgb, var(--bg-accent-subtle) 20%, var(--bg-layer-1));
+}
+
+.intake-public-attachment-drop:disabled {
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.intake-public-attachment-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.intake-public-attachment-item {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-subtle-1);
+  background-color: var(--bg-layer-1);
+  padding: 0.625rem 0.75rem;
+}
+
+.intake-public-attachment-remove {
+  display: grid;
+  size: 1.75rem;
+  place-items: center;
+  border-radius: 0.375rem;
+  color: var(--txt-tertiary);
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
+}
+
+.intake-public-attachment-remove:hover:not(:disabled) {
+  background-color: var(--bg-danger-subtle);
+  color: var(--txt-danger-primary);
+}
+
+.intake-public-attachment-error {
+  font-size: 0.75rem;
+  color: var(--txt-danger-primary);
+}

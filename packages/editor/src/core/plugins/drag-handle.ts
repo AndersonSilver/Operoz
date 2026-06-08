@@ -10,6 +10,10 @@ import type { SideMenuHandleOptions, SideMenuPluginProps } from "@/extensions";
 const verticalEllipsisIcon =
   '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>';
 
+/** Blocos embed — o handle fica no topo, não alinhado por line-height de texto. */
+export const BLOCK_DRAG_HANDLE_SELECTORS =
+  ".html-document-embed-root, .image-component, .image-upload-component, .issue-embed, .editor-callout-component, .editor-embed-component, .editor-drawio-component";
+
 const generalSelectors = [
   "li",
   "p.editor-paragraph-block:not(:first-child)",
@@ -93,6 +97,11 @@ export const nodeDOMAtCoords = (coords: { x: number; y: number }) => {
   const elements = document.elementsFromPoint(coords.x, coords.y);
 
   for (const elem of elements) {
+    const blockRoot = elem.closest(BLOCK_DRAG_HANDLE_SELECTORS);
+    if (blockRoot instanceof Element) {
+      return blockRoot;
+    }
+
     // Check for table wrapper first
     if (elem.matches("table:not(.table-drag-preview)")) {
       return elem;

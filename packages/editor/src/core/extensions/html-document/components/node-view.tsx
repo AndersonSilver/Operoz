@@ -344,7 +344,12 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
         frameLayout === "fullBleed" && "editor-full-width-block horizontal-scrollbar scrollbar-sm"
       )}
     >
-      <div className={cn("relative mx-0 my-3 w-full rounded-md border border-subtle-1 bg-layer-1", selected && "ring-1 ring-subtle-2")}>
+      <div
+        className={cn(
+          "group/html-embed-card relative mx-0 my-3 w-full rounded-md border border-subtle-1 bg-layer-1",
+          selected && "ring-1 ring-subtle-2"
+        )}
+      >
         <input
           ref={fileInputRef}
           type="file"
@@ -414,26 +419,39 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
             )}
           </div>
         ) : (
-          <div className="flex flex-col items-center justify-center gap-3 px-4 py-10">
-            {showFailure ? (
-              <p className="text-13 text-danger">Não foi possível carregar o HTML.</p>
-            ) : (
-              <>
-                <FileCode2 className="size-8 text-tertiary" />
-                <p className="text-center text-13 text-secondary">
-                  {isUploading ? "Enviando HTML…" : "Envie um arquivo HTML para exibir aqui"}
-                </p>
-                {!isUploading && editor.isEditable && (
-                  <button
-                    type="button"
-                    className="rounded-sm bg-primary px-3 py-1.5 text-12 font-medium text-white hover:opacity-90"
-                    onClick={() => fileInputRef.current?.click()}
-                  >
-                    Escolher arquivo
-                  </button>
-                )}
-              </>
+          <div className="flex flex-col">
+            {editor.isEditable && !showFailure && (
+              <div className="flex items-center border-b border-subtle-1/60 px-3 py-2">
+                <div
+                  className="flex min-w-0 cursor-grab items-center gap-2 text-13 text-secondary active:cursor-grabbing"
+                  data-drag-handle
+                >
+                  <FileCode2 className="size-4 shrink-0" />
+                  <span className="truncate font-medium text-primary">HTML</span>
+                </div>
+              </div>
             )}
+            <div className="flex flex-col items-center justify-center gap-3 px-4 py-10">
+              {showFailure ? (
+                <p className="text-13 text-danger">Não foi possível carregar o HTML.</p>
+              ) : (
+                <>
+                  <FileCode2 className="size-8 text-tertiary" />
+                  <p className="text-center text-13 text-secondary">
+                    {isUploading ? "Enviando HTML…" : "Envie um arquivo HTML para exibir aqui"}
+                  </p>
+                  {!isUploading && editor.isEditable && (
+                    <button
+                      type="button"
+                      className="rounded-sm bg-primary px-3 py-1.5 text-12 font-medium text-white hover:opacity-90"
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      Escolher arquivo
+                    </button>
+                  )}
+                </>
+              )}
+            </div>
           </div>
         )}
       </div>

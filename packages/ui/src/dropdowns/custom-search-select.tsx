@@ -37,7 +37,9 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
     noResultsMessage = "No matches found",
     searchPlaceholder = "Search",
     defaultOpen = false,
+    appearance = "default",
   } = props;
+  const isHubAppearance = appearance === "hub";
   const [query, setQuery] = useState("");
 
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
@@ -141,17 +143,36 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                 <Combobox.Options data-prevent-outside-click static>
                   <div
                     className={cn(
-                      "z-30 my-1 min-w-48 overflow-y-scroll rounded-md border-[0.5px] border-subtle-1 bg-surface-1 py-2.5 text-11 whitespace-nowrap focus:outline-none",
+                      "z-30 my-1.5 overflow-y-auto whitespace-nowrap focus:outline-none",
+                      isHubAppearance
+                        ? "min-w-[min(100vw-2rem,20rem)] rounded-lg border border-subtle/50 bg-layer-1/95 py-2 text-13 shadow-lg backdrop-blur-xl"
+                        : "min-w-48 rounded-md border-[0.5px] border-subtle-1 bg-surface-1 py-2.5 text-11",
                       optionsClassName
                     )}
                     ref={setPopperElement}
                     style={styles.popper}
                     {...attributes.popper}
                   >
-                    <div className="mx-2 flex items-center gap-1.5 rounded-sm border border-subtle px-2">
-                      <SearchIcon className="h-3.5 w-3.5 text-placeholder" strokeWidth={1.5} />
+                    <div
+                      className={cn(
+                        "flex items-center gap-2 border border-subtle",
+                        isHubAppearance
+                          ? "mx-2 mb-1 h-9 rounded-md border-subtle/60 bg-layer-2/70 px-3"
+                          : "mx-2 rounded-sm px-2"
+                      )}
+                    >
+                      <SearchIcon
+                        className={cn(
+                          "shrink-0 text-placeholder",
+                          isHubAppearance ? "size-4" : "h-3.5 w-3.5"
+                        )}
+                        strokeWidth={1.5}
+                      />
                       <Combobox.Input
-                        className="w-full bg-transparent py-1 text-11 text-secondary placeholder:text-placeholder focus:outline-none"
+                        className={cn(
+                          "w-full bg-transparent text-secondary placeholder:text-placeholder focus:outline-none",
+                          isHubAppearance ? "py-2 text-13" : "py-1 text-11"
+                        )}
                         value={query}
                         onChange={(e) => setQuery(e.target.value)}
                         placeholder={searchPlaceholder}
@@ -159,7 +180,9 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                       />
                     </div>
                     <div
-                      className={cn("vertical-scrollbar mt-2 scrollbar-xs space-y-1 overflow-y-scroll px-2", {
+                      className={cn("vertical-scrollbar scrollbar-xs overflow-y-scroll", {
+                        "mt-2 space-y-1 px-2": !isHubAppearance,
+                        "space-y-0.5 px-1.5": isHubAppearance,
                         "max-h-96": maxHeight === "2xl",
                         "max-h-80": maxHeight === "xl",
                         "max-h-60": maxHeight === "lg",
@@ -174,11 +197,16 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                             <Combobox.Option
                               key={option.value}
                               value={option.value}
-                              className={({ active }) =>
+                              className={({ active, selected }) =>
                                 cn(
-                                  "flex w-full cursor-pointer items-center justify-between gap-2 truncate rounded-sm px-1 py-1.5 select-none",
+                                  "flex w-full cursor-pointer items-center justify-between gap-2 truncate select-none",
+                                  isHubAppearance
+                                    ? "rounded-md px-2.5 py-2 text-13"
+                                    : "rounded-sm px-1 py-1.5 text-11",
                                   {
-                                    "bg-layer-transparent-hover": active,
+                                    "bg-layer-transparent-hover": active && !isHubAppearance,
+                                    "bg-layer-1-hover": active && isHubAppearance && !selected,
+                                    "bg-accent-primary/10 text-primary": selected && isHubAppearance,
                                     "cursor-not-allowed text-placeholder opacity-60": option.disabled,
                                   }
                                 )
@@ -191,7 +219,16 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                               {({ selected }) => (
                                 <>
                                   <span className="flex-grow truncate">{option.content}</span>
-                                  {selected && <CheckIcon className="h-3.5 w-3.5 flex-shrink-0" />}
+                                  {selected && (
+                                    <CheckIcon
+                                      className={cn(
+                                        "shrink-0",
+                                        isHubAppearance
+                                          ? "size-4 text-accent-primary"
+                                          : "h-3.5 w-3.5"
+                                      )}
+                                    />
+                                  )}
                                   {option.tooltip && (
                                     <>
                                       {typeof option.tooltip === "string" ? (
