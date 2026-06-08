@@ -29,7 +29,12 @@ ALLOWED_LOGO_COVER_IMAGE_TYPES = frozenset(
         "image/webp",
         "image/jpg",
         "image/gif",
+        "image/svg+xml",
     }
+)
+
+LOGO_COVER_TYPE_ERROR = (
+    "Invalid file type. Only JPEG, PNG, WebP, JPG, GIF and SVG files are allowed."
 )
 
 # Use string values so membership checks match JSON payload strings reliably (TextChoices quirks across Django versions).
@@ -41,6 +46,7 @@ EDITOR_ASSET_ENTITY_TYPES = frozenset(
         FileAsset.EntityTypeContext.PAGE_DESCRIPTION.value,
         FileAsset.EntityTypeContext.DRAFT_ISSUE_ATTACHMENT.value,
         FileAsset.EntityTypeContext.DRAFT_ISSUE_DESCRIPTION.value,
+        FileAsset.EntityTypeContext.INTAKE_FORM_ATTACHMENT.value,
     }
 )
 
@@ -65,14 +71,14 @@ def validate_scoped_asset_upload(entity_type: str, file_type: str) -> tuple[bool
         return False, "Invalid file type."
     if entity_type in LOGO_COVER_ENTITY_TYPES:
         if file_type not in ALLOWED_LOGO_COVER_IMAGE_TYPES:
-            return False, "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed."
+            return False, LOGO_COVER_TYPE_ERROR
         return True, ""
     if entity_type in EDITOR_ASSET_ENTITY_TYPES:
         if file_type not in settings.ATTACHMENT_MIME_TYPES:
             return False, "Invalid file type."
         return True, ""
     if file_type not in ALLOWED_LOGO_COVER_IMAGE_TYPES:
-        return False, "Invalid file type. Only JPEG, PNG, WebP, JPG and GIF files are allowed."
+        return False, LOGO_COVER_TYPE_ERROR
     return True, ""
 
 

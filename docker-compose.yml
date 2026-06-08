@@ -64,6 +64,24 @@ services:
       - api
       - operis-db
       - operis-redis
+      - operis-mq
+
+  automation-worker:
+    container_name: automationworker
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.api
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    command: ./bin/docker-entrypoint-automation-worker.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
 
   beat-worker:
     container_name: beatworker

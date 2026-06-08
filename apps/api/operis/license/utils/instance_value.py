@@ -53,3 +53,30 @@ def get_email_configuration():
             },
         ]
     )
+
+
+def get_instance_smtp_connection(*, fail_silently: bool = False):
+    """SMTP real (God mode / instance config), independente de EMAIL_BACKEND local (console)."""
+    from django.core.mail import get_connection
+
+    (
+        email_host,
+        email_host_user,
+        email_host_password,
+        email_port,
+        email_use_tls,
+        email_use_ssl,
+        email_from,
+    ) = get_email_configuration()
+
+    connection = get_connection(
+        backend="django.core.mail.backends.smtp.EmailBackend",
+        host=email_host,
+        port=int(email_port or 587),
+        username=email_host_user,
+        password=email_host_password,
+        use_tls=email_use_tls == "1",
+        use_ssl=email_use_ssl == "1",
+        fail_silently=fail_silently,
+    )
+    return connection, email_from

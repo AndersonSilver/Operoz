@@ -28,3 +28,27 @@ from .roles import (
     BoardRoleDuplicateEndpoint,
     BoardRoleEndpoint,
 )
+from .email_audit import BoardEmailNotificationAuditEndpoint
+from .automation import (
+    BoardAutomationCatalogEndpoint,
+    BoardAutomationDeadLetterListEndpoint,
+    BoardAutomationDryRunEndpoint,
+    BoardAutomationMetricsEndpoint,
+    BoardAutomationRuleDetailEndpoint,
+    BoardAutomationRuleListEndpoint,
+    BoardAutomationRulePublishEndpoint,
+    BoardAutomationRuleRevisionListEndpoint,
+    BoardAutomationRuleRevisionRestoreEndpoint,
+    BoardAutomationRunListEndpoint,
+    BoardAutomationValidateEndpoint,
+)
+from .automation_secrets import (
+    BoardAutomationSecretDetailEndpoint,
+    BoardAutomationSecretListEndpoint,
+)
+from .automation_assets import (
+    BoardAutomationEmailTemplateDetailEndpoint,
+    BoardAutomationEmailTemplateListEndpoint,
+    BoardAutomationScriptDetailEndpoint,
+    BoardAutomationScriptListEndpoint,
+)

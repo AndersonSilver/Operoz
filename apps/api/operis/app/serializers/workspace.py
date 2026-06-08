@@ -36,6 +36,7 @@ import re
 
 
 class WorkSpaceSerializer(DynamicBaseSerializer):
+    owner = UserLiteSerializer(read_only=True)
     total_members = serializers.IntegerField(read_only=True)
     logo_url = serializers.CharField(read_only=True)
     role = serializers.IntegerField(read_only=True)

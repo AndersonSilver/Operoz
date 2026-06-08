@@ -45,6 +45,7 @@ from .workspace.base import (
     WorkspaceThemeViewSet,
     ExportWorkspaceUserActivityEndpoint,
 )
+from .workspace.ownership import WorkspaceTransferOwnershipEndpoint
 
 from .workspace.draft import WorkspaceDraftIssueViewSet
 
@@ -116,6 +117,24 @@ from .board import (
     BoardRoleDuplicateEndpoint,
     BoardRoleEndpoint,
     BoardViewSet,
+    BoardEmailNotificationAuditEndpoint,
+    BoardAutomationCatalogEndpoint,
+    BoardAutomationDeadLetterListEndpoint,
+    BoardAutomationDryRunEndpoint,
+    BoardAutomationMetricsEndpoint,
+    BoardAutomationRuleDetailEndpoint,
+    BoardAutomationRuleListEndpoint,
+    BoardAutomationRulePublishEndpoint,
+    BoardAutomationRuleRevisionListEndpoint,
+    BoardAutomationRuleRevisionRestoreEndpoint,
+    BoardAutomationRunListEndpoint,
+    BoardAutomationSecretDetailEndpoint,
+    BoardAutomationSecretListEndpoint,
+    BoardAutomationValidateEndpoint,
+    BoardAutomationScriptDetailEndpoint,
+    BoardAutomationScriptListEndpoint,
+    BoardAutomationEmailTemplateDetailEndpoint,
+    BoardAutomationEmailTemplateListEndpoint,
     WorkspaceCustomFieldDetailEndpoint,
     WorkspaceCustomFieldEndpoint,
 )
@@ -228,6 +247,7 @@ from .estimate.base import (
     EstimatePointEndpoint,
 )
 
+from operis.app.views.intake.form import IntakeFormDetailEndpoint, IntakeFormListCreateEndpoint
 from .intake.base import (
     IntakeViewSet,
     IntakeIssueViewSet,

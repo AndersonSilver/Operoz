@@ -1,9 +1,13 @@
+import uuid
+
 import pytest
+from django.utils import timezone
 from rest_framework.test import APIClient
 from pytest_django.fixtures import django_db_setup
 
 from operis.db.models import User, Workspace, WorkspaceMember
 from operis.db.models.api import APIToken
+from operis.license.models import Instance
 
 
 @pytest.fixture(scope="session")
@@ -116,6 +120,25 @@ def plane_server(live_server):
     Returns a live Django server for testing HTTP requests.
     """
     return live_server
+
+
+@pytest.fixture
+def setup_instance(db):
+    """Instance configurada — necessária para testes de auth/instance."""
+    instance_id = uuid.uuid4() if not Instance.objects.exists() else Instance.objects.first().id
+    instance, _ = Instance.objects.update_or_create(
+        id=instance_id,
+        defaults={
+            "instance_name": "Test Instance",
+            "instance_id": str(uuid.uuid4()),
+            "current_version": "1.3.1",
+            "latest_version": "1.3.1",
+            "domain": "http://localhost:8000",
+            "last_checked_at": timezone.now(),
+            "is_setup_done": True,
+        },
+    )
+    return instance
 
 
 @pytest.fixture

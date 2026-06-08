@@ -17,6 +17,12 @@
     "check:lint": "turbo run check:lint",
     "check:format": "turbo run check:format",
     "check:types": "turbo run check:types",
+    "setup:playwright": "./scripts/install-playwright.sh",
+    "test:f0:api": "./scripts/run-f0-smoke.sh",
+    "test:f0:e2e": "./scripts/run-f0-e2e.sh",
+    "test:f0:e2e:headed": "./scripts/run-f0-e2e.sh --headed",
+    "test:f0:e2e:ui": "./scripts/run-f0-e2e.sh --ui",
+    "test:f0": "./scripts/run-f0-smoke.sh && ./scripts/run-f0-e2e.sh",
     "prepare": "husky"
   },
   "devDependencies": {

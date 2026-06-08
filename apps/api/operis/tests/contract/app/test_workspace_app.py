@@ -1,9 +1,11 @@
+import uuid
+from unittest.mock import patch
+
 import pytest
 from django.urls import reverse
 from rest_framework import status
-from unittest.mock import patch
 
-from operis.db.models import Workspace, WorkspaceMember
+from operis.db.models import User, Workspace, WorkspaceMember
 
 
 @pytest.mark.contract
@@ -71,3 +73,41 @@ class TestWorkspaceAPI:
 
         # Optionally check the error message to confirm it's related to the duplicate slug
         assert "slug" in response.data
+
+    @pytest.mark.django_db
+    def test_transfer_workspace_ownership(self, session_client, workspace, create_user):
+        suffix = uuid.uuid4().hex[:8]
+        new_owner = User.objects.create(
+            email=f"new-owner-{suffix}@plane.so",
+            username=f"new_owner_{suffix}",
+            first_name="New",
+            last_name="Owner",
+        )
+        WorkspaceMember.objects.create(workspace=workspace, member=new_owner, role=15)
+
+        url = reverse("workspace-transfer-ownership", kwargs={"slug": workspace.slug})
+        response = session_client.post(url, {"new_owner_id": str(new_owner.id)}, format="json")
+
+        assert response.status_code == status.HTTP_200_OK
+        workspace.refresh_from_db()
+        assert workspace.owner_id == new_owner.id
+
+        new_owner_member = WorkspaceMember.objects.get(workspace=workspace, member=new_owner)
+        assert new_owner_member.role == 20
+
+    @pytest.mark.django_db
+    def test_transfer_workspace_ownership_forbidden_for_non_owner(self, session_client, workspace):
+        suffix = uuid.uuid4().hex[:8]
+        other_user = User.objects.create(
+            email=f"other-{suffix}@plane.so",
+            username=f"other_user_{suffix}",
+            first_name="Other",
+            last_name="User",
+        )
+        WorkspaceMember.objects.create(workspace=workspace, member=other_user, role=20)
+        session_client.force_authenticate(user=other_user)
+
+        url = reverse("workspace-transfer-ownership", kwargs={"slug": workspace.slug})
+        response = session_client.post(url, {"new_owner_id": str(other_user.id)}, format="json")
+
+        assert response.status_code == status.HTTP_403_FORBIDDEN

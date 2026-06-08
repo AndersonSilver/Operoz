@@ -17,7 +17,7 @@ from operis.app.serializers import (
     WorkSpaceMemberSerializer,
 )
 from operis.app.views.base import BaseAPIView
-from operis.db.models import Project, ProjectMember, WorkspaceMember, DraftIssue
+from operis.db.models import Project, ProjectMember, Workspace, WorkspaceMember, DraftIssue
 from operis.utils.cache import invalidate_cache
 
 from .. import BaseViewSet
@@ -74,6 +74,14 @@ class WorkSpaceMemberViewSet(BaseViewSet):
         workspace_member = WorkspaceMember.objects.get(
             pk=pk, workspace__slug=slug, member__is_bot=False, is_active=True
         )
+        workspace = Workspace.objects.get(slug=slug)
+        if workspace.owner_id == workspace_member.member_id and "role" in request.data:
+            if int(request.data.get("role", 0)) < ROLE.ADMIN.value:
+                return Response(
+                    {"error": "You cannot change the workspace owner's role. Transfer ownership first."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
         if request.user.id == workspace_member.member_id:
             return Response(
                 {"error": "You cannot update your own role"},
@@ -97,6 +105,13 @@ class WorkSpaceMemberViewSet(BaseViewSet):
         workspace_member = WorkspaceMember.objects.get(
             workspace__slug=slug, pk=pk, member__is_bot=False, is_active=True
         )
+
+        workspace = Workspace.objects.get(slug=slug)
+        if workspace.owner_id == workspace_member.member_id:
+            return Response(
+                {"error": "You cannot remove the workspace owner. Transfer ownership first."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         # check requesting user role
         requesting_workspace_member = WorkspaceMember.objects.get(
@@ -156,6 +171,15 @@ class WorkSpaceMemberViewSet(BaseViewSet):
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
     def leave(self, request, slug):
         workspace_member = WorkspaceMember.objects.get(workspace__slug=slug, member=request.user, is_active=True)
+        workspace = Workspace.objects.get(slug=slug)
+
+        if workspace.owner_id == request.user.id:
+            return Response(
+                {
+                    "error": "You cannot leave the workspace as you are the owner. Transfer ownership or delete the workspace."
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         # Check if the leaving user is the only admin of the workspace
         if (

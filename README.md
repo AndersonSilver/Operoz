@@ -1,71 +1,51 @@
-<br /><br />
+# Operoz
 
-<p align="center">
-<a href="https://plane.so">
-  <img src="https://media.docs.plane.so/logo/plane_github_readme.png" alt="Plane Logo" width="400">
-</a>
-</p>
-<p align="center"><b>Modern project management for all teams</b></p>
+**Gestão de projetos, squads e custos** — com boards, Cliente 360, integrações Git e métricas de pipeline (Harness), num monorepo self-host.
 
-<p align="center">
-    <a href="https://plane.so/"><b>Website</b></a> •
-    <a href="https://forum.plane.so"><b>Forum</b></a> •
-    <a href="https://x.com/planepowers"><b>X</b></a> •
-    <a href="https://docs.plane.so/"><b>Documentation</b></a>
-</p>
+O produto chama-se **Operoz**. No código e na infraestrutura persistem prefixos legados `operis` (pacotes `@operis/*`, `apps/api/operis`, serviços Docker `operis-*`).
 
-<p>
-    <a href="https://app.plane.so/#gh-light-mode-only" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-top.webp"
-        alt="Plane Screens"
-        width="100%"
-      />
-    </a>
-</p>
+---
 
-Meet [Plane](https://plane.so/), an open-source project management tool to track issues, run ~sprints~ cycles, and manage product roadmaps without the chaos of managing the tool itself. 🧘‍♀️
+## O que é o Operoz
 
-> Plane is evolving every day. Your suggestions, ideas, and reported bugs help us immensely. Do not hesitate to join in the conversation on [Forum](https://forum.plane.so) or raise a GitHub issue. We read everything and respond to most.
+Plataforma para equipas de entrega que precisam de:
 
-## 🚀 Installation
+- **Boards (squads)** — carteiras de trabalho com ciclos, estados, campos custom e visões.
+- **Projetos e Cliente 360** — um projeto pode representar um cliente, com módulos, status reports e propriedades de receção.
+- **Work items** — cards rastreáveis com tipos, subtarefas, comentários, anexos e ligação a PRs/commits.
+- **Integrações Git** — webhooks normalizados para correlacionar atividade de repositório com cards.
+- **Custos Harness** — atribuição de gasto de pipeline/CD a projeto, módulo ou card.
+- **Automações** — regras disparadas por eventos (incl. formulários públicos de intake).
+- **Space** — formulários públicos de receção e portal leve para stakeholders.
+- **MCP** — servidor Model Context Protocol para agentes de IA (Cursor, Claude Desktop, etc.).
 
-Getting started with Plane is simple. Choose the setup that works best for you:
+---
 
-- **Plane Cloud**
-  Sign up for a free account on [Plane Cloud](https://app.plane.so)—it's the fastest way to get up and running without worrying about infrastructure.
+## Estrutura do monorepo
 
-- **Self-host Plane**
-  Prefer full control over your data and infrastructure? Install and run Plane on your own servers. Follow our detailed [deployment guides](https://developers.plane.so/self-hosting/overview) to get started.
+| Caminho       | Função                                          |
+| ------------- | ----------------------------------------------- |
+| `apps/web`    | Aplicação principal (React Router, Turbo)       |
+| `apps/api`    | API Django (`operis/`) + Celery workers         |
+| `apps/space`  | Portal público / intake                         |
+| `apps/admin`  | God mode / administração da instância           |
+| `apps/live`   | Colaboração em tempo real                       |
+| `apps/e2e`    | Testes end-to-end (Playwright)                  |
+| `packages/*`  | Tipos, i18n, UI, ESLint, Tailwind (`@operis/*`) |
+| `mcp-server/` | Servidor MCP                                    |
+| `docs/`       | Documentação interna (ex.: `operis-mcp.md`)     |
 
-| Installation methods | Docs link                                                                                                                                                                               |
-| -------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Docker               | [![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://developers.plane.so/self-hosting/methods/docker-compose)         |
-| Kubernetes           | [![Kubernetes](https://img.shields.io/badge/kubernetes-%23326ce5.svg?style=for-the-badge&logo=kubernetes&logoColor=white)](https://developers.plane.so/self-hosting/methods/kubernetes) |
+---
 
-`Instance admins` can configure instance settings with [God mode](https://developers.plane.so/self-hosting/govern/instance-admin).
+## Requisitos
 
-## 🌟 Features
+- **Node.js** ≥ 22.18
+- **pnpm** 10.32
+- **Docker** e Docker Compose (Postgres, Redis/Valkey, RabbitMQ, MinIO, API e workers)
 
-- **Work Items**
-  Efficiently create and manage tasks with a robust rich text editor that supports file uploads. Enhance organization and tracking by adding sub-properties and referencing related issues.
+---
 
-- **Cycles**
-  Maintain your team’s momentum with Cycles. Track progress effortlessly using burn-down charts and other insightful tools.
-
-- **Modules**
-  Simplify complex projects by dividing them into smaller, manageable modules.
-
-- **Views**
-  Customize your workflow by creating filters to display only the most relevant issues. Save and share these views with ease.
-
-- **Pages**
-  Capture and organize ideas using Plane Pages, complete with AI capabilities and a rich text editor. Format text, insert images, add hyperlinks, or convert your notes into actionable items.
-
-- **Analytics**
-  Access real-time insights across all your Plane data. Visualize trends, remove blockers, and keep your projects moving forward.
-
-## 🛠️ Desenvolvimento local (Operis)
+## Desenvolvimento local
 
 Na raiz do repositório:
 
@@ -75,112 +55,88 @@ docker compose -f docker-compose-local.yml up -d
 pnpm dev
 ```
 
-- Primeiro acesso ao admin: http://localhost:3001/god-mode/
-- App: http://localhost:3000
+O `setup.sh` copia `.env.example` → `.env` (raiz e apps), gera `SECRET_KEY` e instala dependências com pnpm.
 
-Infra Docker local: serviços `operis-db`, `operis-redis`, `operis-mq`, `operis-minio` e base `operis` (utilizador/credenciais Postgres e RabbitMQ).
+### URLs locais
 
-Backend Python: `apps/api/operis/`. Frontend/monorepo: pacotes **`@operis/*`** (`pnpm dev` / Turbo).
+| Serviço          | URL                                      |
+| ---------------- | ---------------------------------------- |
+| App web          | http://localhost:3000                    |
+| Admin (God mode) | http://localhost:3001/god-mode/          |
+| API              | http://localhost:8000                    |
+| MinIO (S3 local) | http://localhost:9000 (consola: `:9090`) |
+| Postgres         | `localhost:5432`                         |
+| Redis            | `localhost:16379`                        |
 
-### MCP (agentes IA)
+### Infra Docker
 
-Servidor MCP em [`mcp-server/`](./mcp-server/README.md) — 32 ferramentas para API v1 + boards. Ver [`docs/operis-mcp.md`](./docs/operis-mcp.md).
+Serviços: `operis-db`, `operis-redis`, `operis-mq`, `operis-minio`, `api`, `worker`, `beat-worker`, `migrator`.
 
-Se migraste de nomes `plane-*`, recria volumes: `docker compose -f docker-compose-local.yml down -v` antes do `up -d`.
+Se migraste de nomes antigos de volumes, recria-os antes do `up`:
 
-Requisitos: Node.js ≥ 22.18, pnpm 10.32, Docker.
+```bash
+docker compose -f docker-compose-local.yml down -v
+docker compose -f docker-compose-local.yml up -d
+```
 
-## ⚙️ Built with
+### Comandos úteis
+
+```bash
+pnpm build              # build Turbo de todos os pacotes
+pnpm check:types        # verificação de tipos
+pnpm test:f0            # smoke API + e2e F0
+pnpm test:f0:api        # só smoke da API
+```
+
+Backend Python: `apps/api/operis/`. Configuração local: `operis.settings.local`.
+
+---
+
+## Deploy (self-host)
+
+O workflow [`.github/workflows/deploy-operis.yml`](./.github/workflows/deploy-operis.yml) faz build, push para GHCR e deploy no VPS.
+
+| Gatilho                      | Comportamento                                    |
+| ---------------------------- | ------------------------------------------------ |
+| Push na branch `preview`     | Build e deploy de **web** + **MCP**              |
+| `workflow_dispatch` → `web`  | Só frontend                                      |
+| `workflow_dispatch` → `mcp`  | Só servidor MCP                                  |
+| `workflow_dispatch` → `full` | Stack completa (API, Space, migrations, workers) |
+
+Secrets necessários: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.  
+Variables recomendadas: `OPERIS_WEB_URL`, `OPERIS_REPO_PATH`, `OPERIS_APP_PATH`.
+
+Para alterações que exigem migrações Django ou novos serviços (ex.: `automation-worker`), usa o alvo **`full`**.
+
+---
+
+## MCP (agentes de IA)
+
+Pacote em [`mcp-server/`](./mcp-server/README.md). Expõe workspaces, projetos, work items, boards, Cliente 360, páginas, ciclos e mais — ver [`docs/operis-mcp.md`](./docs/operis-mcp.md).
+
+```bash
+cd mcp-server
+cp .env.example .env
+# OPERIS_API_BASE_URL e OPERIS_API_KEY (ou sessão via operis_sign_in)
+npm install && npm run build
+```
+
+Configura no Cursor em **Settings → MCP** apontando para `mcp-server/dist/index.js`.
+
+---
+
+## Stack
 
 [![React Router](https://img.shields.io/badge/-React%20Router-CA4245?logo=react-router&style=for-the-badge&logoColor=white)](https://reactrouter.com/)
 [![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green)](https://www.djangoproject.com/)
-[![Node JS](https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/en)
+[![Node.js](https://img.shields.io/badge/node.js-339933?style=for-the-badge&logo=Node.js&logoColor=white)](https://nodejs.org/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-## 📸 Screenshots
+Monorepo: **pnpm** + **Turbo**. API: **Django REST** + **Celery** + **RabbitMQ**. Fila/cache: **Valkey**. Object storage: **MinIO** (local) / S3 (produção).
 
-  <p>
-    <a href="https://plane.so" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-work-items.webp"
-        alt="Plane Views"
-        width="100%"
-      />
-    </a>
-  </p>
-  <p>
-    <a href="https://plane.so" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-cycles.webp"
-        width="100%"
-      />
-    </a>
-  </p>
-  <p>
-    <a href="https://plane.so" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-modules.webp"
-        alt="Plane Cycles and Modules"
-        width="100%"
-      />
-    </a>
-  </p>
-  <p>
-    <a href="https://plane.so" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-views.webp"
-        alt="Plane Analytics"
-        width="100%"
-      />
-    </a>
-  </p>
-   <p>
-    <a href="https://plane.so" target="_blank">
-      <img
-        src="https://media.docs.plane.so/GitHub-readme/github-analytics.webp"
-        alt="Plane Pages"
-        width="100%"
-      />
-    </a>
-  </p>
-</p>
+---
 
-## 📝 Documentation
+## Licença
 
-Explore Plane's [product documentation](https://docs.plane.so/) and [developer documentation](https://developers.plane.so/) to learn about features, setup, and usage.
-
-## ❤️ Community
-
-Join the Plane community on [GitHub Discussions](https://github.com/orgs/makeplane/discussions) and our [Forum](https://forum.plane.so). We follow a [Code of conduct](https://github.com/makeplane/plane/blob/master/CODE_OF_CONDUCT.md) in all our community channels.
-
-Feel free to ask questions, report bugs, participate in discussions, share ideas, request features, or showcase your projects. We’d love to hear from you!
-
-## 🛡️ Security
-
-If you discover a security vulnerability in Plane, please report it responsibly instead of opening a public issue. We take all legitimate reports seriously and will investigate them promptly. See [Security policy](https://github.com/makeplane/plane/blob/master/SECURITY.md) for more info.
-
-To disclose any security issues, please email us at security@plane.so.
-
-## 🤝 Contributing
-
-There are many ways you can contribute to Plane:
-
-- Report [bugs](https://github.com/makeplane/plane/issues/new?assignees=srinivaspendem%2Cpushya22&labels=%F0%9F%90%9Bbug&projects=&template=--bug-report.yaml&title=%5Bbug%5D%3A+) or submit [feature requests](https://github.com/makeplane/plane/issues/new?assignees=srinivaspendem%2Cpushya22&labels=%E2%9C%A8feature&projects=&template=--feature-request.yaml&title=%5Bfeature%5D%3A+).
-- Review the [documentation](https://docs.plane.so/) and submit [pull requests](https://github.com/makeplane/docs) to improve it—whether it's fixing typos or adding new content.
-- Talk or write about Plane or any other ecosystem integration and [let us know](https://forum.plane.so)!
-- Show your support by upvoting [popular feature requests](https://github.com/makeplane/plane/issues).
-
-Please read [CONTRIBUTING.md](https://github.com/makeplane/plane/blob/master/CONTRIBUTING.md) for details on the process for submitting pull requests to us.
-
-### Repo activity
-
-![Plane Repo Activity](https://repobeats.axiom.co/api/embed/2523c6ed2f77c082b7908c33e2ab208981d76c39.svg "Repobeats analytics image")
-
-### We couldn't have done this without you.
-
-<a href="https://github.com/makeplane/plane/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=makeplane/plane" />
-</a>
-
-## License
-
-This project is licensed under the [GNU Affero General Public License v3.0](https://github.com/makeplane/plane/blob/master/LICENSE.txt).
+Este projeto está licenciado sob [GNU Affero General Public License v3.0](./LICENSE.txt).

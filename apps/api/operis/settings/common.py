@@ -289,9 +289,35 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 
+# Board automation — fila dedicada e limites operacionais
+AUTOMATION_CELERY_QUEUE = os.environ.get("AUTOMATION_CELERY_QUEUE", "automation")
+AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", "500"))
+AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(
+    os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000")
+)
+AUTOMATION_CIRCUIT_FAILURE_THRESHOLD = int(os.environ.get("AUTOMATION_CIRCUIT_FAILURE_THRESHOLD", "10"))
+AUTOMATION_CIRCUIT_OPEN_SECONDS = int(os.environ.get("AUTOMATION_CIRCUIT_OPEN_SECONDS", "300"))
+
+try:
+    from kombu import Exchange, Queue
+
+    CELERY_TASK_QUEUES = (
+        Queue("celery", Exchange("celery"), routing_key="celery"),
+        Queue(AUTOMATION_CELERY_QUEUE, Exchange(AUTOMATION_CELERY_QUEUE), routing_key=AUTOMATION_CELERY_QUEUE),
+    )
+except ImportError:
+    CELERY_TASK_QUEUES = None
+
+CELERY_TASK_ROUTES = {
+    "operis.bgtasks.automation_task.run_board_automation": {"queue": AUTOMATION_CELERY_QUEUE},
+    "operis.bgtasks.automation_task.enqueue_automation_outbox": {"queue": AUTOMATION_CELERY_QUEUE},
+    "operis.bgtasks.automation_task.flush_stale_automation_outbox": {"queue": AUTOMATION_CELERY_QUEUE},
+}
+
 
 CELERY_IMPORTS = (
     # scheduled tasks
+    "operis.bgtasks.automation_task",
     "operis.bgtasks.issue_automation_task",
     "operis.bgtasks.jira_ops_sync_task",
     "operis.bgtasks.exporter_expired_task",

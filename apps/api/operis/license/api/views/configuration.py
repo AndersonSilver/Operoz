@@ -8,7 +8,7 @@ from smtplib import (
 )
 
 # Django imports
-from django.core.mail import BadHeaderError, EmailMultiAlternatives, get_connection
+from django.core.mail import BadHeaderError, EmailMultiAlternatives
 from django.db.models import Q, Case, When, Value
 
 # Third party imports
@@ -22,7 +22,7 @@ from operis.license.models import InstanceConfiguration
 from operis.license.api.serializers import InstanceConfigurationSerializer
 from operis.license.utils.encryption import encrypt_data
 from operis.utils.cache import cache_response, invalidate_cache
-from operis.license.utils.instance_value import get_email_configuration
+from operis.license.utils.instance_value import get_instance_smtp_connection
 from operis.utils.instance_config_variables import instance_config_variables
 
 
@@ -115,34 +115,15 @@ class EmailCredentialCheckEndpoint(BaseAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, email_from = get_instance_smtp_connection()
 
-        # Configure all the connections
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
-        # Prepare email details
-        subject = "Email Notification from Plane"
-        message = "This is a sample email notification sent from Plane application."
-        # Send the email
+        subject = "Email Notification from Operis"
+        message = "This is a sample email notification sent from your Operis instance."
         try:
             msg = EmailMultiAlternatives(
                 subject=subject,
                 body=message,
-                from_email=EMAIL_FROM,
+                from_email=email_from,
                 to=[receiver_email],
                 connection=connection,
             )
