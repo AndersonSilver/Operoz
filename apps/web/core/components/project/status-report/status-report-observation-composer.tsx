@@ -21,15 +21,30 @@ type Props = {
   projectId: string;
   reportId: string;
   theme: ObservationComposerTheme;
+  initialHtml?: string;
+  composerKey?: string;
+  submitLabel?: string;
   onCommit: (html: string) => void;
   onCancel: () => void;
   t: ReturnType<typeof useTranslation>["t"];
 };
 
 export function StatusReportObservationComposer(props: Props) {
-  const { workspaceSlug, workspaceId, projectId, reportId, theme, onCommit, onCancel, t } = props;
+  const {
+    workspaceSlug,
+    workspaceId,
+    projectId,
+    reportId,
+    theme,
+    initialHtml = "<p></p>",
+    composerKey = "new",
+    submitLabel,
+    onCommit,
+    onCancel,
+    t,
+  } = props;
   const editorRef = useRef<EditorRefApi>(null);
-  const [descriptionHtml, setDescriptionHtml] = useState("<p></p>");
+  const [descriptionHtml, setDescriptionHtml] = useState(initialHtml);
   const [isEditorReady, setIsEditorReady] = useState(false);
   const { uploadEditorAsset, duplicateEditorAsset } = useEditorAsset();
 
@@ -46,8 +61,8 @@ export function StatusReportObservationComposer(props: Props) {
       </div>
       <RichTextEditor
         editable
-        id={`status-report-observation-${reportId}`}
-        initialValue="<p></p>"
+        id={`status-report-observation-${reportId}-${composerKey}`}
+        initialValue={initialHtml}
         value={descriptionHtml}
         bubbleMenuEnabled={false}
         disabledExtensions={["editorSideMenu", "calloutComponent"]}
@@ -113,7 +128,7 @@ export function StatusReportObservationComposer(props: Props) {
               theme.submitBtn
             )}
           >
-            {t("project.status_report.detail_add_short")}
+            {submitLabel ?? t("project.status_report.detail_add_short")}
           </button>
         </div>
       </div>

@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
-// components
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import { useTranslation } from "@operis/i18n";
+import { cn } from "@operis/utils";
 // assets
 import AllFiltersImage from "@/app/assets/empty-state/cycle/all-filters.svg?url";
 import NameFilterImage from "@/app/assets/empty-state/cycle/name-filter.svg?url";
@@ -51,12 +52,14 @@ export const CyclesView = observer(function CyclesView(props: ICyclesView) {
     );
 
   return (
-    <CyclesList
-      completedCycleIds={filteredCompletedCycleIds ?? []}
-      upcomingCycleIds={filteredUpcomingCycleIds}
-      cycleIds={filteredCycleIds}
-      workspaceSlug={workspaceSlug}
-      projectId={projectId}
-    />
+    <div className={cn("min-h-0 flex-1 overflow-y-auto", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
+      <CyclesList
+        completedCycleIds={filteredCompletedCycleIds ?? []}
+        upcomingCycleIds={filteredUpcomingCycleIds}
+        cycleIds={filteredCycleIds}
+        workspaceSlug={workspaceSlug}
+        projectId={projectId}
+      />
+    </div>
   );
 });

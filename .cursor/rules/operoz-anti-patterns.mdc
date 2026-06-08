@@ -1,0 +1,48 @@
+---
+description: Operoz — anti-patterns proibidos (N+1, IDOR, any, fixtures, UI duplicada)
+globs: apps/api/**/*.py,apps/web/**/*.tsx,apps/web/**/*.ts
+alwaysApply: false
+---
+
+# Regra — Anti-patterns (Operoz)
+
+Documento completo: `.cursor/skills/OPEROZ ENGENHARIA/ANTI_PATTERNS.md`
+
+## Regra de ouro
+
+**Não inventar** campos de API, webhooks ou Harness. Fonte: `tests/fixtures/` ou `packages/types/`.
+
+## Backend — proibido
+
+| # | Anti-pattern | Correção |
+|---|--------------|----------|
+| 1 | `SerializerMethodField` sem prefetch | Otimizar `get_queryset()` |
+| 2 | `Issue.objects.get(pk=…)` sem workspace/board | Filtrar tenant + `_project_permission_filters` |
+| 3 | Várias writes sem `atomic()` | `with transaction.atomic():` |
+| 4 | Payload Git/Harness inventado | `github_webhook_pr.json`, `harness_cost_report.json` |
+| 5 | Log completo de webhook em prod | Redact tokens/PII |
+| 6 | Bypass `deleted_at` | Soft delete consistente |
+
+## Frontend — proibido
+
+| # | Anti-pattern | Correção |
+|---|--------------|----------|
+| 1 | `any` / props sem tipo | `@operis/types` |
+| 2 | `console.log(token, user)` commitado | Remover ou logger redacted |
+| 3 | Button/Input/Modal local | `@operis/ui`, `@operis/propel` |
+| 4 | `#0052CC`, `bg-white`, `text-gray-*` | Tokens `bg-surface-*`, `text-primary` |
+| 5 | UI mostra ação que API nega | Capabilities do BE |
+| 6 | Mock de API «na cabeça» | Copiar fixtures |
+
+## Integrações
+
+- Parser sem fixture canónico → bloqueado
+- Custo sem `pipeline_id` / `project_id` / `board_slug` → ver CONTEXTO skill
+- Webhook sem `delivery_id` ou hash idempotente → bloqueado
+
+## Antes do PR
+
+- [ ] Diff sem itens desta tabela
+- [ ] Fixtures atualizados se contrato mudou
+- [ ] `pnpm check:types` (web)
+- [ ] Listagens API sem N+1 óbvio

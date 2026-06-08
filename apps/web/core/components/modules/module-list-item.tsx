@@ -8,6 +8,7 @@ import { useTranslation } from "@operis/i18n";
 import { ModuleStatusIcon } from "@operis/propel/icons";
 import { ControlLink } from "@operis/ui";
 import { cn, generateQueryParams } from "@operis/utils";
+import { MODULE_LIST_ROW_GRID } from "@/components/modules/module-list-header";
 import { ModuleListItemAction, ModuleQuickActions } from "@/components/modules";
 import { useModule } from "@/hooks/store/use-module";
 import { useAppRouter } from "@/hooks/use-app-router";
@@ -75,7 +76,7 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
       ref={parentRef}
       className="group border-b border-subtle last:border-b-0 transition-colors hover:bg-layer-transparent-hover"
     >
-      <div className="flex items-center gap-3 px-4 py-2.5 lg:grid lg:grid-cols-[minmax(0,1fr)_11rem_6.5rem_2rem_4.5rem] lg:items-center lg:gap-3">
+      <div className={cn("flex items-center gap-3 px-4 py-2.5", MODULE_LIST_ROW_GRID)}>
         <ControlLink
           className="flex min-w-0 items-center gap-3 overflow-hidden"
           href={itemLink}
@@ -111,8 +112,12 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
                 <Info className="size-3.5" strokeWidth={1.75} />
               </button>
             </div>
-            <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-11 text-tertiary">
-              <span className="tabular-nums">{issueLabel}</span>
+            <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-11">
+              <span
+                className={cn("tabular-nums", moduleTotalIssues === 0 ? "text-secondary" : "text-tertiary")}
+              >
+                {issueLabel}
+              </span>
               {moduleTotalIssues > 0 ? (
                 <>
                   <span className="text-subtle">·</span>

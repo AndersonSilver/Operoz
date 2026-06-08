@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { pointerOutsideOfPreview } from "@atlaskit/pragmatic-drag-and-drop/element/pointer-outside-of-preview";
@@ -8,18 +8,26 @@ import { observer } from "mobx-react";
 import { useParams, useRouter } from "next/navigation";
 import { createRoot } from "react-dom/client";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
-import { Settings, Share2, LogOut, MoreHorizontal, Star } from "lucide-react";
+import { Settings, Share2, LogOut, Star } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { useOutsideClickDetector } from "@operis/hooks";
 import { useTranslation } from "@operis/i18n";
 import { Logo } from "@operis/propel/emoji-icon-picker";
 import { LinkIcon, ArchiveIcon, ChevronRightIcon } from "@operis/propel/icons";
 import { IconButton } from "@operis/propel/icon-button";
 import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu, DropIndicator, DragHandle, ControlLink } from "@operis/ui";
+import { DropIndicator, DragHandle, ControlLink } from "@operis/ui";
+import { SidebarRowQuickMenu } from "@/components/sidebar/sidebar-row-quick-menu";
 import { cn } from "@operis/utils";
+import { SidebarTreeGuide } from "@/components/sidebar/sidebar-tree-guide";
+import {
+  SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS,
+  SIDEBAR_TREE_CHILD_INDENT_CLASS,
+  SIDEBAR_TREE_CHEVRON_CLASS,
+  sidebarNestedNavItemClass,
+} from "@/components/sidebar/sidebar-styles";
 // components
 import { DEFAULT_TAB_KEY, getTabUrl } from "@/components/navigation/tab-navigation-utils";
 import { useTabPreferences } from "@/components/navigation/use-tab-preferences";
@@ -94,7 +102,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
   const isProjectListOpen = getIsProjectListOpen(projectId);
   const [instruction, setInstruction] = useState<"DRAG_OVER" | "DRAG_BELOW" | undefined>(undefined);
   // refs
-  const actionSectionRef = useRef<HTMLButtonElement | null>(null);
+  const actionSectionRef = useRef<HTMLDivElement | null>(null);
   const projectRef = useRef<HTMLDivElement | null>(null);
   const dragHandleRef = useRef<HTMLButtonElement | null>(null);
   // router
@@ -137,6 +145,12 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
     workspaceSlug.toString(),
     project?.id
   );
+  const isWorkspaceAdmin = allowPermissions(
+    [EUserPermissions.ADMIN],
+    EUserPermissionsLevel.WORKSPACE,
+    workspaceSlug.toString()
+  );
+  const canOpenProjectSettings = isAuthorized || isWorkspaceAdmin;
 
   const handleLeaveProject = () => {
     setLeaveProjectModal(true);
@@ -282,7 +296,8 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
     }
   };
 
-  const shouldHighlightProject = URLProjectId === project?.id && !showProjectSubNav;
+  const isCurrentProject = URLProjectId === project?.id;
+  const shouldHighlightProject = nestedUnderBoard ? isCurrentProject : isCurrentProject && !showProjectSubNav;
 
   const projectNameClassName = "min-w-0 flex-1 truncate text-13 font-medium text-secondary";
 
@@ -304,6 +319,109 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
     projectId
   );
 
+  const projectQuickMenuItems = useMemo(
+    () => [
+      {
+        key: "move_board",
+        label: !project.board_id ? t("boards.assign_to_board") : t("boards.move_to_board"),
+        onClick: () => setIsMoveBoardModalOpen(true),
+        shouldRender: canManageBoard,
+      },
+      {
+        key: "favorite",
+        label: (
+          <span className="flex items-center gap-2">
+            <Star
+              className={cn("size-3.5", {
+                "fill-yellow-500 stroke-yellow-500": isFavorite,
+              })}
+            />
+            <span>{isFavorite ? t("remove_from_favorites") : t("add_to_favorites")}</span>
+          </span>
+        ),
+        onClick: isFavorite ? handleRemoveFromFavorites : handleAddToFavorites,
+        shouldRender: canFavorite,
+      },
+      {
+        key: "publish",
+        label: (
+          <span className="flex items-center gap-2">
+            <Share2 className="size-3.5 stroke-[1.5]" />
+            <span>{t("publish_project")}</span>
+          </span>
+        ),
+        onClick: () => setPublishModal(true),
+        shouldRender: isAdmin,
+      },
+      {
+        key: "copy_link",
+        label: (
+          <span className="flex items-center gap-2">
+            <LinkIcon className="size-3.5 stroke-[1.5]" />
+            <span>{t("copy_link")}</span>
+          </span>
+        ),
+        onClick: handleCopyText,
+        shouldRender: true,
+      },
+      {
+        key: "archives",
+        label: (
+          <span className="flex items-center gap-2">
+            <ArchiveIcon className="size-3.5 stroke-[1.5]" />
+            <span>{t("archives")}</span>
+          </span>
+        ),
+        onClick: () => {
+          router.push(`/${workspaceSlug}/projects/${project?.id}/archives/issues`);
+        },
+        shouldRender: isAuthorized,
+      },
+      {
+        key: "settings",
+        label: (
+          <span className="flex items-center gap-2">
+            <Settings className="size-3.5 stroke-[1.5]" />
+            <span>{t("settings")}</span>
+          </span>
+        ),
+        onClick: () => {
+          router.push(`/${workspaceSlug}/settings/projects/${project?.id}`);
+        },
+        shouldRender: canOpenProjectSettings,
+      },
+      {
+        key: "leave",
+        label: (
+          <span className="flex items-center gap-2">
+            <LogOut className="size-3.5 stroke-[1.5]" />
+            <span>{t("leave_project")}</span>
+          </span>
+        ),
+        onClick: handleLeaveProject,
+        shouldRender: !isAuthorized && Boolean(project?.member_role),
+      },
+    ],
+    [
+      canFavorite,
+      canManageBoard,
+      canOpenProjectSettings,
+      handleAddToFavorites,
+      handleCopyText,
+      handleLeaveProject,
+      handleRemoveFromFavorites,
+      isAdmin,
+      isAuthorized,
+      isFavorite,
+      project?.board_id,
+      project?.id,
+      project?.member_role,
+      router,
+      t,
+      workspaceSlug,
+    ]
+  );
+
   return (
     <>
       {canManageBoard && workspaceSlug && (
@@ -322,7 +440,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
         key={`${project.id}_${URLProjectId}`}
         defaultOpen={isProjectListOpen}
         as="div"
-        className={cn(nestedUnderBoard && "pl-2")}
+        className={cn(nestedUnderBoard && "pl-0")}
       >
         <div
           id={`sidebar-${projectId}-${projectListType}`}
@@ -334,14 +452,19 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
           <DropIndicator classNames="absolute top-0" isVisible={instruction === "DRAG_OVER"} />
           <div
             className={cn(
-              "group/project-item relative flex w-full items-center rounded-md px-2 py-1.5 text-primary hover:bg-layer-transparent-hover",
+              nestedUnderBoard
+                ? sidebarNestedNavItemClass(shouldHighlightProject)
+                : "group/project-item relative flex w-full items-center rounded-md px-2 py-1.5 text-primary hover:bg-layer-transparent-hover",
               {
-                "bg-surface-2": isMenuActive,
-                "bg-layer-transparent-active": shouldHighlightProject,
+                "bg-surface-2": !nestedUnderBoard && isMenuActive,
+                "bg-layer-transparent-active": !nestedUnderBoard && shouldHighlightProject,
               }
             )}
             id={`${project?.id}`}
           >
+            {nestedUnderBoard && shouldHighlightProject ? (
+              <span className={SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS} aria-hidden />
+            ) : null}
             {!disableDrag && (
               <Tooltip
                 isMobile={isMobile}
@@ -406,7 +529,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                   </div>
                 )}
               </ControlLink>
-              <div className="flex items-center gap-1">
+              <div ref={actionSectionRef} className="flex items-center gap-1">
                 <ProjectFavoriteStar
                   workspaceSlug={workspaceSlug?.toString()}
                   projectId={projectId}
@@ -419,112 +542,29 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                   buttonClassName="size-6"
                   iconClassName="size-3.5"
                 />
-                <CustomMenu
-                  customButton={
-                    <IconButton
-                      ref={actionSectionRef}
-                      variant="ghost"
-                      size="sm"
-                      icon={MoreHorizontal}
-                      onClick={() => setIsMenuActive(!isMenuActive)}
-                      className="text-placeholder"
-                    />
-                  }
+                <SidebarRowQuickMenu
+                  items={projectQuickMenuItems}
+                  ariaLabel={t("aria_labels.projects_sidebar.toggle_quick_actions_menu")}
                   className={cn(
-                    "pointer-events-none flex-shrink-0 opacity-0 group-hover/project-item:pointer-events-auto group-hover/project-item:opacity-100",
+                    "pointer-events-none opacity-0 group-hover/project-item:pointer-events-auto group-hover/project-item:opacity-100",
                     {
                       "pointer-events-auto opacity-100": isMenuActive,
                     }
                   )}
-                  customButtonClassName="grid place-items-center"
-                  placement="bottom-start"
-                  ariaLabel={t("aria_labels.projects_sidebar.toggle_quick_actions_menu")}
-                  useCaptureForOutsideClick
-                  closeOnSelect
-                  onMenuClose={() => setIsMenuActive(false)}
-                >
-                  {canManageBoard && (
-                    <CustomMenu.MenuItem onClick={() => setIsMoveBoardModalOpen(true)}>
-                      {!project.board_id ? t("boards.assign_to_board") : t("boards.move_to_board")}
-                    </CustomMenu.MenuItem>
-                  )}
-                  {canFavorite && (
-                    <CustomMenu.MenuItem
-                      onClick={isFavorite ? handleRemoveFromFavorites : handleAddToFavorites}
-                    >
-                      <span className="flex items-center justify-start gap-2">
-                        <Star
-                          className={cn("h-3.5 w-3.5", {
-                            "fill-yellow-500 stroke-yellow-500": isFavorite,
-                          })}
-                        />
-                        <span>{isFavorite ? t("remove_from_favorites") : t("add_to_favorites")}</span>
-                      </span>
-                    </CustomMenu.MenuItem>
-                  )}
-
-                  {/* publish project settings */}
-                  {isAdmin && (
-                    <CustomMenu.MenuItem onClick={() => setPublishModal(true)}>
-                      <div className="relative flex flex-shrink-0 items-center justify-start gap-2">
-                        <div className="flex h-4 w-4 cursor-pointer items-center justify-center rounded-sm text-secondary transition-all duration-300 hover:bg-layer-1">
-                          <Share2 className="h-3.5 w-3.5 stroke-[1.5]" />
-                        </div>
-                        <div>{t("publish_project")}</div>
-                      </div>
-                    </CustomMenu.MenuItem>
-                  )}
-                  <CustomMenu.MenuItem onClick={handleCopyText}>
-                    <span className="flex items-center justify-start gap-2">
-                      <LinkIcon className="h-3.5 w-3.5 stroke-[1.5]" />
-                      <span>{t("copy_link")}</span>
-                    </span>
-                  </CustomMenu.MenuItem>
-                  {isAuthorized && (
-                    <CustomMenu.MenuItem
-                      onClick={() => {
-                        router.push(`/${workspaceSlug}/projects/${project?.id}/archives/issues`);
-                      }}
-                    >
-                      <div className="flex cursor-pointer items-center justify-start gap-2">
-                        <ArchiveIcon className="h-3.5 w-3.5 stroke-[1.5]" />
-                        <span>{t("archives")}</span>
-                      </div>
-                    </CustomMenu.MenuItem>
-                  )}
-                  <CustomMenu.MenuItem
-                    onClick={() => {
-                      router.push(`/${workspaceSlug}/settings/projects/${project?.id}`);
-                    }}
-                  >
-                    <div className="flex cursor-pointer items-center justify-start gap-2">
-                      <Settings className="h-3.5 w-3.5 stroke-[1.5]" />
-                      <span>{t("settings")}</span>
-                    </div>
-                  </CustomMenu.MenuItem>
-                  {/* leave project */}
-                  {!isAuthorized && (
-                    <CustomMenu.MenuItem
-                      onClick={handleLeaveProject}
-                      data-ph-element={MEMBER_TRACKER_ELEMENTS.SIDEBAR_PROJECT_QUICK_ACTIONS}
-                    >
-                      <div className="flex items-center justify-start gap-2">
-                        <LogOut className="h-3.5 w-3.5 stroke-[1.5]" />
-                        <span>{t("leave_project")}</span>
-                      </div>
-                    </CustomMenu.MenuItem>
-                  )}
-                </CustomMenu>
+                  onOpenChange={setIsMenuActive}
+                />
                 {showProjectSubNav && (
                   <IconButton
                     variant="ghost"
                     size="sm"
                     icon={ChevronRightIcon}
                     onClick={() => setIsProjectListOpen(!isProjectListOpen)}
-                    className={cn("text-placeholder", {
-                      "inline-flex": nestedUnderBoard || isMenuActive,
-                      "hidden group-hover/project-item:inline-flex": !nestedUnderBoard,
-                    })}
+                    className={cn(
+                      nestedUnderBoard ? cn("text-secondary", SIDEBAR_TREE_CHEVRON_CLASS) : "hidden text-placeholder group-hover/project-item:inline-flex",
+                      {
+                        "inline-flex opacity-100": isMenuActive || isProjectListOpen || !nestedUnderBoard,
+                      }
+                    )}
                     iconClassName={cn("transition-transform", {
                       "rotate-90": isProjectListOpen,
                     })}
@@ -549,8 +589,14 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               leaveTo="transform scale-95 opacity-0"
             >
               {isProjectListOpen && (
-                <Disclosure.Panel as="div" className="relative mt-1 mb-1.5 flex flex-col gap-0.5 pl-6">
-                  <div className="absolute top-0 bottom-1 left-[15px] w-[1px] bg-layer-3" />
+                <Disclosure.Panel
+                  as="div"
+                  className={cn(
+                    "relative mt-1 mb-1.5 flex flex-col gap-0.5",
+                    SIDEBAR_TREE_CHILD_INDENT_CLASS
+                  )}
+                >
+                  <SidebarTreeGuide />
                   <ProjectNavigationRoot workspaceSlug={workspaceSlug.toString()} projectId={projectId.toString()} />
                 </Disclosure.Panel>
               )}

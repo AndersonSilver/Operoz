@@ -1,12 +1,16 @@
+import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
-// components
 import { EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { EmptyStateDetailed } from "@operis/propel/empty-state";
 import { EUserProjectRoles } from "@operis/types";
 import { ContentWrapper, Row, ERowVariant } from "@operis/ui";
-// components
+import { cn } from "@operis/utils";
+import {
+  BOARD_HUB_MODULE_CARD,
+  BOARD_HUB_MODULE_LIST_PANEL,
+} from "@/components/board/board-hub-background";
 import { ListLayout } from "@/components/core/list";
 import {
   ModuleCardItem,
@@ -18,25 +22,27 @@ import {
 import { CycleModuleBoardLayoutLoader } from "@/components/ui/loader/cycle-module-board-loader";
 import { CycleModuleListLayoutLoader } from "@/components/ui/loader/cycle-module-list-loader";
 import { GanttLayoutLoader } from "@/components/ui/loader/layouts/gantt-layout-loader";
-// hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useModule } from "@/hooks/store/use-module";
 import { useModuleFilter } from "@/hooks/store/use-module-filter";
 import { useUserPermissions } from "@/hooks/store/user";
 
+const MODULE_EMPTY_WRAP = "flex min-h-[20rem] flex-1 items-center justify-center p-6";
+
+function ModuleEmptyState({ children }: { children: ReactNode }) {
+  return <div className={MODULE_EMPTY_WRAP}>{children}</div>;
+}
+
 export const ModulesListView = observer(function ModulesListView() {
-  // router
   const { workspaceSlug, projectId } = useParams();
   const searchParams = useSearchParams();
   const peekModule = searchParams.get("peekModule");
-  // plane hooks
   const { t } = useTranslation();
-  // store hooks
   const { toggleCreateModuleModal } = useCommandPalette();
   const { getProjectModuleIds, getFilteredModuleIds, loader } = useModule();
   const { currentProjectDisplayFilters: displayFilters } = useModuleFilter();
   const { allowPermissions } = useUserPermissions();
-  // derived values
+
   const projectModuleIds = projectId ? getProjectModuleIds(projectId.toString()) : undefined;
   const filteredModuleIds = projectId ? getFilteredModuleIds(projectId.toString()) : undefined;
   const canPerformEmptyStateActions = allowPermissions(
@@ -44,73 +50,83 @@ export const ModulesListView = observer(function ModulesListView() {
     EUserPermissionsLevel.PROJECT
   );
 
-  if (loader || !projectModuleIds || !filteredModuleIds)
+  if (loader || !projectModuleIds || !filteredModuleIds) {
     return (
-      <>
+      <div className="min-h-0 flex-1 overflow-y-auto">
         {displayFilters?.layout === "list" && <CycleModuleListLayoutLoader />}
         {displayFilters?.layout === "board" && <CycleModuleBoardLayoutLoader />}
         {displayFilters?.layout === "gantt" && <GanttLayoutLoader />}
-      </>
+      </div>
     );
+  }
 
-  if (projectModuleIds.length === 0)
+  if (projectModuleIds.length === 0) {
     return (
-      <EmptyStateDetailed
-        assetKey="module"
-        title={t("project_empty_state.modules.title")}
-        description={t("project_empty_state.modules.description")}
-        actions={[
-          {
-            label: t("project_empty_state.modules.cta_primary"),
-            onClick: () => toggleCreateModuleModal(true),
-            disabled: !canPerformEmptyStateActions,
-            variant: "primary",
-            "data-ph-element": MODULE_TRACKER_ELEMENTS.EMPTY_STATE_ADD_BUTTON,
-          },
-        ]}
-      />
+      <ModuleEmptyState>
+        <EmptyStateDetailed
+          assetKey="module"
+          title={t("project_empty_state.modules.title")}
+          description={t("project_empty_state.modules.description")}
+          actions={[
+            {
+              label: t("project_empty_state.modules.cta_primary"),
+              onClick: () => toggleCreateModuleModal(true),
+              disabled: !canPerformEmptyStateActions,
+              variant: "primary",
+              "data-ph-element": MODULE_TRACKER_ELEMENTS.EMPTY_STATE_ADD_BUTTON,
+            },
+          ]}
+        />
+      </ModuleEmptyState>
     );
+  }
 
-  if (filteredModuleIds.length === 0)
+  if (filteredModuleIds.length === 0) {
     return (
-      <EmptyStateDetailed
-        assetKey="search"
-        title={t("common_empty_state.search.title")}
-        description={t("common_empty_state.search.description")}
-      />
+      <ModuleEmptyState>
+        <EmptyStateDetailed
+          assetKey="search"
+          title={t("common_empty_state.search.title")}
+          description={t("common_empty_state.search.description")}
+        />
+      </ModuleEmptyState>
     );
+  }
 
   return (
-    <ContentWrapper variant={ERowVariant.HUGGING}>
-      <div className="flex size-full justify-between">
-        {displayFilters?.layout === "list" && (
-          <ListLayout>
-            <div className="w-full overflow-hidden rounded-lg border border-subtle bg-layer-1">
-              <ModuleListHeader />
+    <ContentWrapper variant={ERowVariant.HUGGING} className="min-h-0 flex-1">
+      <div className="flex size-full min-h-0 justify-between">
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col overflow-y-auto">
+          {displayFilters?.layout === "list" && (
+            <ListLayout>
+              <div className={BOARD_HUB_MODULE_LIST_PANEL}>
+                <ModuleListHeader />
+                {filteredModuleIds.map((moduleId) => (
+                  <ModuleListItem key={moduleId} moduleId={moduleId} />
+                ))}
+              </div>
+            </ListLayout>
+          )}
+          {displayFilters?.layout === "board" && (
+            <Row
+              className={cn(
+                "grid auto-rows-max grid-cols-1 gap-4 p-4 transition-all vertical-scrollbar scrollbar-lg",
+                peekModule
+                  ? "3xl:grid-cols-3 lg:grid-cols-1 xl:grid-cols-2"
+                  : "3xl:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3"
+              )}
+            >
               {filteredModuleIds.map((moduleId) => (
-                <ModuleListItem key={moduleId} moduleId={moduleId} />
+                <ModuleCardItem key={moduleId} moduleId={moduleId} />
               ))}
+            </Row>
+          )}
+          {displayFilters?.layout === "gantt" && (
+            <div className="min-h-0 flex-1 overflow-hidden p-3 md:p-4">
+              <ModulesListGanttChartView />
             </div>
-          </ListLayout>
-        )}
-        {displayFilters?.layout === "board" && (
-          <Row
-            className={`grid size-full grid-cols-1 gap-6 overflow-y-auto py-page-y ${
-              peekModule
-                ? "3xl:grid-cols-3 lg:grid-cols-1 xl:grid-cols-2"
-                : "3xl:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3"
-            } vertical-scrollbar scrollbar-lg auto-rows-max transition-all`}
-          >
-            {filteredModuleIds.map((moduleId) => (
-              <ModuleCardItem key={moduleId} moduleId={moduleId} />
-            ))}
-          </Row>
-        )}
-        {displayFilters?.layout === "gantt" && (
-          <div className="size-full overflow-hidden">
-            <ModulesListGanttChartView />
-          </div>
-        )}
+          )}
+        </div>
         <div className="flex-shrink-0">
           <ModulePeekOverview projectId={projectId?.toString() ?? ""} workspaceSlug={workspaceSlug?.toString() ?? ""} />
         </div>

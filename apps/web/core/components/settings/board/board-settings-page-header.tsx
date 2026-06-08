@@ -10,6 +10,7 @@ import { BOARD_SETTINGS_ICONS } from "./sidebar/item-icon";
 
 type Props = {
   workspaceSlug: string;
+  /** @deprecated só compat — breadcrumb não repete workspace */
   workspaceName?: string;
   boardName: string;
   boardSlug: string;
@@ -18,7 +19,7 @@ type Props = {
 };
 
 export const BoardSettingsPageHeader = observer(function BoardSettingsPageHeader(props: Props) {
-  const { workspaceSlug, workspaceName, boardName, boardSlug, boardLogo, section } = props;
+  const { workspaceSlug, boardName, boardSlug, boardLogo, section } = props;
   const { t } = useTranslation();
   const SectionIcon = section ? BOARD_SETTINGS_ICONS[section.key] : undefined;
   const settingsHref = `/${workspaceSlug}/settings/boards/${boardSlug}/`;
@@ -31,14 +32,6 @@ export const BoardSettingsPageHeader = observer(function BoardSettingsPageHeader
           <Breadcrumbs.Item
             component={
               <BreadcrumbLink
-                label={workspaceName ?? t("workspace")}
-                href={`/${workspaceSlug}/`}
-              />
-            }
-          />
-          <Breadcrumbs.Item
-            component={
-              <BreadcrumbLink
                 label={boardName}
                 href={boardHref}
                 icon={
@@ -48,12 +41,8 @@ export const BoardSettingsPageHeader = observer(function BoardSettingsPageHeader
                     </span>
                   ) : undefined
                 }
+                isLast={!section}
               />
-            }
-          />
-          <Breadcrumbs.Item
-            component={
-              <BreadcrumbLink label={t("boards.settings.title")} href={settingsHref} isLast={!section} />
             }
             isLast={!section}
           />
@@ -62,8 +51,9 @@ export const BoardSettingsPageHeader = observer(function BoardSettingsPageHeader
               component={
                 <BreadcrumbLink
                   label={t(section.i18n_label)}
+                  href={`/${workspaceSlug}/settings/boards/${boardSlug}${section.href}/`}
                   isLast
-                  icon={SectionIcon ? <SectionIcon className="size-4 text-tertiary" /> : undefined}
+                  icon={SectionIcon ? <SectionIcon className="size-4 text-tertiary" strokeWidth={1.75} /> : undefined}
                 />
               }
               isLast

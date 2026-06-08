@@ -2,7 +2,7 @@ import { ISSUE_DISPLAY_PROPERTIES_KEYS, SPREADSHEET_PROPERTY_LIST } from "@operi
 import type { IIssueDisplayProperties } from "@operis/types";
 import { getComputedDisplayProperties } from "@operis/utils";
 
-/** Colunas visíveis por omissão na lista do board (evita tabela larga demais). */
+/** Colunas visíveis por omissão na lista do board / módulo / projeto. */
 const BOARD_LIST_DEFAULT_VISIBLE: Partial<IIssueDisplayProperties> = {
   key: true,
   state: true,
@@ -12,12 +12,12 @@ const BOARD_LIST_DEFAULT_VISIBLE: Partial<IIssueDisplayProperties> = {
   modules: false,
   cycle: false,
   estimate: false,
-  start_date: false,
-  due_date: false,
+  start_date: true,
+  due_date: true,
   sub_issue_count: false,
   attachment_count: false,
   link: false,
-  issue_type: false,
+  issue_type: true,
   created_on: false,
   updated_on: false,
 };
@@ -37,6 +37,12 @@ export const resolveBoardListDisplayProperties = (
 
   const hasVisibleColumn = Object.values(displayProperties).some(Boolean);
   if (!hasVisibleColumn) return boardDefaults;
+
+  // Filtros antigos costumam guardar só `key: true` e o resto explicitamente `false`.
+  const enabledKeys = (Object.keys(displayProperties) as (keyof IIssueDisplayProperties)[]).filter(
+    (key) => displayProperties[key]
+  );
+  if (enabledKeys.length === 1 && enabledKeys[0] === "key") return boardDefaults;
 
   return { ...boardDefaults, ...displayProperties };
 };

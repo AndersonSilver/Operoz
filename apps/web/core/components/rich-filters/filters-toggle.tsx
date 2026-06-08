@@ -7,18 +7,24 @@ import type { IFilterInstance } from "@operis/shared-state";
 import type { TExternalFilter, TFilterProperty } from "@operis/types";
 // components
 import { AddFilterButton } from "@/components/rich-filters/add-filters/button";
+import { PROJECT_HUB_GHOST_BUTTON_CLASS } from "@/components/project/project-hub-toolbar";
 
 type TFiltersToggleProps<P extends TFilterProperty, E extends TExternalFilter> = {
   filter: IFilterInstance<P, E> | undefined;
+  appearance?: "default" | "hub";
 };
 
 const COMMON_CLASSNAME =
   "grid place-items-center h-7 w-full py-0.5 px-2 rounded-md border border-subtle-1 transition-all duration-200 cursor-pointer";
 
+const HUB_ICON_CLASSNAME =
+  "h-8 w-8 rounded-md border border-subtle/45 bg-layer-2/40 shadow-none hover:bg-layer-transparent-hover";
+
 export const FiltersToggle = observer(function FiltersToggle<P extends TFilterProperty, E extends TExternalFilter>(
   props: TFiltersToggleProps<P, E>
 ) {
-  const { filter } = props;
+  const { filter, appearance = "default" } = props;
+  const isHub = appearance === "hub";
   // derived values
   const hasAnyConditions = (filter?.allConditionsForDisplay.length ?? 0) > 0;
   const isFilterRowVisible = filter?.isVisible ?? false;
@@ -62,9 +68,10 @@ export const FiltersToggle = observer(function FiltersToggle<P extends TFilterPr
       <AddFilterButton
         filter={filter}
         buttonConfig={{
-          variant: "secondary",
-          className: COMMON_CLASSNAME,
+          variant: isHub ? "ghost" : "secondary",
+          className: isHub ? cn(HUB_ICON_CLASSNAME, "px-2") : COMMON_CLASSNAME,
           label: null,
+          size: isHub ? "sm" : "lg",
         }}
         onFilterSelect={() => filter?.toggleVisibility(true)}
       />
@@ -73,11 +80,11 @@ export const FiltersToggle = observer(function FiltersToggle<P extends TFilterPr
 
   return (
     <IconButton
-      size="lg"
-      variant="secondary"
+      size={isHub ? "sm" : "lg"}
+      variant={isHub ? "ghost" : "secondary"}
       icon={showFilterRowChangesPill ? FilterAppliedIcon : FilterIcon}
       onClick={handleToggleFilter}
-      className={buttonClassName}
+      className={cn(isHub ? HUB_ICON_CLASSNAME : undefined, !isHub && buttonClassName, isHub && showFilterRowChangesPill && "border-accent-subtle bg-accent-subtle/40 text-accent-primary")}
       iconClassName={iconClassName}
     />
   );

@@ -20,7 +20,7 @@ function GeneralWorkspaceSettingsPage() {
     : undefined;
 
   return (
-    <SettingsContentWrapper header={<GeneralWorkspaceSettingsHeader />}>
+    <SettingsContentWrapper hugging header={<GeneralWorkspaceSettingsHeader />}>
       <PageHead title={pageTitle} />
       <WorkspaceDetails />
     </SettingsContentWrapper>

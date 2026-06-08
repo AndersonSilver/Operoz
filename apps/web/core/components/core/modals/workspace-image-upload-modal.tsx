@@ -125,7 +125,11 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
                   <img
                     src={image ? URL.createObjectURL(image) : value ? getFileURL(value) : ""}
                     alt="image"
-                    className="absolute top-0 left-0 h-full w-full rounded-md object-cover"
+                    className={`absolute inset-0 m-auto block max-h-full max-w-full rounded-md object-center ${
+                      image?.type === "image/svg+xml" || value?.toLowerCase().includes(".svg")
+                        ? "object-contain p-8"
+                        : "h-full w-full object-cover"
+                    }`}
                   />
                 </>
               ) : (
@@ -148,7 +152,7 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
             </p>
           )}
         </div>
-        <p className="my-4 text-13 text-secondary">File formats supported- .jpeg, .jpg, .png, .webp</p>
+        <p className="my-4 text-13 text-secondary">File formats supported: .jpeg, .jpg, .png, .webp, .svg</p>
         <div className="flex items-center justify-between">
           <Button variant="error-fill" size="lg" onClick={handleImageRemove} disabled={!value} loading={isRemoving}>
             {isRemoving ? "Removing" : "Remove"}

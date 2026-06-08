@@ -1,36 +1,46 @@
+import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { EIssuesStoreType } from "@operis/types";
-// hooks
 import { useIssues } from "@/hooks/store/use-issues";
-// local imports — mesmo root da lista do board (WorkspaceListRoot)
-import { WorkspaceListRoot } from "./workspace-root";
+import { useUserPermissions } from "@/hooks/store/user";
+import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
+import { BaseListRoot } from "../base-list-root";
 
 export const ModuleListLayout = observer(function ModuleListLayout() {
   const { workspaceSlug, projectId, moduleId } = useParams();
   const { issues } = useIssues(EIssuesStoreType.MODULE);
+  const { allowPermissions } = useUserPermissions();
 
-  const workspaceSlugStr = workspaceSlug?.toString();
-  const moduleIdStr = moduleId?.toString();
+  const isEditingAllowed = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.PROJECT
+  );
 
-  if (!workspaceSlugStr || !moduleIdStr) return null;
+  const canEditIssueProperties = useCallback(() => isEditingAllowed, [isEditingAllowed]);
+
+  const addIssuesToView = useCallback(
+    (issueIds: string[]) => {
+      if (!workspaceSlug || !projectId || !moduleId) throw new Error();
+      return issues.addIssuesToModule(
+        workspaceSlug.toString(),
+        projectId.toString(),
+        moduleId.toString(),
+        issueIds
+      );
+    },
+    [issues, workspaceSlug, projectId, moduleId]
+  );
+
+  if (!moduleId) return null;
 
   return (
-    <WorkspaceListRoot
-      isLoading={false}
-      workspaceSlug={workspaceSlugStr}
-      globalViewId={moduleIdStr}
-      issuesLoading={false}
-      addIssuesToView={(issueIds: string[]) => {
-        if (!projectId) throw new Error();
-        return issues.addIssuesToModule(
-          workspaceSlugStr,
-          projectId.toString(),
-          moduleIdStr,
-          issueIds
-        );
-      }}
+    <BaseListRoot
+      QuickActions={ModuleIssueQuickActions}
+      addIssuesToView={addIssuesToView}
+      canEditPropertiesBasedOnProject={canEditIssueProperties}
+      viewId={moduleId.toString()}
     />
   );
 });

@@ -8,10 +8,12 @@ type Props = {
   children: React.ReactNode;
   header?: React.ReactNode;
   hugging?: boolean;
+  /** Preenche a área útil sem scroll da página — para editores full-height (ex.: canvas de automação). */
+  embedded?: boolean;
 };
 
 export function SettingsContentWrapper(props: Props) {
-  const { children, header, hugging = false } = props;
+  const { children, header, hugging = false, embedded = false } = props;
 
   return (
     <div className="@container flex size-full grow flex-col overflow-hidden">
@@ -20,9 +22,17 @@ export function SettingsContentWrapper(props: Props) {
           <AppHeader header={header} />
         </div>
       )}
-      <ScrollArea scrollType="hover" orientation="vertical" size="sm" className="size-full grow overflow-y-scroll">
+      <ScrollArea
+        scrollType="hover"
+        orientation="vertical"
+        size="sm"
+        className={cn("size-full grow", embedded ? "overflow-hidden" : "overflow-y-scroll")}
+        viewportClassName={embedded ? "!overflow-hidden" : undefined}
+      >
         <div
-          className={cn("py-9", {
+          className={cn({
+            "flex h-full min-h-0 flex-col pt-4 pb-5 lg:pt-5 lg:pb-6": embedded,
+            "py-9": !embedded,
             "w-full px-page-x lg:px-12": hugging,
             "mx-auto w-full max-w-225 px-page-x @min-[58.95rem]:px-0": !hugging, // 58.95rem = max-width(56.25rem) + padding-x(1.35rem * 2)
           })}

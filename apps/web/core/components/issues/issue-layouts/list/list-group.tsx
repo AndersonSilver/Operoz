@@ -96,11 +96,15 @@ export const ListGroup = observer(function ListGroup(props: Props) {
     isEpic = false,
   } = props;
 
+  const { t } = useTranslation();
   const [isDraggingOverColumn, setIsDraggingOverColumn] = useState(false);
+  const groupTitle =
+    group.id === "All Issues"
+      ? t(isEpic ? "issue.epics" : "default_global_view.all_issues")
+      : group.name;
   const [dragColumnOrientation, setDragColumnOrientation] = useState<"justify-start" | "justify-end">("justify-start");
   const isExpanded = !collapsedGroups?.group_by.includes(group.id);
   const groupRef = useRef<HTMLDivElement | null>(null);
-  const { t } = useTranslation();
   const projectState = useProjectState();
 
   const {
@@ -257,15 +261,15 @@ export const ListGroup = observer(function ListGroup(props: Props) {
       })}
     >
       <Row
-        className={cn("w-full flex-shrink-0 border-b border-subtle bg-layer-1 py-1 pr-3 hover:bg-layer-1-hover", {
-          "sticky top-0 z-[2]": isExpanded && groupIssueCount > 0,
+        className={cn("w-full flex-shrink-0 border-b border-subtle bg-layer-1 py-2 pr-3 hover:bg-layer-1-hover", {
+          "sticky top-0 z-[2] shadow-sm": isExpanded && groupIssueCount > 0,
         })}
       >
         <HeaderGroupByCard
           groupID={group.id}
           groupBy={group_by}
           icon={group.icon}
-          title={group.name}
+          title={groupTitle}
           count={groupIssueCount}
           issuePayload={group.payload}
           canEditProperties={canEditProperties}
@@ -291,12 +295,12 @@ export const ListGroup = observer(function ListGroup(props: Props) {
             isEpic={isEpic}
           />
           {!group_by && displayProperties && (
-            <div className="min-w-full w-max max-w-none">
+            <div className="w-full min-w-0">
               <ListPropertiesColumnsHeader displayProperties={displayProperties} isEpic={isEpic} />
             </div>
           )}
           {groupIssueIds && (
-            <div className="min-w-full w-max max-w-none">
+            <div className="w-full min-w-0">
             <IssueBlocksList
               issueIds={groupIssueIds}
               groupId={group.id}

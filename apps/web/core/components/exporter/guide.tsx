@@ -18,15 +18,13 @@ export const ExportGuide = observer(function ExportGuide() {
   const [cursor, setCursor] = useState<string | undefined>(`10:0:0`);
 
   return (
-    <>
-      <div className="flex size-full flex-col gap-y-13">
-        <ExportForm
-          workspaceSlug={workspaceSlug}
-          provider={provider}
-          mutateServices={() => mutate(EXPORT_SERVICES_LIST(workspaceSlug, `${cursor}`, `${per_page}`))}
-        />
-        <PrevExports workspaceSlug={workspaceSlug} cursor={cursor} per_page={per_page} setCursor={setCursor} />
-      </div>
-    </>
+    <div className="flex w-full flex-col gap-6">
+      <ExportForm
+        workspaceSlug={workspaceSlug}
+        provider={provider}
+        mutateServices={() => mutate(EXPORT_SERVICES_LIST(workspaceSlug, `${cursor}`, `${per_page}`))}
+      />
+      <PrevExports workspaceSlug={workspaceSlug} cursor={cursor} per_page={per_page} setCursor={setCursor} />
+    </div>
   );
 });

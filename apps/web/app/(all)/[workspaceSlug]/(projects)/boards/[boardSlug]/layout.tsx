@@ -8,12 +8,13 @@ import {
   BoardHubBackgroundContent,
   BoardHubBackgroundLayer,
   BoardHubBackgroundProvider,
-  BoardHubHeaderContentFade,
   BoardHubImmersiveShell,
+  BOARD_HUB_GLASS_HEADER,
   useBoardHubBackgroundOptional,
 } from "@/components/board/board-hub-background";
 import { AppHeader } from "@/components/core/app-header";
 import { ContentWrapper } from "@/components/core/content-wrapper";
+import { cn } from "@operis/utils";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";
 import { useRouterParams } from "@/hooks/store/use-router-params";
@@ -76,8 +77,15 @@ function BoardRouteChrome({ header, children }: { header: ReactNode; children: R
   return (
     <BoardHubImmersiveShell>
       <BoardHubBackgroundLayer />
-      <AppHeader header={header} opaque={!hasBackground} rowClassName="h-auto min-h-11 items-start py-2.5" />
-      {hasBackground ? <BoardHubHeaderContentFade /> : null}
+      <AppHeader
+        header={header}
+        opaque={!hasBackground}
+        rowClassName={cn(
+          "h-auto min-h-11 items-start py-3",
+          hasBackground && cn(BOARD_HUB_GLASS_HEADER, "!border-b-0"),
+          hasBackground && "px-5 md:px-6"
+        )}
+      />
       <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
         <ContentWrapper className="flex h-full min-h-0 flex-col overflow-hidden bg-transparent">
           <BoardHubBackgroundContent>{children}</BoardHubBackgroundContent>

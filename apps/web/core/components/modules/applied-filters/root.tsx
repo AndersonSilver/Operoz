@@ -16,6 +16,8 @@ type Props = {
   handleRemoveFilter: (key: keyof TModuleFilters, value: string | null) => void;
   alwaysAllowEditing?: boolean;
   isArchived?: boolean;
+  /** Dentro do painel com vidro (lista de módulos no hub). */
+  appearance?: "default" | "embedded";
 };
 
 const MEMBERS_FILTERS = ["lead", "members"];
@@ -30,6 +32,7 @@ export function ModuleAppliedFiltersList(props: Props) {
     handleDisplayFiltersUpdate,
     alwaysAllowEditing,
     isArchived = false,
+    appearance = "default",
   } = props;
   const { t } = useTranslation();
 
@@ -38,8 +41,7 @@ export function ModuleAppliedFiltersList(props: Props) {
 
   const isEditingAllowed = alwaysAllowEditing;
 
-  return (
-    <Header variant={EHeaderVariant.TERNARY}>
+  const filterTags = (
       <div className="flex flex-wrap gap-2">
         {Object.entries(appliedFilters).map(([key, value]) => {
           const filterKey = key as keyof TModuleFilters;
@@ -121,6 +123,11 @@ export function ModuleAppliedFiltersList(props: Props) {
           </button>
         )}
       </div>
-    </Header>
   );
+
+  if (appearance === "embedded") {
+    return <div className="shrink-0 border-b border-subtle/60 px-3 py-2.5">{filterTags}</div>;
+  }
+
+  return <Header variant={EHeaderVariant.TERNARY}>{filterTags}</Header>;
 }

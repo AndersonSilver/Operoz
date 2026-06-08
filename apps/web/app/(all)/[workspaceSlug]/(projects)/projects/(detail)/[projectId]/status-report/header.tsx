@@ -1,45 +1,45 @@
 import { observer } from "mobx-react";
-import { FileText } from "lucide-react";
 import { useParams } from "react-router";
+import { FileText } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
-import { Breadcrumbs, Header } from "@operis/ui";
-import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
+import { Header } from "@operis/ui";
+import { useStatusReportHub } from "@/components/project/status-report/status-report-hub-context";
+import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
+import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
+import { useStatusReportCapabilities } from "@/hooks/use-status-report-capabilities";
 import { useProject } from "@/hooks/store/use-project";
-import { useAppRouter } from "@/hooks/use-app-router";
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
 
 export const ProjectStatusReportHeader = observer(function ProjectStatusReportHeader() {
-  const router = useAppRouter();
-  const { workspaceSlug, projectId, reportId } = useParams();
+  const { reportId, projectId } = useParams();
   const { t } = useTranslation();
-  const { loader } = useProject();
+  const { loader, currentProjectDetails } = useProject();
+  const hub = useStatusReportHub();
+  const { canManage: canManageReports } = useStatusReportCapabilities(projectId?.toString());
+  const canManage = !reportId && canManageReports();
 
-  const listHref = `/${workspaceSlug}/projects/${projectId}/status-report`;
+  const isListPage = !reportId;
 
   return (
-    <Header>
+    <ProjectFeaturePageHeader>
       <Header.LeftItem>
-        <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
-          <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
-          <Breadcrumbs.Item
-            component={
-              <BreadcrumbLink
-                label={t("project.status_report.title")}
-                href={listHref}
-                icon={<FileText className="size-4 text-tertiary" strokeWidth={1.75} />}
-                isLast={!reportId}
-              />
-            }
-            isLast={!reportId}
-          />
-          {reportId && (
-            <Breadcrumbs.Item
-              component={<BreadcrumbLink label={t("project.status_report.detail_breadcrumb")} isLast />}
-              isLast
-            />
-          )}
-        </Breadcrumbs>
+        <ProjectFeaturePageTitle
+          title={reportId ? t("project.status_report.detail_breadcrumb") : t("project.status_report.title")}
+          subtitle={isListPage ? t("project.status_report.subtitle") : undefined}
+          icon={<FileText className="size-4 text-secondary" strokeWidth={1.75} />}
+          isLoading={loader === "init-loader"}
+        />
       </Header.LeftItem>
-    </Header>
+      {isListPage && canManage && hub ? (
+        <Header.RightItem>
+          <ProjectHubPrimaryAction
+            onClick={hub.openCreateModal}
+            disabled={!currentProjectDetails}
+          >
+            <span className="sm:hidden">{t("add")}</span>
+            <span className="hidden sm:inline">{t("project.status_report.create_button")}</span>
+          </ProjectHubPrimaryAction>
+        </Header.RightItem>
+      ) : null}
+    </ProjectFeaturePageHeader>
   );
 });

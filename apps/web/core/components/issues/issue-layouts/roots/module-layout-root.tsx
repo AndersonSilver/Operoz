@@ -6,7 +6,10 @@ import useSWR from "swr";
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
 import { cn } from "@operis/utils";
-import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
+import {
+  BOARD_HUB_PROJECT_WORK_SURFACE_INNER,
+  useBoardHubHasBackground,
+} from "@/components/board/board-hub-background";
 // hooks
 import { ProjectLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/project-level";
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
@@ -80,12 +83,15 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
     { revalidateIfStale: false, revalidateOnFocus: false }
   );
 
+  const scopedModuleKey = issuesFilter?.scopedModuleIds?.join(",") ?? "";
+
   const moduleIssuesFetchKey =
     workspaceSlug && projectId && moduleId && displayFilters?.layout
       ? [
           workspaceSlug,
           projectId,
           moduleId,
+          scopedModuleKey,
           displayFilters.layout,
           displayFilters.group_by,
           displayFilters.sub_group_by,
@@ -154,7 +160,12 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
         {({ filter: moduleWorkItemsFilter }) => (
           <div className="relative flex h-full w-full flex-col overflow-hidden">
             {moduleWorkItemsFilter ? (
-              <div className={cn("shrink-0", hasBoardWallpaper && "border-b border-subtle/40")}>
+              <div
+                className={cn(
+                  "shrink-0 border-b border-subtle",
+                  hasBoardWallpaper ? "border-subtle/40 bg-layer-1/80 backdrop-blur-sm" : "bg-layer-1"
+                )}
+              >
                 <WorkItemFiltersRow
                   filter={moduleWorkItemsFilter}
                   trackerElements={{
@@ -163,12 +174,7 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
                 />
               </div>
             ) : null}
-            <div
-              className={cn(
-                "relative h-full min-h-0 min-w-0 flex-1 overflow-hidden",
-                hasBoardWallpaper ? "bg-transparent" : "bg-surface-1"
-              )}
-            >
+            <div className={cn("relative min-h-0 min-w-0 flex-1 overflow-hidden", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
               <ModuleIssueLayout activeLayout={activeLayout} moduleId={moduleId} />
             </div>
             {/* peek overview */}

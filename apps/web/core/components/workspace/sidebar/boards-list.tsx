@@ -19,7 +19,9 @@ import { useBoard } from "@/hooks/store/use-board";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
+import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";
 import { BoardSidebarBoardItem } from "./board-sidebar-board-item";
+import { BoardsSidebarEmptyState } from "./boards-empty-state";
 import { SidebarProjectsListItem } from "./projects-list-item";
 
 export const SidebarBoardsList = observer(function SidebarBoardsList() {
@@ -153,41 +155,39 @@ export const SidebarBoardsList = observer(function SidebarBoardsList() {
       )}
       <div className="flex flex-col">
         <Disclosure as="div" className="flex flex-col" defaultOpen={isBoardsSectionOpen}>
-          <div className="group flex w-full items-center justify-between rounded-sm px-2 py-1.5 text-placeholder hover:bg-layer-transparent-hover">
-            <Disclosure.Button
-              as="button"
-              type="button"
-              className="flex w-full items-center gap-1 text-left text-13 font-semibold whitespace-nowrap text-placeholder"
-              onClick={() => toggleBoardsSection(!isBoardsSectionOpen)}
-            >
-              <span>{t("boards.title")}</span>
-            </Disclosure.Button>
-            <div className="flex items-center gap-1">
-              {isWorkspaceAdmin && (
-                <Tooltip tooltipHeading={t("boards.create")} tooltipContent="">
-                  <IconButton
-                    variant="ghost"
-                    size="sm"
-                    icon={PlusIcon}
-                    onClick={() => setIsCreateBoardModalOpen(true)}
-                    className="hidden text-placeholder group-hover:inline-flex"
-                    aria-label={t("boards.create")}
-                  />
-                </Tooltip>
-              )}
-              <IconButton
-                variant="ghost"
-                size="sm"
-                icon={ChevronRightIcon}
-                onClick={() => toggleBoardsSection(!isBoardsSectionOpen)}
-                className="text-placeholder"
-                iconClassName={cn("transition-transform", {
-                  "rotate-90": isBoardsSectionOpen,
-                })}
-                aria-label={t("boards.title")}
-              />
-            </div>
-          </div>
+          <SidebarSectionHeader
+            label={t("boards.title")}
+            isOpen={isBoardsSectionOpen}
+            onToggle={() => toggleBoardsSection(!isBoardsSectionOpen)}
+            toggleAriaLabel={t("boards.title")}
+            actions={
+              <>
+                {isWorkspaceAdmin && (
+                  <Tooltip tooltipHeading={t("boards.create")} tooltipContent="">
+                    <IconButton
+                      variant="ghost"
+                      size="sm"
+                      icon={PlusIcon}
+                      onClick={() => setIsCreateBoardModalOpen(true)}
+                      className="text-tertiary hover:text-secondary"
+                      aria-label={t("boards.create")}
+                    />
+                  </Tooltip>
+                )}
+                <IconButton
+                  variant="ghost"
+                  size="sm"
+                  icon={ChevronRightIcon}
+                  onClick={() => toggleBoardsSection(!isBoardsSectionOpen)}
+                  className="text-tertiary hover:text-secondary"
+                  iconClassName={cn("transition-transform duration-150", {
+                    "rotate-90": isBoardsSectionOpen,
+                  })}
+                  aria-label={t("boards.title")}
+                />
+              </>
+            }
+          />
 
           <Transition
             show={isBoardsSectionOpen}
@@ -200,7 +200,10 @@ export const SidebarBoardsList = observer(function SidebarBoardsList() {
           >
             <Disclosure.Panel as="div" ref={boardsPanelRef} className="flex flex-col gap-0.5" static>
               {currentWorkspaceBoardIds.length === 0 ? (
-                <p className="px-2 py-1.5 text-11 text-tertiary">{t("boards.empty")}</p>
+                <BoardsSidebarEmptyState
+                  canCreate={isWorkspaceAdmin}
+                  onCreate={() => setIsCreateBoardModalOpen(true)}
+                />
               ) : (
                 currentWorkspaceBoardIds.map((boardId, boardIndex) => {
                   const board = getBoardById(boardId);

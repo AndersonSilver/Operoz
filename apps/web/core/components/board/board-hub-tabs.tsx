@@ -3,7 +3,7 @@ import { Calendar, GanttChart, Kanban, LayoutDashboard, LayoutList, ListTodo, Us
 import { useTranslation } from "@operis/i18n";
 import { cn } from "@operis/utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
-import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW, BOARD_HUB_TAB_DIVIDER } from "@/components/board/board-hub-background";
+import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW } from "@/components/board/board-hub-background";
 
 export type BoardHubTabId = "overview" | "backlog" | "list" | "views" | "timeline" | "calendar" | "clientes";
 
@@ -111,8 +111,8 @@ export function BoardHubTabNav({
   const tabs = buildBoardHubTabs(workspaceSlug, boardSlug);
 
   return (
-    <nav className={cn("relative w-full", immersive && "pb-4", className)}>
-      <div className="flex flex-wrap gap-1">
+    <nav className={cn("relative w-full", immersive && "pb-3 pt-0.5", className)}>
+      <div className="flex flex-wrap gap-0.5">
         {tabs.map((tab) => {
           const active = tab.isActive(pathname);
           const Icon = tab.icon;
@@ -121,14 +121,14 @@ export function BoardHubTabNav({
               key={tab.id}
               to={tab.href(`/${workspaceSlug}/boards/${boardSlug}`)}
               className={cn(
-                "inline-flex items-center gap-1.5 px-2.5 py-1 text-12 font-medium transition-colors",
+                "inline-flex items-center gap-1.5 px-2.5 py-1.5 text-12 font-medium transition-colors",
                 immersive && BOARD_HUB_IMMERSIVE_TEXT_SHADOW,
                 immersive
                   ? cn(
-                      "rounded-none border-b-2 border-transparent",
+                      "rounded-none border-b-2 border-transparent -mb-px",
                       active
                         ? "border-white font-semibold text-white"
-                        : "text-white hover:border-white/70 hover:text-white"
+                        : "text-white/65 hover:border-white/40 hover:text-white/90"
                     )
                   : cn(
                       "rounded-md",
@@ -139,7 +139,10 @@ export function BoardHubTabNav({
               )}
             >
               <Icon
-                className={cn("size-3.5 shrink-0", immersive ? "opacity-100" : "opacity-90")}
+                className={cn(
+                  "size-3.5 shrink-0",
+                  immersive ? (active ? "opacity-100" : "opacity-80") : "opacity-90"
+                )}
                 strokeWidth={2}
                 aria-hidden
               />
@@ -148,16 +151,6 @@ export function BoardHubTabNav({
           );
         })}
       </div>
-      {immersive ? (
-        <div
-          className={cn(
-            "pointer-events-none absolute bottom-0 left-1/2 max-w-full -translate-x-1/2",
-            BOARD_HUB_TAB_DIVIDER,
-            "w-[calc(100vw-2*var(--padding-page-x))]"
-          )}
-          aria-hidden
-        />
-      ) : null}
     </nav>
   );
 }

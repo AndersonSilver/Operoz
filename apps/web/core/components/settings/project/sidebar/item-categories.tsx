@@ -6,6 +6,7 @@ import { EUserPermissionsLevel, GROUPED_PROJECT_SETTINGS, PROJECT_SETTINGS_CATEG
 import { useTranslation } from "@operis/i18n";
 // components
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";
+import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
 // local imports
@@ -39,7 +40,7 @@ export const ProjectSettingsSidebarItemCategories = observer(function ProjectSet
 
         return (
           <div key={category} className="shrink-0 py-3 first:pt-0 last:pb-0">
-            <div className="p-2 text-caption-md-medium text-tertiary capitalize">{t(category)}</div>
+            <SidebarSectionHeader label={t(category)} className="px-0 pt-2 pb-1 first:pt-0" />
             <div className="flex flex-col">
               {accessibleItems.map((item) => {
                 const isItemActive =

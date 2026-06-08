@@ -26,6 +26,7 @@ import userImage from "@/app/assets/user.png?url";
 // components
 import { SingleProgressStats } from "@/components/core/sidebar/single-progress-stats";
 import { StateDropdown } from "@/components/dropdowns/state/dropdown";
+import { BOARD_HUB_CYCLE_METRIC_CARD } from "@/components/board/board-hub-background";
 import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
@@ -99,7 +100,7 @@ export const ActiveCycleStats = observer(function ActiveCycleStats(props: Active
   );
 
   return cycleId ? (
-    <div className="col-span-1 flex min-h-[17rem] flex-col gap-4 overflow-hidden rounded-lg border border-subtle bg-surface-1 p-4 lg:col-span-2 xl:col-span-1">
+    <div className={cn(BOARD_HUB_CYCLE_METRIC_CARD, "col-span-1 overflow-hidden lg:col-span-2 xl:col-span-1")}>
       <Tab.Group
         as={Fragment}
         defaultIndex={currentValue(tab)}
@@ -365,7 +366,7 @@ export const ActiveCycleStats = observer(function ActiveCycleStats(props: Active
       </Tab.Group>
     </div>
   ) : (
-    <Loader className="col-span-1 flex min-h-[17rem] flex-col gap-4 overflow-hidden bg-surface-1 lg:col-span-2 xl:col-span-1">
+    <Loader className={cn(BOARD_HUB_CYCLE_METRIC_CARD, "col-span-1 overflow-hidden lg:col-span-2 xl:col-span-1")}>
       <Loader.Item width="100%" height="17rem" />
     </Loader>
   );

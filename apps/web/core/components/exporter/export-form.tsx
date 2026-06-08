@@ -1,28 +1,23 @@
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { intersection } from "lodash-es";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// import { Info } from "lucide-react";
+import { Download, FileJson, FileSpreadsheet, FileText } from "lucide-react";
 import {
   EUserPermissions,
   EUserPermissionsLevel,
   EXPORTERS_LIST,
-  // ISSUE_DISPLAY_FILTERS_BY_PAGE,
 } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-// import { Tooltip } from "@operis/propel/tooltip";
-// import { EIssuesStoreType } from "@operis/types";
 import type { TWorkItemFilterExpression } from "@operis/types";
-import { CustomSearchSelect, CustomSelect } from "@operis/ui";
-// import { WorkspaceLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/workspace-level";
-// import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
+import { cn } from "@operis/ui";
+import { CustomSearchSelect } from "@operis/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { ProjectExportService } from "@/services/project/project-export.service";
-// local imports
-import { SettingsBoxedControlItem } from "../settings/boxed-control-item";
+import "./workspace-exports-settings.css";
 
 type Props = {
   workspaceSlug: string;
@@ -36,30 +31,34 @@ type FormData = {
   filters: TWorkItemFilterExpression;
 };
 
-// const initialWorkItemFilters = {
-//   richFilters: {},
-//   displayFilters: {},
-//   displayProperties: {},
-//   kanbanFilters: {
-//     group_by: [],
-//     sub_group_by: [],
-//   },
-// };
-
 const projectExportService = new ProjectExportService();
 
+const FORMAT_ICONS = {
+  csv: FileText,
+  xlsx: FileSpreadsheet,
+  json: FileJson,
+} as const;
+
+function FieldLabel(props: { children: ReactNode; hint?: string }) {
+  const { children, hint } = props;
+
+  return (
+    <div className="flex flex-col gap-0.5">
+      <span className="text-12 font-medium text-primary">{children}</span>
+      {hint && <span className="text-11 text-tertiary">{hint}</span>}
+    </div>
+  );
+}
+
 export const ExportForm = observer(function ExportForm(props: Props) {
-  // props
   const { workspaceSlug, mutateServices } = props;
-  // states
   const [exportLoading, setExportLoading] = useState(false);
 
-  // store hooks
   const { allowPermissions } = useUserPermissions();
   const { data: user, canPerformAnyCreateAction, projectsWithCreatePermissions } = useUser();
   const { workspaceProjectIds, getProjectById } = useProject();
   const { t } = useTranslation();
-  // form
+
   const { handleSubmit, control } = useForm<FormData>({
     defaultValues: {
       provider: EXPORTERS_LIST[0],
@@ -69,7 +68,6 @@ export const ExportForm = observer(function ExportForm(props: Props) {
     },
   });
 
-  // derived values
   const hasProjects = workspaceProjectIds && workspaceProjectIds.length > 0;
   const isMember = allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.WORKSPACE);
   const wsProjectIdsWithCreatePermisisons = projectsWithCreatePermissions
@@ -89,8 +87,8 @@ export const ExportForm = observer(function ExportForm(props: Props) {
       ),
     };
   });
+  const fieldsDisabled = !isMember && (!hasProjects || !canPerformAnyCreateAction);
 
-  // handlers
   async function ExportCSVToMail(formData: FormData) {
     setExportLoading(true);
     if (workspaceSlug && user) {
@@ -136,18 +134,25 @@ export const ExportForm = observer(function ExportForm(props: Props) {
       onSubmit={(e) => {
         void handleSubmit(ExportCSVToMail)(e);
       }}
-      className="flex flex-col gap-5"
+      className="workspace-exports-form-panel flex flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1"
     >
-      <div className="rounded-lg border border-subtle bg-layer-2">
-        {/* Project Selector */}
-        <SettingsBoxedControlItem
-          className="rounded-none border-0 border-b"
-          title={t("workspace_settings.settings.exports.exporting_projects")}
-          control={
+      <div className="workspace-exports-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-5 lg:px-6">
+        <p className="text-11 font-semibold uppercase tracking-wide text-tertiary">
+          {t("workspace_settings.settings.exports.new_export")}
+        </p>
+        <p className="mt-1 text-12 text-tertiary">{t("workspace_settings.settings.exports.new_export_hint")}</p>
+      </div>
+
+      <div className="flex flex-1 flex-col px-5 py-5 lg:px-6 lg:py-6">
+        <div className="workspace-exports-form-fields">
+          <div className="flex flex-col gap-2">
+            <FieldLabel hint={t("workspace_settings.settings.exports.exporting_projects_hint")}>
+              {t("workspace_settings.settings.exports.exporting_projects")}
+            </FieldLabel>
             <Controller
               control={control}
               name="project"
-              disabled={!isMember && (!hasProjects || !canPerformAnyCreateAction)}
+              disabled={fieldsDisabled}
               render={({ field: { value, onChange } }) => (
                 <CustomSearchSelect
                   value={value ?? []}
@@ -163,7 +168,7 @@ export const ExportForm = observer(function ExportForm(props: Props) {
                             return projectDetails?.identifier;
                           })
                           .join(", ")
-                      : "All projects"
+                      : t("workspace_settings.settings.exports.all_projects")
                   }
                   optionsClassName="max-w-48 sm:max-w-[532px]"
                   placement="bottom-end"
@@ -171,85 +176,51 @@ export const ExportForm = observer(function ExportForm(props: Props) {
                 />
               )}
             />
-          }
-        />
-        {/* Format Selector */}
-        <SettingsBoxedControlItem
-          className="rounded-none border-0 border-b"
-          title={t("workspace_settings.settings.exports.format")}
-          control={
+          </div>
+
+          <div className="workspace-exports-format-field flex flex-col gap-2">
+            <FieldLabel>{t("workspace_settings.settings.exports.format")}</FieldLabel>
             <Controller
               control={control}
               name="provider"
-              disabled={!isMember && (!hasProjects || !canPerformAnyCreateAction)}
+              disabled={fieldsDisabled}
               render={({ field: { value, onChange } }) => (
-                <CustomSelect
-                  value={value}
-                  onChange={onChange}
-                  label={t(value.i18n_title)}
-                  optionsClassName="max-w-48 sm:max-w-[532px]"
-                  placement="bottom-end"
-                  buttonClassName="py-2 text-13"
-                >
-                  {EXPORTERS_LIST.map((service) => (
-                    <CustomSelect.Option key={service.provider} className="flex items-center gap-2" value={service}>
-                      <span className="truncate">{t(service.i18n_title)}</span>
-                    </CustomSelect.Option>
-                  ))}
-                </CustomSelect>
+                <div className="workspace-exports-format-options" role="group" aria-label={t("workspace_settings.settings.exports.format")}>
+                  {EXPORTERS_LIST.map((service) => {
+                    const Icon = FORMAT_ICONS[service.provider as keyof typeof FORMAT_ICONS] ?? FileText;
+                    const isActive = value.provider === service.provider;
+
+                    return (
+                      <button
+                        key={service.provider}
+                        type="button"
+                        disabled={fieldsDisabled}
+                        data-active={isActive}
+                        className="workspace-exports-format-option"
+                        onClick={() => onChange(service)}
+                      >
+                        <Icon className={cn("size-3.5", isActive ? "text-accent-primary" : "text-tertiary")} strokeWidth={1.75} />
+                        {t(service.i18n_title)}
+                      </button>
+                    );
+                  })}
+                </div>
               )}
             />
-          }
-        />
-        <div className="px-4 py-3">
-          <Button variant="primary" size="lg" type="submit" loading={exportLoading}>
-            {exportLoading ? `${t("workspace_settings.settings.exports.exporting")}...` : t("export")}
-          </Button>
+          </div>
         </div>
       </div>
-      {/* Rich Filters */}
-      {/* <div className="w-full">
-        <div className="flex items-center gap-2 mb-2">
-          <div className="text-13 font-medium text-secondary leading-tight">{t("common.filters")}</div>
-          <Tooltip
-            tooltipContent={
-              <div className="max-w-[238px] flex gap-2">
-                <div className=" rounded-sm bg-layer-1 flex items-center justify-center p-1 h-5 aspect-square">
-                  <Info className="h-3 w-3" />
-                </div>
-                {t("workspace_settings.settings.exports.filters_info")}
-              </div>
-            }
-            position="top"
-          >
-            <button type="button" className="flex items-center justify-center">
-              <Info className="h-3 w-3 text-tertiary" />
-            </button>
-          </Tooltip>
-        </div>
-        <Controller
-          control={control}
-          name="filters"
-          render={({ field: { onChange } }) => (
-            <WorkspaceLevelWorkItemFiltersHOC
-              entityId={workspaceSlug}
-              entityType={EIssuesStoreType.GLOBAL}
-              filtersToShowByLayout={ISSUE_DISPLAY_FILTERS_BY_PAGE.my_issues.filters}
-              initialWorkItemFilters={initialWorkItemFilters}
-              isTemporary
-              updateFilters={(updatedFilters) => onChange(updatedFilters)}
-              showOnMount
-              workspaceSlug={workspaceSlug}
-            >
-              {({ filter: workspaceExportWorkItemsFilter }) =>
-                workspaceExportWorkItemsFilter && (
-                  <WorkItemFiltersRow filter={workspaceExportWorkItemsFilter} variant="modal" />
-                )
-              }
-            </WorkspaceLevelWorkItemFiltersHOC>
-          )}
-        />
-      </div> */}
+
+      <footer className="workspace-exports-form-footer">
+        <Button
+          variant="primary"
+          type="submit"
+          loading={exportLoading}
+          prependIcon={<Download className="size-3.5" strokeWidth={1.75} />}
+        >
+          {exportLoading ? `${t("workspace_settings.settings.exports.exporting")}...` : t("export")}
+        </Button>
+      </footer>
     </form>
   );
 });

@@ -214,7 +214,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
         className={cn(
           "group/list-block relative min-h-11 bg-layer-transparent text-13 transition-colors hover:bg-layer-transparent-hover",
           useAlignedListGrid
-            ? "grid w-full min-w-max items-center gap-0 py-2.5 pr-3 pl-3"
+            ? "grid w-full min-w-0 items-center gap-0 py-2.5 pr-3 pl-3"
             : cn(
                 "flex min-w-full flex-col",
                 useListGridLayout ? "gap-2 py-2.5 sm:flex-row sm:items-center sm:gap-0" : "gap-3 py-3"

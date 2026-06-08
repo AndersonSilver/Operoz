@@ -1,0 +1,58 @@
+---
+description: Operoz — UX de issues (70/30, Kanban, transições, squads, velocidade)
+globs: apps/web/**/board/**,apps/web/**/issues/**,apps/web/ce/**/issues/**
+alwaysApply: false
+---
+
+# Regra — Experiência issues & squads (Operoz)
+
+Skill completa: `.cursor/skills/OPEROZ ENGENHARIA/EXPERIÊNCIA JIRA/SKILL.md`  
+Tokens: regra `operoz-frontend-design.mdc`.
+
+## Velocidade Operoz
+
+- Transição de status em **≤2 cliques** (painel direito ou atalho).
+- **Optimistic UI** com rollback se API falhar.
+- Sem modal para assignee, status, ciclo — só destrutivo/bulk/form longo.
+
+## Layout detalhe 70 / 30
+
+| Esquerda (~70%) | Direita (~30%) |
+|-----------------|----------------|
+| Título inline, descrição, subtarefas, atividade | Status, assignee, squad, cliente, datas, labels, custo Harness |
+
+```tsx
+<div className="flex gap-4 bg-surface-1">
+  <main className="min-w-0 flex-[7] border-r border-subtle" />
+  <aside className="w-72 shrink-0 bg-layer-1 p-3 space-y-3" />
+</div>
+```
+
+Alterar layout → atualizar **todas** as vistas de detalhe de card no board.
+
+## Transições de status
+
+- Só estados **permitidos** a partir do atual.
+- Cores via tokens (`success`, `warning`, `danger`, `accent`) — sem hex por estado.
+- Kanban drag = mesma API que dropdown no detalhe.
+- Timeline: «Fulano moveu X → Y».
+- Campo obrigatório (resolução) **inline** no painel direito.
+
+## Squads & filtros
+
+- Contexto visível: `workspace → board (squad) → projeto/cliente`.
+- Chips: «Minhas», «Sem responsável», «Prazo esta semana», «Bloqueado», «Acima do orçamento».
+- Padrão chip: `Client360FilterChip` (accent ring quando ativo).
+- Listas densas: `divide-y divide-subtle`, não cards flutuantes por linha.
+
+## Identificadores & formato BR
+
+- ID: `font-mono text-11 text-tertiary` — usar API (`WEB-104`, `OP-1234`), não inventar.
+- Moeda: `R$ 1.234,56` · Duração: `2d 4h` · Datas relativas em listas.
+
+## Checklist
+
+- [ ] ≤2 cliques para status principal
+- [ ] Metadados no painel direito
+- [ ] 100% tokens Operoz
+- [ ] Telas irmãs consistentes

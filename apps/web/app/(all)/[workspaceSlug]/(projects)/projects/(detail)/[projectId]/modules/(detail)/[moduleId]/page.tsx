@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane imports
 import { cn } from "@operis/utils";
+import { BOARD_HUB_GLASS_PANEL, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // assets
 import emptyModule from "@/app/assets/empty-state/module.svg?url";
 // components
@@ -35,6 +36,7 @@ function ModuleIssuesPage({ params }: Route.ComponentProps) {
   const projectModule = getModuleById(moduleId);
   const project = getProjectById(projectId);
   const pageTitle = project?.name && projectModule?.name ? `${project?.name} - ${projectModule?.name}` : undefined;
+  const hasBoardWallpaper = useBoardHubHasBackground();
 
   const toggleSidebar = () => {
     setValue(`${!isSidebarCollapsed}`);
@@ -62,7 +64,10 @@ function ModuleIssuesPage({ params }: Route.ComponentProps) {
           {!isSidebarCollapsed && (
             <div
               className={cn(
-                "vertical-scrollbar flex h-full w-[24rem] shrink-0 flex-col gap-3.5 overflow-y-auto border-l border-subtle bg-surface-1 px-6 shadow-raised-200 scrollbar-sm duration-300"
+                "vertical-scrollbar flex h-full w-[24rem] shrink-0 flex-col gap-3.5 overflow-y-auto border-l px-6 scrollbar-sm duration-300",
+                hasBoardWallpaper
+                  ? cn(BOARD_HUB_GLASS_PANEL, "border-subtle/50 shadow-sm")
+                  : "border-subtle bg-surface-1 shadow-raised-200"
               )}
             >
               <ModuleAnalyticsSidebar moduleId={moduleId} handleClose={toggleSidebar} />

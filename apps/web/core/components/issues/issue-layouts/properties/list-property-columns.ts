@@ -185,12 +185,14 @@ export function clampListColumnWidthPx(column: TListGridResizableColumn, widthPx
 
 export function buildListPropertyGridTemplateColumns(
   columns: TListPropertyColumn[],
-  columnWidthsPx?: Partial<Record<TListPropertyColumn, number>>
+  columnWidthsPx?: Partial<Record<TListPropertyColumn, number>>,
+  options?: { expandToFill?: boolean }
 ): string {
   return columns
     .map((column) => {
       const width = columnWidthsPx?.[column] ?? getDefaultListColumnWidthPx(column);
-      return `${width}px`;
+      if (!options?.expandToFill) return `${width}px`;
+      return `minmax(${width}px, 1fr)`;
     })
     .join(" ");
 }
@@ -200,7 +202,14 @@ export function buildListLayoutGridTemplateColumns(
   titleWidthPx: number,
   propertiesPanelWidthPx: number
 ): string {
-  return `${titleWidthPx}px ${propertiesPanelWidthPx}px ${LIST_GRID_ACTIONS_COLUMN_WIDTH_PX}px`;
+  const title = `minmax(${titleWidthPx}px, 1fr)`;
+  const actions = `${LIST_GRID_ACTIONS_COLUMN_WIDTH_PX}px`;
+
+  if (propertiesPanelWidthPx <= 0) {
+    return `${title} ${actions}`;
+  }
+
+  return `${title} minmax(${propertiesPanelWidthPx}px, 2fr) ${actions}`;
 }
 
 export function computeListPropertiesPanelWidthPx(

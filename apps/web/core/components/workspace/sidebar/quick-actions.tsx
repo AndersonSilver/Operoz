@@ -75,7 +75,7 @@ export const SidebarQuickActions = observer(function SidebarQuickActions() {
         <SidebarAddButton
           label={
             <>
-              <AddWorkItemIcon className="size-4" />
+              <AddWorkItemIcon className="size-3.5 text-accent-primary" />
               <span className="max-w-[145px] truncate text-13 font-medium">{t("sidebar.new_work_item")}</span>
             </>
           }

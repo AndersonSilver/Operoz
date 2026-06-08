@@ -1,0 +1,66 @@
+---
+description: Operoz — descrição de Pull Request (template, testes, impacto)
+globs: .github/**/*
+alwaysApply: false
+---
+
+# Regra — Pull Request (Operoz)
+
+Skill completa: `.cursor/skills/OPEROZ FLUXO/DESCRIÇÃO PR/SKILL.md`
+
+## Quando aplicar
+
+Pedido de «gera PR», «descrição do pull request», ou edição em `.github/`.
+
+## Passos
+
+1. **Base:** `git branch -vv` / `gh pr view --json baseRefName`
+2. **Diff:** `git log <base>...HEAD --oneline` + `git diff <base>...HEAD`
+3. **Template:** ler `.github/pull_request_template.md` — mesma estrutura na saída
+
+## Conteúdo (pt-BR, marca Operoz)
+
+### Description
+
+- Problema → solução → **impacto para utilizador Operoz**
+- Bullets se web + API + i18n
+- Flags, migrações, env vars — sem diff linha a linha
+
+### Type of Change
+
+Marcar `[x]` só o que aplicar.
+
+### Screenshots
+
+**Não inventar.** Manter placeholder HTML do template intacto.
+
+### Test Scenarios
+
+Formato executável:
+
+```markdown
+- [ ] Como `<papel>`, `<rota>` → `<ação>` → `<resultado>`
+```
+
+Incluir cenário de **permissão** se RBAC; **regressão** se status/custo.
+
+### References
+
+IDs reais (`[WEB-1234]`, `[OP-1234]`). Links só se o utilizador forneceu.
+
+## Checklist autor (opcional no fim)
+
+- [ ] `pnpm check:types` nos pacotes tocados
+- [ ] Migração / deploy documentado
+- [ ] Telas irmãs (design)
+- [ ] Sem segredos no diff
+- [ ] Anti-patterns respeitados
+
+## Qualidade
+
+| Bom | Evitar |
+|-----|--------|
+| «Gestor vê custo Harness no Cliente 360» | «12 ficheiros alterados» |
+| Passos com menu/URL | «Testar tudo» |
+
+Saída: markdown **cru** para colar no GitHub (sem wrapper em code block único).

@@ -6,8 +6,8 @@ import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import type { EViewAccess, TViewFilterProps } from "@operis/types";
 import { EUserProjectRoles } from "@operis/types";
-import { Header, EHeaderVariant } from "@operis/ui";
-import { calculateTotalFilters } from "@operis/utils";
+import { calculateTotalFilters, cn } from "@operis/utils";
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 // assets
 import darkViewsAsset from "@/app/assets/empty-state/disabled-feature/views-dark.webp?url";
 import lightViewsAsset from "@/app/assets/empty-state/disabled-feature/views-light.webp?url";
@@ -82,17 +82,18 @@ function ProjectViewsPage({ params }: Route.ComponentProps) {
   return (
     <>
       <PageHead title={pageTitle} />
-      {isFiltersApplied && (
-        <Header variant={EHeaderVariant.TERNARY}>
+      <div className={cn("flex h-full min-h-0 flex-col", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
+        {isFiltersApplied ? (
           <ViewAppliedFiltersList
+            appearance="embedded"
             appliedFilters={filters.filters ?? {}}
             handleClearAllFilters={clearAllFilters}
             handleRemoveFilter={handleRemoveFilter}
             alwaysAllowEditing
           />
-        </Header>
-      )}
-      <ProjectViewsList />
+        ) : null}
+        <ProjectViewsList />
+      </div>
     </>
   );
 }

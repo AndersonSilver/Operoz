@@ -117,6 +117,8 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
   const dateDropdown = (
     <DateRangeDropdown
       mergeDates
+      renderInPortal
+      placement="bottom-start"
       buttonContainerClassName={dateButtonClass(isDisabled, hasDates)}
       buttonVariant="transparent-with-text"
       className="h-7 w-full min-w-0"

@@ -16,7 +16,7 @@ export const WorkspaceLogo = observer(function WorkspaceLogo(props: Props) {
   return (
     <div
       className={cn(
-        `relative grid h-6 w-6 flex-shrink-0 place-items-center uppercase ${
+        `relative flex h-6 w-6 shrink-0 items-center justify-center uppercase ${
           !props.logo && "rounded-md bg-accent-primary text-on-color"
         } ${props.classNames ? props.classNames : ""}`
       )}
@@ -24,7 +24,7 @@ export const WorkspaceLogo = observer(function WorkspaceLogo(props: Props) {
       {props.logo && props.logo !== "" ? (
         <img
           src={getFileURL(props.logo)}
-          className="absolute top-0 left-0 h-full w-full rounded-md object-cover"
+          className="block max-h-full max-w-full rounded-md object-contain object-center"
           alt={t("aria_labels.projects_sidebar.workspace_logo")}
         />
       ) : (

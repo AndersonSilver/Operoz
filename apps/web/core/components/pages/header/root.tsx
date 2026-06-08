@@ -5,7 +5,9 @@ import { ListFilter } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TPageFilterProps, TPageNavigationTabs } from "@operis/types";
 import { Header, EHeaderVariant } from "@operis/ui";
-import { calculateTotalFilters } from "@operis/utils";
+import { cn, calculateTotalFilters } from "@operis/utils";
+import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
+import { ProjectFeaturePageActions } from "@/components/project/project-feature-page-header";
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 // hooks
@@ -52,38 +54,45 @@ export const PagesListHeaderRoot = observer(function PagesListHeaderRoot(props: 
   );
 
   const isFiltersApplied = calculateTotalFilters(filters?.filters ?? {}) !== 0;
+  const hasBoardWallpaper = useBoardHubHasBackground();
 
   return (
     <>
-      <Header variant={EHeaderVariant.SECONDARY}>
+      <Header
+        variant={EHeaderVariant.SECONDARY}
+        className={cn(hasBoardWallpaper && "!border-subtle/40 !bg-transparent")}
+      >
         <Header.LeftItem>
           <PageTabNavigation workspaceSlug={workspaceSlug} projectId={projectId} pageType={pageType} />
         </Header.LeftItem>
         <Header.RightItem className="items-center">
-          <PageSearchInput
-            searchQuery={filters.searchQuery}
-            updateSearchQuery={(val) => updateFilters("searchQuery", val)}
-          />
-          <PageOrderByDropdown
-            sortBy={filters.sortBy}
-            sortKey={filters.sortKey}
-            onChange={(val) => {
-              if (val.key) updateFilters("sortKey", val.key);
-              if (val.order) updateFilters("sortBy", val.order);
-            }}
-          />
-          <FiltersDropdown
-            icon={<ListFilter className="h-3 w-3" />}
-            title={t("common.filters")}
-            placement="bottom-end"
-            isFiltersApplied={isFiltersApplied}
-          >
-            <PageFiltersSelection
-              filters={filters}
-              handleFiltersUpdate={updateFilters}
-              memberIds={workspaceMemberIds ?? undefined}
+          <ProjectFeaturePageActions>
+            <PageSearchInput
+              searchQuery={filters.searchQuery}
+              updateSearchQuery={(val) => updateFilters("searchQuery", val)}
             />
-          </FiltersDropdown>
+            <PageOrderByDropdown
+              sortBy={filters.sortBy}
+              sortKey={filters.sortKey}
+              onChange={(val) => {
+                if (val.key) updateFilters("sortKey", val.key);
+                if (val.order) updateFilters("sortBy", val.order);
+              }}
+            />
+            <FiltersDropdown
+              icon={<ListFilter className="size-3.5" strokeWidth={1.75} />}
+              title={t("common.filters")}
+              placement="bottom-end"
+              isFiltersApplied={isFiltersApplied}
+              appearance="hub"
+            >
+              <PageFiltersSelection
+                filters={filters}
+                handleFiltersUpdate={updateFilters}
+                memberIds={workspaceMemberIds ?? undefined}
+              />
+            </FiltersDropdown>
+          </ProjectFeaturePageActions>
         </Header.RightItem>
       </Header>
       {calculateTotalFilters(filters?.filters ?? {}) !== 0 && (

@@ -1,0 +1,57 @@
+---
+description: Operoz — integrações Git webhooks e custos Harness (fixtures, idempotência)
+globs: tests/fixtures/**,apps/api/**/bgtasks/**,apps/api/**/*webhook*,apps/api/**/integration/**
+alwaysApply: false
+---
+
+# Regra — Integrações Git & Harness (Operoz)
+
+Skill completa: `.cursor/skills/OPEROZ FLUXO/CONTEXTO/SKILL.md`  
+Backend: `operoz-backend-django.mdc` + `operoz-anti-patterns.mdc`
+
+## Fixtures canónicos (fonte de verdade)
+
+| Ficheiro | Conteúdo |
+|----------|----------|
+| `tests/fixtures/github_webhook_pr.json` | `pull_request` / `opened`, título com `[OP-1234]`, `head`/`base` |
+| `tests/fixtures/harness_cost_report.json` | `line_items[]` com `pipeline_id`, `cost_usd`, `attribution_tags` |
+
+**Proibido** alterar parsers sem atualizar fixtures e testes. `_operoz_meta` é extensão interna pós-normalização.
+
+## Git — fluxo
+
+```
+Provider → HMAC → API → Celery → DTO → correlacionar repo/branch/PR → issue/project → atividade
+```
+
+| Regra | Detalhe |
+|-------|---------|
+| Idempotência | `delivery_id` ou hash `(event_type, ref, sha)` |
+| Correlação | `repository_url` → project; `[OP-1234]` no título/branch |
+| Segurança | Secret, rate limit, payload size cap |
+| Referência | `bgtasks/webhook_task.py`, `db/models/webhook.py` |
+
+Eventos mínimos: `push`, `pull_request` opened/merged, `deployment`, `workflow_run`.
+
+## Harness — fluxo
+
+```
+Harness API/webhook → ingestão → normalizar → atribuir → agregar → UI (Cliente 360, board)
+```
+
+| Prioridade atribuição | |
+|------------------------|---|
+| 1 | Tag Harness = `project.identifier` / `board.slug` |
+| 2 | Repo Git ligado ao projeto |
+| 3 | Regra manual admin board |
+| 4 | «Não alocado» (só admins) |
+
+Campos: `pipeline_id`, `stage_name`, `cost_usd`, `currency`, `timestamp`, `project_id`, `board_slug`.
+
+Escritas: `transaction.atomic()`; moeda workspace na data do snapshot.
+
+## Implementação
+
+- Feature flag se integração incompleta
+- Não logar tokens; SSRF em callbacks via `validate_url` + `WEBHOOK_ALLOWED_IPS`
+- Testes carregam JSON dos fixtures — nunca dict inline inventado

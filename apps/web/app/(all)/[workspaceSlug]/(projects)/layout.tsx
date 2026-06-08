@@ -20,12 +20,12 @@ function WorkspaceLayout() {
         )}
       >
         <div id="full-screen-portal" className="absolute inset-0 w-full" />
-        <div className="relative flex size-full overflow-hidden">
+        <div className="relative flex min-w-0 flex-1 flex-row overflow-hidden">
           <ProjectAppSidebar />
           <ExtendedProjectSidebar />
           <main
             className={cn(
-              "relative flex h-full w-full flex-col overflow-hidden",
+              "relative flex h-full min-w-0 flex-1 flex-col overflow-hidden",
               isBoardHubImmersive ? "bg-transparent" : "bg-surface-1"
             )}
           >

@@ -28,13 +28,13 @@ export const BoardOverviewHeader = observer(function BoardOverviewHeader(props: 
   return (
     <Header className={cn(hasBackground && "!border-none !bg-transparent")}>
       <Header.LeftItem className="min-w-0 items-start">
-        <div className="flex w-full min-w-0 flex-col gap-4">
+        <div className="flex w-full min-w-0 flex-col gap-2">
           <BoardHubNavLink
             to={`/${workspaceSlug}/boards`}
             className={cn(
-              "w-fit text-12 font-medium transition-colors",
+              "w-fit text-11 font-medium transition-colors",
               hasBackground
-                ? cn("text-white/90 hover:text-white", BOARD_HUB_IMMERSIVE_TEXT_SHADOW)
+                ? cn("text-white/70 hover:text-white/90", BOARD_HUB_IMMERSIVE_TEXT_SHADOW)
                 : "text-tertiary hover:text-secondary"
             )}
           >
@@ -45,8 +45,10 @@ export const BoardOverviewHeader = observer(function BoardOverviewHeader(props: 
               {board ? (
                 <span
                   className={cn(
-                    "grid size-8 shrink-0 place-items-center rounded-md border",
-                    hasBackground ? "border-white/35 bg-white/10" : "border-subtle bg-layer-2"
+                    "grid size-8 shrink-0 place-items-center rounded-md border shadow-sm",
+                    hasBackground
+                      ? "border-white/25 bg-white/12 backdrop-blur-sm"
+                      : "border-subtle bg-layer-2"
                   )}
                 >
                   <Logo logo={board.logo_props} size={20} />
@@ -54,7 +56,7 @@ export const BoardOverviewHeader = observer(function BoardOverviewHeader(props: 
               ) : null}
               <h1
                 className={cn(
-                  "truncate text-16 font-semibold tracking-tight",
+                  "truncate text-15 font-semibold tracking-tight",
                   hasBackground ? cn("text-white", BOARD_HUB_IMMERSIVE_TEXT_SHADOW) : "text-primary"
                 )}
               >

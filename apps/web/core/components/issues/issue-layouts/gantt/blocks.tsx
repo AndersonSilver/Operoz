@@ -142,6 +142,11 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
   const issueTypeLogo = isBoardGantt
     ? resolveBoardGanttIssueTypeLogo(issueDetails?.type_id, issueTypeLogoMap)
     : undefined;
+  const displayProperties = issuesFilter?.issueFilters?.displayProperties;
+  const sidebarDisplayProperties =
+    isBoardGantt && issueTypeLogo && displayProperties
+      ? { ...displayProperties, issue_type: false }
+      : displayProperties;
 
   const handleIssuePeekOverview = (e: any) => {
     e.stopPropagation(true);
@@ -167,7 +172,7 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
       disabled={!!issueDetails?.tempId}
     >
       <div className="relative flex h-full w-full cursor-pointer items-center gap-2">
-        {isBoardGantt ? (
+        {isBoardGantt && issueTypeLogo ? (
           <BoardGanttRowIcon logo={issueTypeLogo} size={14} className="!border-0 !bg-transparent" />
         ) : null}
         {issueDetails?.project_id && (
@@ -176,7 +181,7 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
             projectId={issueDetails.project_id}
             size="xs"
             variant="tertiary"
-            displayProperties={issuesFilter?.issueFilters?.displayProperties}
+            displayProperties={sidebarDisplayProperties}
           />
         )}
         <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile} nativeButton={false}>

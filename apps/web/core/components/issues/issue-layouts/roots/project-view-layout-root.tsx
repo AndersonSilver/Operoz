@@ -5,6 +5,11 @@ import useSWR from "swr";
 // plane constants
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import { cn } from "@operis/utils";
+import {
+  BOARD_HUB_PROJECT_WORK_SURFACE_INNER,
+  useBoardHubHasBackground,
+} from "@/components/board/board-hub-background";
 // hooks
 import { ProjectLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/project-level";
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
@@ -37,6 +42,7 @@ function ProjectViewIssueLayout(props: { activeLayout: EIssueLayoutTypes | undef
 }
 
 export const ProjectViewLayoutRoot = observer(function ProjectViewLayoutRoot() {
+  const hasBoardWallpaper = useBoardHubHasBackground();
   // router
   const { workspaceSlug: routerWorkspaceSlug, projectId: routerProjectId, viewId: routerViewId } = useParams();
   const workspaceSlug = routerWorkspaceSlug ? routerWorkspaceSlug?.toString() : undefined;
@@ -95,15 +101,24 @@ export const ProjectViewLayoutRoot = observer(function ProjectViewLayoutRoot() {
       >
         {({ filter: projectViewWorkItemsFilter }) => (
           <div className="relative flex h-full w-full flex-col overflow-hidden">
-            {projectViewWorkItemsFilter && (
-              <WorkItemFiltersRow
-                filter={projectViewWorkItemsFilter}
-                trackerElements={{
-                  saveView: PROJECT_VIEW_TRACKER_ELEMENTS.HEADER_SAVE_VIEW_BUTTON,
-                }}
-              />
-            )}
-            <div className="relative h-full w-full overflow-auto">
+            {projectViewWorkItemsFilter ? (
+              <div
+                className={cn(
+                  "shrink-0 border-b border-subtle",
+                  hasBoardWallpaper ? "border-subtle/40 bg-layer-1/80 backdrop-blur-sm" : "bg-layer-1"
+                )}
+              >
+                <WorkItemFiltersRow
+                  filter={projectViewWorkItemsFilter}
+                  trackerElements={{
+                    saveView: PROJECT_VIEW_TRACKER_ELEMENTS.HEADER_SAVE_VIEW_BUTTON,
+                  }}
+                />
+              </div>
+            ) : null}
+            <div
+              className={cn("relative min-h-0 min-w-0 flex-1 overflow-hidden", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}
+            >
               <ProjectViewIssueLayout activeLayout={activeLayout} viewId={viewId.toString()} />
             </div>
             {/* peek overview */}

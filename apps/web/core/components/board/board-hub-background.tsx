@@ -30,7 +30,7 @@ export const BOARD_HUB_GLASS_BAR = "border-subtle/40 bg-layer-1/45 backdrop-blur
 
 /** Cabeçalho do hub (breadcrumbs + abas) sobre wallpaper. */
 export const BOARD_HUB_GLASS_HEADER =
-  "border-b border-subtle/40 bg-surface-1/35 backdrop-blur-xl supports-[backdrop-filter]:bg-surface-1/25";
+  "border-b border-white/10 bg-surface-1/35 backdrop-blur-xl supports-[backdrop-filter]:bg-surface-1/25";
 
 /** Agrupa layout, filtros, exibir e ações no header do projeto. */
 export const BOARD_HUB_TOOLBAR_CLUSTER =
@@ -39,25 +39,70 @@ export const BOARD_HUB_TOOLBAR_CLUSTER =
 /** Legibilidade do texto branco sobre presets claros (oceano, aurora, etc.). */
 export const BOARD_HUB_IMMERSIVE_TEXT_SHADOW = "[text-shadow:0_1px_2px_rgba(0,0,0,0.72),0_0_14px_rgba(0,0,0,0.48)]";
 
-/** Separador abaixo das abas — fino e estável em telas retina. */
-export const BOARD_HUB_TAB_DIVIDER = "h-px scale-y-50 bg-white/90";
-
 /** Moldura do conteúdo (cronograma, resumo) sobre wallpaper. */
 export const BOARD_HUB_CONTENT_PANEL_IMMERSIVE =
   "rounded-lg border border-subtle/40 bg-layer-1/55 shadow-sm backdrop-blur-md";
 
+/** Superfície legível dentro do painel immersive (widgets, tabelas). */
+export const BOARD_HUB_PANEL_INNER_SURFACE =
+  "bg-surface-1/88 backdrop-blur-sm supports-[backdrop-filter]:bg-surface-1/82";
+
+/** Cartão sólido dentro do painel immersive — sem vidro extra. */
+export const BOARD_HUB_PANEL_CARD = "overflow-hidden rounded-md border border-subtle bg-layer-1";
+
+/** Cartão de trabalho do projeto (itens, módulos…) — vidro fosco; o wallpaper continua visível. */
+export const BOARD_HUB_PROJECT_WORK_SURFACE =
+  "rounded-xl border border-white/10 bg-surface-1/45 shadow-lg backdrop-blur-xl supports-[backdrop-filter]:bg-surface-1/30";
+
+/** Área interna legível (lista/tabela) dentro do cartão com vidro. */
+export const BOARD_HUB_PROJECT_WORK_SURFACE_INNER = "bg-surface-1/88 backdrop-blur-sm supports-[backdrop-filter]:bg-surface-1/82";
+
+/** Cartão de métrica do ciclo ativo (progresso, burndown, stats). */
+export const BOARD_HUB_CYCLE_METRIC_CARD =
+  "flex min-h-[11rem] flex-col gap-3 rounded-lg border border-subtle/50 bg-layer-1/75 p-4 shadow-sm backdrop-blur-sm";
+
+/** Faixa de secção colapsável (ciclo ativo / próximo / concluído). */
+export const BOARD_HUB_CYCLE_SECTION_HEADER =
+  "sticky top-0 z-[2] w-full border-b border-subtle/60 bg-layer-1/90 backdrop-blur-md";
+
+/** Tabela/lista de módulos dentro do painel do hub. */
+export const BOARD_HUB_MODULE_LIST_PANEL =
+  "w-full rounded-lg border border-subtle/50 bg-layer-1/60 shadow-sm backdrop-blur-sm";
+
+/** Cartão de módulo na vista galeria. */
+export const BOARD_HUB_MODULE_CARD =
+  "border border-subtle/50 bg-layer-1/75 shadow-sm backdrop-blur-sm";
+
+/** Painel de histórico (status report, listas densas). */
+export const BOARD_HUB_HISTORY_PANEL =
+  "flex min-h-[280px] w-full min-w-0 flex-col rounded-lg border border-subtle/50 bg-layer-1/60 shadow-sm backdrop-blur-sm";
+
+/** Coluna da lista de intake (split view). */
+export const BOARD_HUB_INTAKE_SIDEBAR =
+  "h-full w-full flex-shrink-0 border-r border-subtle/50 bg-layer-1/70 backdrop-blur-sm";
+
+/** Painel de detalhe do item de intake. */
+export const BOARD_HUB_INTAKE_DETAIL =
+  "flex min-h-0 min-w-0 flex-1 flex-col overflow-hidden bg-layer-1/55 backdrop-blur-sm";
+
+/** Faixa de métricas no topo de uma vista hub. */
+export const BOARD_HUB_METRICS_STRIP =
+  "grid grid-cols-1 gap-2 border-b border-subtle/60 px-4 py-3 sm:grid-cols-3 md:px-5 md:py-4";
+
+/** Painel “semana em curso” do status report. */
+export const BOARD_HUB_STATUS_REPORT_WEEK_PANEL =
+  "relative overflow-hidden rounded-xl border border-subtle/50 bg-gradient-to-br from-layer-1/80 via-layer-1/65 to-accent-primary/5 p-4 shadow-sm backdrop-blur-md md:p-5";
+
+/** Tile de módulo na semana em curso. */
+export const BOARD_HUB_STATUS_REPORT_MODULE_TILE =
+  "flex min-h-[7.5rem] flex-col rounded-lg border border-subtle/50 bg-layer-1/70 p-3 shadow-sm backdrop-blur-sm transition-colors hover:border-subtle hover:bg-layer-1/90";
+
+/** Cartão de métrica compacto (status report). */
+export const BOARD_HUB_STATUS_REPORT_METRIC =
+  "flex items-center gap-3 rounded-lg border border-subtle/45 bg-layer-1/55 px-3 py-2.5 backdrop-blur-sm";
+
 /** Superfícies internas do Gantt (sidebar, chart) sobre wallpaper. */
 export const BOARD_HUB_GANTT_SURFACE = "border-subtle/40 bg-layer-1/50 backdrop-blur-md";
-
-/** Gradiente entre header com foto e área de trabalho. */
-export function BoardHubHeaderContentFade() {
-  return (
-    <div
-      className="pointer-events-none relative z-[2] h-14 w-full shrink-0 bg-gradient-to-b from-transparent via-black/20 to-surface-1/75"
-      aria-hidden
-    />
-  );
-}
 
 type BoardHubBackgroundContextValue = {
   value: GanttChartBackgroundValue;

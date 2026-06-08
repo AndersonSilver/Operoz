@@ -20,7 +20,12 @@ import { AppliedFilters } from "./filters/applied-filter";
 import { NotificationSidebarHeader } from "./header";
 import { NotificationsLoader } from "./loader";
 
-export const NotificationsSidebarRoot = observer(function NotificationsSidebarRoot() {
+type Props = {
+  embedded?: boolean;
+};
+
+export const NotificationsSidebarRoot = observer(function NotificationsSidebarRoot(props: Props) {
+  const { embedded = false } = props;
   const { workspaceSlug } = useParams();
   // hooks
   const { getWorkspaceBySlug } = useWorkspace();
@@ -53,7 +58,11 @@ export const NotificationsSidebarRoot = observer(function NotificationsSidebarRo
     <div
       className={cn(
         "relative z-[10] h-full flex-shrink-0 border-0 border-subtle bg-surface-1 transition-all max-md:overflow-hidden md:border-r",
-        currentSelectedNotificationId ? "w-0 md:w-3/12" : "w-full md:w-3/12"
+        embedded
+          ? "w-full"
+          : currentSelectedNotificationId
+            ? "w-0 md:w-3/12"
+            : "w-full md:w-3/12"
       )}
     >
       <div className="relative flex h-full w-full flex-col">

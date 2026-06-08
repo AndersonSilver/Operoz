@@ -35,18 +35,20 @@ export const ProjectViewsList = observer(function ProjectViewsList() {
 
   if (filteredProjectViews.length === 0 && projectViews.length > 0) {
     return (
-      <EmptyStateDetailed
-        assetKey="search"
-        title={t("common_empty_state.search.title")}
-        description={t("common_empty_state.search.description")}
-      />
+      <div className="flex min-h-0 flex-1 items-center justify-center">
+        <EmptyStateDetailed
+          assetKey="search"
+          title={t("common_empty_state.search.title")}
+          description={t("common_empty_state.search.description")}
+        />
+      </div>
     );
   }
 
   return (
     <>
       {filteredProjectViews.length > 0 ? (
-        <div className="flex h-full w-full flex-col">
+        <div className="flex min-h-0 flex-1 flex-col">
           <ListLayout>
             {filteredProjectViews.length > 0 ? (
               filteredProjectViews.map((view) => <ProjectViewListItem key={view.id} view={view} />)
@@ -56,19 +58,21 @@ export const ProjectViewsList = observer(function ProjectViewsList() {
           </ListLayout>
         </div>
       ) : (
-        <EmptyStateDetailed
-          assetKey="view"
-          title={t("project_empty_state.views.title")}
-          description={t("project_empty_state.views.description")}
-          actions={[
-            {
-              label: t("project_empty_state.views.cta_primary"),
-              onClick: () => toggleCreateViewModal(true),
-              disabled: !canPerformEmptyStateActions,
-              variant: "primary",
-            },
-          ]}
-        />
+        <div className="flex min-h-0 flex-1 items-center justify-center">
+          <EmptyStateDetailed
+            assetKey="view"
+            title={t("project_empty_state.views.title")}
+            description={t("project_empty_state.views.description")}
+            actions={[
+              {
+                label: t("project_empty_state.views.cta_primary"),
+                onClick: () => toggleCreateViewModal(true),
+                disabled: !canPerformEmptyStateActions,
+                variant: "primary",
+              },
+            ]}
+          />
+        </div>
       )}
     </>
   );

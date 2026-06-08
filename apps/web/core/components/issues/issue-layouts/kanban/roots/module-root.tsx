@@ -1,29 +1,46 @@
+import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
+import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { EIssuesStoreType } from "@operis/types";
 import { useIssues } from "@/hooks/store/use-issues";
-import { WorkspaceKanbanRoot } from "./workspace-root";
+import { useUserPermissions } from "@/hooks/store/user";
+import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
+import { BaseKanBanRoot } from "../base-kanban-root";
 
 export const ModuleKanBanLayout = observer(function ModuleKanBanLayout() {
   const { workspaceSlug, projectId, moduleId } = useParams();
   const { issues } = useIssues(EIssuesStoreType.MODULE);
+  const { allowPermissions } = useUserPermissions();
 
-  const moduleIdStr = moduleId?.toString();
+  const isEditingAllowed = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.PROJECT
+  );
 
-  if (!moduleIdStr) return null;
+  const canEditIssueProperties = useCallback(() => isEditingAllowed, [isEditingAllowed]);
+
+  const addIssuesToView = useCallback(
+    (issueIds: string[]) => {
+      if (!workspaceSlug || !projectId || !moduleId) throw new Error();
+      return issues.addIssuesToModule(
+        workspaceSlug.toString(),
+        projectId.toString(),
+        moduleId.toString(),
+        issueIds
+      );
+    },
+    [issues, workspaceSlug, projectId, moduleId]
+  );
+
+  if (!moduleId) return null;
 
   return (
-    <WorkspaceKanbanRoot
-      viewId={moduleIdStr}
-      addIssuesToView={(issueIds: string[]) => {
-        if (!workspaceSlug || !projectId) throw new Error();
-        return issues.addIssuesToModule(
-          workspaceSlug.toString(),
-          projectId.toString(),
-          moduleIdStr,
-          issueIds
-        );
-      }}
+    <BaseKanBanRoot
+      QuickActions={ModuleIssueQuickActions}
+      addIssuesToView={addIssuesToView}
+      canEditPropertiesBasedOnProject={canEditIssueProperties}
+      viewId={moduleId.toString()}
     />
   );
 });

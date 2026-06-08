@@ -71,9 +71,9 @@ function ProjectInboxPage({ params }: Route.ComponentProps) {
     : undefined;
 
   return (
-    <div className="flex h-full flex-col">
+    <div className="flex h-full min-h-0 flex-col">
       <PageHead title={pageTitle} />
-      <div className="h-full w-full overflow-hidden">
+      <div className="h-full min-h-0 w-full overflow-hidden">
         <InboxIssueRoot
           workspaceSlug={workspaceSlug}
           projectId={projectId}

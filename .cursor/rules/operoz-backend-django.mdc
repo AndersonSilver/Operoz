@@ -1,0 +1,78 @@
+---
+description: Operoz — backend Django/DRF (API, RBAC, queries, board-scoped URLs)
+globs: apps/api/**/*
+alwaysApply: false
+---
+
+# Regra — Backend Django (Operoz)
+
+Skill completa: `.cursor/skills/OPEROZ ENGENHARIA/DESENVOLVEDOR SENIOR/SKILL.md`  
+Anti-patterns: `.cursor/skills/OPEROZ ENGENHARIA/ANTI_PATTERNS.md`
+
+## Fluxo antes de codar
+
+1. Critério de aceite mensurável.
+2. `grep` por view/serializer/utils existente — **estender, não duplicar**.
+3. Plano: ficheiros, endpoint, permissão, filtro workspace/board/project.
+
+## Mapa de camadas
+
+| Camada | Path |
+|--------|------|
+| Views | `apps/api/operis/app/views/` |
+| Board URLs | `apps/api/operis/app/urls/board.py` |
+| Negócio | `apps/api/operis/utils/` |
+| Models | `apps/api/operis/db/models/` |
+| Serializers | `apps/api/operis/app/serializers/` |
+| Celery | `apps/api/operis/bgtasks/` |
+| Tipos FE | `packages/types/src/` |
+
+## Domínio (URLs board-scoped)
+
+```
+Workspace → Board (squad) → Project (≈ cliente) → Module / Issue
+```
+
+- Toda feature board: `workspaceSlug` + `boardSlug` na URL.
+- Guest: queryset sempre com `_project_permission_filters(user)`.
+- Cliente 360: `plane/utils/client_360.py`.
+
+## Nova API (checklist)
+
+1. Lógica em `plane/utils/<feature>.py`
+2. View fina `app/views/board/<feature>.py`
+3. Registo em `app/urls/board.py`
+4. Serializer com `validate_*`
+5. Tipos em `packages/types/src/board/`
+
+Referência: `client_360.py`.
+
+## Performance (obrigatório em listas)
+
+- `select_related` / `prefetch_related` no `get_queryset()`
+- `SerializerMethodField` só com prefetch correspondente
+- Agregações no DB (`annotate`, `Sum`, `Count`)
+- Paginação; `use_read_replica` se o módulo já usar
+- Sem N+1 — bloquear em review se >1 query extra por objeto
+
+## Segurança (não negociável)
+
+- `IsAuthenticated` + `@allow_permission` / `board.administer`
+- Updates/deletes: filtrar `workspace__slug`, `board`, `project` — **nunca** `get(pk=id)` isolado (IDOR)
+- 404 quando sem acesso (padrão do código)
+- `transaction.atomic()` em escritas multi-tabela
+- Webhooks: HMAC, idempotência, sem log de token em produção
+- Sem segredos no diff; sem `allow_any` em integrações
+
+## Proibido
+
+- N+1 em serializers (ver anti-patterns)
+- Inventar campos JSON — usar `tests/fixtures/`
+- Cabeçalho copyright Plane/SPDX em ficheiros novos
+- Lógica crítica só no serializer
+
+## Verificação
+
+- Testes do módulo ou `assertNumQueries` em listagem
+- Migração documentada se alterar models
+- Avisar breaking change e env vars novas

@@ -23,16 +23,21 @@ type Props = {
 const boardService = new BoardService();
 
 function DashboardSkeleton() {
+  const pulse = "animate-pulse bg-layer-2";
+
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex flex-wrap gap-3">
+    <div className="flex flex-col gap-5">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-[88px] min-w-[200px] flex-1 animate-pulse rounded-lg bg-layer-1/80" />
+          <div key={i} className={cn("h-[5.5rem] rounded-lg border border-subtle bg-layer-1", pulse)} />
         ))}
       </div>
-      <div className="grid gap-4 lg:grid-cols-2">
+      <div className="grid gap-5 lg:grid-cols-2">
         {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-[320px] animate-pulse rounded-lg bg-layer-1/80" />
+          <div key={i} className="flex flex-col gap-2">
+            <div className={cn("h-6 w-40 rounded-sm", pulse)} />
+            <div className={cn("h-[300px] rounded-md border border-subtle bg-layer-1", pulse)} />
+          </div>
         ))}
       </div>
     </div>
@@ -66,10 +71,10 @@ export function BoardOverview(props: Props) {
         data={{ board_id: board.id }}
       />
       <div className="h-full w-full overflow-y-auto bg-transparent">
-        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-5 px-6 py-5">
+        <div className="mx-auto flex w-full max-w-[1200px] flex-col gap-4 px-6 py-5">
           <section aria-label={t("boards.overview_kpis_title")}>
             {metaError ? (
-              <p className="rounded-lg border border-subtle/80 bg-layer-1/80 px-4 py-3 text-13 text-tertiary backdrop-blur-sm">
+              <p className="rounded-md border border-subtle bg-layer-1 px-4 py-3 text-13 text-tertiary">
                 {t("boards.overview_meta_unavailable")}
               </p>
             ) : isMetaLoading || !meta ? (
@@ -79,7 +84,7 @@ export function BoardOverview(props: Props) {
             )}
           </section>
 
-          <section className="overflow-hidden rounded-lg border border-subtle/80 bg-layer-1/80 shadow-sm backdrop-blur-sm">
+          <section className="overflow-hidden rounded-lg border border-subtle bg-layer-1 shadow-sm">
             <button
               type="button"
               className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-layer-transparent-hover"
@@ -88,7 +93,7 @@ export function BoardOverview(props: Props) {
             >
               <div>
                 <h2 className="text-13 font-semibold text-primary">{t("boards.overview_projects_title")}</h2>
-                <p className="mt-0.5 text-12 text-tertiary">
+                <p className="mt-0.5 text-12 text-secondary">
                   {t("boards.overview_projects_hint", { count: projectIds.length })}
                 </p>
               </div>

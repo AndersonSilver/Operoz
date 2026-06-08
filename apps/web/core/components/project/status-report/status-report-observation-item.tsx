@@ -1,4 +1,4 @@
-import { X } from "lucide-react";
+import { Pencil, X } from "lucide-react";
 import { cn } from "@operis/utils";
 import { isObservationHtml } from "@/components/project/status-report/observation-content";
 import { ObservationHtmlView } from "@/components/project/status-report/observation-html-view";
@@ -41,7 +41,10 @@ function parseObservationCard(line: string): { title?: string; body: string; dat
 type Props = {
   line: string;
   variant: "exec" | "attention";
+  onEdit?: () => void;
   onRemove?: () => void;
+  editLabel?: string;
+  removeLabel?: string;
 };
 
 const ACCENT_BAR_CLASS = {
@@ -50,10 +53,11 @@ const ACCENT_BAR_CLASS = {
 } as const;
 
 export function StatusReportObservationItem(props: Props) {
-  const { line, variant, onRemove } = props;
+  const { line, variant, onEdit, onRemove, editLabel = "Edit", removeLabel = "Remove" } = props;
+  const hasActions = Boolean(onEdit || onRemove);
 
   return (
-    <div className="group relative flex gap-2 py-2.5 pr-7 first:pt-0 last:pb-0">
+    <div className={cn("group relative flex gap-2 py-2.5 first:pt-0 last:pb-0", hasActions && "pr-14")}>
       <span className={cn("w-1 shrink-0 self-stretch rounded-sm", ACCENT_BAR_CLASS[variant])} aria-hidden />
       <div className="min-w-0 flex-1">
       {isObservationHtml(line) ? (
@@ -75,15 +79,29 @@ export function StatusReportObservationItem(props: Props) {
         })()
       )}
       </div>
-      {onRemove && (
-        <button
-          type="button"
-          onClick={onRemove}
-          className="absolute top-2 right-0 rounded p-0.5 text-tertiary opacity-0 transition-opacity hover:bg-layer-3 hover:text-danger-primary group-hover:opacity-100"
-          aria-label="Remove"
-        >
-          <X className="size-3.5" strokeWidth={1.75} />
-        </button>
+      {(onEdit || onRemove) && (
+        <div className="absolute top-2 right-0 flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
+          {onEdit ? (
+            <button
+              type="button"
+              onClick={onEdit}
+              className="rounded p-0.5 text-tertiary hover:bg-layer-3 hover:text-primary"
+              aria-label={editLabel}
+            >
+              <Pencil className="size-3.5" strokeWidth={1.75} />
+            </button>
+          ) : null}
+          {onRemove ? (
+            <button
+              type="button"
+              onClick={onRemove}
+              className="rounded p-0.5 text-tertiary hover:bg-layer-3 hover:text-danger-primary"
+              aria-label={removeLabel}
+            >
+              <X className="size-3.5" strokeWidth={1.75} />
+            </button>
+          ) : null}
+        </div>
       )}
     </div>
   );

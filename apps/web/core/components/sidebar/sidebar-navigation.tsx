@@ -1,4 +1,5 @@
 import { cn } from "@operis/utils";
+import { SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS, sidebarNavItemClass } from "./sidebar-styles";
 
 type TSidebarNavItem = {
   className?: string;
@@ -8,17 +9,10 @@ type TSidebarNavItem = {
 
 export function SidebarNavItem(props: TSidebarNavItem) {
   const { className, isActive, children } = props;
+
   return (
-    <div
-      className={cn(
-        "group relative flex w-full cursor-pointer items-center justify-between gap-1.5 rounded-md px-2 py-1 outline-none",
-        {
-          "!bg-layer-transparent-active text-primary": isActive,
-          "text-secondary hover:bg-layer-transparent-hover active:bg-layer-transparent-active": !isActive,
-        },
-        className
-      )}
-    >
+    <div className={cn(sidebarNavItemClass(isActive), className)}>
+      {isActive ? <span className={SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS} aria-hidden /> : null}
       {children}
     </div>
   );

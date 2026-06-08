@@ -3,7 +3,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { EIssuesStoreType } from "@operis/types";
 import { useIssues } from "@/hooks/store/use-issues";
-import { WorkspaceCalendarRoot } from "./workspace-calendar-root";
+import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
+import { BaseCalendarRoot } from "../base-calendar-root";
 
 export const ModuleCalendarLayout = observer(function ModuleCalendarLayout() {
   const { workspaceSlug, projectId, moduleId } = useParams();
@@ -11,17 +12,21 @@ export const ModuleCalendarLayout = observer(function ModuleCalendarLayout() {
     issues: { addIssuesToModule },
   } = useIssues(EIssuesStoreType.MODULE);
 
-  const moduleIdStr = moduleId?.toString();
-
   const addIssuesToView = useCallback(
     (issueIds: string[]) => {
-      if (!workspaceSlug || !projectId || !moduleIdStr) throw new Error();
-      return addIssuesToModule(workspaceSlug.toString(), projectId.toString(), moduleIdStr, issueIds);
+      if (!workspaceSlug || !projectId || !moduleId) throw new Error();
+      return addIssuesToModule(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), issueIds);
     },
-    [addIssuesToModule, workspaceSlug, projectId, moduleIdStr]
+    [addIssuesToModule, workspaceSlug, projectId, moduleId]
   );
 
-  if (!moduleIdStr) return null;
+  if (!moduleId) return null;
 
-  return <WorkspaceCalendarRoot viewId={moduleIdStr} addIssuesToView={addIssuesToView} />;
+  return (
+    <BaseCalendarRoot
+      QuickActions={ModuleIssueQuickActions}
+      addIssuesToView={addIssuesToView}
+      viewId={moduleId.toString()}
+    />
+  );
 });

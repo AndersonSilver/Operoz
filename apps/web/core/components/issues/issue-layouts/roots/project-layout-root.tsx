@@ -5,8 +5,8 @@ import useSWR from "swr";
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
 import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
 import { Spinner } from "@operis/ui";
+import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import { cn } from "@operis/utils";
-import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { ProjectLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/project-level";
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
@@ -41,7 +41,6 @@ function ProjectIssueLayout(props: { activeLayout: EIssueLayoutTypes | undefined
 }
 
 export const ProjectLayoutRoot = observer(function ProjectLayoutRoot() {
-  const hasBoardWallpaper = useBoardHubHasBackground();
   // router
   const { workspaceSlug: routerWorkspaceSlug, projectId: routerProjectId } = useParams();
   const workspaceSlug = routerWorkspaceSlug ? routerWorkspaceSlug.toString() : undefined;
@@ -131,9 +130,9 @@ export const ProjectLayoutRoot = observer(function ProjectLayoutRoot() {
         workspaceSlug={workspaceSlug}
       >
         {({ filter: projectWorkItemsFilter }) => (
-          <div className="relative flex h-full w-full flex-col overflow-hidden">
+          <div className="relative flex h-full min-h-0 w-full flex-col overflow-hidden">
             {projectWorkItemsFilter ? (
-              <div className={cn("shrink-0", hasBoardWallpaper && "border-b border-subtle/40")}>
+              <div className="shrink-0 border-b border-subtle bg-layer-1">
                 <WorkItemFiltersRow
                   filter={projectWorkItemsFilter}
                   trackerElements={{
@@ -142,13 +141,7 @@ export const ProjectLayoutRoot = observer(function ProjectLayoutRoot() {
                 />
               </div>
             ) : null}
-            <div
-              className={cn(
-                "relative h-full w-full overflow-auto",
-                hasBoardWallpaper ? "bg-transparent" : "bg-surface-1"
-              )}
-            >
-              {/* mutation loader */}
+            <div className={cn("relative min-h-0 flex-1 overflow-hidden", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
               {issues?.getIssueLoader() === "mutation" && (
                 <div className="shadow-sm fixed top-[70px] right-[20px] z-50 flex h-[40px] w-[40px] items-center justify-center rounded-sm bg-layer-1">
                   <Spinner className="h-4 w-4" />
@@ -156,7 +149,6 @@ export const ProjectLayoutRoot = observer(function ProjectLayoutRoot() {
               )}
               <ProjectIssueLayout activeLayout={activeLayout} />
             </div>
-            {/* peek overview */}
             <IssuePeekOverview />
           </div>
         )}

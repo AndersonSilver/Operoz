@@ -4,8 +4,9 @@ import { PanelRight } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { Tooltip } from "@operis/propel/tooltip";
 import { cn } from "@operis/utils";
-// components
+import { BOARD_HUB_GLASS_BAR } from "@/components/board/board-hub-background";
 import { PageToolbar } from "@/components/pages/editor/toolbar";
+import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 // hooks
 import { usePageFilters } from "@/hooks/use-page-filters";
 // plane web components
@@ -32,6 +33,7 @@ export const PageEditorToolbarRoot = observer(function PageEditorToolbarRoot(pro
   const { isFullWidth, isStickyToolbarEnabled } = usePageFilters();
   // derived values
   const shouldHideToolbar = !isStickyToolbarEnabled || !isContentEditable;
+  const insideWorkSurface = useProjectWorkSurface();
 
   return (
     <>
@@ -43,7 +45,8 @@ export const PageEditorToolbarRoot = observer(function PageEditorToolbarRoot(pro
       >
         <div
           className={cn(
-            "page-toolbar-content relative hidden min-h-[52px] items-center px-page-x transition-all duration-200 ease-in-out md:flex",
+            "page-toolbar-content relative hidden min-h-[52px] items-center border-b px-page-x transition-all duration-200 ease-in-out md:flex",
+            insideWorkSurface && BOARD_HUB_GLASS_BAR,
             {
               "wide-layout": isFullWidth,
             }

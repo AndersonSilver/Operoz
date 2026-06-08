@@ -1,0 +1,134 @@
+.workspace-general-hero-dot-grid {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--border-subtle-1) 70%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 14px 14px;
+}
+
+.workspace-general-split-grid {
+  display: grid;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+@media (min-width: 1024px) {
+  .workspace-general-split-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.workspace-general-danger-panel {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--text-danger-primary) 8%, transparent),
+    0 12px 32px -20px color-mix(in srgb, var(--text-danger-primary) 18%, transparent);
+}
+
+@media (min-width: 1024px) {
+  .workspace-general-danger-panel {
+    position: sticky;
+    top: 1.5rem;
+    align-self: start;
+  }
+}
+
+.workspace-general-danger-header {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--bg-danger-subtle) 55%, transparent),
+    transparent 70%
+  );
+}
+
+.workspace-general-identity-panel {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 10%, transparent),
+    0 12px 32px -22px color-mix(in srgb, var(--bg-accent-primary) 16%, transparent);
+}
+
+.workspace-general-identity-logo-btn {
+  position: relative;
+  flex-shrink: 0;
+}
+
+.workspace-general-identity-logo-btn .workspace-general-logo-frame {
+  display: flex;
+  width: 4.5rem;
+  height: 4.5rem;
+  align-items: center;
+  justify-content: center;
+  border-radius: 1rem;
+  border: 1px solid var(--border-subtle-1);
+  background: var(--bg-surface-1);
+  padding: 0.625rem;
+  box-shadow:
+    0 0 0 2px color-mix(in srgb, var(--bg-accent-primary) 12%, transparent),
+    0 1px 2px color-mix(in srgb, var(--bg-accent-primary) 8%, transparent);
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.workspace-general-identity-logo-btn:not(:disabled):hover .workspace-general-logo-frame {
+  border-color: color-mix(in srgb, var(--bg-accent-primary) 35%, var(--border-subtle-1));
+  box-shadow: 0 8px 20px -12px color-mix(in srgb, var(--bg-accent-primary) 35%, transparent);
+  transform: translateY(-1px);
+}
+
+.workspace-general-identity-logo-btn .workspace-general-logo-overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--bg-accent-primary) 82%, transparent);
+  opacity: 0;
+  transition: opacity 150ms ease;
+}
+
+.workspace-general-identity-logo-btn:not(:disabled):hover .workspace-general-logo-overlay {
+  opacity: 1;
+}
+
+.workspace-general-details-fields {
+  display: grid;
+  gap: 1rem 1.25rem;
+  width: 100%;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .workspace-general-details-fields {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.workspace-general-field-full {
+  grid-column: 1 / -1;
+}
+
+.workspace-general-details-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: auto;
+  border-top: 1px solid var(--border-subtle-1);
+  background: linear-gradient(
+    180deg,
+    transparent,
+    color-mix(in srgb, var(--bg-layer-2) 55%, transparent)
+  );
+  padding: 1rem 1.25rem;
+}
+
+@media (min-width: 1024px) {
+  .workspace-general-details-footer {
+    padding: 1rem 1.5rem;
+  }
+}

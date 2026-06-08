@@ -11,7 +11,9 @@ import darkChartAsset from "@/app/assets/empty-state/active-cycle/chart-dark.web
 import lightChartAsset from "@/app/assets/empty-state/active-cycle/chart-light.webp?url";
 // components
 import ProgressChart from "@/components/core/sidebar/progress-chart";
+import { BOARD_HUB_CYCLE_METRIC_CARD } from "@/components/board/board-hub-background";
 import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";
+import { cn } from "@operis/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { EstimateTypeDropdown } from "../dropdowns/estimate-type-dropdown";
@@ -44,7 +46,7 @@ export const ActiveCycleProductivity = observer(function ActiveCycleProductivity
   const completionChartDistributionData = chartDistributionData?.completion_chart || undefined;
 
   return cycle && completionChartDistributionData ? (
-    <div className="flex min-h-[17rem] flex-col gap-5 rounded-lg border border-subtle bg-surface-1 px-3.5 py-4">
+    <div className={cn(BOARD_HUB_CYCLE_METRIC_CARD)}>
       <div className="relative flex items-center justify-between gap-4">
         <Link href={`/${workspaceSlug}/projects/${projectId}/cycles/${cycle?.id}`}>
           <h3 className="text-14 font-semibold text-tertiary">{t("project_cycles.active_cycle.issue_burndown")}</h3>
@@ -95,7 +97,7 @@ export const ActiveCycleProductivity = observer(function ActiveCycleProductivity
       </Link>
     </div>
   ) : (
-    <Loader className="flex min-h-[17rem] flex-col gap-5 rounded-lg border border-subtle bg-surface-1">
+    <Loader className={cn(BOARD_HUB_CYCLE_METRIC_CARD)}>
       <Loader.Item width="100%" height="100%" />
     </Loader>
   );

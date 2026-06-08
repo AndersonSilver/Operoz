@@ -1,71 +1,68 @@
-# Configuração Cursor — Operis
+# Configuração Cursor — Operoz
 
-Skills e regras do agente Cursor para este monorepo. Tudo em **português** e com a marca **Operis**.
+Skills (conhecimento profundo) + **Rules** (ativação automática por ficheiro/glob).
 
-## Ficheiros na raiz do monorepo
-
-| Ficheiro | Função |
-|----------|--------|
-| **`.cursorrules`** | Regras de design e código (tokens Operis, densidade enterprise, TypeScript). Lidas em cada prompt. |
-
-## Hierarquia de skills
+## Estrutura
 
 ```text
 .cursor/
-└── skills/
-    ├── OPERIS ENGENHARIA/              ← engenharia, design, arquitetura
-    │   ├── DESENVOLVEDOR SENIOR/
-    │   │   └── SKILL.md                → operis-desenvolvedor-senior
-    │   ├── DESIGN SISTEMA/
-    │   │   └── SKILL.md                → operis-design-sistema
-    │   └── EXPERIÊNCIA JIRA/
-    │       └── SKILL.md                → operis-experiencia-jira
-    │
-    └── OPERIS FLUXO/                   ← PR, release, contexto de produto
-        ├── CONTEXTO/
-        │   └── SKILL.md                → operis-contexto
-        ├── DESCRIÇÃO PR/
-        │   └── SKILL.md                → operis-pr-description
-        └── RELEASE NOTES/
-            └── SKILL.md                → operis-release-notes
+├── rules/                          ← 8 regras .mdc (1 orquestrador + 7 domínios)
+│   ├── operoz-orchestrator.mdc     alwaysApply: true
+│   ├── operoz-backend-django.mdc
+│   ├── operoz-anti-patterns.mdc
+│   ├── operoz-frontend-design.mdc
+│   ├── operoz-issue-ux.mdc
+│   ├── operoz-integrations.mdc
+│   ├── operoz-pull-request.mdc
+│   └── operoz-release-notes.mdc
+├── skills/
+│   ├── OPEROZ ENGENHARIA/
+│   └── OPEROZ FLUXO/
+└── README.md
 ```
 
-## OPERIS ENGENHARIA
+## Mapa Rule ↔ Skill ↔ Globs
 
-Arquitetura, segurança, design e layout enterprise.
+| Regra | Skill | Quando o Cursor aplica (globs) |
+|-------|-------|--------------------------------|
+| `operoz-orchestrator` | — | **Sempre** (`alwaysApply: true`) |
+| `operoz-backend-django` | `DESENVOLVEDOR SENIOR/SKILL.md` | `apps/api/**/*` |
+| `operoz-anti-patterns` | `ANTI_PATTERNS.md` | `apps/api/**/*.py`, `apps/web/**/*.{ts,tsx}` |
+| `operoz-frontend-design` | `DESIGN SISTEMA/SKILL.md` | `apps/web/**`, `packages/tailwind-config/**`, `ui`, `propel` |
+| `operoz-issue-ux` | `EXPERIÊNCIA JIRA/SKILL.md` | `apps/web/**/board/**`, `issues/**` |
+| `operoz-integrations` | `CONTEXTO/SKILL.md` | `tests/fixtures/**`, `bgtasks/**`, `*webhook*` |
+| `operoz-pull-request` | `DESCRIÇÃO PR/SKILL.md` | `.github/**` |
+| `operoz-release-notes` | `RELEASE NOTES/SKILL.md` | `docs/**` (+ pedido explícito) |
 
-| Pasta | Skill (`name`) | Quando usar |
-|-------|----------------|-------------|
-| `DESENVOLVEDOR SENIOR/` | `operis-desenvolvedor-senior` | **Qualquer desenvolvimento** — fluxo, camadas, RBAC, validação, IDOR |
-| `DESIGN SISTEMA/` | `operis-design-sistema` | Tokens do monorepo (`tailwind-config`), canvas/surface/layer |
-| `EXPERIÊNCIA JIRA/` | `operis-experiencia-jira` | Layout 70/30, issue/card, filtros (tokens Operis) |
+## Skills (detalhe longo)
 
-Para features novas, o agente deve priorizar **DESENVOLVEDOR SENIOR** + **DESIGN SISTEMA** + `.cursorrules`.
+```text
+.cursor/skills/
+├── OPEROZ ENGENHARIA/
+│   ├── DESENVOLVEDOR SENIOR/SKILL.md
+│   ├── DESIGN SISTEMA/SKILL.md
+│   ├── EXPERIÊNCIA JIRA/SKILL.md
+│   └── ANTI_PATTERNS.md
+└── OPEROZ FLUXO/
+    ├── CONTEXTO/SKILL.md
+    ├── DESCRIÇÃO PR/SKILL.md
+    └── RELEASE NOTES/SKILL.md
+```
 
-## OPERIS FLUXO
+**Regra:** a `.mdc` dispara no contexto certo; o `SKILL.md` tem o manual completo — o agente deve ler ambos quando implementar.
 
-Fluxos do dia a dia da equipa.
+## Fixtures (raiz monorepo)
 
-| Pasta | Skill (`name`) | Quando usar |
-|-------|----------------|-------------|
-| `CONTEXTO/` | `operis-contexto` | Domínio Operis, marca, tom em português |
-| `DESCRIÇÃO PR/` | `operis-pr-description` | Descrição de pull request |
-| `RELEASE NOTES/` | `operis-release-notes` | Notas de release (`release: vX.Y.Z`) |
+`tests/fixtures/github_webhook_pr.json` · `harness_cost_report.json`
 
-## Como o Cursor carrega
+## Como validar no Cursor
 
-- **`.cursorrules`** — contexto global automático na raiz do projeto.
-- **`SKILL.md`** — sob `.cursor/skills/`; ativação pela `description` no frontmatter.
+1. **Settings → Rules** — deve listar 8 regras Operoz.
+2. Abrir `apps/api/.../views.py` — deve aparecer backend + anti-patterns.
+3. Abrir `apps/web/.../board/...tsx` — design + issue-ux + anti-patterns.
+4. Novo chat — orquestrador sempre ativo.
 
-## Regras adicionais (opcional)
+## Convenção
 
-Ficheiros `.cursor/rules/*.mdc` para regras persistentes extra.
-
-## Convenção de pastas
-
-- Nomes de pastas em **MAIÚSCULAS** e **português**.
-- Uma skill por pasta; ficheiro obrigatório `SKILL.md`.
-
-## Origem
-
-Migrado de `.claude/skills/`. Design alinhado ao tema Operis em `packages/tailwind-config/`.
+- Marca: **Operoz** · Pastas skills: **OPEROZ** (maiúsculas, português).
+- Paths legados no código: `operis`, `apps/api/operis`.

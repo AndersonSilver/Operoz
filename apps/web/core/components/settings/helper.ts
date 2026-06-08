@@ -56,6 +56,28 @@ const boardSettingsHrefToLabelMap = BOARD_SETTINGS_FLAT.reduce(
 /** `/{ws}/settings/boards/{boardSlug}/…` — esconder sidebar do workspace. */
 export const isBoardDetailSettingsPath = (pathname: string) => /\/settings\/boards\/[^/]+/.test(pathname);
 
+export const isProjectDetailSettingsPath = (pathname: string) => /\/settings\/projects\/[^/]+/.test(pathname);
+
+export const isWorkspaceSettingsNavPath = (pathname: string) =>
+  /\/settings(\/|$)/.test(pathname) &&
+  !isBoardDetailSettingsPath(pathname) &&
+  !isProjectDetailSettingsPath(pathname);
+
+export const isNotificationsPath = (pathname: string, workspaceSlug?: string) =>
+  Boolean(workspaceSlug && pathname.includes(`/${workspaceSlug}/notifications`));
+
+/** Chave de persistência da sidebar auxiliar (settings, inbox, etc.). */
+export function getAuxiliarySidebarStorageKey(pathname: string, workspaceSlug?: string): string | null {
+  if (isBoardDetailSettingsPath(pathname)) return "board_settings_sidebar_pinned";
+  if (isProjectDetailSettingsPath(pathname)) {
+    const match = pathname.match(/\/settings\/projects\/([^/]+)/);
+    return match ? `project_settings_sidebar_pinned_${match[1]}` : null;
+  }
+  if (isWorkspaceSettingsNavPath(pathname)) return "workspace_settings_sidebar_pinned";
+  if (isNotificationsPath(pathname, workspaceSlug)) return "inbox_sidebar_pinned";
+  return null;
+}
+
 /** Active sidebar label for `/{ws}/settings/boards/{boardSlug}/…` */
 export const getBoardActivePath = (pathname: string) => {
   const parts = pathname.split("/").filter(Boolean);

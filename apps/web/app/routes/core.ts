@@ -345,6 +345,34 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/page.tsx"
             ),
             route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/scripts",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/scripts/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/emails",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/emails/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/simulacao",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/simulacao/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/historico",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/historico/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/metricas",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/metricas/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/falhas",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/falhas/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/automacao/segredos",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/automacao/segredos/page.tsx"
+            ),
+            route(
               ":workspaceSlug/settings/boards/:boardSlug/campos",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/campos/page.tsx"
             ),

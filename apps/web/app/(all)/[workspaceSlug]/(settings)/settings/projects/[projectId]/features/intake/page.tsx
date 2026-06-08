@@ -5,9 +5,8 @@ import { useTranslation } from "@operis/i18n";
 import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
+import { IntakeSettingsView } from "@/components/intake/forms/intake-settings-view";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
-import { SettingsHeading } from "@/components/settings/heading";
-import { ProjectSettingsFeatureControlItem } from "@/components/settings/project/content/feature-control-item";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -33,24 +32,14 @@ function FeaturesIntakeSettingsPage({ params }: Route.ComponentProps) {
   }
 
   return (
-    <SettingsContentWrapper header={<FeaturesIntakeProjectSettingsHeader />}>
+    <SettingsContentWrapper header={<FeaturesIntakeProjectSettingsHeader />} hugging>
       <PageHead title={pageTitle} />
-      <section className="w-full">
-        <SettingsHeading
-          title={t("project_settings.features.intake.title")}
-          description={t("project_settings.features.intake.description")}
-        />
-        <div className="mt-7">
-          <ProjectSettingsFeatureControlItem
-            title={t("project_settings.features.intake.toggle_title")}
-            description={t("project_settings.features.intake.toggle_description")}
-            featureProperty="inbox_view"
-            projectId={projectId}
-            value={!!currentProjectDetails?.inbox_view}
-            workspaceSlug={workspaceSlug}
-          />
-        </div>
-      </section>
+      <IntakeSettingsView
+        workspaceSlug={workspaceSlug}
+        projectId={projectId}
+        boardSlug={currentProjectDetails?.board?.slug ?? undefined}
+        intakeEnabled={!!currentProjectDetails?.inbox_view}
+      />
     </SettingsContentWrapper>
   );
 }

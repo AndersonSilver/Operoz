@@ -2,20 +2,16 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR, { mutate } from "swr";
 import { MoveLeft, MoveRight, RefreshCw } from "lucide-react";
-// plane imports
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { EmptyStateCompact } from "@operis/propel/empty-state";
 import type { IExportData } from "@operis/types";
 import { Table } from "@operis/ui";
-// components
 import { ImportExportSettingsLoader } from "@/components/ui/loader/settings/import-and-export";
-// constants
 import { EXPORT_SERVICES_LIST } from "@/constants/fetch-keys";
-// services
 import { IntegrationService } from "@/services/integrations";
-// local imports
 import { useExportColumns } from "./column";
+import "./workspace-exports-settings.css";
 
 const integrationService = new IntegrationService();
 
@@ -26,12 +22,10 @@ type Props = {
   setCursor: (cursor: string) => void;
 };
 type RowData = IExportData;
+
 export const PrevExports = observer(function PrevExports(props: Props) {
-  // props
   const { workspaceSlug, cursor, per_page, setCursor } = props;
-  // state
   const [refreshing, setRefreshing] = useState(false);
-  // hooks
   const { t } = useTranslation();
   const columns = useExportColumns();
 
@@ -57,64 +51,79 @@ export const PrevExports = observer(function PrevExports(props: Props) {
     return () => clearInterval(interval);
   }, [exporterServices]);
 
+  const hasResults = !!exporterServices?.results?.length;
+
   return (
-    <div>
-      <div className="flex items-center justify-between border-b border-subtle pb-3.5">
-        <div className="flex items-center gap-2">
-          <h3 className="text-h6-medium text-primary">{t("workspace_settings.settings.exports.previous_exports")}</h3>
-          <Button variant="tertiary" className="shrink-0" onClick={handleRefresh}>
-            <RefreshCw className={`h-3 w-3 ${refreshing ? "animate-spin" : ""}`} />
-            {refreshing ? t("refreshing") : t("refresh_status")}
-          </Button>
+    <section className="workspace-exports-history-panel overflow-hidden rounded-xl border border-subtle bg-layer-1">
+      <div className="flex flex-col gap-3 border-b border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+        <div className="min-w-0">
+          <h3 className="text-13 font-semibold text-primary">
+            {t("workspace_settings.settings.exports.previous_exports")}
+          </h3>
+          <p className="mt-0.5 text-12 text-tertiary">
+            {t("workspace_settings.settings.exports.previous_exports_hint")}
+          </p>
         </div>
-        {!!exporterServices?.results?.length && (
-          <div className="flex items-center gap-2 text-11">
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={!exporterServices?.prev_page_results}
-              onClick={() => exporterServices?.prev_page_results && setCursor(exporterServices?.prev_cursor)}
-              prependIcon={<MoveLeft />}
-            >
-              {t("prev")}
-            </Button>
-            <Button
-              variant="secondary"
-              size="sm"
-              disabled={!exporterServices?.next_page_results}
-              onClick={() => exporterServices?.next_page_results && setCursor(exporterServices?.next_cursor)}
-              appendIcon={<MoveRight />}
-            >
-              {t("next")}
-            </Button>
-          </div>
-        )}
+
+        <div className="flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            className="workspace-exports-refresh-btn"
+            onClick={handleRefresh}
+            disabled={refreshing}
+          >
+            <RefreshCw className={`size-3 ${refreshing ? "animate-spin" : ""}`} strokeWidth={1.75} />
+            {refreshing ? t("refreshing") : t("refresh_status")}
+          </button>
+
+          {hasResults && (
+            <div className="flex items-center gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!exporterServices?.prev_page_results}
+                onClick={() => exporterServices?.prev_page_results && setCursor(exporterServices?.prev_cursor)}
+                prependIcon={<MoveLeft />}
+              >
+                {t("prev")}
+              </Button>
+              <Button
+                variant="secondary"
+                size="sm"
+                disabled={!exporterServices?.next_page_results}
+                onClick={() => exporterServices?.next_page_results && setCursor(exporterServices?.next_cursor)}
+                appendIcon={<MoveRight />}
+              >
+                {t("next")}
+              </Button>
+            </div>
+          )}
+        </div>
       </div>
+
       <div className="flex flex-col">
         {exporterServices && exporterServices?.results ? (
           exporterServices?.results?.length > 0 ? (
-            <div>
-              <div className="divide-y divide-subtle-1">
-                <Table
-                  columns={columns}
-                  data={exporterServices?.results ?? []}
-                  keyExtractor={(rowData: RowData) => rowData?.id ?? ""}
-                  tHeadClassName="border-b border-subtle"
-                  thClassName="text-left font-medium divide-x-0 text-placeholder"
-                  tBodyClassName="divide-y-0"
-                  tBodyTrClassName="divide-x-0 p-4 h-[40px] text-secondary"
-                  tHeadTrClassName="divide-x-0"
-                />
-              </div>
+            <div className="divide-y divide-subtle-1 overflow-x-auto">
+              <Table
+                columns={columns}
+                data={exporterServices?.results ?? []}
+                keyExtractor={(rowData: RowData) => rowData?.id ?? ""}
+                tHeadClassName="border-b border-subtle bg-layer-2/40"
+                thClassName="text-left font-medium divide-x-0 text-placeholder text-11 uppercase tracking-wide"
+                tBodyClassName="divide-y-0"
+                tBodyTrClassName="divide-x-0 px-4 h-[44px] text-secondary hover:bg-layer-1-hover/50"
+                tHeadTrClassName="divide-x-0"
+              />
             </div>
           ) : (
-            <div className="flex h-full w-full items-center justify-center">
+            <div className="flex w-full items-center justify-center px-4 py-12">
               <EmptyStateCompact
                 assetKey="export"
                 title={t("settings_empty_state.exports.title")}
                 description={t("settings_empty_state.exports.description")}
-                align="start"
-                rootClassName="py-20"
+                align="center"
+                rootClassName="py-8"
               />
             </div>
           )
@@ -122,6 +131,6 @@ export const PrevExports = observer(function PrevExports(props: Props) {
           <ImportExportSettingsLoader />
         )}
       </div>
-    </div>
+    </section>
   );
 });

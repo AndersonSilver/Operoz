@@ -10,6 +10,7 @@ import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
 // constants
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
+import { useBoardAlignedDisplayProperties } from "../list-display-properties";
 import { useBoardIssueCapabilities, useCanEditIssueOnProject } from "@/hooks/use-board-issue-capabilities";
 // hooks
 import { useGroupIssuesDragNDrop } from "@/hooks/use-group-dragndrop";
@@ -71,7 +72,13 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
   const { issueMap } = useIssues(storeType);
 
   const displayFilters = issuesFilter?.issueFilters?.displayFilters;
-  const displayProperties = issuesFilter?.issueFilters?.displayProperties;
+  const alignedDisplayProperties = useBoardAlignedDisplayProperties(viewId, {
+    layout: displayFilters?.layout,
+  });
+  const displayProperties =
+    storeType === EIssuesStoreType.MODULE || storeType === EIssuesStoreType.PROJECT
+      ? alignedDisplayProperties
+      : issuesFilter?.issueFilters?.displayProperties;
   const orderBy = displayFilters?.order_by || undefined;
 
   const group_by = (displayFilters?.group_by || null) as GroupByColumnTypes | null;
@@ -152,7 +159,7 @@ export const BaseListRoot = observer(function BaseListRoot(props: IBaseListRoot)
 
   return (
     <IssueLayoutHOC layout={EIssueLayoutTypes.LIST}>
-      <div className={`relative size-full bg-surface-2`}>
+      <div className="relative size-full min-h-0">
         <List
           issuesMap={issueMap}
           displayProperties={displayProperties}

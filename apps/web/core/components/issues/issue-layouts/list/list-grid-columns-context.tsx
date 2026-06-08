@@ -138,7 +138,7 @@ export function ListGridColumnsProvider(props: ProviderProps) {
   );
 
   const propertyGridTemplateColumns = useMemo(
-    () => buildListPropertyGridTemplateColumns(columns, columnWidthsPx),
+    () => buildListPropertyGridTemplateColumns(columns, columnWidthsPx, { expandToFill: true }),
     [columns, columnWidthsPx]
   );
 

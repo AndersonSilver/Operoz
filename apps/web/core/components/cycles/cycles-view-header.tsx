@@ -1,34 +1,34 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-// plane imports
 import { useOutsideClickDetector } from "@operis/hooks";
 import { IconButton } from "@operis/propel/icon-button";
 import { useTranslation } from "@operis/i18n";
 import { SearchIcon, CloseIcon } from "@operis/propel/icons";
 import type { TCycleFilters } from "@operis/types";
 import { cn, calculateTotalFilters } from "@operis/utils";
-// components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
-// hooks
+import {
+  ProjectHubToolbar,
+  ProjectHubToolbarDivider,
+  ProjectHubToolbarSegment,
+} from "@/components/project/project-hub-toolbar";
 import { useCycleFilter } from "@/hooks/store/use-cycle-filter";
-// local imports
 import { CycleFiltersSelection } from "./dropdowns";
 
 type Props = {
   projectId: string;
+  trailing?: ReactNode;
 };
 
 export const CyclesViewHeader = observer(function CyclesViewHeader(props: Props) {
-  const { projectId } = props;
-  // refs
+  const { projectId, trailing } = props;
   const inputRef = useRef<HTMLInputElement>(null);
-  // hooks
   const { currentProjectFilters, searchQuery, updateFilters, updateSearchQuery } = useCycleFilter();
   const { t } = useTranslation();
-  // states
-  const [isSearchOpen, setIsSearchOpen] = useState(searchQuery !== "" ? true : false);
-  // outside click detector hook
+  const [isSearchOpen, setIsSearchOpen] = useState(searchQuery !== "");
+
   useOutsideClickDetector(inputRef, () => {
     if (isSearchOpen && searchQuery.trim() === "") setIsSearchOpen(false);
   });
@@ -55,7 +55,7 @@ export const CyclesViewHeader = observer(function CyclesViewHeader(props: Props)
 
   const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Escape") {
-      if (searchQuery && searchQuery.trim() !== "") updateSearchQuery("");
+      if (searchQuery?.trim()) updateSearchQuery("");
       else {
         setIsSearchOpen(false);
         inputRef.current?.blur();
@@ -70,58 +70,59 @@ export const CyclesViewHeader = observer(function CyclesViewHeader(props: Props)
   }, [searchQuery]);
 
   return (
-    <div className="flex items-center gap-2">
-      {!isSearchOpen ? (
-        <IconButton
-          variant="ghost"
-          size="lg"
-          onClick={() => {
-            setIsSearchOpen(true);
-            inputRef.current?.focus();
-          }}
-          icon={SearchIcon}
-        />
-      ) : (
-        <div
-          className={cn(
-            "ml-auto flex w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-surface-1 text-placeholder opacity-0 transition-[width] ease-linear",
-            {
-              "w-64 border-subtle px-2.5 py-1.5 opacity-100": isSearchOpen,
-            }
-          )}
-        >
-          <SearchIcon className="h-3.5 w-3.5" />
-          <input
-            ref={inputRef}
-            className="w-full max-w-[234px] border-none bg-transparent text-13 text-primary placeholder:text-placeholder focus:outline-none"
-            placeholder="Search"
-            value={searchQuery}
-            onChange={(e) => updateSearchQuery(e.target.value)}
-            onKeyDown={handleInputKeyDown}
+    <ProjectHubToolbar className="hidden sm:inline-flex">
+      <ProjectHubToolbarSegment>
+        {!isSearchOpen ? (
+          <IconButton
+            variant="ghost"
+            size="sm"
+            className="h-8 w-8 border-0 bg-transparent shadow-none hover:bg-layer-transparent-hover"
+            onClick={() => {
+              setIsSearchOpen(true);
+              inputRef.current?.focus();
+            }}
+            icon={SearchIcon}
           />
-          {isSearchOpen && (
-            <button
-              type="button"
-              className="grid place-items-center"
-              onClick={() => {
-                updateSearchQuery("");
-                setIsSearchOpen(false);
-              }}
-            >
-              <CloseIcon className="h-3 w-3" />
+        ) : (
+          <div
+            className={cn(
+              "flex h-8 w-52 items-center gap-1.5 rounded-md border border-subtle/50 bg-layer-2/60 px-2.5",
+              "transition-[width] ease-out"
+            )}
+          >
+            <SearchIcon className="size-3.5 shrink-0 text-tertiary" />
+            <input
+              ref={inputRef}
+              className="w-full border-none bg-transparent text-13 text-primary placeholder:text-placeholder focus:outline-none"
+              placeholder={t("common.search.label")}
+              value={searchQuery}
+              onChange={(e) => updateSearchQuery(e.target.value)}
+              onKeyDown={handleInputKeyDown}
+            />
+            <button type="button" className="grid place-items-center text-tertiary hover:text-primary" onClick={() => {
+              updateSearchQuery("");
+              setIsSearchOpen(false);
+            }}>
+              <CloseIcon className="size-3" />
             </button>
-          )}
-        </div>
-      )}
-
-      <FiltersDropdown
-        icon={<ListFilter className="h-3 w-3" />}
-        title={t("common.filters")}
-        placement="bottom-end"
-        isFiltersApplied={isFiltersApplied}
-      >
-        <CycleFiltersSelection filters={currentProjectFilters ?? {}} handleFiltersUpdate={handleFilters} />
-      </FiltersDropdown>
-    </div>
+          </div>
+        )}
+        <FiltersDropdown
+          icon={<ListFilter className="size-3.5" strokeWidth={1.75} />}
+          title={t("common.filters")}
+          placement="bottom-end"
+          isFiltersApplied={isFiltersApplied}
+          appearance="hub"
+        >
+          <CycleFiltersSelection filters={currentProjectFilters ?? {}} handleFiltersUpdate={handleFilters} />
+        </FiltersDropdown>
+      </ProjectHubToolbarSegment>
+      {trailing ? (
+        <>
+          <ProjectHubToolbarDivider />
+          <ProjectHubToolbarSegment>{trailing}</ProjectHubToolbarSegment>
+        </>
+      ) : null}
+    </ProjectHubToolbar>
   );
 });

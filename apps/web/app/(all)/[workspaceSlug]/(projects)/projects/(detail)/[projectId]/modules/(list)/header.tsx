@@ -1,83 +1,45 @@
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
-// plane imports
-import { EUserPermissions, EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operis/constants";
+import { EProjectFeatureKey, EUserPermissions, EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-// ui
-import { Button } from "@operis/propel/button";
-import { ModuleIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
-import { cn } from "@operis/utils";
-import { BOARD_HUB_TOOLBAR_CLUSTER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
-// components
-import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
+import { Header } from "@operis/ui";
 import { ModuleViewHeader } from "@/components/modules";
-// hooks
+import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
+import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
 
 export const ModulesListHeader = observer(function ModulesListHeader() {
-  // router
-  const router = useAppRouter();
-  const { workspaceSlug, projectId } = useParams();
-  // store hooks
   const { toggleCreateModuleModal } = useCommandPalette();
   const { allowPermissions } = useUserPermissions();
-
   const { loader } = useProject();
-
   const { t } = useTranslation();
-  const hasBoardWallpaper = useBoardHubHasBackground();
 
-  // auth
   const canUserCreateModule = allowPermissions(
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
     EUserPermissionsLevel.PROJECT
   );
 
   return (
-    <Header className={cn(hasBoardWallpaper && "!bg-transparent")}>
+    <ProjectFeaturePageHeader>
       <Header.LeftItem>
-        <div>
-          <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
-            <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
-            <Breadcrumbs.Item
-              component={
-                <BreadcrumbLink
-                  label={t("common.modules")}
-                  href={`/${workspaceSlug}/projects/${projectId}/modules/`}
-                  icon={<ModuleIcon className="h-4 w-4 text-tertiary" />}
-                  isLast
-                />
-              }
-              isLast
-            />
-          </Breadcrumbs>
-        </div>
+        <ProjectFeaturePageTitle featureKey={EProjectFeatureKey.MODULES} isLoading={loader === "init-loader"} />
       </Header.LeftItem>
       <Header.RightItem>
-        <div className={cn("flex items-center gap-2", hasBoardWallpaper && BOARD_HUB_TOOLBAR_CLUSTER)}>
-          <ModuleViewHeader />
-          {canUserCreateModule ? (
-            <Button
-              variant="primary"
-              data-ph-element={MODULE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
-              onClick={() => {
-                toggleCreateModuleModal(true);
-              }}
-              size="lg"
-              className="shrink-0"
-            >
-              <div className="block sm:hidden">{t("add")}</div>
-              <div className="hidden sm:block">{t("project_module.add_module")}</div>
-            </Button>
-          ) : null}
-        </div>
+        <ModuleViewHeader
+          trailing={
+            canUserCreateModule ? (
+              <ProjectHubPrimaryAction
+                data-ph-element={MODULE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
+                onClick={() => toggleCreateModuleModal(true)}
+              >
+                <span className="sm:hidden">{t("add")}</span>
+                <span className="hidden sm:inline">{t("project_module.add_module")}</span>
+              </ProjectHubPrimaryAction>
+            ) : undefined
+          }
+        />
       </Header.RightItem>
-    </Header>
+    </ProjectFeaturePageHeader>
   );
 });

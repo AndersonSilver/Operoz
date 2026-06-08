@@ -1,28 +1,20 @@
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
-// ui
-import { EUserPermissions, EUserPermissionsLevel, CYCLE_TRACKER_ELEMENTS } from "@operis/constants";
+import {
+  CYCLE_TRACKER_ELEMENTS,
+  EProjectFeatureKey,
+  EUserPermissions,
+  EUserPermissionsLevel,
+} from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CycleIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
-// components
-import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
+import { Header } from "@operis/ui";
 import { CyclesViewHeader } from "@/components/cycles/cycles-view-header";
-// hooks
+import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
+import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
 
 export const CyclesListHeader = observer(function CyclesListHeader() {
-  // router
-  const router = useAppRouter();
-  const { workspaceSlug, projectId } = useParams();
-
-  // store hooks
   const { toggleCreateCycleModal } = useCommandPalette();
   const { allowPermissions } = useUserPermissions();
   const { currentProjectDetails, loader } = useProject();
@@ -34,41 +26,28 @@ export const CyclesListHeader = observer(function CyclesListHeader() {
   );
 
   return (
-    <Header>
+    <ProjectFeaturePageHeader>
       <Header.LeftItem>
-        <Breadcrumbs onBack={router.back} isLoading={loader === "init-loader"}>
-          <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
-          <Breadcrumbs.Item
-            component={
-              <BreadcrumbLink
-                label="Cycles"
-                href={`/${workspaceSlug}/projects/${currentProjectDetails?.id}/cycles/`}
-                icon={<CycleIcon className="h-4 w-4 text-tertiary" />}
-                isLast
-              />
-            }
-            isLast
-          />
-        </Breadcrumbs>
+        <ProjectFeaturePageTitle featureKey={EProjectFeatureKey.CYCLES} isLoading={loader === "init-loader"} />
       </Header.LeftItem>
-      {canUserCreateCycle && currentProjectDetails ? (
-        <Header.RightItem>
-          <CyclesViewHeader projectId={currentProjectDetails.id} />
-          <Button
-            variant="primary"
-            size="lg"
-            data-ph-element={CYCLE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
-            onClick={() => {
-              toggleCreateCycleModal(true);
-            }}
-          >
-            <div className="block sm:hidden">{t("add")}</div>
-            <div className="hidden sm:block">{t("project_cycles.add_cycle")}</div>
-          </Button>
-        </Header.RightItem>
-      ) : (
-        <></>
-      )}
-    </Header>
+      <Header.RightItem>
+        {currentProjectDetails ? (
+          <CyclesViewHeader
+            projectId={currentProjectDetails.id}
+            trailing={
+              canUserCreateCycle ? (
+                <ProjectHubPrimaryAction
+                  data-ph-element={CYCLE_TRACKER_ELEMENTS.RIGHT_HEADER_ADD_BUTTON}
+                  onClick={() => toggleCreateCycleModal(true)}
+                >
+                  <span className="sm:hidden">{t("add")}</span>
+                  <span className="hidden sm:inline">{t("project_cycles.add_cycle")}</span>
+                </ProjectHubPrimaryAction>
+              ) : undefined
+            }
+          />
+        ) : null}
+      </Header.RightItem>
+    </ProjectFeaturePageHeader>
   );
 });

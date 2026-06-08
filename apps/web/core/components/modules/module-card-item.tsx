@@ -18,6 +18,8 @@ import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
 import { Tooltip } from "@operis/propel/tooltip";
 import type { IModule } from "@operis/types";
 import { Card, FavoriteStar, LinearProgressIndicator } from "@operis/ui";
+import { cn } from "@operis/utils";
+import { BOARD_HUB_MODULE_CARD } from "@/components/board/board-hub-background";
 import { getDate, renderFormattedPayloadDate, generateQueryParams } from "@operis/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
@@ -180,7 +182,7 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
   return (
     <div className="relative" data-prevent-progress>
       <Link ref={parentRef} href={`/${workspaceSlug}/projects/${moduleDetails.project_id}/modules/${moduleDetails.id}`}>
-        <Card>
+        <Card className={cn(BOARD_HUB_MODULE_CARD)}>
           <div>
             <div className="flex items-center justify-between gap-2">
               <Tooltip tooltipContent={moduleDetails.name} position="top" isMobile={isMobile}>
@@ -219,6 +221,8 @@ export const ModuleCardItem = observer(function ModuleCardItem(props: Props) {
             <LinearProgressIndicator size="lg" data={progressIndicatorData} />
             <div className="flex items-center justify-between py-0.5" onClick={handleEventPropagation}>
               <DateRangeDropdown
+                renderInPortal
+                placement="bottom-start"
                 buttonContainerClassName={`h-6 w-full flex ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"} items-center gap-1.5 text-tertiary border-[0.5px] border-strong rounded-sm text-11`}
                 buttonVariant="transparent-with-text"
                 className="h-7"
