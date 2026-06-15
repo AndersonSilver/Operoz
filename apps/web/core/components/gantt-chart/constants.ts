@@ -13,3 +13,6 @@ export const GANTT_SIDEBAR_MAX_WIDTH = 720;
 export const DEFAULT_BLOCK_WIDTH = 60;
 
 export const GANTT_SELECT_GROUP = "gantt-issues";
+
+/** Espaço fixo à esquerda da sidebar para checkboxes de seleção em massa. */
+export const GANTT_CHECKBOX_GUTTER_PX = 32;

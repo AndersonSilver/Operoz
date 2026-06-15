@@ -3,7 +3,7 @@ import { useParams } from "next/navigation";
 // constants
 import { SPREADSHEET_SELECT_GROUP } from "@operis/constants";
 // ui
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IProjectCustomFieldLite } from "@operis/types";
 // components
 import { cn } from "@operis/utils";
 import { MultipleSelectGroupAction } from "@/components/core/multiple-select";
@@ -18,6 +18,7 @@ interface Props {
   canEditProperties: (projectId: string | undefined) => boolean;
   isEstimateEnabled: boolean;
   spreadsheetColumnsList: (keyof IIssueDisplayProperties)[];
+  customFieldColumns?: IProjectCustomFieldLite[];
   selectionHelpers: TSelectionHelper;
   isEpic?: boolean;
 }
@@ -30,6 +31,7 @@ export const SpreadsheetHeader = observer(function SpreadsheetHeader(props: Prop
     canEditProperties,
     isEstimateEnabled,
     spreadsheetColumnsList,
+    customFieldColumns = [],
     selectionHelpers,
     isEpic = false,
   } = props;
@@ -80,6 +82,17 @@ export const SpreadsheetHeader = observer(function SpreadsheetHeader(props: Prop
             isEstimateEnabled={isEstimateEnabled}
             isEpic={isEpic}
           />
+        ))}
+        {customFieldColumns.map((field) => (
+          <th
+            key={field.id}
+            className="h-11 min-w-36 items-center border border-t-0 border-b-0 border-subtle bg-layer-1 py-1 text-13 font-medium"
+            tabIndex={-1}
+          >
+            <div className="flex h-full w-full items-center px-page-x">
+              <span className="truncate text-13 font-medium text-secondary">{field.name}</span>
+            </div>
+          </th>
         ))}
       </tr>
     </thead>

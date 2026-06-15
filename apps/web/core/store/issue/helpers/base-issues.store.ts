@@ -739,21 +739,9 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
         Object.keys(data.properties).forEach((key) => {
           const property = key as keyof TBulkOperationsPayload["properties"];
           const propertyValue = data.properties[property];
-          // update root issue map properties
-          if (Array.isArray(propertyValue)) {
-            // if property value is array, append it to the existing values
-            const existingValue = issueBeforeUpdate[property];
-            // convert existing value to an array
-            const newExistingValue = Array.isArray(existingValue) ? existingValue : [];
-            this.rootIssueStore.issues.updateIssue(issueId, {
-              [property]: uniq([...newExistingValue, ...propertyValue]),
-            });
-          } else {
-            // if property value is not an array, simply update the value
-            this.rootIssueStore.issues.updateIssue(issueId, {
-              [property]: propertyValue,
-            });
-          }
+          this.rootIssueStore.issues.updateIssue(issueId, {
+            [property]: propertyValue,
+          });
         });
         const issueDetails = this.rootIssueStore.issues.getIssueById(issueId);
         this.updateIssueList(issueDetails, issueBeforeUpdate);
@@ -1199,8 +1187,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
 
     const fromKey = this.resolveIssueGroupId(sourceGroupId);
     const toKey = this.resolveIssueGroupId(destinationGroupId);
-    const hadInSource =
-      Array.isArray(this.groupedIssueIds[fromKey]) && this.groupedIssueIds[fromKey].includes(issueId);
+    const hadInSource = Array.isArray(this.groupedIssueIds[fromKey]) && this.groupedIssueIds[fromKey].includes(issueId);
 
     runInAction(() => {
       const nextGrouped: TGroupedIssues = {};
@@ -1301,7 +1288,12 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
       this.updateIssueCount(accumulatedUpdatesForCount);
 
       // Calendar: remove stale copies when API group keys and normalized keys diverged
-      if (this.groupBy === "target_date" && issue && issueBeforeUpdate && issue.target_date !== issueBeforeUpdate.target_date) {
+      if (
+        this.groupBy === "target_date" &&
+        issue &&
+        issueBeforeUpdate &&
+        issue.target_date !== issueBeforeUpdate.target_date
+      ) {
         const previousKeys = new Set<string>();
 
         if (this.groupedIssueIds) {
@@ -1372,8 +1364,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
     //if is an array then it's an ungrouped response. return values with groupId as ALL_ISSUES
     if (Array.isArray(issueResult)) {
       const groupKey = this.issueGroupKey;
-      const isMultiValueGroupKey =
-        groupKey === "label_ids" || groupKey === "assignee_ids" || groupKey === "module_ids";
+      const isMultiValueGroupKey = groupKey === "label_ids" || groupKey === "assignee_ids" || groupKey === "module_ids";
       const isCalendarTargetDateGroup =
         issueResponse.grouped_by === "target_date" ||
         this.groupBy === "target_date" ||

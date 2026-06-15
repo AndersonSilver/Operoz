@@ -1,4 +1,5 @@
 from django.db.models import Q
+from django.http import HttpResponse
 from django.utils import timezone
 from django.utils.dateparse import parse_date
 from rest_framework import status
@@ -7,7 +8,7 @@ from rest_framework.response import Response
 from operis.app.permissions import ROLE, allow_permission
 from operis.app.views.base import BaseViewSet
 from operis.app.views.board.meta import CLOSED_STATE_GROUPS, _project_permission_filters
-from operis.db.models import Board, BoardStatusReport, Issue, Module, Project
+from operis.db.models import Board, BoardStatusReport, Issue, Module, Project, Workspace
 from operis.utils.client_360 import (
     aggregate_issue_stats,
     aggregate_module_counts,
@@ -15,6 +16,32 @@ from operis.utils.client_360 import (
     build_client_row,
     build_module_report_rows,
     parse_week_period,
+)
+from operis.utils.client_360_health_settings import (
+    load_board_health_config_map,
+    load_board_score_alert_threshold_map,
+)
+from operis.utils.client_360_health_alerts import build_client360_list_summary
+from operis.utils.client_360_display import client_360_display_payload
+from operis.utils.client_360_period_compare import attach_period_compare, parse_compare_query
+from operis.utils.client_360_health_history import (
+    build_health_history_payload,
+    parse_health_history_weeks,
+)
+from operis.utils.client_360_matrix import (
+    build_client360_matrix_payload,
+    parse_matrix_pagination,
+    parse_matrix_weeks,
+)
+from operis.utils.client_360_matrix_csv_export import build_client360_matrix_csv_content, matrix_csv_filename
+from operis.utils.client_360_qbr_export import parse_qbr_format, parse_qbr_weeks, qbr_to_markdown, qbr_to_pdf_bytes
+from operis.utils.client_360_operational import apply_operational_enrichment, build_detail_operational_payload
+from operis.utils.client_360_finops import (
+    apply_finops_enrichment,
+    build_detail_finops_payload,
+    load_finops_profiles,
+    load_finops_settings,
+    month_start,
 )
 
 SUPPORT_TYPE_NAME_Q = Q(type__name__icontains="sustent") | Q(type__name__icontains="chamado")
@@ -84,6 +111,8 @@ class BoardClient360ViewSet(BaseViewSet):
         )
         module_counts = aggregate_module_counts(project_ids)
         report_stats_map = aggregate_status_reports(project_ids, period)
+        health_config_map = load_board_health_config_map([board.id])
+        alert_threshold_map = load_board_score_alert_threshold_map([board.id])
 
         clients = [
             build_client_row(
@@ -92,30 +121,52 @@ class BoardClient360ViewSet(BaseViewSet):
                 modules_total=module_counts.get(str(project.id), 0),
                 issue_stats=issue_stats_map.get(str(project.id)),
                 report_stats=report_stats_map.get(str(project.id)),
+                health_config=health_config_map.get(str(board.id)),
+                score_alert_threshold=alert_threshold_map.get(str(board.id)),
             )
             for project in projects
         ]
 
-        summary = {
-            "total_clients": len(clients),
-            "health_critical": sum(1 for c in clients if c["health"] == "critical"),
-            "health_warning": sum(1 for c in clients if c["health"] == "warning"),
-            "report_missing": sum(
-                1 for c in clients if c["status_report"]["coverage"] == "missing"
-            ),
-            "total_overdue": sum(c["issues"]["overdue"] for c in clients),
-            "total_support_open": sum(c["support"]["open_count"] for c in clients),
+        issue_qs = self._board_issues_queryset(slug, board.id, project_ids)
+        project_board_map = {str(p.id): str(board.id) for p in projects}
+        apply_operational_enrichment(
+            clients,
+            issue_queryset=issue_qs,
+            period=period,
+            today=today,
+            board_ids=[board.id],
+            project_board_map=project_board_map,
+        )
+
+        finops_settings = load_finops_settings(board.workspace_id)
+        finops_profiles = load_finops_profiles(project_ids, month_start(today))
+        apply_finops_enrichment(clients, profiles=finops_profiles, settings=finops_settings)
+
+        summary = build_client360_list_summary(clients)
+
+        payload = {
+            "period_start": period.start.isoformat(),
+            "period_end": period.end.isoformat(),
+            "display": client_360_display_payload(board.workspace),
+            "summary": summary,
+            "clients": clients,
         }
 
-        return Response(
-            {
-                "period_start": period.start.isoformat(),
-                "period_end": period.end.isoformat(),
-                "summary": summary,
-                "clients": clients,
-            },
-            status=status.HTTP_200_OK,
-        )
+        if parse_compare_query(request.query_params.get("compare")):
+            payload["period_compare"] = attach_period_compare(
+                clients=clients,
+                summary=summary,
+                projects=projects,
+                current_period=period,
+                issue_queryset=self._board_issues_queryset(slug, board.id, project_ids),
+                today=today,
+                include_board=False,
+                health_config_map=health_config_map,
+                alert_threshold_map=alert_threshold_map,
+                module_counts=module_counts,
+            )
+
+        return Response(payload, status=status.HTTP_200_OK)
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
     def retrieve(self, request, slug, board_slug, project_id):
@@ -141,6 +192,8 @@ class BoardClient360ViewSet(BaseViewSet):
         issue_stats_map = aggregate_issue_stats(issue_qs, today)
         module_counts = aggregate_module_counts([pid])
         report_stats_map = aggregate_status_reports([pid], period)
+        health_config_map = load_board_health_config_map([board.id])
+        alert_threshold_map = load_board_score_alert_threshold_map([board.id])
 
         client = build_client_row(
             project,
@@ -148,6 +201,8 @@ class BoardClient360ViewSet(BaseViewSet):
             modules_total=module_counts.get(str(pid), 0),
             issue_stats=issue_stats_map.get(str(pid)),
             report_stats=report_stats_map.get(str(pid)),
+            health_config=health_config_map.get(str(board.id)),
+            score_alert_threshold=alert_threshold_map.get(str(board.id)),
         )
 
         modules = list(
@@ -203,12 +258,219 @@ class BoardClient360ViewSet(BaseViewSet):
             )
         )
 
+        operational = build_detail_operational_payload(
+            project_id=pid,
+            issue_queryset=issue_qs,
+            period=period,
+            today=today,
+            board_id=board.id,
+            module_rows=module_rows,
+        )
+        finops_settings = load_finops_settings(board.workspace_id)
+        finops_profile = load_finops_profiles([pid], month_start(today)).get(str(pid))
+        finops = build_detail_finops_payload(
+            project_id=str(pid),
+            profile=finops_profile,
+            settings=finops_settings,
+            issue_queryset=issue_qs,
+            period=period,
+            throughput=operational.get("delivery", {}),
+        )
+
         return Response(
             {
                 **client,
+                "display": client_360_display_payload(board.workspace),
                 "modules": module_rows,
                 "overdue_issues": overdue_issues,
                 "support_issues": support_issues,
+                "operational": operational,
+                "finops": finops,
             },
             status=status.HTTP_200_OK,
         )
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
+    def health_history(self, request, slug, board_slug, project_id):
+        board = self._get_board(slug, board_slug)
+        if not board:
+            return Response({"error": "Board not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        weeks, err = parse_health_history_weeks(request.query_params.get("weeks"))
+        if err:
+            return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
+
+        project = (
+            self._accessible_projects(slug, board.id)
+            .filter(id=project_id)
+            .first()
+        )
+        if not project:
+            return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        payload = build_health_history_payload(
+            project,
+            weeks=weeks,
+            issue_queryset=self._board_issues_queryset(slug, board.id, [project.id]),
+        )
+        return Response(payload, status=status.HTTP_200_OK)
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
+    def matrix(self, request, slug, board_slug):
+        board = self._get_board(slug, board_slug)
+        if not board:
+            return Response({"error": "Board not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        anchor_period, err = self._parse_period(request)
+        if err:
+            return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
+
+        weeks, weeks_err = parse_matrix_weeks(request.query_params.get("weeks"))
+        if weeks_err:
+            return Response({"error": weeks_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        page, page_size, page_err = parse_matrix_pagination(
+            request.query_params.get("page"),
+            request.query_params.get("page_size"),
+        )
+        if page_err:
+            return Response({"error": page_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        projects = list(self._accessible_projects(slug, board.id))
+        project_ids = [project.id for project in projects]
+        module_counts = aggregate_module_counts(project_ids)
+
+        payload = build_client360_matrix_payload(
+            projects,
+            anchor_period=anchor_period,
+            weeks=weeks,
+            module_counts=module_counts,
+            page=page,
+            page_size=page_size,
+            include_board=False,
+        )
+
+        if (request.query_params.get("export") or "").lower() == "csv":
+            export_payload = build_client360_matrix_payload(
+                projects,
+                anchor_period=anchor_period,
+                weeks=weeks,
+                module_counts=module_counts,
+                page=1,
+                page_size=max(len(projects), 1),
+                include_board=False,
+            )
+            delimiter = ";" if (request.query_params.get("delimiter") or "") == "semicolon" else ","
+            csv_content = build_client360_matrix_csv_content(
+                clients=export_payload.get("clients") or [],
+                weeks=export_payload.get("weeks") or [],
+                delimiter=delimiter,
+            )
+            filename = matrix_csv_filename(f"{slug}-{board_slug}", anchor_period.end.isoformat())
+            response = HttpResponse("\ufeff" + csv_content, content_type="text/csv; charset=utf-8")
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
+            return response
+
+        return Response(payload, status=status.HTTP_200_OK)
+
+    def _qbr_filename_base(self, payload: dict) -> str:
+        period_end = payload.get("period_end", "qbr")
+        scope = payload.get("scope", "portfolio")
+        return f"operoz-qbr-{scope}-{period_end}"
+
+    def _qbr_http_response(self, payload: dict, export_format: str):
+        base_name = self._qbr_filename_base(payload)
+        if export_format == "pdf":
+            pdf_bytes, extra_warnings = qbr_to_pdf_bytes(payload)
+            all_warnings = list(payload.get("chart_warnings") or []) + [
+                w for w in extra_warnings if w not in (payload.get("chart_warnings") or [])
+            ]
+            if pdf_bytes:
+                response = HttpResponse(pdf_bytes, content_type="application/pdf")
+                response["Content-Disposition"] = f'attachment; filename="{base_name}.pdf"'
+                if all_warnings:
+                    response["X-Client360-Qbr-Warnings"] = "; ".join(all_warnings)[:500]
+                return response
+            from operis.utils.client_360_qbr_export import qbr_to_html
+
+            html_body = qbr_to_html({**payload, "chart_warnings": all_warnings})
+            response = HttpResponse(html_body, content_type="text/html; charset=utf-8")
+            response["Content-Disposition"] = f'inline; filename="{base_name}-print.html"'
+            response["X-Client360-Qbr-Pdf-Fallback"] = "html-print"
+            if all_warnings:
+                response["X-Client360-Qbr-Warnings"] = "; ".join(all_warnings)[:500]
+            return response
+
+        markdown = qbr_to_markdown(payload)
+        response = HttpResponse(markdown, content_type="text/markdown; charset=utf-8")
+        response["Content-Disposition"] = f'attachment; filename="{base_name}.md"'
+        return response
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
+    def qbr_portfolio(self, request, slug, board_slug):
+        board = self._get_board(slug, board_slug)
+        if not board:
+            return Response({"error": "Board not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        period, err = self._parse_period(request)
+        if err:
+            return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
+
+        weeks, weeks_err = parse_qbr_weeks(request.query_params.get("weeks"))
+        if weeks_err:
+            return Response({"error": weeks_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        export_format, fmt_err = parse_qbr_format(request.query_params.get("export_format"))
+        if fmt_err:
+            return Response({"error": fmt_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        projects = list(self._accessible_projects(slug, board.id))
+        workspace = Workspace.objects.filter(slug=slug, deleted_at__isnull=True).first()
+        if not workspace:
+            return Response({"error": "Workspace not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        payload = build_workspace_portfolio_qbr_context(
+            workspace=workspace,
+            projects=projects,
+            period=period,
+            weeks=weeks,
+            issue_queryset=self._board_issues_queryset(slug, board.id, [project.id for project in projects]),
+            include_compare=parse_compare_query(request.query_params.get("compare")),
+        )
+        return self._qbr_http_response(payload, export_format)
+
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
+    def qbr_client(self, request, slug, board_slug, project_id):
+        board = self._get_board(slug, board_slug)
+        if not board:
+            return Response({"error": "Board not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        period, err = self._parse_period(request)
+        if err:
+            return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
+
+        weeks, weeks_err = parse_qbr_weeks(request.query_params.get("weeks"))
+        if weeks_err:
+            return Response({"error": weeks_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        export_format, fmt_err = parse_qbr_format(request.query_params.get("export_format"))
+        if fmt_err:
+            return Response({"error": fmt_err}, status=status.HTTP_400_BAD_REQUEST)
+
+        project = self._accessible_projects(slug, board.id).filter(id=project_id).first()
+        if not project:
+            return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        workspace = Workspace.objects.filter(slug=slug, deleted_at__isnull=True).first()
+        if not workspace:
+            return Response({"error": "Workspace not found"}, status=status.HTTP_404_NOT_FOUND)
+
+        payload = build_client_qbr_context(
+            workspace=workspace,
+            project=project,
+            period=period,
+            weeks=weeks,
+            issue_queryset=self._board_issues_queryset(slug, board.id, [project.id]),
+            include_compare=parse_compare_query(request.query_params.get("compare")),
+        )
+        return self._qbr_http_response(payload, export_format)

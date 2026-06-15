@@ -1,0 +1,58 @@
+{
+  "id": "status-report-friday-reminder",
+  "version": 1,
+  "name": "Lembrete status report (sexta)",
+  "description": "Lembrete semanal sexta-feira 14h para leads com status report em falta ou parcial.",
+  "icon": "file-text",
+  "category": "client_360",
+  "default_rule_name": "Lembrete status report sexta",
+  "default_description": "Template Operoz Visão 360 — lembrete de status report.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Lembrete status report sexta" },
+    { "key": "time", "type": "string", "label": "Horário (HH:MM)", "default": "14:00" },
+    { "key": "timezone", "type": "string", "label": "Fuso horário", "default": "America/Sao_Paulo" },
+    {
+      "key": "message",
+      "type": "string",
+      "label": "Mensagem",
+      "default": "Revise o status report semanal dos clientes com report em falta ou parcial."
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-friday",
+        "type": "scheduleCronNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "schedule.cron",
+          "label": "Sexta 14h",
+          "config": {
+            "preset": "weekly",
+            "time": "{{time}}",
+            "weekdays": [4],
+            "day_of_month": 1,
+            "cron": "0 14 * * 5",
+            "timezone": "{{timezone}}"
+          }
+        }
+      },
+      {
+        "id": "action-notify",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.notify",
+          "label": "Notificar leads",
+          "config": {
+            "user_ids": [],
+            "message": "{{message}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-friday", "target": "action-notify" }]
+  }
+}

@@ -41,7 +41,7 @@ class Command(BaseCommand):
 
         parser.add_argument("--workspace", type=str, default="tech4humans")
 
-        parser.add_argument("--board-slug", type=str, default="squad-as-a-services")
+        parser.add_argument("--board-slug", type=str, default="squad-as-a-service")
 
         parser.add_argument("--actor-email", type=str, default="andersonsilver18@gmail.com")
 

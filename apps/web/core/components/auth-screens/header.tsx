@@ -4,19 +4,20 @@ import Link from "next/link";
 import { AUTH_TRACKER_ELEMENTS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { PlaneLockup } from "@operis/propel/icons";
+import { cn } from "@operis/utils";
 import { PageHead } from "@/components/core/page-title";
 import { EAuthModes } from "@/helpers/authentication.helper";
 import { useInstance } from "@/hooks/store/use-instance";
 
 const authContentMap = {
   [EAuthModes.SIGN_IN]: {
-    pageTitle: "Sign up",
+    pageTitle: "Entrar",
     text: "auth.common.new_to_plane",
     linkText: "Sign up",
     linkHref: "/sign-up",
   },
   [EAuthModes.SIGN_UP]: {
-    pageTitle: "Sign in",
+    pageTitle: "Criar conta",
     text: "auth.common.already_have_an_account",
     linkText: "Sign in",
     linkHref: "/sign-in",
@@ -25,9 +26,10 @@ const authContentMap = {
 
 type AuthHeaderProps = {
   type: EAuthModes;
+  compactOnDesktop?: boolean;
 };
 
-export const AuthHeader = observer(function AuthHeader({ type }: AuthHeaderProps) {
+export const AuthHeader = observer(function AuthHeader({ type, compactOnDesktop = false }: AuthHeaderProps) {
   const { t } = useTranslation();
   // store
   const { config } = useInstance();
@@ -50,23 +52,39 @@ export const AuthHeader = observer(function AuthHeader({ type }: AuthHeaderProps
     ) : undefined;
 
   return (
-    <AuthHeaderBase pageTitle={t(authContentMap[type].pageTitle)} additionalAction={additionalAction} />
+    <AuthHeaderBase
+      pageTitle={t(authContentMap[type].pageTitle)}
+      additionalAction={additionalAction}
+      compactOnDesktop={compactOnDesktop}
+    />
   );
 });
 
 type TAuthHeaderBase = {
   pageTitle: string;
   additionalAction?: React.ReactNode;
+  compactOnDesktop?: boolean;
 };
 
 export function AuthHeaderBase(props: TAuthHeaderBase) {
-  const { pageTitle, additionalAction } = props;
+  const { pageTitle, additionalAction, compactOnDesktop = false } = props;
   return (
     <>
-      <PageHead title={pageTitle + " - Plane"} />
-      <div className="flex w-full flex-shrink-0 items-center justify-between gap-6 pb-2 pt-0 sm:pb-3">
-        <Link href="/" className="rounded-lg outline-none transition-opacity hover:opacity-90 focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-1">
-          <PlaneLockup className="h-10 w-auto max-w-[min(88vw,300px)] sm:h-11 sm:max-w-[340px]" />
+      <PageHead title="Operoz" />
+      <div
+        className={cn(
+          "flex w-full flex-shrink-0 items-center justify-between gap-6 pt-0 pb-2 sm:pb-3",
+          compactOnDesktop && "lg:min-h-8 lg:pb-6"
+        )}
+      >
+        <Link
+          href="/"
+          className={cn(
+            "focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 rounded-lg transition-opacity outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2",
+            compactOnDesktop && "lg:hidden"
+          )}
+        >
+          <PlaneLockup height={44} className="w-auto max-w-[min(88vw,300px)] sm:max-w-[340px]" />
         </Link>
         {additionalAction}
       </div>

@@ -48,12 +48,10 @@ export function OAuthOptions(props: OAuthOptionsProps) {
       </div>
 
       {showDivider && (
-        <div className="mt-6 flex items-center gap-3 transition-all duration-300">
-          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-subtle" />
-          <p className="flex-shrink-0 rounded-full bg-layer-3 px-3 py-1 text-center text-12 font-medium uppercase tracking-wide text-tertiary">
-            or
-          </p>
-          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-subtle" />
+        <div className="mt-7 flex items-center gap-4">
+          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-white/[0.08] dark:border-white/[0.06]" />
+          <p className="flex-shrink-0 text-11 font-medium tracking-[0.18em] text-tertiary/80 uppercase">ou</p>
+          <hr className="min-h-px min-w-0 flex-1 border-0 border-t border-white/[0.08] dark:border-white/[0.06]" />
         </div>
       )}
     </div>

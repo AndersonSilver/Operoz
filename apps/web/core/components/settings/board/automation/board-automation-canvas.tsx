@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { type Dispatch, type SetStateAction, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Background,
   Controls,
@@ -9,6 +9,9 @@ import {
   addEdge,
   applyEdgeChanges,
   applyNodeChanges,
+  useEdgesState,
+  useNodesState,
+  useReactFlow,
   type Connection,
   type Edge,
   type EdgeChange,
@@ -23,9 +26,13 @@ import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import "./automation-canvas.css";
 import { AutomationFlowNode } from "./automation-node";
 import { DecisionFlowNode } from "./decision-flow-node";
+import { ParallelFlowNode } from "./parallel-flow-node";
+import { ScheduleCronFlowNode } from "./schedule-cron-flow-node";
 import {
   AUTOMATION_NODE_TYPE,
   DECISION_NODE_TYPE,
+  PARALLEL_NODE_TYPE,
+  SCHEDULE_CRON_NODE_TYPE,
   type AutomationNodeData,
   type TAutomationGraphClip,
   extractGraphClip,
@@ -41,7 +48,7 @@ type Props = {
   graph: TAutomationGraph;
   selectedNodeIds: string[];
   selectedEdgeId: string | null;
-  onGraphChange: (graph: TAutomationGraph) => void;
+  onGraphChange: Dispatch<SetStateAction<TAutomationGraph>>;
   onNodesSelect: (nodeIds: string[]) => void;
   onEdgeSelect: (edgeId: string | null) => void;
 };
@@ -49,9 +56,9 @@ type Props = {
 const nodeTypes = {
   [AUTOMATION_NODE_TYPE]: AutomationFlowNode,
   [DECISION_NODE_TYPE]: DecisionFlowNode,
+  [PARALLEL_NODE_TYPE]: ParallelFlowNode,
+  [SCHEDULE_CRON_NODE_TYPE]: ScheduleCronFlowNode,
 };
-
-const STRUCTURAL_NODE_CHANGES = new Set(["add", "remove", "position", "replace", "reset"]);
 
 function isEditableTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
@@ -60,14 +67,30 @@ function isEditableTarget(target: EventTarget | null): boolean {
   return target.isContentEditable;
 }
 
+function shouldPersistNodeChanges(changes: NodeChange<Node<AutomationNodeData>>[]): boolean {
+  return changes.some((change) => {
+    if (change.type === "select" || change.type === "dimensions" || change.type === "reset") {
+      return false;
+    }
+    if (change.type === "position") {
+      return change.dragging !== true;
+    }
+    return true;
+  });
+}
+
 function minimapNodeColor(node: Node<AutomationNodeData>): string {
   switch (node.data?.kind) {
     case "trigger":
-      return "var(--text-accent-primary)";
+      return node.data?.catalog_key === "schedule.cron"
+        ? "var(--extended-color-indigo-500)"
+        : "var(--text-accent-primary)";
     case "filter":
       return "var(--text-warning-primary)";
     case "decision":
       return "var(--text-link-primary)";
+    case "parallel":
+      return "var(--extended-color-cyan-500)";
     case "action":
       return "var(--text-success-primary)";
     default:
@@ -76,67 +99,112 @@ function minimapNodeColor(node: Node<AutomationNodeData>): string {
 }
 
 function CanvasInner(props: Props) {
-  const {
-    graph,
-    selectedNodeIds,
-    selectedEdgeId,
-    onGraphChange,
-    onNodesSelect,
-    onEdgeSelect,
-  } = props;
+  const { graph, selectedNodeIds, selectedEdgeId, onGraphChange, onNodesSelect, onEdgeSelect } = props;
   const { t } = useTranslation();
+  const { fitView } = useReactFlow();
   const clipboardRef = useRef<TAutomationGraphClip | null>(null);
   const pasteOffsetRef = useRef(0);
   const [hasClipboard, setHasClipboard] = useState(false);
+  const skipGraphSyncRef = useRef(false);
+  const isDraggingRef = useRef(false);
+  const didFitViewRef = useRef(false);
 
-  const { nodes, edges } = useMemo(
+  const flowFromGraph = useMemo(
     () => graphToFlow(graph, selectedNodeIds, selectedEdgeId),
     [graph, selectedNodeIds, selectedEdgeId]
   );
 
+  const [nodes, setNodes, onNodesChangeInternal] = useNodesState(flowFromGraph.nodes);
+  const [edges, setEdges, onEdgesChangeInternal] = useEdgesState(flowFromGraph.edges);
+  const nodesRef = useRef(nodes);
+  const edgesRef = useRef(edges);
+  nodesRef.current = nodes;
+  edgesRef.current = edges;
+
+  const persistFlowToGraph = useCallback(
+    (nextNodes: Node<AutomationNodeData>[], nextEdges: Edge[]) => {
+      skipGraphSyncRef.current = true;
+      onGraphChange(flowToGraph(nextNodes, nextEdges));
+    },
+    [onGraphChange]
+  );
+
+  useEffect(() => {
+    if (skipGraphSyncRef.current) {
+      skipGraphSyncRef.current = false;
+      return;
+    }
+    if (isDraggingRef.current) return;
+
+    const { nodes: nextNodes, edges: nextEdges } = graphToFlow(graph, selectedNodeIds, selectedEdgeId);
+    setNodes(nextNodes);
+    setEdges(nextEdges);
+  }, [graph, selectedNodeIds, selectedEdgeId, setNodes, setEdges]);
+
+  useEffect(() => {
+    if (didFitViewRef.current || nodes.length === 0) return;
+    didFitViewRef.current = true;
+    requestAnimationFrame(() => {
+      void fitView({ padding: 0.2 });
+    });
+  }, [nodes.length, fitView]);
+
   const onNodesChange = useCallback(
     (changes: NodeChange<Node<AutomationNodeData>>[]) => {
-      const structuralChanges = changes.filter((change) => STRUCTURAL_NODE_CHANGES.has(change.type));
-      if (structuralChanges.length === 0) return;
+      if (changes.some((change) => change.type === "position" && change.dragging === true)) {
+        isDraggingRef.current = true;
+      }
+      if (changes.some((change) => change.type === "position" && change.dragging === false)) {
+        isDraggingRef.current = false;
+      }
 
-      const nextNodes = applyNodeChanges(structuralChanges, nodes);
-      const removedIds = new Set(
-        structuralChanges.filter((c) => c.type === "remove").map((c) => c.id)
-      );
-      const nextEdges =
-        removedIds.size > 0
-          ? edges.filter((e) => !removedIds.has(e.source) && !removedIds.has(e.target))
-          : edges;
+      onNodesChangeInternal(changes);
 
-      onGraphChange(flowToGraph(nextNodes, nextEdges));
+      if (!shouldPersistNodeChanges(changes)) return;
+
+      const nextNodes = applyNodeChanges(changes, nodesRef.current);
+      nodesRef.current = nextNodes;
+
+      const removedIds = new Set(changes.filter((change) => change.type === "remove").map((change) => change.id));
+      let nextEdges = edgesRef.current;
       if (removedIds.size > 0) {
+        nextEdges = nextEdges.filter((edge) => !removedIds.has(edge.source) && !removedIds.has(edge.target));
+        edgesRef.current = nextEdges;
+        setEdges(nextEdges);
         onNodesSelect(selectedNodeIds.filter((id) => !removedIds.has(id)));
       }
+
+      persistFlowToGraph(nextNodes, nextEdges);
     },
-    [nodes, edges, onGraphChange, onNodesSelect, selectedNodeIds]
+    [onNodesChangeInternal, onNodesSelect, persistFlowToGraph, selectedNodeIds, setEdges]
   );
 
   const onEdgesChange = useCallback(
     (changes: EdgeChange[]) => {
-      const structuralChanges = changes.filter((change) => change.type !== "select");
-      if (structuralChanges.length === 0) return;
+      onEdgesChangeInternal(changes);
 
-      const nextEdges = applyEdgeChanges(structuralChanges, edges);
-      const removedIds = new Set(
-        structuralChanges.filter((c) => c.type === "remove").map((c) => c.id)
-      );
-      onGraphChange(flowToGraph(nodes, nextEdges));
+      const persistable = changes.filter((change) => change.type !== "select" && change.type !== "reset");
+      if (persistable.length === 0) return;
+
+      const nextEdges = applyEdgeChanges(changes, edgesRef.current);
+      edgesRef.current = nextEdges;
+
+      const removedIds = new Set(persistable.filter((change) => change.type === "remove").map((change) => change.id));
       if (selectedEdgeId && removedIds.has(selectedEdgeId)) onEdgeSelect(null);
+
+      persistFlowToGraph(nodesRef.current, nextEdges);
     },
-    [nodes, edges, onGraphChange, onEdgeSelect, selectedEdgeId]
+    [onEdgesChangeInternal, onEdgeSelect, persistFlowToGraph, selectedEdgeId]
   );
 
   const onConnect = useCallback(
     (connection: Connection) => {
-      const nextEdges = addEdge({ ...connection, animated: true }, edges);
-      onGraphChange(flowToGraph(nodes, nextEdges));
+      const nextEdges = addEdge({ ...connection, animated: true }, edgesRef.current);
+      edgesRef.current = nextEdges;
+      setEdges(nextEdges);
+      persistFlowToGraph(nodesRef.current, nextEdges);
     },
-    [nodes, edges, onGraphChange]
+    [persistFlowToGraph, setEdges]
   );
 
   const handleSelectionChange = useCallback(
@@ -292,10 +360,9 @@ function CanvasInner(props: Props) {
         elementsSelectable
         nodesDeletable
         edgesDeletable
-        selectionOnDrag
+        selectionOnDrag={false}
         panOnDrag={[1, 2]}
         multiSelectionKeyCode="Shift"
-        fitView
         minZoom={0.2}
         maxZoom={1.5}
         proOptions={{ hideAttribution: true }}

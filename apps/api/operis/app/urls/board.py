@@ -1,5 +1,11 @@
 from django.urls import path
 
+from operis.app.views.workspace.client_360_narrative import BoardClient360ReminderLogsEndpoint
+from operis.app.views.workspace.client_360_operational import (
+    BoardClient360IntakeTypeDetailEndpoint,
+    BoardClient360IntakeTypesEndpoint,
+)
+
 from operis.app.views import (
     BoardAutomationCatalogEndpoint,
     BoardAutomationDeadLetterListEndpoint,
@@ -11,6 +17,18 @@ from operis.app.views import (
     BoardAutomationRuleRevisionListEndpoint,
     BoardAutomationRuleRevisionRestoreEndpoint,
     BoardAutomationRunListEndpoint,
+    BoardAutomationHookDetailEndpoint,
+    BoardAutomationHookListEndpoint,
+    BoardAutomationPolicyEndpoint,
+    BoardAutomationPublishAuditListEndpoint,
+    BoardPlaybookDetailEndpoint,
+    BoardPlaybookListEndpoint,
+    BoardPlaybookPublishEndpoint,
+    BoardAutomationPackInstallEndpoint,
+    BoardAutomationPackListEndpoint,
+    BoardAutomationPackUninstallEndpoint,
+    BoardAutomationTemplateInstallEndpoint,
+    BoardAutomationTemplateListEndpoint,
     BoardAutomationSecretDetailEndpoint,
     BoardAutomationSecretListEndpoint,
     BoardAutomationValidateEndpoint,
@@ -28,6 +46,7 @@ from operis.app.views import (
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,
     BoardClient360ViewSet,
+    BoardClient360HealthSettingsEndpoint,
     BoardMetaViewSet,
     BoardModulesViewSet,
     BoardPermissionCatalogEndpoint,
@@ -82,9 +101,49 @@ urlpatterns = [
         name="workspace-board-client-360",
     ),
     path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/matrix/",
+        BoardClient360ViewSet.as_view({"get": "matrix"}),
+        name="workspace-board-client-360-matrix",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/qbr/",
+        BoardClient360ViewSet.as_view({"get": "qbr_portfolio"}),
+        name="workspace-board-client-360-qbr",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/qbr/",
+        BoardClient360ViewSet.as_view({"get": "qbr_client"}),
+        name="workspace-board-client-360-client-qbr",
+    ),
+    path(
         "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/",
         BoardClient360ViewSet.as_view({"get": "retrieve"}),
         name="workspace-board-client-360-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/health-history/",
+        BoardClient360ViewSet.as_view({"get": "health_history"}),
+        name="workspace-board-client-360-health-history",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/reminder-logs/",
+        BoardClient360ReminderLogsEndpoint.as_view(),
+        name="workspace-board-client-360-reminder-logs",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/intake-types/",
+        BoardClient360IntakeTypesEndpoint.as_view(),
+        name="workspace-board-client-360-intake-types",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/intake-types/<uuid:intake_type_id>/",
+        BoardClient360IntakeTypeDetailEndpoint.as_view(),
+        name="workspace-board-client-360-intake-type-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/health-settings/",
+        BoardClient360HealthSettingsEndpoint.as_view(),
+        name="workspace-board-client-360-health-settings",
     ),
     path(
         "workspaces/<str:slug>/boards/<str:board_slug>/modules/",
@@ -245,6 +304,66 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/automation/dead-letters/",
         BoardAutomationDeadLetterListEndpoint.as_view(),
         name="workspace-board-automation-dead-letters",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/policy/",
+        BoardAutomationPolicyEndpoint.as_view(),
+        name="workspace-board-automation-policy",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/publish-audits/",
+        BoardAutomationPublishAuditListEndpoint.as_view(),
+        name="workspace-board-automation-publish-audits",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/hooks/",
+        BoardAutomationHookListEndpoint.as_view(),
+        name="workspace-board-automation-hooks",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/hooks/<uuid:hook_id>/",
+        BoardAutomationHookDetailEndpoint.as_view(),
+        name="workspace-board-automation-hook",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/packs/",
+        BoardAutomationPackListEndpoint.as_view(),
+        name="workspace-board-automation-packs",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/packs/<str:pack_name>/install/",
+        BoardAutomationPackInstallEndpoint.as_view(),
+        name="workspace-board-automation-pack-install",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/packs/<str:pack_name>/uninstall/",
+        BoardAutomationPackUninstallEndpoint.as_view(),
+        name="workspace-board-automation-pack-uninstall",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/templates/",
+        BoardAutomationTemplateListEndpoint.as_view(),
+        name="workspace-board-automation-templates",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/automation/templates/<str:template_id>/install/",
+        BoardAutomationTemplateInstallEndpoint.as_view(),
+        name="workspace-board-automation-template-install",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/playbooks/",
+        BoardPlaybookListEndpoint.as_view(),
+        name="workspace-board-playbooks",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/playbooks/<uuid:playbook_id>/",
+        BoardPlaybookDetailEndpoint.as_view(),
+        name="workspace-board-playbook",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/playbooks/<uuid:playbook_id>/publish/",
+        BoardPlaybookPublishEndpoint.as_view(),
+        name="workspace-board-playbook-publish",
     ),
     path(
         "workspaces/<str:slug>/boards/<str:board_slug>/automation/secrets/",

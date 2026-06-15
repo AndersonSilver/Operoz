@@ -6,7 +6,7 @@ Skills (conhecimento profundo) + **Rules** (ativação automática por ficheiro/
 
 ```text
 .cursor/
-├── rules/                          ← 8 regras .mdc (1 orquestrador + 7 domínios)
+├── rules/                          ← 8 regras .mdc Operoz (+ harness em Harness Engineering/.cursor/rules/)
 │   ├── operoz-orchestrator.mdc     alwaysApply: true
 │   ├── operoz-backend-django.mdc
 │   ├── operoz-anti-patterns.mdc
@@ -16,6 +16,7 @@ Skills (conhecimento profundo) + **Rules** (ativação automática por ficheiro/
 │   ├── operoz-pull-request.mdc
 │   └── operoz-release-notes.mdc
 ├── skills/
+│   ├── HARNESS ENGINEERING/     → symlink Harness Engineering/.cursor/skills/…
 │   ├── OPEROZ ENGENHARIA/
 │   └── OPEROZ FLUXO/
 └── README.md
@@ -23,21 +24,22 @@ Skills (conhecimento profundo) + **Rules** (ativação automática por ficheiro/
 
 ## Mapa Rule ↔ Skill ↔ Globs
 
-| Regra | Skill | Quando o Cursor aplica (globs) |
-|-------|-------|--------------------------------|
-| `operoz-orchestrator` | — | **Sempre** (`alwaysApply: true`) |
-| `operoz-backend-django` | `DESENVOLVEDOR SENIOR/SKILL.md` | `apps/api/**/*` |
-| `operoz-anti-patterns` | `ANTI_PATTERNS.md` | `apps/api/**/*.py`, `apps/web/**/*.{ts,tsx}` |
-| `operoz-frontend-design` | `DESIGN SISTEMA/SKILL.md` | `apps/web/**`, `packages/tailwind-config/**`, `ui`, `propel` |
-| `operoz-issue-ux` | `EXPERIÊNCIA JIRA/SKILL.md` | `apps/web/**/board/**`, `issues/**` |
-| `operoz-integrations` | `CONTEXTO/SKILL.md` | `tests/fixtures/**`, `bgtasks/**`, `*webhook*` |
-| `operoz-pull-request` | `DESCRIÇÃO PR/SKILL.md` | `.github/**` |
-| `operoz-release-notes` | `RELEASE NOTES/SKILL.md` | `docs/**` (+ pedido explícito) |
+| Regra                    | Skill                           | Quando o Cursor aplica (globs)                               |
+| ------------------------ | ------------------------------- | ------------------------------------------------------------ |
+| `operoz-orchestrator`    | —                               | **Sempre** (`alwaysApply: true`)                             |
+| `operoz-backend-django`  | `DESENVOLVEDOR SENIOR/SKILL.md` | `apps/api/**/*`                                              |
+| `operoz-anti-patterns`   | `ANTI_PATTERNS.md`              | `apps/api/**/*.py`, `apps/web/**/*.{ts,tsx}`                 |
+| `operoz-frontend-design` | `DESIGN SISTEMA/SKILL.md`       | `apps/web/**`, `packages/tailwind-config/**`, `ui`, `propel` |
+| `operoz-issue-ux`        | `EXPERIÊNCIA JIRA/SKILL.md`     | `apps/web/**/board/**`, `issues/**`                          |
+| `operoz-integrations`    | `CONTEXTO/SKILL.md`             | `tests/fixtures/**`, `bgtasks/**`, `*webhook*`               |
+| `operoz-pull-request`    | `DESCRIÇÃO PR/SKILL.md`         | `.github/**`                                                 |
+| `operoz-release-notes`   | `RELEASE NOTES/SKILL.md`        | `docs/**` (+ pedido explícito)                               |
 
 ## Skills (detalhe longo)
 
 ```text
 .cursor/skills/
+├── HARNESS ENGINEERING/          # symlink → Harness Engineering/.cursor/skills/…
 ├── OPEROZ ENGENHARIA/
 │   ├── DESENVOLVEDOR SENIOR/SKILL.md
 │   ├── DESIGN SISTEMA/SKILL.md

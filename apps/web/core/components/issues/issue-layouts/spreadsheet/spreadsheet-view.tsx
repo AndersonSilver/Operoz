@@ -1,14 +1,17 @@
 import React, { useRef } from "react";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 // plane constants
 import { SPREADSHEET_SELECT_GROUP, SPREADSHEET_PROPERTY_LIST } from "@operis/constants";
 // types
 import type { TIssue, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
+import { useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
+import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 // plane web components
 import { IssueBulkOperationsRoot } from "@/plane-web/components/issues/bulk-operations";
 // plane web hooks
@@ -34,6 +37,7 @@ type Props = {
   disableIssueCreation?: boolean;
   isWorkspaceLevel?: boolean;
   isEpic?: boolean;
+  boardSlug?: string;
 };
 
 export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
@@ -52,12 +56,23 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
     loadMoreIssues,
     isWorkspaceLevel = false,
     isEpic = false,
+    boardSlug: boardSlugProp,
   } = props;
   // refs
   const containerRef = useRef<HTMLTableElement | null>(null);
   const portalRef = useRef<HTMLDivElement | null>(null);
+  // router
+  const { workspaceSlug: routerWorkspaceSlug, boardSlug: routerBoardSlug } = useParams();
+  const workspaceSlug = routerWorkspaceSlug?.toString() ?? "";
+  const boardSlug = boardSlugProp ?? routerBoardSlug?.toString();
+  const storeType = useIssueStoreType();
   // store hooks
   const { currentProjectDetails } = useProject();
+  const { visibleFields: customFieldColumns } = useBoardLayoutCustomFields({
+    workspaceSlug,
+    boardSlug,
+    displayProperties,
+  });
   // plane web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
@@ -70,6 +85,8 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
         if (property === "modules" && !currentProjectDetails?.module_view) return false;
         return true;
       });
+
+  const resolvedCustomFieldColumns = storeType === EIssuesStoreType.BOARD && boardSlug ? customFieldColumns : [];
 
   if (!issueIds || issueIds.length === 0) return <></>;
   return (
@@ -84,7 +101,11 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
       >
         {(helpers) => (
           <>
-            <div ref={containerRef} className="vertical-scrollbar horizontal-scrollbar scrollbar-lg h-full w-full">
+            <IssueBulkOperationsRoot selectionHelpers={helpers} />
+            <div
+              ref={containerRef}
+              className="vertical-scrollbar horizontal-scrollbar scrollbar-lg min-h-0 w-full flex-1"
+            >
               <SpreadsheetTable
                 displayProperties={displayProperties}
                 displayFilters={displayFilters}
@@ -99,6 +120,8 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
                 canLoadMoreIssues={canLoadMoreIssues}
                 loadMoreIssues={loadMoreIssues}
                 spreadsheetColumnsList={spreadsheetColumnsList}
+                customFieldColumns={resolvedCustomFieldColumns}
+                workspaceSlug={workspaceSlug}
                 selectionHelpers={helpers}
                 isEpic={isEpic}
               />
@@ -115,7 +138,6 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
                 )}
               </div>
             </div>
-            <IssueBulkOperationsRoot selectionHelpers={helpers} />
           </>
         )}
       </MultipleSelectGroup>

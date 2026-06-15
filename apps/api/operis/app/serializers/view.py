@@ -17,6 +17,14 @@ class ViewIssueListSerializer(serializers.Serializer):
     def get_module_ids(self, instance):
         return [module.module_id for module in instance.issue_module.all()]
 
+    def get_custom_field_values(self, instance):
+        values: dict[str, object] = {}
+        for row in instance.custom_field_values.all():
+            if getattr(row, "deleted_at", None):
+                continue
+            values[str(row.custom_field_id)] = row.value
+        return values
+
     def to_representation(self, instance):
         data = {
             "id": instance.id,
@@ -46,6 +54,7 @@ class ViewIssueListSerializer(serializers.Serializer):
             "assignee_ids": self.get_assignee_ids(instance),
             "label_ids": self.get_label_ids(instance),
             "module_ids": self.get_module_ids(instance),
+            "custom_field_values": self.get_custom_field_values(instance),
         }
         return data
 

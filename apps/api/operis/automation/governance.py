@@ -22,12 +22,19 @@ def _circuit_open_key(rule_id: str) -> str:
     return f"automation:circuit:open:{rule_id}"
 
 
+def get_workspace_rate_limit(workspace_id: str) -> int:
+    overrides = getattr(settings, "AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES", {}) or {}
+    if workspace_id in overrides:
+        return int(overrides[workspace_id])
+    return int(getattr(settings, "AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", 5000))
+
+
 def check_dispatch_allowed(rule, event: DomainEvent) -> tuple[bool, str]:
     if is_circuit_open(str(rule.id)):
         return False, "circuit_open"
 
     board_limit = getattr(settings, "AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", 500)
-    workspace_limit = getattr(settings, "AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", 5000)
+    workspace_limit = get_workspace_rate_limit(event.workspace_id)
 
     try:
         ri = redis_instance()

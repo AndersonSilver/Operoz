@@ -2,7 +2,12 @@ import type { MutableRefObject } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, TIssue } from "@operis/types";
+import type {
+  IIssueDisplayFilterOptions,
+  IIssueDisplayProperties,
+  IProjectCustomFieldLite,
+  TIssue,
+} from "@operis/types";
 // components
 import { SpreadsheetIssueRowLoader } from "@/components/ui/loader/layouts/spreadsheet-layout-loader";
 // hooks
@@ -30,6 +35,8 @@ type Props = {
   canLoadMoreIssues: boolean;
   loadMoreIssues: () => void;
   spreadsheetColumnsList: (keyof IIssueDisplayProperties)[];
+  customFieldColumns?: IProjectCustomFieldLite[];
+  workspaceSlug?: string;
   selectionHelpers: TSelectionHelper;
   isEpic?: boolean;
 };
@@ -49,6 +56,8 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
     containerRef,
     loadMoreIssues,
     spreadsheetColumnsList,
+    customFieldColumns = [],
+    workspaceSlug = "",
     selectionHelpers,
     isEpic = false,
   } = props;
@@ -102,7 +111,8 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
 
   const ignoreFieldsForCounting: (keyof IIssueDisplayProperties)[] = ["key"];
   if (!isEstimateEnabled) ignoreFieldsForCounting.push("estimate");
-  const displayPropertiesCount = getDisplayPropertiesCount(displayProperties, ignoreFieldsForCounting);
+  const displayPropertiesCount =
+    getDisplayPropertiesCount(displayProperties, ignoreFieldsForCounting) + customFieldColumns.length;
 
   return (
     <table className="w-full overflow-y-auto bg-surface-1" onKeyDown={handleKeyBoardNavigation}>
@@ -113,6 +123,7 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
         canEditProperties={canEditProperties}
         isEstimateEnabled={isEstimateEnabled}
         spreadsheetColumnsList={spreadsheetColumnsList}
+        customFieldColumns={customFieldColumns}
         selectionHelpers={selectionHelpers}
         isEpic={isEpic}
       />
@@ -131,6 +142,8 @@ export const SpreadsheetTable = observer(function SpreadsheetTable(props: Props)
             containerRef={containerRef}
             isScrolled={isScrolled}
             spreadsheetColumnsList={spreadsheetColumnsList}
+            customFieldColumns={customFieldColumns}
+            workspaceSlug={workspaceSlug}
             selectionHelpers={selectionHelpers}
             isEpic={isEpic}
           />

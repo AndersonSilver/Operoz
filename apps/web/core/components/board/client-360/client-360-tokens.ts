@@ -1,15 +1,12 @@
-/** Cores só em ícones / pontos / barras finas — fundos da UI permanecem neutros. */
+/** Cores só em pontos / barras de dados — UI neutra, acentos discretos. */
 export type Client360Tone = "accent" | "neutral" | "success" | "warning" | "danger" | "info";
 
-export const CLIENT_360_TONE: Record<
-  Client360Tone,
-  { icon: string; iconBg: string; bar: string; dot: string }
-> = {
+export const CLIENT_360_TONE: Record<Client360Tone, { icon: string; iconBg: string; bar: string; dot: string }> = {
   accent: {
-    icon: "text-accent-primary",
-    iconBg: "bg-accent-primary/12",
-    bar: "var(--text-color-accent-primary)",
-    dot: "bg-accent-primary",
+    icon: "text-secondary",
+    iconBg: "bg-layer-2",
+    bar: "var(--text-color-tertiary)",
+    dot: "bg-accent-primary/70",
   },
   neutral: {
     icon: "text-tertiary",
@@ -18,27 +15,27 @@ export const CLIENT_360_TONE: Record<
     dot: "bg-tertiary",
   },
   success: {
-    icon: "text-success-primary",
-    iconBg: "bg-success-subtle/40",
+    icon: "text-secondary",
+    iconBg: "bg-layer-2",
     bar: "var(--background-color-success-primary)",
-    dot: "bg-success-primary",
+    dot: "bg-success-primary/70",
   },
   warning: {
-    icon: "text-warning-primary",
-    iconBg: "bg-warning-subtle/40",
+    icon: "text-secondary",
+    iconBg: "bg-layer-2",
     bar: "var(--background-color-warning-primary)",
-    dot: "bg-warning-primary",
+    dot: "bg-warning-primary/70",
   },
   danger: {
-    icon: "text-danger-primary",
-    iconBg: "bg-danger-subtle/40",
+    icon: "text-secondary",
+    iconBg: "bg-layer-2",
     bar: "var(--background-color-danger-primary)",
-    dot: "bg-danger-primary",
+    dot: "bg-danger-primary/70",
   },
   info: {
-    icon: "text-accent-primary",
-    iconBg: "bg-accent-primary/10",
-    bar: "var(--text-color-accent-primary)",
-    dot: "bg-accent-primary",
+    icon: "text-secondary",
+    iconBg: "bg-layer-2",
+    bar: "var(--text-color-tertiary)",
+    dot: "bg-accent-primary/70",
   },
 };

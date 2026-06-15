@@ -13,7 +13,7 @@ import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 // constants
 import { useGanttSidebarWidth } from "../contexts/gantt-sidebar-width";
 import { GanttSidebarResizeHandle } from "./gantt-sidebar-resize-handle";
-import { GANTT_SELECT_GROUP, HEADER_HEIGHT } from "../constants";
+import { GANTT_SELECT_GROUP, HEADER_HEIGHT, GANTT_CHECKBOX_GUTTER_PX } from "../constants";
 
 type Props = {
   blockIds: string[];
@@ -28,6 +28,7 @@ type Props = {
   selectionHelpers: TSelectionHelper;
   showAllBlocks?: boolean;
   isEpic?: boolean;
+  showDurationColumn?: boolean;
 };
 
 export const GanttChartSidebar = observer(function GanttChartSidebar(props: Props) {
@@ -45,9 +46,10 @@ export const GanttChartSidebar = observer(function GanttChartSidebar(props: Prop
     selectionHelpers,
     showAllBlocks = false,
     isEpic = false,
+    showDurationColumn = false,
   } = props;
 
-  const isGroupSelectionEmpty = selectionHelpers.isGroupSelected(GANTT_SELECT_GROUP) === "empty";
+  const selectionEnabled = Boolean(enableSelection);
   const { sidebarWidth, isResizing } = useGanttSidebarWidth();
   const hasBoardWallpaper = useBoardHubHasBackground();
   const ganttSurface = hasBoardWallpaper ? BOARD_HUB_GANTT_SURFACE : "bg-surface-1";
@@ -75,24 +77,26 @@ export const GanttChartSidebar = observer(function GanttChartSidebar(props: Prop
           height: `${HEADER_HEIGHT}px`,
         }}
       >
-        <div className={cn("flex items-center gap-2")}>
-          {enableSelection && (
-            <div className="absolute left-1 flex w-3.5 flex-shrink-0 items-center">
+        <div
+          className={cn("flex min-w-0 flex-1 items-center gap-2", {
+            "pl-8": selectionEnabled,
+          })}
+        >
+          {selectionEnabled && (
+            <div
+              className="absolute left-2 flex w-3.5 flex-shrink-0 items-center"
+              style={{ width: `${GANTT_CHECKBOX_GUTTER_PX - 8}px` }}
+            >
               <MultipleSelectGroupAction
-                className={cn(
-                  "pointer-events-none size-3.5 opacity-0 !outline-none group-hover/list-header:pointer-events-auto group-hover/list-header:opacity-100",
-                  {
-                    "pointer-events-auto opacity-100": !isGroupSelectionEmpty,
-                  }
-                )}
+                className="size-3.5 !outline-none"
                 groupID={GANTT_SELECT_GROUP}
                 selectionHelpers={selectionHelpers}
               />
             </div>
           )}
-          <h6>{title}</h6>
+          <h6 className="truncate">{title}</h6>
         </div>
-        <h6>{t("common.duration")}</h6>
+        {showDurationColumn ? <h6 className="flex-shrink-0">{t("common.duration")}</h6> : null}
       </Row>
 
       <Row variant={ERowVariant.HUGGING} className={cn("h-max min-h-full", ganttSurface)}>
@@ -109,6 +113,7 @@ export const GanttChartSidebar = observer(function GanttChartSidebar(props: Prop
             selectionHelpers,
             showAllBlocks,
             isEpic,
+            showDurationColumn,
           })}
       </Row>
       <GanttSidebarResizeHandle />

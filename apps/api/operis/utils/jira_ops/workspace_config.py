@@ -6,10 +6,12 @@ from typing import Any, Literal
 from django.conf import settings
 from django.utils import timezone
 
-from operis.db.models import Workspace, WorkspaceJiraOpsConfig
+from operis.db.models import Workspace, WorkspaceJiraOpsConfig, Board
 from operis.license.utils.encryption import decrypt_data, encrypt_data
 
 from .oauth import ensure_fresh_oauth_token
+
+DEFAULT_JIRA_OPS_BOARD_SLUG = getattr(settings, "JIRA_OPS_BOARD_SLUG", "squad-as-a-service")
 
 
 @dataclass
@@ -27,12 +29,35 @@ class JiraOpsCredentials:
         return bool(self.cloud_id and self.email and self.api_token)
 
 
+def resolve_jira_board_slug(workspace: Workspace, board_slug: str | None) -> str:
+    """Retorna um slug de board existente; corrige defaults legados inválidos."""
+    slug = (board_slug or "").strip() or DEFAULT_JIRA_OPS_BOARD_SLUG
+    boards = Board.objects.filter(workspace=workspace, deleted_at__isnull=True)
+    if boards.filter(slug=slug).exists():
+        return slug
+    preferred = boards.filter(slug=DEFAULT_JIRA_OPS_BOARD_SLUG).first()
+    if preferred:
+        return preferred.slug
+    first = boards.order_by("sort_order", "-created_at").first()
+    return first.slug if first else slug
+
+
+def get_board_for_jira_ops(workspace: Workspace, board_slug: str | None) -> Board:
+    slug = resolve_jira_board_slug(workspace, board_slug)
+    board = Board.objects.filter(slug=slug, workspace=workspace, deleted_at__isnull=True).first()
+    if not board:
+        raise ValueError(
+            "Nenhum board válido neste workspace. Crie um board antes de importar do Jira."
+        )
+    return board
+
+
 def get_or_create_config(workspace: Workspace) -> WorkspaceJiraOpsConfig:
     config, _ = WorkspaceJiraOpsConfig.objects.get_or_create(
         workspace=workspace,
         defaults={
             "project_key": getattr(settings, "JIRA_OPS_PROJECT_KEY", "OPS"),
-            "board_slug": getattr(settings, "JIRA_OPS_BOARD_SLUG", "squad-as-a-services"),
+            "board_slug": DEFAULT_JIRA_OPS_BOARD_SLUG,
         },
     )
     return config
@@ -49,7 +74,7 @@ def credentials_from_config(config: WorkspaceJiraOpsConfig) -> JiraOpsCredential
             email=(config.email or "oauth@connected").strip(),
             api_token=access,
             project_key=(config.project_key or "OPS").strip() or "OPS",
-            board_slug=(config.board_slug or "squad-as-a-services").strip() or "squad-as-a-services",
+            board_slug=resolve_jira_board_slug(config.workspace, config.board_slug),
             auth_mode="oauth",
         )
         return creds if creds.is_complete() else None
@@ -60,7 +85,7 @@ def credentials_from_config(config: WorkspaceJiraOpsConfig) -> JiraOpsCredential
         email=(config.email or "").strip(),
         api_token=token,
         project_key=(config.project_key or "OPS").strip() or "OPS",
-        board_slug=(config.board_slug or "squad-as-a-services").strip() or "squad-as-a-services",
+        board_slug=resolve_jira_board_slug(config.workspace, config.board_slug),
         auth_mode="basic",
     )
     return creds if creds.is_complete() else None
@@ -75,7 +100,7 @@ def _credentials_from_env() -> JiraOpsCredentials | None:
         email=email.strip(),
         api_token=token.strip(),
         project_key=getattr(settings, "JIRA_OPS_PROJECT_KEY", "OPS"),
-        board_slug=getattr(settings, "JIRA_OPS_BOARD_SLUG", "squad-as-a-services"),
+        board_slug=getattr(settings, "JIRA_OPS_BOARD_SLUG", DEFAULT_JIRA_OPS_BOARD_SLUG),
         auth_mode="basic",
     )
     return creds if creds.is_complete() else None
@@ -112,7 +137,7 @@ def config_to_api_dict(
         "oauth_connected": bool(config.oauth_access_token_encrypted),
         "jira_site_name": config.jira_site_name or "",
         "project_key": config.project_key or "OPS",
-        "board_slug": config.board_slug or "squad-as-a-services",
+        "board_slug": resolve_jira_board_slug(config.workspace, config.board_slug),
         "configured": configured,
         "last_sync_at": config.last_sync_at.isoformat() if config.last_sync_at else None,
         "uses_env_fallback": uses_env_fallback,
@@ -129,7 +154,8 @@ def update_workspace_config(workspace: Workspace, data: dict[str, Any]) -> Works
     if "project_key" in data:
         config.project_key = (data.get("project_key") or "OPS").strip() or "OPS"
     if "board_slug" in data:
-        config.board_slug = (data.get("board_slug") or "squad-as-a-services").strip() or "squad-as-a-services"
+        raw = (data.get("board_slug") or DEFAULT_JIRA_OPS_BOARD_SLUG).strip() or DEFAULT_JIRA_OPS_BOARD_SLUG
+        config.board_slug = resolve_jira_board_slug(workspace, raw)
 
     if "oauth_app_client_id" in data:
         config.oauth_app_client_id = (data.get("oauth_app_client_id") or "").strip()

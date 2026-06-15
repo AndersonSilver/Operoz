@@ -58,6 +58,8 @@ export const ListColumnsMenu = observer(function ListColumnsMenu() {
         handleUpdate={handleDisplayPropertiesUpdate}
         cycleViewDisabled={false}
         moduleViewDisabled={false}
+        workspaceSlug={workspaceSlug?.toString()}
+        boardSlug={boardSlug?.toString()}
       />
     </FiltersDropdown>
   );

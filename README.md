@@ -70,7 +70,9 @@ O `setup.sh` copia `.env.example` → `.env` (raiz e apps), gera `SECRET_KEY` e 
 
 ### Infra Docker
 
-Serviços: `operis-db`, `operis-redis`, `operis-mq`, `operis-minio`, `api`, `worker`, `beat-worker`, `migrator`.
+Serviços: `operis-db`, `operis-redis`, `operis-mq`, `operis-minio`, `api`, `worker`, `beat-worker`, `automation-worker`, `automation-email-worker`, `assistant-worker`, `migrator`.
+
+O `docker compose up -d` **sem nome de serviço** sobe todos os workers acima. Se fizeste `git pull` e um worker novo não aparece, volta a correr `up -d` (o Compose não cria serviços novos só por estarem no ficheiro).
 
 Se migraste de nomes antigos de volumes, recria-os antes do `up`:
 

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import type { TLanguage } from "@operis/i18n";
-import { useTranslation } from "@operis/i18n";
+import { DEFAULT_LOCALE, useTranslation } from "@operis/i18n";
 // helpers
 import { applyCustomTheme, clearCustomTheme } from "@operis/utils";
 // hooks
@@ -102,8 +102,8 @@ function StoreWrapper(props: TStoreWrapper) {
   }, [userProfile?.theme]);
 
   useEffect(() => {
-    if (!userProfile?.language) return;
-    changeLanguage(userProfile?.language as TLanguage);
+    const locale = (userProfile?.language as TLanguage) || DEFAULT_LOCALE;
+    changeLanguage(locale);
   }, [userProfile?.language, changeLanguage]);
 
   useEffect(() => {

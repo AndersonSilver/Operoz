@@ -57,6 +57,8 @@ from .workspace.favorite import (
 )
 from .workspace.recent_visit import UserRecentVisitViewSet
 from .workspace.user_preference import WorkspaceUserPreferenceViewSet
+from .workspace.client_360 import WorkspaceClient360ViewSet
+from .workspace.client_360_display_settings import WorkspaceClient360DisplaySettingsEndpoint
 
 from .workspace.member import (
     WorkSpaceMemberViewSet,
@@ -104,6 +106,7 @@ from .board import (
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,
     BoardClient360ViewSet,
+    BoardClient360HealthSettingsEndpoint,
     BoardMetaViewSet,
     BoardModulesViewSet,
     BoardPermissionCatalogEndpoint,
@@ -128,6 +131,18 @@ from .board import (
     BoardAutomationRuleRevisionListEndpoint,
     BoardAutomationRuleRevisionRestoreEndpoint,
     BoardAutomationRunListEndpoint,
+    BoardAutomationHookDetailEndpoint,
+    BoardAutomationHookListEndpoint,
+    BoardAutomationPolicyEndpoint,
+    BoardAutomationPublishAuditListEndpoint,
+    BoardPlaybookDetailEndpoint,
+    BoardPlaybookListEndpoint,
+    BoardPlaybookPublishEndpoint,
+    BoardAutomationPackInstallEndpoint,
+    BoardAutomationPackListEndpoint,
+    BoardAutomationPackUninstallEndpoint,
+    BoardAutomationTemplateInstallEndpoint,
+    BoardAutomationTemplateListEndpoint,
     BoardAutomationSecretDetailEndpoint,
     BoardAutomationSecretListEndpoint,
     BoardAutomationValidateEndpoint,
@@ -176,6 +191,7 @@ from .issue.base import (
     IssueViewSet,
     ProjectUserDisplayPropertyEndpoint,
     BulkDeleteIssuesEndpoint,
+    BulkOperationIssuesEndpoint,
     DeletedIssuesListViewSet,
     IssuePaginatedViewSet,
     IssueDetailEndpoint,

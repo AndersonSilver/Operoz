@@ -16,6 +16,7 @@ from operis.utils.jira_ops.workspace_config import (
     update_workspace_config,
     workspace_jira_configured,
 )
+from operis.utils.jira_ops.jira_dates import set_active_jira_cloud
 
 
 class WorkspaceJiraOpsSyncEndpoint(BaseAPIView):
@@ -67,7 +68,7 @@ class WorkspaceJiraOpsSyncEndpoint(BaseAPIView):
             )
 
         creds = get_workspace_credentials(workspace)
-        board_slug = request.data.get("board_slug") or (creds.board_slug if creds else "squad-as-a-services")
+        board_slug = request.data.get("board_slug") or (creds.board_slug if creds else "squad-as-a-service")
         payload = start_jira_ops_sync(slug, board_slug, str(request.user.id))
         return Response({**self._response_payload(workspace), **payload}, status=status.HTTP_202_ACCEPTED)
 
@@ -97,6 +98,7 @@ class WorkspaceJiraOpsSyncPreviewEndpoint(BaseAPIView):
 
         try:
             client = JiraOpsClient(creds)
+            set_active_jira_cloud(client.cloud_id)
             epics = client.fetch_epics()
             issues = client.fetch_issues()
             preview = preview_jira_ops_import(

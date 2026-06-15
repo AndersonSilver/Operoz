@@ -1,0 +1,11 @@
+{
+  "operoz_prd_version": 1,
+  "document_type": "prd",
+  "title": "Pós-Contemplação: Cliente Exemplo",
+  "client": "Magalu",
+  "phase": "Imersão",
+  "channel": "WebApp Consórcio",
+  "epic_key": "OPS-1483",
+  "review_enabled": true,
+  "sections": ["sec-indice", "sec-contexto"]
+}

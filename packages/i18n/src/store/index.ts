@@ -7,6 +7,7 @@ import {
   FALLBACK_LANGUAGE,
   SUPPORTED_LANGUAGES,
   LANGUAGE_STORAGE_KEY,
+  LEGACY_LOCALE_MIGRATION_KEY,
   ETranslationFiles,
 } from "../constants";
 // core translations imports
@@ -49,11 +50,20 @@ export class TranslationStore {
     this.loadTranslations();
   }
 
-  /** Initializes the language based on the local storage or browser language */
+  /** Initializes the language based on localStorage or Operoz default (pt-BR). */
   private initializeLanguage() {
     if (typeof window === "undefined") return;
 
     const savedLocale = localStorage.getItem(LANGUAGE_STORAGE_KEY) as TLanguage;
+
+    // One-time: legacy Plane installs persisted English as the default locale
+    if (savedLocale === "en" && !localStorage.getItem(LEGACY_LOCALE_MIGRATION_KEY)) {
+      localStorage.setItem(LEGACY_LOCALE_MIGRATION_KEY, "1");
+      localStorage.setItem(LANGUAGE_STORAGE_KEY, DEFAULT_LOCALE);
+      this.setLanguage(DEFAULT_LOCALE);
+      return;
+    }
+
     if (this.isValidLanguage(savedLocale)) {
       this.setLanguage(savedLocale);
       return;

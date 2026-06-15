@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import html
 from collections import defaultdict
 from dataclasses import dataclass, asdict
 from typing import Any
@@ -9,7 +10,6 @@ from typing import Any
 from operis.app.permissions import ROLE
 from operis.app.serializers import IssueCreateSerializer, ProjectSerializer
 from operis.db.models import (
-    Board,
     DEFAULT_STATES,
     Issue,
     Module,
@@ -24,7 +24,19 @@ from operis.db.models.module import ModuleStatus
 from operis.utils.board_custom_fields import sync_board_custom_fields_to_project
 from operis.utils.board_issue_types import sync_board_issue_types_to_project
 
+from .adf_to_html import description_needs_jira_repair, resolve_jira_description_html
 from .clients import load_client_aliases, resolve_client, slug_identifier
+from .jira_attachments import sync_jira_description_media
+from .jira_custom_fields import (
+    JiraCustomFieldImportContext,
+    build_custom_field_import_context,
+    issue_jira_custom_fields_would_update,
+    prepare_board_projects_for_jira_custom_fields,
+    sync_issue_jira_custom_fields,
+)
+from .jira_client import JiraOpsClient
+from .jira_dates import jira_issue_dates, set_active_jira_cloud
+from .workspace_config import get_board_for_jira_ops, get_workspace_credentials
 
 JIRA_STATE_TO_OPERIS = {
     "para fazer": "Todo",
@@ -69,11 +81,22 @@ def parent_jira_key(issue: dict) -> str | None:
     return parent.get("key")
 
 
-def issue_description_html(key: str, fields: dict) -> str:
-    desc = fields.get("description") or ""
-    if desc:
-        return f"<p>{desc}</p><p><em>Jira: {key}</em></p>"
-    return f"<p><em>Jira: {key}</em></p>"
+def issue_description_html(
+    key: str,
+    fields: dict,
+    *,
+    media_urls: dict[str, str] | None = None,
+    existing_description_html: str | None = None,
+) -> str:
+    desc_html = resolve_jira_description_html(
+        fields.get("description"),
+        media_urls=media_urls,
+        existing_description_html=existing_description_html,
+    )
+    jira_footer = f"<p><em>Jira: {html.escape(key)}</em></p>"
+    if desc_html:
+        return f"{desc_html}{jira_footer}"
+    return jira_footer
 
 
 def resolve_state(project: Project, fields: dict) -> State | None:
@@ -85,30 +108,149 @@ def resolve_state(project: Project, fields: dict) -> State | None:
     return state
 
 
-def issue_would_update(issue: Issue, fields: dict, key: str, project: Project) -> bool:
+def issue_would_update(
+    issue: Issue,
+    fields: dict,
+    key: str,
+    project: Project,
+    *,
+    client: JiraOpsClient | None = None,
+    custom_ctx: JiraCustomFieldImportContext | None = None,
+) -> bool:
     name = (fields.get("summary") or key)[:255]
     if issue.name != name:
         return True
-    html = issue_description_html(key, fields)
-    if issue.description_html != html:
+    if description_needs_jira_repair(issue.description_html):
+        return True
+    if client and fields.get("attachment"):
+        return True
+    desc_html = issue_description_html(key, fields, existing_description_html=issue.description_html)
+    if issue.description_html != desc_html:
+        return True
+    start, target = jira_issue_dates(fields)
+    if issue.start_date != start:
+        return True
+    if issue.target_date != target:
         return True
     state = resolve_state(project, fields)
     if state and issue.state_id != state.id:
         return True
+    if custom_ctx and issue_jira_custom_fields_would_update(issue, fields, custom_ctx):
+        return True
     return False
 
 
-def _touch_issue_fields(issue: Issue, fields: dict, key: str, project: Project) -> bool:
-    if not issue_would_update(issue, fields, key, project):
-        return False
+def _apply_jira_issue_content(
+    issue: Issue,
+    fields: dict,
+    key: str,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+    *,
+    client: JiraOpsClient | None = None,
+    custom_ctx: JiraCustomFieldImportContext | None = None,
+) -> bool:
+    media_urls: dict[str, str] = {}
+    if client:
+        media_urls = sync_jira_description_media(
+            client,
+            issue=issue,
+            attachments=fields.get("attachment"),
+            workspace=workspace,
+            project=project,
+            actor=actor,
+        )
+
     name = (fields.get("summary") or key)[:255]
-    issue.name = name
-    issue.description_html = issue_description_html(key, fields)
+    desc_html = issue_description_html(
+        key,
+        fields,
+        media_urls=media_urls or None,
+        existing_description_html=issue.description_html,
+    )
+    start, target = jira_issue_dates(fields)
     state = resolve_state(project, fields)
-    if state:
+
+    changed = False
+    if issue.name != name:
+        issue.name = name
+        changed = True
+    if issue.description_html != desc_html:
+        issue.description_html = desc_html
+        changed = True
+    if issue.start_date != start:
+        issue.start_date = start
+        changed = True
+    if issue.target_date != target:
+        issue.target_date = target
+        changed = True
+    if state and issue.state_id != state.id:
         issue.state_id = state.id
-    issue.save(update_fields=["name", "description_html", "state_id", "updated_at"])
-    return True
+        changed = True
+
+    if changed:
+        issue.save(
+            update_fields=[
+                "name",
+                "description_html",
+                "start_date",
+                "target_date",
+                "state_id",
+                "updated_at",
+            ]
+        )
+
+    if custom_ctx and sync_issue_jira_custom_fields(
+        issue, fields, custom_ctx, project, workspace, actor
+    ):
+        changed = True
+
+    return changed
+
+
+def _touch_issue_fields(
+    issue: Issue,
+    fields: dict,
+    key: str,
+    project: Project,
+    workspace: Workspace,
+    actor: User,
+    *,
+    client: JiraOpsClient | None = None,
+    custom_ctx: JiraCustomFieldImportContext | None = None,
+) -> bool:
+    if not issue_would_update(
+        issue, fields, key, project, client=client, custom_ctx=custom_ctx
+    ):
+        return False
+    return _apply_jira_issue_content(
+        issue,
+        fields,
+        key,
+        project,
+        workspace,
+        actor,
+        client=client,
+        custom_ctx=custom_ctx,
+    )
+
+
+def _issue_create_payload(fields: dict, key: str, project: Project, **extra: Any) -> dict[str, Any]:
+    state = resolve_state(project, fields)
+    start, target = jira_issue_dates(fields)
+    payload: dict[str, Any] = {
+        "name": (fields.get("summary") or key)[:255],
+        "description_html": issue_description_html(key, fields),
+        "state_id": str(state.id) if state else None,
+        "priority": "none",
+        **extra,
+    }
+    if start is not None:
+        payload["start_date"] = start
+    if target is not None:
+        payload["target_date"] = target
+    return payload
 
 
 @dataclass
@@ -145,7 +287,10 @@ def preview_jira_ops_import(
     issues_list: list[dict],
 ) -> JiraOpsImportPreview:
     workspace = Workspace.objects.get(slug=workspace_slug)
-    board = Board.objects.get(slug=board_slug, workspace=workspace)
+    creds = get_workspace_credentials(workspace)
+    if creds:
+        set_active_jira_cloud(creds.cloud_id)
+    board = get_board_for_jira_ops(workspace, board_slug)
     preview = JiraOpsImportPreview(
         epics_fetched=len(epics),
         issues_fetched=len(issues_list),
@@ -191,7 +336,8 @@ def preview_jira_ops_import(
 
         for epic in client_epics:
             key = epic["key"]
-            summary = ((epic.get("fields") or {}).get("summary") or key)[:255]
+            epic_fields = epic.get("fields") or {}
+            summary = (epic_fields.get("summary") or key)[:255]
             mod = existing_modules.get(key)
             if not mod:
                 preview.modules_new += 1
@@ -199,7 +345,8 @@ def preview_jira_ops_import(
                     preview.sample_new_modules.append(f"{key}: {summary}")
             else:
                 preview.modules_existing += 1
-                if mod.name != summary:
+                start, target = jira_issue_dates(epic_fields)
+                if mod.name != summary or mod.start_date != start or mod.target_date != target:
                     preview.modules_renamed += 1
 
             epic_context[key] = {"module": mod, "project": project}
@@ -302,9 +449,31 @@ def run_jira_ops_import(
     epics: list[dict],
     issues_list: list[dict],
     projects_only: bool = False,
+    jira_client: JiraOpsClient | None = None,
 ) -> JiraOpsImportResult:
     workspace = Workspace.objects.get(slug=workspace_slug)
-    board = Board.objects.get(slug=board_slug, workspace=workspace)
+    creds = get_workspace_credentials(workspace)
+    custom_ctx: JiraCustomFieldImportContext | None = None
+
+    if creds:
+        set_active_jira_cloud(creds.cloud_id)
+        if jira_client is None:
+            try:
+                jira_client = JiraOpsClient(creds)
+            except Exception:
+                jira_client = None
+
+    board = get_board_for_jira_ops(workspace, board_slug)
+
+    if jira_client:
+        try:
+            custom_ctx = build_custom_field_import_context(
+                board, workspace, actor, jira_client._field_metadata
+            )
+            prepare_board_projects_for_jira_custom_fields(board, actor)
+        except Exception:
+            custom_ctx = None
+
     result = JiraOpsImportResult(epics_fetched=len(epics), issues_fetched=len(issues_list))
 
     epic_issues = [e for e in epics if is_epic(e)]
@@ -369,7 +538,9 @@ def run_jira_ops_import(
 
         for epic in client_epics:
             key = epic["key"]
-            summary = ((epic.get("fields") or {}).get("summary") or key)[:255]
+            fields = epic.get("fields") or {}
+            summary = (fields.get("summary") or key)[:255]
+            start, target = jira_issue_dates(fields)
             mod = Module.objects.filter(project=project, external_id=key).first()
             if not mod:
                 mod = Module.objects.create(
@@ -379,11 +550,24 @@ def run_jira_ops_import(
                     external_id=key,
                     external_source="jira",
                     status=ModuleStatus.PLANNED.value,
+                    start_date=start,
+                    target_date=target,
                     created_by=actor,
                 )
-            elif mod.name != summary:
-                mod.name = summary
-                mod.save(update_fields=["name", "updated_at"])
+            else:
+                update_fields: list[str] = []
+                if mod.name != summary:
+                    mod.name = summary
+                    update_fields.append("name")
+                if mod.start_date != start:
+                    mod.start_date = start
+                    update_fields.append("start_date")
+                if mod.target_date != target:
+                    mod.target_date = target
+                    update_fields.append("target_date")
+                if update_fields:
+                    update_fields.append("updated_at")
+                    mod.save(update_fields=update_fields)
             epic_key_to_module[key] = mod
 
     if projects_only or not issues_list:
@@ -408,7 +592,16 @@ def run_jira_ops_import(
         existing_issue = Issue.objects.filter(project=project, external_id=key).first()
         if existing_issue:
             jira_key_to_issue[key] = existing_issue
-            if _touch_issue_fields(existing_issue, fields, key, project):
+            if _touch_issue_fields(
+                existing_issue,
+                fields,
+                key,
+                project,
+                workspace,
+                actor,
+                client=jira_client,
+                custom_ctx=custom_ctx,
+            ):
                 result.updated_cards += 1
             _, created = ModuleIssue.objects.get_or_create(
                 module=module,
@@ -421,14 +614,8 @@ def run_jira_ops_import(
                 result.linked_cards += 1
             return
 
-        state = resolve_state(project, fields)
         ser = IssueCreateSerializer(
-            data={
-                "name": (fields.get("summary") or key)[:255],
-                "description_html": issue_description_html(key, fields),
-                "state_id": str(state.id) if state else None,
-                "priority": "none",
-            },
+            data=_issue_create_payload(fields, key, project),
             context={
                 "project_id": str(project.id),
                 "workspace_id": str(workspace.id),
@@ -438,6 +625,17 @@ def run_jira_ops_import(
         ser.is_valid(raise_exception=True)
         inst = ser.save()
         Issue.objects.filter(pk=inst.pk).update(external_id=key, external_source="jira")
+        inst.refresh_from_db()
+        _apply_jira_issue_content(
+            inst,
+            fields,
+            key,
+            project,
+            workspace,
+            actor,
+            client=jira_client,
+            custom_ctx=custom_ctx,
+        )
         jira_key_to_issue[key] = inst
         ModuleIssue.objects.get_or_create(
             module=module,
@@ -464,22 +662,29 @@ def run_jira_ops_import(
                 existing_issue.save(update_fields=["parent_id", "updated_at"])
                 result.linked_subtasks += 1
                 changed = True
-            if _touch_issue_fields(existing_issue, fields, key, project):
+            if _touch_issue_fields(
+                existing_issue,
+                fields,
+                key,
+                project,
+                workspace,
+                actor,
+                client=jira_client,
+                custom_ctx=custom_ctx,
+            ):
                 result.updated_subtasks += 1
                 changed = True
             if not changed and existing_issue.parent_id == parent_issue.id:
                 pass
             return
 
-        state = resolve_state(project, fields)
         ser = IssueCreateSerializer(
-            data={
-                "name": (fields.get("summary") or key)[:255],
-                "description_html": issue_description_html(key, fields),
-                "state_id": str(state.id) if state else None,
-                "priority": "none",
-                "parent_id": str(parent_issue.id),
-            },
+            data=_issue_create_payload(
+                fields,
+                key,
+                project,
+                parent_id=str(parent_issue.id),
+            ),
             context={
                 "project_id": str(project.id),
                 "workspace_id": str(workspace.id),
@@ -489,6 +694,17 @@ def run_jira_ops_import(
         ser.is_valid(raise_exception=True)
         inst = ser.save()
         Issue.objects.filter(pk=inst.pk).update(external_id=key, external_source="jira")
+        inst.refresh_from_db()
+        _apply_jira_issue_content(
+            inst,
+            fields,
+            key,
+            project,
+            workspace,
+            actor,
+            client=jira_client,
+            custom_ctx=custom_ctx,
+        )
         jira_key_to_issue[key] = inst
         result.created_subtasks += 1
 

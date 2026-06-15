@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { HelpCircle, User } from "lucide-react";
+import { BookOpen, HelpCircle, User } from "lucide-react";
+import { useParams } from "next/navigation";
 import { useTranslation } from "@operis/i18n";
+import Link from "next/link";
 import { PageIcon } from "@operis/propel/icons";
 // ui
 import { CustomMenu } from "@operis/ui";
@@ -15,6 +17,7 @@ import { usePowerK } from "@/hooks/store/use-power-k";
 import { PlaneVersionNumber } from "@/plane-web/components/global";
 
 export const HelpMenuRoot = observer(function HelpMenuRoot() {
+  const { workspaceSlug } = useParams();
   // store hooks
   const { t } = useTranslation();
   const { toggleShortcutsListModal } = usePowerK();
@@ -44,6 +47,15 @@ export const HelpMenuRoot = observer(function HelpMenuRoot() {
         maxHeight="lg"
         closeOnSelect
       >
+        <CustomMenu.MenuItem>
+          <Link
+            href={`/${workspaceSlug?.toString()}/manual`}
+            className="flex w-full items-center gap-x-2 rounded-sm text-11"
+          >
+            <BookOpen className="size-3.5 text-secondary" />
+            <span className="text-11">{t("operoz_manual.title")}</span>
+          </Link>
+        </CustomMenu.MenuItem>
         <CustomMenu.MenuItem onClick={() => window.open("https://go.plane.so/p-docs", "_blank")}>
           <div className="flex items-center gap-x-2 rounded-sm text-11">
             <PageIcon className="h-3.5 w-3.5 text-secondary" height={14} width={14} />

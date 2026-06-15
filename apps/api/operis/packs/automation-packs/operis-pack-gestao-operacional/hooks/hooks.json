@@ -1,0 +1,15 @@
+{
+  "hooks": [
+    {
+      "name": "[Pack] Métrica ações Gestão Operacional",
+      "event": "post_action",
+      "matcher": "",
+      "handler_type": "record_metric",
+      "config": {
+        "metric_name": "pack_gestao_operacional_action"
+      },
+      "enabled": true,
+      "sort_order": 100
+    }
+  ]
+}

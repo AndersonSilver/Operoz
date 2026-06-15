@@ -1,0 +1,224 @@
+openapi: 3.0.3
+info:
+  title: Operoz Assistant API
+  version: 1.0.0
+  description: |
+    REST API do Assistente Operoz (workspace-scoped).
+    Autenticação por sessão. Prefixo `/api/workspaces/{slug}/assistant/`.
+servers:
+  - url: http://localhost:8000/api/workspaces/{slug}/assistant
+    variables:
+      slug:
+        default: operoz
+tags:
+  - name: sessions
+  - name: chat
+  - name: admin
+paths:
+  /sessions/:
+    get:
+      tags: [sessions]
+      summary: List assistant sessions
+      responses:
+        "200":
+          description: List of sessions
+    post:
+      tags: [sessions]
+      summary: Create session
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                context:
+                  type: object
+      responses:
+        "201":
+          description: Created
+  /sessions/{session_id}/:
+    parameters:
+      - name: session_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+    get:
+      tags: [sessions]
+      summary: Get session
+      responses:
+        "200":
+          description: Session
+        "404":
+          description: Not found
+    patch:
+      tags: [sessions]
+      summary: Update session
+      responses:
+        "200":
+          description: Updated
+    delete:
+      tags: [sessions]
+      summary: Delete session
+      responses:
+        "204":
+          description: Deleted
+  /sessions/{session_id}/messages/:
+    get:
+      tags: [sessions]
+      summary: List messages
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Message list
+  /sessions/{session_id}/chat/:
+    post:
+      tags: [chat]
+      summary: Send chat message
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [message]
+              properties:
+                message:
+                  type: string
+                  maxLength: 16000
+                stream:
+                  type: boolean
+                  default: false
+      responses:
+        "200":
+          description: Assistant reply (non-streaming)
+        "429":
+          description: Rate limit
+        "503":
+          description: LLM not configured
+  /sessions/{session_id}/confirm-action/:
+    post:
+      tags: [chat]
+      summary: Confirm proposed action
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [proposal]
+              properties:
+                proposal:
+                  type: object
+      responses:
+        "200":
+          description: Action executed
+  /sessions/{session_id}/messages/{message_id}/feedback/:
+    patch:
+      tags: [chat]
+      summary: Thumbs up/down feedback
+      parameters:
+        - name: session_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: message_id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [rating]
+              properties:
+                rating:
+                  type: string
+                  enum: [up, down, clear]
+      responses:
+        "200":
+          description: Updated message
+  /usage/:
+    get:
+      tags: [admin]
+      summary: Token usage summary (admin)
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 7
+      responses:
+        "200":
+          description: Usage summary
+  /quality/:
+    get:
+      tags: [admin]
+      summary: Quality metrics dashboard (admin)
+      parameters:
+        - name: days
+          in: query
+          schema:
+            type: integer
+            default: 7
+      responses:
+        "200":
+          description: Quality dashboard
+  /quality/reviews/:
+    get:
+      tags: [admin]
+      summary: List quality reviews
+      responses:
+        "200":
+          description: Review list
+    post:
+      tags: [admin]
+      summary: Submit quality review
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [verdict]
+              properties:
+                verdict:
+                  type: string
+                  enum: [ok, hallucination, incomplete, unsafe]
+                message_id:
+                  type: string
+                  format: uuid
+                notes:
+                  type: string
+      responses:
+        "201":
+          description: Created

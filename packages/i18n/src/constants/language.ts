@@ -1,11 +1,13 @@
 import type { TLanguage, ILanguageOption } from "../types";
 
+/** Fallback when a key is missing in the active locale (not the default UI language). */
 export const FALLBACK_LANGUAGE: TLanguage = "en";
 
 /** Default UI language when the user has not chosen one (localStorage empty). */
 export const DEFAULT_LOCALE: TLanguage = "pt-BR";
 
 export const SUPPORTED_LANGUAGES: ILanguageOption[] = [
+  { label: "Português Brasil", value: "pt-BR" },
   { label: "English", value: "en" },
   { label: "Français", value: "fr" },
   { label: "Español", value: "es" },
@@ -20,7 +22,6 @@ export const SUPPORTED_LANGUAGES: ILanguageOption[] = [
   { label: "Українська", value: "ua" },
   { label: "Polski", value: "pl" },
   { label: "한국어", value: "ko" },
-  { label: "Português Brasil", value: "pt-BR" },
   { label: "Indonesian", value: "id" },
   { label: "Română", value: "ro" },
   { label: "Tiếng việt", value: "vi-VN" },
@@ -39,3 +40,6 @@ export enum ETranslationFiles {
 }
 
 export const LANGUAGE_STORAGE_KEY = "userLanguage";
+
+/** One-time flag: migrates legacy Plane default (localStorage `en`) to Operoz default. */
+export const LEGACY_LOCALE_MIGRATION_KEY = "operozLegacyEnLocaleMigrated";

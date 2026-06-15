@@ -10,7 +10,7 @@ export function PageHead(props: PageHeadTitleProps) {
 
   useEffect(() => {
     if (title) {
-      document.title = title ?? "Operis | Simple, extensible, open-source project management tool.";
+      document.title = title ?? "Operoz";
     }
   }, [title]);
 

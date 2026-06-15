@@ -12,7 +12,8 @@ import {
   getModuleIdFromBoardBlock,
   isBoardModuleBlockId,
 } from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
-import { useBoardGroupedTimelineStore } from "@/hooks/store/use-board-grouped-timeline";
+import { getGanttScheduleDisplay } from "@/components/gantt-chart/helpers/schedule-display";
+import { useTranslation } from "@operis/i18n";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 
 type Props = {
@@ -22,16 +23,16 @@ type Props = {
 
 export const BoardModuleSidebarBlock = observer(function BoardModuleSidebarBlock(props: Props) {
   const { block, isDragging } = props;
+  const { t } = useTranslation();
   const { board } = useBoardLayout();
-  const { updateActiveBlockId, isBlockActive, getNumberOfDaysFromPosition } = useTimeLineChartStore();
+  const { updateActiveBlockId, isBlockActive } = useTimeLineChartStore();
   const { toggleModuleCollapsed, isModuleCollapsed } = useBoardGroupedTimelineStore();
 
   const moduleId = isBoardModuleBlockId(block.id) ? getModuleIdFromBoardBlock(block.id) : (block.data?.id as string);
   const collapsed = moduleId ? isModuleCollapsed(moduleId) : false;
 
   const status = block.data?.status as string | undefined;
-  const isBlockComplete = !!block?.start_date && !!block?.target_date;
-  const duration = isBlockComplete ? getNumberOfDaysFromPosition(block?.position?.width) : undefined;
+  const schedule = getGanttScheduleDisplay(block, t);
 
   if (!block?.data || !moduleId) return null;
 
@@ -79,14 +80,8 @@ export const BoardModuleSidebarBlock = observer(function BoardModuleSidebarBlock
         >
           {block.name}
         </button>
-        <span className="flex-shrink-0 text-13 text-secondary">
-          {isBlockComplete && duration ? (
-            <>
-              {duration} day{duration > 1 ? "s" : ""}
-            </>
-          ) : (
-            <span className="text-tertiary">—</span>
-          )}
+        <span className="flex-shrink-0 text-13 text-secondary" title={schedule.title}>
+          <span className={schedule.isPlaceholder ? "text-tertiary" : undefined}>{schedule.label}</span>
         </span>
       </Row>
     </div>

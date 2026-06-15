@@ -1,0 +1,36 @@
+.automation-code-editor {
+  overflow: hidden;
+  border-radius: 0.5rem;
+  border: 1px solid var(--border-subtle-1);
+  background: var(--bg-canvas);
+}
+
+.automation-code-editor .cm-editor {
+  background: transparent;
+}
+
+.automation-code-editor .cm-editor.cm-focused {
+  outline: none;
+}
+
+.automation-code-editor .cm-scroller {
+  overflow: auto;
+}
+
+.automation-code-editor--fallback {
+  border: 1px solid var(--border-subtle-1);
+  border-radius: 0.5rem;
+  background: var(--bg-canvas);
+}
+
+.automation-code-editor__fallback {
+  margin: 0;
+  overflow: auto;
+  padding: 12px 16px;
+  font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+  white-space: pre-wrap;
+  word-break: break-word;
+}

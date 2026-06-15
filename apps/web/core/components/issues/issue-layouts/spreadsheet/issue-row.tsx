@@ -9,7 +9,7 @@ import { useOutsideClickDetector } from "@operis/hooks";
 import { ChevronRightIcon } from "@operis/propel/icons";
 // types
 import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueDisplayProperties, TIssue } from "@operis/types";
+import type { IIssueDisplayProperties, IProjectCustomFieldLite, TCustomFieldValue, TIssue } from "@operis/types";
 import { EIssueServiceType } from "@operis/types";
 // ui
 import { ControlLink, Row } from "@operis/ui";
@@ -22,6 +22,7 @@ import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
+import { store } from "@/lib/store-context";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
@@ -31,6 +32,7 @@ import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/iss
 import type { TRenderQuickActions } from "../list/list-view-types";
 import { isIssueNew } from "../utils";
 import { IssueColumn } from "./issue-column";
+import { SpreadsheetCustomFieldColumn } from "./columns/custom-field-column";
 
 interface Props {
   displayProperties: IIssueDisplayProperties;
@@ -44,6 +46,8 @@ interface Props {
   isScrolled: MutableRefObject<boolean>;
   containerRef: MutableRefObject<HTMLTableElement | null>;
   spreadsheetColumnsList: (keyof IIssueDisplayProperties)[];
+  customFieldColumns?: IProjectCustomFieldLite[];
+  workspaceSlug?: string;
   spacingLeft?: number;
   selectionHelpers: TSelectionHelper;
   shouldRenderByDefault?: boolean;
@@ -63,6 +67,8 @@ export const SpreadsheetIssueRow = observer(function SpreadsheetIssueRow(props: 
     isScrolled,
     containerRef,
     spreadsheetColumnsList,
+    customFieldColumns = [],
+    workspaceSlug = "",
     spacingLeft = 6,
     selectionHelpers,
     shouldRenderByDefault,
@@ -117,6 +123,8 @@ export const SpreadsheetIssueRow = observer(function SpreadsheetIssueRow(props: 
           isExpanded={isExpanded}
           setExpanded={setExpanded}
           spreadsheetColumnsList={spreadsheetColumnsList}
+          customFieldColumns={customFieldColumns}
+          workspaceSlug={workspaceSlug}
           selectionHelpers={selectionHelpers}
           isEpic={isEpic}
         />
@@ -139,6 +147,8 @@ export const SpreadsheetIssueRow = observer(function SpreadsheetIssueRow(props: 
             isScrolled={isScrolled}
             containerRef={containerRef}
             spreadsheetColumnsList={spreadsheetColumnsList}
+            customFieldColumns={customFieldColumns}
+            workspaceSlug={workspaceSlug}
             selectionHelpers={selectionHelpers}
             shouldRenderByDefault={isExpanded}
           />
@@ -160,6 +170,8 @@ interface IssueRowDetailsProps {
   isExpanded: boolean;
   setExpanded: Dispatch<SetStateAction<boolean>>;
   spreadsheetColumnsList: (keyof IIssueDisplayProperties)[];
+  customFieldColumns?: IProjectCustomFieldLite[];
+  workspaceSlug?: string;
   spacingLeft?: number;
   selectionHelpers: TSelectionHelper;
   isEpic?: boolean;
@@ -179,6 +191,8 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
     isExpanded,
     setExpanded,
     spreadsheetColumnsList,
+    customFieldColumns = [],
+    workspaceSlug = "",
     spacingLeft = 6,
     selectionHelpers,
     isEpic = false,
@@ -189,7 +203,8 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
   const cellRef = useRef(null);
   const menuActionRef = useRef<HTMLDivElement | null>(null);
   // router
-  const { workspaceSlug, projectId } = useParams();
+  const { workspaceSlug: routerWorkspaceSlug, projectId } = useParams();
+  const resolvedWorkspaceSlug = workspaceSlug || routerWorkspaceSlug?.toString() || "";
   // hooks
   const { getProjectIdentifierById } = useProject();
   const { getIsIssuePeeked, peekIssue } = useIssueDetail(isEpic ? EIssueServiceType.EPICS : EIssueServiceType.ISSUES);
@@ -198,7 +213,7 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
 
   // handlers
   const handleIssuePeekOverview = (issue: TIssue) =>
-    handleRedirection(workspaceSlug?.toString(), issue, isMobile, nestingLevel);
+    handleRedirection(resolvedWorkspaceSlug, issue, isMobile, nestingLevel);
 
   const { subIssues: subIssuesStore, issue } = useIssueDetail();
 
@@ -228,8 +243,8 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
       handleIssuePeekOverview(issueDetail);
     } else {
       setExpanded((prevState) => {
-        if (!prevState && workspaceSlug && issueDetail && issueDetail.project_id)
-          subIssuesStore.fetchSubIssues(workspaceSlug.toString(), issueDetail.project_id, issueDetail.id);
+        if (!prevState && resolvedWorkspaceSlug && issueDetail && issueDetail.project_id)
+          subIssuesStore.fetchSubIssues(resolvedWorkspaceSlug, issueDetail.project_id, issueDetail.id);
         return !prevState;
       });
     }
@@ -243,13 +258,19 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
   const canSelectIssues = !disableUserActions && !selectionHelpers.isSelectionDisabled;
 
   const workItemLink = generateWorkItemLink({
-    workspaceSlug: workspaceSlug?.toString(),
+    workspaceSlug: resolvedWorkspaceSlug,
     projectId: issueDetail?.project_id,
     issueId,
     projectIdentifier,
     sequenceId: issueDetail?.sequence_id,
     isEpic,
   });
+
+  const handleCustomFieldSaved = (fieldId: string, value: TCustomFieldValue) => {
+    store.issue.issues.updateIssue(issueDetail.id, {
+      custom_field_values: { ...(issueDetail.custom_field_values ?? {}), [fieldId]: value },
+    });
+  };
 
   return (
     <>
@@ -391,6 +412,22 @@ const IssueRowDetails = observer(function IssueRowDetails(props: IssueRowDetails
           updateIssue={updateIssue}
           isEstimateEnabled={isEstimateEnabled}
         />
+      ))}
+      {customFieldColumns.map((field) => (
+        <td
+          key={field.id}
+          tabIndex={0}
+          className="h-11 min-w-36 border-r-[1px] border-subtle text-13 after:absolute after:bottom-[-1px] after:w-full after:border after:border-subtle"
+        >
+          <SpreadsheetCustomFieldColumn
+            field={field}
+            issue={issueDetail}
+            workspaceSlug={resolvedWorkspaceSlug}
+            disabled={disableUserActions}
+            onCustomFieldSaved={handleCustomFieldSaved}
+            onClose={() => undefined}
+          />
+        </td>
       ))}
     </>
   );

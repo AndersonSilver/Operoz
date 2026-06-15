@@ -30,6 +30,8 @@ import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-sta
 //
 import { DEFAULT_BLOCK_WIDTH, GANTT_SELECT_GROUP, HEADER_HEIGHT } from "../constants";
 import { getItemPositionWidth } from "../views";
+import { GanttChartFloatingViewControls } from "./floating-view-controls";
+import { GanttTodayLine } from "./gantt-today-line";
 import { TimelineDragHelper } from "./timeline-drag-helper";
 
 type Props = {
@@ -58,6 +60,11 @@ type Props = {
   ) => ChartDataType | undefined;
   quickAdd?: React.ReactNode | undefined;
   isEpic?: boolean;
+  showToday: boolean;
+  isViewControlsCollapsed: boolean;
+  onToday: () => void;
+  onChartView: (view: TGanttViews) => void;
+  onToggleViewControlsCollapsed: () => void;
 };
 
 export const GanttChartMainContent = observer(function GanttChartMainContent(props: Props) {
@@ -83,6 +90,11 @@ export const GanttChartMainContent = observer(function GanttChartMainContent(pro
     quickAdd,
     updateBlockDates,
     isEpic = false,
+    showToday,
+    isViewControlsCollapsed,
+    onToday,
+    onChartView,
+    onToggleViewControlsCollapsed,
   } = props;
   // refs
   const ganttContainerRef = useRef<HTMLDivElement>(null);
@@ -158,84 +170,95 @@ export const GanttChartMainContent = observer(function GanttChartMainContent(pro
   return (
     <>
       <TimelineDragHelper ganttContainerRef={ganttContainerRef} />
-      <MultipleSelectGroup
-        containerRef={ganttContainerRef}
-        entities={{
-          [GANTT_SELECT_GROUP]: blockIds ?? [],
-        }}
-        disabled={!isBulkOperationsEnabled || isEpic}
-      >
-        {(helpers) => (
-          <>
-            <div
-              // DO NOT REMOVE THE ID
-              id="gantt-container"
-              className={cn(
-                "vertical-scrollbar horizontal-scrollbar flex scrollbar-lg h-full w-full overflow-auto border-t-[0.5px] border-subtle",
-                {
-                  "mb-8": bottomSpacing,
-                }
-              )}
-              ref={ganttContainerRef}
-              onScroll={onScroll}
-            >
-              <GanttChartSidebar
-                blockIds={blockIds}
-                loadMoreBlocks={loadMoreBlocks}
-                canLoadMoreBlocks={canLoadMoreBlocks}
-                ganttContainerRef={ganttContainerRef}
-                blockUpdateHandler={blockUpdateHandler}
-                enableReorder={enableReorder}
-                enableSelection={enableSelection}
-                sidebarToRender={sidebarToRender}
-                title={title}
-                selectionHelpers={helpers}
-                showAllBlocks={showAllBlocks}
-                isEpic={isEpic}
-              />
-              <div className="relative h-max min-h-full flex-shrink-0 flex-grow">
-                <ActiveChartView />
-                {currentViewData && (
-                  <div
-                    className="relative h-full"
-                    style={{
-                      width: `${itemsContainerWidth}px`,
-                      transform: `translateY(${HEADER_HEIGHT}px)`,
-                      paddingBottom: `${HEADER_HEIGHT}px`,
-                    }}
-                  >
-                    <GanttChartRowList
-                      blockIds={blockIds}
-                      blockUpdateHandler={blockUpdateHandler}
-                      handleScrollToBlock={handleScrollToBlock}
-                      enableAddBlock={enableAddBlock}
-                      showAllBlocks={showAllBlocks}
-                      selectionHelpers={helpers}
-                      ganttContainerRef={ganttContainerRef}
-                    />
-                    <TimelineDependencyPaths isEpic={isEpic} />
-                    <TimelineDraggablePath />
-                    <GanttAdditionalLayers itemsContainerWidth={itemsContainerWidth} blockCount={blockIds.length} />
-                    <GanttChartBlocksList
-                      blockIds={blockIds}
-                      blockToRender={blockToRender}
-                      enableBlockLeftResize={enableBlockLeftResize}
-                      enableBlockRightResize={enableBlockRightResize}
-                      enableBlockMove={enableBlockMove}
-                      ganttContainerRef={ganttContainerRef}
-                      enableDependency={enableDependency}
-                      showAllBlocks={showAllBlocks}
-                      updateBlockDates={updateBlockDates}
-                    />
-                  </div>
+      <div className="flex min-h-0 flex-1 flex-col">
+        <MultipleSelectGroup
+          containerRef={ganttContainerRef}
+          entities={{
+            [GANTT_SELECT_GROUP]: blockIds ?? [],
+          }}
+          disabled={!isBulkOperationsEnabled || isEpic}
+        >
+          {(helpers) => (
+            <>
+              <IssueBulkOperationsRoot selectionHelpers={helpers} />
+              <div
+                // DO NOT REMOVE THE ID
+                id="gantt-container"
+                className={cn(
+                  "vertical-scrollbar horizontal-scrollbar flex scrollbar-lg min-h-0 w-full flex-1 overflow-auto border-t-[0.5px] border-subtle",
+                  {
+                    "mb-8": bottomSpacing,
+                  }
                 )}
+                ref={ganttContainerRef}
+                onScroll={onScroll}
+              >
+                <GanttChartSidebar
+                  blockIds={blockIds}
+                  loadMoreBlocks={loadMoreBlocks}
+                  canLoadMoreBlocks={canLoadMoreBlocks}
+                  ganttContainerRef={ganttContainerRef}
+                  blockUpdateHandler={blockUpdateHandler}
+                  enableReorder={enableReorder}
+                  enableSelection={enableSelection}
+                  sidebarToRender={sidebarToRender}
+                  title={title}
+                  selectionHelpers={helpers}
+                  showAllBlocks={showAllBlocks}
+                  isEpic={isEpic}
+                />
+                <div className="relative h-max min-h-full flex-shrink-0 flex-grow">
+                  <ActiveChartView />
+                  {currentViewData && <GanttTodayLine />}
+                  {currentViewData && (
+                    <div
+                      className="relative h-full"
+                      style={{
+                        width: `${itemsContainerWidth}px`,
+                        transform: `translateY(${HEADER_HEIGHT}px)`,
+                        paddingBottom: `${HEADER_HEIGHT}px`,
+                      }}
+                    >
+                      <GanttChartRowList
+                        blockIds={blockIds}
+                        blockUpdateHandler={blockUpdateHandler}
+                        handleScrollToBlock={handleScrollToBlock}
+                        enableAddBlock={enableAddBlock}
+                        showAllBlocks={showAllBlocks}
+                        selectionHelpers={helpers}
+                        ganttContainerRef={ganttContainerRef}
+                      />
+                      <TimelineDependencyPaths isEpic={isEpic} />
+                      <TimelineDraggablePath />
+                      <GanttAdditionalLayers itemsContainerWidth={itemsContainerWidth} blockCount={blockIds.length} />
+                      <GanttChartBlocksList
+                        blockIds={blockIds}
+                        blockToRender={blockToRender}
+                        enableBlockLeftResize={enableBlockLeftResize}
+                        enableBlockRightResize={enableBlockRightResize}
+                        enableBlockMove={enableBlockMove}
+                        ganttContainerRef={ganttContainerRef}
+                        enableDependency={enableDependency}
+                        showAllBlocks={showAllBlocks}
+                        updateBlockDates={updateBlockDates}
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-            {quickAdd ? quickAdd : null}
-            <IssueBulkOperationsRoot selectionHelpers={helpers} />
-          </>
-        )}
-      </MultipleSelectGroup>
+              {quickAdd ? quickAdd : null}
+              <GanttChartFloatingViewControls
+                showToday={showToday}
+                currentView={currentView}
+                isViewControlsCollapsed={isViewControlsCollapsed}
+                onToday={onToday}
+                onChartView={onChartView}
+                onToggleCollapsed={onToggleViewControlsCollapsed}
+              />
+            </>
+          )}
+        </MultipleSelectGroup>
+      </div>
     </>
   );
 });

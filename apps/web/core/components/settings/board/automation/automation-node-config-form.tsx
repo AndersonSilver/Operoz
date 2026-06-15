@@ -12,6 +12,7 @@ import {
 } from "./automation-config-primitives";
 import type { AutomationBoardContext } from "./use-automation-board-context";
 import { isBranchingAction } from "./automation-utils";
+import { ScheduleCronConfigForm } from "./schedule-cron-config";
 
 const FIELD_CHANGE_OPTIONS = [
   { id: "name", label: "Nome" },
@@ -38,15 +39,12 @@ type Props = {
   onUpdateData: (patch: Partial<AutomationNodeData>) => void;
 };
 
-function catalogItemsForKind(
-  catalog: TAutomationCatalog,
-  kind: AutomationNodeData["kind"]
-): TAutomationCatalogItem[] {
+function catalogItemsForKind(catalog: TAutomationCatalog, kind: AutomationNodeData["kind"]): TAutomationCatalogItem[] {
   if (kind === "trigger") return catalog.triggers ?? [];
   if (kind === "filter") return catalog.filters ?? [];
   if (kind === "action") return catalog.actions ?? [];
   return [];
-};
+}
 
 function defaultConfigForKey(catalogKey: string): Record<string, unknown> {
   switch (catalogKey) {
@@ -70,6 +68,15 @@ function defaultConfigForKey(catalogKey: string): Record<string, unknown> {
       return { script_id: "" };
     case "action.send_email":
       return { template_id: "", recipient_user_ids: [], recipient_emails: [] };
+    case "schedule.cron":
+      return {
+        preset: "daily",
+        time: "09:00",
+        weekdays: [0, 1, 2, 3, 4],
+        day_of_month: 1,
+        cron: "0 9 * * *",
+        timezone: "America/Sao_Paulo",
+      };
     default:
       if (catalogKey.startsWith("issue.")) return { event_type: catalogKey };
       return {};
@@ -125,10 +132,12 @@ export function AutomationNodeConfigForm(props: Props) {
         </ConfigField>
       )}
 
-      {data.catalog_key.startsWith("issue.") && (
-        <p className="mb-3 text-11 text-tertiary">
-          {kindItems.find((i) => i.key === data.catalog_key)?.description}
-        </p>
+      {(data.catalog_key.startsWith("issue.") || data.catalog_key === "schedule.cron") && (
+        <p className="mb-3 text-11 text-tertiary">{kindItems.find((i) => i.key === data.catalog_key)?.description}</p>
+      )}
+
+      {data.catalog_key === "schedule.cron" && (
+        <ScheduleCronConfigForm config={config} onChange={(patch) => patchConfig(patch)} />
       )}
 
       {data.catalog_key === "filter.state" && (
@@ -222,10 +231,7 @@ export function AutomationNodeConfigForm(props: Props) {
           )}
           {config.field === "name" && (
             <ConfigField label={t("boards.settings.automation.config.new_name")}>
-              <ConfigTextInput
-                value={(config.value as string) ?? ""}
-                onChange={(value) => patchConfig({ value })}
-              />
+              <ConfigTextInput value={(config.value as string) ?? ""} onChange={(value) => patchConfig({ value })} />
             </ConfigField>
           )}
         </>
@@ -267,6 +273,24 @@ export function AutomationNodeConfigForm(props: Props) {
               onChange={(message) => patchConfig({ message })}
             />
           </ConfigField>
+        </>
+      )}
+
+      {data.catalog_key === "action.retry_until" && (
+        <>
+          <ConfigField label={t("boards.settings.automation.retry.max_iterations")}>
+            <ConfigTextInput
+              value={String(config.max_iterations ?? 3)}
+              onChange={(value) => patchConfig({ max_iterations: Number.parseInt(value, 10) || 1 })}
+            />
+          </ConfigField>
+          <ConfigField label={t("boards.settings.automation.retry.backoff_seconds")}>
+            <ConfigTextInput
+              value={String(config.backoff_seconds ?? 1)}
+              onChange={(value) => patchConfig({ backoff_seconds: Number.parseFloat(value) || 0 })}
+            />
+          </ConfigField>
+          <p className="text-11 text-tertiary">{t("boards.settings.automation.retry.hint")}</p>
         </>
       )}
 

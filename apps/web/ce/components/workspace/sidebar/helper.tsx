@@ -7,6 +7,7 @@ import {
   Home,
   Inbox,
   LayoutGrid,
+  ScanEye,
   StickyNote,
   UserRound,
 } from "lucide-react";
@@ -24,6 +25,8 @@ export const getSidebarNavigationItemIcon = (key: string, className: string = ""
       return <Inbox {...props} />;
     case "projects":
       return <FolderKanban {...props} />;
+    case "visao_360":
+      return <ScanEye {...props} />;
     case "views":
       return <LayoutGrid {...props} />;
     case "active_cycles":

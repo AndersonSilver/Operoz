@@ -1,0 +1,58 @@
+{
+  "id": "unassigned-cards-alert",
+  "version": 1,
+  "name": "Alerta cards sem assignee",
+  "description": "Alerta diário para revisar cards sem responsável atribuído no board.",
+  "icon": "user-x",
+  "category": "quality",
+  "default_rule_name": "Alerta sem assignee",
+  "default_description": "Template oficial Operoz — higiene de responsáveis.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Alerta sem assignee" },
+    { "key": "time", "type": "string", "label": "Horário (HH:MM)", "default": "17:00" },
+    { "key": "timezone", "type": "string", "label": "Fuso horário", "default": "America/Sao_Paulo" },
+    {
+      "key": "message",
+      "type": "string",
+      "label": "Mensagem",
+      "default": "Existem cards sem responsável — atribua assignees no board."
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-daily",
+        "type": "scheduleCronNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "schedule.cron",
+          "label": "Agendamento (cron)",
+          "config": {
+            "preset": "daily",
+            "time": "{{time}}",
+            "weekdays": [0, 1, 2, 3, 4],
+            "day_of_month": 1,
+            "cron": "0 17 * * *",
+            "timezone": "{{timezone}}"
+          }
+        }
+      },
+      {
+        "id": "action-notify",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.notify",
+          "label": "Notificar membros",
+          "config": {
+            "user_ids": [],
+            "message": "{{message}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-daily", "target": "action-notify" }]
+  }
+}

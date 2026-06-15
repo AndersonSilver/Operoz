@@ -7,6 +7,7 @@ import { Logo } from "@operis/propel/emoji-icon-picker";
 import type { IBoard, IBoardMeta, TPartialProject } from "@operis/types";
 import { cn } from "@operis/utils";
 import { BoardOverviewDashboard } from "@/components/board/board-overview-dashboard";
+import { BoardClient360ReportMissingWidget } from "@/components/board/client-360/board-client-360-report-missing-widget";
 import { CreateProjectModal } from "@/components/project/create-project-modal";
 import { ProjectFavoriteStar } from "@/components/project/project-favorite-star";
 import { useAppRouter } from "@/hooks/use-app-router";
@@ -52,7 +53,11 @@ export function BoardOverview(props: Props) {
   const [isCreateProjectOpen, setIsCreateProjectOpen] = useState(false);
   const [projectsExpanded, setProjectsExpanded] = useState(false);
 
-  const { data: meta, isLoading: isMetaLoading, error: metaError } = useSWR<IBoardMeta>(
+  const {
+    data: meta,
+    isLoading: isMetaLoading,
+    error: metaError,
+  } = useSWR<IBoardMeta>(
     workspaceSlug && board.slug ? `BOARD_META_${workspaceSlug}_${board.slug}` : null,
     () => boardService.getBoardMeta(workspaceSlug, board.slug),
     { revalidateOnFocus: false, shouldRetryOnError: false }
@@ -80,11 +85,14 @@ export function BoardOverview(props: Props) {
             ) : isMetaLoading || !meta ? (
               <DashboardSkeleton />
             ) : (
-              <BoardOverviewDashboard meta={meta} workspaceSlug={workspaceSlug} />
+              <>
+                <BoardClient360ReportMissingWidget workspaceSlug={workspaceSlug} board={board} />
+                <BoardOverviewDashboard meta={meta} workspaceSlug={workspaceSlug} />
+              </>
             )}
           </section>
 
-          <section className="overflow-hidden rounded-lg border border-subtle bg-layer-1 shadow-sm">
+          <section className="shadow-sm overflow-hidden rounded-lg border border-subtle bg-layer-1">
             <button
               type="button"
               className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-layer-transparent-hover"
@@ -134,7 +142,7 @@ export function BoardOverview(props: Props) {
                   <div className="overflow-x-auto border-t border-subtle/60">
                     <table className="w-full min-w-[520px] border-collapse text-left">
                       <thead>
-                        <tr className="border-b border-subtle/60 bg-layer-2/50 text-11 font-medium uppercase tracking-wide text-tertiary">
+                        <tr className="border-b border-subtle/60 bg-layer-2/50 text-11 font-medium tracking-wide text-tertiary uppercase">
                           <th className="px-4 py-2.5 font-medium">{t("boards.overview_table_project")}</th>
                           <th className="hidden w-28 px-4 py-2.5 font-medium sm:table-cell">
                             {t("boards.overview_table_key")}
@@ -172,7 +180,7 @@ export function BoardOverview(props: Props) {
                                 </button>
                               </td>
                               <td className="hidden px-4 py-2.5 sm:table-cell">
-                                <span className="inline-flex rounded bg-layer-2 px-1.5 py-0.5 font-mono text-11 text-tertiary">
+                                <span className="font-mono inline-flex rounded bg-layer-2 px-1.5 py-0.5 text-11 text-tertiary">
                                   {project.identifier}
                                 </span>
                               </td>

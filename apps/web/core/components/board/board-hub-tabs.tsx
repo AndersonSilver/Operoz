@@ -1,11 +1,11 @@
 import type { LucideIcon } from "lucide-react";
-import { Calendar, GanttChart, Kanban, LayoutDashboard, LayoutList, ListTodo, Users } from "lucide-react";
+import { Calendar, GanttChart, Kanban, LayoutDashboard, LayoutList, ListTodo } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { cn } from "@operis/utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW } from "@/components/board/board-hub-background";
 
-export type BoardHubTabId = "overview" | "backlog" | "list" | "views" | "timeline" | "calendar" | "clientes";
+export type BoardHubTabId = "overview" | "backlog" | "list" | "views" | "timeline" | "calendar";
 
 type BoardHubTabDef = {
   id: BoardHubTabId;
@@ -31,8 +31,7 @@ export function buildBoardHubTabs(workspaceSlug: string, boardSlug: string): Boa
           !pathname.includes("/list") &&
           !pathname.includes("/views") &&
           !pathname.includes("/timeline") &&
-          !pathname.includes("/calendar") &&
-          !pathname.includes("/clientes")),
+          !pathname.includes("/calendar")),
     },
     {
       id: "backlog",
@@ -69,13 +68,6 @@ export function buildBoardHubTabs(workspaceSlug: string, boardSlug: string): Boa
       href: () => `${base}/calendar`,
       isActive: (pathname) => pathname.includes("/calendar"),
     },
-    {
-      id: "clientes",
-      labelKey: "boards.tab_clients",
-      icon: Users,
-      href: () => `${base}/clientes`,
-      isActive: (pathname) => pathname.includes("/clientes"),
-    },
   ];
 }
 
@@ -111,7 +103,7 @@ export function BoardHubTabNav({
   const tabs = buildBoardHubTabs(workspaceSlug, boardSlug);
 
   return (
-    <nav className={cn("relative w-full", immersive && "pb-3 pt-0.5", className)}>
+    <nav className={cn("relative w-full", immersive && "pt-0.5 pb-3", className)}>
       <div className="flex flex-wrap gap-0.5">
         {tabs.map((tab) => {
           const active = tab.isActive(pathname);
@@ -125,7 +117,7 @@ export function BoardHubTabNav({
                 immersive && BOARD_HUB_IMMERSIVE_TEXT_SHADOW,
                 immersive
                   ? cn(
-                      "rounded-none border-b-2 border-transparent -mb-px",
+                      "-mb-px rounded-none border-b-2 border-transparent",
                       active
                         ? "border-white font-semibold text-white"
                         : "text-white/65 hover:border-white/40 hover:text-white/90"
@@ -139,10 +131,7 @@ export function BoardHubTabNav({
               )}
             >
               <Icon
-                className={cn(
-                  "size-3.5 shrink-0",
-                  immersive ? (active ? "opacity-100" : "opacity-80") : "opacity-90"
-                )}
+                className={cn("size-3.5 shrink-0", immersive ? (active ? "opacity-100" : "opacity-80") : "opacity-90")}
                 strokeWidth={2}
                 aria-hidden
               />

@@ -34,6 +34,7 @@ from operis.db.models import (
     UserRecentVisit,
     IssueAssignee,
     IssueLabel,
+    IssueCustomFieldValue,
     ModuleIssue,
 )
 from operis.utils.grouper import issue_group_values, issue_on_results, issue_queryset_grouper
@@ -203,6 +204,14 @@ class WorkspaceViewIssuesViewSet(BaseViewSet):
                 Prefetch(
                     "issue_module",
                     queryset=ModuleIssue.objects.all(),
+                )
+            )
+            .prefetch_related(
+                Prefetch(
+                    "custom_field_values",
+                    queryset=IssueCustomFieldValue.objects.filter(deleted_at__isnull=True).select_related(
+                        "custom_field"
+                    ),
                 )
             )
         )

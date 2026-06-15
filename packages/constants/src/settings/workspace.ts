@@ -43,6 +43,13 @@ export const WORKSPACE_SETTINGS: Record<TWorkspaceSettingsTabs, TWorkspaceSettin
     access: [EUserWorkspaceRoles.ADMIN],
     highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/settings/boards/`,
   },
+  assistant: {
+    key: "assistant",
+    i18n_label: "workspace_settings.settings.assistant.title",
+    href: `/settings/assistant`,
+    access: [EUserWorkspaceRoles.ADMIN],
+    highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/settings/assistant/`,
+  },
   jira: {
     key: "jira",
     i18n_label: "workspace_settings.settings.jira.title",
@@ -69,6 +76,10 @@ export const GROUPED_WORKSPACE_SETTINGS: Record<WORKSPACE_SETTINGS_CATEGORY, TWo
     WORKSPACE_SETTINGS["members"],
     WORKSPACE_SETTINGS["export"],
   ],
-  [WORKSPACE_SETTINGS_CATEGORY.FEATURES]: [WORKSPACE_SETTINGS["boards"], WORKSPACE_SETTINGS["jira"]],
+  [WORKSPACE_SETTINGS_CATEGORY.FEATURES]: [
+    WORKSPACE_SETTINGS["boards"],
+    WORKSPACE_SETTINGS["assistant"],
+    WORKSPACE_SETTINGS["jira"],
+  ],
   [WORKSPACE_SETTINGS_CATEGORY.DEVELOPER]: [WORKSPACE_SETTINGS["webhooks"]],
 };

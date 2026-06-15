@@ -12,7 +12,6 @@ import { cn } from "@operis/utils";
 // assets
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";
 import favicon32 from "@/app/assets/favicon/favicon-32x32.png?url";
-import faviconIco from "@/app/assets/favicon/favicon.ico?url";
 import icon180 from "@/app/assets/icons/icon-180x180.png?url";
 import icon512 from "@/app/assets/icons/icon-512x512.png?url";
 
@@ -20,7 +19,7 @@ import icon512 from "@/app/assets/icons/icon-512x512.png?url";
 import { AppProvider } from "./provider";
 
 export const meta = () => [
-  { title: "Operis | Simple, extensible, open-source project management tool." },
+  { title: "Operoz" },
   { name: "description", content: SITE_DESCRIPTION },
   {
     name: "keywords",
@@ -57,10 +56,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={DEFAULT_LOCALE}>
       <head>
         <meta name="theme-color" content="#fff" />
+        <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href={favicon32} />
         <link rel="icon" type="image/png" sizes="16x16" href={favicon16} />
         <link rel="manifest" href="/site.webmanifest.json" />
-        <link rel="shortcut icon" href={faviconIco} />
+        <link rel="shortcut icon" type="image/svg+xml" href="/brand/favicon.svg" />
         {/* Meta info for PWA */}
         <meta name="application-name" content="Operis" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

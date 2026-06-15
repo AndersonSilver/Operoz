@@ -75,7 +75,7 @@ export type TPageInstance = TBasePage &
 export class BasePage extends ExtendedBasePage implements TBasePage {
   // loaders
   isSubmitting: TNameDescriptionLoader = "saved";
-  isSyncingWithServer: "syncing" | "synced" | "error" = "syncing";
+  isSyncingWithServer: "syncing" | "synced" | "error" = "synced";
   // page properties
   id: string | undefined;
   name: string | undefined;

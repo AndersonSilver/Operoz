@@ -1,3 +1,4 @@
+import type { TCustomFieldValue } from "../board/custom-fields";
 import type { TIssuePriorities } from "../issues";
 import type { TStateGroups } from "../state";
 import type { TIssuePublicComment } from "./activity/issue_comment";
@@ -72,6 +73,7 @@ export type TBaseIssue = {
   is_draft: boolean;
   is_epic?: boolean;
   is_intake?: boolean;
+  custom_field_values?: Record<string, TCustomFieldValue>;
 };
 
 type IssueRelation = {
@@ -143,6 +145,7 @@ export type TBulkIssueProperties = Pick<
   | "module_ids"
   | "cycle_id"
   | "estimate_point"
+  | "type_id"
 >;
 
 export type TBulkOperationsPayload = {

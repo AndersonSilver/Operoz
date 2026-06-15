@@ -1,0 +1,73 @@
+from django.urls import path
+
+from operis.app.views.assistant.metrics import AssistantOpsMetricsEndpoint
+from operis.app.views.assistant.sessions import (
+    AssistantChatJobStreamEndpoint,
+    AssistantConfirmActionEndpoint,
+    AssistantMessageFeedbackEndpoint,
+    AssistantQualityEndpoint,
+    AssistantQualityReviewEndpoint,
+    AssistantSessionChatEndpoint,
+    AssistantSessionDetailEndpoint,
+    AssistantSessionListCreateEndpoint,
+    AssistantSessionMessagesEndpoint,
+    AssistantUsageEndpoint,
+)
+
+urlpatterns = [
+    path(
+        "assistant/ops/metrics/",
+        AssistantOpsMetricsEndpoint.as_view(),
+        name="assistant-ops-metrics",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/",
+        AssistantSessionListCreateEndpoint.as_view(),
+        name="assistant-sessions",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/<uuid:session_id>/",
+        AssistantSessionDetailEndpoint.as_view(),
+        name="assistant-session-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/<uuid:session_id>/messages/",
+        AssistantSessionMessagesEndpoint.as_view(),
+        name="assistant-session-messages",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/<uuid:session_id>/chat/",
+        AssistantSessionChatEndpoint.as_view(),
+        name="assistant-session-chat",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/chat/jobs/<uuid:job_id>/stream/",
+        AssistantChatJobStreamEndpoint.as_view(),
+        name="assistant-chat-job-stream",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/<uuid:session_id>/messages/<uuid:message_id>/feedback/",
+        AssistantMessageFeedbackEndpoint.as_view(),
+        name="assistant-message-feedback",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/sessions/<uuid:session_id>/confirm-action/",
+        AssistantConfirmActionEndpoint.as_view(),
+        name="assistant-confirm-action",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/usage/",
+        AssistantUsageEndpoint.as_view(),
+        name="assistant-usage",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/quality/",
+        AssistantQualityEndpoint.as_view(),
+        name="assistant-quality",
+    ),
+    path(
+        "workspaces/<str:slug>/assistant/quality/reviews/",
+        AssistantQualityReviewEndpoint.as_view(),
+        name="assistant-quality-reviews",
+    ),
+]

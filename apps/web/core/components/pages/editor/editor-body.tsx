@@ -137,9 +137,9 @@ export const PageEditorBody = observer(function PageEditorBody(props: Props) {
     handlers,
   });
 
-  // Set syncing status when page changes and reset collaboration state
+  // Reset collaboration UI state when switching pages (do not flash "Syncing…" on connect).
   useEffect(() => {
-    setSyncingStatus("syncing");
+    setSyncingStatus("synced");
     onCollaborationStateChange?.({
       stage: { kind: "connecting" },
       isServerSynced: false,
@@ -166,15 +166,15 @@ export const PageEditorBody = observer(function PageEditorBody(props: Props) {
         // Pass full state to parent
         onCollaborationStateChange?.(state);
 
-        // Map collaboration stage to UI syncing status
-        // Stage → UI mapping: disconnected → error | synced → synced | all others → syncing
+        // Badge "Syncing…" só em reconexão; handshake inicial permanece como synced (sem flash).
         if (state.stage.kind === "disconnected") {
           setSyncingStatus("error");
         } else if (state.stage.kind === "synced") {
           setSyncingStatus("synced");
-        } else {
-          // initial, connecting, awaiting-sync, reconnecting → show as syncing
+        } else if (state.stage.kind === "reconnecting") {
           setSyncingStatus("syncing");
+        } else {
+          setSyncingStatus("synced");
         }
       },
     }),

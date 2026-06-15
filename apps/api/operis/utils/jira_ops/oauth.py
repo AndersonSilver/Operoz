@@ -23,6 +23,7 @@ ATLASSIAN_RESOURCES_URL = "https://api.atlassian.com/oauth/token/accessible-reso
 JIRA_SCOPES = "read:jira-work read:jira-user offline_access"
 STATE_TTL = 600
 PENDING_CLOUDS_TTL = 600
+STATE_SLUG_SEPARATOR = "::"
 
 
 def oauth_redirect_uri() -> str:
@@ -68,13 +69,22 @@ def _http_json(method: str, url: str, headers: dict | None = None, body: dict | 
 
 
 def create_oauth_state(workspace_slug: str, user_id: str) -> str:
-    state = secrets.token_urlsafe(32)
+    token = secrets.token_urlsafe(32)
+    state = f"{workspace_slug}{STATE_SLUG_SEPARATOR}{token}"
     cache.set(
         f"jira_oauth_state:{state}",
         {"workspace_slug": workspace_slug, "user_id": user_id},
         timeout=STATE_TTL,
     )
     return state
+
+
+def workspace_slug_from_oauth_state(state: str) -> str:
+    """Fallback quando o state expirou no cache — slug embutido no parâmetro state."""
+    if not state or STATE_SLUG_SEPARATOR not in state:
+        return ""
+    slug, _ = state.split(STATE_SLUG_SEPARATOR, 1)
+    return slug.strip()
 
 
 def pop_oauth_state(state: str) -> dict | None:

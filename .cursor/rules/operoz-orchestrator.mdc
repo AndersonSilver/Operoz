@@ -13,9 +13,10 @@ Antes de código ou plano, ative a **regra + skill** correspondente:
 
 | Tarefa | Regra (`.cursor/rules/`) | Skill (`.cursor/skills/`) |
 |--------|--------------------------|---------------------------|
+| **UI / UX (qualquer tela)** | `operoz-frontend-design.mdc` | **`OPEROZ ENGENHARIA/SKILL.md`** + `DESIGN SISTEMA/SKILL.md` |
 | API, models, Celery, RBAC | `operoz-backend-django.mdc` | `OPEROZ ENGENHARIA/DESENVOLVEDOR SENIOR/SKILL.md` |
 | Proibições N+1, IDOR, `any` | `operoz-anti-patterns.mdc` | `OPEROZ ENGENHARIA/ANTI_PATTERNS.md` |
-| UI, Tailwind, tokens | `operoz-frontend-design.mdc` | `OPEROZ ENGENHARIA/DESIGN SISTEMA/SKILL.md` |
+| Tokens, telas irmãs | `operoz-frontend-design.mdc` | `OPEROZ ENGENHARIA/DESIGN SISTEMA/SKILL.md` |
 | Cards, Kanban, squads | `operoz-issue-ux.mdc` | `OPEROZ ENGENHARIA/EXPERIÊNCIA JIRA/SKILL.md` |
 | Git webhooks, Harness, custos | `operoz-integrations.mdc` | `OPEROZ FLUXO/CONTEXTO/SKILL.md` |
 | Descrição de PR | `operoz-pull-request.mdc` | `OPEROZ FLUXO/DESCRIÇÃO PR/SKILL.md` |

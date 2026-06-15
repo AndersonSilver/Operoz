@@ -7,6 +7,7 @@ import { useTranslation } from "@operis/i18n";
 // types
 import type { IIssueDisplayProperties } from "@operis/types";
 // components
+import { isCustomFieldVisible, useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
 import { FilterHeader } from "../helpers/filter-header";
 
 type Props = {
@@ -16,6 +17,8 @@ type Props = {
   cycleViewDisabled?: boolean;
   moduleViewDisabled?: boolean;
   isEpic?: boolean;
+  workspaceSlug?: string;
+  boardSlug?: string;
 };
 
 export const FilterDisplayProperties = observer(function FilterDisplayProperties(props: Props) {
@@ -26,9 +29,16 @@ export const FilterDisplayProperties = observer(function FilterDisplayProperties
     cycleViewDisabled = false,
     moduleViewDisabled = false,
     isEpic = false,
+    workspaceSlug = "",
+    boardSlug,
   } = props;
   // hooks
   const { t } = useTranslation();
+  const { fields: boardCustomFields } = useBoardLayoutCustomFields({
+    workspaceSlug,
+    boardSlug,
+    displayProperties,
+  });
   // states
   const [previewEnabled, setPreviewEnabled] = React.useState(true);
 
@@ -80,6 +90,29 @@ export const FilterDisplayProperties = observer(function FilterDisplayProperties
               </button>
             </>
           ))}
+          {boardCustomFields.map((field) => {
+            const isVisible = isCustomFieldVisible(field.id, displayProperties);
+
+            return (
+              <button
+                key={field.id}
+                type="button"
+                className={`rounded-sm border px-2 py-0.5 text-11 transition-all ${
+                  isVisible ? "border-accent-strong bg-accent-primary text-on-color" : "border-subtle hover:bg-layer-1"
+                }`}
+                onClick={() =>
+                  handleUpdate({
+                    custom_fields: {
+                      ...(displayProperties.custom_fields ?? {}),
+                      [field.id]: !isVisible,
+                    },
+                  })
+                }
+              >
+                {field.name}
+              </button>
+            );
+          })}
         </div>
       )}
     </>

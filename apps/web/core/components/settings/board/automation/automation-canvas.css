@@ -94,7 +94,10 @@
   font-size: 0.75rem;
   line-height: 1;
   cursor: pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease,
+    border-color 0.15s ease;
 }
 
 .automation-flow-host .automation-canvas-clipboard-btn:hover:not(:disabled) {
@@ -106,4 +109,26 @@
 .automation-flow-host .automation-canvas-clipboard-btn:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+.automation-flow-host .schedule-cron-node {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--extended-color-indigo-500) 22%, transparent),
+    0 8px 24px color-mix(in srgb, var(--extended-color-indigo-500) 12%, transparent);
+}
+
+.automation-flow-host .schedule-cron-node-icon {
+  animation: schedule-cron-pulse 3s ease-in-out infinite;
+}
+
+@keyframes schedule-cron-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.04);
+    opacity: 0.92;
+  }
 }

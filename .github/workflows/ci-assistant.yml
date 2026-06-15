@@ -1,0 +1,92 @@
+# Testes do Assistente Operoz — unit + contract API.
+# Dispara em PR/push que tocam backend assistant ou este workflow.
+
+name: CI Assistant Operoz
+
+on:
+  push:
+    branches: [preview, main, develop]
+    paths:
+      - "apps/api/operis/assistant/**"
+      - "apps/api/operis/bgtasks/assistant_index_task.py"
+      - "apps/api/operis/app/views/assistant/**"
+      - "apps/api/operis/tests/unit/assistant/**"
+      - "apps/api/operis/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operis/devops/**"
+      - "apps/api/operis/db/management/commands/check_celery_queues.py"
+      - ".github/workflows/ci-assistant.yml"
+  pull_request:
+    paths:
+      - "apps/api/operis/assistant/**"
+      - "apps/api/operis/bgtasks/assistant_index_task.py"
+      - "apps/api/operis/app/views/assistant/**"
+      - "apps/api/operis/tests/unit/assistant/**"
+      - "apps/api/operis/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operis/devops/**"
+      - "apps/api/operis/db/management/commands/check_celery_queues.py"
+      - ".github/workflows/ci-assistant.yml"
+
+concurrency:
+  group: ci-assistant-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  assistant-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    services:
+      postgres:
+        image: pgvector/pgvector:pg15
+        env:
+          POSTGRES_USER: operis
+          POSTGRES_PASSWORD: operis
+          POSTGRES_DB: operis
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U operis -d operis"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: valkey/valkey:7.2.11-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    defaults:
+      run:
+        working-directory: apps/api
+
+    env:
+      DATABASE_URL: postgres://operis:operis@localhost:5432/operis
+      REDIS_URL: redis://localhost:6379/0
+      SECRET_KEY: ci-assistant-secret
+      LLM_API_KEY: sk-ci-mock
+      ASSISTANT_ENABLED: "1"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: apps/api/requirements.txt
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Pytest assistant (unit + contract)
+        run: |
+          python -m pytest \
+            operis/tests/unit/assistant/ \
+            operis/tests/unit/devops/test_celery_queue_monitor.py \
+            operis/tests/contract/app/test_assistant_app.py \
+            -q --tb=short

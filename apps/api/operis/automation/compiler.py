@@ -114,3 +114,12 @@ def get_outgoing_targets(
         elif not edge.source_handle:
             targets.append(edge.target)
     return targets
+
+
+def get_parallel_branch_targets(compiled: CompiledGraph, node_id: str) -> list[tuple[str | None, str]]:
+    """Retorna (source_handle, target_id) para todos os ramos de um fan-out."""
+    pairs: list[tuple[str | None, str]] = []
+    for edge in compiled.edges:
+        if edge.source == node_id:
+            pairs.append((edge.source_handle, edge.target))
+    return pairs

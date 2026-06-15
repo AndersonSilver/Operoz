@@ -1,4 +1,5 @@
 import { APP_BOARD_OPERATIONS } from "./app-boards.js";
+import { APP_GAP_OPERATIONS } from "./app-gaps.js";
 import { APP_INTEGRATION_OPERATIONS } from "./app-integrations.js";
 import { APP_PAGE_OPERATIONS } from "./app-pages.js";
 import { APP_PLANNING_OPERATIONS } from "./app-planning.js";
@@ -30,6 +31,7 @@ export const ALL_OPERATIONS: ToolOperation[] = dedupeByName([
   ...APP_BOARD_OPERATIONS,
   ...APP_PAGE_OPERATIONS,
   ...APP_INTEGRATION_OPERATIONS,
+  ...APP_GAP_OPERATIONS,
 ]);
 
 export const OPERATIONS_BY_NAME = new Map(ALL_OPERATIONS.map((o) => [o.name, o]));

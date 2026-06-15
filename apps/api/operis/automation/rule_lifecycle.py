@@ -72,6 +72,12 @@ def save_rule_draft(
     if enabled is not None and enabled != rule.enabled:
         if enabled and not rule_has_published_graph(rule):
             raise ValueError("publish_required_before_enable")
+        if enabled:
+            from operis.automation.policy import can_enable_rule
+
+            enable_check = can_enable_rule(rule)
+            if not enable_check.allowed:
+                raise ValueError(enable_check.code or "dry_run_required")
         rule.enabled = enabled
         updates.append("enabled")
     if graph is not None:
@@ -102,20 +108,31 @@ def publish_rule_draft(rule: BoardAutomationRule, *, actor) -> BoardAutomationRu
     if not validation["valid"]:
         raise ValueError(json.dumps({"graph_errors": validation["errors"]}))
 
+    from operis.automation.graph_trigger import extract_trigger_from_graph
+
+    previous_graph = rule.published_graph or {}
     rule.published_graph = graph
     rule.published_version = (rule.published_version or 0) + 1
     rule.published_at = timezone.now()
+    rule.dry_run_verified_version = 0
     rule.updated_by = actor
-    rule.save(
-        update_fields=[
-            "published_graph",
-            "published_version",
-            "published_at",
-            "updated_by",
-            "updated_at",
-        ]
-    )
+    extracted = extract_trigger_from_graph(graph)
+    update_fields = [
+        "published_graph",
+        "published_version",
+        "published_at",
+        "dry_run_verified_version",
+        "updated_by",
+        "updated_at",
+    ]
+    if extracted and extracted[0] == "schedule.cron":
+        rule.schedule_last_slot = ""
+        update_fields.append("schedule_last_slot")
+    rule.save(update_fields=update_fields)
     _create_revision(rule, kind=BoardAutomationRuleRevision.KIND_PUBLISHED, actor=actor)
+    from operis.automation.policy import record_publish_audit
+
+    record_publish_audit(rule, actor=actor, previous_graph=previous_graph)
     return rule
 
 

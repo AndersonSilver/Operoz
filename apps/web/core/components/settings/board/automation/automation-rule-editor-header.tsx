@@ -7,9 +7,7 @@ import { Switch } from "@operis/propel/switch";
 import { cn } from "@operis/ui";
 import type { IBoardAutomationRule } from "@operis/types";
 import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
-import {
-  automationHasLocalDraftChanges,
-} from "./automation-publication";
+import { automationHasLocalDraftChanges } from "./automation-publication";
 import "./automation-list.css";
 
 type Props = {
@@ -65,7 +63,7 @@ export function AutomationRuleEditorHeader(props: Props) {
             <Button variant="ghost" size="sm" onClick={onBack} prependIcon={<ArrowLeft />}>
               {t("boards.settings.automation.back_to_list")}
             </Button>
-            <span className="hidden h-5 w-px bg-subtle sm:block" aria-hidden />
+            <span className="bg-subtle hidden h-5 w-px sm:block" aria-hidden />
             <div className="flex min-w-0 items-center gap-2.5">
               <span className="grid size-9 shrink-0 place-items-center rounded-lg border border-subtle bg-accent-subtle/60 text-accent-primary">
                 <Workflow className="size-4" strokeWidth={1.75} />
@@ -135,17 +133,22 @@ export function AutomationRuleEditorHeader(props: Props) {
               </button>
             </div>
 
-            <Button
-              variant="secondary"
-              size="sm"
-              className="automation-editor-save-draft"
-              onClick={onSaveDraft}
-              loading={saving}
-              disabled={publishing}
-              prependIcon={<Save className="size-3.5" strokeWidth={1.75} />}
-            >
-              {t("boards.settings.automation.editor.save_draft")}
-            </Button>
+            <div className="flex flex-col items-stretch gap-0.5">
+              <Button
+                variant="secondary"
+                size="sm"
+                className="automation-editor-save-draft"
+                onClick={onSaveDraft}
+                loading={saving}
+                disabled={publishing}
+                prependIcon={<Save className="size-3.5" strokeWidth={1.75} />}
+              >
+                {t("boards.settings.automation.editor.save_draft")}
+              </Button>
+              <p className="px-0.5 text-center text-10 leading-tight text-placeholder">
+                {t("boards.settings.automation.editor.autosave_hint")}
+              </p>
+            </div>
 
             <Button
               variant="secondary"

@@ -1,0 +1,236 @@
+[
+  {
+    "article_key": "get_started_introduction",
+    "title": "Introdução",
+    "category": "get",
+    "content": "# Introdução\n\nConheça o Operoz e como ele se organiza para gestão operacional inteligente.\n\nO Operoz é uma plataforma operacional que une gestão de projetos, sustentação, documentação e automação em um único lugar. Ele foi construído para times que precisam de visibilidade de ponta a ponta — do card individual até a saúde do cliente.\n\nA hierarquia principal é: Workspace → Board (time) → Projeto → Card. Cada camada adiciona contexto: o workspace isola sua organização; o board agrupa projetos de um squad; o projeto contém o trabalho; o card é a unidade executável.\n\nDiferencial do Operoz em relação a ferramentas genéricas: Cliente 360 nativo, motor de automação por board com grafos visuais, e Assistente Operoz com IA fundamentada em dados reais (não alucinação).\n\n\nDicas:\n\n- Use a barra superior para Inbox, Manual e perfil — sempre acessíveis.\n\n- O botão flutuante «Perguntar ao Operoz» abre o assistente de IA.\n\n- Cmd+K (Power K) é o atalho mais poderoso para navegar sem mouse."
+  },
+  {
+    "article_key": "get_started_quickstart",
+    "title": "Guia rápido",
+    "category": "get",
+    "content": "# Guia rápido\n\nConfigure seu workspace e entregue valor em poucos passos.\n\n1. Crie ou entre no workspace e convide membros em Configurações → Membros.\n\n2. Crie um board (time) e adicione projetos — cada projeto recebe uma chave (ex.: OPZ).\n\n3. Dentro de um projeto, crie seu primeiro card com «Novo item» ou atalho C.\n\n4. Explore as vistas do board (quadro, lista, backlog) e configure automações básicas se necessário.\n\n\nDicas:\n\n- Comece pelo overview do board para ver KPIs agregados.\n\n- Ative apenas os módulos que seu time usa (ciclos, intake, páginas) nas configs do projeto.\n\n- Salve uma visualização filtrada para acesso rápido depois.\n\n- Teste o Assistente perguntando «liste cards abertos neste board»."
+  },
+  {
+    "article_key": "get_started_core_concepts",
+    "title": "Conceitos principais",
+    "category": "get",
+    "content": "# Conceitos principais\n\nEntenda os blocos fundamentais da plataforma Operoz.\n\nWorkspace: ambiente isolado da sua empresa. Contém membros, boards, projetos e configurações globais.\n\nBoard: agrupamento por time ou área. Oferece vistas transversais, Cliente 360 e automações compartilhadas.\n\nCard (work item): unidade de trabalho com ciclo de vida (status), responsáveis, datas e metadados customizáveis.\n\n\nDicas:\n\n- Projetos podem existir sem board em setups legados, mas o modelo recomendado é board → projetos.\n\n- Estados de card são configuráveis por projeto (A fazer, Em progresso, Concluído, etc.).\n\n- Módulos e ciclos são opcionais — ative conforme a metodologia do time.\n\n- Automações vivem no board, não no card individual."
+  },
+  {
+    "article_key": "workspace_overview",
+    "title": "Gerenciar workspace",
+    "category": "workspace",
+    "content": "# Gerenciar workspace\n\nVisão geral das configurações e estrutura do workspace.\n\nO workspace é o container raiz. Na Home você vê widgets de atividade, dashboards e atalhos. A sidebar lista projetos/boards e itens pessoais (Seu trabalho, Rascunhos, Anotações).\n\nTroque de workspace pelo menu no topo da sidebar (logo + nome). Convites pendentes aparecem em «Convites para o espaço de trabalho».\n\nConfigurações do workspace ficam em /settings — membros, integrações, API tokens, exportação e faturamento.\n\n\nDicas:\n\n- Personalize a homepage com widgets relevantes para seu papel.\n\n- Use workspace views para ver todos os cards do workspace com filtros globais.\n\n- Arquivos de projetos inativos ficam em Projetos → Arquivos."
+  },
+  {
+    "article_key": "workspace_members",
+    "title": "Gerenciar membros",
+    "category": "workspace",
+    "content": "# Gerenciar membros\n\nConvide pessoas e defina papéis no workspace.\n\nAdmins podem convidar por e-mail em Configurações → Membros. Cada membro recebe um papel: Admin, Member ou Guest.\n\nGuests têm acesso restrito — ideal para stakeholders externos. Members criam e editam trabalho. Admins configuram tudo.\n\nRemover um membro não apaga o trabalho que ele criou; apenas revoga acesso futuro.\n\n\nDicas:\n\n- Revise convites pendentes regularmente no menu do workspace.\n\n- Combine papéis de workspace com funções de board para controle fino.\n\n- Exporte lista de membros nas configurações se precisar de auditoria."
+  },
+  {
+    "article_key": "workspace_power_k",
+    "title": "Power K",
+    "category": "workspace",
+    "content": "# Power K\n\nPaleta de comandos universal do Operoz.\n\nPower K (Cmd+K / Ctrl+K) abre a busca e paleta de comandos. Digite para encontrar projetos, boards, cards, páginas ou executar ações.\n\nGrupos de comandos: Navegação, Ações contextuais (no card aberto), Criação e Ajuda.\n\nCmd+/ lista todos os atalhos de teclado disponíveis na tela atual.\n\n\nDicas:\n\n- No card aberto, Power K mostra ações como alterar status, prioridade ou atribuir a mim.\n\n- Busque «Manual» no Power K para abrir esta documentação.\n\n- Power K respeita suas permissões — só mostra o que você pode acessar."
+  },
+  {
+    "article_key": "workspace_navigation",
+    "title": "Personalizar navegação",
+    "category": "workspace",
+    "content": "# Personalizar navegação\n\nAdapte a sidebar ao seu fluxo de trabalho.\n\nA sidebar principal mostra Home, Projetos/Boards e seção Workspace (visualizações, analytics, arquivos).\n\nUse «Mostrar mais» para itens extras e o ícone de preferências para reordenar ou ocultar itens pessoais (anotações, rascunhos, seu trabalho).\n\n\nDicas:\n\n- Fixe projetos favoritos na seção Favoritos para acesso em um clique.\n\n- App Rail (barra vertical esquerda) pode exibir ícones com ou sem rótulo.\n\n- Em boards, a navegação pode ser em abas (TABBED) ou sidebar estendida."
+  },
+  {
+    "article_key": "workspace_roles",
+    "title": "Papéis e permissões",
+    "category": "workspace",
+    "content": "# Papéis e permissões\n\nEntenda quem pode fazer o quê no workspace.\n\nTrês papéis base no workspace: Admin (configuração total), Member (trabalho + criação) e Guest (leitura limitada).\n\nBoards adicionam funções customizáveis — ex.: quem edita automações, quem vê Cliente 360.\n\nProjetos têm papéis próprios (Admin/Member/Guest) independentes do workspace em alguns casos.\n\n\nDicas:\n\n- Matriz de permissões disponível nas configurações avançadas.\n\n- Assistente Operoz e MCP herdam permissões do usuário logado.\n\n- Revise funções de board ao onboarding de novos squads."
+  },
+  {
+    "article_key": "boards_overview",
+    "title": "Visão geral dos boards",
+    "category": "boards",
+    "content": "# Visão geral dos boards\n\nBoards como unidade de organização por time.\n\nUm board representa um time, squad ou área de negócio. Agrupa múltiplos projetos (clientes, produtos, iniciativas) sob a mesma governança operacional.\n\nO overview do board exibe KPIs: cards abertos, atrasados, concluídos, atividade recente e gráficos por status/prioridade.\n\nCrie boards em /boards ou pela sidebar. Cada board tem slug único usado na URL (/boards/meu-time).\n\n\nDicas:\n\n- Boards arquivados somem da sidebar mas permanecem nas configurações.\n\n- Adicione projetos existentes ou crie novos diretamente no board.\n\n- O overview alerta sobre cards sem data-alvo ou atrasados.\n\n- Use espaços (spaces) para sub-agrupar dentro de boards grandes."
+  },
+  {
+    "article_key": "boards_views",
+    "title": "Vistas e layouts",
+    "category": "boards",
+    "content": "# Vistas e layouts\n\nQuadro, lista, backlog, cronograma e calendário.\n\nQuadro (kanban): colunas por status, arraste cards para transicionar. Ideal para fluxo contínuo.\n\nLista: tabela densa com filtros, agrupamento e ordenação. Ideal para triagem em volume.\n\nBacklog, cronograma e calendário: planejamento temporal e priorização antes da execução.\n\n\nDicas:\n\n- Display options permitem agrupar por responsável, prioridade ou etiqueta.\n\n- Salve combinações de filtros como visualizações reutilizáveis.\n\n- Timeline mostra dependências entre cards quando configuradas.\n\n- Vistas do board são transversais a todos os projetos do time."
+  },
+  {
+    "article_key": "boards_client_360",
+    "title": "Cliente 360",
+    "category": "boards",
+    "content": "# Cliente 360\n\nVisão consolidada da saúde de cada cliente/projeto.\n\nCliente 360 lista todos os projetos do board com indicadores de saúde: abertos, atrasados, sustentação, status reports.\n\nClique num cliente para ver detalhe: KPIs, cards críticos, módulos ativos e histórico de entregas.\n\nProjetada para gestores de conta, líderes de squad e operações que acompanham múltiplos clientes."
+  },
+  {
+    "article_key": "boards_settings",
+    "title": "Configurações do board",
+    "category": "boards",
+    "content": "# Configurações do board\n\nGovernança, campos, tipos, automação e notificações.\n\n\nDicas:\n\n- Auditoria de e-mail rastreia envios automáticos do board.\n\n- Segredos de automação ficam isolados por board.\n\n- Playbooks são templates de grafo reutilizáveis.\n\n- Simule automações antes de publicar em produção."
+  },
+  {
+    "article_key": "projects_overview",
+    "title": "Gerenciar projetos",
+    "category": "projects",
+    "content": "# Gerenciar projetos\n\nCriação, publicação e estrutura de projetos.\n\nProjetos vivem dentro de boards (recomendado) ou diretamente no workspace. Cada projeto tem nome, chave (identifier), descrição e membros.\n\nA navegação do projeto mostra módulos ativos: Itens, Ciclos, Módulos, Visualizações, Documentação, Recepção, Status Report.\n\nPublique projetos para torná-los visíveis a guests ou despublique para restringir acesso.\n\n\nDicas:\n\n- Chave do projeto aparece nos cards: OPZ-123.\n\n- Overview do projeto resume progresso e membros ativos.\n\n- Templates de projeto aceleram setup de novos clientes."
+  },
+  {
+    "article_key": "projects_features",
+    "title": "Módulos do projeto",
+    "category": "projects",
+    "content": "# Módulos do projeto\n\nCiclos, módulos, páginas, intake e mais.\n\nItens: lista/kanban de todos os cards do projeto. Núcleo de qualquer projeto.\n\nCiclos: sprints com datas, escopo e burndown. Módulos: agrupamentos de features (ex.: «Checkout v2»).\n\nPages: wiki/documentação rich-text. Intake: formulários de recepção. Status Report: relatórios periódicos de progresso.\n\n\nDicas:\n\n- Desative módulos não usados para simplificar a navegação.\n\n- Módulos podem ter datas de início/fim e membros dedicados.\n\n- Pages suportam versões, lock colaborativo e Ask Pi no editor.\n\n- Intake converte submissões em cards automaticamente.\n\n- Visualizações salvas são compartilháveis no time."
+  },
+  {
+    "article_key": "projects_configuration",
+    "title": "Configurar projeto",
+    "category": "projects",
+    "content": "# Configurar projeto\n\nEstados, etiquetas, estimativas e features.\n\nConfigurações do projeto: estados (workflow), prioridades, etiquetas, estimativas, tipos de card e membros.\n\nEstados definem o fluxo kanban — crie grupos (backlog, unstarted, started, completed, cancelled).\n\n\nDicas:\n\n- Automações de projeto complementam (não substituem) automações de board.\n\n- Exporte dados do projeto para backup ou migração.\n\n- Arquive projetos concluídos em vez de excluir."
+  },
+  {
+    "article_key": "work_items_manage",
+    "title": "Gerenciar cards",
+    "category": "work",
+    "content": "# Gerenciar cards\n\nCriar, editar, mover e colaborar em work items.\n\nCrie cards pelo botão «Novo item», Power K ou duplicando existentes. O modal de card centraliza todas as propriedades.\n\nComentários, menções (@), anexos e histórico de atividade ficam no painel do card.\n\nMova cards entre projetos, ciclos e módulos conforme o trabalho evolui.\n\n\nDicas:\n\n- Atalho C cria card no contexto do projeto atual.\n\n- Use relações entre cards para dependências e bloqueios.\n\n- Bulk operations permitem editar vários cards de uma vez.\n\n- IA no modal ajuda a redigir descrições."
+  },
+  {
+    "article_key": "work_items_properties",
+    "title": "Propriedades do card",
+    "category": "work",
+    "content": "# Propriedades do card\n\nStatus, prioridade, responsáveis, datas e campos custom.\n\nPropriedades padrão: título, descrição, status, prioridade, responsáveis, datas (início/alvo), etiquetas, estimativa.\n\nCampos customizados do board/projeto aparecem como propriedades adicionais (texto, número, select, data).\n\nTipos de card podem ter workflows e campos específicos (bug vs. história vs. sustentação).\n\n\nDicas:\n\n- Prioridade: urgente, alta, média, baixa, nenhuma.\n\n- Target date alimenta alertas de atraso no overview e Cliente 360.\n\n- Subscribers recebem notificações de mudanças no card.\n\n- Versões de descrição permitem ver edições anteriores."
+  },
+  {
+    "article_key": "work_items_filters",
+    "title": "Filtros e visualizações",
+    "category": "work",
+    "content": "# Filtros e visualizações\n\nEncontre e organize cards com filtros poderosos.\n\nFiltre por status, responsável, etiqueta, prioridade, data, módulo, ciclo e campos custom.\n\nSalve filtros como visualizações nomeadas — pessoais ou compartilhadas com o time.\n\n\nDicas:\n\n- Workspace views agregam cards de todos os projetos.\n\n- «Seu trabalho» mostra cards atribuídos a você.\n\n- Combine filtros com agrupamento para standups eficientes."
+  },
+  {
+    "article_key": "work_items_drafts",
+    "title": "Rascunhos",
+    "category": "work",
+    "content": "# Rascunhos\n\nSalve trabalho incompleto antes de publicar.\n\nCards em rascunho ficam em /drafts — visíveis só para você até publicar.\n\nÚtil para capturar ideias rapidamente sem poluir o backlog do time.\n\n\nDicas:\n\n- O contador de rascunhos aparece na sidebar.\n\n- Publique quando título e projeto estiverem definidos."
+  },
+  {
+    "article_key": "planning_cycles",
+    "title": "Ciclos",
+    "category": "planning",
+    "content": "# Ciclos\n\nPlaneje trabalho em sprints com datas e escopo.\n\nCiclos são períodos de tempo (sprints) com conjunto de cards. Cada ciclo tem início, fim e status (draft, current, upcoming, completed).\n\nBurndown e progresso mostram se o ciclo está no trilho.\n\nCards podem pertencer a um ciclo por vez; mova entre ciclos conforme replanejamento.\n\n\nDicas:\n\n- Active Cycles no workspace lista ciclos em andamento de todos os projetos.\n\n- Feche ciclos concluídos para histórico limpo.\n\n- Use módulos junto com ciclos para escopo por feature."
+  },
+  {
+    "article_key": "planning_modules",
+    "title": "Módulos",
+    "category": "planning",
+    "content": "# Módulos\n\nAgrupe cards por feature ou entrega.\n\nMódulos representam blocos de entrega (ex.: «API v2», «Onboarding»). Têm datas, membros, status e progresso próprio.\n\nUm card pode estar em múltiplos módulos. A vista de módulo filtra cards associados.\n\nStatus reports podem ser gerados por módulo.\n\n\nDicas:\n\n- Módulos aparecem no Cliente 360 como indicador de escopo ativo.\n\n- Arraste cards para módulos no modal ou via Power K.\n\n- Arquive módulos entregues."
+  },
+  {
+    "article_key": "planning_views",
+    "title": "Visualizações",
+    "category": "planning",
+    "content": "# Visualizações\n\nVistas salvas com filtros personalizados.\n\nVisualizações capturam filtros, ordenação e display options. Podem ser privadas ou compartilhadas.\n\nWorkspace views cobrem todos os projetos; project views são locais.\n\n\nDicas:\n\n- Crie vista «Bugs críticos» com filtro prioridade=urgente + tipo=bug.\n\n- Fixe visualizações favoritas na sidebar.\n\n- Exporte resultados de vistas filtradas quando necessário."
+  },
+  {
+    "article_key": "planning_stickies",
+    "title": "Anotações",
+    "category": "planning",
+    "content": "# Anotações\n\nNotas rápidas pessoais no workspace.\n\nStickies são post-its digitais para lembretes, ideias e rascunhos não estruturados.\n\nOrganize em grid, busque por texto e fixe os importantes.\n\n\nDicas:\n\n- Acesse em /stickies pela sidebar.\n\n- Stickies são pessoais — não substituem cards do time."
+  },
+  {
+    "article_key": "knowledge_pages",
+    "title": "Páginas e documentação",
+    "category": "knowledge",
+    "content": "# Páginas e documentação\n\nWiki rich-text por projeto.\n\nPages são documentos colaborativos com editor de blocos, tabelas, imagens e código.\n\nSuportam versões, comentários inline, lock de edição e estrutura hierárquica (páginas aninhadas).\n\nAsk Pi no editor: IA auxilia redação e resumo de conteúdo.\n\n\nDicas:\n\n- O Assistente Operoz busca em páginas com a tool search_pages.\n\n- Use páginas para runbooks, specs e decisões de arquitetura.\n\n- Exporte páginas quando necessário para compartilhamento externo."
+  },
+  {
+    "article_key": "knowledge_status_report",
+    "title": "Status Report",
+    "category": "knowledge",
+    "content": "# Status Report\n\nRelatórios periódicos de progresso do projeto.\n\nStatus Report consolida avanço por módulo/ciclo em formato executivo.\n\nIdeal para comunicação com stakeholders e rituais de reporte semanal.\n\n\nDicas:\n\n- Cliente 360 agrega status reports de todos os projetos do board.\n\n- Combine com automações para envio automático por e-mail."
+  },
+  {
+    "article_key": "knowledge_intake",
+    "title": "Recepção (Intake)",
+    "category": "knowledge",
+    "content": "# Recepção (Intake)\n\nFormulários para capturar solicitações externas.\n\nIntake permite criar formulários públicos ou internos que geram cards no projeto.\n\nSubmissões passam por triagem antes de virar trabalho formal.\n\nO Assistente lista intake pendente com list_intake_pending.\n\n\nDicas:\n\n- Configure campos do formulário conforme tipo de solicitação.\n\n- Automatize notificação ao time quando nova submissão chegar.\n\n- Intake por e-mail também é suportado em configurações avançadas."
+  },
+  {
+    "article_key": "automation_overview",
+    "title": "Visão geral da automação",
+    "category": "automation",
+    "content": "# Visão geral da automação\n\nMotor de regras visuais por board.\n\nAutomações reagem a eventos (card criado, status mudou, cron diário) e executam ações (e-mail, webhook, script, notificação).\n\nCada regra é um grafo direcionado: nós de trigger, filter e action conectados por arestas.\n\nExecuções são assíncronas (Celery + outbox) com retry, logs e métricas.\n\n\nDicas:\n\n- Comece com automações simples: «quando status = Concluído, notificar responsável».\n\n- Use filtros para restringir a projetos ou tipos de card específicos.\n\n- Desative regras em vez de excluir — preserva histórico.\n\n- Catálogo de nós inclui triggers, filters e actions pré-definidos."
+  },
+  {
+    "article_key": "automation_canvas",
+    "title": "Canvas e regras",
+    "category": "automation",
+    "content": "# Canvas e regras\n\nConstrua grafos de automação visualmente.\n\nO canvas permite arrastar nós da paleta, conectar saídas a entradas e configurar cada nó.\n\nValidação impede publicar grafos inválidos (ciclos, nós órfãos, parâmetros faltando).\n\nSimulação executa dry-run com card de teste sem efeitos colaterais.\n\n\nDicas:\n\n- Nomeie regras de forma descritiva: «Alerta SLA sustentação».\n\n- Scripts rodam em sandbox com timeout e lista de imports permitidos.\n\n- Webhooks suportam retry e assinatura HMAC.\n\n- O Assistente pode propor grafos em linguagem natural."
+  },
+  {
+    "article_key": "automation_playbooks",
+    "title": "Playbooks e hooks",
+    "category": "automation",
+    "content": "# Playbooks e hooks\n\nTemplates reutilizáveis e governança Pre/Post.\n\nPlaybooks são grafos template instaláveis por board — aceleram setup de fluxos comuns.\n\nHooks Pre/Post action interceptam execuções para auditoria, bloqueio ou enriquecimento.\n\n\nDicas:\n\n- Políticas definem quais ações exigem aprovação manual."
+  },
+  {
+    "article_key": "automation_metrics",
+    "title": "Métricas e debug",
+    "category": "automation",
+    "content": "# Métricas e debug\n\nMonitore execuções, falhas e performance.\n\nHistórico de runs mostra cada execução com step_logs JSON detalhado.\n\nMétricas agregam taxa de sucesso, latência e volume por período."
+  },
+  {
+    "article_key": "ai_assistant",
+    "title": "Assistente Operoz",
+    "category": "ai",
+    "content": "# Assistente Operoz\n\nChat com IA fundamentada em dados reais.\n\nO assistente responde perguntas sobre cards, páginas, Cliente 360, intake e automações consultando a API com suas permissões.\n\nSessões persistentes mantêm histórico. Selecione contexto de board/projeto para precisão.\n\nRespostas incluem citações clicáveis (cards, páginas, runs de automação).\n\n\nDicas:\n\n- Exemplos: «Cards atrasados no board as-a-service», «Conteúdo da página X».\n\n- Feedback thumbs up/down melhora qualidade ao longo do tempo.\n\n- Requer LLM configurado na instância — senão exibe mensagem clara.\n\n- Tools: search_issues, get_client_360_summary, propose_automation_rule, etc."
+  },
+  {
+    "article_key": "ai_automation",
+    "title": "IA para automação",
+    "category": "ai",
+    "content": "# IA para automação\n\nProponha e explique regras com linguagem natural.\n\nDescreva em português o que a automação deve fazer — o assistente gera grafo, valida e opcionalmente simula.\n\nexplain_automation_run traduz step_logs técnicos em narrativa compreensível.\n\n\nDicas:\n\n- Sempre revise o grafo proposto antes de publicar.\n\n- Dry-run é padrão em propostas de automação.\n\n- Combine IA com playbooks manuais para fluxos críticos."
+  },
+  {
+    "article_key": "analytics_overview",
+    "title": "Analytics",
+    "category": "analytics",
+    "content": "# Analytics\n\nMétricas de trabalho e operação.\n\nAnalytics do workspace mostra distribuição de cards, lead time, throughput e tendências.\n\nAnalytics de automação por board: sucessos, falhas, timeline de execuções.\n\nFiltre por projeto, período e tipo de card.\n\n\nDicas:\n\n- Acesse em /analytics no workspace.\n\n- Exporte dados para planilhas quando necessário.\n\n- Correlacione métricas de automação com volume de cards."
+  },
+  {
+    "article_key": "analytics_dashboards",
+    "title": "Dashboards",
+    "category": "analytics",
+    "content": "# Dashboards\n\nPainéis personalizados na home.\n\nDashboards permitem widgets arrastáveis: gráficos, listas, KPIs customizados.\n\nCada usuário pode montar sua home ideal com widgets relevantes ao seu papel.\n\n\nDicas:\n\n- Acesse /dashboards no workspace.\n\n- Combine widgets de analytics com atalhos de projetos favoritos."
+  },
+  {
+    "article_key": "communication_inbox",
+    "title": "Inbox",
+    "category": "communication",
+    "content": "# Inbox\n\nCentral de notificações e menções.\n\nA Inbox agrega menções, atribuições, comentários e atualizações de cards inscritos.\n\nFiltre por lidas/não lidas, menções e tipo de evento.\n\nÍcone na barra superior com indicador vermelho de não lidas.\n\n\nDicas:\n\n- Marque como lida em lote para triagem rápida.\n\n- Clique para ir direto ao card ou comentário.\n\n- Configure o que gera notificação nas preferências."
+  },
+  {
+    "article_key": "communication_notifications",
+    "title": "Notificações",
+    "category": "communication",
+    "content": "# Notificações\n\nPreferências e canais de alerta.\n\nConfigure notificações por workspace, board e projeto: e-mail, in-app, menções.\n\nInscreva-se em cards específicos para seguir atualizações.\n\n\nDicas:\n\n- Reduza ruído desinscrevendo de cards irrelevantes.\n\n- Auditoria de e-mail do board em configurações de notificações.\n\n- Menções (@) sempre geram notificação prioritária."
+  },
+  {
+    "article_key": "integrations_overview",
+    "title": "Visão geral de integrações",
+    "category": "integrations",
+    "content": "# Visão geral de integrações\n\nConecte o Operoz ao seu ecossistema.\n\nIntegrações nativas: GitHub, GitLab, Slack, Sentry e outras via configurações do workspace.\n\nWebhooks de automação disparam sistemas externos em eventos de board.\n\n\nDicas:\n\n- Revise permissões OAuth ao conectar apps externos.\n\n- Teste webhooks em ambiente de staging primeiro.\n\n- Documente integrações críticas nas Pages do projeto."
+  },
+  {
+    "article_key": "integrations_api",
+    "title": "API e webhooks",
+    "category": "integrations",
+    "content": "# API e webhooks\n\nREST API e tokens de acesso.\n\nAPI REST completa para workspaces, projetos, cards, páginas e automações.\n\nGere API tokens em Configurações → API Tokens com escopo adequado.\n\nWebhooks de saída nas automações; webhooks de entrada para criar cards.\n\n\nDicas:\n\n- Use tokens com menor privilégio necessário.\n\n- Rate limits aplicam-se — consulte documentação da API.\n\n- Rotacione tokens periodicamente."
+  },
+  {
+    "article_key": "integrations_mcp",
+    "title": "MCP Server",
+    "category": "integrations",
+    "content": "# MCP Server\n\nAgentes externos (Cursor, Claude) conectados ao Operoz.\n\nO servidor MCP expõe centenas de ferramentas para agentes de IA consultarem e modificarem dados do Operoz.\n\nConfigure em .cursor/mcp.json apontando para sua instância. Autentique com token de usuário.\n\nMCP respeita permissões do usuário — agentes não bypassam segurança.\n\n\nDicas:\n\n- Ideal para desenvolvimento assistido e automação de backlog.\n\n- operis_list_operations descobre domínios disponíveis.\n\n- Combine MCP com Assistente web para usuários finais e devs."
+  }
+]

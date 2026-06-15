@@ -169,6 +169,8 @@ export interface IIssueDisplayProperties {
   modules?: boolean;
   cycle?: boolean;
   issue_type?: boolean;
+  /** Visibilidade por campo custom do board (custom_field_id → visível). */
+  custom_fields?: Record<string, boolean>;
 }
 
 export type TIssueKanbanFilters = {

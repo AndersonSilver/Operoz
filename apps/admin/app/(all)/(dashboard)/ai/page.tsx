@@ -1,4 +1,3 @@
-
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { Loader } from "@operis/ui";
@@ -20,8 +19,9 @@ const InstanceAIPage = observer(function InstanceAIPage(_props: Route.ComponentP
   return (
     <PageWrapper
       header={{
-        title: "AI features for all your workspaces",
-        description: "Configure your AI API credentials so Plane AI features are turned on for all your workspaces.",
+        title: "Inteligência artificial do Operoz",
+        description:
+          "Configure provedor, modelo e credenciais de IA para habilitar o Operoz Assistant e recursos inteligentes em todos os workspaces.",
       }}
     >
       {formattedConfig ? (
@@ -40,6 +40,6 @@ const InstanceAIPage = observer(function InstanceAIPage(_props: Route.ComponentP
   );
 });
 
-export const meta: Route.MetaFunction = () => [{ title: "Artificial Intelligence Settings - God Mode" }];
+export const meta: Route.MetaFunction = () => [{ title: "Inteligência Artificial - Operoz Admin" }];
 
 export default InstanceAIPage;

@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
 import { CloudOff, Dot } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { Tooltip } from "@operis/propel/tooltip";
 import { Badge } from "@operis/propel/badge";
 
@@ -8,52 +8,28 @@ type Props = {
 };
 
 export function PageSyncingBadge({ syncStatus }: Props) {
-  const [prevSyncStatus, setPrevSyncStatus] = useState<"syncing" | "synced" | "error" | null>(null);
-  const [isVisible, setIsVisible] = useState(syncStatus !== "synced");
+  const { t } = useTranslation();
 
-  useEffect(() => {
-    // Only handle transitions when there's a change
-    if (prevSyncStatus !== syncStatus) {
-      if (syncStatus === "synced") {
-        // Delay hiding to allow exit animation to complete
-        setTimeout(() => {
-          setIsVisible(false);
-        }, 300); // match animation duration
-      } else {
-        setIsVisible(true);
-      }
-      setPrevSyncStatus(syncStatus);
-    }
-  }, [syncStatus, prevSyncStatus]);
+  if (syncStatus === "synced") return null;
 
-  if (!isVisible || syncStatus === "synced") return null;
-
-  const badgeContent = {
-    syncing: {
-      label: "Syncing...",
-      tooltipHeading: "Syncing...",
-      tooltipContent: "Your changes are being synced with the server. You can continue making changes.",
-    },
-    error: {
-      label: "Connection lost",
-      tooltipHeading: "Connection lost",
-      tooltipContent:
-        "We're having trouble connecting to the websocket server. Your changes will be synced and saved every 10 seconds.",
-    },
-  };
-
-  // This way we guarantee badgeContent is defined
-  const content = badgeContent[syncStatus];
+  const isError = syncStatus === "error";
 
   return (
-    <Tooltip tooltipHeading={content.tooltipHeading} tooltipContent={content.tooltipContent}>
+    <Tooltip
+      tooltipHeading={
+        isError ? t("project_page.sync_badge.error_heading") : t("project_page.sync_badge.syncing_heading")
+      }
+      tooltipContent={
+        isError ? t("project_page.sync_badge.error_tooltip") : t("project_page.sync_badge.syncing_tooltip")
+      }
+    >
       <span className="animate-quickFadeIn">
         <Badge
-          variant={syncStatus === "syncing" ? "brand" : "danger"}
+          variant={isError ? "danger" : "brand"}
           size="lg"
-          prependIcon={syncStatus === "syncing" ? <Dot /> : <CloudOff />}
+          prependIcon={isError ? <CloudOff className="size-3.5" /> : <Dot className="size-3.5" />}
         >
-          {content.label}
+          {isError ? t("project_page.sync_badge.error_label") : t("project_page.sync_badge.syncing_label")}
         </Badge>
       </span>
     </Tooltip>

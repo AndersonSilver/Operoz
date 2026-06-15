@@ -1,52 +1,15 @@
 import { useMemo } from "react";
-import type { LucideIcon } from "lucide-react";
-import {
-  Activity,
-  ArrowRightLeft,
-  Gauge,
-  Inbox,
-  RefreshCw,
-  Server,
-  ShieldAlert,
-  Zap,
-} from "lucide-react";
+import { Activity, ArrowRightLeft, Gauge, RefreshCw, Server } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import type { TAutomationMetricsResponse } from "@operis/types";
 import { cn } from "@operis/ui";
 import { AutomationListHero } from "./automation-list-hero";
-import {
-  METRIC_GROUP_ORDER,
-  formatMetricValue,
-  parseAutomationMetrics,
-  type AutomationMetricGroup,
-  type ParsedAutomationMetric,
-} from "./automation-ops-utils";
+import { AutomationMetricsCharts } from "./automation-metrics-charts";
+import { AutomationOpsSignals } from "./automation-ops-signals";
+import { normalizeAutomationMetrics } from "./automation-ops-utils";
 import "./automation-list.css";
 import "./automation-ops.css";
-
-const GROUP_ICONS: Record<AutomationMetricGroup, LucideIcon> = {
-  dispatch: ArrowRightLeft,
-  outbox: Inbox,
-  runs: Zap,
-  resilience: ShieldAlert,
-};
-
-const GROUP_ACCENT: Record<AutomationMetricGroup, string> = {
-  dispatch: "text-accent-primary bg-accent-subtle",
-  outbox: "text-[var(--extended-color-purple-500)] bg-[var(--extended-color-purple-500)]/10",
-  runs: "text-success-primary bg-success-subtle",
-  resilience: "text-danger-primary bg-danger-subtle",
-};
-
-const VARIANT_CLASS: Record<ParsedAutomationMetric["variant"], string> = {
-  success: "automation-ops-metric-card--success",
-  warning: "automation-ops-metric-card--warning",
-  danger: "automation-ops-metric-card--danger",
-  accent: "automation-ops-metric-card--accent",
-  purple: "automation-ops-metric-card--purple",
-  neutral: "",
-};
 
 type Props = {
   data: TAutomationMetricsResponse | null;
@@ -58,28 +21,30 @@ export function AutomationMetricsPanel(props: Props) {
   const { data, refreshing, onRefresh } = props;
   const { t } = useTranslation();
 
-  const parsed = useMemo(
-    () => parseAutomationMetrics(data?.metrics ?? {}),
-    [data?.metrics]
+  const normalizedMetrics = useMemo(() => normalizeAutomationMetrics(data?.metrics ?? {}), [data?.metrics]);
+
+  const totalRuns =
+    data?.analytics?.summary.total_runs ??
+    (normalizedMetrics.run_success ?? 0) + (normalizedMetrics.run_failed ?? 0) + (normalizedMetrics.run_skipped ?? 0);
+
+  const pipelineSteps = useMemo(
+    () =>
+      [
+        {
+          key: "dispatch_rules_matched",
+          label: t("boards.settings.automation.ops.metrics.keys.dispatch_rules_matched"),
+        },
+        { key: "outbox_scheduled", label: t("boards.settings.automation.ops.metrics.keys.outbox_scheduled") },
+        { key: "outbox_enqueued", label: t("boards.settings.automation.ops.metrics.keys.outbox_enqueued") },
+        { key: "run_success", label: t("boards.settings.automation.ops.metrics.keys.run_success") },
+      ].map((step) => ({
+        ...step,
+        value: normalizedMetrics[step.key] ?? 0,
+      })),
+    [normalizedMetrics, t]
   );
 
-  const maxValue = useMemo(
-    () => Math.max(...parsed.map((item) => item.value), 1),
-    [parsed]
-  );
-
-  const grouped = useMemo(() => {
-    const map = new Map<AutomationMetricGroup, ParsedAutomationMetric[]>();
-    for (const group of METRIC_GROUP_ORDER) map.set(group, []);
-    for (const item of parsed) {
-      map.get(item.group)?.push(item);
-    }
-    return map;
-  }, [parsed]);
-
-  const totalRuns = parsed
-    .filter((item) => ["run_success", "run_failed", "run_skipped"].includes(item.baseKey))
-    .reduce((sum, item) => sum + item.value, 0);
+  const pipelineMax = Math.max(...pipelineSteps.map((step) => step.value), 1);
 
   return (
     <div className="space-y-6">
@@ -135,100 +100,83 @@ export function AutomationMetricsPanel(props: Props) {
           </Button>
         </div>
 
-        <div className="mt-5 grid gap-3 sm:grid-cols-3">
-          <div className="rounded-lg border border-subtle bg-surface-1 px-4 py-3">
-            <p className="text-11 text-tertiary">{t("boards.settings.automation.ops.metrics.total_signals")}</p>
-            <p className="automation-ops-metric-value mt-1 text-primary">{parsed.length}</p>
-          </div>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           <div className="rounded-lg border border-subtle bg-surface-1 px-4 py-3">
             <p className="text-11 text-tertiary">{t("boards.settings.automation.ops.metrics.total_runs")}</p>
             <p className="automation-ops-metric-value mt-1 text-success-primary">{totalRuns.toLocaleString()}</p>
           </div>
           <div className="rounded-lg border border-subtle bg-surface-1 px-4 py-3">
+            <p className="text-11 text-tertiary">{t("boards.settings.automation.ops.metrics.charts.success_rate")}</p>
+            <p className="automation-ops-metric-value mt-1 text-primary">
+              {data?.analytics?.summary.success_rate != null ? `${data.analytics.summary.success_rate}%` : "—"}
+            </p>
+          </div>
+          <div className="rounded-lg border border-subtle bg-surface-1 px-4 py-3">
             <p className="text-11 text-tertiary">{t("boards.settings.automation.ops.metrics.dlq_count")}</p>
             <p className="automation-ops-metric-value mt-1 text-danger-primary">
-              {(data?.metrics?.dlq_persisted ?? 0).toLocaleString()}
+              {(normalizedMetrics.dlq_persisted ?? 0).toLocaleString()}
+            </p>
+          </div>
+          <div className="rounded-lg border border-subtle bg-surface-1 px-4 py-3">
+            <p className="text-11 text-tertiary">{t("boards.settings.automation.ops.metrics.charts.runs_24h")}</p>
+            <p className="automation-ops-metric-value mt-1 text-accent-primary">
+              {(data?.analytics?.summary.runs_last_24h ?? 0).toLocaleString()}
             </p>
           </div>
         </div>
       </section>
 
-      {parsed.length === 0 ? (
+      <AutomationMetricsCharts analytics={data?.analytics} />
+
+      {pipelineSteps.some((step) => step.value > 0) ? (
+        <section className="automation-ops-glow-top overflow-hidden rounded-xl border border-subtle bg-layer-1 p-4 sm:p-5">
+          <div className="flex items-center gap-3">
+            <span className="grid size-10 place-items-center rounded-xl border border-subtle bg-layer-2 text-accent-primary">
+              <ArrowRightLeft className="size-4" strokeWidth={1.75} />
+            </span>
+            <div>
+              <h2 className="text-14 font-semibold text-primary">
+                {t("boards.settings.automation.ops.metrics.charts.pipeline_title")}
+              </h2>
+              <p className="text-12 text-tertiary">
+                {t("boards.settings.automation.ops.metrics.charts.pipeline_description")}
+              </p>
+            </div>
+          </div>
+          <div className="mt-5 space-y-3">
+            {pipelineSteps.map((step) => (
+              <div key={step.key}>
+                <div className="mb-1 flex items-center justify-between gap-2 text-12">
+                  <span className="text-secondary">{step.label}</span>
+                  <span className="font-medium text-primary tabular-nums">{step.value.toLocaleString()}</span>
+                </div>
+                <div className="automation-ops-bar-track">
+                  <div
+                    className="automation-ops-bar-fill bg-accent-primary"
+                    style={{ width: `${Math.max(6, (step.value / pipelineMax) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      ) : null}
+
+      <AutomationOpsSignals metrics={data?.metrics ?? {}} />
+
+      {totalRuns === 0 && Object.keys(normalizedMetrics).length === 0 ? (
         <section className="flex flex-col items-center justify-center rounded-xl border border-dashed border-subtle bg-layer-1 px-6 py-14 text-center">
           <span className="grid size-14 place-items-center rounded-2xl border border-subtle bg-accent-subtle text-accent-primary">
             <Gauge className="size-6" strokeWidth={1.5} />
           </span>
-          <h3 className="mt-4 text-15 font-semibold text-primary">
+          <h3 className="text-15 mt-4 font-semibold text-primary">
             {t("boards.settings.automation.ops.metrics.empty_title")}
           </h3>
           <p className="mt-2 max-w-md text-13 leading-relaxed text-tertiary">
             {t("boards.settings.automation.ops.metrics.empty_description")}
           </p>
         </section>
-      ) : (
-        METRIC_GROUP_ORDER.map((group) => {
-          const items = grouped.get(group) ?? [];
-          if (items.length === 0) return null;
-          const GroupIcon = GROUP_ICONS[group];
-
-          return (
-            <section key={group} className="space-y-3">
-              <div className="flex items-center gap-2">
-                <span
-                  className={cn(
-                    "grid size-8 place-items-center rounded-lg border border-subtle",
-                    GROUP_ACCENT[group]
-                  )}
-                >
-                  <GroupIcon className="size-3.5" strokeWidth={1.75} />
-                </span>
-                <h3 className="text-13 font-semibold text-primary">
-                  {t(`boards.settings.automation.ops.metrics.groups.${group}`)}
-                </h3>
-                <span className="rounded-full bg-layer-2 px-2 py-0.5 text-10 text-tertiary">
-                  {items.length}
-                </span>
-              </div>
-
-              <div className="automation-ops-metric-grid">
-                {items.map((item) => (
-                  <article
-                    key={item.rawKey}
-                    className={cn("automation-ops-metric-card", VARIANT_CLASS[item.variant])}
-                  >
-                    <p className="text-11 font-medium text-secondary">
-                      {item.reason
-                        ? t(`boards.settings.automation.ops.metrics.reasons.${item.reason}`, {
-                            defaultValue: item.reason,
-                          })
-                        : t(`boards.settings.automation.ops.metrics.keys.${item.baseKey}`, {
-                            defaultValue: item.baseKey,
-                          })}
-                    </p>
-                    <p className="automation-ops-metric-value mt-2 text-primary">
-                      {formatMetricValue(item.value, item.baseKey)}
-                    </p>
-                    <div className="automation-ops-bar-track mt-3">
-                      <div
-                        className={cn(
-                          "automation-ops-bar-fill",
-                          item.variant === "success" && "bg-success-primary",
-                          item.variant === "danger" && "bg-danger-primary",
-                          item.variant === "warning" && "bg-warning-primary",
-                          item.variant === "accent" && "bg-accent-primary",
-                          item.variant === "purple" && "bg-[var(--extended-color-purple-500)]",
-                          item.variant === "neutral" && "bg-layer-3"
-                        )}
-                        style={{ width: `${Math.max(8, (item.value / maxValue) * 100)}%` }}
-                      />
-                    </div>
-                  </article>
-                ))}
-              </div>
-            </section>
-          );
-        })
-      )}
+      ) : null}
     </div>
   );
 }

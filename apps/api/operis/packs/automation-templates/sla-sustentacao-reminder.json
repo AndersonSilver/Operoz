@@ -1,0 +1,58 @@
+{
+  "id": "sla-sustentacao-reminder",
+  "version": 1,
+  "name": "Lembrete sustentação SLA",
+  "description": "Lembrete periódico para revisar cards de sustentação dentro do SLA do board.",
+  "icon": "clock",
+  "category": "sla",
+  "default_rule_name": "Lembrete SLA sustentação",
+  "default_description": "Template oficial Operoz — lembrete de sustentação.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Lembrete SLA sustentação" },
+    { "key": "time", "type": "string", "label": "Horário (HH:MM)", "default": "10:00" },
+    { "key": "timezone", "type": "string", "label": "Fuso horário", "default": "America/Sao_Paulo" },
+    {
+      "key": "message",
+      "type": "string",
+      "label": "Mensagem da notificação",
+      "default": "Revisar cards de sustentação em aberto no board."
+    }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-daily",
+        "type": "scheduleCronNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "schedule.cron",
+          "label": "Agendamento (cron)",
+          "config": {
+            "preset": "daily",
+            "time": "{{time}}",
+            "weekdays": [0, 1, 2, 3, 4],
+            "day_of_month": 1,
+            "cron": "0 10 * * *",
+            "timezone": "{{timezone}}"
+          }
+        }
+      },
+      {
+        "id": "action-notify",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.notify",
+          "label": "Notificar membros",
+          "config": {
+            "user_ids": [],
+            "message": "{{message}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-daily", "target": "action-notify" }]
+  }
+}

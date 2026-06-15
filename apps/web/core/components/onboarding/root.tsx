@@ -1,15 +1,14 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IWorkspaceMemberInvitation, TOnboardingStep, TOnboardingSteps, TUserProfile } from "@operis/types";
 import { EOnboardingSteps } from "@operis/types";
-// hooks
 import { useInstance } from "@/hooks/store/use-instance";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserProfile } from "@/hooks/store/user";
-// local components
+import { OnboardingBrandPanel } from "./brand-panel";
 import { OnboardingHeader } from "./header";
+import { OnboardingProgressBar } from "./progress-bar";
 import { OnboardingStepRoot } from "./steps";
 
 type Props = {
@@ -18,7 +17,6 @@ type Props = {
 
 export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [] }: Props) {
   const [currentStep, setCurrentStep] = useState<TOnboardingStep>(EOnboardingSteps.PROFILE_SETUP);
-  // store hooks
   const { data: user } = useUser();
   const { data: userProfile, updateUserProfile, finishUserOnboarding } = useUserProfile();
   const { workspaces } = useWorkspace();
@@ -26,11 +24,21 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
 
   const workspacesList = Object.values(workspaces ?? {});
   const isSelfManaged = instanceConfig?.is_self_managed;
-
-  // Calculate total steps based on whether invitations are available
   const hasInvitations = invitations.length > 0;
 
-  // complete onboarding
+  const stepOrder: TOnboardingStep[] = useMemo(() => {
+    const showInviteStep = !hasInvitations || currentStep === EOnboardingSteps.INVITE_MEMBERS;
+    return [
+      EOnboardingSteps.PROFILE_SETUP,
+      ...(isSelfManaged ? [] : [EOnboardingSteps.ROLE_SETUP, EOnboardingSteps.USE_CASE_SETUP]),
+      EOnboardingSteps.WORKSPACE_CREATE_OR_JOIN,
+      ...(showInviteStep ? [EOnboardingSteps.INVITE_MEMBERS] : []),
+    ];
+  }, [currentStep, hasInvitations, isSelfManaged]);
+
+  const currentStepNumber = stepOrder.indexOf(currentStep) + 1;
+  const totalSteps = stepOrder.length;
+
   const finishOnboarding = useCallback(async () => {
     if (!user) return;
     try {
@@ -44,7 +52,6 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
     }
   }, [user, finishUserOnboarding]);
 
-  // handle step change
   const stepChange = useCallback(
     async (steps: Partial<TOnboardingSteps>) => {
       if (!user) return;
@@ -66,7 +73,6 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
       switch (step) {
         case EOnboardingSteps.PROFILE_SETUP:
           if (isSelfManaged) {
-            // Skip role & use case steps for self-hosted
             stepChange({ profile_complete: true });
             if (workspacesList.length > 0) finishOnboarding();
             else setCurrentStep(EOnboardingSteps.WORKSPACE_CREATE_OR_JOIN);
@@ -123,16 +129,47 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
   }, []);
 
   return (
-    <div className="flex h-full flex-col">
-      {/* Header with progress */}
-      <OnboardingHeader
-        currentStep={currentStep}
-        updateCurrentStep={updateCurrentStep}
-        hasInvitations={hasInvitations}
-      />
+    <div className="flex h-full min-h-0 flex-col overflow-hidden bg-surface-1">
+      <OnboardingProgressBar currentStepNumber={currentStepNumber} totalSteps={totalSteps} />
 
-      {/* Main content area */}
-      <OnboardingStepRoot currentStep={currentStep} invitations={invitations} handleStepChange={handleStepChange} />
+      <div className="flex min-h-0 flex-1">
+        <OnboardingBrandPanel
+          stepOrder={stepOrder}
+          currentStep={currentStep}
+          currentStepNumber={currentStepNumber}
+          totalSteps={totalSteps}
+        />
+
+        <div className="relative flex min-h-0 min-w-0 flex-1 flex-col bg-gradient-to-br from-surface-1 via-surface-1 to-layer-1/40">
+          <div
+            className="pointer-events-none absolute inset-0 opacity-[0.1] dark:opacity-[0.06]"
+            aria-hidden="true"
+            style={{
+              backgroundImage: "radial-gradient(circle at 1px 1px, var(--border-color-subtle) 1px, transparent 0)",
+              backgroundSize: "24px 24px",
+            }}
+          />
+          <div
+            className="pointer-events-none absolute top-[12%] right-[8%] h-[min(45vh,380px)] w-[min(50vw,420px)] rounded-full bg-accent-primary/[0.07] blur-[100px] dark:bg-accent-primary/[0.11]"
+            aria-hidden="true"
+          />
+
+          <div className="relative z-10 flex min-h-0 flex-1 flex-col">
+            <OnboardingHeader
+              currentStep={currentStep}
+              updateCurrentStep={updateCurrentStep}
+              isSelfManaged={!!isSelfManaged}
+              currentStepNumber={currentStepNumber}
+              totalSteps={totalSteps}
+            />
+            <OnboardingStepRoot
+              currentStep={currentStep}
+              invitations={invitations}
+              handleStepChange={handleStepChange}
+            />
+          </div>
+        </div>
+      </div>
     </div>
   );
 });

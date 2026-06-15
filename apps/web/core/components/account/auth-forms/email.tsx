@@ -43,18 +43,18 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
   const inputRef = useRef<HTMLInputElement>(null);
 
   return (
-    <form onSubmit={handleFormSubmit} className="space-y-5">
-      <div className="flex flex-col gap-3">
-        <label htmlFor="email" className="text-13 font-medium text-secondary">
+    <form onSubmit={handleFormSubmit} className="space-y-6">
+      <div className="flex flex-col gap-2.5">
+        <label htmlFor="email" className="text-12 font-medium tracking-[0.04em] text-tertiary uppercase">
           {t("auth.common.email.label")}
         </label>
         <div
           className={cn(
-            "relative flex items-center rounded-lg border bg-layer-1 transition-colors duration-150",
-            "border-subtle focus-within:border-accent-primary focus-within:ring-1 focus-within:ring-accent-primary/25",
+            "relative flex items-center rounded-xl border bg-layer-1/80 shadow-[inset_0_1px_0_rgba(255,255,255,0.04)] transition-all duration-200",
+            "focus-within:border-accent-primary/60 border-white/[0.08] focus-within:bg-layer-1 focus-within:shadow-[0_0_0_3px_rgba(94,106,210,0.15)] dark:border-white/[0.06]",
             !isFocused && Boolean(emailError?.email)
-              ? "border-danger-strong focus-within:border-danger-strong focus-within:ring-1 focus-within:ring-danger-primary/30"
-              : "hover:bg-layer-2"
+              ? "border-danger-strong focus-within:border-danger-strong focus-within:shadow-[0_0_0_3px_rgba(220,38,38,0.12)]"
+              : "hover:border-white/[0.12] hover:bg-layer-2/80"
           )}
           onFocus={() => {
             setIsFocused(true);
@@ -70,7 +70,7 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder={t("auth.common.email.placeholder")}
-            className="h-11 w-full rounded-lg border-0 bg-transparent disable-autofill-style placeholder:text-placeholder autofill:bg-transparent focus:bg-transparent active:bg-transparent"
+            className="text-15 h-12 w-full rounded-xl border-0 bg-transparent px-4 disable-autofill-style placeholder:text-placeholder/80 autofill:bg-transparent focus:bg-transparent active:bg-transparent"
             autoComplete="off"
             autoFocus
             ref={inputRef}
@@ -100,7 +100,7 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
       <Button
         type="submit"
         variant="primary"
-        className="h-11 w-full rounded-lg text-body-sm-semibold shadow-sm transition-[transform,box-shadow] hover:shadow-md active:scale-[0.99] disabled:shadow-none"
+        className="h-12 w-full rounded-xl text-body-sm-semibold shadow-[0_8px_28px_-8px_rgba(94,106,210,0.55)] transition-all duration-200 hover:shadow-[0_12px_32px_-8px_rgba(94,106,210,0.65)] active:scale-[0.98] disabled:scale-100 disabled:opacity-45 disabled:shadow-none"
         size="xl"
         disabled={isButtonDisabled}
       >

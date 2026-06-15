@@ -2,6 +2,7 @@ import {
   Bell,
   Bolt,
   CircleDot,
+  Clock3,
   Code2,
   CornerDownRight,
   Edit3,
@@ -18,6 +19,7 @@ import clsx from "clsx";
 
 const ICON_MAP: Record<string, LucideIcon> = {
   bolt: Bolt,
+  clock: Clock3,
   bell: Bell,
   code: Code2,
   mail: Mail,
