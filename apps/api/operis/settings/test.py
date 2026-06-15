@@ -11,6 +11,10 @@ ASSISTANT_REQUIRE_SESSION_SCOPE = "0"
 # Send it in a dummy outbox
 EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 
+# base_host() exige origem pública (ex.: convites PRD review por e-mail).
+WEB_URL = "http://localhost:3000"
+APP_BASE_URL = "http://localhost:3000"
+
 INSTALLED_APPS.append(  # noqa
     "operis.tests"
 )

@@ -86,6 +86,22 @@ def api_client():
     return APIClient()
 
 
+@pytest.fixture(autouse=True)
+def stub_assistant_embeddings(monkeypatch, request):
+    """Evita chamadas OpenAI reais quando indexação eager dispara durante setup de testes."""
+    if "no_stub_embeddings" in request.keywords:
+        return
+
+    def _fake_embed(texts, *, use_cache=True):
+        normalized = [(t or "").strip() for t in texts]
+        if not normalized or not any(normalized):
+            return [[] for _ in normalized]
+        return [[0.0] * 1536 for _ in normalized]
+
+    monkeypatch.setattr("operis.assistant.embeddings.embed_texts", _fake_embed)
+    monkeypatch.setattr("operis.assistant.indexing.embed_texts", _fake_embed)
+
+
 @pytest.fixture
 def mute_assistant_auto_index(monkeypatch):
     """Silencia fila/indexação automática do assistant durante setup de unit tests."""
