@@ -12,6 +12,7 @@ from operis.settings.redis import redis_instance
 
 _lock = threading.Lock()
 _round_robin: Iterator[int] | None = None
+_round_robin_size: int = 0
 
 
 def _failure_key(key_hash: str) -> str:
@@ -44,10 +45,12 @@ def list_api_keys() -> list[str]:
 
 
 def _next_index(size: int) -> int:
-    global _round_robin
+    global _round_robin, _round_robin_size
     with _lock:
-        if _round_robin is None or size <= 0:
-            _round_robin = itertools.cycle(range(max(size, 1)))
+        normalized_size = max(size, 1)
+        if _round_robin is None or _round_robin_size != normalized_size:
+            _round_robin = itertools.cycle(range(normalized_size))
+            _round_robin_size = normalized_size
         return next(_round_robin)
 
 

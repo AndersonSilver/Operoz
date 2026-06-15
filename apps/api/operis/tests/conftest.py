@@ -87,6 +87,12 @@ def api_client():
 
 
 @pytest.fixture
+def mute_assistant_auto_index(monkeypatch):
+    """Silencia fila/indexação automática do assistant durante setup de unit tests."""
+    monkeypatch.setattr("operis.assistant.signals.schedule_entity_index", lambda *args, **kwargs: None)
+
+
+@pytest.fixture
 def user_data():
     """Return standard user data for tests"""
     return {

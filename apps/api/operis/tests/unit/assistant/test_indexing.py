@@ -23,7 +23,10 @@ class TestIndexingChunking:
 @pytest.mark.django_db
 class TestIndexEntity:
     @patch("operis.assistant.indexing.embed_texts")
-    def test_index_issue_creates_embeddings(self, mock_embed, create_user, workspace, workspace_board):
+    def test_index_issue_creates_embeddings(
+        self, mock_embed, create_user, workspace, workspace_board, mute_assistant_auto_index
+    ):
+        mock_embed.side_effect = lambda texts: [[0.1] * 1536 for _ in texts]
         WorkspaceMember.objects.get_or_create(
             workspace=workspace,
             member=create_user,
@@ -55,7 +58,7 @@ class TestIndexEntity:
         issue.description_stripped = "Passo a passo completo"
         issue.save(update_fields=["description_stripped"])
 
-        mock_embed.return_value = [[0.1] * 1536]
+        mock_embed.side_effect = lambda texts: [[0.1] * 1536 for _ in texts]
 
         result = index_entity(SearchEmbedding.ENTITY_ISSUE, str(issue.id))
         assert result["ok"] is True
