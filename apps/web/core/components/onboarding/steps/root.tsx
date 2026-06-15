@@ -49,8 +49,8 @@ export function OnboardingStepRoot(props: Props) {
 
   return (
     <div ref={scrollContainerRef} className="flex-1 overflow-y-auto">
-      <div className="flex min-h-full items-center justify-center p-8">
-        <div className="w-full max-w-[24rem]">
+      <div className="flex min-h-full items-center justify-center px-5 py-8 sm:px-8 lg:items-center lg:justify-center lg:px-12 lg:py-10 xl:px-16">
+        <div className="w-full max-w-[27rem] rounded-xl border border-subtle/80 bg-surface-1/90 p-7 shadow-raised-100 backdrop-blur-sm sm:p-8">
           <OnboardingStepContent {...props} />
         </div>
       </div>

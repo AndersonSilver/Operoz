@@ -1,0 +1,55 @@
+{
+  "id": "weekly-status-report",
+  "version": 1,
+  "name": "Status Report Semanal",
+  "description": "Agenda envio semanal de e-mail com resumo executivo do board.",
+  "icon": "mail",
+  "category": "reports",
+  "default_rule_name": "Status Report Semanal",
+  "default_description": "Template oficial Operoz — relatório semanal por e-mail.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Status Report Semanal" },
+    { "key": "time", "type": "string", "label": "Horário (HH:MM)", "default": "09:00" },
+    { "key": "weekday", "type": "integer", "label": "Dia da semana (0=segunda)", "default": 0 },
+    { "key": "timezone", "type": "string", "label": "Fuso horário", "default": "America/Sao_Paulo" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-weekly",
+        "type": "scheduleCronNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "schedule.cron",
+          "label": "Agendamento (cron)",
+          "config": {
+            "preset": "weekly",
+            "time": "{{time}}",
+            "weekdays": ["{{weekday}}"],
+            "day_of_month": 1,
+            "cron": "0 9 * * 1",
+            "timezone": "{{timezone}}"
+          }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-weekly", "target": "action-email" }]
+  }
+}

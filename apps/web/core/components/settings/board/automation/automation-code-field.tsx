@@ -1,34 +1,34 @@
-import { cn } from "@operis/ui";
+import { AutomationCodeEditor, type AutomationCodeLanguage } from "./automation-code-editor";
 
 type Props = {
   value: string;
   onChange: (value: string) => void;
   label: string;
   hint?: string;
-  rows?: number;
+  language?: AutomationCodeLanguage;
+  minHeight?: string;
+};
+
+const LANGUAGE_LABEL: Record<AutomationCodeLanguage, string> = {
+  html: "HTML",
+  javascript: "JavaScript",
 };
 
 export function AutomationCodeField(props: Props) {
-  const { value, onChange, label, hint, rows = 18 } = props;
+  const { value, onChange, label, hint, language = "javascript", minHeight = "480px" } = props;
 
   return (
     <label className="block">
-      <span className="text-11 font-medium uppercase tracking-wide text-tertiary">{label}</span>
-      {hint && <span className="mt-1 block text-11 leading-relaxed text-placeholder">{hint}</span>}
+      <span className="text-11 font-medium tracking-wide text-tertiary uppercase">{label}</span>
+      {hint ? <span className="mt-1 block text-11 leading-relaxed text-placeholder">{hint}</span> : null}
       <div className="mt-2 overflow-hidden rounded-md border border-subtle bg-canvas shadow-raised-100">
-        <div className="border-b border-subtle px-3 py-1.5">
-          <span className="text-10 font-medium uppercase tracking-wide text-placeholder">JavaScript</span>
+        <div className="flex items-center justify-between border-b border-subtle bg-layer-2 px-3 py-1.5">
+          <span className="text-10 font-medium tracking-wide text-placeholder uppercase">
+            {LANGUAGE_LABEL[language]}
+          </span>
+          <span className="text-10 text-placeholder">VS Code</span>
         </div>
-        <textarea
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          rows={rows}
-          spellCheck={false}
-          className={cn(
-            "block w-full resize-y bg-transparent px-4 py-3 font-mono text-12 leading-6 text-primary",
-            "placeholder:text-placeholder focus:outline-none min-h-[320px]"
-          )}
-        />
+        <AutomationCodeEditor value={value} onChange={onChange} language={language} minHeight={minHeight} />
       </div>
     </label>
   );

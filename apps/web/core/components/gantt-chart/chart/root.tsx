@@ -2,9 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { createPortal } from "react-dom";
 import { useParams } from "next/navigation";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
 // components
 import type { ChartDataType, IBlockUpdateData, IBlockUpdateDependencyData, TGanttViews } from "@operis/types";
 import { cn } from "@operis/utils";
@@ -22,7 +20,7 @@ import { useUserProfile } from "@/hooks/store/user";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
 import { useGanttSidebarWidth } from "../contexts/gantt-sidebar-width";
-import { currentViewDataWithView, VIEWS_LIST } from "../data";
+import { currentViewDataWithView } from "../data";
 import type { IMonthBlock, IMonthView, IWeekBlock } from "../views";
 import { getNumberOfDaysBetweenTwoDates, monthView, quarterView, weekView } from "../views";
 
@@ -82,7 +80,6 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
     updateBlockDates,
     isEpic = false,
   } = props;
-  const { t } = useTranslation();
   // states
   const [itemsContainerWidth, setItemsContainerWidth] = useState(0);
   const [fullScreenMode, setFullScreenMode] = useState(false);
@@ -310,63 +307,14 @@ export const ChartViewRoot = observer(function ChartViewRoot(props: ChartViewRoo
         quickAdd={quickAdd}
         updateBlockDates={updateBlockDates}
         isEpic={isEpic}
+        showToday={showToday}
+        isViewControlsCollapsed={isViewControlsCollapsed}
+        onToday={handleToday}
+        onChartView={handleChartView}
+        onToggleViewControlsCollapsed={() => setIsViewControlsCollapsed((v) => !v)}
       />
     </div>
   );
 
-  // Bottom bar rendered via portal into document.body so `position:fixed`
-  // is always relative to the real viewport, regardless of parent transforms.
-  const floatingBar = createPortal(
-    <div
-      style={{ position: "fixed", bottom: "16px", right: "16px", zIndex: 9999 }}
-      className="shadow-lg flex items-center gap-0.5 rounded-lg border border-subtle bg-surface-1 px-2 py-1.5"
-    >
-      {!isViewControlsCollapsed && (
-        <>
-          {showToday && (
-            <button
-              type="button"
-              className="rounded-md px-2 py-1 text-11 font-medium text-secondary hover:bg-layer-transparent-hover"
-              onClick={handleToday}
-            >
-              {t("common.today")}
-            </button>
-          )}
-          {showToday && <div className="bg-subtle mx-1 h-4 w-px" />}
-          {VIEWS_LIST.map((chartView: any) => (
-            <button
-              key={chartView?.key}
-              type="button"
-              className={cn(
-                "rounded-md px-2 py-1 text-11 font-medium transition-colors",
-                currentView === chartView?.key
-                  ? "bg-accent-primary text-on-color"
-                  : "text-secondary hover:bg-layer-transparent-hover"
-              )}
-              onClick={() => handleChartView(chartView?.key)}
-            >
-              {t(chartView?.i18n_title)}
-            </button>
-          ))}
-          <div className="bg-subtle mx-1 h-4 w-px" />
-        </>
-      )}
-      <button
-        type="button"
-        title={isViewControlsCollapsed ? "Expandir controles" : "Recolher controles"}
-        className="flex items-center justify-center rounded-md p-1 text-secondary transition-all hover:bg-layer-transparent-hover"
-        onClick={() => setIsViewControlsCollapsed((v) => !v)}
-      >
-        {isViewControlsCollapsed ? <ChevronLeft className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
-      </button>
-    </div>,
-    document.body
-  );
-
-  return (
-    <>
-      {fullScreenMode && portalContainer ? createPortal(content, portalContainer) : content}
-      {floatingBar}
-    </>
-  );
+  return <>{fullScreenMode && portalContainer ? createPortal(content, portalContainer) : content}</>;
 });

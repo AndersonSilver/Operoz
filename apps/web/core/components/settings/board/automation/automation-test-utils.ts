@@ -49,7 +49,7 @@ export async function runAutomationTestStream(
 ): Promise<TAutomationDryRunResult> {
   const { workspaceSlug, board, rule, ruleName, graph } = params;
   const graphToUse = graph ?? rule.graph;
-  const event = sampleDryRunEvent(board.id, board.workspace, graphToUse);
+  const event = sampleDryRunEvent(board.id, board.workspace, graphToUse, rule.id);
 
   const csrfToken = await authService.requestCSRFToken().then((data) => data?.csrf_token);
   const url = `${API_BASE_URL}/api/workspaces/${workspaceSlug}/boards/${board.slug}/automation/rules/${rule.id}/dry-run/`;

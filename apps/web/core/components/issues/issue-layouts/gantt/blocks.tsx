@@ -23,7 +23,7 @@ import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web imports
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+import { IssueIdentifier, IssueTypeIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
 import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
 // local imports
 import { WorkItemPreviewCard } from "../../preview-card";
@@ -54,39 +54,41 @@ export const IssueGanttBlock = observer(function IssueGanttBlock(props: Props) {
   const stateDetails =
     issueDetails && getProjectStates(issueDetails?.project_id)?.find((state) => state?.id == issueDetails?.state_id);
 
-  const { blockStyle } = getBlockViewDetails(issueDetails, stateDetails?.color ?? "");
+  const { blockStyle, message } = getBlockViewDetails(issueDetails, stateDetails?.color ?? "");
 
   const handleIssuePeekOverview = () => handleRedirection(workspaceSlug, issueDetails, isMobile);
 
   const duration = findTotalDaysInRange(issueDetails?.start_date, issueDetails?.target_date) || 0;
   const { sidebarWidth } = useGanttSidebarWidth();
+  const tooltipContent = message ?? issueDetails?.name;
 
   return (
     <Popover delay={100} openOnHover>
       <Popover.Button
         className="w-full"
         render={
-          <div
-            id={`issue-${issueId}`}
-            className="space-between relative flex h-full w-full cursor-pointer items-center rounded-sm"
-            style={blockStyle}
-            onClick={handleIssuePeekOverview}
-          >
-            <div className="absolute top-0 left-0 h-full w-full bg-surface-1/50" />
+          <Tooltip tooltipContent={tooltipContent} isMobile={isMobile}>
             <div
-              className="sticky w-auto flex-1 truncate overflow-hidden px-2.5 py-1 text-13 text-primary"
-              style={{ left: `${sidebarWidth}px` }}
+              id={`issue-${issueId}`}
+              className="relative flex h-full w-full cursor-pointer items-center rounded-sm transition-colors hover:brightness-[1.03]"
+              style={blockStyle}
+              onClick={handleIssuePeekOverview}
             >
-              {issueDetails?.name}
+              <div
+                className="sticky w-auto flex-1 truncate overflow-hidden px-2.5 py-1 text-13 font-medium text-primary"
+                style={{ left: `${sidebarWidth}px` }}
+              >
+                {issueDetails?.name}
+              </div>
+              {isEpic && (
+                <IssueStats
+                  issueId={issueId}
+                  className="sticky mx-2 w-auto flex-shrink-0 justify-end truncate overflow-hidden font-medium text-primary"
+                  showProgressText={duration >= 2}
+                />
+              )}
             </div>
-            {isEpic && (
-              <IssueStats
-                issueId={issueId}
-                className="sticky mx-2 w-auto flex-shrink-0 justify-end truncate overflow-hidden font-medium text-primary"
-                showProgressText={duration >= 2}
-              />
-            )}
-          </div>
+          </Tooltip>
         }
       />
       <Popover.Panel side="bottom" align="start">
@@ -142,9 +144,10 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
   const issueTypeLogo = isBoardGantt
     ? resolveBoardGanttIssueTypeLogo(issueDetails?.type_id, issueTypeLogoMap)
     : undefined;
+  const showIssueTypeIcon = Boolean(issueDetails?.type_id && issueDetails?.project_id);
   const displayProperties = issuesFilter?.issueFilters?.displayProperties;
   const sidebarDisplayProperties =
-    isBoardGantt && issueTypeLogo && displayProperties
+    displayProperties && (showIssueTypeIcon || (isBoardGantt && issueTypeLogo))
       ? { ...displayProperties, issue_type: false }
       : displayProperties;
 
@@ -174,6 +177,8 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
       <div className="relative flex h-full w-full cursor-pointer items-center gap-2">
         {isBoardGantt && issueTypeLogo ? (
           <BoardGanttRowIcon logo={issueTypeLogo} size={14} className="!border-0 !bg-transparent" />
+        ) : showIssueTypeIcon ? (
+          <IssueTypeIdentifier issueTypeId={issueDetails!.type_id!} projectId={issueDetails!.project_id!} size="xs" />
         ) : null}
         {issueDetails?.project_id && (
           <IssueIdentifier
@@ -189,8 +194,12 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
         </Tooltip>
         {isCompleted && stateDetails && (
           <span
-            className="flex-shrink-0 rounded px-1.5 py-0.5 text-9 font-semibold uppercase tracking-wide"
-            style={{ backgroundColor: `${stateDetails.color}25`, color: stateDetails.color, border: `1px solid ${stateDetails.color}60` }}
+            className="flex-shrink-0 rounded px-1.5 py-0.5 text-9 font-semibold tracking-wide uppercase"
+            style={{
+              backgroundColor: `${stateDetails.color}25`,
+              color: stateDetails.color,
+              border: `1px solid ${stateDetails.color}60`,
+            }}
           >
             {stateDetails.name}
           </span>

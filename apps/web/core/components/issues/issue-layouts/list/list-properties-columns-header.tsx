@@ -32,17 +32,17 @@ function ListHeaderCell(props: { align?: TListPropertyColumnAlign; children: Rea
   const { align = "start", children } = props;
 
   return (
-    <div className={cn("flex min-h-6 min-w-0 w-full items-center px-0.5", headerCellAlign[align])}>{children}</div>
+    <div className={cn("flex min-h-6 w-full min-w-0 items-center px-0.5", headerCellAlign[align])}>{children}</div>
   );
 }
 
 export const ListPropertiesColumnsHeader = observer(function ListPropertiesColumnsHeader(props: Props) {
   const { isEpic: _isEpic = false } = props;
   const { t } = useTranslation();
-  const { columns, layoutGridTemplateColumns, propertyGridTemplateColumns, resizeColumnByDelta } =
+  const { columns, customFieldColumns, layoutGridTemplateColumns, propertyGridTemplateColumns, resizeColumnByDelta } =
     useListGridColumnsContext();
 
-  if (!columns.length) return null;
+  if (!columns.length && !customFieldColumns.length) return null;
 
   return (
     <div
@@ -74,12 +74,7 @@ export const ListPropertiesColumnsHeader = observer(function ListPropertiesColum
           return (
             <div key={column} className="group/column-header relative min-w-0">
               <ListHeaderCell align={align}>
-                <span
-                  className={cn(
-                    "w-full truncate text-caption-sm-medium text-tertiary",
-                    headerTextAlign[align]
-                  )}
-                >
+                <span className={cn("w-full truncate text-caption-sm-medium text-tertiary", headerTextAlign[align])}>
                   {t(getListPropertyColumnTitleKey(column))}
                 </span>
               </ListHeaderCell>
@@ -87,6 +82,13 @@ export const ListPropertiesColumnsHeader = observer(function ListPropertiesColum
             </div>
           );
         })}
+        {customFieldColumns.map((field) => (
+          <div key={field.id} className="relative min-w-0">
+            <ListHeaderCell align="start">
+              <span className="w-full truncate text-left text-caption-sm-medium text-tertiary">{field.name}</span>
+            </ListHeaderCell>
+          </div>
+        ))}
       </div>
 
       <div className="w-8 shrink-0" aria-hidden />

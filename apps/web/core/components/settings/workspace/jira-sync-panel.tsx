@@ -41,6 +41,7 @@ import { useUserPermissions } from "@/hooks/store/user";
 const syncService = new WorkspaceJiraSyncService();
 const boardService = new BoardService();
 const POLL_MS = 3000;
+const ATLASSIAN_DEVELOPER_CONSOLE_URL = "https://developer.atlassian.com/console/myapps/";
 
 const SELECT_CONTROL_CLASS =
   "w-full !rounded-lg !border-subtle !bg-layer-2 !px-3.5 !py-2.5 !text-13 !font-normal shadow-none hover:!bg-layer-1 focus-visible:ring-2 focus-visible:ring-accent-primary/30";
@@ -49,6 +50,20 @@ const INPUT_WITH_ICON_CLASS =
   "h-10 w-full rounded-lg border-subtle bg-layer-2 pl-10 pr-3 text-13 shadow-none hover:bg-layer-1 focus-visible:ring-2 focus-visible:ring-accent-primary/30";
 
 const OAUTH_SECRET_MASK = "****************";
+
+const JIRA_OAUTH_ERROR_KEYS: Record<string, string> = {
+  invalid_state: "workspace_settings.settings.jira.oauth_error_invalid_state",
+  missing_code: "workspace_settings.settings.jira.oauth_error_missing_code",
+};
+
+function resolveBoardSlug(savedSlug: string | undefined, boards: IBoard[]): string {
+  const slug = (savedSlug ?? "").trim();
+  if (!boards.length) return slug;
+  if (slug && boards.some((b) => b.slug === slug)) return slug;
+  const preferred = boards.find((b) => b.slug === "squad-as-a-service");
+  if (preferred) return preferred.slug;
+  return boards[0].slug;
+}
 
 type Props = {
   workspaceSlug: string;
@@ -135,7 +150,7 @@ function IconField({
   return (
     <FormField label={label} hint={hint} htmlFor={htmlFor}>
       <div className="relative">
-        <span className="pointer-events-none absolute left-3 top-1/2 z-10 -translate-y-1/2 text-tertiary">
+        <span className="pointer-events-none absolute top-1/2 left-3 z-10 -translate-y-1/2 text-tertiary">
           <Icon className="size-4" strokeWidth={1.75} aria-hidden />
         </span>
         {children}
@@ -161,7 +176,7 @@ function CopyField({
         <span className="flex shrink-0 items-center border-r border-subtle px-3 text-tertiary">
           <Link2 className="size-4" strokeWidth={1.75} aria-hidden />
         </span>
-        <code className="min-w-0 flex-1 truncate px-3 py-2.5 font-mono text-12 text-secondary">{value}</code>
+        <code className="font-mono min-w-0 flex-1 truncate px-3 py-2.5 text-12 text-secondary">{value}</code>
         <button
           type="button"
           onClick={onCopy}
@@ -175,15 +190,7 @@ function CopyField({
   );
 }
 
-function PreviewStat({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: number;
-  accent?: boolean;
-}) {
+function PreviewStat({ label, value, accent }: { label: string; value: number; accent?: boolean }) {
   if (!value) return null;
   return (
     <div
@@ -193,7 +200,7 @@ function PreviewStat({
       )}
     >
       <p className="text-11 text-tertiary">{label}</p>
-      <p className="mt-0.5 text-16 font-semibold tabular-nums text-primary">{value}</p>
+      <p className="mt-0.5 text-16 font-semibold text-primary tabular-nums">{value}</p>
     </div>
   );
 }
@@ -225,13 +232,9 @@ function ImportPreviewPanel({
 
   if (!preview) return null;
 
-  const createsTotal =
-    preview.projects_new + preview.modules_new + preview.cards_new + preview.subtasks_new;
+  const createsTotal = preview.projects_new + preview.modules_new + preview.cards_new + preview.subtasks_new;
   const updatesTotal =
-    preview.modules_renamed +
-    preview.cards_updated +
-    preview.subtasks_updated +
-    preview.cards_link_only;
+    preview.modules_renamed + preview.cards_updated + preview.subtasks_updated + preview.cards_link_only;
   const samples = [
     ...(preview.new_project_names ?? []),
     ...(preview.sample_new_modules ?? []),
@@ -303,12 +306,12 @@ function ImportPreviewPanel({
 
         {samples.length > 0 ? (
           <div>
-            <p className="mb-2 text-11 font-medium uppercase tracking-wide text-tertiary">
+            <p className="mb-2 text-11 font-medium tracking-wide text-tertiary uppercase">
               {t("workspace_settings.settings.jira.preview_samples")}
             </p>
             <ul className="space-y-1.5 text-12 text-secondary">
               {samples.slice(0, 8).map((line) => (
-                <li key={line} className="truncate rounded bg-layer-2 px-2 py-1 font-mono">
+                <li key={line} className="font-mono truncate rounded bg-layer-2 px-2 py-1">
                   {line}
                 </li>
               ))}
@@ -331,21 +334,19 @@ function ImportPreviewPanel({
 }
 
 function ImportResultChips({ result, t }: { result: TJiraOpsSyncResult; t: (key: string) => string }) {
-  const items = (
-    [
-      ["clients", result.clients],
-      ["modules", result.modules],
-      ["created_cards", result.created_cards],
-      ["created_subtasks", result.created_subtasks],
-    ] as const
-  );
+  const items = [
+    ["clients", result.clients],
+    ["modules", result.modules],
+    ["created_cards", result.created_cards],
+    ["created_subtasks", result.created_subtasks],
+  ] as const;
 
   return (
     <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
       {items.map(([key, val]) => (
         <div key={key} className="rounded-md border border-subtle bg-layer-2 px-3 py-2">
           <p className="text-11 text-tertiary">{t(`workspace_settings.settings.jira.result.${key}`)}</p>
-          <p className="mt-0.5 text-16 font-semibold tabular-nums text-primary">{val}</p>
+          <p className="mt-0.5 text-16 font-semibold text-primary tabular-nums">{val}</p>
         </div>
       ))}
     </div>
@@ -403,10 +404,7 @@ function HorizontalStepTab({
         </span>
         <Icon className={cn("hidden size-4 shrink-0 md:block", isActive ? "text-accent-primary" : "text-tertiary")} />
         <span
-          className={cn(
-            "hidden truncate text-13 font-medium md:inline",
-            isActive ? "text-primary" : "text-secondary"
-          )}
+          className={cn("hidden truncate text-13 font-medium md:inline", isActive ? "text-primary" : "text-secondary")}
         >
           {title}
         </span>
@@ -431,7 +429,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
   const [oauthClientSecret, setOauthClientSecret] = useState("");
   const [oauthSecretEditing, setOauthSecretEditing] = useState(false);
   const [projectKey, setProjectKey] = useState("OPS");
-  const [boardSlug, setBoardSlug] = useState("squad-as-a-services");
+  const [boardSlug, setBoardSlug] = useState("");
   const [savingApp, setSavingApp] = useState(false);
   const [connecting, setConnecting] = useState(false);
   const [starting, setStarting] = useState(false);
@@ -448,9 +446,8 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     { refreshInterval: (latest) => (latest?.status === "running" ? POLL_MS : 0) }
   );
 
-  const { data: boards = [] } = useSWR<IBoard[]>(
-    isAdmin ? `JIRA_OPS_BOARDS_${workspaceSlug}` : null,
-    () => boardService.getBoards(workspaceSlug)
+  const { data: boards = [] } = useSWR<IBoard[]>(isAdmin ? `JIRA_OPS_BOARDS_${workspaceSlug}` : null, () =>
+    boardService.getBoards(workspaceSlug)
   );
 
   const { data: jiraProjects = [] } = useSWR(
@@ -458,17 +455,16 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     () => syncService.getJiraProjects(workspaceSlug)
   );
 
-  const { data: oauthSites } = useSWR(
-    isAdmin && pickCloudOpen ? `JIRA_OPS_SITES_${workspaceSlug}` : null,
-    () => syncService.getOAuthSites(workspaceSlug)
+  const { data: oauthSites } = useSWR(isAdmin && pickCloudOpen ? `JIRA_OPS_SITES_${workspaceSlug}` : null, () =>
+    syncService.getOAuthSites(workspaceSlug)
   );
 
   useEffect(() => {
     if (!data) return;
     setOauthClientId(data.oauth_app_client_id ?? "");
     setProjectKey(data.project_key ?? "OPS");
-    setBoardSlug(data.board_slug ?? "squad-as-a-services");
-  }, [data]);
+    setBoardSlug(resolveBoardSlug(data.board_slug, boards));
+  }, [data, boards]);
 
   useEffect(() => {
     setImportPreview(null);
@@ -493,7 +489,9 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     const jiraError = searchParams.get("jira_error");
 
     if (jiraError) {
-      setToast({ type: TOAST_TYPE.ERROR, title: decodeURIComponent(jiraError) });
+      const errorKey = JIRA_OAUTH_ERROR_KEYS[jiraError];
+      const title = errorKey ? t(errorKey) : decodeURIComponent(jiraError);
+      setToast({ type: TOAST_TYPE.ERROR, title });
       setSearchParams({}, { replace: true });
     }
     if (connected === "1") {
@@ -615,8 +613,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
       setImportPreview(null);
       setToast({
         type: TOAST_TYPE.ERROR,
-        title:
-          (err as { error?: string })?.error || t("workspace_settings.settings.jira.preview_errors.failed"),
+        title: (err as { error?: string })?.error || t("workspace_settings.settings.jira.preview_errors.failed"),
       });
     } finally {
       setPreviewLoading(false);
@@ -689,123 +686,132 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
   const renderStepBody = () => {
     if (activeStep === "app") {
       return (
-        <section className="w-full overflow-hidden rounded-xl border border-subtle bg-layer-1 shadow-sm">
-            <div className="border-b border-subtle px-5 py-4 lg:px-6">
-              <div className="flex gap-3">
-                <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-primary/12 text-accent-primary">
-                  <KeyRound className="size-5" strokeWidth={1.5} />
-                </span>
-                <div className="min-w-0 flex-1">
-                  <h3 className="text-14 font-semibold text-primary">
-                    {t("workspace_settings.settings.jira.oauth_card_title")}
-                  </h3>
-                  <p className="mt-1 text-13 leading-relaxed text-tertiary">
-                    {t("workspace_settings.settings.jira.step_app_hint")}
-                  </p>
-                  {oauthAppReady && (
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      <Badge variant="success" size="sm">
-                        <ShieldCheck className="mr-1 inline size-3" />
-                        {t("workspace_settings.settings.jira.badge_app_configured")}
-                      </Badge>
-                      <Badge variant="neutral" size="sm">
-                        <Lock className="mr-1 inline size-3" />
-                        {t("workspace_settings.settings.jira.badge_secret_saved")}
-                      </Badge>
-                    </div>
-                  )}
-                </div>
+        <section className="shadow-sm w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
+          <div className="border-b border-subtle px-5 py-4 lg:px-6">
+            <div className="flex gap-3">
+              <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-primary/12 text-accent-primary">
+                <KeyRound className="size-5" strokeWidth={1.5} />
+              </span>
+              <div className="min-w-0 flex-1">
+                <h3 className="text-14 font-semibold text-primary">
+                  {t("workspace_settings.settings.jira.oauth_card_title")}
+                </h3>
+                <p className="mt-1 text-13 leading-relaxed text-tertiary">
+                  {t("workspace_settings.settings.jira.step_app_hint")}
+                </p>
+                <a
+                  href={ATLASSIAN_DEVELOPER_CONSOLE_URL}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="mt-2 inline-flex items-center gap-1.5 text-13 font-medium text-accent-primary hover:underline"
+                >
+                  <ExternalLink className="size-3.5" strokeWidth={1.75} />
+                  {t("workspace_settings.settings.jira.developer_console_link")}
+                </a>
+                {oauthAppReady && (
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <Badge variant="success" size="sm">
+                      <ShieldCheck className="mr-1 inline size-3" />
+                      {t("workspace_settings.settings.jira.badge_app_configured")}
+                    </Badge>
+                    <Badge variant="neutral" size="sm">
+                      <Lock className="mr-1 inline size-3" />
+                      {t("workspace_settings.settings.jira.badge_secret_saved")}
+                    </Badge>
+                  </div>
+                )}
               </div>
             </div>
+          </div>
 
-            <div className="space-y-4 px-5 py-5 lg:px-6 lg:py-6">
-              <div className="grid gap-4 lg:grid-cols-2">
-                <IconField
-                  label={t("workspace_settings.settings.jira.oauth_client_id_label")}
-                  htmlFor="oauth-client-id"
-                  icon={KeyRound}
-                >
-                  <Input
-                    id="oauth-client-id"
-                    className={INPUT_WITH_ICON_CLASS}
-                    value={oauthClientId}
-                    onChange={(e) => setOauthClientId(e.target.value)}
-                    placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
-                  />
-                </IconField>
-
-                <IconField
-                  label={t("workspace_settings.settings.jira.oauth_client_secret_label")}
-                  hint={
-                    showOauthSecretMask
-                      ? t("workspace_settings.settings.jira.oauth_secret_stored_hint")
-                      : t("workspace_settings.settings.jira.oauth_secret_hint")
-                  }
-                  htmlFor="oauth-client-secret"
-                  icon={Lock}
-                >
-                  <Input
-                    id="oauth-client-secret"
-                    type={showOauthSecretMask ? "text" : "password"}
-                    readOnly={showOauthSecretMask}
-                    className={cn(
-                      INPUT_WITH_ICON_CLASS,
-                      showOauthSecretMask && "cursor-text font-mono tracking-[0.2em] text-tertiary"
-                    )}
-                    value={showOauthSecretMask ? OAUTH_SECRET_MASK : oauthClientSecret}
-                    onFocus={() => {
-                      if (showOauthSecretMask) {
-                        setOauthSecretEditing(true);
-                        setOauthClientSecret("");
-                      }
-                    }}
-                    onChange={(e) => {
-                      setOauthSecretEditing(true);
-                      setOauthClientSecret(e.target.value);
-                    }}
-                    onBlur={() => {
-                      if (!oauthClientSecret.trim() && oauthAppReady) {
-                        setOauthSecretEditing(false);
-                      }
-                    }}
-                    placeholder={showOauthSecretMask ? undefined : "••••••••••••••••"}
-                    autoComplete="off"
-                  />
-                </IconField>
-              </div>
-
-              {data?.oauth_redirect_uri ? (
-                <CopyField
-                  label={t("workspace_settings.settings.jira.callback_url_label")}
-                  hint={t("workspace_settings.settings.jira.callback_url_hint")}
-                  value={data.oauth_redirect_uri}
-                  onCopy={copyCallbackUrl}
-                />
-              ) : null}
-            </div>
-
-            <div className="flex flex-col-reverse gap-2 border-t border-subtle bg-layer-2/30 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
-              {oauthAppReady ? (
-                <Button variant="ghost" size="base" onClick={goNextStep} className="w-full sm:w-auto">
-                  {t("workspace_settings.settings.jira.next_step")}
-                  <ArrowRight className="size-4" />
-                </Button>
-              ) : (
-                <span className="hidden text-12 text-tertiary sm:inline">
-                  {t("workspace_settings.settings.jira.oauth_save_hint")}
-                </span>
-              )}
-              <Button
-                variant="primary"
-                size="base"
-                onClick={saveAppConfig}
-                loading={savingApp}
-                className="w-full sm:w-auto"
+          <div className="space-y-4 px-5 py-5 lg:px-6 lg:py-6">
+            <div className="grid gap-4 lg:grid-cols-2">
+              <IconField
+                label={t("workspace_settings.settings.jira.oauth_client_id_label")}
+                htmlFor="oauth-client-id"
+                icon={KeyRound}
               >
-                <Save className="size-4" />
-                {t("workspace_settings.settings.jira.save_app")}
-              </Button>
+                <Input
+                  id="oauth-client-id"
+                  className={INPUT_WITH_ICON_CLASS}
+                  value={oauthClientId}
+                  onChange={(e) => setOauthClientId(e.target.value)}
+                  placeholder="xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx"
+                />
+              </IconField>
+
+              <IconField
+                label={t("workspace_settings.settings.jira.oauth_client_secret_label")}
+                hint={
+                  showOauthSecretMask
+                    ? t("workspace_settings.settings.jira.oauth_secret_stored_hint")
+                    : t("workspace_settings.settings.jira.oauth_secret_hint")
+                }
+                htmlFor="oauth-client-secret"
+                icon={Lock}
+              >
+                <Input
+                  id="oauth-client-secret"
+                  type={showOauthSecretMask ? "text" : "password"}
+                  readOnly={showOauthSecretMask}
+                  className={cn(
+                    INPUT_WITH_ICON_CLASS,
+                    showOauthSecretMask && "font-mono cursor-text tracking-[0.2em] text-tertiary"
+                  )}
+                  value={showOauthSecretMask ? OAUTH_SECRET_MASK : oauthClientSecret}
+                  onFocus={() => {
+                    if (showOauthSecretMask) {
+                      setOauthSecretEditing(true);
+                      setOauthClientSecret("");
+                    }
+                  }}
+                  onChange={(e) => {
+                    setOauthSecretEditing(true);
+                    setOauthClientSecret(e.target.value);
+                  }}
+                  onBlur={() => {
+                    if (!oauthClientSecret.trim() && oauthAppReady) {
+                      setOauthSecretEditing(false);
+                    }
+                  }}
+                  placeholder={showOauthSecretMask ? undefined : "••••••••••••••••"}
+                  autoComplete="off"
+                />
+              </IconField>
             </div>
+
+            {data?.oauth_redirect_uri ? (
+              <CopyField
+                label={t("workspace_settings.settings.jira.callback_url_label")}
+                hint={t("workspace_settings.settings.jira.callback_url_hint")}
+                value={data.oauth_redirect_uri}
+                onCopy={copyCallbackUrl}
+              />
+            ) : null}
+          </div>
+
+          <div className="flex flex-col-reverse gap-2 border-t border-subtle bg-layer-2/30 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+            {oauthAppReady ? (
+              <Button variant="ghost" size="base" onClick={goNextStep} className="w-full sm:w-auto">
+                {t("workspace_settings.settings.jira.next_step")}
+                <ArrowRight className="size-4" />
+              </Button>
+            ) : (
+              <span className="hidden text-12 text-tertiary sm:inline">
+                {t("workspace_settings.settings.jira.oauth_save_hint")}
+              </span>
+            )}
+            <Button
+              variant="primary"
+              size="base"
+              onClick={saveAppConfig}
+              loading={savingApp}
+              className="w-full sm:w-auto"
+            >
+              <Save className="size-4" />
+              {t("workspace_settings.settings.jira.save_app")}
+            </Button>
+          </div>
         </section>
       );
     }
@@ -815,7 +821,9 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
         return (
           <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-subtle bg-layer-1/50 px-6 py-16 text-center">
             <Lock className="mb-4 size-10 text-tertiary" />
-            <p className="text-14 font-medium text-primary">{t("workspace_settings.settings.jira.connect_locked_hint")}</p>
+            <p className="text-14 font-medium text-primary">
+              {t("workspace_settings.settings.jira.connect_locked_hint")}
+            </p>
             <Button variant="secondary" className="mt-6" onClick={() => setActiveStep("app")}>
               {t("workspace_settings.settings.jira.go_to_app_step")}
             </Button>
@@ -824,7 +832,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
       }
 
       return (
-        <section className="w-full overflow-hidden rounded-xl border border-subtle bg-layer-1 shadow-sm">
+        <section className="shadow-sm w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
           <div className="border-b border-subtle px-5 py-4 lg:px-6">
             <div className="flex gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-primary/12 text-accent-primary">
@@ -843,11 +851,11 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
 
           <div className="space-y-4 px-5 py-5 lg:px-6 lg:py-6">
             {connected && data && (
-              <div className="rounded-lg border border-success/30 bg-success/10 p-4">
+              <div className="border-success/30 bg-success/10 rounded-lg border p-4">
                 <div className="flex items-start gap-3">
-                  <CheckCircle2 className="mt-0.5 size-6 shrink-0 text-success" />
+                  <CheckCircle2 className="text-success mt-0.5 size-6 shrink-0" />
                   <div className="min-w-0 flex-1">
-                    <p className="text-12 font-medium text-success">
+                    <p className="text-success text-12 font-medium">
                       {t("workspace_settings.settings.jira.badge_connected")}
                     </p>
                     <p className="mt-1 text-14 font-medium text-primary">{data.jira_site_name || data.cloud_id}</p>
@@ -862,7 +870,9 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
                 <h4 className="text-13 font-semibold text-primary">
                   {t("workspace_settings.settings.jira.pick_site_heading")}
                 </h4>
-                <p className="mt-1 text-12 text-tertiary">{t("workspace_settings.settings.jira.pick_site_description")}</p>
+                <p className="mt-1 text-12 text-tertiary">
+                  {t("workspace_settings.settings.jira.pick_site_description")}
+                </p>
                 <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-end">
                   <div className="min-w-0 flex-1">
                     <CustomSelect
@@ -932,142 +942,132 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     const showPreviewPanel = previewLoading || importPreview !== null;
 
     return (
-      <div
-        className={cn(
-          "grid w-full gap-5",
-          showPreviewPanel && "lg:grid-cols-2 lg:items-start"
-        )}
-      >
+      <div className={cn("grid w-full gap-5", showPreviewPanel && "lg:grid-cols-2 lg:items-start")}>
         <div className="space-y-4">
-        <section className="overflow-hidden rounded-xl border border-subtle bg-layer-1 shadow-sm">
-          <div className="border-b border-subtle px-5 py-4 lg:px-6">
-            <h3 className="text-14 font-semibold text-primary">
-              {t("workspace_settings.settings.jira.import_card_title")}
-            </h3>
-            <p className="mt-1 text-13 leading-relaxed text-tertiary">
-              {t("workspace_settings.settings.jira.sync_description")}
-            </p>
-            {data?.last_sync_at ? (
-              <p className="mt-3 flex items-center gap-2 text-12 text-secondary">
-                <Clock className="size-3.5 shrink-0 text-tertiary" />
-                {t("workspace_settings.settings.jira.last_sync_label", {
-                  time: calculateTimeAgo(data.last_sync_at),
-                })}
+          <section className="shadow-sm overflow-hidden rounded-xl border border-subtle bg-layer-1">
+            <div className="border-b border-subtle px-5 py-4 lg:px-6">
+              <h3 className="text-14 font-semibold text-primary">
+                {t("workspace_settings.settings.jira.import_card_title")}
+              </h3>
+              <p className="mt-1 text-13 leading-relaxed text-tertiary">
+                {t("workspace_settings.settings.jira.sync_description")}
               </p>
-            ) : (
-              <p className="mt-3 text-12 text-tertiary">{t("workspace_settings.settings.jira.last_sync_never")}</p>
-            )}
-          </div>
+              {data?.last_sync_at ? (
+                <p className="mt-3 flex items-center gap-2 text-12 text-secondary">
+                  <Clock className="size-3.5 shrink-0 text-tertiary" />
+                  {t("workspace_settings.settings.jira.last_sync_label", {
+                    time: calculateTimeAgo(data.last_sync_at),
+                  })}
+                </p>
+              ) : (
+                <p className="mt-3 text-12 text-tertiary">{t("workspace_settings.settings.jira.last_sync_never")}</p>
+              )}
+            </div>
 
-          <div className="px-5 py-5 lg:px-6 lg:py-6">
-            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-3">
-              <div className="min-w-0 flex-1">
-                <FormField label={t("workspace_settings.settings.jira.pick_project_label")}>
-                  <CustomSelect
-                    input
-                    value={projectKey}
-                    onChange={(v: string) => setProjectKey(v)}
-                    label={
-                      <span className="flex min-w-0 items-center gap-2 truncate text-left">
-                        <span className="shrink-0 rounded bg-layer-2 px-1.5 py-0.5 font-mono text-11 text-tertiary">
-                          {projectKey}
+            <div className="px-5 py-5 lg:px-6 lg:py-6">
+              <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:gap-3">
+                <div className="min-w-0 flex-1">
+                  <FormField label={t("workspace_settings.settings.jira.pick_project_label")}>
+                    <CustomSelect
+                      input
+                      value={projectKey}
+                      onChange={(v: string) => setProjectKey(v)}
+                      label={
+                        <span className="flex min-w-0 items-center gap-2 truncate text-left">
+                          <span className="font-mono shrink-0 rounded bg-layer-2 px-1.5 py-0.5 text-11 text-tertiary">
+                            {projectKey}
+                          </span>
+                          <span className="truncate text-primary">{jiraProjectLabel}</span>
                         </span>
-                        <span className="truncate text-primary">{jiraProjectLabel}</span>
-                      </span>
-                    }
-                    buttonClassName={SELECT_CONTROL_CLASS}
-                  >
-                    {(jiraProjects?.length
-                      ? jiraProjects
-                      : [{ key: projectKey, name: projectKey, id: projectKey }]
-                    ).map((p) => (
-                      <CustomSelect.Option key={p.key} value={p.key}>
-                        <span className="font-mono text-12 text-tertiary">{p.key}</span>
-                        <span className="mx-1.5 text-tertiary">·</span>
-                        {p.name}
-                      </CustomSelect.Option>
-                    ))}
-                  </CustomSelect>
-                </FormField>
-              </div>
+                      }
+                      buttonClassName={SELECT_CONTROL_CLASS}
+                    >
+                      {(jiraProjects?.length
+                        ? jiraProjects
+                        : [{ key: projectKey, name: projectKey, id: projectKey }]
+                      ).map((p) => (
+                        <CustomSelect.Option key={p.key} value={p.key}>
+                          <span className="font-mono text-12 text-tertiary">{p.key}</span>
+                          <span className="mx-1.5 text-tertiary">·</span>
+                          {p.name}
+                        </CustomSelect.Option>
+                      ))}
+                    </CustomSelect>
+                  </FormField>
+                </div>
 
-              <div
-                className="flex shrink-0 items-center justify-center text-tertiary lg:pb-2"
-                aria-hidden
-              >
-                <ArrowRight className="size-5 lg:rotate-0" />
-              </div>
+                <div className="flex shrink-0 items-center justify-center text-tertiary lg:pb-2" aria-hidden>
+                  <ArrowRight className="size-5 lg:rotate-0" />
+                </div>
 
-              <div className="min-w-0 flex-1">
-                <FormField label={t("workspace_settings.settings.jira.pick_board_label")}>
-                  <CustomSelect
-                    input
-                    value={boardSlug}
-                    onChange={(v: string) => setBoardSlug(v)}
-                    label={<span className="truncate text-left text-primary">{boardLabel}</span>}
-                    buttonClassName={SELECT_CONTROL_CLASS}
-                  >
-                    {boards.map((board) => (
-                      <CustomSelect.Option key={board.id} value={board.slug}>
-                        {board.name}
-                      </CustomSelect.Option>
-                    ))}
-                  </CustomSelect>
-                </FormField>
+                <div className="min-w-0 flex-1">
+                  <FormField label={t("workspace_settings.settings.jira.pick_board_label")}>
+                    <CustomSelect
+                      input
+                      value={boardSlug}
+                      onChange={(v: string) => setBoardSlug(v)}
+                      label={<span className="truncate text-left text-primary">{boardLabel}</span>}
+                      buttonClassName={SELECT_CONTROL_CLASS}
+                    >
+                      {boards.map((board) => (
+                        <CustomSelect.Option key={board.id} value={board.slug}>
+                          {board.name}
+                        </CustomSelect.Option>
+                      ))}
+                    </CustomSelect>
+                  </FormField>
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="flex flex-col-reverse gap-2 border-t border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
-            <Button variant="ghost" size="base" onClick={handleSaveTargets} className="w-full sm:w-auto">
-              {t("workspace_settings.settings.jira.save_targets_short")}
-            </Button>
-            <Button
-              variant="primary"
-              size="base"
-              onClick={handlePreviewImport}
-              disabled={!canSync || running || previewLoading}
-              loading={previewLoading}
-              className="w-full sm:w-auto"
-            >
-              <RefreshCw className={cn("size-4", previewLoading && "animate-spin")} />
-              {previewLoading
-                ? t("workspace_settings.settings.jira.preview_loading")
-                : t("workspace_settings.settings.jira.sync_button")}
-            </Button>
-          </div>
-        </section>
+            <div className="flex flex-col-reverse gap-2 border-t border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+              <Button variant="ghost" size="base" onClick={handleSaveTargets} className="w-full sm:w-auto">
+                {t("workspace_settings.settings.jira.save_targets_short")}
+              </Button>
+              <Button
+                variant="primary"
+                size="base"
+                onClick={handlePreviewImport}
+                disabled={!canSync || running || previewLoading}
+                loading={previewLoading}
+                className="w-full sm:w-auto"
+              >
+                <RefreshCw className={cn("size-4", previewLoading && "animate-spin")} />
+                {previewLoading
+                  ? t("workspace_settings.settings.jira.preview_loading")
+                  : t("workspace_settings.settings.jira.sync_button")}
+              </Button>
+            </div>
+          </section>
 
-        {data?.result && data.status !== "running" && (
-          <div className="rounded-xl border border-subtle bg-layer-1 px-5 py-4 lg:px-6">
-            <p className="mb-3 text-12 font-medium uppercase tracking-wide text-tertiary">
-              {t("workspace_settings.settings.jira.last_import_summary")}
-            </p>
-            <ImportResultChips result={data.result} t={t} />
-          </div>
-        )}
-
-        {data && (data.status === "running" || data.status === "failed") && (
-          <div
-            className={cn(
-              "rounded-lg border p-5 text-13",
-              data.status === "failed"
-                ? "border-danger-subtle bg-danger-subtle/20"
-                : "border-subtle bg-layer-1"
-            )}
-          >
-            <p className="font-semibold text-primary">
-              {t(`workspace_settings.settings.jira.status.${data.status}`)}
-            </p>
-            {running && data.phase && (
-              <p className="mt-2 flex items-center gap-2 text-12 text-tertiary">
-                <Loader2 className="size-3.5 animate-spin" />
-                {phaseLabel(t, data.phase)}
+          {data?.result && data.status !== "running" && (
+            <div className="rounded-xl border border-subtle bg-layer-1 px-5 py-4 lg:px-6">
+              <p className="mb-3 text-12 font-medium tracking-wide text-tertiary uppercase">
+                {t("workspace_settings.settings.jira.last_import_summary")}
               </p>
-            )}
-            {data.error && <p className="mt-2 text-12 text-danger-primary">{data.error}</p>}
-          </div>
-        )}
+              <ImportResultChips result={data.result} t={t} />
+            </div>
+          )}
+
+          {data && (data.status === "running" || data.status === "failed") && (
+            <div
+              className={cn(
+                "rounded-lg border p-5 text-13",
+                data.status === "failed" ? "border-danger-subtle bg-danger-subtle/20" : "border-subtle bg-layer-1"
+              )}
+            >
+              <p className="font-semibold text-primary">
+                {t(`workspace_settings.settings.jira.status.${data.status}`)}
+              </p>
+              {running && data.phase && (
+                <p className="mt-2 flex items-center gap-2 text-12 text-tertiary">
+                  <Loader2 className="size-3.5 animate-spin" />
+                  {phaseLabel(t, data.phase)}
+                </p>
+              )}
+              {data.error && <p className="mt-2 text-12 text-danger-primary">{data.error}</p>}
+            </div>
+          )}
         </div>
 
         {showPreviewPanel ? (
@@ -1086,10 +1086,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
 
   const showImportPreview = activeStep === "import" && (previewLoading || importPreview !== null);
 
-  const layoutShellClass = cn(
-    "mx-auto w-full",
-    showImportPreview ? "max-w-6xl" : "max-w-4xl"
-  );
+  const layoutShellClass = cn("mx-auto w-full", showImportPreview ? "max-w-6xl" : "max-w-4xl");
 
   if (isLoading && !data) {
     return (
@@ -1113,7 +1110,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
       </header>
 
       <nav
-        className="mt-6 overflow-hidden rounded-xl border border-subtle bg-layer-1 shadow-sm"
+        className="shadow-sm mt-6 overflow-hidden rounded-xl border border-subtle bg-layer-1"
         aria-label={t("workspace_settings.settings.jira.nav_title")}
       >
         <div className="flex">

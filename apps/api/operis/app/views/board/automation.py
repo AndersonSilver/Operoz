@@ -11,15 +11,17 @@ from operis.app.serializers.board_automation import (
     BoardAutomationRunSerializer,
 )
 from operis.app.views.base import BaseAPIView
-from operis.automation.catalog import ensure_catalog
+from operis.automation.catalog import catalog_for_board, ensure_catalog
 from operis.automation.domain import DomainEvent
 from dataclasses import replace
 
 from operis.automation.compiler import compile_graph
 from operis.automation.executor import execute_graph, execute_graph_events
 from operis.automation.rule_lifecycle import publish_rule_draft, restore_rule_revision, save_rule_draft
-from operis.automation.test_event import resolve_board_test_event
+from operis.automation.run_recorder import persist_automation_run
+from operis.automation.dry_run_event import resolve_board_test_event, run_requires_issue
 from operis.automation.validator import validate_graph
+from operis.automation.analytics import build_board_automation_analytics
 from operis.automation.observability import get_metrics_snapshot
 from operis.db.models import (
     Board,
@@ -41,6 +43,14 @@ def _lifecycle_error_response(exc: ValueError):
             {"error": "Publique o fluxo antes de ativar a automação.", "code": message},
             status=status.HTTP_400_BAD_REQUEST,
         )
+    if message == "dry_run_required":
+        return Response(
+            {
+                "error": "Execute um dry-run bem-sucedido da versão publicada antes de ativar.",
+                "code": message,
+            },
+            status=status.HTTP_400_BAD_REQUEST,
+        )
     if message == "revision_not_found":
         return Response({"error": "Revisão não encontrada.", "code": message}, status=status.HTTP_404_NOT_FOUND)
     try:
@@ -55,8 +65,8 @@ def _lifecycle_error_response(exc: ValueError):
 class BoardAutomationCatalogEndpoint(BaseAPIView):
     @allow_workspace_or_board_admin
     def get(self, request, slug, board_slug):
-        _get_board(slug, board_slug)
-        return Response(ensure_catalog().to_api_list(), status=status.HTTP_200_OK)
+        board = _get_board(slug, board_slug)
+        return Response(catalog_for_board(str(board.id)).to_api_list(), status=status.HTTP_200_OK)
 
 
 class BoardAutomationRuleListEndpoint(BaseAPIView):
@@ -191,7 +201,7 @@ class BoardAutomationDryRunEndpoint(BaseAPIView):
             pass
 
         event, issue = resolve_board_test_event(board, event)
-        if issue is None:
+        if issue is None and run_requires_issue(graph, event):
             return Response(
                 {
                     "error": "Nenhum card encontrado neste board para testar a automação.",
@@ -218,8 +228,18 @@ class BoardAutomationDryRunEndpoint(BaseAPIView):
                         if item.get("type") == "done":
                             result = item.get("result") or {}
                             result["live"] = live
-                            result["test_issue_id"] = str(issue.id)
-                            result["test_issue_name"] = issue.name
+                            if issue is not None:
+                                result["test_issue_id"] = str(issue.id)
+                                result["test_issue_name"] = issue.name
+                            run = persist_automation_run(
+                                rule, event, graph, result, dry_run=not live
+                            )
+                            if run is not None:
+                                result["run_id"] = str(run.id)
+                            if not live:
+                                from operis.automation.policy import mark_dry_run_verified
+
+                                mark_dry_run_verified(rule, graph=graph, result=result)
                             item = {**item, "result": result}
                         yield json.dumps(item, default=str) + "\n"
                 except Exception as exc:
@@ -237,9 +257,17 @@ class BoardAutomationDryRunEndpoint(BaseAPIView):
             automation_actor=request.user,
             dry_run=not live,
         )
+        if not live:
+            from operis.automation.policy import mark_dry_run_verified
+
+            mark_dry_run_verified(rule, graph=graph, result=result)
         result["live"] = live
-        result["test_issue_id"] = str(issue.id)
-        result["test_issue_name"] = issue.name
+        if issue is not None:
+            result["test_issue_id"] = str(issue.id)
+            result["test_issue_name"] = issue.name
+        run = persist_automation_run(rule, event, graph, result, dry_run=not live)
+        if run is not None:
+            result["run_id"] = str(run.id)
         return Response(result, status=status.HTTP_200_OK)
 
 
@@ -258,11 +286,12 @@ class BoardAutomationRunListEndpoint(BaseAPIView):
 class BoardAutomationMetricsEndpoint(BaseAPIView):
     @allow_workspace_or_board_admin
     def get(self, request, slug, board_slug):
-        _get_board(slug, board_slug)
+        board = _get_board(slug, board_slug)
         return Response(
             {
                 "metrics": get_metrics_snapshot(),
                 "queue": "automation",
+                "analytics": build_board_automation_analytics(board),
             },
             status=status.HTTP_200_OK,
         )

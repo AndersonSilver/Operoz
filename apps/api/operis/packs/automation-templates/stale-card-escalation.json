@@ -1,0 +1,54 @@
+{
+  "id": "stale-card-escalation",
+  "version": 1,
+  "name": "Escalar card parado N dias",
+  "description": "Agendamento diário que notifica via webhook cards parados além do limite configurado.",
+  "icon": "alert-triangle",
+  "category": "escalation",
+  "default_rule_name": "Escalar cards parados",
+  "default_description": "Template oficial Operoz — escalação de cards sem movimentação.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Escalar cards parados" },
+    { "key": "time", "type": "string", "label": "Horário (HH:MM)", "default": "08:30" },
+    { "key": "timezone", "type": "string", "label": "Fuso horário", "default": "America/Sao_Paulo" },
+    { "key": "stale_days", "type": "integer", "label": "Dias sem movimentação", "default": 5 },
+    { "key": "webhook_url", "type": "string", "label": "URL do webhook", "required": true, "default": "" }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-daily",
+        "type": "scheduleCronNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "schedule.cron",
+          "label": "Agendamento (cron)",
+          "config": {
+            "preset": "daily",
+            "time": "{{time}}",
+            "weekdays": [0, 1, 2, 3, 4],
+            "day_of_month": 1,
+            "cron": "30 8 * * *",
+            "timezone": "{{timezone}}"
+          }
+        }
+      },
+      {
+        "id": "action-webhook",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.webhook",
+          "label": "Webhook",
+          "config": {
+            "url": "{{webhook_url}}",
+            "stale_days": "{{stale_days}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-daily", "target": "action-webhook" }]
+  }
+}

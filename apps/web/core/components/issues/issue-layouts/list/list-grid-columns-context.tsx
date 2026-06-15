@@ -1,7 +1,8 @@
 import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { useLocalStorage } from "@operis/hooks";
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties, IProjectCustomFieldLite } from "@operis/types";
+import { useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
 import {
   buildListLayoutGridTemplateColumns,
   buildListPropertyColumns,
@@ -16,6 +17,8 @@ import {
 
 export const LIST_GRID_ROW_GAP = "0.75rem";
 
+export const LIST_GRID_CUSTOM_FIELD_WIDTH_PX = 144;
+
 export type TListGridStoredWidths = {
   title?: number;
   columns?: Partial<Record<TListPropertyColumn, number>>;
@@ -23,6 +26,7 @@ export type TListGridStoredWidths = {
 
 type TListGridColumnsContextValue = {
   columns: TListPropertyColumn[];
+  customFieldColumns: IProjectCustomFieldLite[];
   /** Grelha das colunas de propriedades (Estado, Prioridade, …). */
   propertyGridTemplateColumns: string;
   propertiesPanelWidthPx: number;
@@ -46,6 +50,8 @@ type ProviderProps = {
   showEstimate: boolean;
   /** Chave localStorage; omitir para não persistir */
   storageKey?: string;
+  workspaceSlug?: string;
+  boardSlug?: string;
 };
 
 export function ListGridColumnsProvider(props: ProviderProps) {
@@ -58,7 +64,15 @@ export function ListGridColumnsProvider(props: ProviderProps) {
     showCycles,
     showEstimate,
     storageKey,
+    workspaceSlug,
+    boardSlug,
   } = props;
+
+  const { visibleFields: customFieldColumns } = useBoardLayoutCustomFields({
+    workspaceSlug: workspaceSlug ?? "",
+    boardSlug,
+    displayProperties,
+  });
 
   const { storedValue, setValue } = useLocalStorage<TListGridStoredWidths | undefined>(
     storageKey ?? "list-grid-columns-disabled",
@@ -91,8 +105,7 @@ export function ListGridColumnsProvider(props: ProviderProps) {
     setColumnWidthsPx((prev) => {
       const next = { ...getDefaultListGridColumnWidths(columns), ...storedValue?.columns };
       const sameKeys =
-        Object.keys(prev).length === Object.keys(next).length &&
-        columns.every((col) => prev[col] === next[col]);
+        Object.keys(prev).length === Object.keys(next).length && columns.every((col) => prev[col] === next[col]);
       return sameKeys ? prev : next;
     });
   }, [columns, storedValue?.columns]);
@@ -137,15 +150,17 @@ export function ListGridColumnsProvider(props: ProviderProps) {
     [columnWidthsPx, columns, resizeColumn, titleWidthPx]
   );
 
-  const propertyGridTemplateColumns = useMemo(
-    () => buildListPropertyGridTemplateColumns(columns, columnWidthsPx, { expandToFill: true }),
-    [columns, columnWidthsPx]
-  );
+  const propertyGridTemplateColumns = useMemo(() => {
+    const base = buildListPropertyGridTemplateColumns(columns, columnWidthsPx, { expandToFill: true });
+    if (!customFieldColumns.length) return base;
+    const custom = customFieldColumns.map(() => `${LIST_GRID_CUSTOM_FIELD_WIDTH_PX}px`).join(" ");
+    return `${base} ${custom}`;
+  }, [columns, columnWidthsPx, customFieldColumns]);
 
-  const propertiesPanelWidthPx = useMemo(
-    () => computeListPropertiesPanelWidthPx(columns, columnWidthsPx),
-    [columns, columnWidthsPx]
-  );
+  const propertiesPanelWidthPx = useMemo(() => {
+    const base = computeListPropertiesPanelWidthPx(columns, columnWidthsPx);
+    return base + customFieldColumns.length * LIST_GRID_CUSTOM_FIELD_WIDTH_PX;
+  }, [columns, columnWidthsPx, customFieldColumns]);
 
   const layoutGridTemplateColumns = useMemo(
     () => buildListLayoutGridTemplateColumns(titleWidthPx, propertiesPanelWidthPx),
@@ -155,6 +170,7 @@ export function ListGridColumnsProvider(props: ProviderProps) {
   const value = useMemo(
     () => ({
       columns,
+      customFieldColumns,
       propertyGridTemplateColumns,
       propertiesPanelWidthPx,
       layoutGridTemplateColumns,
@@ -165,6 +181,7 @@ export function ListGridColumnsProvider(props: ProviderProps) {
     }),
     [
       columns,
+      customFieldColumns,
       propertyGridTemplateColumns,
       propertiesPanelWidthPx,
       layoutGridTemplateColumns,

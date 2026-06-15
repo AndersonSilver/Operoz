@@ -9,7 +9,8 @@ import type { IBoard, IBoardAutomationEmailTemplate } from "@operis/types";
 import { cn } from "@operis/ui";
 import { BoardService } from "@/services/board/board.service";
 import { AutomationEmailPreview } from "./automation-email-preview";
-import { ConfigField, ConfigTextArea, ConfigTextInput } from "./automation-config-primitives";
+import { AutomationCodeField } from "./automation-code-field";
+import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
 
 const boardService = new BoardService();
 
@@ -39,14 +40,16 @@ export const BoardAutomationEmailEditor = observer(function BoardAutomationEmail
     setSubject(template.subject);
     setHtmlBody(template.html_body);
     setIsActive(template.is_active);
-  }, [
-    template.id,
-    template.name,
-    template.description,
-    template.subject,
-    template.html_body,
-    template.is_active,
-  ]);
+  }, [template.id, template.name, template.description, template.subject, template.html_body, template.is_active]);
+
+  const handleNameChange = (nextName: string) => {
+    setName(nextName);
+    const defaultSubject = t("boards.settings.automation.emails.default_subject");
+    const newTemplateName = t("boards.settings.automation.emails.new_name");
+    if (subject === defaultSubject && nextName.trim() && nextName !== newTemplateName) {
+      setSubject(nextName.trim());
+    }
+  };
 
   const handleSave = async () => {
     setSaving(true);
@@ -86,11 +89,7 @@ export const BoardAutomationEmailEditor = observer(function BoardAutomationEmail
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-2 border-b border-subtle pb-4">
-        <button
-          type="button"
-          className="text-13 font-medium text-accent-primary hover:underline"
-          onClick={onBack}
-        >
+        <button type="button" className="text-13 font-medium text-accent-primary hover:underline" onClick={onBack}>
           ← {t("boards.settings.automation.back_to_list")}
         </button>
         <div className="ml-auto flex flex-wrap items-center gap-2">
@@ -117,7 +116,7 @@ export const BoardAutomationEmailEditor = observer(function BoardAutomationEmail
         </div>
         <span
           className={cn(
-            "rounded-full px-2.5 py-0.5 text-10 font-semibold uppercase tracking-wide",
+            "rounded-full px-2.5 py-0.5 text-10 font-semibold tracking-wide uppercase",
             isActive ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
           )}
         >
@@ -129,15 +128,18 @@ export const BoardAutomationEmailEditor = observer(function BoardAutomationEmail
 
       <div className="rounded-xl border border-subtle bg-layer-1 p-4 lg:p-5">
         <div className="grid gap-4 sm:grid-cols-2">
-          <ConfigField label={t("name")}>
-            <ConfigTextInput value={name} onChange={setName} />
+          <ConfigField label={t("name")} hint={t("boards.settings.automation.emails.name_hint")}>
+            <ConfigTextInput value={name} onChange={handleNameChange} />
           </ConfigField>
           <ConfigField label={t("description")}>
             <ConfigTextInput value={description} onChange={setDescription} />
           </ConfigField>
         </div>
         <div className="mt-4">
-          <ConfigField label={t("boards.settings.automation.emails.subject")}>
+          <ConfigField
+            label={t("boards.settings.automation.emails.subject")}
+            hint={t("boards.settings.automation.emails.subject_hint")}
+          >
             <ConfigTextInput value={subject} onChange={setSubject} />
           </ConfigField>
         </div>
@@ -145,12 +147,14 @@ export const BoardAutomationEmailEditor = observer(function BoardAutomationEmail
 
       <div className="grid gap-4 xl:grid-cols-2">
         <div className="rounded-xl border border-subtle bg-layer-1 p-4 lg:p-5">
-          <ConfigField
+          <AutomationCodeField
             label={t("boards.settings.automation.emails.html")}
             hint={t("boards.settings.automation.emails.html_hint")}
-          >
-            <ConfigTextArea value={htmlBody} onChange={setHtmlBody} rows={18} />
-          </ConfigField>
+            value={htmlBody}
+            onChange={setHtmlBody}
+            language="html"
+            minHeight="520px"
+          />
         </div>
         <div className="rounded-xl border border-subtle bg-layer-1 p-4 lg:p-5">
           <AutomationEmailPreview subject={subject} htmlBody={htmlBody} />

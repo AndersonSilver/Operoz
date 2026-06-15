@@ -222,6 +222,22 @@ def run_board_automation(
 
 
 @shared_task(queue=AUTOMATION_QUEUE)
+def dispatch_scheduled_automation_rules() -> None:
+    """Varre regras com gatilho schedule.cron e dispara as que estão no horário."""
+    from operis.automation.schedule import dispatch_due_scheduled_rules
+
+    try:
+        count = dispatch_due_scheduled_rules()
+        if count:
+            record_metric("schedule_dispatched", amount=count)
+            automation_log("schedule_dispatch_completed", dispatched=count)
+    except Exception:
+        logger.exception("dispatch_scheduled_automation_rules failed")
+        record_metric("schedule_dispatch_failed")
+        raise
+
+
+@shared_task(queue=AUTOMATION_QUEUE)
 def flush_stale_automation_outbox() -> None:
     """Recupera entradas pendentes na outbox (falha entre persistência e enqueue)."""
     cutoff = timezone.now() - timedelta(minutes=2)

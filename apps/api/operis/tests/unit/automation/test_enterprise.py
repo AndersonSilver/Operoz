@@ -4,7 +4,14 @@ from unittest.mock import MagicMock, patch
 from operis.automation.domain import DomainEvent
 from operis.automation.matching import extract_trigger_from_graph, rule_trigger_matches_event
 from operis.automation.secrets import redact_for_storage, resolve_config_value
-from operis.automation.governance import check_dispatch_allowed, is_circuit_open, record_rule_failure
+from django.test import override_settings
+
+from operis.automation.governance import (
+    check_dispatch_allowed,
+    get_workspace_rate_limit,
+    is_circuit_open,
+    record_rule_failure,
+)
 
 
 @pytest.mark.unit
@@ -118,6 +125,7 @@ class TestGovernance:
     def test_rate_limit_blocks_dispatch(self, mock_redis_factory):
         ri = MagicMock()
         mock_redis_factory.return_value = ri
+        ri.exists.return_value = False
         ri.get.side_effect = lambda key: b"99999"
 
         rule = MagicMock()
@@ -136,3 +144,11 @@ class TestGovernance:
         allowed, reason = check_dispatch_allowed(rule, event)
         assert allowed is False
         assert reason in ("board_rate_limit", "workspace_rate_limit")
+
+    @override_settings(
+        AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR=5000,
+        AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES={"ws-override": 8000},
+    )
+    def test_workspace_rate_limit_override(self):
+        assert get_workspace_rate_limit("ws-override") == 8000
+        assert get_workspace_rate_limit("ws-other") == 5000

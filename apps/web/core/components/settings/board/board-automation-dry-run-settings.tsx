@@ -193,6 +193,7 @@ export const BoardAutomationDryRunSettings = observer(function BoardAutomationDr
   }
 
   const completedResult = liveResult ?? session.result;
+  const failedRun = !isRunning && session.status === "failed" && Boolean(session.error);
   const displayResult: TAutomationDryRunResult = isRunning
     ? {
         matched: true,
@@ -206,10 +207,18 @@ export const BoardAutomationDryRunSettings = observer(function BoardAutomationDr
             }
           : {}),
       }
-    : (completedResult ?? {
-        matched: false,
-        steps: [],
-      });
+    : failedRun
+      ? {
+          matched: false,
+          steps: [],
+          live: true,
+          error: session.error,
+          message: session.error,
+        }
+      : (completedResult ?? {
+          matched: false,
+          steps: [],
+        });
 
   return (
     <BoardAutomationDryRunView
@@ -221,11 +230,7 @@ export const BoardAutomationDryRunSettings = observer(function BoardAutomationDr
       onBack={handleBack}
       onRerun={handleRerun}
       rerunning={isRunning}
-      backLabel={
-        from === "historico"
-          ? t("boards.settings.automation.dry_run_page.back_to_history")
-          : undefined
-      }
+      backLabel={from === "historico" ? t("boards.settings.automation.dry_run_page.back_to_history") : undefined}
     />
   );
 });

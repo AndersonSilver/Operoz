@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-import { ImageIcon } from "lucide-react";
 // plane imports
 import { E_PASSWORD_STRENGTH } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IUser } from "@operis/types";
@@ -48,13 +48,11 @@ const defaultValues: Partial<TProfileSetupFormValues> = {
 };
 
 export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepChange }: Props) {
-  // states
+  const { t } = useTranslation();
   const [isImageUploadModalOpen, setIsImageUploadModalOpen] = useState(false);
-  // store hooks
   const { data: user, updateCurrentUser } = useUser();
   const { updateUserProfile } = useUserProfile();
   const { config: instanceConfig } = useInstance();
-  // form info
   const {
     getValues,
     handleSubmit,
@@ -71,7 +69,7 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
     },
     mode: "onChange",
   });
-  // derived values
+
   const userAvatar = watch("avatar_url");
 
   const handleSetPassword = async (password: string) => {
@@ -93,8 +91,8 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
     } catch {
       setToast({
         type: TOAST_TYPE.ERROR,
-        title: "Error",
-        message: "User details update failed. Please try again!",
+        title: t("onboarding.profile.error_title"),
+        message: t("onboarding.profile.error_message"),
       });
     }
   };
@@ -113,37 +111,27 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
     setValue("avatar_url", "");
   };
 
-  // derived values
   const isPasswordAlreadySetup = !user?.is_password_autoset;
   const currentPassword = watch("password") || undefined;
   const currentConfirmPassword = watch("confirm_password") || undefined;
 
   const isValidPassword = useMemo(() => {
     if (currentPassword) {
-      if (
+      return (
         currentPassword === currentConfirmPassword &&
         getPasswordStrength(currentPassword) === E_PASSWORD_STRENGTH.STRENGTH_VALID
-      ) {
-        return true;
-      } else {
-        return false;
-      }
-    } else {
-      return true;
+      );
     }
+    return true;
   }, [currentPassword, currentConfirmPassword]);
 
-  // Check for all available fields validation and if password field is available, then checks for password validation (strength + confirmation).
-  // Also handles the condition for optional password i.e if password field is optional it only checks for above validation if it's not empty.
   const isButtonDisabled =
     !isSubmitting && isValid ? (isPasswordAlreadySetup ? false : isValidPassword ? false : true) : true;
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
-      {/* Header */}
-      <CommonOnboardingHeader title="Create your profile." description="This is how you will appear in Plane." />
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-8">
+      <CommonOnboardingHeader title={t("onboarding.profile.title")} description={t("onboarding.profile.description")} />
 
-      {/* Profile Picture Section */}
       <Controller
         control={control}
         name="avatar_url"
@@ -160,52 +148,56 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
           />
         )}
       />
-      <div className="flex items-center gap-4">
+
+      <div className="flex flex-col gap-3 rounded-lg bg-layer-1/50 px-4 py-3.5 sm:flex-row sm:items-center sm:gap-4">
         <button
-          className="flex size-12 items-center justify-center rounded-full bg-accent-primary text-18 font-semibold text-on-color"
+          className={cn(
+            "mx-auto flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-2 sm:mx-0",
+            userAvatar
+              ? "border-subtle bg-surface-1"
+              : "border-accent-primary/30 bg-layer-1 text-body-sm-semibold text-secondary"
+          )}
           type="button"
           onClick={() => setIsImageUploadModalOpen(true)}
+          aria-label={userAvatar ? t("onboarding.profile.change_image") : t("onboarding.profile.upload_image")}
         >
           {userAvatar ? (
-            <img
-              src={getFileURL(userAvatar ?? "")}
-              onClick={() => setIsImageUploadModalOpen(true)}
-              alt={user?.display_name}
-              className="h-full w-full rounded-full object-cover"
-            />
+            <img src={getFileURL(userAvatar ?? "")} alt={user?.display_name} className="size-full object-cover" />
           ) : (
-            <>{watch("first_name")[0] ?? "R"}</>
+            <span>{watch("first_name")?.[0]?.toUpperCase() ?? "R"}</span>
           )}
         </button>
-        <input type="file" className="hidden" id="profile-image-input" />
-        <button
-          className="flex items-center gap-1.5 px-2 py-1 text-13 text-tertiary hover:text-secondary"
-          type="button"
-          onClick={() => setIsImageUploadModalOpen(true)}
-        >
-          <ImageIcon className="size-4" />
-          <span className="text-13">{userAvatar ? "Change image" : "Upload image"}</span>
-        </button>
+
+        <div className="min-w-0 flex-1 text-center sm:text-left">
+          <p className="text-body-sm-semibold text-primary">{t("onboarding.profile.photo_label")}</p>
+          <p className="text-13 text-tertiary">{t("onboarding.profile.photo_hint")}</p>
+          <button
+            className="mt-1.5 text-13 font-medium text-accent-primary transition-colors hover:text-accent-secondary"
+            type="button"
+            onClick={() => setIsImageUploadModalOpen(true)}
+          >
+            {userAvatar ? t("onboarding.profile.change_image") : t("onboarding.profile.upload_image")}
+          </button>
+        </div>
       </div>
 
       <div className="flex w-full flex-col gap-6">
-        {/* Name Input */}
         <div className="flex flex-col gap-2">
           <label
             className="block text-13 font-medium text-tertiary after:ml-0.5 after:text-danger-primary after:content-['*']"
             htmlFor="first_name"
           >
-            Name
+            {t("onboarding.profile.name_label")}
           </label>
           <Controller
             control={control}
             name="first_name"
             rules={{
-              required: "Name is required",
+              required: t("onboarding.profile.name_required"),
               validate: validatePersonName,
               maxLength: {
                 value: 50,
-                message: "Name must be within 50 characters.",
+                message: t("onboarding.profile.name_max_length"),
               },
             }}
             render={({ field: { value, onChange, ref } }) => (
@@ -218,21 +210,17 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
                 onChange={(e) => onChange(e.target.value)}
                 autoFocus
                 className={cn(
-                  "w-full rounded-md border border-strong bg-surface-1 px-3 py-2 text-secondary transition-all duration-200 placeholder:text-placeholder focus:border-transparent focus:ring-2 focus:ring-accent-strong focus:outline-none",
-                  {
-                    "border-strong": !errors.first_name,
-                    "border-danger-strong": errors.first_name,
-                  }
+                  "w-full rounded-md border border-strong bg-surface-1 px-3 py-2 text-secondary placeholder:text-placeholder focus:border-transparent focus:ring-2 focus:ring-accent-strong focus:outline-none",
+                  { "border-danger-strong": errors.first_name }
                 )}
-                placeholder="Enter your full name"
-                autoComplete="on"
+                placeholder={t("onboarding.profile.name_placeholder")}
+                autoComplete="name"
               />
             )}
           />
           {errors.first_name && <span className="text-13 text-danger-primary">{errors.first_name.message}</span>}
         </div>
 
-        {/* setting up password for the first time */}
         {!isPasswordAlreadySetup && (
           <SetPasswordRoot
             onPasswordChange={(password) => setValue("password", password)}
@@ -240,12 +228,11 @@ export const ProfileSetupStep = observer(function ProfileSetupStep({ handleStepC
           />
         )}
       </div>
-      {/* Continue Button */}
+
       <Button variant="primary" type="submit" className="w-full" size="xl" disabled={isButtonDisabled}>
-        Continue
+        {t("onboarding.profile.continue")}
       </Button>
 
-      {/* Marketing Consent */}
       {!instanceConfig?.is_self_managed && (
         <MarketingConsent
           isChecked={!!watch("has_marketing_email_consent")}

@@ -42,6 +42,7 @@ from operis.bgtasks.issue_description_version_task import issue_description_vers
 from operis.bgtasks.recent_visited_task import recent_visited_task
 from operis.bgtasks.webhook_task import model_activity
 from operis.db.models import (
+    Cycle,
     CycleIssue,
     FileAsset,
     IntakeIssue,
@@ -783,6 +784,237 @@ class ProjectUserDisplayPropertyEndpoint(BaseAPIView):
         issue_property, _ = ProjectUserProperty.objects.get_or_create(user=request.user, project_id=project_id)
         serializer = ProjectUserPropertySerializer(issue_property)
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class BulkOperationIssuesEndpoint(BaseAPIView):
+    """Bulk update work item properties within a project."""
+
+    ALLOWED_PROPERTIES = {
+        "state_id",
+        "priority",
+        "start_date",
+        "target_date",
+        "estimate_point",
+        "type_id",
+        "assignee_ids",
+        "label_ids",
+        "module_ids",
+        "cycle_id",
+    }
+
+    def _validate_dates(self, current_start, current_target, new_start, new_target):
+        from datetime import datetime
+
+        start = new_start if new_start is not None else current_start
+        target = new_target if new_target is not None else current_target
+
+        if isinstance(start, str):
+            start = datetime.strptime(start, "%Y-%m-%d").date()
+        if isinstance(target, str):
+            target = datetime.strptime(target, "%Y-%m-%d").date()
+
+        if start and target and start > target:
+            return False
+        return True
+
+    def _apply_cycle(self, request, slug, project_id, issues, cycle_id):
+        issue_ids = [str(issue.id) for issue in issues]
+
+        if cycle_id in (None, "", "None"):
+            CycleIssue.objects.filter(issue_id__in=issue_ids).delete()
+            return
+
+        cycle = Cycle.objects.filter(workspace__slug=slug, project_id=project_id, pk=cycle_id).first()
+        if not cycle:
+            return
+
+        if cycle.end_date is not None and cycle.end_date < timezone.now():
+            raise ValueError("CYCLE_COMPLETED")
+
+        cycle_issues = list(CycleIssue.objects.filter(~Q(cycle_id=cycle_id), issue_id__in=issue_ids))
+        existing_issues = [str(ci.issue_id) for ci in cycle_issues]
+        new_issues = list(set(issue_ids) - set(existing_issues))
+
+        CycleIssue.objects.bulk_create(
+            [
+                CycleIssue(
+                    project_id=project_id,
+                    workspace_id=cycle.workspace_id,
+                    created_by_id=request.user.id,
+                    updated_by_id=request.user.id,
+                    cycle_id=cycle_id,
+                    issue_id=issue,
+                )
+                for issue in new_issues
+            ],
+            batch_size=10,
+        )
+
+        for cycle_issue in cycle_issues:
+            cycle_issue.cycle_id = cycle_id
+        CycleIssue.objects.bulk_update(cycle_issues, ["cycle_id"], batch_size=100)
+
+    def _apply_modules(self, request, project_id, issue, module_ids):
+        project = Project.objects.get(pk=project_id)
+        current_module_ids = set(
+            ModuleIssue.objects.filter(issue_id=issue.id).values_list("module_id", flat=True)
+        )
+        target_module_ids = set(module_ids or [])
+
+        to_add = target_module_ids - current_module_ids
+        to_remove = current_module_ids - target_module_ids
+
+        if to_remove:
+            ModuleIssue.objects.filter(issue_id=issue.id, module_id__in=to_remove).delete()
+
+        if to_add:
+            ModuleIssue.objects.bulk_create(
+                [
+                    ModuleIssue(
+                        issue_id=issue.id,
+                        module_id=module_id,
+                        project_id=project_id,
+                        workspace_id=project.workspace_id,
+                        created_by=request.user,
+                        updated_by=request.user,
+                    )
+                    for module_id in to_add
+                ],
+                batch_size=10,
+                ignore_conflicts=True,
+            )
+
+    @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
+    def post(self, request, slug, project_id):
+        issue_ids = request.data.get("issue_ids", [])
+        properties = request.data.get("properties", {})
+
+        if not issue_ids:
+            return Response({"error": "Issue IDs are required"}, status=status.HTTP_400_BAD_REQUEST)
+        if not properties:
+            return Response({"error": "Properties are required"}, status=status.HTTP_400_BAD_REQUEST)
+
+        unknown_keys = set(properties.keys()) - self.ALLOWED_PROPERTIES
+        if unknown_keys:
+            return Response(
+                {"error": f"Unsupported properties: {', '.join(sorted(unknown_keys))}"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        project = get_project_for_enforcement(project_id, slug)
+        if denied := deny_for_issue_patch(request.user, project, properties):
+            return denied
+
+        issues = list(
+            Issue.issue_objects.filter(
+                workspace__slug=slug, project_id=project_id, pk__in=issue_ids
+            )
+        )
+
+        if not issues:
+            return Response({"error": "No matching work items found"}, status=status.HTTP_404_NOT_FOUND)
+
+        cycle_id = properties.pop("cycle_id", None) if "cycle_id" in properties else None
+        module_ids = properties.pop("module_ids", None) if "module_ids" in properties else None
+        assignee_ids = properties.pop("assignee_ids", None) if "assignee_ids" in properties else None
+        label_ids = properties.pop("label_ids", None) if "label_ids" in properties else None
+
+        epoch = int(timezone.now().timestamp())
+
+        for issue in issues:
+            requested_data = {}
+
+            if properties:
+                new_start = properties.get("start_date")
+                new_target = properties.get("target_date")
+                if new_start is not None or new_target is not None:
+                    if not self._validate_dates(issue.start_date, issue.target_date, new_start, new_target):
+                        return Response(
+                            {"message": "Start date cannot exceed target date"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+
+                serializer = IssueCreateSerializer(
+                    issue,
+                    data=properties,
+                    partial=True,
+                    context={"project_id": project_id},
+                )
+                if not serializer.is_valid():
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+                serializer.save()
+                requested_data.update(properties)
+
+            if assignee_ids is not None:
+                IssueAssignee.objects.filter(issue=issue).delete()
+                if assignee_ids:
+                    IssueAssignee.objects.bulk_create(
+                        [
+                            IssueAssignee(
+                                assignee_id=assignee_id,
+                                issue=issue,
+                                project_id=project_id,
+                                workspace_id=issue.workspace_id,
+                                created_by_id=issue.created_by_id,
+                                updated_by_id=request.user.id,
+                            )
+                            for assignee_id in assignee_ids
+                        ],
+                        batch_size=10,
+                        ignore_conflicts=True,
+                    )
+                requested_data["assignee_ids"] = assignee_ids
+
+            if label_ids is not None:
+                IssueLabel.objects.filter(issue=issue).delete()
+                if label_ids:
+                    IssueLabel.objects.bulk_create(
+                        [
+                            IssueLabel(
+                                label_id=label_id,
+                                issue=issue,
+                                project_id=project_id,
+                                workspace_id=issue.workspace_id,
+                                created_by_id=issue.created_by_id,
+                                updated_by_id=request.user.id,
+                            )
+                            for label_id in label_ids
+                        ],
+                        batch_size=10,
+                        ignore_conflicts=True,
+                    )
+                requested_data["label_ids"] = label_ids
+
+            if module_ids is not None:
+                self._apply_modules(request, project_id, issue, module_ids)
+                requested_data["module_ids"] = module_ids
+
+            if requested_data:
+                issue.refresh_from_db()
+                issue_activity.delay(
+                    type="issue.activity.updated",
+                    requested_data=json.dumps(requested_data, cls=DjangoJSONEncoder),
+                    actor_id=str(request.user.id),
+                    issue_id=str(issue.id),
+                    project_id=str(project_id),
+                    current_instance=json.dumps(IssueSerializer(issue).data, cls=DjangoJSONEncoder),
+                    epoch=epoch,
+                    notification=True,
+                    origin=base_host(request=request, is_app=True),
+                )
+
+        if "cycle_id" in request.data.get("properties", {}):
+            try:
+                self._apply_cycle(request, slug, project_id, issues, cycle_id)
+            except ValueError as exc:
+                if str(exc) == "CYCLE_COMPLETED":
+                    return Response(
+                        {"error": "The cycle has already been completed"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                raise
+
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class BulkDeleteIssuesEndpoint(BaseAPIView):

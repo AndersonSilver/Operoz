@@ -1,4 +1,5 @@
 export * from "./ai";
+export * from "./assistant";
 export * from "./developer";
 export * from "./auth";
 export * from "./cycle";

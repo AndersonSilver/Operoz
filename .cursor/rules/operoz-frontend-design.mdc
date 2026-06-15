@@ -6,7 +6,8 @@ alwaysApply: false
 
 # Regra — Design sistema (Operoz)
 
-Skill completa: `.cursor/skills/OPEROZ ENGENHARIA/DESIGN SISTEMA/SKILL.md`
+UX produto (obrigatório): `.cursor/skills/OPEROZ ENGENHARIA/SKILL.md`  
+Tokens e telas irmãs: `.cursor/skills/OPEROZ ENGENHARIA/DESIGN SISTEMA/SKILL.md`
 
 ## Regra mestre (antes de qualquer UI)
 

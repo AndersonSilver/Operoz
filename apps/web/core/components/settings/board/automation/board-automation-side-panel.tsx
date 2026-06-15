@@ -15,7 +15,8 @@ type Props = {
   onDeleteNode: (nodeId: string) => void;
   onDeleteEdge: (edgeId: string) => void;
   onAddNode: (item: TAutomationCatalogItem, kind: "trigger" | "filter" | "action") => void;
-  onAddDecision: () => void;
+  onAddDecision: (catalogKey?: string) => void;
+  onAddParallel: (item: TAutomationCatalogItem) => void;
 };
 
 export function BoardAutomationSidePanel(props: Props) {
@@ -32,6 +33,7 @@ export function BoardAutomationSidePanel(props: Props) {
     onDeleteEdge,
     onAddNode,
     onAddDecision,
+    onAddParallel,
   } = props;
 
   const hasSelection = Boolean(selectedNodeId || selectedEdgeId);
@@ -52,7 +54,12 @@ export function BoardAutomationSidePanel(props: Props) {
           onDeleteEdge={onDeleteEdge}
         />
       ) : (
-        <BoardAutomationPalette catalog={catalog} onAdd={onAddNode} onAddDecision={onAddDecision} />
+        <BoardAutomationPalette
+          catalog={catalog}
+          onAdd={onAddNode}
+          onAddDecision={onAddDecision}
+          onAddParallel={onAddParallel}
+        />
       )}
     </div>
   );

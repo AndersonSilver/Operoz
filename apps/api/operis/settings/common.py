@@ -70,6 +70,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "corsheaders",
     "django_celery_beat",
+    "pgvector.django",
 ]
 
 # Middlewares
@@ -168,6 +169,13 @@ else:
             "PORT": os.environ.get("POSTGRES_PORT", "5432"),
         }
     }
+
+if os.environ.get("USE_PGBOUNCER", "0") == "1":
+    for _db in DATABASES.values():
+        _db["CONN_MAX_AGE"] = 0
+        _db["DISABLE_SERVER_SIDE_CURSORS"] = True
+        _db.setdefault("OPTIONS", {})
+        _db["OPTIONS"]["connect_timeout"] = 10
 
 
 if os.environ.get("ENABLE_READ_REPLICA", "0") == "1":
@@ -291,10 +299,58 @@ CELERY_ACCEPT_CONTENT = ["application/json"]
 
 # Board automation — fila dedicada e limites operacionais
 AUTOMATION_CELERY_QUEUE = os.environ.get("AUTOMATION_CELERY_QUEUE", "automation")
+AUTOMATION_EMAIL_CELERY_QUEUE = os.environ.get("AUTOMATION_EMAIL_CELERY_QUEUE", "automation_email")
+ASSISTANT_CELERY_QUEUE = os.environ.get("ASSISTANT_CELERY_QUEUE", "assistant")
+ASSISTANT_CHAT_CELERY_QUEUE = os.environ.get("ASSISTANT_CHAT_CELERY_QUEUE", "assistant-chat")
+AUTOMATION_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_WORKER_CONCURRENCY", "4"))
+AUTOMATION_EMAIL_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_EMAIL_WORKER_CONCURRENCY", "2"))
+CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT = os.environ.get("CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT", "0")
+
+ASSISTANT_RAG_ENABLED = os.environ.get("ASSISTANT_RAG_ENABLED", "1")
+ASSISTANT_HISTORY_SUMMARIZE_AFTER = int(os.environ.get("ASSISTANT_HISTORY_SUMMARIZE_AFTER", "14"))
+ASSISTANT_HISTORY_KEEP_RECENT = int(os.environ.get("ASSISTANT_HISTORY_KEEP_RECENT", "8"))
+ASSISTANT_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_EMBEDDING_CACHE_TTL", str(60 * 60 * 24 * 7)))
+ASSISTANT_ORCHESTRATOR_ENABLED = os.environ.get("ASSISTANT_ORCHESTRATOR_ENABLED", "0")
+ASSISTANT_DAILY_TOKEN_BUDGET = int(os.environ.get("ASSISTANT_DAILY_TOKEN_BUDGET", "200000"))
+ASSISTANT_BUDGET_ALERT_RATIO = float(os.environ.get("ASSISTANT_BUDGET_ALERT_RATIO", "0.8"))
+ASSISTANT_RAG_TOP_K = int(os.environ.get("ASSISTANT_RAG_TOP_K", "5"))
+ASSISTANT_RAG_CANDIDATE_LIMIT = int(os.environ.get("ASSISTANT_RAG_CANDIDATE_LIMIT", "30"))
+ASSISTANT_RAG_RRF_K = int(os.environ.get("ASSISTANT_RAG_RRF_K", "60"))
+ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL", str(60 * 10)))
+ASSISTANT_RAG_RESULTS_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_RESULTS_CACHE_TTL", str(60 * 3)))
+ASSISTANT_RAG_HNSW_EF_SEARCH = int(os.environ.get("ASSISTANT_RAG_HNSW_EF_SEARCH", "40"))
+ASSISTANT_SUMMARY_SYNC = os.environ.get("ASSISTANT_SUMMARY_SYNC", "0")
+ASSISTANT_DEFER_NONCRITICAL = os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1")
+ASSISTANT_MAX_CONCURRENT_LLM = int(os.environ.get("ASSISTANT_MAX_CONCURRENT_LLM", "40"))
+ASSISTANT_MAX_ACTIVE_CHATS_PER_USER = int(os.environ.get("ASSISTANT_MAX_ACTIVE_CHATS_PER_USER", "2"))
+ASSISTANT_FAIR_QUEUE_AVG_SECONDS = int(os.environ.get("ASSISTANT_FAIR_QUEUE_AVG_SECONDS", "15"))
+ASSISTANT_LLM_WAIT_TIMEOUT_SECONDS = int(os.environ.get("ASSISTANT_LLM_WAIT_TIMEOUT_SECONDS", "600"))
+ASSISTANT_LLM_KEY_FAILURE_THRESHOLD = int(os.environ.get("ASSISTANT_LLM_KEY_FAILURE_THRESHOLD", "3"))
+ASSISTANT_LLM_KEY_OPEN_SECONDS = int(os.environ.get("ASSISTANT_LLM_KEY_OPEN_SECONDS", "120"))
+ASSISTANT_DEGRADED_QUEUE_THRESHOLD = int(os.environ.get("ASSISTANT_DEGRADED_QUEUE_THRESHOLD", "10"))
+ASSISTANT_DEGRADED_BUDGET_RATIO = float(os.environ.get("ASSISTANT_DEGRADED_BUDGET_RATIO", "0.9"))
+ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD = int(os.environ.get("ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD", "100"))
+ASSISTANT_CHAT_STREAM_IDLE_SECONDS = int(os.environ.get("ASSISTANT_CHAT_STREAM_IDLE_SECONDS", "90"))
+ASSISTANT_CHAT_JOB_STALE_SECONDS = int(os.environ.get("ASSISTANT_CHAT_JOB_STALE_SECONDS", "900"))
+ASSISTANT_ALERT_STALE_JOBS = int(os.environ.get("ASSISTANT_ALERT_STALE_JOBS", "1"))
+ASSISTANT_METRICS_TOKEN = os.environ.get("ASSISTANT_METRICS_TOKEN", "")
+ASSISTANT_ALERT_P95_FIRST_TOKEN_MS = int(os.environ.get("ASSISTANT_ALERT_P95_FIRST_TOKEN_MS", "3000"))
+ASSISTANT_ALERT_ERROR_RATE = float(os.environ.get("ASSISTANT_ALERT_ERROR_RATE", "0.05"))
+ASSISTANT_REQUIRE_SESSION_SCOPE = os.environ.get("ASSISTANT_REQUIRE_SESSION_SCOPE", "1")
+LLM_MODEL_FALLBACK = os.environ.get("LLM_MODEL_FALLBACK", "")
 AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", "500"))
 AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(
     os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000")
 )
+_AUTOMATION_WORKSPACE_OVERRIDES_RAW = os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES", "{}")
+try:
+    import json as _json
+
+    AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES = {
+        str(k): int(v) for k, v in _json.loads(_AUTOMATION_WORKSPACE_OVERRIDES_RAW).items()
+    }
+except (ValueError, TypeError):
+    AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES = {}
 AUTOMATION_CIRCUIT_FAILURE_THRESHOLD = int(os.environ.get("AUTOMATION_CIRCUIT_FAILURE_THRESHOLD", "10"))
 AUTOMATION_CIRCUIT_OPEN_SECONDS = int(os.environ.get("AUTOMATION_CIRCUIT_OPEN_SECONDS", "300"))
 
@@ -304,6 +360,17 @@ try:
     CELERY_TASK_QUEUES = (
         Queue("celery", Exchange("celery"), routing_key="celery"),
         Queue(AUTOMATION_CELERY_QUEUE, Exchange(AUTOMATION_CELERY_QUEUE), routing_key=AUTOMATION_CELERY_QUEUE),
+        Queue(
+            AUTOMATION_EMAIL_CELERY_QUEUE,
+            Exchange(AUTOMATION_EMAIL_CELERY_QUEUE),
+            routing_key=AUTOMATION_EMAIL_CELERY_QUEUE,
+        ),
+        Queue(ASSISTANT_CELERY_QUEUE, Exchange(ASSISTANT_CELERY_QUEUE), routing_key=ASSISTANT_CELERY_QUEUE),
+        Queue(
+            ASSISTANT_CHAT_CELERY_QUEUE,
+            Exchange(ASSISTANT_CHAT_CELERY_QUEUE),
+            routing_key=ASSISTANT_CHAT_CELERY_QUEUE,
+        ),
     )
 except ImportError:
     CELERY_TASK_QUEUES = None
@@ -312,18 +379,33 @@ CELERY_TASK_ROUTES = {
     "operis.bgtasks.automation_task.run_board_automation": {"queue": AUTOMATION_CELERY_QUEUE},
     "operis.bgtasks.automation_task.enqueue_automation_outbox": {"queue": AUTOMATION_CELERY_QUEUE},
     "operis.bgtasks.automation_task.flush_stale_automation_outbox": {"queue": AUTOMATION_CELERY_QUEUE},
+    "operis.bgtasks.automation_email_task.send_automation_email_task": {
+        "queue": AUTOMATION_EMAIL_CELERY_QUEUE,
+    },
+    "operis.bgtasks.assistant_index_task.index_entity_task": {"queue": ASSISTANT_CELERY_QUEUE},
+    "operis.bgtasks.assistant_chat_task.run_assistant_chat_job_task": {"queue": ASSISTANT_CHAT_CELERY_QUEUE},
+    "operis.bgtasks.assistant_deferred_task.log_assistant_action_task": {"queue": ASSISTANT_CELERY_QUEUE},
+    "operis.bgtasks.assistant_deferred_task.record_assistant_response_task": {"queue": ASSISTANT_CELERY_QUEUE},
+    "operis.bgtasks.assistant_deferred_task.summarize_session_task": {"queue": ASSISTANT_CELERY_QUEUE},
 }
 
 
 CELERY_IMPORTS = (
     # scheduled tasks
     "operis.bgtasks.automation_task",
+    "operis.bgtasks.automation_email_task",
+    "operis.bgtasks.assistant_index_task",
+    "operis.bgtasks.assistant_chat_task",
+    "operis.bgtasks.assistant_deferred_task",
     "operis.bgtasks.issue_automation_task",
     "operis.bgtasks.jira_ops_sync_task",
     "operis.bgtasks.exporter_expired_task",
     "operis.bgtasks.file_asset_task",
     "operis.bgtasks.email_notification_task",
     "operis.bgtasks.cleanup_task",
+    "operis.bgtasks.client_360_health_snapshot_task",
+    "operis.bgtasks.client_360_weekly_briefing_task",
+    "operis.bgtasks.client_360_status_report_reminder_task",
     "operis.license.bgtasks.tracer",
     # management tasks
     "operis.bgtasks.dummy_data_task",
@@ -344,7 +426,8 @@ JIRA_OPS_CLOUD_ID = os.environ.get("JIRA_OPS_CLOUD_ID", "")
 JIRA_OPS_EMAIL = os.environ.get("JIRA_OPS_EMAIL", "")
 JIRA_OPS_API_TOKEN = os.environ.get("JIRA_OPS_API_TOKEN", "")
 JIRA_OPS_PROJECT_KEY = os.environ.get("JIRA_OPS_PROJECT_KEY", "OPS")
-JIRA_OPS_BOARD_SLUG = os.environ.get("JIRA_OPS_BOARD_SLUG", "squad-as-a-services")
+JIRA_OPS_BOARD_SLUG = os.environ.get("JIRA_OPS_BOARD_SLUG", "squad-as-a-service")
+JIRA_OPS_START_DATE_FIELD = os.environ.get("JIRA_OPS_START_DATE_FIELD", "")
 
 # OAuth Atlassian (login na UI — Configurações → Jira OPS)
 ATLASSIAN_OAUTH_CLIENT_ID = os.environ.get("ATLASSIAN_OAUTH_CLIENT_ID", "")

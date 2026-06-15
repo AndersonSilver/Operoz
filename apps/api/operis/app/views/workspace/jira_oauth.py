@@ -1,3 +1,5 @@
+import urllib.parse
+
 from django.conf import settings
 from django.http import HttpResponseRedirect
 from rest_framework import status
@@ -19,6 +21,7 @@ from operis.utils.jira_ops.oauth import (
     pop_oauth_state,
     store_pending_clouds,
     workspace_oauth_app_ready,
+    workspace_slug_from_oauth_state,
 )
 from operis.utils.jira_ops.workspace_config import (
     config_to_api_dict,
@@ -32,9 +35,10 @@ from operis.utils.jira_ops.workspace_config import (
 def _settings_redirect(workspace_slug: str, **query) -> str:
     # Volta ao SPA (ex.: :3000), não à API Django (:8000).
     base = (settings.APP_BASE_URL or settings.WEB_URL or "http://localhost:3000").rstrip("/")
-    path = f"{base}/{workspace_slug}/settings/jira"
+    slug = (workspace_slug or "").strip().strip("/")
+    path = f"{base}/{slug}/settings/jira" if slug else base
     if query:
-        params = "&".join(f"{k}={v}" for k, v in query.items() if v is not None)
+        params = urllib.parse.urlencode({k: v for k, v in query.items() if v is not None})
         return f"{path}?{params}"
     return path
 
@@ -67,11 +71,15 @@ class JiraOpsOAuthCallbackEndpoint(BaseAPIView):
         code = request.GET.get("code")
 
         if error or not state or not code:
-            return HttpResponseRedirect(_settings_redirect("", jira_error=error or "missing_code"))
+            slug = workspace_slug_from_oauth_state(state or "")
+            return HttpResponseRedirect(
+                _settings_redirect(slug, jira_error=error or "missing_code")
+            )
 
         payload = pop_oauth_state(state)
         if not payload:
-            return HttpResponseRedirect(_settings_redirect("", jira_error="invalid_state"))
+            slug = workspace_slug_from_oauth_state(state)
+            return HttpResponseRedirect(_settings_redirect(slug, jira_error="invalid_state"))
 
         workspace_slug = payload["workspace_slug"]
         try:

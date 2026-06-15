@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PRD — Template Operoz</title>
+  <link rel="stylesheet" href="prd-review.css">
+  <script type="application/json" id="operoz-prd-config">
+  {
+    "operoz_prd_version": 1,
+    "document_type": "prd",
+    "title": "Título do PRD",
+    "client": "Cliente",
+    "phase": "Imersão",
+    "channel": "Canal",
+    "epic_key": "OPS-0000",
+    "review_enabled": true,
+    "sections": []
+  }
+  </script>
+</head>
+<body>
+  <div class="approval-banner" id="approvalBanner">
+    <p>Leia o projeto abaixo. <strong>Se estiver tudo certo</strong>, clique em Aprovar.</p>
+    <div class="approval-actions">
+      <button type="button" class="btn-approve" id="btnApprove">✓ Aprovar projeto</button>
+      <button type="button" class="btn-adjust" id="btnAdjust">✏️ Enviar feedback</button>
+    </div>
+  </div>
+
+  <main id="content" class="doc-body">
+    <section class="doc-section" id="sec-exemplo">
+      <h2 class="section-title">1. Exemplo</h2>
+      <div class="section-body">
+        <p>Conteúdo do PRD…</p>
+        <button type="button" class="btn-comment" data-section="sec-exemplo" data-title="1. Exemplo">💬 Comentar</button>
+        <div class="comment-block" id="comment-block-sec-exemplo" data-section="sec-exemplo">
+          <textarea placeholder="Comentário…" rows="3"></textarea>
+          <button type="button" class="btn-save-comment" data-section="sec-exemplo">Salvar comentário</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- UI review (trecho, resumo, impressão) — ver PRD-MAGALU.html para markup completo -->
+  <div class="selection-toolbar" id="selectionToolbar">
+    <button type="button" id="btnCommentSelection">💬 Comentar neste trecho</button>
+  </div>
+  <div class="inline-comment-popover" id="inlineCommentPopover">
+    <button type="button" class="popover-close" id="btnCloseInlinePopover" aria-label="Fechar sem salvar">×</button>
+    <div class="popover-quote" id="popoverQuote"></div>
+    <textarea id="inlineCommentText" placeholder="Digite seu comentário sobre o trecho..." rows="3"></textarea>
+    <button type="button" class="btn-save-inline" id="btnSaveInlineComment">Salvar comentário</button>
+  </div>
+  <div class="inline-comment-viewer" id="inlineCommentViewer" aria-hidden="true">
+    <button type="button" class="viewer-close" id="btnCloseInlineViewer" aria-label="Fechar comentário">×</button>
+    <div class="viewer-quote" id="viewerQuote"></div>
+    <div class="viewer-text" id="viewerText"></div>
+    <div class="viewer-actions">
+      <button type="button" id="btnEditInlineComment">Editar</button>
+      <button type="button" class="btn-delete-inline" id="btnDeleteInlineComment">Apagar</button>
+    </div>
+  </div>
+  <div class="summary-overlay" id="summaryOverlay" aria-hidden="true">
+    <div class="summary-box">
+      <h3 id="summaryTitle">Resumo</h3>
+      <ul id="summaryCommentsList"></ul>
+      <button type="button" id="btnCopySummary">📋 Copiar resumo</button>
+      <button type="button" id="btnCloseSummary">Fechar</button>
+    </div>
+  </div>
+
+  <script src="prd-review/manifest.js"></script>
+  <script src="prd-review/storage-local.js"></script>
+  <script src="prd-review/storage-api.js"></script>
+  <script src="prd-review/review-core.js"></script>
+  <script src="prd-review/init.js"></script>
+  <script>
+    initPrdReview({ mode: 'preview', autoInit: true });
+  </script>
+</body>
+</html>

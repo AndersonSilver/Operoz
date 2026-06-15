@@ -198,3 +198,164 @@
 .automation-editor-save:active:not(:disabled) {
   transform: translateY(1px);
 }
+
+/* Histórico de execuções */
+.automation-history-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 0.875rem;
+  border: 1px solid var(--border-subtle-1);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, var(--bg-layer-1) 94%, var(--bg-surface-2)) 0%,
+    var(--bg-layer-1) 55%
+  );
+  transition:
+    border-color 150ms ease,
+    box-shadow 150ms ease,
+    transform 150ms ease;
+}
+
+.automation-history-card:hover {
+  border-color: var(--border-strong-1);
+  box-shadow: 0 10px 28px -18px color-mix(in srgb, black 55%, transparent);
+}
+
+.automation-history-card__accent {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+}
+
+.automation-history-card--success:hover {
+  box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--bg-success-primary) 35%, transparent);
+}
+
+.automation-history-card--failed:hover {
+  box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--bg-danger-primary) 35%, transparent);
+}
+
+.automation-history-card--running:hover {
+  box-shadow: 0 10px 28px -18px color-mix(in srgb, var(--bg-accent-primary) 35%, transparent);
+}
+
+.automation-history-card__body {
+  padding: 1rem 1.125rem 1.125rem 1.25rem;
+}
+
+.automation-history-card__timing {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid color-mix(in srgb, var(--border-subtle-1) 80%, transparent);
+}
+
+@media (min-width: 640px) {
+  .automation-history-card__timing {
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    align-items: center;
+    gap: 0.5rem;
+  }
+}
+
+.automation-history-timing-cell {
+  border-radius: 0.625rem;
+  border: 1px solid var(--border-subtle-1);
+  background: color-mix(in srgb, var(--bg-surface-1) 88%, transparent);
+  padding: 0.625rem 0.75rem;
+}
+
+.automation-history-timing-cell__label {
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+.automation-history-timing-cell__time {
+  margin-top: 0.25rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.automation-history-timing-cell__date {
+  margin-top: 0.125rem;
+  font-size: 0.6875rem;
+  color: var(--text-tertiary);
+}
+
+.automation-history-card__bridge {
+  display: none;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 7.5rem;
+  padding-inline: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .automation-history-card__bridge {
+    display: flex;
+  }
+}
+
+.automation-history-card__bridge-line {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--border-subtle-1) 90%, var(--text-tertiary)) 50%,
+    transparent
+  );
+}
+
+.automation-history-card__bridge-pill {
+  flex-shrink: 0;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--bg-accent-primary) 25%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 55%, var(--bg-layer-1));
+  padding: 0.2rem 0.55rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--text-accent-primary);
+  white-space: nowrap;
+}
+
+.automation-history-card__bridge-pill--muted {
+  border-color: var(--border-subtle-1);
+  background: var(--bg-layer-2);
+  color: var(--text-tertiary);
+}
+
+.automation-history-card__bridge-dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 9999px;
+  background: var(--border-strong-1);
+}
+
+.automation-history-card__bridge-arrow {
+  flex-shrink: 0;
+  opacity: 0.45;
+}
+
+.automation-history-card__duration-mobile {
+  display: block;
+  border-radius: 0.625rem;
+  border: 1px dashed color-mix(in srgb, var(--bg-accent-primary) 22%, var(--border-subtle-1));
+  background: color-mix(in srgb, var(--bg-accent-subtle) 35%, transparent);
+  padding: 0.625rem 0.75rem;
+}
+
+@media (min-width: 640px) {
+  .automation-history-card__duration-mobile {
+    display: none;
+  }
+}

@@ -208,11 +208,7 @@ const getModuleColumns = (): IGroupByColumn[] | undefined => {
 
 const getStateColumns = ({ projectId, isWorkspaceLevel }: TGetColumns): IGroupByColumn[] | undefined => {
   const { getProjectStates, projectStates, workspaceStates } = store.state;
-  const _states = projectId
-    ? getProjectStates(projectId)
-    : isWorkspaceLevel
-      ? workspaceStates
-      : projectStates;
+  const _states = projectId ? getProjectStates(projectId) : isWorkspaceLevel ? workspaceStates : projectStates;
   if (!_states) return;
   // map project states to group by columns
   return _states.map((state) => ({
@@ -682,8 +678,8 @@ export function getApproximateCardHeight(displayProperties: IIssueDisplayPropert
  * @param backgroundColor
  * @returns
  */
-// Jira-style purple bar color for gantt blocks
-const GANTT_BAR_COLOR = "#7C3AED";
+// Gantt bar styling uses workflow state color with a readable tinted fill.
+const GANTT_BAR_FALLBACK_COLOR = "#6366F1";
 
 export const getBlockViewDetails = (
   block: { start_date: string | undefined | null; target_date: string | undefined | null } | undefined | null,
@@ -692,29 +688,34 @@ export const getBlockViewDetails = (
   const isBlockVisibleOnChart = block?.start_date || block?.target_date;
   const isBlockComplete = block?.start_date && block?.target_date;
 
-  // Use Jira-style purple color; fall back to state color if purple not available
-  const barColor = GANTT_BAR_COLOR || backgroundColor;
+  const barColor = backgroundColor || GANTT_BAR_FALLBACK_COLOR;
 
   let message;
   const blockStyle: CSSProperties = {
-    backgroundColor: barColor,
+    backgroundColor: `${barColor}1F`,
+    borderTop: `1px solid ${barColor}55`,
+    borderRight: `1px solid ${barColor}55`,
+    borderBottom: `1px solid ${barColor}55`,
+    borderLeft: `3px solid ${barColor}`,
+    boxShadow: `inset 0 1px 0 ${barColor}22`,
   };
 
   if (isBlockVisibleOnChart && !isBlockComplete) {
     if (block?.start_date) {
       message = `From ${renderFormattedDate(block.start_date)}`;
-      blockStyle.maskImage = `linear-gradient(to right, ${barColor} 50%, transparent 95%)`;
+      blockStyle.maskImage = `linear-gradient(to right, black 55%, transparent 98%)`;
     } else if (block?.target_date) {
       message = `Till ${renderFormattedDate(block.target_date)}`;
-      blockStyle.maskImage = `linear-gradient(to left, ${barColor} 50%, transparent 95%)`;
+      blockStyle.maskImage = `linear-gradient(to left, black 55%, transparent 98%)`;
     }
   } else if (isBlockComplete) {
-    message = `${renderFormattedDate(block?.start_date)} to ${renderFormattedDate(block?.target_date)}`;
+    message = `${renderFormattedDate(block?.start_date)} – ${renderFormattedDate(block?.target_date)}`;
   }
 
   return {
     message,
     blockStyle,
+    barColor,
   };
 };
 

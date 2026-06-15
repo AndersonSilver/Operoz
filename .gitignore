@@ -17,6 +17,8 @@ node_modules
 
 # Production
 dist/
+dist.bak/
+dist.testbak/
 out/
 build/
 .react-router/
@@ -80,6 +82,7 @@ package-lock.json
 # lock files
 package-lock.json
 !mcp-server/package-lock.json
+mcp-server/.env
 
 
 

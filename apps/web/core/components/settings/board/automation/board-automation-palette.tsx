@@ -7,14 +7,11 @@ import { AUTOMATION_KIND_THEME, type AutomationVisualKind } from "./automation-k
 type Props = {
   catalog: TAutomationCatalog;
   onAdd: (item: TAutomationCatalogItem, kind: "trigger" | "filter" | "action") => void;
-  onAddDecision: () => void;
+  onAddDecision: (catalogKey?: string) => void;
+  onAddParallel: (item: TAutomationCatalogItem) => void;
 };
 
-function PaletteItem(props: {
-  item: TAutomationCatalogItem;
-  kind: AutomationVisualKind;
-  onClick: () => void;
-}) {
+function PaletteItem(props: { item: TAutomationCatalogItem; kind: AutomationVisualKind; onClick: () => void }) {
   const { item, kind, onClick } = props;
   const theme = AUTOMATION_KIND_THEME[kind];
 
@@ -37,7 +34,7 @@ function PaletteItem(props: {
         <AutomationCatalogIcon name={item.icon} className={clsx("size-4", theme.iconColor)} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="text-13 font-medium leading-tight text-primary">{item.label}</p>
+        <p className="text-13 leading-tight font-medium text-primary">{item.label}</p>
         <p className="mt-0.5 line-clamp-2 text-11 leading-snug text-tertiary">{item.description}</p>
       </div>
     </button>
@@ -46,7 +43,7 @@ function PaletteItem(props: {
 
 function PaletteGroup(props: {
   title: string;
-  kind: AutomationVisualKind;
+  kind: "trigger" | "filter" | "action";
   items: TAutomationCatalogItem[];
   onAdd: Props["onAdd"];
 }) {
@@ -70,9 +67,9 @@ function PaletteGroup(props: {
 }
 
 export function BoardAutomationPalette(props: Props) {
-  const { catalog, onAdd, onAddDecision } = props;
+  const { catalog, onAdd, onAddDecision, onAddParallel } = props;
   const { t } = useTranslation();
-  const decisionItem = catalog.decisions?.[0];
+  const decisionItems = catalog.decisions ?? [];
   const decisionTheme = AUTOMATION_KIND_THEME.decision;
 
   return (
@@ -96,18 +93,32 @@ export function BoardAutomationPalette(props: Props) {
             {t("boards.settings.automation.decision.palette_title")}
           </p>
         </div>
-        <PaletteItem
-          item={{
-            key: decisionItem?.key ?? "decision.switch",
-            label: decisionItem?.label ?? t("boards.settings.automation.decision.title"),
-            description: decisionItem?.description ?? t("boards.settings.automation.decision.lead"),
-            icon: decisionItem?.icon ?? "git-branch",
-            config_schema: {},
-            output_schema: {},
-          }}
-          kind="decision"
-          onClick={onAddDecision}
-        />
+        {(decisionItems.length
+          ? decisionItems
+          : [
+              {
+                key: "decision.switch",
+                label: t("boards.settings.automation.decision.title"),
+                description: t("boards.settings.automation.decision.lead"),
+                icon: "git-branch",
+                config_schema: {},
+                output_schema: {},
+              },
+            ]
+        ).map((item) => (
+          <PaletteItem key={item.key} item={item} kind="decision" onClick={() => onAddDecision(item.key)} />
+        ))}
+      </section>
+      <section className="mb-5">
+        <div className="mb-2 flex items-center gap-1.5 px-0.5">
+          <span className="size-1.5 shrink-0 rounded-full bg-[var(--extended-color-cyan-500)]" aria-hidden />
+          <p className="text-11 font-semibold text-secondary">
+            {t("boards.settings.automation.parallel.palette_title")}
+          </p>
+        </div>
+        {(catalog.parallel ?? []).map((item) => (
+          <PaletteItem key={item.key} item={item} kind="action" onClick={() => onAddParallel(item)} />
+        ))}
       </section>
       <PaletteGroup
         title={t("boards.settings.automation.palette.actions")}

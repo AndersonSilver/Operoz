@@ -3,8 +3,8 @@ import { useTranslation } from "@operis/i18n";
 import type { IBoardAutomationRun, TAutomationGraph } from "@operis/types";
 import { Button } from "@operis/propel/button";
 import { EModalPosition, EModalWidth, ModalCore, cn } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
 import { AutomationDryRunTimeline, summarizeSteps } from "./automation-dry-run-timeline";
+import { formatRunDateTime, formatRunDurationLabel, getRunDurationMs } from "./automation-history-utils";
 
 type Props = {
   run: IBoardAutomationRun | null;
@@ -22,23 +22,19 @@ export function AutomationRunDetailModal(props: Props) {
   const steps = run.step_logs ?? [];
   const stats = summarizeSteps(steps);
   const allPassed = run.status === "success" && stats.failed === 0;
-  const statusTone = run.status === "success" && allPassed
-    ? "success"
-    : run.status === "skipped"
-      ? "warning"
-      : "danger";
+  const statusTone =
+    run.status === "success" && allPassed ? "success" : run.status === "skipped" ? "warning" : "danger";
   const StatusIcon = allPassed ? CheckCircle2 : CircleX;
+  const startedAt = formatRunDateTime(run.started_at ?? run.created_at);
+  const finishedAt = formatRunDateTime(run.finished_at);
+  const durationMs = getRunDurationMs(run.started_at ?? run.created_at, run.finished_at);
+  const durationLabel = durationMs != null ? formatRunDurationLabel(durationMs, t) : null;
 
   return (
-    <ModalCore
-      isOpen={isOpen}
-      handleClose={onClose}
-      position={EModalPosition.CENTER}
-      width={EModalWidth.XXXL}
-    >
+    <ModalCore isOpen={isOpen} handleClose={onClose} position={EModalPosition.CENTER} width={EModalWidth.XXXL}>
       <div className="flex max-h-[85vh] flex-col">
         <div className="flex items-start justify-between gap-3 border-b border-subtle px-5 py-3">
-          <p className="text-11 font-medium uppercase tracking-wide text-tertiary">
+          <p className="text-11 font-medium tracking-wide text-tertiary uppercase">
             {t("boards.settings.automation.history.steps_modal_badge")}
           </p>
           <button
@@ -62,7 +58,7 @@ export function AutomationRunDetailModal(props: Props) {
           >
             <div
               className={cn(
-                "pointer-events-none absolute -right-8 -top-8 size-32 rounded-full opacity-20 blur-3xl",
+                "pointer-events-none absolute -top-8 -right-8 size-32 rounded-full opacity-20 blur-3xl",
                 statusTone === "success" && "bg-success-primary",
                 statusTone === "warning" && "bg-warning-primary",
                 statusTone === "danger" && "bg-danger-primary"
@@ -80,17 +76,29 @@ export function AutomationRunDetailModal(props: Props) {
                 <StatusIcon className="size-6" strokeWidth={1.75} />
               </span>
               <div className="min-w-0 flex-1">
-                <p className="text-11 font-medium uppercase tracking-wide text-tertiary">
+                <p className="text-11 font-medium tracking-wide text-tertiary uppercase">
                   {t("boards.settings.automation.dry_run_page.badge_live")}
                 </p>
                 <h3 className="mt-1 text-18 font-semibold text-primary">{run.rule_name}</h3>
                 <div className="mt-2 flex flex-wrap gap-2 text-12 text-tertiary">
-                  <span className="rounded-md border border-subtle bg-layer-1 px-2 py-1 font-mono text-11">
+                  <span className="font-mono rounded-md border border-subtle bg-layer-1 px-2 py-1 text-11">
                     {run.event_type}
                   </span>
-                  <span className="rounded-md border border-subtle bg-layer-1 px-2 py-1">
-                    {run.finished_at ? renderFormattedDate(run.finished_at) : "—"}
-                  </span>
+                  {startedAt ? (
+                    <span className="rounded-md border border-subtle bg-layer-1 px-2 py-1">
+                      {t("boards.settings.automation.history.started_at", { date: startedAt })}
+                    </span>
+                  ) : null}
+                  {finishedAt ? (
+                    <span className="rounded-md border border-subtle bg-layer-1 px-2 py-1">
+                      {t("boards.settings.automation.history.finished_at", { date: finishedAt })}
+                    </span>
+                  ) : null}
+                  {durationLabel ? (
+                    <span className="rounded-md border border-subtle bg-accent-subtle px-2 py-1 text-accent-primary">
+                      {t("boards.settings.automation.history.duration", { value: durationLabel })}
+                    </span>
+                  ) : null}
                 </div>
               </div>
             </div>
@@ -103,7 +111,7 @@ export function AutomationRunDetailModal(props: Props) {
                   { label: t("boards.settings.automation.dry_run_page.stat_failed"), value: stats.failed },
                 ].map((item) => (
                   <div key={item.label} className="rounded-lg border border-subtle bg-layer-1 px-3 py-2.5 text-center">
-                    <p className="text-20 font-semibold tabular-nums text-primary">{item.value}</p>
+                    <p className="text-20 font-semibold text-primary tabular-nums">{item.value}</p>
                     <p className="mt-0.5 text-11 text-tertiary">{item.label}</p>
                   </div>
                 ))}

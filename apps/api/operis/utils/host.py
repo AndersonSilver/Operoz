@@ -10,6 +10,18 @@ from rest_framework.request import Request
 from operis.utils.ip_address import get_client_ip
 
 
+def frontend_base_url() -> str:
+    """Public origin for SPA routes (guest pages, auth redirects)."""
+    base = settings.APP_BASE_URL or settings.WEB_URL or "http://localhost:3000"
+    return str(base).rstrip("/")
+
+
+def api_public_base_url() -> str:
+    """Public origin where /api/* is reachable from the browser."""
+    base = settings.WEB_URL or settings.APP_BASE_URL or "http://localhost:8000"
+    return str(base).rstrip("/")
+
+
 def base_host(
     request: Request | HttpRequest,
     is_admin: bool = False,

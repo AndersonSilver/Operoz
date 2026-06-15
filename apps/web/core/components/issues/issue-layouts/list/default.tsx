@@ -104,9 +104,7 @@ export const List = observer(function List(props: IList) {
     return undefined;
   }, [workspaceSlug, boardSlug, routerProjectId, storeType, useListGridLayout]);
 
-  const estimateEnabled = Boolean(
-    currentProjectDetails?.id && areEstimateEnabledByProjectId(currentProjectDetails.id)
-  );
+  const estimateEnabled = Boolean(currentProjectDetails?.id && areEstimateEnabledByProjectId(currentProjectDetails.id));
 
   const containerRef = useRef<HTMLDivElement | null>(null);
 
@@ -161,10 +159,8 @@ export const List = observer(function List(props: IList) {
         >
           {(helpers) => (
             <>
-              <div
-                ref={containerRef}
-                className="vertical-scrollbar relative scrollbar-lg size-full overflow-auto"
-              >
+              <IssueBulkOperationsRoot selectionHelpers={helpers} />
+              <div ref={containerRef} className="vertical-scrollbar relative scrollbar-lg min-h-0 flex-1 overflow-auto">
                 {groups.map((group: IGroupByColumn) => (
                   <ListGroup
                     key={group.id}
@@ -194,8 +190,6 @@ export const List = observer(function List(props: IList) {
                   />
                 ))}
               </div>
-
-              <IssueBulkOperationsRoot selectionHelpers={helpers} />
             </>
           )}
         </MultipleSelectGroup>
@@ -214,6 +208,8 @@ export const List = observer(function List(props: IList) {
       showCycles={Boolean(currentProjectDetails?.cycle_view)}
       showEstimate={estimateEnabled}
       storageKey={listGridStorageKey}
+      workspaceSlug={workspaceSlug?.toString()}
+      boardSlug={boardSlug?.toString()}
     >
       {listContent}
     </ListGridColumnsProvider>

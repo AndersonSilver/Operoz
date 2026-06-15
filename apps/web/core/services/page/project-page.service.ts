@@ -1,6 +1,7 @@
 // types
 import { API_BASE_URL } from "@operis/constants";
 import type { TDocumentPayload, TPage } from "@operis/types";
+import type { TPrdReviewInvite, TPrdReviewSession } from "@/services/guest-prd-review.service";
 // helpers
 // services
 import { APIService } from "@/services/api.service";
@@ -181,6 +182,112 @@ export class ProjectPageService extends APIService {
       new_project_id: newProjectId,
     })
       .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async fetchReviewSessions(workspaceSlug: string, projectId: string, pageId: string): Promise<TPrdReviewSession[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createReviewSession(
+    workspaceSlug: string,
+    projectId: string,
+    pageId: string,
+    data?: { page_version_id?: string; send?: boolean; snapshot_version?: boolean; previous_session_id?: string }
+  ): Promise<TPrdReviewSession> {
+    return this.post(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/`,
+      data ?? {}
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async fetchReviewSessionDetail(
+    workspaceSlug: string,
+    projectId: string,
+    pageId: string,
+    sessionId: string
+  ): Promise<TPrdReviewSession> {
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/${sessionId}/`
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createReviewInvites(
+    workspaceSlug: string,
+    projectId: string,
+    pageId: string,
+    sessionId: string,
+    data: { emails: string[]; expires_in_days?: number; send_email?: boolean }
+  ): Promise<TPrdReviewInvite[]> {
+    return this.post(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/${sessionId}/invites/`,
+      data
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async syncReviewToIssue(
+    workspaceSlug: string,
+    projectId: string,
+    pageId: string,
+    sessionId: string,
+    issueId: string
+  ): Promise<{ synced_count: number; skipped_count: number; issue_comment_id: string | null }> {
+    return this.post(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/${sessionId}/sync-to-issue/`,
+      { issue_id: issueId }
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async exportReviewSession(
+    workspaceSlug: string,
+    projectId: string,
+    pageId: string,
+    sessionId: string,
+    includeComments = true
+  ): Promise<{ blob: Blob; filename: string; pdfFallback: boolean }> {
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/projects/${projectId}/pages/${pageId}/review-sessions/${sessionId}/export/`,
+      { params: { include_comments: includeComments ? "true" : "false" } },
+      { responseType: "blob" }
+    )
+      .then((response) => {
+        const mime = (response?.headers?.["content-type"] as string) || "application/pdf";
+        const disposition = response?.headers?.["content-disposition"] as string | undefined;
+        const pdfFallback =
+          response?.headers?.["x-prd-review-pdf-fallback"] === "html-print" || mime.includes("text/html");
+        let filename = "prd-review.pdf";
+        if (disposition) {
+          const match = /filename="([^"]+)"/.exec(disposition);
+          if (match?.[1]) filename = match[1];
+        }
+        return {
+          blob: response.data as Blob,
+          filename,
+          pdfFallback,
+        };
+      })
       .catch((error) => {
         throw error?.response?.data;
       });

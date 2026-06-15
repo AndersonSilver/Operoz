@@ -20,6 +20,10 @@ import type {
   IWorkspaceSidebarNavigationItem,
   IWorkspaceSidebarNavigation,
   IWorkspaceUserPropertiesResponse,
+  TClient360DetailResponse,
+  TClient360HealthHistoryResponse,
+  TClient360ListResponse,
+  TClient360MatrixResponse,
 } from "@operis/types";
 // services
 import { APIService } from "@/services/api.service";
@@ -69,10 +73,7 @@ export class WorkspaceService extends APIService {
       });
   }
 
-  async transferWorkspaceOwnership(
-    workspaceSlug: string,
-    data: { new_owner_id: string }
-  ): Promise<IWorkspace> {
+  async transferWorkspaceOwnership(workspaceSlug: string, data: { new_owner_id: string }): Promise<IWorkspace> {
     return this.post(`/api/workspaces/${workspaceSlug}/transfer-ownership/`, data)
       .then((response) => response?.data)
       .catch((error) => {
@@ -423,6 +424,341 @@ export class WorkspaceService extends APIService {
     data: Partial<IWorkspaceUserPropertiesResponse>
   ): Promise<IWorkspaceUserPropertiesResponse> {
     return this.patch(`/api/workspaces/${workspaceSlug}/user-properties/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360(
+    workspaceSlug: string,
+    params?: { period_start?: string; period_end?: string; compare?: boolean }
+  ): Promise<TClient360ListResponse> {
+    const query = params
+      ? {
+          ...params,
+          ...(params.compare ? { compare: 1 } : {}),
+        }
+      : undefined;
+    if (query && "compare" in query && !params?.compare) {
+      delete query.compare;
+    }
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/`, { params: query })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw {
+          status: error?.response?.status,
+          ...(error?.response?.data ?? {}),
+        };
+      });
+  }
+
+  async getClient360Detail(
+    workspaceSlug: string,
+    projectId: string,
+    params?: { period_start?: string; period_end?: string }
+  ): Promise<TClient360DetailResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360HealthHistory(
+    workspaceSlug: string,
+    projectId: string,
+    params?: { weeks?: number }
+  ): Promise<TClient360HealthHistoryResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/health-history/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360Matrix(
+    workspaceSlug: string,
+    params?: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      page?: number;
+      page_size?: number;
+      board_ids?: string;
+    }
+  ): Promise<TClient360MatrixResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/matrix/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw {
+          status: error?.response?.status,
+          ...(error?.response?.data ?? {}),
+        };
+      });
+  }
+
+  async downloadClient360MatrixCsv(
+    workspaceSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export: "csv";
+      delimiter?: "semicolon";
+      board_ids?: string;
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/matrix/`, { params }, { responseType: "blob" })
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360Narrative(
+    workspaceSlug: string,
+    projectId: string,
+    params: { period_start: string; period_end: string }
+  ): Promise<import("@operis/types").TClient360Narrative> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/narrative/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updateClient360Narrative(
+    workspaceSlug: string,
+    projectId: string,
+    data: { wins_md?: string; risks_md?: string; next_steps_md?: string },
+    params: { period_start: string; period_end: string }
+  ): Promise<import("@operis/types").TClient360Narrative> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/narrative/`, data, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async downloadClient360QbrPortfolio(
+    workspaceSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export_format: "md" | "pdf";
+      compare?: boolean;
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    const query: Record<string, string | number | undefined> = {
+      period_start: params.period_start,
+      period_end: params.period_end,
+      weeks: params.weeks,
+      export_format: params.export_format,
+    };
+    if (params.compare) query.compare = 1;
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/qbr/`, { params: query }, { responseType: "blob" })
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async downloadClient360QbrClient(
+    workspaceSlug: string,
+    projectId: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export_format: "md" | "pdf";
+      compare?: boolean;
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    const query: Record<string, string | number | undefined> = {
+      period_start: params.period_start,
+      period_end: params.period_end,
+      weeks: params.weeks,
+      export_format: params.export_format,
+    };
+    if (params.compare) query.compare = 1;
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr/`,
+      { params: query },
+      { responseType: "blob" }
+    )
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createClient360QbrGuestLink(
+    workspaceSlug: string,
+    data: {
+      scope: "client" | "portfolio";
+      project_id?: string;
+      period_start: string;
+      period_end: string;
+      weeks?: number;
+      include_compare?: boolean;
+      expires_in_days?: number;
+    }
+  ): Promise<import("@/services/guest-qbr.service").TClient360QbrGuestLink> {
+    return this.post(`/api/workspaces/${workspaceSlug}/client-360/qbr-guest-links/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360SharedViews(workspaceSlug: string): Promise<import("@operis/types").TClient360SharedView[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/shared-views/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createClient360SharedView(
+    workspaceSlug: string,
+    data: { name: string; payload: Record<string, unknown>; is_shared?: boolean }
+  ): Promise<import("@operis/types").TClient360SharedView> {
+    return this.post(`/api/workspaces/${workspaceSlug}/client-360/shared-views/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async deleteClient360SharedView(workspaceSlug: string, viewId: string): Promise<void> {
+    await this.delete(`/api/workspaces/${workspaceSlug}/client-360/shared-views/${viewId}/`).catch((error) => {
+      throw error?.response?.data;
+    });
+  }
+
+  async getClient360FinopsHeatmap(
+    workspaceSlug: string,
+    params?: { board_ids?: string }
+  ): Promise<import("@operis/types").TClient360ConsultantHeatmap> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/finops/consultant-heatmap/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async downloadClient360FinopsCsv(workspaceSlug: string): Promise<void> {
+    const response = await this.get(
+      `/api/workspaces/${workspaceSlug}/client-360/finops/export/`,
+      {},
+      { responseType: "blob" }
+    );
+    const blob = response.data as Blob;
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = `operoz-finops-${workspaceSlug}.csv`;
+    anchor.click();
+    URL.revokeObjectURL(url);
+  }
+
+  async updateClient360FinopsProfile(
+    workspaceSlug: string,
+    projectId: string,
+    data: import("@operis/types").TClient360FinopsProfileWrite
+  ): Promise<import("@operis/types").TClient360FinopsProfile> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/finops/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360WeeklyBriefing(
+    workspaceSlug: string,
+    params: { period_start: string; period_end: string }
+  ): Promise<import("@operis/types").TClient360WeeklyBriefing> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/intelligence/weekly-briefing/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async generateClient360WeeklyBriefing(
+    workspaceSlug: string,
+    params: { period_start: string; period_end: string; force?: boolean }
+  ): Promise<import("@operis/types").TClient360WeeklyBriefing> {
+    return this.post(`/api/workspaces/${workspaceSlug}/client-360/intelligence/weekly-briefing/`, {}, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360HealthExplainer(
+    workspaceSlug: string,
+    projectId: string,
+    params: { period_start: string; period_end: string }
+  ): Promise<import("@operis/types").TClient360HealthExplainer> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/health-explainer/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360SuggestedActions(
+    workspaceSlug: string,
+    projectId: string,
+    params: { period_start: string; period_end: string }
+  ): Promise<import("@operis/types").TClient360SuggestedActionsResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/suggested-actions/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async dismissClient360SuggestedAction(workspaceSlug: string, projectId: string, actionKey: string): Promise<void> {
+    await this.post(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/suggested-actions/`, {
+      action_key: actionKey,
+    }).catch((error) => {
+      throw error?.response?.data;
+    });
+  }
+
+  async generateClient360QbrDraft(
+    workspaceSlug: string,
+    projectId: string,
+    params: { period_start: string; period_end: string; quarter?: string }
+  ): Promise<import("@operis/types").TClient360QbrDraft> {
+    return this.post(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, {}, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updateClient360QbrDraft(
+    workspaceSlug: string,
+    projectId: string,
+    payload: { human_edited_md: string; quarter?: string }
+  ): Promise<import("@operis/types").TClient360QbrDraft> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, payload, {
+      params: payload.quarter ? { quarter: payload.quarter } : undefined,
+    })
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;

@@ -1,0 +1,45 @@
+{
+  "id": "prd-review-feedback-alert",
+  "version": 1,
+  "name": "Alerta feedback PRD Review",
+  "description": "Notifica a equipa por e-mail quando o cliente envia feedback numa sessão PRD Review.",
+  "icon": "mail",
+  "category": "documentation",
+  "default_rule_name": "Alerta feedback PRD",
+  "default_description": "Template Operoz — cliente solicitou ajustes no PRD.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Alerta feedback PRD" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-prd-feedback",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "prd_review.feedback_submitted",
+          "label": "PRD Review — feedback enviado",
+          "config": { "event_type": "prd_review.feedback_submitted" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-prd-feedback", "target": "action-email" }]
+  }
+}

@@ -21,30 +21,30 @@ type TAuthHeader = {
 const Titles = {
   [EAuthModes.SIGN_IN]: {
     [EAuthSteps.EMAIL]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Bem-vindo de volta",
+      header: "Bem-vindo de volta",
+      subHeader: "Entre com sua conta para continuar",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Bem-vindo de volta",
+      header: "Bem-vindo de volta",
+      subHeader: "Informe sua senha para acessar",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Bem-vindo de volta",
+      header: "Bem-vindo de volta",
+      subHeader: "Digite o código enviado ao seu e-mail",
     },
   },
   [EAuthModes.SIGN_UP]: {
     [EAuthSteps.EMAIL]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Create your Plane account.",
+      header: "Criar conta",
+      subHeader: "Comece a gerenciar seu trabalho com o time",
     },
     [EAuthSteps.PASSWORD]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Create your Plane account.",
+      header: "Criar conta",
+      subHeader: "Defina uma senha segura para continuar",
     },
     [EAuthSteps.UNIQUE_CODE]: {
-      header: "Trabalhar em todas as dimensões.",
-      subHeader: "Create your Plane account.",
+      header: "Criar conta",
+      subHeader: "Digite o código enviado ao seu e-mail",
     },
   },
 };
@@ -110,11 +110,17 @@ type TAuthHeaderBase = {
 
 export function AuthHeaderBase(props: TAuthHeaderBase) {
   return (
-    <div className="flex flex-col gap-2 text-balance">
-      <div className="text-20 font-semibold leading-snug tracking-tight text-primary sm:text-[1.375rem] sm:leading-tight">
-        {props.header}
+    <div className="flex flex-col gap-3 text-balance">
+      <div
+        className="h-[3px] w-10 rounded-full bg-gradient-to-r from-accent-primary to-accent-primary/30"
+        aria-hidden="true"
+      />
+      <div className="space-y-1.5">
+        <div className="text-20 leading-[1.2] font-semibold tracking-[-0.02em] text-primary sm:text-24">
+          {props.header}
+        </div>
+        <p className="sm:text-15 text-14 leading-relaxed text-tertiary">{props.subHeader}</p>
       </div>
-      <p className="text-15 font-normal leading-relaxed text-secondary">{props.subHeader}</p>
     </div>
   );
 }

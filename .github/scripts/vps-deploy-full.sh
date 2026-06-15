@@ -36,8 +36,15 @@ for entry in "${SERVICES[@]}"; do
   docker tag "${remote}" "${local_name}:local"
 done
 
-echo "==> Recriar stack"
+echo "==> Migrações Django (nova imagem plane-backend)"
 cd "${OPERIS_APP_PATH}"
+if docker compose --env-file operis.env config --services 2>/dev/null | grep -qx migrator; then
+  docker compose --env-file operis.env run --rm --no-deps migrator
+else
+  echo "WARN: serviço migrator não encontrado no compose — aplique migrações manualmente."
+fi
+
+echo "==> Recriar stack"
 docker compose --env-file operis.env up -d --pull never
 
 echo "==> Deploy full concluído"

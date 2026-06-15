@@ -7,7 +7,11 @@ from typing import Literal
 from django.db.models import Count, Q
 from django.utils import timezone
 
-from operis.db.models import BoardStatusReport, Issue, Module, Project
+from operis.db.models import Board, BoardStatusReport, Issue, Module, Project
+from operis.utils.client_360_health_alerts import (
+    is_health_score_alert,
+    resolve_score_alert_threshold,
+)
 from operis.utils.status_report_export import user_consultor_label
 
 CLOSED_STATE_GROUPS = ("completed", "cancelled")
@@ -15,6 +19,70 @@ SUPPORT_TYPE_NAME_Q = Q(type__name__icontains="sustent") | Q(type__name__icontai
 
 HealthLevel = Literal["ok", "warning", "critical"]
 ReportCoverage = Literal["complete", "partial", "missing", "n_a"]
+HealthDimension = Literal["report", "overdue", "support"]
+
+
+@dataclass(frozen=True)
+class HealthScoreWeights:
+    report: int = 60
+    overdue: int = 25
+    support: int = 15
+
+    def __post_init__(self) -> None:
+        total = self.report + self.overdue + self.support
+        if total != 100:
+            raise ValueError("Health score weights must sum to 100")
+
+
+@dataclass(frozen=True)
+class HealthScoreThresholds:
+    ok_min: int = 70
+    warning_min: int = 45
+
+
+@dataclass(frozen=True)
+class HealthScoreBreakdownItem:
+    dimension: HealthDimension
+    score: int
+    weight: int
+    detail: str
+
+    def as_dict(self) -> dict:
+        return {
+            "dimension": self.dimension,
+            "score": self.score,
+            "weight": self.weight,
+            "detail": self.detail,
+        }
+
+
+@dataclass(frozen=True)
+class HealthScoreResult:
+    score: int
+    health: HealthLevel
+    breakdown: tuple[HealthScoreBreakdownItem, ...]
+
+    def as_breakdown_list(self) -> list[dict]:
+        return [item.as_dict() for item in self.breakdown]
+
+
+def health_dimensions_from_breakdown(
+    breakdown: tuple[HealthScoreBreakdownItem, ...],
+    thresholds: HealthScoreThresholds | None = None,
+) -> list[dict]:
+    """RAG independente por dimensão (report, overdue/entrega, sustentação)."""
+    return [
+        {
+            "dimension": item.dimension,
+            "score": item.score,
+            "health": health_level_from_score(item.score, thresholds),
+        }
+        for item in breakdown
+    ]
+
+
+DEFAULT_HEALTH_SCORE_WEIGHTS = HealthScoreWeights()
+DEFAULT_HEALTH_SCORE_THRESHOLDS = HealthScoreThresholds()
 
 
 @dataclass(frozen=True)
@@ -69,11 +137,116 @@ def compute_health(
     support_open: int,
     support_overdue: int,
 ) -> HealthLevel:
+    """Legacy semáforo — prefer :func:`compute_health_score` for API payloads."""
     if report_coverage == "missing" or overdue_issues >= 5 or support_overdue > 0:
         return "critical"
     if overdue_issues > 0 or report_coverage == "partial" or support_open > 0:
         return "warning"
     return "ok"
+
+
+def _clamp_score(value: int) -> int:
+    return max(0, min(100, int(value)))
+
+
+def _dimension_report_score(
+    report_coverage: ReportCoverage,
+    modules_total: int,
+    modules_published: int,
+) -> tuple[int, str]:
+    if report_coverage == "complete":
+        return 100, "Status report completo"
+    if report_coverage == "n_a":
+        return 90, "Sem módulos configurados"
+    if report_coverage == "partial":
+        if modules_total > 0:
+            ratio_score = _clamp_score(round(100 * modules_published / modules_total))
+            return max(ratio_score, 45), f"Report parcial ({modules_published}/{modules_total} módulos)"
+        return 55, "Report parcial"
+    if modules_total > 0:
+        return 0, f"Report em falta ({modules_total} módulos sem publicação)"
+    return 25, "Report em falta"
+
+
+def _dimension_overdue_score(overdue_issues: int) -> tuple[int, str]:
+    if overdue_issues <= 0:
+        return 100, "Sem itens atrasados"
+    if overdue_issues == 1:
+        return 80, "1 item atrasado"
+    if overdue_issues == 2:
+        return 60, "2 itens atrasados"
+    if overdue_issues == 3:
+        return 40, "3 itens atrasados"
+    if overdue_issues == 4:
+        return 20, "4 itens atrasados"
+    return 0, f"{overdue_issues} itens atrasados"
+
+
+def _dimension_support_score(support_open: int, support_overdue: int) -> tuple[int, str]:
+    if support_overdue > 0:
+        score = _clamp_score(25 - support_overdue * 10)
+        return score, f"{support_overdue} sustentação atrasada"
+    if support_open <= 0:
+        return 100, "Sem sustentação aberta"
+    if support_open == 1:
+        return 70, "1 chamado de sustentação aberto"
+    score = _clamp_score(70 - (support_open - 1) * 15)
+    return score, f"{support_open} chamados de sustentação abertos"
+
+
+def health_level_from_score(score: int, thresholds: HealthScoreThresholds | None = None) -> HealthLevel:
+    limits = thresholds or DEFAULT_HEALTH_SCORE_THRESHOLDS
+    if score >= limits.ok_min:
+        return "ok"
+    if score >= limits.warning_min:
+        return "warning"
+    return "critical"
+
+
+def compute_health_score(
+    *,
+    report_coverage: ReportCoverage,
+    modules_total: int,
+    modules_published: int,
+    overdue_issues: int,
+    support_open: int,
+    support_overdue: int,
+    weights: HealthScoreWeights | None = None,
+    thresholds: HealthScoreThresholds | None = None,
+) -> HealthScoreResult:
+    """
+    Score 0–100 com breakdown por dimensão (report, overdue, sustentação).
+    Caps alinhados ao semáforo legado para casos críticos conhecidos.
+    """
+    w = weights or DEFAULT_HEALTH_SCORE_WEIGHTS
+    report_score, report_detail = _dimension_report_score(
+        report_coverage, modules_total, modules_published
+    )
+    overdue_score, overdue_detail = _dimension_overdue_score(overdue_issues)
+    support_score, support_detail = _dimension_support_score(support_open, support_overdue)
+
+    weighted = round(
+        (report_score * w.report + overdue_score * w.overdue + support_score * w.support) / 100
+    )
+    score = _clamp_score(weighted)
+
+    if report_coverage == "missing" and modules_total > 0:
+        score = min(score, 40)
+    if overdue_issues >= 5:
+        score = min(score, 35)
+    if support_overdue > 0:
+        score = min(score, 35)
+
+    breakdown = (
+        HealthScoreBreakdownItem("report", report_score, w.report, report_detail),
+        HealthScoreBreakdownItem("overdue", overdue_score, w.overdue, overdue_detail),
+        HealthScoreBreakdownItem("support", support_score, w.support, support_detail),
+    )
+    return HealthScoreResult(
+        score=score,
+        health=health_level_from_score(score, thresholds),
+        breakdown=breakdown,
+    )
 
 
 def aggregate_issue_stats(issue_queryset, today: date) -> dict[str, dict[str, int]]:
@@ -185,8 +358,11 @@ def build_client_row(
     *,
     period: WeekPeriod,
     modules_total: int,
-    issue_stats: dict[str, int],
+    issue_stats: dict[str, int] | None,
     report_stats: dict | None,
+    board: Board | None = None,
+    health_config: tuple[HealthScoreWeights, HealthScoreThresholds] | None = None,
+    score_alert_threshold: int | None = None,
 ) -> dict:
     pid = str(project.id)
     issues = issue_stats or {
@@ -207,14 +383,21 @@ def build_client_row(
         modules_draft_only,
         has_project_level_published,
     )
-    health = compute_health(
+    score_weights = health_config[0] if health_config else None
+    score_thresholds = health_config[1] if health_config else None
+    effective_alert_threshold = resolve_score_alert_threshold(score_alert_threshold)
+    health_result = compute_health_score(
         report_coverage=report_coverage,
+        modules_total=modules_total,
+        modules_published=modules_published,
         overdue_issues=issues["overdue"],
         support_open=issues["support_open"],
         support_overdue=issues["support_overdue"],
+        weights=score_weights,
+        thresholds=score_thresholds,
     )
 
-    return {
+    row = {
         "project_id": pid,
         "name": project.name,
         "identifier": project.identifier,
@@ -242,8 +425,32 @@ def build_client_row(
                 rs["latest_published_at"].isoformat() if rs.get("latest_published_at") else None
             ),
         },
-        "health": health,
+        "health": health_result.health,
+        "health_score": health_result.score,
+        "legacy_health": compute_health(
+            report_coverage=report_coverage,
+            overdue_issues=issues["overdue"],
+            support_open=issues["support_open"],
+            support_overdue=issues["support_overdue"],
+        ),
+        "health_breakdown": health_result.as_breakdown_list(),
+        "health_dimensions": health_dimensions_from_breakdown(
+            health_result.breakdown,
+            score_thresholds,
+        ),
+        "score_alert_threshold": effective_alert_threshold,
+        "health_score_alert": is_health_score_alert(
+            health_result.score,
+            effective_alert_threshold,
+        ),
     }
+    if board is not None:
+        row["board"] = {
+            "id": str(board.id),
+            "slug": board.slug,
+            "name": board.name,
+        }
+    return row
 
 
 def build_module_report_rows(

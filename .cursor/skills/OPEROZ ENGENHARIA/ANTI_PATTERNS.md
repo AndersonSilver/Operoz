@@ -91,13 +91,13 @@ with transaction.atomic():
 
 ### 4. Outros anti-patterns backend
 
-| Anti-pattern | Porquê evitar |
-|--------------|---------------|
-| Inventar campos JSON de GitHub/Harness | Quebra parsers e testes; usar `tests/fixtures/*.json` |
-| Logar payload completo de webhook em produção | Vazamento de tokens e PII |
-| Bypass de `deleted_at` / soft delete | Dados fantasma e fugas de permissão |
-| Lógica de negócio crítica só no serializer | Duplicação e bypass via outro endpoint |
-| `allow_any` em endpoints de integração | Abuso e SSRF em callbacks |
+| Anti-pattern                                  | Porquê evitar                                         |
+| --------------------------------------------- | ----------------------------------------------------- |
+| Inventar campos JSON de GitHub/Harness        | Quebra parsers e testes; usar `tests/fixtures/*.json` |
+| Logar payload completo de webhook em produção | Vazamento de tokens e PII                             |
+| Bypass de `deleted_at` / soft delete          | Dados fantasma e fugas de permissão                   |
+| Lógica de negócio crítica só no serializer    | Duplicação e bypass via outro endpoint                |
+| `allow_any` em endpoints de integração        | Abuso e SSRF em callbacks                             |
 
 ---
 
@@ -152,30 +152,43 @@ export function PrimaryButton({ children, onClick }: Props) {
 ```tsx
 // ✅ Correto
 import { Button } from "@operis/propel";
-<Button variant="primary" onClick={onClick}>{children}</Button>
+<Button variant="primary" onClick={onClick}>
+  {children}
+</Button>;
 ```
 
 ---
 
-### 4. Outros anti-patterns frontend
+### 4. UX anti-patterns (proibidos)
 
-| Anti-pattern | Porquê evitar |
-|--------------|---------------|
-| Cores hex / `gray-*` em features novas | Quebra dark mode; ver DESIGN SISTEMA |
-| Assumir permissão que a API nega | UI enganosa; esconder ação via capability |
-| Mock de API «na cabeça» em testes/docs | Drift; copiar de `tests/fixtures/` |
-| Fetch sem tratar 404/403 alinhado ao BE | UX inconsistente com regra 404 do tenant |
+Ver detalhe em `OPEROZ ENGENHARIA/SKILL.md` §8.
+
+| Anti-pattern                               | Alternativa                                                |
+| ------------------------------------------ | ---------------------------------------------------------- |
+| URL/token cru em `<p break-all>`           | `IconButton` + `Tooltip` + toast (`copy-link-control.tsx`) |
+| Chave i18n visível na UI                   | Corrigir `packages/i18n` pt-BR + en                        |
+| Modal cramped / perde contexto pós-sucesso | `p-6 gap-4`, manter lista de convites                      |
+| Empty state genérico                       | CTA + próximo passo Operoz                                 |
+
+### 5. Outros anti-patterns frontend
+
+| Anti-pattern                            | Porquê evitar                             |
+| --------------------------------------- | ----------------------------------------- |
+| Cores hex / `gray-*` em features novas  | Quebra dark mode; ver DESIGN SISTEMA      |
+| Assumir permissão que a API nega        | UI enganosa; esconder ação via capability |
+| Mock de API «na cabeça» em testes/docs  | Drift; copiar de `tests/fixtures/`        |
+| Fetch sem tratar 404/403 alinhado ao BE | UX inconsistente com regra 404 do tenant  |
 
 ---
 
 ## Integrações (Git + Harness)
 
-| Anti-pattern | Alternativa |
-|--------------|-------------|
-| Parser escrito contra exemplo inventado | `tests/fixtures/github_webhook_pr.json` |
-| Agregação de custo sem `pipeline_id` / tags | `tests/fixtures/harness_cost_report.json` |
-| Processar webhook sem idempotência | `delivery_id` ou hash `(event, sha)` |
-| Atribuir custo sem `board_slug` / `project_id` | Regras em CONTEXTO/SKILL.md |
+| Anti-pattern                                   | Alternativa                               |
+| ---------------------------------------------- | ----------------------------------------- |
+| Parser escrito contra exemplo inventado        | `tests/fixtures/github_webhook_pr.json`   |
+| Agregação de custo sem `pipeline_id` / tags    | `tests/fixtures/harness_cost_report.json` |
+| Processar webhook sem idempotência             | `delivery_id` ou hash `(event, sha)`      |
+| Atribuir custo sem `board_slug` / `project_id` | Regras em CONTEXTO/SKILL.md               |
 
 ---
 

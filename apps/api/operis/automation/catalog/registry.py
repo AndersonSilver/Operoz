@@ -29,17 +29,30 @@ class AutomationCatalog:
     def list_by_kind(self, kind: str) -> list[CatalogEntry]:
         return [e for e in self._entries.values() if e.kind == kind]
 
+    def copy(self) -> AutomationCatalog:
+        cloned = AutomationCatalog()
+        cloned._entries = dict(self._entries)
+        return cloned
+
+    def merge(self, entries: list[CatalogEntry]) -> AutomationCatalog:
+        merged = self.copy()
+        for entry in entries:
+            merged._entries[entry.key] = entry
+        return merged
+
     def to_api_list(self) -> dict[str, list[dict[str, Any]]]:
         result: dict[str, list[dict[str, Any]]] = {
             "triggers": [],
             "filters": [],
             "decisions": [],
+            "parallel": [],
             "actions": [],
         }
         kind_map = {
             "trigger": "triggers",
             "filter": "filters",
             "decision": "decisions",
+            "parallel": "parallel",
             "action": "actions",
         }
         for entry in self._entries.values():

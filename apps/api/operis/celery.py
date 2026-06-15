@@ -73,9 +73,25 @@ app.conf.beat_schedule = {
         "task": "operis.bgtasks.automation_task.flush_stale_automation_outbox",
         "schedule": crontab(minute="*/2"),
     },
+    "dispatch-scheduled-automation-rules-every-minute": {
+        "task": "operis.bgtasks.automation_task.dispatch_scheduled_automation_rules",
+        "schedule": crontab(minute="*"),
+    },
     "check-every-day-to-delete-exporter-history": {
         "task": "operis.bgtasks.exporter_expired_task.delete_old_s3_link",
         "schedule": crontab(hour=3, minute=45),  # UTC 03:45
+    },
+    "snapshot-weekly-client360-health": {
+        "task": "operis.bgtasks.client_360_health_snapshot_task.snapshot_weekly_client360_health",
+        "schedule": crontab(hour=6, minute=0, day_of_week=1),  # Monday 06:00 UTC
+    },
+    "monday-client360-weekly-briefing": {
+        "task": "operis.bgtasks.client_360_weekly_briefing_task.generate_weekly_client360_briefings",
+        "schedule": crontab(hour=8, minute=0, day_of_week=1),  # Monday 08:00 UTC
+    },
+    "friday-client360-status-report-reminder": {
+        "task": "operis.bgtasks.client_360_status_report_reminder_task.friday_status_report_reminder",
+        "schedule": crontab(hour="*", minute=0, day_of_week=5),  # hourly on Fridays
     },
 }
 

@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
-import { Check, ListFilter } from "lucide-react";
-import type { ReactNode } from "react";
+import { Client360PeriodDelta } from "@/components/board/client-360/client-360-period-delta";
+import { Check, ChevronDown, ListFilter, Search } from "lucide-react";
+import type { ReactNode, RefObject } from "react";
 import { useTranslation } from "@operis/i18n";
 import { IconButton } from "@operis/propel/icon-button";
 import { Tooltip } from "@operis/propel/tooltip";
@@ -12,29 +13,20 @@ import {
 } from "@/components/board/client-360/client-360-client-filters";
 import { BOARD_HUB_GLASS_BAR, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
+import { useClient360DetailSection } from "@/components/board/client-360/client-360-detail-section-context";
+import { useClient360SectionOpen } from "@/components/board/client-360/use-client-360-section-open";
 
 export type { Client360Tone };
 
-export function Client360PageShell({
-  children,
-  header,
-}: {
-  header: ReactNode;
-  children: ReactNode;
-}) {
+export function Client360PageShell({ children, header }: { header: ReactNode; children: ReactNode }) {
   const hasBackground = useBoardHubHasBackground();
 
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto bg-transparent">
-      <div
-        className={cn(
-          "border-b border-subtle px-6 py-4",
-          hasBackground ? BOARD_HUB_GLASS_BAR : "bg-layer-1"
-        )}
-      >
+    <div className="flex h-full w-full flex-col overflow-y-auto bg-surface-1">
+      <div className={cn("border-b border-subtle px-6 py-4", hasBackground ? BOARD_HUB_GLASS_BAR : "bg-surface-1")}>
         {header}
       </div>
-      <div className="flex flex-col gap-6 px-6 py-5">{children}</div>
+      <div className="flex flex-col gap-5 bg-surface-1 px-6 py-5">{children}</div>
     </div>
   );
 }
@@ -44,7 +36,7 @@ export function Client360PageTitle({
   title,
   subtitle,
   trailing,
-  iconTone = "accent",
+  iconTone = "neutral",
 }: {
   icon: LucideIcon;
   title: string;
@@ -59,7 +51,7 @@ export function Client360PageTitle({
       <div className="flex min-w-0 items-start gap-3">
         <span
           className={cn(
-            "grid size-9 shrink-0 place-items-center rounded-md border border-subtle",
+            "grid size-9 shrink-0 place-items-center rounded-md border border-subtle bg-layer-1",
             tone.iconBg
           )}
         >
@@ -84,6 +76,7 @@ export function Client360Section({
   className,
   noPadding,
   iconTone = "neutral",
+  sectionId,
 }: {
   icon?: LucideIcon;
   title: string;
@@ -93,44 +86,75 @@ export function Client360Section({
   className?: string;
   noPadding?: boolean;
   iconTone?: Client360Tone;
+  /** When set inside Client360 detail, enables collapse + persistence via context. */
+  sectionId?: string;
 }) {
   const tone = CLIENT_360_TONE[iconTone];
+  const { collapsible, defaultOpen, collapseScope } = useClient360DetailSection(sectionId);
+  const storageKey = collapseScope && sectionId ? `${collapseScope}:${sectionId}` : undefined;
+  const { open, toggle } = useClient360SectionOpen(storageKey, defaultOpen);
 
   return (
-    <section className={cn("overflow-hidden rounded-md border border-subtle bg-layer-1", className)}>
+    <section className={cn("shadow-xs overflow-hidden rounded-xl border border-subtle bg-layer-1", className)}>
       <div
         className={cn(
-          "flex justify-between gap-3 border-b border-subtle px-4 py-3",
-          action ? "flex-nowrap items-center" : "flex-wrap items-start"
+          "flex justify-between gap-3 border-b border-subtle px-3 py-2.5",
+          action ? "flex-nowrap items-center" : "flex-wrap items-start",
+          collapsible && "cursor-pointer select-none hover:bg-layer-transparent-hover"
         )}
+        role={collapsible ? "button" : undefined}
+        tabIndex={collapsible ? 0 : undefined}
+        aria-expanded={collapsible ? open : undefined}
+        onClick={collapsible ? toggle : undefined}
+        onKeyDown={
+          collapsible
+            ? (event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  toggle();
+                }
+              }
+            : undefined
+        }
       >
         <div className={cn("flex min-w-0 gap-2.5", action ? "items-center" : "items-start")}>
           {Icon ? (
             <span
-              className={cn(
-                "grid size-7 shrink-0 place-items-center rounded-sm",
-                tone.iconBg,
-                !action && "mt-0.5"
-              )}
+              className={cn("grid size-7 shrink-0 place-items-center rounded-sm", tone.iconBg, !action && "mt-0.5")}
             >
               <Icon className={cn("size-3.5", tone.icon)} strokeWidth={1.75} />
             </span>
           ) : null}
           <div className="min-w-0">
             <h2 className="text-13 font-semibold text-primary">{title}</h2>
-            {description ? <p className="mt-0.5 text-12 text-tertiary">{description}</p> : null}
+            {description && (!collapsible || open) ? (
+              <p className="mt-0.5 text-12 text-tertiary">{description}</p>
+            ) : null}
           </div>
         </div>
-        {action ? <div className="flex shrink-0 items-center">{action}</div> : null}
+        <div className="flex shrink-0 items-center gap-1">
+          {action ? (
+            <div className="flex items-center" onClick={(event) => event.stopPropagation()}>
+              {action}
+            </div>
+          ) : null}
+          {collapsible ? (
+            <ChevronDown
+              className={cn("size-4 text-tertiary transition-transform", !open && "-rotate-90")}
+              strokeWidth={1.75}
+              aria-hidden
+            />
+          ) : null}
+        </div>
       </div>
-      <div className={cn(!noPadding && "p-4")}>{children}</div>
+      {(!collapsible || open) && <div className={cn(!noPadding && "p-3")}>{children}</div>}
     </section>
   );
 }
 
 export function Client360StatGrid({ children }: { children: ReactNode }) {
   return (
-    <div className="grid grid-cols-2 gap-px overflow-hidden rounded-md border border-subtle bg-subtle sm:grid-cols-3 lg:grid-cols-5">
+    <div className="bg-subtle grid grid-cols-2 gap-px overflow-hidden border-b border-subtle sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7">
       {children}
     </div>
   );
@@ -143,6 +167,10 @@ export function Client360StatTile({
   tone = "neutral",
   highlightValue,
   variant = "default",
+  onClick,
+  ariaLabel,
+  delta,
+  deltaMode = "lower_is_better",
 }: {
   icon?: LucideIcon;
   label: string;
@@ -151,16 +179,42 @@ export function Client360StatTile({
   highlightValue?: boolean;
   /** Compact tiles omit icons and use sentence-case labels (overview strip). */
   variant?: "default" | "compact";
+  onClick?: () => void;
+  ariaLabel?: string;
+  delta?: number;
+  deltaMode?: "lower_is_better" | "higher_is_better";
 }) {
   const t = CLIENT_360_TONE[tone];
 
   if (variant === "compact") {
-    return (
-      <div className="flex flex-col gap-1 bg-layer-1 px-4 py-3.5">
+    const content = (
+      <>
         <span className="text-12 text-tertiary">{label}</span>
-        <span className="text-20 font-semibold tabular-nums leading-none text-primary">{value}</span>
-      </div>
+        <div className="flex items-baseline gap-2">
+          <span
+            className={cn("text-20 leading-none font-semibold tabular-nums", highlightValue ? t.icon : "text-primary")}
+          >
+            {value}
+          </span>
+          {delta != null ? <Client360PeriodDelta delta={delta} mode={deltaMode} /> : null}
+        </div>
+      </>
     );
+
+    if (onClick && Number(value) > 0) {
+      return (
+        <button
+          type="button"
+          onClick={onClick}
+          aria-label={ariaLabel ?? label}
+          className="focus-visible:outline-accent-primary flex flex-col gap-1 bg-layer-1 px-4 py-3.5 text-left transition-colors hover:bg-layer-2 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px]"
+        >
+          {content}
+        </button>
+      );
+    }
+
+    return <div className="flex flex-col gap-1 bg-layer-1 px-4 py-3.5">{content}</div>;
   }
 
   if (!Icon) return null;
@@ -170,12 +224,12 @@ export function Client360StatTile({
       <span className={cn("col-start-1 row-start-1 grid size-7 shrink-0 place-items-center rounded-sm", t.iconBg)}>
         <Icon className={cn("size-3.5", t.icon)} strokeWidth={1.75} />
       </span>
-      <span className="col-start-2 row-start-1 text-11 font-medium uppercase leading-tight tracking-wide text-tertiary">
+      <span className="col-start-2 row-start-1 text-11 leading-tight font-medium tracking-wide text-tertiary uppercase">
         {label}
       </span>
       <span
         className={cn(
-          "col-start-2 row-start-2 text-22 font-semibold tabular-nums leading-none",
+          "text-22 col-start-2 row-start-2 leading-none font-semibold tabular-nums",
           highlightValue ? t.icon : "text-primary"
         )}
       >
@@ -216,7 +270,7 @@ export function Client360StackedDistribution({
             <div
               key={segment.key}
               className="h-full first:rounded-l-full last:rounded-r-full"
-              style={{ width: `${pct}%`, backgroundColor: tone.bar, opacity: 0.55 }}
+              style={{ width: `${pct}%`, backgroundColor: tone.bar, opacity: 0.38 }}
               title={`${segment.label}: ${segment.value}`}
             />
           );
@@ -232,7 +286,7 @@ export function Client360StackedDistribution({
                 <span className={cn("size-2 shrink-0 rounded-full", tone.dot)} />
                 <span className="truncate">{segment.label}</span>
               </span>
-              <span className="shrink-0 tabular-nums text-tertiary">
+              <span className="shrink-0 text-tertiary tabular-nums">
                 {segment.value}
                 <span className="ml-1 text-11">({pct}%)</span>
               </span>
@@ -257,6 +311,41 @@ export function Client360OverviewBlock({
     <div className={cn("min-w-0", className)}>
       <h3 className="mb-3 text-12 font-medium text-tertiary">{title}</h3>
       {children}
+    </div>
+  );
+}
+
+export function Client360ToolbarDivider() {
+  return <span className="bg-subtle mx-0.5 hidden h-5 w-px shrink-0 sm:block" aria-hidden />;
+}
+
+export function Client360SearchInput({
+  value,
+  onChange,
+  placeholder,
+  inputRef,
+  className,
+}: {
+  value: string;
+  onChange: (value: string) => void;
+  placeholder: string;
+  inputRef?: RefObject<HTMLInputElement | null>;
+  className?: string;
+}) {
+  return (
+    <div className={cn("relative w-[200px] max-w-[40vw] shrink-0", className)}>
+      <Search
+        className="pointer-events-none absolute top-1/2 left-2.5 size-4 -translate-y-1/2 text-tertiary"
+        strokeWidth={1.75}
+      />
+      <input
+        ref={inputRef}
+        type="search"
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        className="h-8 w-full rounded-sm border border-subtle bg-layer-2 py-1.5 pr-3 pl-8 text-13 text-primary placeholder:text-tertiary focus:border-strong focus:outline-none"
+      />
     </div>
   );
 }
@@ -297,15 +386,9 @@ export function Client360FilterMenu({
       {CLIENT_360_FILTER_OPTIONS.map(({ key, labelKey, icon: Icon }) => {
         const isActive = filter === key;
         return (
-          <CustomMenu.MenuItem
-            key={key}
-            className="flex items-center gap-2"
-            onClick={() => onFilterChange(key)}
-          >
+          <CustomMenu.MenuItem key={key} className="flex items-center gap-2" onClick={() => onFilterChange(key)}>
             <Icon className="size-3.5 shrink-0 text-tertiary" strokeWidth={1.75} />
-            <span className={cn("min-w-0 flex-1 truncate", isActive && "font-medium text-primary")}>
-              {t(labelKey)}
-            </span>
+            <span className={cn("min-w-0 flex-1 truncate", isActive && "font-medium text-primary")}>{t(labelKey)}</span>
             {isActive ? <Check className="size-3.5 shrink-0 text-accent-primary" strokeWidth={2.5} /> : null}
           </CustomMenu.MenuItem>
         );
@@ -335,16 +418,13 @@ export function Client360BreakdownRow({
           <span className={cn("size-1.5 shrink-0 rounded-full", t.dot)} />
           {label}
         </span>
-        <span className="shrink-0 tabular-nums text-tertiary">
+        <span className="shrink-0 text-tertiary tabular-nums">
           {value}
           <span className="ml-1 text-11">({pct}%)</span>
         </span>
       </div>
       <div className="h-1 overflow-hidden rounded-full bg-layer-2">
-        <div
-          className="h-full rounded-full opacity-90"
-          style={{ width: `${pct}%`, backgroundColor: t.bar }}
-        />
+        <div className="h-full rounded-full opacity-90" style={{ width: `${pct}%`, backgroundColor: t.bar }} />
       </div>
     </div>
   );
@@ -379,8 +459,7 @@ export function Client360ReportProgress({
   label: string;
 }) {
   const pct = total > 0 ? Math.round((published / total) * 100) : 0;
-  const barTone: Client360Tone =
-    pct >= 100 ? "success" : pct > 0 ? "warning" : "danger";
+  const barTone: Client360Tone = pct >= 100 ? "success" : pct > 0 ? "warning" : "danger";
   const t = CLIENT_360_TONE[barTone];
 
   return (
@@ -390,7 +469,7 @@ export function Client360ReportProgress({
           <span className={cn("size-1.5 rounded-full", t.dot)} />
           {label}
         </span>
-        <span className="tabular-nums text-secondary">
+        <span className="text-secondary tabular-nums">
           {published}/{total}
         </span>
       </div>
@@ -445,13 +524,8 @@ export function Client360ClientPeople({
   );
 }
 
-export function Client360StatusLozenge({
-  status,
-}: {
-  status: "published" | "draft" | "missing";
-}) {
-  const tone: Client360Tone =
-    status === "published" ? "success" : status === "draft" ? "warning" : "danger";
+export function Client360StatusLozenge({ status }: { status: "published" | "draft" | "missing" }) {
+  const tone: Client360Tone = status === "published" ? "success" : status === "draft" ? "warning" : "danger";
   const t = CLIENT_360_TONE[tone];
 
   return <span className={cn("inline-block size-1.5 shrink-0 rounded-full", t.dot)} />;

@@ -3,24 +3,55 @@
 		max_size {$FILE_SIZE_LIMIT}
 	}
 
-  redir /spaces /spaces/ permanent
-	reverse_proxy /spaces/* space:3000
+	redir /spaces /spaces/ permanent
+	handle /spaces/* {
+		reverse_proxy space:3000
+	}
 
-  redir /god-mode /god-mode/ permanent
-	reverse_proxy /god-mode/* admin:3000
-	
-	reverse_proxy /live/* live:3000
+	redir /god-mode /god-mode/ permanent
+	handle /god-mode/* {
+		reverse_proxy admin:3000
+	}
 
-	reverse_proxy /api/* api:8000
+	handle /live/* {
+		reverse_proxy live:3000
+	}
 
-	reverse_proxy /auth/* api:8000
+	@assistant_chat path /api/workspaces/*/assistant/sessions/*/chat* /api/workspaces/*/assistant/chat/jobs/*/stream*
+	handle @assistant_chat {
+		reverse_proxy api-chat:8000 {
+			flush_interval -1
+			lb_policy cookie assistant_sse {
+				fallback duration 24h
+			}
+		}
+	}
 
-	reverse_proxy /static/* api:8000
+	handle /api/* {
+		reverse_proxy api:8000 {
+			flush_interval -1
+		}
+	}
 
-	reverse_proxy /{$BUCKET_NAME}/* operis-minio:9000
-	reverse_proxy /{$BUCKET_NAME} operis-minio:9000
+	handle /auth/* {
+		reverse_proxy api:8000
+	}
 
-	reverse_proxy /* web:3000
+	handle /static/* {
+		reverse_proxy api:8000
+	}
+
+	handle /{$BUCKET_NAME}/* {
+		reverse_proxy operis-minio:9000
+	}
+
+	handle /{$BUCKET_NAME} {
+		reverse_proxy operis-minio:9000
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
 }
 
 {

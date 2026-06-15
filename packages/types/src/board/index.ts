@@ -1,6 +1,7 @@
 export * from "./boards";
 export * from "./board-meta";
 export * from "./client-360";
+export * from "./client-360-health-settings";
 export * from "./board-module";
 export * from "./issue-types";
 export * from "./custom-fields";

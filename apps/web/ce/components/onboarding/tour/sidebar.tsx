@@ -1,68 +1,73 @@
-// plane imports
-import { CycleIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operis/propel/icons";
-import type { ISvgIcons } from "@operis/propel/icons";
-// types
-import type { TTourSteps } from "./root";
-
-const sidebarOptions: {
-  key: TTourSteps;
-  label: string;
-  Icon: React.FC<ISvgIcons>;
-}[] = [
-  {
-    key: "work-items",
-    label: "Work items",
-    Icon: WorkItemsIcon,
-  },
-  {
-    key: "cycles",
-    label: "Cycles",
-    Icon: CycleIcon,
-  },
-  {
-    key: "modules",
-    label: "Modules",
-    Icon: ModuleIcon,
-  },
-  {
-    key: "views",
-    label: "Views",
-    Icon: ViewsIcon,
-  },
-  {
-    key: "pages",
-    label: "Pages",
-    Icon: PageIcon,
-  },
-];
+import { useTranslation } from "@operis/i18n";
+import { cn } from "@operis/utils";
+import type { TTourSteps } from "./tour-steps";
+import { TOUR_STEPS } from "./tour-steps";
 
 type Props = {
   step: TTourSteps;
   setStep: React.Dispatch<React.SetStateAction<TTourSteps>>;
+  currentStepIndex: number;
+  totalSteps: number;
 };
 
-export function TourSidebar({ step, setStep }: Props) {
+export function TourSidebar({ step, setStep, currentStepIndex, totalSteps }: Props) {
+  const { t } = useTranslation();
+
   return (
-    <div className="col-span-3 hidden bg-surface-2 p-8 lg:block">
-      <h3 className="text-16 font-medium">
-        Let{"'"}s get started!
-        <br />
-        Get more out of Plane.
-      </h3>
-      <div className="mt-8 space-y-5">
-        {sidebarOptions.map((option) => (
-          <h5
-            key={option.key}
-            className={`flex cursor-pointer items-center gap-2 border-l-[3px] py-0.5 pr-2 pl-3 text-13 font-medium capitalize ${
-              step === option.key ? "border-accent-strong text-accent-primary" : "border-transparent text-secondary"
-            }`}
-            onClick={() => setStep(option.key)}
-            role="button"
-          >
-            <option.Icon className="h-4 w-4" aria-hidden="true" />
-            {option.label}
-          </h5>
-        ))}
+    <div className="hidden flex-col border-b border-subtle/60 bg-layer-1/40 p-5 lg:flex lg:border-r lg:border-b-0">
+      <div className="space-y-1 px-1">
+        <h3 className="text-14 font-semibold text-primary">{t("product_tour.sidebar.title")}</h3>
+        <p className="text-12 leading-relaxed text-tertiary">{t("product_tour.sidebar.subtitle")}</p>
+      </div>
+
+      <nav className="mt-5 flex-1 space-y-0.5">
+        {TOUR_STEPS.map((option, index) => {
+          const isActive = step === option.key;
+          const isComplete = index < currentStepIndex;
+          const Icon = option.Icon;
+
+          return (
+            <button
+              key={option.key}
+              type="button"
+              className={cn(
+                "flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-13 font-medium transition-colors",
+                isActive && "bg-accent-primary/10 text-accent-primary",
+                !isActive && isComplete && "text-secondary hover:bg-layer-1-hover",
+                !isActive && !isComplete && "text-tertiary hover:bg-layer-1-hover hover:text-secondary"
+              )}
+              onClick={() => setStep(option.key)}
+            >
+              <span
+                className={cn(
+                  "flex size-5 shrink-0 items-center justify-center rounded-full text-10 font-semibold",
+                  isActive && "bg-accent-primary text-on-color",
+                  !isActive && isComplete && "bg-accent-primary/20 text-accent-primary",
+                  !isActive && !isComplete && "bg-layer-2 text-placeholder"
+                )}
+              >
+                {index + 1}
+              </span>
+              <Icon className="size-3.5 shrink-0 opacity-80" aria-hidden="true" />
+              <span className="truncate">{t(`product_tour.nav.${option.translationKey}`)}</span>
+            </button>
+          );
+        })}
+      </nav>
+
+      <div className="mt-4 space-y-2 px-1">
+        <div className="flex justify-between text-11 text-tertiary">
+          <span>{t("product_tour.welcome.progress")}</span>
+          <span>
+            {currentStepIndex + 1}/{totalSteps}
+          </span>
+        </div>
+        <div className="h-1 overflow-hidden rounded-full bg-layer-2">
+          <div
+            className="h-full rounded-full bg-accent-primary transition-all duration-500"
+            style={{ width: `${((currentStepIndex + 1) / totalSteps) * 100}%` }}
+          />
+        </div>
       </div>
     </div>
   );

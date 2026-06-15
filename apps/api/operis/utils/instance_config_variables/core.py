@@ -228,10 +228,46 @@ llm_config_variables = [
         "category": "AI",
         "is_encrypted": False,
     },
+    {
+        "key": "LLM_BASE_URL",
+        "value": os.environ.get("LLM_BASE_URL", ""),
+        "category": "AI",
+        "is_encrypted": False,
+    },
     # Deprecated, use LLM_MODEL
     {
         "key": "GPT_ENGINE",
         "value": os.environ.get("GPT_ENGINE", "gpt-3.5-turbo"),
+        "category": "AI",
+        "is_encrypted": False,
+    },
+    {
+        "key": "ASSISTANT_ENABLED",
+        "value": os.environ.get("ASSISTANT_ENABLED", "1"),
+        "category": "AI",
+        "is_encrypted": False,
+    },
+    {
+        "key": "ASSISTANT_MAX_MESSAGES_PER_USER_PER_HOUR",
+        "value": os.environ.get("ASSISTANT_MAX_MESSAGES_PER_USER_PER_HOUR", "60"),
+        "category": "AI",
+        "is_encrypted": False,
+    },
+    {
+        "key": "ASSISTANT_MAX_MESSAGES_PER_WORKSPACE_PER_HOUR",
+        "value": os.environ.get("ASSISTANT_MAX_MESSAGES_PER_WORKSPACE_PER_HOUR", "500"),
+        "category": "AI",
+        "is_encrypted": False,
+    },
+    {
+        "key": "ASSISTANT_MAX_TOOL_ROUNDS",
+        "value": os.environ.get("ASSISTANT_MAX_TOOL_ROUNDS", "5"),
+        "category": "AI",
+        "is_encrypted": False,
+    },
+    {
+        "key": "VITE_ENABLE_OPEROZ_ASSISTANT",
+        "value": os.environ.get("VITE_ENABLE_OPEROZ_ASSISTANT", "1"),
         "category": "AI",
         "is_encrypted": False,
     },

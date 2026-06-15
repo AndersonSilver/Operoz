@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { CircleUserRound } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
+import { useTranslation, DEFAULT_LOCALE } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
 import { EFileAssetType } from "@operis/types";
@@ -70,7 +70,7 @@ export const GeneralProfileSettingsForm = observer(function GeneralProfileSettin
       display_name: user.display_name || "",
       email: user.email || "",
       role: profile.role || "Product / Project Manager",
-      language: profile.language || "en",
+      language: profile.language || DEFAULT_LOCALE,
       user_timezone: user.user_timezone || "Asia/Kolkata",
     },
   });

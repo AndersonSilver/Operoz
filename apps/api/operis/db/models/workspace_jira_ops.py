@@ -21,7 +21,7 @@ class WorkspaceJiraOpsConfig(BaseModel):
     oauth_expires_at = models.DateTimeField(null=True, blank=True)
     jira_site_name = models.CharField(max_length=255, blank=True, default="")
     project_key = models.CharField(max_length=32, default="OPS")
-    board_slug = models.CharField(max_length=48, default="squad-as-a-services")
+    board_slug = models.CharField(max_length=48, default="squad-as-a-service")
     last_sync_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

@@ -4,6 +4,9 @@ import { AutomationNodeConfigForm } from "./automation-node-config-form";
 import type { AutomationNodeData } from "./automation-utils";
 import { getDecisionBranches } from "./automation-utils";
 import { DecisionInspector } from "./decision-inspector";
+import { LlmDecisionInspector } from "./llm-decision-inspector";
+import { ParallelInspector } from "./parallel-inspector";
+import { getParallelBranches } from "./automation-utils";
 import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
 import { useAutomationBoardContext } from "./use-automation-board-context";
 
@@ -50,11 +53,18 @@ export function BoardAutomationInspector(props: Props) {
             label: source.data.label,
             config: source.data.config ?? {},
           }).find((b) => b.id === edge.sourceHandle)
-        : null;
+        : source?.data.kind === "parallel" && edge.sourceHandle
+          ? getParallelBranches({
+              kind: "parallel",
+              catalog_key: source.data.catalog_key,
+              label: source.data.label,
+              config: source.data.config ?? {},
+            }).find((b) => b.id === edge.sourceHandle)
+          : null;
 
     return (
       <div className="flex h-full min-h-0 flex-col overflow-y-auto rounded-lg border border-subtle bg-surface-1 p-3">
-        <p className="mb-2 text-11 font-semibold uppercase tracking-wide text-tertiary">
+        <p className="mb-2 text-11 font-semibold tracking-wide text-tertiary uppercase">
           {t("boards.settings.automation.inspector.connection")}
         </p>
         <p className="text-13 text-primary">
@@ -64,7 +74,7 @@ export function BoardAutomationInspector(props: Props) {
         <p className="mt-2 text-11 text-tertiary">{t("boards.settings.automation.inspector.delete_hint")}</p>
         <button
           type="button"
-          className="mt-4 rounded-md border border-danger-primary px-3 py-1.5 text-13 text-danger-primary hover:bg-danger-primary/10"
+          className="border-danger-primary mt-4 rounded-md border px-3 py-1.5 text-13 text-danger-primary hover:bg-danger-primary/10"
           onClick={() => onDeleteEdge(edge.id)}
         >
           {t("boards.settings.automation.inspector.delete_connection")}
@@ -79,6 +89,36 @@ export function BoardAutomationInspector(props: Props) {
         <p className="text-13 text-tertiary">{t("boards.settings.automation.inspector.empty")}</p>
         <p className="mt-3 text-11 text-tertiary">{t("boards.settings.automation.inspector.delete_hint")}</p>
       </div>
+    );
+  }
+
+  if (node.data.kind === "parallel") {
+    return (
+      <ParallelInspector
+        graph={graph}
+        nodeId={node.id}
+        label={node.data.label}
+        config={node.data.config ?? {}}
+        onUpdateLabel={(label) => onUpdateNodeData(node.id, { label })}
+        onUpdateConfig={(config) => onUpdateNodeData(node.id, { config })}
+        onGraphChange={onGraphChange}
+        onDeleteNode={() => onDeleteNode(node.id)}
+      />
+    );
+  }
+
+  if (node.data.kind === "decision" && node.data.catalog_key === "decision.llm") {
+    return (
+      <LlmDecisionInspector
+        graph={graph}
+        nodeId={node.id}
+        label={node.data.label}
+        config={node.data.config ?? {}}
+        onUpdateLabel={(label) => onUpdateNodeData(node.id, { label })}
+        onUpdateConfig={(config) => onUpdateNodeData(node.id, { config })}
+        onGraphChange={onGraphChange}
+        onDeleteNode={() => onDeleteNode(node.id)}
+      />
     );
   }
 
@@ -107,7 +147,7 @@ export function BoardAutomationInspector(props: Props) {
 
   return (
     <div className="flex h-full min-h-0 flex-col overflow-y-auto rounded-lg border border-subtle bg-surface-1 p-3">
-      <p className="mb-2 text-11 font-semibold uppercase tracking-wide text-tertiary">
+      <p className="mb-2 text-11 font-semibold tracking-wide text-tertiary uppercase">
         {t("boards.settings.automation.inspector.node")}
       </p>
 
@@ -116,10 +156,7 @@ export function BoardAutomationInspector(props: Props) {
       ) : (
         <>
           <ConfigField label={t("boards.settings.automation.inspector.label")}>
-            <ConfigTextInput
-              value={node.data.label}
-              onChange={(label) => onUpdateNodeData(node.id, { label })}
-            />
+            <ConfigTextInput value={node.data.label} onChange={(label) => onUpdateNodeData(node.id, { label })} />
           </ConfigField>
 
           <AutomationNodeConfigForm
@@ -136,7 +173,7 @@ export function BoardAutomationInspector(props: Props) {
       <p className="mt-3 text-11 text-tertiary">{t("boards.settings.automation.inspector.delete_hint")}</p>
       <button
         type="button"
-        className="mt-3 rounded-md border border-danger-primary px-3 py-1.5 text-13 text-danger-primary hover:bg-danger-primary/10"
+        className="border-danger-primary mt-3 rounded-md border px-3 py-1.5 text-13 text-danger-primary hover:bg-danger-primary/10"
         onClick={() => onDeleteNode(node.id)}
       >
         {t("boards.settings.automation.inspector.delete_node")}

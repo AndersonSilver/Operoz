@@ -3,22 +3,34 @@ import type {
   IBoard,
   IBoardAutomationDeadLetter,
   IBoardAutomationEmailTemplate,
+  IBoardAutomationHook,
+  IBoardAutomationPolicy,
+  IBoardAutomationPublishAudit,
   IBoardAutomationRule,
   IBoardAutomationRuleRevision,
   IBoardAutomationRun,
   IBoardAutomationScript,
   IBoardAutomationSecret,
+  IBoardClient360HealthSettings,
+  IBoardClient360HealthSettingsUpdate,
+  IBoardPlaybook,
+  IBoardPlaybookMetadata,
   IBoardMeta,
   IBoardModule,
   IEmailNotificationLog,
   TAutomationCatalog,
   TAutomationDryRunResult,
   TAutomationGraph,
+  TAutomationPacksResponse,
+  TAutomationTemplate,
+  TAutomationTemplateInstallResult,
   TAutomationMetricsResponse,
   TAutomationValidation,
   TBoardFormData,
   TClient360DetailResponse,
+  TClient360HealthHistoryResponse,
   TClient360ListResponse,
+  TClient360MatrixResponse,
   TIssuesResponse,
 } from "@operis/types";
 import { APIService } from "@/services/api.service";
@@ -62,11 +74,7 @@ export class BoardService extends APIService {
       });
   }
 
-  async updateBoard(
-    workspaceSlug: string,
-    boardSlug: string,
-    data: Partial<TBoardFormData>
-  ): Promise<IBoard> {
+  async updateBoard(workspaceSlug: string, boardSlug: string, data: Partial<TBoardFormData>): Promise<IBoard> {
     return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
@@ -134,12 +142,24 @@ export class BoardService extends APIService {
   async getClient360(
     workspaceSlug: string,
     boardSlug: string,
-    params?: { period_start?: string; period_end?: string }
+    params?: { period_start?: string; period_end?: string; compare?: boolean }
   ): Promise<TClient360ListResponse> {
-    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/`, { params })
+    const query = params
+      ? {
+          ...params,
+          ...(params.compare ? { compare: 1 } : {}),
+        }
+      : undefined;
+    if (query && "compare" in query && !params?.compare) {
+      delete query.compare;
+    }
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/`, { params: query })
       .then((response) => response?.data)
       .catch((error) => {
-        throw error?.response?.data;
+        throw {
+          status: error?.response?.status,
+          ...(error?.response?.data ?? {}),
+        };
       });
   }
 
@@ -149,20 +169,151 @@ export class BoardService extends APIService {
     projectId: string,
     params?: { period_start?: string; period_end?: string }
   ): Promise<TClient360DetailResponse> {
-    return this.get(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/${projectId}/`,
-      { params }
-    )
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/${projectId}/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async getEmailNotificationLogs(
+  async getClient360HealthHistory(
+    workspaceSlug: string,
+    boardSlug: string,
+    projectId: string,
+    params?: { weeks?: number }
+  ): Promise<TClient360HealthHistoryResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/${projectId}/health-history/`, {
+      params,
+    })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360Matrix(
+    workspaceSlug: string,
+    boardSlug: string,
+    params?: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      page?: number;
+      page_size?: number;
+    }
+  ): Promise<TClient360MatrixResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/matrix/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw {
+          status: error?.response?.status,
+          ...(error?.response?.data ?? {}),
+        };
+      });
+  }
+
+  async downloadClient360MatrixCsv(
+    workspaceSlug: string,
+    boardSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export: "csv";
+      delimiter?: "semicolon";
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/matrix/`,
+      { params },
+      { responseType: "blob" }
+    )
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360ReminderLogs(
     workspaceSlug: string,
     boardSlug: string
-  ): Promise<IEmailNotificationLog[]> {
+  ): Promise<import("@operis/types").TClient360ReminderLog[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/reminder-logs/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async downloadClient360QbrPortfolio(
+    workspaceSlug: string,
+    boardSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export_format: "md" | "pdf";
+      compare?: boolean;
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    const query: Record<string, string | number | undefined> = {
+      period_start: params.period_start,
+      period_end: params.period_end,
+      weeks: params.weeks,
+      export_format: params.export_format,
+    };
+    if (params.compare) query.compare = 1;
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/qbr/`,
+      { params: query },
+      { responseType: "blob" }
+    )
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async downloadClient360QbrClient(
+    workspaceSlug: string,
+    boardSlug: string,
+    projectId: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      weeks?: number;
+      export_format: "md" | "pdf";
+      compare?: boolean;
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    const query: Record<string, string | number | undefined> = {
+      period_start: params.period_start,
+      period_end: params.period_end,
+      weeks: params.weeks,
+      export_format: params.export_format,
+    };
+    if (params.compare) query.compare = 1;
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/${projectId}/qbr/`,
+      { params: query },
+      { responseType: "blob" }
+    )
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getEmailNotificationLogs(workspaceSlug: string, boardSlug: string): Promise<IEmailNotificationLog[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/email-notification-logs/`)
       .then((response) => response?.data ?? [])
       .catch((error) => {
@@ -204,24 +355,15 @@ export class BoardService extends APIService {
     ruleId: string,
     data: Partial<IBoardAutomationRule>
   ): Promise<IBoardAutomationRule> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async publishAutomationRule(
-    workspaceSlug: string,
-    boardSlug: string,
-    ruleId: string
-  ): Promise<IBoardAutomationRule> {
-    return this.post(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/publish/`
-    )
+  async publishAutomationRule(workspaceSlug: string, boardSlug: string, ruleId: string): Promise<IBoardAutomationRule> {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/publish/`)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
@@ -287,21 +429,18 @@ export class BoardService extends APIService {
     graph?: TAutomationGraph,
     live = true
   ): Promise<TAutomationDryRunResult> {
-    return this.post(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/dry-run/`,
-      { event, graph, live }
-    )
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/rules/${ruleId}/dry-run/`, {
+      event,
+      graph,
+      live,
+    })
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async getAutomationRuns(
-    workspaceSlug: string,
-    boardSlug: string,
-    ruleId?: string
-  ): Promise<IBoardAutomationRun[]> {
+  async getAutomationRuns(workspaceSlug: string, boardSlug: string, ruleId?: string): Promise<IBoardAutomationRun[]> {
     const params = ruleId ? { rule_id: ruleId } : undefined;
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/runs/`, { params })
       .then((response) => response?.data ?? [])
@@ -336,10 +475,7 @@ export class BoardService extends APIService {
     scriptId: string,
     data: Partial<IBoardAutomationScript>
   ): Promise<IBoardAutomationScript> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/scripts/${scriptId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/scripts/${scriptId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
@@ -393,14 +529,8 @@ export class BoardService extends APIService {
       });
   }
 
-  async deleteAutomationEmailTemplate(
-    workspaceSlug: string,
-    boardSlug: string,
-    templateId: string
-  ): Promise<void> {
-    return this.delete(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/email-templates/${templateId}/`
-    )
+  async deleteAutomationEmailTemplate(workspaceSlug: string, boardSlug: string, templateId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/email-templates/${templateId}/`)
       .then(() => undefined)
       .catch((error) => {
         throw error?.response?.data;
@@ -415,12 +545,259 @@ export class BoardService extends APIService {
       });
   }
 
-  async getAutomationDeadLetters(
-    workspaceSlug: string,
-    boardSlug: string
-  ): Promise<IBoardAutomationDeadLetter[]> {
+  async getAutomationDeadLetters(workspaceSlug: string, boardSlug: string): Promise<IBoardAutomationDeadLetter[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/dead-letters/`)
       .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getAutomationPolicy(workspaceSlug: string, boardSlug: string): Promise<IBoardAutomationPolicy> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/policy/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updateAutomationPolicy(
+    workspaceSlug: string,
+    boardSlug: string,
+    data: Partial<IBoardAutomationPolicy>
+  ): Promise<IBoardAutomationPolicy> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/policy/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360HealthSettings(workspaceSlug: string, boardSlug: string): Promise<IBoardClient360HealthSettings> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/health-settings/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updateClient360HealthSettings(
+    workspaceSlug: string,
+    boardSlug: string,
+    data: IBoardClient360HealthSettingsUpdate
+  ): Promise<IBoardClient360HealthSettings> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/health-settings/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async resetClient360HealthSettings(workspaceSlug: string, boardSlug: string): Promise<IBoardClient360HealthSettings> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/health-settings/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getClient360IntakeTypes(
+    workspaceSlug: string,
+    boardSlug: string
+  ): Promise<import("@operis/types").TClient360IntakeType[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/intake-types/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createClient360IntakeType(
+    workspaceSlug: string,
+    boardSlug: string,
+    data: { name: string; slug?: string; type_name_pattern?: string; sort_order?: number }
+  ): Promise<import("@operis/types").TClient360IntakeType> {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/intake-types/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async deleteClient360IntakeType(workspaceSlug: string, boardSlug: string, intakeTypeId: string): Promise<void> {
+    await this.delete(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/intake-types/${intakeTypeId}/`
+    ).catch((error) => {
+      throw error?.response?.data;
+    });
+  }
+
+  async getAutomationPublishAudits(
+    workspaceSlug: string,
+    boardSlug: string,
+    ruleId?: string
+  ): Promise<IBoardAutomationPublishAudit[]> {
+    const params = ruleId ? { rule_id: ruleId } : undefined;
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/publish-audits/`, {
+      params,
+    })
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getAutomationHooks(workspaceSlug: string, boardSlug: string): Promise<IBoardAutomationHook[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/hooks/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createAutomationHook(
+    workspaceSlug: string,
+    boardSlug: string,
+    data: {
+      name: string;
+      enabled?: boolean;
+      event: string;
+      matcher?: string;
+      handler_type: string;
+      config?: Record<string, unknown>;
+      sort_order?: number;
+    }
+  ): Promise<IBoardAutomationHook> {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/hooks/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getAutomationPacks(workspaceSlug: string, boardSlug: string): Promise<TAutomationPacksResponse> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/packs/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async installAutomationPack(
+    workspaceSlug: string,
+    boardSlug: string,
+    packName: string,
+    data: { config?: Record<string, unknown>; create_rules?: boolean; publish?: boolean } = {}
+  ) {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/packs/${packName}/install/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async uninstallAutomationPack(workspaceSlug: string, boardSlug: string, packName: string) {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/packs/${packName}/uninstall/`, {})
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getAutomationTemplates(workspaceSlug: string, boardSlug: string): Promise<TAutomationTemplate[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/templates/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async installAutomationTemplate(
+    workspaceSlug: string,
+    boardSlug: string,
+    templateId: string,
+    data: {
+      parameters?: Record<string, unknown>;
+      name?: string;
+      description?: string;
+      dry_run?: boolean;
+      publish?: boolean;
+      live?: boolean;
+    }
+  ): Promise<TAutomationTemplateInstallResult> {
+    return this.post(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/templates/${templateId}/install/`,
+      data
+    )
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async getPlaybooks(workspaceSlug: string, boardSlug: string): Promise<IBoardPlaybook[]> {
+    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/playbooks/`)
+      .then((response) => response?.data ?? [])
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async createPlaybook(
+    workspaceSlug: string,
+    boardSlug: string,
+    data: {
+      title: string;
+      description?: string;
+      draft_markdown?: string;
+      metadata?: IBoardPlaybookMetadata;
+    }
+  ): Promise<IBoardPlaybook> {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/playbooks/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async updatePlaybook(
+    workspaceSlug: string,
+    boardSlug: string,
+    playbookId: string,
+    data: Partial<{
+      title: string;
+      description: string;
+      draft_markdown: string;
+      is_active: boolean;
+      metadata: IBoardPlaybookMetadata;
+    }>
+  ): Promise<IBoardPlaybook> {
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/playbooks/${playbookId}/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async publishPlaybook(workspaceSlug: string, boardSlug: string, playbookId: string): Promise<IBoardPlaybook> {
+    return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/playbooks/${playbookId}/publish/`, {})
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async deletePlaybook(workspaceSlug: string, boardSlug: string, playbookId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/playbooks/${playbookId}/`)
+      .then(() => undefined)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async deleteAutomationHook(workspaceSlug: string, boardSlug: string, hookId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/hooks/${hookId}/`)
+      .then(() => undefined)
       .catch((error) => {
         throw error?.response?.data;
       });
@@ -452,10 +829,7 @@ export class BoardService extends APIService {
     secretId: string,
     data: { key?: string; value?: string; description?: string }
   ): Promise<IBoardAutomationSecret> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/secrets/${secretId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/automation/secrets/${secretId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;

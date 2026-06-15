@@ -8,10 +8,7 @@ import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IBoard, IBoardAutomationRule, IBoardAutomationRun } from "@operis/types";
 import { Loader, cn } from "@operis/ui";
 import { BoardService } from "@/services/board/board.service";
-import {
-  AutomationHistoryEmptyState,
-  AutomationHistoryRunList,
-} from "./automation/automation-history-run-list";
+import { AutomationHistoryEmptyState, AutomationHistoryRunList } from "./automation/automation-history-run-list";
 import { AutomationRunDetailModal } from "./automation/automation-run-detail-modal";
 import { prepareAutomationTestNavigation } from "./automation/automation-test-utils";
 
@@ -44,6 +41,16 @@ export const BoardAutomationHistorySettings = observer(function BoardAutomationH
   }, [workspaceSlug, board.slug]);
 
   useEffect(() => {
+    const onVisible = () => {
+      if (document.visibilityState === "visible") {
+        void load();
+      }
+    };
+    document.addEventListener("visibilitychange", onVisible);
+    return () => document.removeEventListener("visibilitychange", onVisible);
+  }, [load]);
+
+  useEffect(() => {
     let cancelled = false;
     setLoading(true);
     load()
@@ -70,10 +77,7 @@ export const BoardAutomationHistorySettings = observer(function BoardAutomationH
     setRefreshing(false);
   };
 
-  const selectedRule = useMemo(
-    () => rules.find((rule) => rule.id === selectedRuleId) ?? null,
-    [rules, selectedRuleId]
-  );
+  const selectedRule = useMemo(() => rules.find((rule) => rule.id === selectedRuleId) ?? null, [rules, selectedRuleId]);
 
   const handleTest = () => {
     if (!selectedRule) return;
@@ -128,9 +132,9 @@ export const BoardAutomationHistorySettings = observer(function BoardAutomationH
                     {t("boards.settings.automation.history.select_rule")}
                   </span>
                   <div className="relative mt-1.5">
-                    <Workflow className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-placeholder" />
+                    <Workflow className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-placeholder" />
                     <select
-                      className="w-full appearance-none rounded-lg border border-subtle bg-surface-1 py-2.5 pl-8 pr-3 text-13 text-primary"
+                      className="w-full appearance-none rounded-lg border border-subtle bg-surface-1 py-2.5 pr-3 pl-8 text-13 text-primary"
                       value={selectedRuleId}
                       onChange={(e) => setSelectedRuleId(e.target.value)}
                       disabled={!rules.length}
@@ -164,10 +168,8 @@ export const BoardAutomationHistorySettings = observer(function BoardAutomationH
                 <div className="mt-3 flex flex-wrap items-center gap-2">
                   <span
                     className={cn(
-                      "rounded-full px-2 py-0.5 text-10 font-semibold uppercase tracking-wide",
-                      selectedRule.enabled
-                        ? "bg-success-subtle text-success-primary"
-                        : "bg-layer-2 text-tertiary"
+                      "rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
+                      selectedRule.enabled ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
                     )}
                   >
                     {selectedRule.enabled
@@ -189,9 +191,7 @@ export const BoardAutomationHistorySettings = observer(function BoardAutomationH
           <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2">
               <History className="size-4 text-tertiary" strokeWidth={1.75} />
-              <h2 className="text-14 font-semibold text-primary">
-                {t("boards.settings.automation.history.title")}
-              </h2>
+              <h2 className="text-14 font-semibold text-primary">{t("boards.settings.automation.history.title")}</h2>
               <span className="rounded-full bg-layer-2 px-2 py-0.5 text-11 text-tertiary">{runs.length}</span>
             </div>
             <Button

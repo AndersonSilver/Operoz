@@ -10,6 +10,8 @@ import { v4 as uuidv4 } from "uuid";
 
 export const AUTOMATION_NODE_TYPE = "automationNode";
 export const DECISION_NODE_TYPE = "decisionNode";
+export const PARALLEL_NODE_TYPE = "parallelNode";
+export const SCHEDULE_CRON_NODE_TYPE = "scheduleCronNode";
 
 export const ACTION_BRANCH_SUCCESS = "success";
 export const ACTION_BRANCH_ERROR = "error";
@@ -22,8 +24,13 @@ export function isBranchingAction(catalogKey: string): boolean {
 
 export type DecisionBranch = TAutomationDecisionBranch;
 
+export type ParallelBranch = {
+  id: string;
+  label: string;
+};
+
 export type AutomationNodeData = {
-  kind: "trigger" | "filter" | "decision" | "action";
+  kind: "trigger" | "filter" | "decision" | "parallel" | "action";
   catalog_key: string;
   label: string;
   icon?: string;
@@ -37,6 +44,21 @@ export const DECISION_CONDITION_OPTIONS = [
   { key: "filter.field_changed", label: "Campo alterado" },
   { key: "decision.else", label: "Senão (padrão)" },
 ] as const;
+
+export function getParallelBranches(data: AutomationNodeData): ParallelBranch[] {
+  const branches = data.config?.branches;
+  if (Array.isArray(branches) && branches.length > 0) {
+    return branches as ParallelBranch[];
+  }
+  return createDefaultParallelBranches();
+}
+
+export function createDefaultParallelBranches(): ParallelBranch[] {
+  return [
+    { id: `branch-${uuidv4().slice(0, 8)}`, label: "Ramo 1" },
+    { id: `branch-${uuidv4().slice(0, 8)}`, label: "Ramo 2" },
+  ];
+}
 
 export function getDecisionBranches(data: AutomationNodeData): DecisionBranch[] {
   const branches = data.config?.branches;
@@ -98,8 +120,11 @@ export function removeBranchEdges(graph: TAutomationGraph, nodeId: string, branc
   };
 }
 
-function nodeTypeForKind(kind: AutomationNodeData["kind"]): string {
-  return kind === "decision" ? DECISION_NODE_TYPE : AUTOMATION_NODE_TYPE;
+function nodeTypeForKind(kind: AutomationNodeData["kind"], catalogKey?: string): string {
+  if (kind === "decision") return DECISION_NODE_TYPE;
+  if (kind === "parallel") return PARALLEL_NODE_TYPE;
+  if (kind === "trigger" && catalogKey === "schedule.cron") return SCHEDULE_CRON_NODE_TYPE;
+  return AUTOMATION_NODE_TYPE;
 }
 
 export type TAutomationGraphClip = {
@@ -113,10 +138,7 @@ export type TPasteGraphClipResult = {
   skippedTrigger: boolean;
 };
 
-export function extractGraphClip(
-  graph: TAutomationGraph,
-  nodeIds: readonly string[]
-): TAutomationGraphClip | null {
+export function extractGraphClip(graph: TAutomationGraph, nodeIds: readonly string[]): TAutomationGraphClip | null {
   if (nodeIds.length === 0) return null;
 
   const idSet = new Set(nodeIds);
@@ -158,9 +180,7 @@ export function pasteGraphClip(
   }
 
   const pasteIdSet = new Set(nodesToPaste.map((n) => n.id));
-  const edgesToPaste = clip.edges.filter(
-    (e) => pasteIdSet.has(e.source) && pasteIdSet.has(e.target)
-  );
+  const edgesToPaste = clip.edges.filter((e) => pasteIdSet.has(e.source) && pasteIdSet.has(e.target));
 
   const nodeIdMap: Record<string, string> = {};
   const branchIdMap: Record<string, Record<string, string>> = {};
@@ -223,11 +243,10 @@ export function graphToFlow(
   selectedNodeIds?: readonly string[] | null,
   selectedEdgeId?: string | null
 ): { nodes: Node<AutomationNodeData>[]; edges: Edge[] } {
-  const selectedNodeSet =
-    selectedNodeIds && selectedNodeIds.length > 0 ? new Set(selectedNodeIds) : null;
+  const selectedNodeSet = selectedNodeIds && selectedNodeIds.length > 0 ? new Set(selectedNodeIds) : null;
   const nodes: Node<AutomationNodeData>[] = (graph.nodes ?? []).map((n) => ({
     id: n.id,
-    type: nodeTypeForKind(n.data.kind),
+    type: nodeTypeForKind(n.data.kind, n.data.catalog_key),
     position: n.position ?? { x: 0, y: 0 },
     selected: selectedNodeSet?.has(n.id) ?? false,
     data: {
@@ -254,8 +273,8 @@ export function flowToGraph(nodes: Node<AutomationNodeData>[], edges: Edge[]): T
   return {
     nodes: nodes.map((n) => ({
       id: n.id,
-      type: n.type,
-      position: n.position,
+      type: nodeTypeForKind(n.data.kind, n.data.catalog_key),
+      position: n.position ?? { x: 0, y: 0 },
       data: {
         kind: n.data.kind,
         catalog_key: n.data.catalog_key,
@@ -300,10 +319,21 @@ export function createNodeFromCatalog(
   position: { x: number; y: number }
 ): Node<AutomationNodeData> {
   const config: Record<string, unknown> = {};
-  if (kind === "trigger") config.event_type = item.key;
+  if (kind === "trigger" && item.key === "schedule.cron") {
+    Object.assign(config, {
+      preset: "daily",
+      time: "09:00",
+      weekdays: [0, 1, 2, 3, 4],
+      day_of_month: 1,
+      cron: "0 9 * * *",
+      timezone: "America/Sao_Paulo",
+    });
+  } else if (kind === "trigger") {
+    config.event_type = item.key;
+  }
   return {
     id: `${kind}-${uuidv4().slice(0, 8)}`,
-    type: nodeTypeForKind(kind),
+    type: nodeTypeForKind(kind, item.key),
     position,
     data: {
       kind,
@@ -315,17 +345,41 @@ export function createNodeFromCatalog(
   };
 }
 
-export function createDecisionNode(position: { x: number; y: number }): Node<AutomationNodeData> {
+export function createParallelNode(
+  item: TAutomationCatalogItem,
+  position: { x: number; y: number }
+): Node<AutomationNodeData> {
+  return {
+    id: `parallel-${uuidv4().slice(0, 8)}`,
+    type: PARALLEL_NODE_TYPE,
+    position,
+    data: {
+      kind: "parallel",
+      catalog_key: item.key,
+      label: item.label,
+      icon: item.icon,
+      config: { join_policy: "all", branches: createDefaultParallelBranches() },
+    },
+  };
+}
+
+export function createDecisionNode(
+  position: { x: number; y: number },
+  catalogKey: "decision.switch" | "decision.llm" = "decision.switch"
+): Node<AutomationNodeData> {
+  const isLlm = catalogKey === "decision.llm";
   return {
     id: `decision-${uuidv4().slice(0, 8)}`,
     type: DECISION_NODE_TYPE,
     position,
     data: {
       kind: "decision",
-      catalog_key: "decision.switch",
-      label: "Tomada de decisão",
-      icon: "git-branch",
-      config: { branches: createDefaultDecisionBranches() },
+      catalog_key: catalogKey,
+      label: isLlm ? "Decisão LLM" : "Tomada de decisão",
+      icon: isLlm ? "sparkles" : "git-branch",
+      config: isLlm
+        ? { prompt: "", confidence_threshold: 80, human_branch_id: "", branches: [] }
+        : { branches: createDefaultDecisionBranches() },
     },
   };
 }
@@ -333,12 +387,37 @@ export function createDecisionNode(position: { x: number; y: number }): Node<Aut
 export function sampleDryRunEvent(
   boardId: string,
   workspace: string | { id: string },
-  graph?: TAutomationGraph
+  graph?: TAutomationGraph,
+  ruleId?: string
 ) {
   const workspaceId = typeof workspace === "string" ? workspace : workspace.id;
   const trigger = graph?.nodes?.find((n) => n.data.kind === "trigger");
   const eventType = trigger?.data.catalog_key ?? "issue.updated";
   const issueId = uuidv4();
+  const scheduleRuleId = ruleId ?? uuidv4();
+  const slot = new Date().toISOString().slice(0, 16).replace("T", "T");
+
+  if (eventType === "schedule.cron") {
+    return {
+      event_id: `schedule:${scheduleRuleId}:${slot}`,
+      event_type: "schedule.cron",
+      workspace_id: workspaceId,
+      board_id: boardId,
+      actor_id: null,
+      entity_type: "schedule",
+      entity_id: scheduleRuleId,
+      project_id: null,
+      payload: {
+        rule_id: scheduleRuleId,
+        slot,
+        preset: trigger?.data.config?.preset ?? "daily",
+        timezone: trigger?.data.config?.timezone ?? "America/Sao_Paulo",
+      },
+      occurred_at: new Date().toISOString(),
+      automation_origin: false,
+    };
+  }
+
   const payload: Record<string, unknown> = { issue_id: issueId };
   if (eventType === "issue.updated" || eventType === "issue.state_changed") {
     payload.changed_fields = ["state_id"];

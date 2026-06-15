@@ -1,13 +1,4 @@
-import {
-  Code2,
-  Filter,
-  GitBranch,
-  Loader2,
-  Mail,
-  Play,
-  Terminal,
-  Zap,
-} from "lucide-react";
+import { Code2, Filter, GitBranch, Loader2, Mail, Play, Shield, Terminal, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TAutomationGraph } from "@operis/types";
@@ -52,11 +43,13 @@ export function stepNodeLabel(
 }
 
 export function kindIcon(kind: string, catalogKey: string): LucideIcon {
+  if (kind === "hook" || kind === "policy") return Shield;
   if (catalogKey === "action.send_email") return Mail;
   if (catalogKey === "action.run_script") return Terminal;
   if (kind === "trigger") return Zap;
   if (kind === "filter") return Filter;
   if (kind === "decision") return GitBranch;
+  if (kind === "parallel") return GitBranch;
   if (kind === "action") return Play;
   return Code2;
 }
@@ -108,6 +101,8 @@ export function AutomationDryRunTimeline(props: Props) {
         const kind = String(step.kind ?? "");
         const catalogKey = stepCatalogKey(graph, nodeId, step);
         const Icon = kindIcon(kind, catalogKey);
+        const isHook = kind === "hook";
+        const isPolicy = kind === "policy";
         const isFilter = kind === "filter";
         const ok = step.ok !== false && step.passed !== false;
         const passed = isFilter ? step.passed === true : ok;
@@ -124,7 +119,7 @@ export function AutomationDryRunTimeline(props: Props) {
             {!isLast && (
               <span
                 className={cn(
-                  "absolute left-[1.125rem] top-10 bottom-0 w-px",
+                  "absolute top-10 bottom-0 left-[1.125rem] w-px",
                   passed ? "bg-success-subtle" : "bg-danger-subtle"
                 )}
                 aria-hidden
@@ -133,9 +128,7 @@ export function AutomationDryRunTimeline(props: Props) {
             <span
               className={cn(
                 "relative z-10 grid size-9 shrink-0 place-items-center rounded-full border-2 bg-surface-1",
-                passed
-                  ? "border-success-primary text-success-primary"
-                  : "border-danger-primary text-danger-primary"
+                passed ? "border-success-primary text-success-primary" : "border-danger-primary text-danger-primary"
               )}
             >
               <Icon className="size-4" strokeWidth={1.75} />
@@ -148,19 +141,21 @@ export function AutomationDryRunTimeline(props: Props) {
             >
               <div className="flex flex-wrap items-start justify-between gap-2">
                 <div>
-                  <p className="text-11 font-medium uppercase tracking-wide text-tertiary">
+                  <p className="text-11 font-medium tracking-wide text-tertiary uppercase">
                     {t("boards.settings.automation.dry_run_page.step_label", { index: index + 1 })}
                   </p>
                   <h3 className="mt-0.5 text-14 font-semibold text-primary">
-                    {stepNodeLabel(graph, nodeId, step)}
+                    {isHook
+                      ? String(step.hook_name ?? t("boards.settings.automation.hooks.step_label"))
+                      : isPolicy
+                        ? t("boards.settings.automation.policy.step_label")
+                        : stepNodeLabel(graph, nodeId, step)}
                   </h3>
                 </div>
                 <span
                   className={cn(
                     "rounded-full px-2.5 py-0.5 text-11 font-semibold uppercase",
-                    passed
-                      ? "bg-success-subtle text-success-primary"
-                      : "bg-danger-subtle text-danger-primary"
+                    passed ? "bg-success-subtle text-success-primary" : "bg-danger-subtle text-danger-primary"
                   )}
                 >
                   {passed
@@ -170,12 +165,25 @@ export function AutomationDryRunTimeline(props: Props) {
               </div>
 
               <div className="mt-2 flex flex-wrap gap-1.5">
-                <span className="rounded bg-layer-2 px-1.5 py-0.5 text-10 uppercase tracking-wide text-tertiary">
+                <span className="rounded bg-layer-2 px-1.5 py-0.5 text-10 tracking-wide text-tertiary uppercase">
                   {kind}
                 </span>
                 {catalogKey && (
-                  <span className="rounded bg-layer-2 px-1.5 py-0.5 font-mono text-10 text-tertiary">
-                    {catalogKey}
+                  <span className="font-mono rounded bg-layer-2 px-1.5 py-0.5 text-10 text-tertiary">{catalogKey}</span>
+                )}
+                {typeof step.iteration === "number" && (
+                  <span className="rounded bg-layer-2 px-1.5 py-0.5 text-10 text-tertiary">
+                    {t("boards.settings.automation.retry.iteration_badge", {
+                      current: step.iteration,
+                      max: step.max_iterations ?? "?",
+                    })}
+                  </span>
+                )}
+                {typeof step.parallel_branch_index === "number" && (
+                  <span className="rounded bg-layer-2 px-1.5 py-0.5 text-10 text-tertiary">
+                    {t("boards.settings.automation.parallel.branch_badge", {
+                      index: Number(step.parallel_branch_index) + 1,
+                    })}
                   </span>
                 )}
                 {branchTaken && (
@@ -199,23 +207,23 @@ export function AutomationDryRunTimeline(props: Props) {
 
               {logs && logs.length > 0 && (
                 <div className="mt-3 rounded-md border border-subtle bg-canvas px-3 py-2">
-                  <p className="text-10 font-medium uppercase tracking-wide text-tertiary">console</p>
-                  <p className="mt-1 font-mono text-11 text-secondary">{logs.join("\n")}</p>
+                  <p className="text-10 font-medium tracking-wide text-tertiary uppercase">console</p>
+                  <p className="font-mono mt-1 text-11 text-secondary">{logs.join("\n")}</p>
                 </div>
               )}
 
               {raw && (
-                <pre className="mt-3 max-h-32 overflow-auto rounded-md border border-subtle bg-canvas px-3 py-2 font-mono text-11 text-tertiary">
+                <pre className="font-mono mt-3 max-h-32 overflow-auto rounded-md border border-subtle bg-canvas px-3 py-2 text-11 text-tertiary">
                   {raw}
                 </pre>
               )}
 
               {scriptResult !== undefined && (
-                <details className="mt-3 group">
+                <details className="group mt-3">
                   <summary className="cursor-pointer text-12 font-medium text-accent-primary hover:underline">
                     {t("boards.settings.automation.dry_run_page.view_script_output")}
                   </summary>
-                  <pre className="mt-2 max-h-48 overflow-auto rounded-md border border-subtle bg-canvas px-3 py-2 font-mono text-11 text-tertiary">
+                  <pre className="font-mono mt-2 max-h-48 overflow-auto rounded-md border border-subtle bg-canvas px-3 py-2 text-11 text-tertiary">
                     {JSON.stringify(scriptResult, null, 2)}
                   </pre>
                 </details>
@@ -227,9 +235,9 @@ export function AutomationDryRunTimeline(props: Props) {
       {isRunning && (
         <li className="relative flex gap-4 pb-2">
           {steps.length > 0 && (
-            <span className="absolute left-[1.125rem] top-0 h-4 w-px bg-accent-subtle" aria-hidden />
+            <span className="absolute top-0 left-[1.125rem] h-4 w-px bg-accent-subtle" aria-hidden />
           )}
-          <span className="relative z-10 grid size-9 shrink-0 place-items-center rounded-full border-2 border-accent-primary bg-surface-1 text-accent-primary">
+          <span className="border-accent-primary relative z-10 grid size-9 shrink-0 place-items-center rounded-full border-2 bg-surface-1 text-accent-primary">
             <Loader2 className="size-4 animate-spin" strokeWidth={1.75} />
           </span>
           <article className="min-w-0 flex-1 rounded-lg border border-accent-subtle bg-layer-1 p-4">

@@ -10,6 +10,8 @@ description: >-
 
 Skill de **engenharia visual** e **consistência funcional** em todo o produto. Complementa `.cursor/rules/operoz-frontend-design.mdc` e o orquestrador.
 
+**Pensamento UX (obrigatório antes de codar):** skill mestre `OPEROZ ENGENHARIA/SKILL.md` — JTBD, estados, copy, acessibilidade, anti-patterns de URL crua.
+
 ## Regra mestre (obrigatória antes de qualquer UI)
 
 Antes de **criar ou alterar** uma tela, modal, tabela, filtro, empty state ou formulário:
@@ -21,13 +23,13 @@ Antes de **criar ou alterar** uma tela, modal, tabela, filtro, empty state ou fo
 
 ### Onde procurar referências
 
-| Contexto | Pastas de referência |
-|----------|----------------------|
-| Board / hub | `apps/web/core/components/board/` |
-| Cliente 360 | `apps/web/core/components/board/client-360/` |
+| Contexto         | Pastas de referência                           |
+| ---------------- | ---------------------------------------------- |
+| Board / hub      | `apps/web/core/components/board/`              |
+| Cliente 360      | `apps/web/core/components/board/client-360/`   |
 | Issues / detalhe | `apps/web/core/components/issues/`, CE headers |
-| Tabelas densas | `client-360-*`, `board-overview-dashboard.tsx` |
-| Chips de filtro | `Client360FilterChip` e equivalentes |
+| Tabelas densas   | `client-360-*`, `board-overview-dashboard.tsx` |
+| Chips de filtro  | `Client360FilterChip` e equivalentes           |
 
 Estilo alvo: **minimalista, denso, rápido** — inspiração Linear/Plane, **sempre** com tokens Operoz (nunca paleta Jira copiada).
 
@@ -35,11 +37,11 @@ Estilo alvo: **minimalista, denso, rápido** — inspiração Linear/Plane, **se
 
 ## Fontes de verdade
 
-| Ficheiro | Conteúdo |
-|----------|----------|
+| Ficheiro                                 | Conteúdo                          |
+| ---------------------------------------- | --------------------------------- |
 | `packages/tailwind-config/variables.css` | `--bg-*`, `--txt-*`, `--border-*` |
-| `packages/tailwind-config/AGENTS.md` | Canvas → Surface → Layer |
-| `packages/tailwind-config/index.css` | Tailwind + `body` |
+| `packages/tailwind-config/AGENTS.md`     | Canvas → Surface → Layer          |
+| `packages/tailwind-config/index.css`     | Tailwind + `body`                 |
 
 ---
 
@@ -77,15 +79,27 @@ Exemplo de tom sem hex: `client-360-tokens.ts` (`CLIENT_360_TONE`).
 
 ## Componentes transversais (manter iguais)
 
-| Padrão | Especificação |
-|--------|----------------|
-| Tabela densa | `text-13`, header `text-11 uppercase text-tertiary`, `divide-y divide-subtle` |
-| Modal | `bg-backdrop`, corpo `bg-surface-1`, ações alinhadas à direita, botão perigoso `danger` |
-| Formulário inline | `border-strong` em foco, `onBlur` para persistir |
-| Empty state | ícone `size={16}`, título `text-secondary`, CTA `accent` |
-| Loading | skeleton `bg-layer-2` animado, sem spinners pesados em listas |
+| Padrão            | Especificação                                                                                                       |
+| ----------------- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------- |
+| Tabela densa      | `text-13`, header `text-11 uppercase text-tertiary`, `divide-y divide-subtle`                                       |
+| Modal             | `bg-backdrop`, corpo `bg-surface-1`, `p-6 gap-4`, `w-[min(100vw-2rem,28rem)]`, ações à direita, `danger` destrutivo |
+| Formulário inline | `border-strong` em foco, `onBlur` para persistir                                                                    |
+| Empty state       | ícone `size={16}`, título `text-secondary`, CTA `accent`, próximo passo claro                                       |
+| Loading           | skeleton `bg-layer-2` animado, sem spinners pesados em listas                                                       |
+| Copiar link       | `IconButton` + `Tooltip` + toast — **nunca** URL crua em `<p break-all>`                                            |
+| Toolbar compacta  | `IconButton` `variant="ghost                                                                                        | secondary"`+`Tooltip`+`aria-label` |
 
 Reutilizar `@operis/ui` e `@operis/propel` antes de primitives novas.
+
+### IconButton + Tooltip (padrão Operoz)
+
+```tsx
+<Tooltip tooltipContent={label} position="bottom">
+  <IconButton variant="ghost" size="lg" icon={SomeIcon} onClick={onAction} aria-label={label} />
+</Tooltip>
+```
+
+Referências: `copy-link-control.tsx`, `client-360-ui.tsx`, `PageReviewShareButton`.
 
 ---
 
@@ -109,11 +123,15 @@ Reutilizar `@operis/ui` e `@operis/propel` antes de primitives novas.
 
 ## Checklist antes de entregar UI
 
+Ver checklist completo em `OPEROZ ENGENHARIA/SKILL.md` §9. Resumo:
+
+- [ ] JTBD + estados vazio/loading/erro/sucesso planeados
 - [ ] Telas irmãs revistas e alinhadas (ou débito listado)
-- [ ] Sem hex hardcoded
-- [ ] Hierarquia canvas / surface / layer correta
-- [ ] Dark mode conceptualmente OK
-- [ ] Copy em português; marca **Operoz**
+- [ ] Sem hex hardcoded; hierarquia canvas / surface / layer
+- [ ] Sem URL/token cru; copiar via IconButton + toast
+- [ ] i18n pt-BR + en; sem chaves visíveis na UI
+- [ ] Dark mode OK; acessibilidade (foco, aria-label, Escape no modal)
+- [ ] Copy marca **Operoz**
 
 ---
 

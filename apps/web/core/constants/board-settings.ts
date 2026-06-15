@@ -33,6 +33,16 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
     i18n_label: "boards.settings.nav.automation",
     children: [
       { key: "automation_rules", href: "/automacao", i18n_label: "boards.settings.nav.automation_rules" },
+      {
+        key: "automation_templates",
+        href: "/automacao/templates",
+        i18n_label: "boards.settings.nav.automation_templates",
+      },
+      {
+        key: "automation_packs",
+        href: "/automacao/packs",
+        i18n_label: "boards.settings.nav.automation_packs",
+      },
       { key: "automation_scripts", href: "/automacao/scripts", i18n_label: "boards.settings.nav.automation_scripts" },
       { key: "automation_emails", href: "/automacao/emails", i18n_label: "boards.settings.nav.automation_emails" },
       {
@@ -55,8 +65,19 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
         href: "/automacao/segredos",
         i18n_label: "boards.settings.nav.automation_secrets",
       },
+      {
+        key: "automation_hooks",
+        href: "/automacao/hooks",
+        i18n_label: "boards.settings.nav.automation_hooks",
+      },
+      {
+        key: "automation_policy",
+        href: "/automacao/politicas",
+        i18n_label: "boards.settings.nav.automation_policy",
+      },
     ],
   },
+  { key: "playbooks", href: "/playbooks", i18n_label: "boards.settings.nav.playbooks" },
   { key: "fields", href: "/campos", i18n_label: "boards.settings.nav.fields" },
   {
     key: "issue_types",
@@ -69,6 +90,7 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
   },
   { key: "roles", href: "/funcoes", i18n_label: "boards.settings.nav.roles" },
   { key: "board_view", href: "/quadro", i18n_label: "boards.settings.nav.board_view" },
+  { key: "client_360_health", href: "/visao-360/saude", i18n_label: "boards.settings.nav.client_360_health" },
   { key: "timeline", href: "/cronograma", i18n_label: "boards.settings.nav.timeline" },
 ];
 
@@ -76,5 +98,4 @@ export const BOARD_SETTINGS_FLAT = BOARD_SETTINGS_NAV.flatMap((item) =>
   item.children ? [item, ...item.children] : [item]
 );
 
-export const getBoardSettingsSection = (key: string) =>
-  BOARD_SETTINGS_FLAT.find((item) => item.key === key);
+export const getBoardSettingsSection = (key: string) => BOARD_SETTINGS_FLAT.find((item) => item.key === key);

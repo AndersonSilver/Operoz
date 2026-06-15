@@ -14,6 +14,7 @@ if (process.env.VITE_ENABLE_BOARDS === undefined) {
 
 // Monorepo root — required so Vite can resolve workspace packages (e.g. @operis/propel/dist) outside apps/web
 const workspaceRoot = path.resolve(__dirname, "../..");
+const propelSrcRoot = path.resolve(workspaceRoot, "packages/propel/src");
 
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
 const requireEditor = createRequire(editorPkg);
@@ -43,32 +44,57 @@ viteEnv.VITE_ENABLE_BOARDS = process.env.VITE_ENABLE_BOARDS ?? "true";
 
 const enableBoards = process.env.VITE_ENABLE_BOARDS ?? "true";
 
-export default defineConfig(() => ({
-  define: {
-    "process.env": JSON.stringify({ ...viteEnv, VITE_ENABLE_BOARDS: enableBoards }),
-    "import.meta.env.VITE_ENABLE_BOARDS": JSON.stringify(enableBoards),
-  },
-  build: {
-    assetsInlineLimit: 0,
-  },
-  plugins: [reactRouter(), tsconfigPaths({ projects: [path.resolve(__dirname, "tsconfig.json")] })],
-  resolve: {
-    alias: {
-      // Use workspace source so SSR/dev never serves a stale packages/utils/dist (e.g. old isomorphic-dompurify).
-      "@operis/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
-      ...prosemirrorAliases,
-      // Next.js compatibility shims used within web
-      "next/link": path.resolve(__dirname, "app/compat/next/link.tsx"),
-      "next/navigation": path.resolve(__dirname, "app/compat/next/navigation.ts"),
-      "next/script": path.resolve(__dirname, "app/compat/next/script.tsx"),
+export default defineConfig(({ command }) => {
+  const isDevServer = command === "serve";
+
+  const alias: Array<{ find: string | RegExp; replacement: string }> = [
+    {
+      find: "@operis/utils",
+      replacement: path.resolve(__dirname, "../../packages/utils/src/index.ts"),
     },
-    dedupe: ["react", "react-dom", "@headlessui/react"],
-  },
-  server: {
-    host: "127.0.0.1",
-    fs: {
-      allow: [workspaceRoot],
+    {
+      find: "@operis/i18n",
+      replacement: path.resolve(__dirname, "../../packages/i18n/src/index.ts"),
     },
-  },
-  // No SSR-specific overrides needed; alias resolves to ESM build
-}));
+    ...Object.entries(prosemirrorAliases).map(([find, replacement]) => ({ find, replacement })),
+    { find: "next/link", replacement: path.resolve(__dirname, "app/compat/next/link.tsx") },
+    { find: "next/navigation", replacement: path.resolve(__dirname, "app/compat/next/navigation.ts") },
+    { find: "next/script", replacement: path.resolve(__dirname, "app/compat/next/script.tsx") },
+  ];
+
+  if (isDevServer) {
+    // Dev: source TS do Propel (como utils/i18n) — não exige packages/propel/dist pré-buildado.
+    alias.unshift(
+      {
+        find: /^@operis\/propel\/styles\/(.+\.css)$/,
+        replacement: `${propelSrcRoot}/styles/$1`,
+      },
+      {
+        find: /^@operis\/propel\/(.+)$/,
+        replacement: `${propelSrcRoot}/$1/index.ts`,
+      }
+    );
+  }
+
+  return {
+    define: {
+      "process.env": JSON.stringify({ ...viteEnv, VITE_ENABLE_BOARDS: enableBoards }),
+      "import.meta.env.VITE_ENABLE_BOARDS": JSON.stringify(enableBoards),
+    },
+    build: {
+      assetsInlineLimit: 0,
+    },
+    plugins: [reactRouter(), tsconfigPaths({ projects: [path.resolve(__dirname, "tsconfig.json")] })],
+    resolve: {
+      alias,
+      dedupe: ["react", "react-dom", "@headlessui/react"],
+    },
+    server: {
+      host: "127.0.0.1",
+      fs: {
+        allow: [workspaceRoot],
+      },
+    },
+    // No SSR-specific overrides needed; alias resolves to ESM build
+  };
+});

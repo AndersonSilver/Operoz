@@ -59,6 +59,8 @@ class InstanceEndpoint(BaseAPIView):
             POSTHOG_HOST,
             UNSPLASH_ACCESS_KEY,
             LLM_API_KEY,
+            ASSISTANT_ENABLED,
+            VITE_ENABLE_OPEROZ_ASSISTANT,
         ) = get_configuration_value(
             [
                 {
@@ -118,6 +120,14 @@ class InstanceEndpoint(BaseAPIView):
                     "key": "LLM_API_KEY",
                     "default": os.environ.get("LLM_API_KEY", ""),
                 },
+                {
+                    "key": "ASSISTANT_ENABLED",
+                    "default": os.environ.get("ASSISTANT_ENABLED", "1"),
+                },
+                {
+                    "key": "VITE_ENABLE_OPEROZ_ASSISTANT",
+                    "default": os.environ.get("VITE_ENABLE_OPEROZ_ASSISTANT", "1"),
+                },
             ]
         )
 
@@ -147,6 +157,9 @@ class InstanceEndpoint(BaseAPIView):
 
         # Open AI settings
         data["has_llm_configured"] = bool(LLM_API_KEY)
+        data["operoz_assistant_enabled"] = (
+            ASSISTANT_ENABLED == "1" and VITE_ENABLE_OPEROZ_ASSISTANT == "1"
+        )
 
         # File size settings
         data["file_size_limit"] = float(os.environ.get("FILE_SIZE_LIMIT", 5242880))

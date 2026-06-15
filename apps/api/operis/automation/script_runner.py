@@ -35,7 +35,14 @@ def _parse_stdout_payload(stdout: str) -> dict[str, Any] | None:
     return None
 
 
-def run_javascript(source_code: str, context: dict[str, Any], *, dry_run: bool = False) -> dict[str, Any]:
+def run_javascript(
+    source_code: str,
+    context: dict[str, Any],
+    *,
+    dry_run: bool = False,
+    timeout_seconds: int | None = None,
+    max_memory_mb: int | None = None,
+) -> dict[str, Any]:
     if not source_code.strip():
         return {"ok": False, "message": "Script vazio"}
 
@@ -45,6 +52,7 @@ def run_javascript(source_code: str, context: dict[str, Any], *, dry_run: bool =
 
     result_path: Path | None = None
     tmp_path: Path | None = None
+    timeout = timeout_seconds or SCRIPT_TIMEOUT_SECONDS
 
     wrapper = f"""
 import {{ writeFileSync }} from "node:fs";
@@ -90,12 +98,14 @@ if (__resultFile) {{
 
         result_path = tmp_path.with_suffix(".result.json")
         env = {**os.environ, RESULT_ENV_KEY: str(result_path)}
+        if max_memory_mb:
+            env["NODE_OPTIONS"] = f"--max-old-space-size={max_memory_mb}"
 
         proc = subprocess.run(
             [node_bin, str(tmp_path)],
             capture_output=True,
             text=True,
-            timeout=SCRIPT_TIMEOUT_SECONDS,
+            timeout=timeout,
             check=False,
             env=env,
         )
@@ -140,7 +150,7 @@ if (__resultFile) {{
             result["logs"] = logs
         return result
     except subprocess.TimeoutExpired:
-        return {"ok": False, "message": f"Script excedeu {SCRIPT_TIMEOUT_SECONDS}s"}
+        return {"ok": False, "message": f"Script excedeu {timeout_seconds or SCRIPT_TIMEOUT_SECONDS}s"}
     except Exception as exc:
         logger.exception("automation script run failed")
         return {"ok": False, "message": str(exc)}

@@ -4,13 +4,22 @@ from typing import Any
 
 from operis.automation.catalog.registry import CatalogEntry, catalog
 from operis.automation.domain import DomainEvent
-
-
 def _matches_issue_event(event: DomainEvent, config: dict[str, Any]) -> bool:
     expected = config.get("event_type")
     if expected and event.event_type != expected:
         return False
     return event.entity_type == "issue"
+
+
+def _matches_prd_review_event(event: DomainEvent, config: dict[str, Any]) -> bool:
+    expected = config.get("event_type")
+    if expected and event.event_type != expected:
+        return False
+    return event.entity_type == "page_review_session"
+
+
+def _matches_schedule_event(event: DomainEvent, config: dict[str, Any]) -> bool:
+    return event.event_type == "schedule.cron" and event.entity_type == "schedule"
 
 
 def register_triggers() -> None:
@@ -22,8 +31,14 @@ def register_triggers() -> None:
         ("issue.comment.created", "Comentário criado", "Dispara quando um comentário é adicionado."),
         ("issue.status_report.created", "Status report criado", "Dispara quando um status report é publicado."),
         ("intake.submitted", "Recepção — pedido recebido", "Dispara quando um item entra na recepção (formulário ou in-app)."),
+        (
+            "prd_review.feedback_submitted",
+            "PRD Review — feedback enviado",
+            "Dispara quando o cliente envia feedback (alterações solicitadas) numa sessão PRD Review.",
+        ),
     ]
     for key, label, description in triggers:
+        handler = _matches_prd_review_event if key.startswith("prd_review.") else _matches_issue_event
         catalog.register(
             CatalogEntry(
                 key=key,
@@ -38,6 +53,29 @@ def register_triggers() -> None:
                     },
                     "required": ["event_type"],
                 },
-                handler=_matches_issue_event,
+                handler=handler,
             )
         )
+
+    catalog.register(
+        CatalogEntry(
+            key="schedule.cron",
+            kind="trigger",
+            label="Agendamento (cron)",
+            description="Dispara o fluxo em horários fixos, como um cron job.",
+            icon="clock",
+            config_schema={
+                "type": "object",
+                "properties": {
+                    "preset": {"type": "string"},
+                    "time": {"type": "string"},
+                    "weekdays": {"type": "array", "items": {"type": "integer"}},
+                    "day_of_month": {"type": "integer"},
+                    "cron": {"type": "string"},
+                    "timezone": {"type": "string"},
+                },
+                "required": ["preset", "timezone"],
+            },
+            handler=_matches_schedule_event,
+        )
+    )

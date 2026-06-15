@@ -1,30 +1,22 @@
 import { observer } from "mobx-react";
-// plane imports
 import { PlaneLockup, ChevronLeftIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TOnboardingStep } from "@operis/types";
 import { EOnboardingSteps } from "@operis/types";
 import { cn } from "@operis/utils";
-// hooks
-import { useInstance } from "@/hooks/store/use-instance";
 import { useUser } from "@/hooks/store/user";
-// local imports
 import { SwitchAccountDropdown } from "./switch-account-dropdown";
 
 type OnboardingHeaderProps = {
   currentStep: EOnboardingSteps;
   updateCurrentStep: (step: EOnboardingSteps) => void;
-  hasInvitations: boolean;
+  isSelfManaged: boolean;
+  currentStepNumber: number;
+  totalSteps: number;
 };
 
 export const OnboardingHeader = observer(function OnboardingHeader(props: OnboardingHeaderProps) {
-  const { currentStep, updateCurrentStep, hasInvitations } = props;
-  // store hooks
+  const { currentStep, updateCurrentStep, isSelfManaged, currentStepNumber, totalSteps } = props;
   const { data: user } = useUser();
-  const { config: instanceConfig } = useInstance();
-  const isSelfManaged = instanceConfig?.is_self_managed;
 
-  // handle step back
   const handleStepBack = () => {
     switch (currentStep) {
       case EOnboardingSteps.ROLE_SETUP:
@@ -39,21 +31,8 @@ export const OnboardingHeader = observer(function OnboardingHeader(props: Onboar
     }
   };
 
-  // can go back
   const canGoBack = ![EOnboardingSteps.PROFILE_SETUP, EOnboardingSteps.INVITE_MEMBERS].includes(currentStep);
 
-  // step order for progress tracking — include INVITE_MEMBERS if user is currently on it
-  const showInviteStep = !hasInvitations || currentStep === EOnboardingSteps.INVITE_MEMBERS;
-  const stepOrder: TOnboardingStep[] = [
-    EOnboardingSteps.PROFILE_SETUP,
-    ...(isSelfManaged ? [] : [EOnboardingSteps.ROLE_SETUP, EOnboardingSteps.USE_CASE_SETUP]),
-    EOnboardingSteps.WORKSPACE_CREATE_OR_JOIN,
-    ...(showInviteStep ? [EOnboardingSteps.INVITE_MEMBERS] : []),
-  ];
-
-  // derived values
-  const currentStepNumber = stepOrder.indexOf(currentStep) + 1;
-  const totalSteps = stepOrder.length;
   const userName = user?.display_name
     ? user?.display_name
     : user?.first_name
@@ -61,23 +40,20 @@ export const OnboardingHeader = observer(function OnboardingHeader(props: Onboar
       : user?.email;
 
   return (
-    <div className="sticky top-0 z-10 flex flex-col gap-4">
-      <div className="h-1.5 w-full cursor-pointer overflow-hidden rounded-t-lg bg-surface-1">
-        <Tooltip tooltipContent={`${currentStepNumber}/${totalSteps}`} position="bottom-end">
-          <div
-            className="h-full bg-accent-primary transition-all duration-700 ease-out"
-            style={{ width: `${(currentStepNumber / totalSteps) * 100}%` }}
-          />
-        </Tooltip>
-      </div>
-      <div className={cn("flex w-full items-center justify-between gap-6 px-6", canGoBack && "pr-6 pl-4")}>
-        <div className="flex items-center gap-2.5">
+    <div className="sticky top-0 z-10 shrink-0 border-b border-subtle/50 bg-surface-1/80 backdrop-blur-sm">
+      <div className={cn("flex w-full items-center justify-between gap-6 px-6 py-4", canGoBack && "pl-4")}>
+        <div className="flex items-center gap-3">
           {canGoBack && (
             <button onClick={handleStepBack} className="cursor-pointer" type="button" disabled={!canGoBack}>
               <ChevronLeftIcon className="size-6 text-placeholder" />
             </button>
           )}
-          <PlaneLockup height={20} width={95} className="text-primary" />
+          <div className="flex flex-col gap-0.5 lg:hidden">
+            <PlaneLockup height={28} className="w-auto text-primary" />
+            <span className="text-12 text-tertiary">
+              Passo {currentStepNumber} de {totalSteps}
+            </span>
+          </div>
         </div>
         <SwitchAccountDropdown fullName={userName} />
       </div>

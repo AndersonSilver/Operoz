@@ -1,11 +1,4 @@
-import {
-  AlertTriangle,
-  ArrowLeft,
-  CheckCircle2,
-  CircleX,
-  Loader2,
-  RotateCcw,
-} from "lucide-react";
+import { AlertTriangle, ArrowLeft, CheckCircle2, CircleX, Loader2, RotateCcw } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TAutomationDryRunResult, TAutomationGraph } from "@operis/types";
 import { Button } from "@operis/propel/button";
@@ -26,57 +19,59 @@ type Props = {
 };
 
 export function BoardAutomationDryRunView(props: Props) {
-  const {
-    ruleName,
-    graph,
-    result,
-    simulatedAt,
-    onBack,
-    onRerun,
-    rerunning,
-    backLabel,
-    isRunning,
-  } = props;
+  const { ruleName, graph, result, simulatedAt, onBack, onRerun, rerunning, backLabel, isRunning } = props;
   const { t } = useTranslation();
 
   const stats = summarizeSteps(result.steps);
+  const runFailed = !isRunning && Boolean(result.error) && !result.matched && result.steps.length === 0;
   const allPassed = !isRunning && result.matched && result.passed_filters !== false && stats.failed === 0;
   const blocked = !isRunning && result.matched && result.passed_filters === false;
-  const notMatched = !isRunning && !result.matched;
+  const notMatched = !isRunning && !result.matched && !runFailed;
 
   const StatusIcon = isRunning
     ? Loader2
-    : notMatched
-      ? AlertTriangle
-      : blocked
-        ? CircleX
-        : allPassed
-          ? CheckCircle2
-          : CircleX;
+    : runFailed
+      ? CircleX
+      : notMatched
+        ? AlertTriangle
+        : blocked
+          ? CircleX
+          : allPassed
+            ? CheckCircle2
+            : CircleX;
   const statusTone = isRunning
     ? "accent"
-    : notMatched
-      ? "warning"
-      : blocked || stats.failed > 0
-        ? "danger"
-        : "success";
+    : runFailed
+      ? "danger"
+      : notMatched
+        ? "warning"
+        : blocked || stats.failed > 0
+          ? "danger"
+          : "success";
 
   const statusTitle = isRunning
     ? t("boards.settings.automation.dry_run_page.running_title")
-    : notMatched
-      ? t("boards.settings.automation.dry_run_page.not_matched_title")
-      : blocked
-        ? t("boards.settings.automation.dry_run_page.blocked_title")
-        : stats.failed > 0
-          ? t("boards.settings.automation.dry_run_page.partial_title")
-          : t("boards.settings.automation.dry_run_page.success_title");
+    : runFailed
+      ? t("boards.settings.automation.dry_run_page.failed_title")
+      : notMatched
+        ? t("boards.settings.automation.dry_run_page.not_matched_title")
+        : blocked
+          ? t("boards.settings.automation.dry_run_page.blocked_title")
+          : stats.failed > 0
+            ? t("boards.settings.automation.dry_run_page.partial_title")
+            : t("boards.settings.automation.dry_run_page.success_title");
 
   const isLive = result.live !== false;
+  const isScheduleTrigger = graph.nodes?.some(
+    (node) => node.data.kind === "trigger" && node.data.catalog_key === "schedule.cron"
+  );
 
   const statusDescription = isRunning
     ? t("boards.settings.automation.dry_run_page.running_description")
     : notMatched
-      ? (result.message ?? result.error ?? t("boards.settings.automation.dry_run_panel.not_matched_hint"))
+      ? isScheduleTrigger
+        ? t("boards.settings.automation.dry_run_page.schedule_test_hint")
+        : (result.message ?? result.error ?? t("boards.settings.automation.dry_run_panel.not_matched_hint"))
       : blocked
         ? t("boards.settings.automation.dry_run_panel.filters_blocked")
         : isLive
@@ -90,13 +85,7 @@ export function BoardAutomationDryRunView(props: Props) {
           {backLabel ?? t("boards.settings.automation.dry_run_page.back_to_editor")}
         </Button>
         {onRerun && (
-          <Button
-            variant="secondary"
-            size="sm"
-            disabled={rerunning}
-            onClick={onRerun}
-            prependIcon={<RotateCcw />}
-          >
+          <Button variant="secondary" size="sm" disabled={rerunning} onClick={onRerun} prependIcon={<RotateCcw />}>
             {rerunning ? t("loading") : t("boards.settings.automation.dry_run_page.rerun")}
           </Button>
         )}
@@ -113,7 +102,7 @@ export function BoardAutomationDryRunView(props: Props) {
       >
         <div
           className={cn(
-            "pointer-events-none absolute -right-8 -top-8 size-40 rounded-full opacity-20 blur-3xl",
+            "pointer-events-none absolute -top-8 -right-8 size-40 rounded-full opacity-20 blur-3xl",
             statusTone === "success" && "bg-success-primary",
             statusTone === "warning" && "bg-warning-primary",
             statusTone === "danger" && "bg-danger-primary",
@@ -130,13 +119,10 @@ export function BoardAutomationDryRunView(props: Props) {
               statusTone === "accent" && "border-accent-subtle bg-accent-subtle/30 text-accent-primary"
             )}
           >
-            <StatusIcon
-              className={cn("size-7", isRunning && "animate-spin")}
-              strokeWidth={1.75}
-            />
+            <StatusIcon className={cn("size-7", isRunning && "animate-spin")} strokeWidth={1.75} />
           </span>
           <div className="min-w-0 flex-1">
-            <p className="text-11 font-medium uppercase tracking-wide text-tertiary">
+            <p className="text-11 font-medium tracking-wide text-tertiary uppercase">
               {isLive
                 ? t("boards.settings.automation.dry_run_page.badge_live")
                 : t("boards.settings.automation.dry_run_page.badge")}
@@ -169,7 +155,7 @@ export function BoardAutomationDryRunView(props: Props) {
               { label: t("boards.settings.automation.dry_run_page.stat_failed"), value: stats.failed },
             ].map((item) => (
               <div key={item.label} className="rounded-lg border border-subtle bg-layer-1 px-3 py-2.5 text-center">
-                <p className="text-20 font-semibold tabular-nums text-primary">{item.value}</p>
+                <p className="text-20 font-semibold text-primary tabular-nums">{item.value}</p>
                 <p className="mt-0.5 text-11 text-tertiary">{item.label}</p>
               </div>
             ))}

@@ -9,6 +9,7 @@ from django.core.cache import cache
 from operis.db.models import User, Workspace
 from operis.utils.exception_logger import log_exception
 from operis.utils.jira_ops import JiraOpsClient, run_jira_ops_import
+from operis.utils.jira_ops.jira_dates import set_active_jira_cloud
 from operis.utils.jira_ops.workspace_config import get_workspace_credentials, mark_sync_completed
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,7 @@ def jira_ops_sync_task(workspace_slug: str, board_slug: str, user_id: str) -> No
         board_slug = board_slug or credentials.board_slug
         actor = User.objects.get(pk=user_id)
         client = JiraOpsClient(credentials)
+        set_active_jira_cloud(client.cloud_id)
 
         update("fetching_epics")
         epics = client.fetch_epics()
@@ -78,6 +80,7 @@ def jira_ops_sync_task(workspace_slug: str, board_slug: str, user_id: str) -> No
             actor=actor,
             epics=epics,
             issues_list=issues,
+            jira_client=client,
         )
 
         mark_sync_completed(workspace)

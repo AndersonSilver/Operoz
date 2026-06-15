@@ -45,9 +45,50 @@ services:
     command: ./bin/docker-entrypoint-api.sh
     env_file:
       - ./apps/api/.env
+    environment:
+      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
+      GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
     depends_on:
       - operis-db
       - operis-redis
+      - operis-pgbouncer
+    mem_limit: 1536m
+    cpus: 1.0
+
+  api-chat:
+    container_name: api-chat
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.api
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    command: ./bin/docker-entrypoint-api-chat.sh
+    env_file:
+      - ./apps/api/.env
+    environment:
+      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
+      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
+      GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
+    depends_on:
+      - operis-db
+      - operis-redis
+      - operis-pgbouncer
+    mem_limit: 2g
+    cpus: 2.0
+
+  operis-pgbouncer:
+    container_name: operis-pgbouncer
+    image: edoburu/pgbouncer:1.22.1-p0
+    restart: always
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@operis-db:5432/${POSTGRES_DB}
+      POOL_MODE: transaction
+      MAX_CLIENT_CONN: 500
+      DEFAULT_POOL_SIZE: 25
+      AUTH_TYPE: scram-sha-256
+    depends_on:
+      - operis-db
 
   worker:
     container_name: bgworker
@@ -82,6 +123,63 @@ services:
       - operis-db
       - operis-redis
       - operis-mq
+
+  automation-email-worker:
+    container_name: automationemailworker
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.api
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    command: ./bin/docker-entrypoint-automation-email-worker.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  assistant-worker:
+    container_name: assistantworker
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.api
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    command: ./bin/docker-entrypoint-assistant-worker.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  assistant-chat-worker:
+    container_name: assistantchatworker
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.api
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: always
+    command: ./bin/docker-entrypoint-assistant-chat-worker.sh
+    env_file:
+      - ./apps/api/.env
+    environment:
+      ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
+      ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
+    depends_on:
+      - api
+      - api-chat
+      - operis-db
+      - operis-redis
+      - operis-mq
+    mem_limit: 2g
+    cpus: 2.0
 
   beat-worker:
     container_name: beatworker
@@ -125,7 +223,8 @@ services:
 
   operis-db:
     container_name: operis-db
-    image: postgres:15.7-alpine
+    # pgvector para RAG do assistente Operoz (extensão vector).
+    image: pgvector/pgvector:pg15
     restart: always
     command: postgres -c 'max_connections=1000'
     volumes:
@@ -185,6 +284,7 @@ services:
     depends_on:
       - web
       - api
+      - api-chat
       - space
       - admin
 

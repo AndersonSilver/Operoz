@@ -1,4 +1,9 @@
-/** Rodapé da auth: vazio (marca / logos removidos para fork interno). */
 export function AuthFooter() {
-  return null;
+  const year = new Date().getFullYear();
+
+  return (
+    <footer className="mt-auto w-full pt-8 lg:hidden">
+      <p className="text-center text-13 text-secondary">© {year} Operoz</p>
+    </footer>
+  );
 }

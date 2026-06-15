@@ -4,6 +4,7 @@ from typing import Any
 
 from operis.automation.catalog.registry import CatalogEntry, catalog
 from operis.automation.domain import DomainEvent
+from operis.automation.llm_decision import DEFAULT_CONFIDENCE_THRESHOLD, evaluate_llm_decision
 
 
 def evaluate_decision_branch(
@@ -57,6 +58,42 @@ def register_decisions() -> None:
                 },
             },
             handler=evaluate_decision_branch,
+        )
+    )
+
+    catalog.register(
+        CatalogEntry(
+            key="decision.llm",
+            kind="decision",
+            label="Decisão LLM",
+            description="Classifica o evento via LLM com score de confiança; ramo humano se abaixo do threshold.",
+            icon="sparkles",
+            config_schema={
+                "type": "object",
+                "properties": {
+                    "prompt": {"type": "string"},
+                    "confidence_threshold": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 100,
+                        "default": DEFAULT_CONFIDENCE_THRESHOLD,
+                    },
+                    "human_branch_id": {"type": "string"},
+                    "branches": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "id": {"type": "string"},
+                                "label": {"type": "string"},
+                                "description": {"type": "string"},
+                            },
+                            "required": ["id", "label"],
+                        },
+                    },
+                },
+            },
+            handler=evaluate_llm_decision,
         )
     )
 

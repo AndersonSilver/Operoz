@@ -9,6 +9,7 @@ import type { TPageInstance } from "@/store/pages/base-page";
 import { PageNavigationPaneAssetsTabPanel } from "./assets";
 import { PageNavigationPaneInfoTabPanel } from "./info/root";
 import { PageNavigationPaneOutlineTabPanel } from "./outline";
+import { PageReviewPanel } from "@/components/pages/review/page-review-panel";
 import { Tabs } from "@operis/propel/tabs";
 
 type Props = {
@@ -26,6 +27,7 @@ export function PageNavigationPaneTabPanelsRoot(props: Props) {
           {tab.key === "outline" && <PageNavigationPaneOutlineTabPanel page={page} />}
           {tab.key === "info" && <PageNavigationPaneInfoTabPanel page={page} versionHistory={versionHistory} />}
           {tab.key === "assets" && <PageNavigationPaneAssetsTabPanel page={page} />}
+          {tab.key === "review" && <PageReviewPanel page={page} />}
           <PageNavigationPaneAdditionalTabPanelsRoot activeTab={tab.key} page={page} />
         </Tabs.Content>
       ))}

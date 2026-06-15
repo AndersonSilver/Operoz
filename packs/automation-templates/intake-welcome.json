@@ -1,0 +1,45 @@
+{
+  "id": "intake-welcome",
+  "version": 1,
+  "name": "Boas-vindas intake",
+  "description": "Envia e-mail de boas-vindas quando um pedido entra na recepção do board.",
+  "icon": "inbox",
+  "category": "intake",
+  "default_rule_name": "Boas-vindas intake",
+  "default_description": "Template oficial Operoz — acolhimento de pedidos na recepção.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Boas-vindas intake" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-intake",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "intake.submitted",
+          "label": "Recepção — pedido recebido",
+          "config": { "event_type": "intake.submitted" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-intake", "target": "action-email" }]
+  }
+}

@@ -50,15 +50,15 @@ Reinicia o Cursor após guardar.
 2. Entra em http://localhost:3000 → **Definições** → **API tokens** (ou God mode).
 3. Cria um token e cola em `OPERIS_API_KEY`.
 
-## Ferramentas (**379**)
+## Ferramentas (**671**)
 
-Cobertura das APIs **v1** e **app** do Operis (work items, boards, páginas/PRD, status reports, ciclos, módulos, webhooks, analytics, assets, views, notificações, Jira Ops, IA, etc.).
+Cobertura completa das APIs **v1** e **app** do Operis (work items, boards, automação, assistente, páginas/PRD, status reports, ciclos, módulos, webhooks, analytics, assets, views, notificações, Jira Ops, IA, etc.).
 
 - **`operis_get_capabilities`** — mapa por domínio e contagens
 - **`operis_list_operations`** — lista filtrável (`domain`, `surface`)
 - **Escape hatch:** `operis_api_v1_request`, `operis_api_app_request`, `operis_get_openapi_schema`
 
-Domínios principais: `work_items`, `boards`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, …
+Domínios principais: `work_items`, `boards`, `automation`, `playbooks`, `assistant`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, …
 
 Cada ferramenta mapeia **um endpoint HTTP** (método + path documentado na descrição).
 

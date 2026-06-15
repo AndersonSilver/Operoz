@@ -1,31 +1,24 @@
-import { useTheme } from "next-themes";
-// assets
-import maintenanceModeDarkModeImage from "@/app/assets/instance/maintenance-mode-dark.svg?url";
-import maintenanceModeLightModeImage from "@/app/assets/instance/maintenance-mode-light.svg?url";
+import { OperozLockup } from "@operis/propel/icons";
 // layouts
 import DefaultLayout from "@/layouts/default-layout";
 // components
 import { MaintenanceMessage } from "@/plane-web/components/instance";
+import { MaintenanceStatusIllustration } from "./maintenance-status-illustration";
 
 export function MaintenanceView() {
-  // hooks
-  const { resolvedTheme } = useTheme();
-  // derived values
-  const maintenanceModeImage = resolvedTheme === "dark" ? maintenanceModeDarkModeImage : maintenanceModeLightModeImage;
   return (
-    <DefaultLayout>
-      <div className="relative container mx-auto flex h-full w-full max-w-xl flex-col items-center justify-center gap-2 gap-y-6 bg-surface-1 text-center">
-        <div className="relative w-full">
-          <img
-            src={maintenanceModeImage}
-            height="176"
-            width="288"
-            alt="ProjectSettingImg"
-            className="h-full w-full object-fill object-center"
-          />
-        </div>
-        <div className="relative mt-4 flex w-full flex-col gap-4">
-          <MaintenanceMessage />
+    <DefaultLayout className="bg-canvas">
+      <div className="flex h-full w-full items-center justify-center px-6 py-10">
+        <div className="shadow-sm w-full max-w-md rounded-lg border border-subtle bg-layer-1 p-8">
+          <div className="mb-8 flex justify-center">
+            <OperozLockup height={28} />
+          </div>
+
+          <MaintenanceStatusIllustration />
+
+          <div className="mt-8">
+            <MaintenanceMessage />
+          </div>
         </div>
       </div>
     </DefaultLayout>

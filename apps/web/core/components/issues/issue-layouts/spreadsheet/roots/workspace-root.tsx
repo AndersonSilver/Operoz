@@ -135,6 +135,7 @@ export const WorkspaceSpreadsheetRoot = observer(function WorkspaceSpreadsheetRo
         canLoadMoreIssues={!!nextPageResults}
         loadMoreIssues={fetchNextPages}
         isWorkspaceLevel={storeType === EIssuesStoreType.GLOBAL}
+        boardSlug={storeType === EIssuesStoreType.BOARD ? globalViewId : undefined}
       />
     </IssueLayoutHOC>
   );

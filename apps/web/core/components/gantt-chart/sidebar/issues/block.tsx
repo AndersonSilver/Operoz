@@ -12,7 +12,8 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 // local imports
-import { BLOCK_HEIGHT, GANTT_SELECT_GROUP } from "../../constants";
+import { getGanttScheduleDisplay } from "@/components/gantt-chart/helpers/schedule-display";
+import { BLOCK_HEIGHT, GANTT_CHECKBOX_GUTTER_PX, GANTT_SELECT_GROUP } from "../../constants";
 
 type Props = {
   block: IGanttBlock;
@@ -20,17 +21,17 @@ type Props = {
   isDragging: boolean;
   selectionHelpers?: TSelectionHelper;
   isEpic?: boolean;
+  showDurationColumn?: boolean;
 };
 
 export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Props) {
-  const { block, enableSelection, isDragging, selectionHelpers, isEpic = false } = props;
+  const { block, enableSelection, isDragging, selectionHelpers, isEpic = false, showDurationColumn = false } = props;
   const { t } = useTranslation();
   // store hooks
-  const { updateActiveBlockId, isBlockActive, getNumberOfDaysFromPosition } = useTimeLineChartStore();
+  const { updateActiveBlockId, isBlockActive } = useTimeLineChartStore();
   const { getIsIssuePeeked } = useIssueDetail();
 
-  const isBlockComplete = !!block?.start_date && !!block?.target_date;
-  const duration = isBlockComplete ? getNumberOfDaysFromPosition(block?.position?.width) : undefined;
+  const schedule = showDurationColumn ? getGanttScheduleDisplay(block, t) : null;
 
   if (!block?.data) return null;
 
@@ -38,7 +39,7 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
   const isIssueFocused = selectionHelpers?.getIsEntityActive(block.id);
   const isBlockHoveredOn = isBlockActive(block.id);
 
-  const scheduleHint = `${t("issue.add.start_date")} · ${t("issue.add.due_date")}`;
+  const scheduleHint = schedule?.title ?? `${t("issue.add.start_date")} · ${t("issue.add.due_date")}`;
 
   return (
     <div
@@ -54,6 +55,7 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
         className={cn(
           "group flex w-full items-center gap-2 bg-layer-transparent pr-4 hover:bg-layer-transparent-hover",
           {
+            "pl-8": enableSelection,
             "bg-layer-transparent-hover": isBlockHoveredOn,
             "bg-accent-primary/5 hover:bg-accent-primary/10": isIssueSelected,
             "bg-accent-primary/10": isIssueSelected && isBlockHoveredOn,
@@ -64,14 +66,12 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
         }}
       >
         {enableSelection && selectionHelpers && (
-          <div className="absolute left-1 flex items-center gap-2">
+          <div
+            className="absolute left-2 flex flex-shrink-0 items-center"
+            style={{ width: `${GANTT_CHECKBOX_GUTTER_PX - 8}px` }}
+          >
             <MultipleSelectEntityAction
-              className={cn(
-                "pointer-events-none opacity-0 transition-opacity group-hover/list-block:pointer-events-auto group-hover/list-block:opacity-100",
-                {
-                  "pointer-events-auto opacity-100": isIssueSelected,
-                }
-              )}
+              className="size-3.5 !outline-none"
               groupId={GANTT_SELECT_GROUP}
               id={block.id}
               selectionHelpers={selectionHelpers}
@@ -82,17 +82,11 @@ export const IssuesSidebarBlock = observer(function IssuesSidebarBlock(props: Pr
           <div className="min-w-0 flex-grow">
             <IssueGanttSidebarBlock issueId={block.data.id} isEpic={isEpic} />
           </div>
-          <div className="flex-shrink-0 text-13 text-secondary">
-            {isBlockComplete && duration ? (
-              <span>
-                {duration} day{duration > 1 ? "s" : ""}
-              </span>
-            ) : (
-              <span className="text-tertiary" title={scheduleHint}>
-                —
-              </span>
-            )}
-          </div>
+          {showDurationColumn && schedule ? (
+            <div className="flex-shrink-0 text-13 text-secondary" title={scheduleHint}>
+              <span className={schedule.isPlaceholder ? "text-tertiary" : undefined}>{schedule.label}</span>
+            </div>
+          ) : null}
         </div>
       </Row>
     </div>

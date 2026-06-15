@@ -3,6 +3,7 @@ from django.urls import path
 from operis.app.views import (
     BulkCreateIssueLabelsEndpoint,
     BulkDeleteIssuesEndpoint,
+    BulkOperationIssuesEndpoint,
     SubIssuesEndpoint,
     IssueLinkViewSet,
     IssueAttachmentEndpoint,
@@ -91,6 +92,11 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/bulk-delete-issues/",
         BulkDeleteIssuesEndpoint.as_view(),
         name="project-issues-bulk",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/bulk-operation-issues/",
+        BulkOperationIssuesEndpoint.as_view(),
+        name="bulk-operation-issues",
     ),
     path(
         "workspaces/<str:slug>/projects/<uuid:project_id>/bulk-archive-issues/",

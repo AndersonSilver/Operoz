@@ -1,23 +1,33 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useNavigate } from "react-router";
 import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationRule, TAutomationCatalog, TAutomationGraph } from "@operis/types";
+import type {
+  IBoard,
+  IBoardAutomationRule,
+  TAutomationCatalog,
+  TAutomationCatalogItem,
+  TAutomationGraph,
+} from "@operis/types";
 import { BoardService } from "@/services/board/board.service";
 import { BoardAutomationCanvas } from "./board-automation-canvas";
 import { BoardAutomationSidePanel } from "./board-automation-side-panel";
 import { AutomationRevisionHistoryPanel } from "./automation-revision-history-panel";
 import { AutomationRuleEditorHeader } from "./automation-rule-editor-header";
+import { automationHasLocalDraftChanges } from "./automation-publication";
 import { prepareAutomationTestNavigation } from "./automation-test-utils";
 import {
+  type AutomationNodeData,
   createDecisionNode,
+  createParallelNode,
   createNodeFromCatalog,
   removeEdgeFromGraph,
   removeNodeFromGraph,
 } from "./automation-utils";
 
 const boardService = new BoardService();
+const AUTOSAVE_INTERVAL_MS = 2 * 60 * 1000;
 
 type Props = {
   workspaceSlug: string;
@@ -52,6 +62,36 @@ export const BoardAutomationEditor = observer(function BoardAutomationEditor(pro
   const [publishing, setPublishing] = useState(false);
   const [showRevisions, setShowRevisions] = useState(false);
 
+  const nameRef = useRef(name);
+  const descriptionRef = useRef(description);
+  const graphRef = useRef(graph);
+  const ruleRef = useRef(rule);
+  const enabledRef = useRef(enabled);
+  const savingRef = useRef(saving);
+  const publishingRef = useRef(publishing);
+
+  useEffect(() => {
+    nameRef.current = name;
+  }, [name]);
+  useEffect(() => {
+    descriptionRef.current = description;
+  }, [description]);
+  useEffect(() => {
+    graphRef.current = graph;
+  }, [graph]);
+  useEffect(() => {
+    ruleRef.current = rule;
+  }, [rule]);
+  useEffect(() => {
+    enabledRef.current = enabled;
+  }, [enabled]);
+  useEffect(() => {
+    savingRef.current = saving;
+  }, [saving]);
+  useEffect(() => {
+    publishingRef.current = publishing;
+  }, [publishing]);
+
   const applyRule = useCallback(
     (updated: IBoardAutomationRule) => {
       const next = syncEditorFromRule(updated);
@@ -64,62 +104,92 @@ export const BoardAutomationEditor = observer(function BoardAutomationEditor(pro
     [onSaved]
   );
 
-  const validateCurrentGraph = async () => {
+  const saveDraft = useCallback(
+    async (options?: { silent?: boolean }) => {
+      const silent = options?.silent ?? false;
+      const currentRule = ruleRef.current;
+      const draft = {
+        name: nameRef.current,
+        description: descriptionRef.current,
+        graph: graphRef.current,
+      };
+
+      if (!automationHasLocalDraftChanges(currentRule, draft)) return false;
+      if (savingRef.current || publishingRef.current) return false;
+
+      const validation = await boardService.validateAutomationGraph(workspaceSlug, board.slug, draft.graph);
+      if (!validation.valid) {
+        if (!silent) {
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: t("toast.error"),
+            message: validation.errors.join("; "),
+          });
+        }
+        return false;
+      }
+
+      setSaving(true);
+      try {
+        const updated = await boardService.updateAutomationRule(workspaceSlug, board.slug, currentRule.id, {
+          name: draft.name,
+          description: draft.description,
+          enabled: currentRule.is_published ? enabledRef.current : false,
+          graph: draft.graph,
+        });
+        applyRule(updated);
+        setToast({
+          type: TOAST_TYPE.SUCCESS,
+          title: t("toast.success"),
+          message: silent
+            ? t("boards.settings.automation.editor.autosave_saved")
+            : t("boards.settings.automation.editor.draft_saved"),
+        });
+        return true;
+      } catch (error: unknown) {
+        const payload = error as { code?: string; error?: string; graph_errors?: string[] };
+        if (!silent) {
+          if (payload?.code === "publish_required_before_enable") {
+            setToast({
+              type: TOAST_TYPE.ERROR,
+              title: t("toast.error"),
+              message: t("boards.settings.automation.editor.enable_requires_publish"),
+            });
+          } else {
+            setToast({
+              type: TOAST_TYPE.ERROR,
+              title: t("toast.error"),
+              message: payload?.graph_errors?.join("; ") ?? payload?.error ?? t("something_went_wrong"),
+            });
+          }
+        }
+        return false;
+      } finally {
+        setSaving(false);
+      }
+    },
+    [applyRule, board.slug, t, workspaceSlug]
+  );
+
+  const handleSaveDraft = useCallback(() => {
+    void saveDraft({ silent: false });
+  }, [saveDraft]);
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      void saveDraft({ silent: true });
+    }, AUTOSAVE_INTERVAL_MS);
+
+    return () => window.clearInterval(timer);
+  }, [saveDraft]);
+
+  const handlePublish = async () => {
     const validation = await boardService.validateAutomationGraph(workspaceSlug, board.slug, graph);
     if (!validation.valid) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
-        message: validation.errors.join("; "),
-      });
-      return false;
-    }
-    return true;
-  };
-
-  const handleSaveDraft = async () => {
-    if (!(await validateCurrentGraph())) return;
-
-    setSaving(true);
-    try {
-      const updated = await boardService.updateAutomationRule(workspaceSlug, board.slug, rule.id, {
-        name,
-        description,
-        enabled: rule.is_published ? enabled : false,
-        graph,
-      });
-      applyRule(updated);
-      setToast({
-        type: TOAST_TYPE.SUCCESS,
-        title: t("toast.success"),
-        message: t("boards.settings.automation.editor.draft_saved"),
-      });
-    } catch (error: unknown) {
-      const payload = error as { code?: string; error?: string; graph_errors?: string[] };
-      if (payload?.code === "publish_required_before_enable") {
-        setToast({
-          type: TOAST_TYPE.ERROR,
-          title: t("toast.error"),
-          message: t("boards.settings.automation.editor.enable_requires_publish"),
-        });
-        return;
-      }
-      setToast({
-        type: TOAST_TYPE.ERROR,
-        title: t("toast.error"),
-        message: payload?.graph_errors?.join("; ") ?? payload?.error ?? t("something_went_wrong"),
-      });
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handlePublish = async () => {
-    if (!(await validateCurrentGraph())) {
-      setToast({
-        type: TOAST_TYPE.ERROR,
-        title: t("toast.error"),
-        message: t("boards.settings.automation.editor.publish_requires_valid_graph"),
+        message: validation.errors.join("; ") || t("boards.settings.automation.editor.publish_requires_valid_graph"),
       });
       return;
     }
@@ -177,7 +247,7 @@ export const BoardAutomationEditor = observer(function BoardAutomationEditor(pro
         message:
           payload?.code === "publish_required_before_enable"
             ? t("boards.settings.automation.editor.enable_requires_publish")
-            : payload?.error ?? t("something_went_wrong"),
+            : (payload?.error ?? t("something_went_wrong")),
       });
     } finally {
       setSaving(false);
@@ -204,29 +274,52 @@ export const BoardAutomationEditor = observer(function BoardAutomationEditor(pro
     [graph.nodes.length]
   );
 
-  const handleAddDecision = useCallback(() => {
-    const yOffset = graph.nodes.length * 80;
-    const node = createDecisionNode({ x: 320, y: 80 + yOffset });
-    setGraph((prev) => ({
-      ...prev,
-      nodes: [
-        ...prev.nodes,
-        {
-          id: node.id,
-          type: node.type,
-          position: node.position,
-          data: node.data,
-        },
-      ],
-    }));
-    setSelectedNodeIds([node.id]);
-    setSelectedEdgeId(null);
-  }, [graph.nodes.length]);
+  const handleAddParallel = useCallback(
+    (item: TAutomationCatalogItem) => {
+      const yOffset = graph.nodes.length * 80;
+      const node = createParallelNode(item, { x: 320, y: 80 + yOffset });
+      setGraph((prev) => ({
+        ...prev,
+        nodes: [
+          ...prev.nodes,
+          {
+            id: node.id,
+            type: node.type,
+            position: node.position,
+            data: node.data,
+          },
+        ],
+      }));
+      setSelectedNodeIds([node.id]);
+      setSelectedEdgeId(null);
+    },
+    [graph.nodes.length]
+  );
 
-  const updateNodeData = (
-    nodeId: string,
-    patch: Partial<{ kind: string; catalog_key: string; label: string; config: Record<string, unknown> }>
-  ) => {
+  const handleAddDecision = useCallback(
+    (catalogKey?: string) => {
+      const yOffset = graph.nodes.length * 80;
+      const key = catalogKey === "decision.llm" ? "decision.llm" : "decision.switch";
+      const node = createDecisionNode({ x: 320, y: 80 + yOffset }, key);
+      setGraph((prev) => ({
+        ...prev,
+        nodes: [
+          ...prev.nodes,
+          {
+            id: node.id,
+            type: node.type,
+            position: node.position,
+            data: node.data,
+          },
+        ],
+      }));
+      setSelectedNodeIds([node.id]);
+      setSelectedEdgeId(null);
+    },
+    [graph.nodes.length]
+  );
+
+  const updateNodeData = (nodeId: string, patch: Partial<AutomationNodeData>) => {
     setGraph((prev) => ({
       ...prev,
       nodes: prev.nodes.map((n) => (n.id === nodeId ? { ...n, data: { ...n.data, ...patch } } : n)),
@@ -323,6 +416,7 @@ export const BoardAutomationEditor = observer(function BoardAutomationEditor(pro
             onDeleteEdge={deleteEdge}
             onAddNode={handleAddNode}
             onAddDecision={handleAddDecision}
+            onAddParallel={handleAddParallel}
           />
         )}
       </div>
