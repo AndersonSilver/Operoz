@@ -72,12 +72,18 @@ def build_prd_review_api_base() -> str:
 
 
 def _prd_review_sdk_root() -> Path:
+    base = Path(settings.BASE_DIR).resolve()
     candidates = (
-        Path(settings.BASE_DIR).joinpath("..", "..", "..", "templates", "prd", "prd-review"),
-        Path(settings.BASE_DIR).joinpath("..", "templates", "prd", "prd-review"),
+        base / "assets" / "prd-review",
+        base.joinpath("..", "templates", "prd", "prd-review"),
+        base.joinpath("..", "..", "..", "templates", "prd", "prd-review"),
     )
     for candidate in candidates:
         resolved = candidate.resolve()
+        if resolved.is_dir():
+            return resolved
+    for parent in base.parents:
+        resolved = (parent / "templates" / "prd" / "prd-review").resolve()
         if resolved.is_dir():
             return resolved
     return candidates[0].resolve()

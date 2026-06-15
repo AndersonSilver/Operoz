@@ -14,3 +14,7 @@ EMAIL_BACKEND = "django.core.mail.backends.locmem.EmailBackend"
 INSTALLED_APPS.append(  # noqa
     "operis.tests"
 )
+
+# CI (GitHub Actions) só sobe Postgres/Redis — executar tasks Celery inline nos testes.
+CELERY_TASK_ALWAYS_EAGER = True
+CELERY_TASK_EAGER_PROPAGATES = True

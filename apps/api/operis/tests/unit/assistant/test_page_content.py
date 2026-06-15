@@ -74,7 +74,9 @@ class TestParseEditorJsonDocumentEmbeds:
 @pytest.mark.django_db
 class TestBuildPageIndexableText:
     @patch("operis.assistant.page_content.read_html_document_asset_text")
-    def test_includes_embed_from_description_json(self, mock_read_asset, create_user, workspace):
+    def test_includes_embed_from_description_json(
+        self, mock_read_asset, create_user, workspace, mute_assistant_auto_index
+    ):
         mock_read_asset.return_value = "Conteudo completo do manual HTML embutido."
         page = Page.objects.create(
             name="TESTE INDEXACAO",
@@ -98,7 +100,9 @@ class TestBuildPageIndexableText:
         mock_read_asset.assert_called_once_with("asset-from-json")
 
     @patch("operis.assistant.page_content.read_html_document_asset_text")
-    def test_includes_embedded_html_asset(self, mock_read_asset, create_user, workspace):
+    def test_includes_embedded_html_asset(
+        self, mock_read_asset, create_user, workspace, mute_assistant_auto_index
+    ):
         mock_read_asset.return_value = (
             "Processos da Tradicao\n\nRitual semanal e governanca operacional."
         )
@@ -119,7 +123,9 @@ class TestBuildPageIndexableText:
 
     @patch("operis.assistant.page_content.read_html_document_asset_text")
     @patch("operis.assistant.indexing.embed_texts")
-    def test_index_page_with_html_embed(self, mock_embed, mock_read_asset, create_user, workspace, workspace_board):
+    def test_index_page_with_html_embed(
+        self, mock_embed, mock_read_asset, create_user, workspace, workspace_board, mute_assistant_auto_index
+    ):
         mock_read_asset.return_value = "Conteudo exclusivo sobre tradicao operacional."
         WorkspaceMember.objects.get_or_create(
             workspace=workspace,
@@ -145,7 +151,7 @@ class TestBuildPageIndexableText:
         )
         page.save()
 
-        mock_embed.return_value = [[0.1] * 1536]
+        mock_embed.side_effect = lambda texts: [[0.1] * 1536 for _ in texts]
 
         result = index_entity(SearchEmbedding.ENTITY_PAGE, str(page.id))
         assert result["ok"] is True

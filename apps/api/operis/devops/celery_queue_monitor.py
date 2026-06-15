@@ -19,15 +19,18 @@ def default_monitored_queues() -> list[str]:
 def get_queue_depths(queue_names: list[str] | None = None) -> dict[str, int | None]:
     """Passive queue_declare via Kombu; None quando a fila não existe."""
     names = queue_names or default_monitored_queues()
-    depths: dict[str, int | None] = {}
-    with app.connection_or_acquire() as conn:
-        channel = conn.default_channel
-        for name in names:
-            try:
-                _, count, _ = channel.queue_declare(queue=name, passive=True)
-                depths[name] = int(count)
-            except Exception:
-                depths[name] = None
+    depths: dict[str, int | None] = {name: None for name in names}
+    try:
+        with app.connection_or_acquire() as conn:
+            channel = conn.default_channel
+            for name in names:
+                try:
+                    _, count, _ = channel.queue_declare(queue=name, passive=True)
+                    depths[name] = int(count)
+                except Exception:
+                    depths[name] = None
+    except Exception:
+        return depths
     return depths
 
 
