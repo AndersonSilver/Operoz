@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 310 120" width="100%" height="100%">
+  <!-- Definições de Gradientes -->
+  <defs>
+    <linearGradient id="operoz-dark-text-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c87f2" />
+      <stop offset="100%" stop-color="#5e6ad2" />
+    </linearGradient>
+  </defs>
+
+  <!-- GRUPO DO ÍCONE HEXAGONAL DARK -->
+  <g transform="translate(10, 25)">
+    <!-- Contorno do Hexágono em Grafite Escuro -->
+    <path d="M 35 10 
+             L 65 27 
+             L 65 62 
+             L 35 79 
+             L 5 62 
+             L 5 27 
+             Z" 
+          fill="none" 
+          stroke="#16171d" 
+          stroke-width="7" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+    
+    <!-- Detalhe do Pipeline Ativo com Brilho Gradiente -->
+    <path d="M 35 32 
+             L 50 41 
+             L 50 58" 
+          fill="none" 
+          stroke="url(#operoz-dark-text-accent)" 
+          stroke-width="6" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+          
+    <!-- Ponto de Conexão Centralizado (Ajustado para cinza claro para destacar no miolo escuro) -->
+    <circle cx="35" cy="32" r="4" fill="#16171d" />
+  </g>
+
+  <!-- TIPOGRAFIA: Wordmark "operoz" em Grafite Escuro -->
+  <text x="105" y="72" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Geist Sans', 'Inter', sans-serif" 
+        font-size="44" 
+        font-weight="600" 
+        letter-spacing="-1.5px" 
+        fill="#16171d">operoz</text>
+</svg>

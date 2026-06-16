@@ -1,1 +1,53 @@
-../../../.cursor/rules/harness-orchestrator.mdc
+---
+description: Harness Engineering — orquestrador do agente (MCP Operoz + backlog OPEROZDP)
+alwaysApply: true
+---
+
+# Harness Engineering — Orquestrador
+
+Coordena o **loop de desenvolvimento** do programa Plataforma Violenta / Assistente Operoz.
+
+## Hierarquia
+
+1. Pedido do utilizador
+2. **Esta regra** + skill `.cursor/skills/harness-engineering/SKILL.md`
+3. Regras Operoz em `Operis/.cursor/rules/` (código)
+4. Código em `Operis/`
+
+## Roteamento
+
+| Tarefa | Regra Harness | Skill Harness | + Operoz |
+|--------|---------------|---------------|----------|
+| Avançar módulo / cards Done | `harness-backlog-mcp` | `SKILL.md` | conforme camada |
+| Implementar API/FE | `harness-verification` | `RULES.md` | `operoz-backend-django` / `operoz-frontend-design` |
+| Push / PR / deploy `preview` | `harness-ci-parity-before-push` | `SKILL.md` | — |
+| Integração Git/custo Harness | — | `mcp-operoz.md` | `operoz-integrations` |
+
+Indicar no início: *Harness: … | Operoz: … | MCP: operis*.
+
+## Loop obrigatório
+
+```text
+Descobrir (MCP) → Implementar (Operis/) → Verificar (testes) → Backlog (mark done)
+```
+
+**Não saltar verificação** antes de marcar cards Done.
+
+**Antes de push/PR/deploy:** gate `harness-ci-parity-before-push.mdc` (CI parity — bloqueante).
+
+## Constantes backlog
+
+| Chave | Valor |
+|-------|--------|
+| Workspace | `operoz` |
+| Projeto | `OPEROZDP` |
+| Prefixo cards | `[ OPEROZ ]` |
+| Mark done | `manage.py mark_operoz_cards_done --workspace operoz` |
+
+Monorepo: `Operis/` (relativo à raiz do workspace `operis/`).
+
+## Global
+
+- Português (pt-BR) ao utilizador; código em inglês
+- Marca **Operoz** na copy
+- Não commitar nem push sem pedido explícito

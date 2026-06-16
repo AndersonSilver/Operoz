@@ -118,7 +118,8 @@ Para 2+ instâncias `api-chat`:
 ```caddy
 reverse_proxy api-chat-1:8000 api-chat-2:8000 {
     flush_interval -1
-    lb_policy cookie assistant_sse { fallback duration 24h }
+    lb_policy cookie assistant_sse
+    stream_timeout 24h
 }
 ```
 

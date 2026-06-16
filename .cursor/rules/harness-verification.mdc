@@ -1,1 +1,52 @@
-../../../.cursor/rules/harness-verification.mdc
+---
+description: Harness — gates de verificação antes de concluir tarefa ou marcar backlog Done
+globs: Operis/apps/api/**,Operis/apps/web/**
+alwaysApply: false
+---
+
+# Regra — Verificação (Harness Engineering)
+
+Complementa `harness-backlog-mcp.mdc`. **Gate bloqueante** antes de Done.
+
+## Checklist mínimo
+
+- [ ] Testes da área tocada executados (mostrar output)
+- [ ] Migrations aplicadas se houve alteração em `db/migrations/`
+- [ ] `pnpm check:types` nos pacotes web tocados (se FE)
+- [ ] Sem regressão óbvia em API (`/api/instances/` 200)
+
+## Comandos por domínio
+
+### Assistente / RAG
+
+```bash
+docker compose -f Operis/docker-compose-local.yml exec api \
+  python -m pytest operis/tests/unit/assistant operis/tests/contract/app/test_assistant_app.py -q
+```
+
+### API geral
+
+```bash
+docker compose -f Operis/docker-compose-local.yml exec api \
+  python -m pytest operis/tests/unit/<area> -q
+```
+
+### Frontend
+
+```bash
+cd Operis && pnpm --filter web check:types
+```
+
+## Após verificação OK
+
+Só então: actualizar `COMPLETED_CARD_TITLES` e correr `mark_operoz_cards_done`.
+
+## Antes de git push / PR / deploy
+
+Gate **bloqueante:** `harness-ci-parity-before-push.mdc` — rodar comandos e env do workflow, não só pytest local.
+
+## Proibido
+
+- «Testes passaram» sem output
+- Marcar Done com migration pendente ou API em crash
+- Recomendar push sem gate CI parity (`harness-ci-parity-before-push.mdc`)

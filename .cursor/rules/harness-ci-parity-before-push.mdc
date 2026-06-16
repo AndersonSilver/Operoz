@@ -1,0 +1,74 @@
+---
+description: Harness — gate CI parity obrigatório antes de recomendar git push ou deploy
+alwaysApply: true
+---
+
+# Gate CI parity — antes do push
+
+**Bloqueante:** não recomendar `git push`, PR ou deploy até passar este gate.
+
+> Passar testes no Docker local **não basta** se o ambiente ≠ GitHub Actions.
+
+## 1. Ler workflows (obrigatório)
+
+Antes de push em `preview`, ler:
+
+- `Operis/.github/workflows/ci-operoz-release.yml`
+- `Operis/.github/workflows/ci-assistant.yml` (se tocou assistant)
+- `Operis/.github/workflows/deploy-operis.yml` (se commit tem `[deploy-full]`)
+
+Anotar: **serviços** (CI = Postgres + Redis, **sem RabbitMQ**), **env vars**, **comandos exatos**.
+
+## 2. Rodar os mesmos comandos do CI
+
+Raiz do monorepo: `Operis/`
+
+```bash
+# web-build
+CI=true pnpm install --frozen-lockfile
+CI=true pnpm turbo run build --filter=web --force
+
+# api-tests (Docker ou venv com env do workflow)
+docker compose -f docker-compose-local.yml exec -T api python manage.py check
+docker compose -f docker-compose-local.yml exec -T api python -m pytest \
+  operis/tests/contract/app/test_prd_review.py \
+  operis/tests/unit/assistant/test_prd_review_summary_tool.py \
+  operis/tests/unit/assistant/ \
+  operis/tests/contract/app/test_assistant_app.py \
+  -q --tb=short
+
+# mcp-build
+cd mcp-server && npm ci && npm run build
+```
+
+Mostrar **output** (exit code + resumo). Sem output = gate não cumprido.
+
+## 3. Simular env do CI quando relevante
+
+Validar com vars do workflow (ou `operis.settings.test`):
+
+| Var | CI típico |
+|-----|-----------|
+| `WEB_URL` / `APP_BASE_URL` | `http://localhost:3000` |
+| `LLM_API_KEY` | `sk-ci-mock` (sem OpenAI real) |
+| `CELERY_TASK_ALWAYS_EAGER` | `True` em test settings |
+
+## 4. Side effects a antecipar
+
+| Padrão | Risco no CI |
+|--------|-------------|
+| `.delay()` / Celery | broker ausente → 500 ou indexação eager |
+| `base_host()` | `WEB_URL` ausente → 500 |
+| `postinstall` em pacotes | script inexistente → `pnpm install` falha |
+| Signals de indexação (Page/Issue) | OpenAI/embeddings em testes contract |
+| `pnpm/action-setup` + `packageManager` | conflito de versão pnpm |
+
+## 5. Proibido
+
+- «Pode fazer push» só porque pytest passou no container com RabbitMQ/.env completo
+- Push após corrigir **um** erro de CI sem re-rodar **todo** o gate
+- Ignorar falha de `web-build` ou `mcp-build`
+
+## 6. Liberar push
+
+Só quando **web-build + api-tests + mcp-build** (escopo do workflow) passarem localmente com paridade CI, **ou** o utilizador aceitar push consciente do risco.

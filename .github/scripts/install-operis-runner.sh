@@ -10,6 +10,9 @@ set -euo pipefail
 
 : "${OPERIS_RUNNER_TOKEN:?Defina OPERIS_RUNNER_TOKEN (token do GitHub New runner)}"
 
+# VPS Hostinger costuma usar root; GitHub runner exige esta flag nesse caso.
+export RUNNER_ALLOW_RUNASROOT="${RUNNER_ALLOW_RUNASROOT:-1}"
+
 RUNNER_DIR="${OPERIS_RUNNER_DIR:-/root/actions-runner-operis}"
 REPO="https://github.com/AndersonSilver/Operis"
 RUNNER_NAME="${OPERIS_RUNNER_NAME:-operis-vps}"

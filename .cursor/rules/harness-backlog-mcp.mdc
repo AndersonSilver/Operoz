@@ -1,1 +1,36 @@
-../../../.cursor/rules/harness-backlog-mcp.mdc
+---
+description: Harness — backlog OPEROZDP via MCP Operis (módulos, cards, mark done)
+globs: Operis/apps/api/operis/db/management/commands/mark_operoz_cards_done.py,Operis/apps/api/operis/db/management/commands/seed_operoz_plataforma_violenta.py,.cursor/skills/harness-engineering/**
+alwaysApply: false
+---
+
+# Regra — Backlog MCP (Harness Engineering)
+
+Skill: `.cursor/skills/harness-engineering/SKILL.md`  
+Referência MCP: `.cursor/skills/harness-engineering/references/mcp-operoz.md`
+
+## Antes de marcar Done
+
+1. **MCP** — `operis_list_operations` (`domain: modules` | `work_items`) ou consulta DB
+2. **Testes** — evidência de pytest/lint (regra `harness-verification`)
+3. **Lista** — títulos em `COMPLETED_CARD_TITLES` (`mark_operoz_cards_done.py`)
+4. **Executar** — `mark_operoz_cards_done --workspace operoz`
+5. **Módulo** — `MODULE_STATUS_WHEN_ALL_DONE` só quando **todos** os cards do módulo estão Done
+
+## MCP — ferramentas prioritárias
+
+| Acção | Tool |
+|-------|------|
+| Descobrir domínios | `operis_get_capabilities` |
+| Listar ops | `operis_list_operations` |
+| Módulos | `operis_list_modules_app` |
+| Estado card | `operis_update_issue_app` (`state_id` Done) |
+| Sessão app | `operis_sign_in` |
+
+Lote dev: preferir `mark_operoz_cards_done` a N PATCHs manuais.
+
+## Proibido
+
+- Inventar cards/módulos concluídos sem MCP ou comando
+- Marcar módulo `completed` com cards pendentes
+- Assumir progresso só da memória do chat

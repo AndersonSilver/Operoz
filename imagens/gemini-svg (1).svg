@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 120" width="100%" height="100%">
+  <!-- Definições de Gradientes e Efeitos -->
+  <defs>
+    <linearGradient id="operoz-accent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7c87f2" />
+      <stop offset="100%" stop-color="#5e6ad2" />
+    </linearGradient>
+  </defs>
+
+  <!-- Fundo Escuro para Pré-visualização (Pode remover se for usar transparente) -->
+  <rect width="100%" height="100%" fill="#0d0e12" rx="8"/>
+
+  <g transform="translate(30, 25)">
+    <!-- ÍCONE: O Hexágono de Infraestrutura / Pipeline -->
+    <!-- Desenhado com linhas grossas e cantos arredondados (stroke-linejoin) -->
+    <path d="M 35 10 
+             L 65 27 
+             L 65 62 
+             L 35 79 
+             L 5 62 
+             L 5 27 
+             Z" 
+          fill="none" 
+          stroke="#e2e8f0" 
+          stroke-width="7" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+    
+    <!-- Detalhe Interno / Aresta do Pipeline Ativo (Conceito Harness/Git) -->
+    <path d="M 35 32 
+             L 50 41 
+             L 50 58" 
+          fill="none" 
+          stroke="url(#operoz-accent)" 
+          stroke-width="6" 
+          stroke-linejoin="round" 
+          stroke-linecap="round"/>
+          
+    <!-- Ponto de Conexão do Fluxo -->
+    <circle cx="35" cy="32" r="4" fill="#ffffff" />
+  </g>
+
+  <!-- TIPOGRAFIA: Wordmark "operoz" -->
+  <!-- Usando fontes padrão de sistema (Inter/Geist) com peso SemiBold e tracking tight -->
+  <text x="125" y="72" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Geist Sans', 'Inter', sans-serif" 
+        font-size="44" 
+        font-weight="600" 
+        letter-spacing="-1.5px" 
+        fill="#ffffff">operoz</text>
+
+  <!-- Tag sutil "OS" indicando o Sistema Operacional da Engenharia -->
+  <text x="285" y="72" 
+        font-family="-apple-system, BlinkMacSystemFont, 'Geist Sans', 'Inter', sans-serif" 
+        font-size="44" 
+        font-weight="300" 
+        letter-spacing="-1px" 
+        fill="#5e6ad2">OS</text>
+</svg>
