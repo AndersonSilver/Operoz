@@ -77,8 +77,30 @@ docker compose --env-file operis.env up -d --no-deps --pull never --force-recrea
 
 ## Troubleshooting
 
-| Problema                           | Solução                                                                   |
-| ---------------------------------- | ------------------------------------------------------------------------- |
-| `pull access denied` no VPS        | Verificar login GHCR no script; repo privado precisa do token do workflow |
-| Compose pede `:stable` inexistente | Script faz `docker tag` para `stable`; confirmar `operis.env`             |
-| Boards não aparecem                | Imagem antiga; verificar tag do contentor `docker ps`                     |
+| Problema                                       | Solução                                                                                                                                            |
+| ---------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `pull access denied` no VPS                    | Verificar login GHCR no script; repo privado precisa do token do workflow                                                                          |
+| Compose pede `:stable` inexistente             | Script faz `docker tag` para `stable`; confirmar `operis.env`                                                                                      |
+| Boards não aparecem                            | Imagem antiga; verificar tag do contentor `docker ps`                                                                                              |
+| CRON de automação não dispara / e-mail não sai | Confirmar serviços `automation-worker`, `automation-email-worker` e `beat-worker` no compose; ver [automation-workers.md](./automation-workers.md) |
+| Filas `automation` / `assistant` acumuladas    | `python manage.py check_celery_queues --alert-threshold 50`; subir workers em falta; purgar filas stale no RabbitMQ se necessário                  |
+
+### Workers de automação no VPS (self-host)
+
+O template `deployments/cli/community/docker-compose.yml` inclui:
+
+- `beat-worker` — agenda CRON (`dispatch_scheduled_automation_rules` a cada minuto)
+- `automation-worker` — fila `automation` (execução de regras)
+- `automation-email-worker` — fila `automation_email` (SMTP)
+- `assistant-worker` — fila `assistant` (indexação RAG)
+
+Após atualizar o compose no VPS (`plane-app`):
+
+```bash
+cd ~/operis-selfhost/plane-app
+# Copiar/sync do repo ou aplicar diff manualmente
+docker compose --env-file operis.env up -d beat-worker automation-worker automation-email-worker assistant-worker
+docker compose --env-file operis.env exec api python manage.py check_celery_queues --alert-threshold 50
+```
+
+Deploy **full** (`[deploy-full]` ou workflow `full`) garante imagem `plane-backend` com os entrypoints `docker-entrypoint-automation-*.sh`.

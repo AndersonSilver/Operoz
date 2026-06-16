@@ -146,7 +146,58 @@ services:
     volumes:
       - logs_beat-worker:/code/operis/logs
     environment:
-      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env]
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env, *mq-env]
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  automation-worker:
+    image: makeplane/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-automation-worker.sh
+    deploy:
+      replicas: ${AUTOMATION_WORKER_REPLICAS:-1}
+      restart_policy:
+        condition: any
+    volumes:
+      - logs_automation-worker:/code/operis/logs
+    environment:
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env, *mq-env]
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  automation-email-worker:
+    image: makeplane/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-automation-email-worker.sh
+    deploy:
+      replicas: ${AUTOMATION_EMAIL_WORKER_REPLICAS:-1}
+      restart_policy:
+        condition: any
+    volumes:
+      - logs_automation-email-worker:/code/operis/logs
+    environment:
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env, *mq-env]
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  assistant-worker:
+    image: makeplane/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-assistant-worker.sh
+    deploy:
+      replicas: ${ASSISTANT_WORKER_REPLICAS:-1}
+      restart_policy:
+        condition: any
+    volumes:
+      - logs_assistant-worker:/code/operis/logs
+    environment:
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env, *proxy-env, *mq-env]
     depends_on:
       - api
       - operis-db
@@ -249,6 +300,9 @@ volumes:
   logs_api:
   logs_worker:
   logs_beat-worker:
+  logs_automation-worker:
+  logs_automation-email-worker:
+  logs_assistant-worker:
   logs_migrator:
   rabbitmq_data:
   proxy_config:
