@@ -21,9 +21,7 @@
 	handle @assistant_chat {
 		reverse_proxy api-chat:8000 {
 			flush_interval -1
-			lb_policy cookie assistant_sse {
-				fallback duration 24h
-			}
+			lb_policy cookie assistant_sse
 		}
 	}
 
