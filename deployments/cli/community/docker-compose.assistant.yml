@@ -1,0 +1,105 @@
+# Overlay para plane-app: workers de indexação RAG + api-chat (assistente Operoz).
+#
+# Uso (na VPS, pasta plane-app):
+#   cd ~/operis-selfhost/plane-app
+#   docker compose \
+#     -f docker-compose.yaml \
+#     -f ~/operis-selfhost/Operis/deployments/cli/community/docker-compose.assistant.yml \
+#     --env-file operis.env \
+#     up -d assistant-worker api-chat assistant-chat-worker
+#
+# Pré-requisito: LLM_API_KEY no operis.env (embeddings OpenAI).
+# Proxy com api-chat: redeploy plane-proxy após fix Caddy (Deploy Operis → full).
+
+x-assistant-app-env: &assistant-app-env
+  WEB_URL: ${WEB_URL:-http://localhost}
+  DEBUG: ${DEBUG:-0}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+  GUNICORN_WORKERS: ${GUNICORN_WORKERS:-1}
+  USE_MINIO: ${USE_MINIO:-1}
+  DATABASE_URL: ${DATABASE_URL:-postgresql://operis:operis@operis-db/operis}
+  SECRET_KEY: ${SECRET_KEY}
+  AMQP_URL: ${AMQP_URL:-amqp://operis:operis@operis-mq:5672/operis}
+  API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+  MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+  LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+  PGHOST: ${PGHOST:-operis-db}
+  PGDATABASE: ${PGDATABASE:-operis}
+  POSTGRES_USER: ${POSTGRES_USER:-operis}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-operis}
+  POSTGRES_DB: ${POSTGRES_DB:-operis}
+  POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+  REDIS_HOST: ${REDIS_HOST:-operis-redis}
+  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_URL: ${REDIS_URL:-redis://operis-redis:6379/}
+  RABBITMQ_HOST: ${RABBITMQ_HOST:-operis-mq}
+  RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+  RABBITMQ_USER: ${RABBITMQ_USER:-operis}
+  RABBITMQ_PASSWORD: ${RABBITMQ_PASSWORD:-operis}
+  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis}
+  AWS_REGION: ${AWS_REGION:-}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://operis-minio:9000}
+  AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+  LLM_API_KEY: ${LLM_API_KEY:-}
+  LLM_PROVIDER: ${LLM_PROVIDER:-openai}
+  LLM_MODEL: ${LLM_MODEL:-gpt-4o-mini}
+  ASSISTANT_EMBEDDING_MODEL: ${ASSISTANT_EMBEDDING_MODEL:-text-embedding-3-small}
+  ASSISTANT_ENABLED: ${ASSISTANT_ENABLED:-1}
+
+services:
+  api-chat:
+    image: ${DOCKERHUB_USER:-myoperis}/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-api-chat.sh
+    restart: always
+    volumes:
+      - logs_api:/code/operis/logs
+    environment:
+      <<: *assistant-app-env
+      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
+      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
+      GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
+    depends_on:
+      - operis-db
+      - operis-redis
+
+  assistant-worker:
+    image: ${DOCKERHUB_USER:-myoperis}/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-assistant-worker.sh
+    restart: always
+    volumes:
+      - logs_worker:/code/operis/logs
+    environment:
+      <<: *assistant-app-env
+    depends_on:
+      - api
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  assistant-chat-worker:
+    image: ${DOCKERHUB_USER:-myoperis}/plane-backend:${APP_RELEASE:-stable}
+    command: ./bin/docker-entrypoint-assistant-chat-worker.sh
+    restart: always
+    volumes:
+      - logs_worker:/code/operis/logs
+    environment:
+      <<: *assistant-app-env
+      ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
+      ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
+    depends_on:
+      - api
+      - api-chat
+      - operis-db
+      - operis-redis
+      - operis-mq
+
+  proxy:
+    depends_on:
+      - web
+      - api
+      - api-chat
+      - space
+      - admin
+      - live
