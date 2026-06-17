@@ -197,3 +197,38 @@ class TestIndexStatus:
         status = resolve_page_index_status(page)
         assert status["status"] == "pending"
         assert status["estimated_seconds_remaining"] is not None
+
+    @patch("operis.assistant.indexing_scheduler.ensure_page_index_queued")
+    @patch("operis.assistant.signals.schedule_entity_index")
+    @patch("operis.assistant.index_status.is_rag_enabled", return_value=True)
+    @patch("operis.assistant.index_status._load_status_record")
+    @patch("operis.assistant.index_status.is_index_debounce_active", return_value=False)
+    def test_pending_without_debounce_does_not_requeue_on_poll(
+        self,
+        _debounce,
+        mock_load,
+        _rag,
+        _schedule,
+        mock_ensure,
+        create_user,
+        workspace,
+    ):
+        page = Page.objects.create(
+            name="Magalu Consórcios",
+            description_html="<p>PRD consórcio Magalu.</p>",
+            workspace=workspace,
+            owned_by=create_user,
+        )
+        mock_load.return_value = {
+            "status": "pending",
+            "updated_at": "2026-06-17T18:00:00+00:00",
+            "queued_at": "2026-06-17T18:00:00+00:00",
+            "eta_at": "2026-06-17T18:01:15+00:00",
+            "chunk_count": 0,
+        }
+
+        status = resolve_page_index_status(page)
+
+        assert status["status"] == "pending"
+        mock_ensure.assert_not_called()
+        _schedule.assert_not_called()

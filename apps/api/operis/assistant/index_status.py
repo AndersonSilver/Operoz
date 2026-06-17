@@ -15,6 +15,7 @@ logger = logging.getLogger(__name__)
 
 DEBOUNCE_SECONDS = 30
 PROCESSING_ESTIMATE_SECONDS = 45
+PENDING_STALE_SECONDS = 600
 
 AssistantIndexStatus = Literal[
     "disabled",
@@ -220,6 +221,13 @@ def compute_page_fingerprint(page: Page) -> str:
     return content_hash(build_page_indexable_text(page))
 
 
+def _is_pending_stale(record: dict[str, Any]) -> bool:
+    queued_at = _parse_iso_datetime(record.get("queued_at")) or _parse_iso_datetime(record.get("updated_at"))
+    if not queued_at:
+        return True
+    return (datetime.now(timezone.utc) - queued_at).total_seconds() >= PENDING_STALE_SECONDS
+
+
 def resolve_page_index_status(page: Page) -> dict[str, Any]:
     """Public status for UI: whether page content is in the assistant knowledge base."""
     from operis.assistant.indexing_scheduler import ensure_page_index_queued
@@ -295,6 +303,33 @@ def resolve_page_index_status(page: Page) -> dict[str, Any]:
                 "chunk_count": chunk_count,
                 "fingerprint": stored_fingerprint,
                 "error": None,
+            },
+            entity_type=entity_type,
+            entity_id=entity_id,
+        )
+
+    # Task already scheduled — do not re-queue on every status poll (fixes countdown loop).
+    if record_status == "pending" and not _is_pending_stale(record):
+        return _public_status_payload(
+            {
+                **record,
+                "status": "pending",
+                "chunk_count": chunk_count,
+                "fingerprint": stored_fingerprint,
+                "error": None,
+            },
+            entity_type=entity_type,
+            entity_id=entity_id,
+        )
+
+    if record_status == "pending" and _is_pending_stale(record) and chunk_count == 0:
+        return _public_status_payload(
+            {
+                "status": "failed",
+                "updated_at": record.get("updated_at"),
+                "chunk_count": 0,
+                "fingerprint": stored_fingerprint,
+                "error": "index_timeout",
             },
             entity_type=entity_type,
             entity_id=entity_id,
@@ -392,9 +427,17 @@ def _compute_eta_fields(
             eta = base + timedelta(seconds=PROCESSING_ESTIMATE_SECONDS)
     else:
         debounce_ttl = _redis_ttl(_debounce_key(entity_type, entity_id))
-        if debounce_ttl is None:
-            debounce_ttl = DEBOUNCE_SECONDS
-        eta = now + timedelta(seconds=debounce_ttl + PROCESSING_ESTIMATE_SECONDS)
+        stored_eta = _parse_iso_datetime(record.get("eta_at"))
+        if debounce_ttl is not None:
+            eta = now + timedelta(seconds=debounce_ttl + PROCESSING_ESTIMATE_SECONDS)
+        elif stored_eta:
+            eta = stored_eta
+        else:
+            queued = _parse_iso_datetime(record.get("queued_at"))
+            if queued:
+                eta = queued + timedelta(seconds=DEBOUNCE_SECONDS + PROCESSING_ESTIMATE_SECONDS)
+            else:
+                eta = now + timedelta(seconds=DEBOUNCE_SECONDS + PROCESSING_ESTIMATE_SECONDS)
 
     remaining = max(0, int((eta - now).total_seconds()))
     return {
