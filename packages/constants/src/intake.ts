@@ -32,6 +32,12 @@ export const INBOX_STATUS: {
     i18n_description: () => `inbox_issue.status.accepted.description`,
   },
   {
+    key: "closed",
+    i18n_title: "inbox_issue.status.closed.title",
+    status: EInboxIssueStatus.CLOSED,
+    i18n_description: () => `inbox_issue.status.closed.description`,
+  },
+  {
     key: "duplicate",
     i18n_title: "inbox_issue.status.duplicate.title",
     status: EInboxIssueStatus.DUPLICATE,

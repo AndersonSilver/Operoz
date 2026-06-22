@@ -9,3 +9,6 @@ export * from "./project-field-layout";
 export * from "./board-roles";
 export * from "./board-permissions";
 export * from "./board-status-report";
+export * from "./board-intake-form";
+export * from "./board-support-queue";
+export * from "./board-support-sla-policy";

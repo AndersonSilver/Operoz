@@ -8,12 +8,46 @@ from rest_framework.views import APIView
 
 from operis.authentication.session import BaseSessionAuthentication
 from operis.app.serializers.intake_form import IntakeFormPublicSerializer
+from operis.app.serializers.board_intake_form import BoardIntakeFormPublicSerializer
 from operis.app.views.asset.v2 import normalize_upload_mime_type
 from operis.bgtasks.storage_metadata_task import get_asset_object_metadata
-from operis.db.models import FileAsset, IntakeForm
+from operis.db.models import BoardIntakeForm, FileAsset, IntakeForm
 from operis.settings.storage import S3Storage
 from operis.utils.intake_submission import IntakeSubmissionError, submit_intake_form
+from operis.utils.board_intake_submission import (
+    board_intake_client_queryset,
+    get_published_board_intake_form,
+    serialize_board_intake_clients,
+    submit_board_intake_form,
+)
 from operis.utils.path_validator import sanitize_filename
+
+
+def _client_ip(request) -> str | None:
+    forwarded = request.META.get("HTTP_X_FORWARDED_FOR")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    return request.META.get("REMOTE_ADDR")
+
+
+def _resolve_public_form(anchor: str):
+    board_form = (
+        BoardIntakeForm.objects.select_related("board", "workspace", "board__support_sla_policy")
+        .filter(anchor=anchor, is_published=True, deleted_at__isnull=True)
+        .first()
+    )
+    if board_form is not None:
+        return "board", board_form
+
+    project_form = (
+        IntakeForm.objects.select_related("project")
+        .filter(anchor=anchor, is_published=True, deleted_at__isnull=True)
+        .first()
+    )
+    if project_form is not None and project_form.project.intake_view:
+        return "project", project_form
+
+    return None, None
 
 
 def _get_published_intake_form(anchor: str) -> IntakeForm:
@@ -28,12 +62,21 @@ class IntakeFormPublicEndpoint(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, anchor):
-        try:
-            form = IntakeForm.objects.select_related("project").get(anchor=anchor, is_published=True)
-        except IntakeForm.DoesNotExist:
+        scope, form = _resolve_public_form(anchor)
+        if form is None:
             return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
-        if not form.project.intake_view:
-            return Response({"error": "Intake is not enabled for this project."}, status=status.HTTP_400_BAD_REQUEST)
+
+        if scope == "board":
+            clients = serialize_board_intake_clients(board_intake_client_queryset(form.board_id))
+            if not clients:
+                return Response(
+                    {"error": "Nenhum cliente com Recepção ativa neste board."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            return Response(
+                BoardIntakeFormPublicSerializer(form, context={"clients": clients}).data,
+            )
+
         return Response(IntakeFormPublicSerializer(form).data)
 
 
@@ -42,9 +85,10 @@ class IntakeFormPublicSubmitEndpoint(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, anchor):
-        form = IntakeForm.objects.select_related("project", "project__workspace").get(
-            anchor=anchor, is_published=True
-        )
+        scope, form = _resolve_public_form(anchor)
+        if form is None:
+            return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
+
         if form.require_auth and not request.user.is_authenticated:
             return Response({"error": "Authentication required."}, status=status.HTTP_401_UNAUTHORIZED)
 
@@ -53,19 +97,29 @@ class IntakeFormPublicSubmitEndpoint(APIView):
         actor_id = str(request.user.id) if request.user.is_authenticated else None
 
         try:
-            intake_issue = submit_intake_form(
-                form=form,
-                submission=submission,
-                actor_id=actor_id,
-                submitter_email=submitter_email,
-                request=request,
-            )
+            if scope == "board":
+                intake_issue = submit_board_intake_form(
+                    form=form,
+                    submission=submission,
+                    actor_id=actor_id,
+                    submitter_email=submitter_email,
+                    request=request,
+                    client_ip=_client_ip(request),
+                )
+            else:
+                intake_issue = submit_intake_form(
+                    form=form,
+                    submission=submission,
+                    actor_id=actor_id,
+                    submitter_email=submitter_email,
+                    request=request,
+                )
         except IntakeSubmissionError as exc:
             return Response(
                 {"error": str(exc), "field_errors": exc.field_errors},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        except IntakeForm.DoesNotExist:
+        except (IntakeForm.DoesNotExist, BoardIntakeForm.DoesNotExist):
             return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
 
         return Response(
@@ -83,9 +137,8 @@ class IntakeFormPublicAssetEndpoint(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request, anchor):
-        try:
-            form = _get_published_intake_form(anchor)
-        except IntakeForm.DoesNotExist:
+        scope, form = _resolve_public_form(anchor)
+        if form is None:
             return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
 
         name = sanitize_filename(request.data.get("name")) or "unnamed"
@@ -100,15 +153,27 @@ class IntakeFormPublicAssetEndpoint(APIView):
 
         size_limit = min(size, settings.FILE_SIZE_LIMIT)
         asset_key = f"{form.workspace_id}/{uuid.uuid4().hex}-{name}"
-        asset = FileAsset.objects.create(
-            attributes={"name": name, "type": file_type, "size": size_limit},
-            asset=asset_key,
-            size=size_limit,
-            workspace_id=form.workspace_id,
-            project_id=form.project_id,
-            entity_type=FileAsset.EntityTypeContext.INTAKE_FORM_ATTACHMENT,
-            entity_identifier=str(form.id),
-        )
+
+        if scope == "board":
+            asset = FileAsset.objects.create(
+                attributes={"name": name, "type": file_type, "size": size_limit},
+                asset=asset_key,
+                size=size_limit,
+                workspace_id=form.workspace_id,
+                project_id=None,
+                entity_type=FileAsset.EntityTypeContext.BOARD_INTAKE_FORM_ATTACHMENT,
+                entity_identifier=str(form.id),
+            )
+        else:
+            asset = FileAsset.objects.create(
+                attributes={"name": name, "type": file_type, "size": size_limit},
+                asset=asset_key,
+                size=size_limit,
+                workspace_id=form.workspace_id,
+                project_id=form.project_id,
+                entity_type=FileAsset.EntityTypeContext.INTAKE_FORM_ATTACHMENT,
+                entity_identifier=str(form.id),
+            )
 
         storage = S3Storage(request=request)
         presigned_url = storage.generate_presigned_post(
@@ -126,19 +191,24 @@ class IntakeFormPublicAssetEndpoint(APIView):
         )
 
     def patch(self, request, anchor, pk):
-        try:
-            form = _get_published_intake_form(anchor)
-        except IntakeForm.DoesNotExist:
+        scope, form = _resolve_public_form(anchor)
+        if form is None:
             return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        asset = FileAsset.objects.filter(
-            id=pk,
-            workspace_id=form.workspace_id,
-            project_id=form.project_id,
-            entity_type=FileAsset.EntityTypeContext.INTAKE_FORM_ATTACHMENT,
-            entity_identifier=str(form.id),
-            is_deleted=False,
-        ).first()
+        filters = {
+            "id": pk,
+            "workspace_id": form.workspace_id,
+            "entity_identifier": str(form.id),
+            "is_deleted": False,
+        }
+        if scope == "board":
+            filters["project_id__isnull"] = True
+            filters["entity_type"] = FileAsset.EntityTypeContext.BOARD_INTAKE_FORM_ATTACHMENT
+        else:
+            filters["project_id"] = form.project_id
+            filters["entity_type"] = FileAsset.EntityTypeContext.INTAKE_FORM_ATTACHMENT
+
+        asset = FileAsset.objects.filter(**filters).first()
         if asset is None:
             return Response({"error": "Asset not found."}, status=status.HTTP_404_NOT_FOUND)
 

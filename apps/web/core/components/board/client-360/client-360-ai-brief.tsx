@@ -1,98 +1,116 @@
+"use client";
+
 import { useCallback, useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
-import { AssistantService } from "@operis/services";
 import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { TClient360DetailResponse } from "@operis/types";
 import { renderFormattedDate } from "@operis/utils";
-import { buildClient360DetailAiPayload } from "@/components/board/client-360/build-client-360-ai-payload";
+import { buildClient360ClientBriefMd } from "@/components/board/client-360/build-client-360-client-brief-md";
+import {
+  Client360ClientBriefDocument,
+  Client360ClientBriefEmptyState,
+  Client360ClientBriefGenerateButton,
+} from "@/components/board/client-360/client-360-client-brief-document";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
-
-const assistantService = new AssistantService();
 
 type Props = {
   workspaceSlug: string;
   projectId: string;
   period: { start: string; end: string };
   data: TClient360DetailResponse;
+  embedded?: boolean;
+  generateSignal?: number;
+  onLoadingChange?: (loading: boolean) => void;
+  onBriefChange?: (hasBrief: boolean) => void;
 };
 
 function cacheKey(projectId: string, periodStart: string) {
   return `client360_client_brief_${projectId}_${periodStart}`;
 }
 
-export function Client360AiBriefBody({ workspaceSlug, projectId, period, data }: Props) {
+export function Client360AiBriefBody({
+  projectId,
+  period,
+  data,
+  embedded = false,
+  generateSignal = 0,
+  onLoadingChange,
+  onBriefChange,
+}: Props) {
   const { t } = useTranslation();
-  const [brief, setBrief] = useState<string | null>(() => {
-    if (typeof window === "undefined") return null;
-    try {
-      return sessionStorage.getItem(cacheKey(projectId, period.start));
-    } catch {
-      return null;
-    }
-  });
+  const [generated, setGenerated] = useState(false);
   const [generating, setGenerating] = useState(false);
+  const [markdown, setMarkdown] = useState<string>("");
 
   useEffect(() => {
+    if (typeof window === "undefined") return;
     try {
-      setBrief(sessionStorage.getItem(cacheKey(projectId, period.start)));
+      const cached = sessionStorage.getItem(cacheKey(projectId, period.start));
+      if (cached) {
+        setMarkdown(cached);
+        setGenerated(true);
+        onBriefChange?.(true);
+      }
     } catch {
-      setBrief(null);
+      /* ignore */
     }
-  }, [projectId, period.start]);
+  }, [onBriefChange, projectId, period.start]);
 
   const periodLabel = `${renderFormattedDate(period.start)} — ${renderFormattedDate(period.end)}`;
 
-  const generate = useCallback(async () => {
+  const generate = useCallback(() => {
     setGenerating(true);
+    onLoadingChange?.(true);
     try {
-      const { prompt } = buildClient360DetailAiPayload(data, periodLabel);
-      const session = await assistantService.createSession(workspaceSlug, {
-        title: t("boards.client_360.ai_title_client"),
-        context: { project_id: projectId },
-      });
-      const response = await assistantService.sendMessage(workspaceSlug, session.id, prompt);
-      const text = (response.message?.content ?? "").trim();
-      if (!text) {
-        setToast({
-          type: TOAST_TYPE.ERROR,
-          title: t("toast.error"),
-          message: t("issue_modal_ai_invalid_response"),
-        });
-        return;
-      }
-      setBrief(text);
+      const text = buildClient360ClientBriefMd(data, periodLabel);
+      setMarkdown(text);
+      setGenerated(true);
+      onBriefChange?.(true);
       try {
         sessionStorage.setItem(cacheKey(projectId, period.start), text);
       } catch {
         /* ignore quota */
       }
-    } catch {
-      setToast({
-        type: TOAST_TYPE.ERROR,
-        title: t("error"),
-        message: t("issue_modal_ai_error_generic"),
-      });
     } finally {
       setGenerating(false);
+      onLoadingChange?.(false);
     }
-  }, [data, periodLabel, projectId, period.start, t, workspaceSlug]);
+  }, [data, onBriefChange, onLoadingChange, period.start, periodLabel, projectId]);
 
-  return (
-    <div className="space-y-3">
-      <Button variant="primary" size="sm" loading={generating} onClick={() => void generate()}>
-        {brief ? t("boards.client_360.ai_regenerate") : t("boards.client_360.ai_generate")}
-      </Button>
-      <div className="rounded-xl border border-dashed border-subtle bg-layer-2/20 px-4 py-4">
-        {brief ? (
-          <p className="text-13 leading-relaxed whitespace-pre-wrap text-secondary">{brief}</p>
-        ) : (
-          <p className="text-12 leading-relaxed text-tertiary">{t("boards.client_360.ai_placeholder_client")}</p>
-        )}
+  useEffect(() => {
+    if (generateSignal > 0) generate();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [generateSignal]);
+
+  if (generated) {
+    return <Client360ClientBriefDocument data={data} period={period} markdown={markdown} />;
+  }
+
+  if (embedded) {
+    return (
+      <div className="space-y-3">
+        <Button variant="primary" size="sm" loading={generating} onClick={generate}>
+          {t("boards.client_360.ai_generate")}
+        </Button>
+        <Client360ClientBriefEmptyState onGenerate={generate} generating={generating} />
       </div>
-    </div>
-  );
+    );
+  }
+
+  return <Client360ClientBriefEmptyState onGenerate={generate} generating={generating} />;
+}
+
+export function Client360AiBriefGenerateButton({
+  hasBrief,
+  loading,
+  onClick,
+}: {
+  hasBrief: boolean;
+  loading: boolean;
+  onClick: () => void;
+}) {
+  return <Client360ClientBriefGenerateButton hasBrief={hasBrief} loading={loading} onClick={onClick} />;
 }
 
 export function Client360AiBrief(props: Props) {
@@ -106,7 +124,7 @@ export function Client360AiBrief(props: Props) {
       title={t("boards.client_360.ai_title_client")}
       description={t("boards.client_360.ai_subtitle_client")}
     >
-      <Client360AiBriefBody {...props} />
+      <Client360AiBriefBody {...props} embedded />
     </Client360Section>
   );
 }

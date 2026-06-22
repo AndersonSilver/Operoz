@@ -23,6 +23,7 @@ from operis.db.models import (
 from operis.db.models.module import ModuleStatus
 from operis.utils.board_custom_fields import sync_board_custom_fields_to_project
 from operis.utils.board_issue_types import sync_board_issue_types_to_project
+from operis.utils.project_default_features import ensure_project_default_features
 
 from .adf_to_html import description_needs_jira_repair, resolve_jira_description_html
 from .clients import load_client_aliases, resolve_client, slug_identifier
@@ -535,6 +536,8 @@ def run_jira_ops_import(
             )
             sync_board_issue_types_to_project(project, actor)
             sync_board_custom_fields_to_project(project, actor)
+
+        ensure_project_default_features(project)
 
         for epic in client_epics:
             key = epic["key"]

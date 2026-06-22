@@ -1,8 +1,11 @@
 import type { OperisClient } from "../client.js";
 import { OperisApiError } from "../client.js";
+import { loadMcpProfile } from "../config.js";
+import { discoverOperations } from "./discover.js";
 import { ALL_OPERATIONS, OPERATIONS_BY_NAME, groupByDomain } from "./registry/index.js";
 import { executeOperation, findOperation } from "./registry/execute.js";
-import { META_TOOL_NAMES } from "./registry/meta.js";
+import { AGENT_TOOL_NAMES, FULL_META_TOOL_NAMES } from "./registry/meta.js";
+import { OPERIS_REGISTRY_OPERATION_COUNT, OPERIS_MCP_PROFILE } from "./definitions.js";
 
 type Args = Record<string, unknown>;
 
@@ -20,6 +23,15 @@ function queryFrom(args: Args): Record<string, string | boolean | undefined> | u
   return q as Record<string, string | boolean | undefined>;
 }
 
+function limitFrom(args: Args): number | undefined {
+  const value = args.limit;
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== "number" || !Number.isFinite(value)) {
+    throw new Error("Parâmetro limit deve ser um número");
+  }
+  return value;
+}
+
 function jsonResult(data: unknown) {
   return {
     content: [{ type: "text" as const, text: JSON.stringify(data, null, 2) }],
@@ -35,11 +47,20 @@ function errorResult(error: unknown) {
   });
 }
 
+function isMetaTool(name: string): boolean {
+  return FULL_META_TOOL_NAMES.has(name);
+}
+
 function buildCapabilities() {
   const domains = groupByDomain();
+  const profile = loadMcpProfile();
+
   return {
-    total_tools: ALL_OPERATIONS.length + META_TOOL_NAMES.size,
-    registry_operations: ALL_OPERATIONS.length,
+    profile,
+    exposed_tools: profile === "agent" ? AGENT_TOOL_NAMES.size : FULL_META_TOOL_NAMES.size + ALL_OPERATIONS.length,
+    registry_operations: OPERIS_REGISTRY_OPERATION_COUNT,
+    workflow:
+      profile === "agent" ? ["operis_discover", "operis_execute"] : ["operis_list_operations ou endpoint directo"],
     auth: {
       v1: "Header X-Api-Key → OPERIS_API_KEY ou Authorization: Bearer",
       app: "Cookie de sessão → operis_sign_in, OPERIS_SESSION_COOKIE ou X-Operis-Session",
@@ -56,18 +77,25 @@ function buildCapabilities() {
 export async function handleToolCall(
   client: OperisClient,
   name: string,
-  args: Args,
+  args: Args
 ): Promise<{ content: Array<{ type: "text"; text: string }> }> {
   try {
-    if (META_TOOL_NAMES.has(name)) {
+    if (isMetaTool(name)) {
       return handleMetaTool(client, name, args);
+    }
+
+    if (OPERIS_MCP_PROFILE === "agent") {
+      return jsonResult({
+        error: `Ferramenta "${name}" não exposta no perfil agent.`,
+        hint: "Use operis_discover → operis_execute, ou operis_api_v1_request / operis_api_app_request.",
+      });
     }
 
     const operation = findOperation(ALL_OPERATIONS, name);
     if (!operation) {
       return jsonResult({
         error: `Ferramenta desconhecida: ${name}`,
-        hint: "Use operis_list_operations ou operis_get_capabilities",
+        hint: "Use operis_discover, operis_list_operations ou operis_get_capabilities",
       });
     }
 
@@ -80,11 +108,46 @@ export async function handleToolCall(
 async function handleMetaTool(
   client: OperisClient,
   name: string,
-  args: Args,
+  args: Args
 ): Promise<{ content: Array<{ type: "text"; text: string }> }> {
   switch (name) {
     case "operis_get_capabilities":
       return jsonResult(buildCapabilities());
+
+    case "operis_discover": {
+      const query = typeof args.query === "string" ? args.query : undefined;
+      const domain = typeof args.domain === "string" ? args.domain : undefined;
+      const surface = args.surface === "v1" || args.surface === "app" ? args.surface : undefined;
+      const matches = discoverOperations(ALL_OPERATIONS, {
+        query,
+        domain,
+        surface,
+        limit: limitFrom(args),
+      });
+
+      return jsonResult({
+        profile: OPERIS_MCP_PROFILE,
+        count: matches.length,
+        next_step: "Chame operis_execute com operation=<name> e path params no top-level.",
+        matches,
+      });
+    }
+
+    case "operis_execute": {
+      const operationName = str(args, "operation");
+      const operation = OPERATIONS_BY_NAME.get(operationName) ?? findOperation(ALL_OPERATIONS, operationName);
+      if (!operation) {
+        return jsonResult({
+          error: `Operação desconhecida: ${operationName}`,
+          hint: "Use operis_discover com query descritiva para obter o name correcto.",
+        });
+      }
+
+      const executeArgs = { ...args };
+      delete executeArgs.operation;
+
+      return jsonResult(await executeOperation(client, operation, executeArgs));
+    }
 
     case "operis_list_operations": {
       let ops = ALL_OPERATIONS;
@@ -102,7 +165,7 @@ async function handleMetaTool(
           method: o.method,
           path: o.path,
           description: o.description,
-        })),
+        }))
       );
     }
 
@@ -127,7 +190,7 @@ async function handleMetaTool(
           path: str(args, "path"),
           query: queryFrom(args),
           body: args.body,
-        }),
+        })
       );
 
     case "operis_api_app_request":
@@ -138,7 +201,7 @@ async function handleMetaTool(
           path: str(args, "path"),
           query: queryFrom(args),
           body: args.body,
-        }),
+        })
       );
 
     case "operis_sign_in": {

@@ -279,6 +279,13 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/intake/page.tsx"
             ),
           ]),
+
+          layout("./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/sustentacao/layout.tsx", [
+            route(
+              ":workspaceSlug/projects/:projectId/sustentacao",
+              "./(all)/[workspaceSlug]/(projects)/projects/(detail)/[projectId]/sustentacao/page.tsx"
+            ),
+          ]),
         ]),
 
         // Project Archives - Issues, Cycles, Modules
@@ -415,6 +422,10 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/playbooks/page.tsx"
             ),
             route(
+              ":workspaceSlug/settings/boards/:boardSlug/sustentacao",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/sustentacao/page.tsx"
+            ),
+            route(
               ":workspaceSlug/settings/boards/:boardSlug/campos",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/campos/page.tsx"
             ),
@@ -433,6 +444,10 @@ export const coreRoutes: RouteConfigEntry[] = [
             route(
               ":workspaceSlug/settings/boards/:boardSlug/quadro",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/quadro/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/visao-360/saude",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/visao-360/saude/page.tsx"
             ),
             route(
               ":workspaceSlug/settings/boards/:boardSlug/cronograma",
@@ -487,6 +502,10 @@ export const coreRoutes: RouteConfigEntry[] = [
             route(
               ":workspaceSlug/settings/projects/:projectId/features/intake",
               "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/intake/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/projects/:projectId/features/support",
+              "./(all)/[workspaceSlug]/(settings)/settings/projects/[projectId]/features/support/page.tsx"
             ),
             // Project States
             route(

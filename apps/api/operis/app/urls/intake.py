@@ -7,6 +7,7 @@ from operis.app.views import (
     IntakeWorkItemDescriptionVersionEndpoint,
     IntakeFormListCreateEndpoint,
     IntakeFormDetailEndpoint,
+    ProjectSupportQueueListEndpoint,
 )
 
 
@@ -70,5 +71,10 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/intake-forms/<uuid:form_id>/",
         IntakeFormDetailEndpoint.as_view(),
         name="intake-form-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/support-queues/",
+        ProjectSupportQueueListEndpoint.as_view(),
+        name="project-support-queues",
     ),
 ]

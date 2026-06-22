@@ -80,16 +80,28 @@ RUN pnpm turbo run build --filter=space
 
 FROM base AS runner
 
+ENV NODE_ENV=production
+ENV PORT=3000
+
 COPY --from=installer /app/apps/space/build ./apps/space/build
 COPY --from=installer /app/apps/space/node_modules ./apps/space/node_modules
 COPY --from=installer /app/node_modules ./node_modules
+COPY apps/space/scripts/docker-healthcheck.mjs ./apps/space/scripts/docker-healthcheck.mjs
 
 WORKDIR /app/apps/space
 
+# tini reaps zombie children (health probes, shell-outs). Non-root reduces container breakout impact.
+RUN apk add --no-cache tini \
+  && addgroup -g 1001 -S operoz \
+  && adduser -S operoz -u 1001 -G operoz \
+  && chown -R operoz:operoz /app/apps/space
+
 EXPOSE 3000
 
-RUN apk add --no-cache curl
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
-  CMD curl -fsS http://127.0.0.1:3000/spaces/ >/dev/null || exit 1
+USER operoz
 
-CMD ["npx", "react-router-serve", "./build/server/index.js"]
+HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+  CMD ["node", "./scripts/docker-healthcheck.mjs"]
+
+ENTRYPOINT ["/sbin/tini", "--"]
+CMD ["./node_modules/.bin/react-router-serve", "./build/server/index.js"]

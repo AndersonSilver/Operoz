@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { Image, MoreHorizontal, Settings } from "lucide-react";
+import { Archive, Image, MoreHorizontal, Settings } from "lucide-react";
 import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { IconButton } from "@operis/propel/icon-button";
@@ -80,7 +80,10 @@ export const BoardOverviewHeaderMenu = observer(function BoardOverviewHeaderMenu
           {t("boards.settings.open_from_menu")}
         </CustomMenu.MenuItem>
         {isAdmin ? (
-          <CustomMenu.MenuItem onClick={() => setIsArchiveOpen(true)}>{t("boards.archive")}</CustomMenu.MenuItem>
+          <CustomMenu.MenuItem onClick={() => setIsArchiveOpen(true)} className="flex items-center gap-2">
+            <Archive className="size-3.5" />
+            {t("boards.archive")}
+          </CustomMenu.MenuItem>
         ) : null}
       </CustomMenu>
     </>

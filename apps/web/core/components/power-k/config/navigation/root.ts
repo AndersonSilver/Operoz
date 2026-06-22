@@ -30,6 +30,7 @@ export const usePowerKNavigationCommands = (): TPowerKCommandConfig[] => {
     optionsList["nav_project_modules"],
     optionsList["nav_project_views"],
     optionsList["nav_project_intake"],
+    optionsList["nav_project_support"],
     optionsList["nav_project_settings"],
     optionsList["nav_project_archives"],
     // Navigate to workspace-level pages

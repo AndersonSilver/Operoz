@@ -1,21 +1,17 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// types
 import { PROJECT_ERROR_MESSAGES } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { TIssue } from "@operis/types";
-// ui
 import { AlertModalCore } from "@operis/ui";
-// constants
-// hooks
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {
   data: Partial<TIssue>;
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: () => Promise<void>;
+  onSubmit: (deleteReason: string) => Promise<void>;
 };
 
 export const DeleteInboxIssueModal = observer(function DeleteInboxIssueModal({
@@ -24,22 +20,31 @@ export const DeleteInboxIssueModal = observer(function DeleteInboxIssueModal({
   onSubmit,
   data,
 }: Props) {
-  // states
   const [isDeleting, setIsDeleting] = useState(false);
-  // store hooks
+  const [deleteReason, setDeleteReason] = useState("");
   const { getProjectById } = useProject();
   const { t } = useTranslation();
-  // derived values
   const projectDetails = data.project_id ? getProjectById(data?.project_id) : undefined;
+  const ticketLabel = `${projectDetails?.identifier}-${data?.sequence_id}`;
 
   const handleClose = () => {
     setIsDeleting(false);
+    setDeleteReason("");
     onClose();
   };
 
   const handleDelete = async () => {
+    if (deleteReason.trim().length < 5) {
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("error"),
+        message: t("inbox_issue.modals.delete.reason_required"),
+      });
+      return;
+    }
+
     setIsDeleting(true);
-    await onSubmit()
+    await onSubmit(deleteReason.trim())
       .then(() => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
@@ -48,14 +53,14 @@ export const DeleteInboxIssueModal = observer(function DeleteInboxIssueModal({
         });
       })
       .catch((errors) => {
-        const isPermissionError = errors?.error === "Only admin or creator can delete the work item";
+        const isPermissionError = errors?.error === "Only board admin can delete the support ticket";
         const currentError = isPermissionError
-          ? PROJECT_ERROR_MESSAGES.permissionError
+          ? { i18n_title: "error", i18n_message: "inbox_issue.errors.delete_permission" }
           : PROJECT_ERROR_MESSAGES.issueDeleteError;
         setToast({
           title: t(currentError.i18n_title),
           type: TOAST_TYPE.ERROR,
-          message: currentError.i18n_message && t(currentError.i18n_message),
+          message: currentError.i18n_message ? t(currentError.i18n_message) : undefined,
         });
       })
       .finally(() => handleClose());
@@ -68,15 +73,22 @@ export const DeleteInboxIssueModal = observer(function DeleteInboxIssueModal({
       isSubmitting={isDeleting}
       isOpen={isOpen}
       title={t("inbox_issue.modals.delete.title")}
-      // TODO: Need to translate the confirmation message
       content={
-        <>
-          Are you sure you want to delete work item{" "}
-          <span className="font-medium break-words text-primary">
-            {projectDetails?.identifier}-{data?.sequence_id}
-          </span>
-          {""}? The work item will only be deleted from the intake and this action cannot be undone.
-        </>
+        <div className="space-y-4">
+          <p>{t("inbox_issue.modals.delete.content", { value: ticketLabel })}</p>
+          <div className="space-y-1">
+            <label className="text-12 font-medium text-secondary" htmlFor="delete-reason">
+              {t("inbox_issue.modals.delete.reason_label")}
+            </label>
+            <textarea
+              id="delete-reason"
+              className="min-h-24 w-full rounded-md border border-subtle bg-layer-1 px-3 py-2 text-13"
+              value={deleteReason}
+              onChange={(event) => setDeleteReason(event.target.value)}
+              placeholder={t("inbox_issue.modals.delete.reason_placeholder")}
+            />
+          </div>
+        </div>
       }
     />
   );

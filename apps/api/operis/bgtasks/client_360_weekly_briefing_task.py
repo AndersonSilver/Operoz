@@ -23,7 +23,7 @@ def _build_workspace_list_payload(workspace_slug: str, period):
 
     from operis.db.models import Issue, Project, Workspace
     from operis.utils.client_360 import (
-        aggregate_issue_stats,
+        aggregate_client360_issue_stats,
         aggregate_module_counts,
         aggregate_status_reports,
         build_client_row,
@@ -38,7 +38,7 @@ def _build_workspace_list_payload(workspace_slug: str, period):
         load_board_health_config_map,
         load_board_score_alert_threshold_map,
     )
-    from operis.utils.client_360_operational import apply_operational_enrichment
+    from operis.utils.client_360_operational import apply_operational_enrichment, load_board_support_sla_map
 
     workspace = Workspace.objects.filter(slug=workspace_slug, deleted_at__isnull=True).first()
     if not workspace:
@@ -59,10 +59,17 @@ def _build_workspace_list_payload(workspace_slug: str, period):
         workspace=workspace,
         project_id__in=project_ids,
     ).distinct()
-    issue_stats_map = aggregate_issue_stats(issue_qs, today)
+    board_ids = list({p.board_id for p in projects if p.board_id})
+    project_board_map = {str(p.id): str(p.board_id) if p.board_id else None for p in projects}
+    issue_stats_map = aggregate_client360_issue_stats(
+        issue_qs,
+        today,
+        project_ids=project_ids,
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map(board_ids),
+    )
     module_counts = aggregate_module_counts(project_ids)
     report_stats_map = aggregate_status_reports(project_ids, period)
-    board_ids = list({p.board_id for p in projects if p.board_id})
     health_config_map = load_board_health_config_map(board_ids)
     alert_threshold_map = load_board_score_alert_threshold_map(board_ids)
     clients = [

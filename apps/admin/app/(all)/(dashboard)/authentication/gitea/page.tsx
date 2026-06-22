@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
@@ -61,6 +60,7 @@ const InstanceGiteaAuthenticationPage = observer(function InstanceGiteaAuthentic
 
   return (
     <PageWrapper
+      size="lg"
       customHeader={
         <AuthenticationMethodCard
           name="Gitea"

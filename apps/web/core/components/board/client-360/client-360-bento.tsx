@@ -4,7 +4,9 @@ import { cn } from "@operis/utils";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 
 export function Client360BentoGrid({ children, className }: { children: ReactNode; className?: string }) {
-  return <div className={cn("grid grid-cols-1 gap-4 md:auto-rows-min md:grid-cols-12", className)}>{children}</div>;
+  return (
+    <div className={cn("grid grid-cols-1 gap-4 md:auto-rows-min md:grid-cols-12 md:gap-5", className)}>{children}</div>
+  );
 }
 
 export function Client360BentoTile({
@@ -36,13 +38,18 @@ export function Client360BentoTile({
   return (
     <article
       className={cn(
-        "group shadow-xs hover:shadow-sm flex min-h-0 flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1 transition-shadow",
+        "client-360-workspace-tile workspace-exports-form-panel group flex min-h-0 flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1",
         highlight && "ring-1 ring-subtle ring-inset",
         className
       )}
     >
-      {highlight ? <div className="bg-border-subtle h-px w-full shrink-0" aria-hidden /> : null}
-      <header className="flex items-center justify-between gap-2 border-b border-subtle/80 bg-layer-1/80 px-4 py-2.5">
+      {highlight ? (
+        <div
+          className="h-0.5 w-full shrink-0 bg-gradient-to-r from-accent-primary/40 via-accent-primary/15 to-transparent"
+          aria-hidden
+        />
+      ) : null}
+      <header className="workspace-exports-hero-dot-grid flex items-center justify-between gap-2 border-b border-subtle bg-gradient-to-r from-layer-1 via-layer-1 to-layer-2/30 px-4 py-3">
         <div className="flex min-w-0 items-center gap-2.5">
           {Icon ? (
             <span className={cn("grid size-7 shrink-0 place-items-center rounded-md", tone.iconBg)}>
@@ -72,6 +79,7 @@ export function Client360BentoMetric({
   className,
   align = "start",
   emphasizeValue = false,
+  valueVariant = "numeric",
 }: {
   label: string;
   value: string | number;
@@ -82,15 +90,23 @@ export function Client360BentoMetric({
   align?: "start" | "center";
   /** Colorize the numeric value (e.g. active alerts). Default keeps values neutral. */
   emphasizeValue?: boolean;
+  /** Smaller text for status labels (e.g. "Sem report"). */
+  valueVariant?: "numeric" | "status";
 }) {
   const t = CLIENT_360_TONE[tone];
   const Tag = onClick ? "button" : "div";
   const centered = align === "center";
   const valueTone =
-    emphasizeValue && (tone === "danger" || tone === "warning")
+    emphasizeValue || valueVariant === "status"
       ? tone === "danger"
         ? "text-danger-secondary"
-        : "text-warning-primary"
+        : tone === "warning"
+          ? "text-warning-primary"
+          : tone === "success"
+            ? "text-success-primary"
+            : tone === "accent"
+              ? "text-accent-primary"
+              : "text-primary"
       : "text-primary";
 
   return (
@@ -98,17 +114,31 @@ export function Client360BentoMetric({
       type={onClick ? "button" : undefined}
       onClick={onClick}
       className={cn(
-        "flex min-w-0 flex-col gap-1 px-4 py-3 transition-colors",
+        "flex min-w-0 flex-col gap-2 px-4 py-4 transition-colors",
         centered ? "items-center text-center" : "text-left",
         onClick && "cursor-pointer hover:bg-layer-transparent-hover",
         className
       )}
     >
-      <span className="flex items-center gap-1.5">
-        {Icon ? <Icon className={cn("size-3.5 shrink-0", t.icon)} strokeWidth={1.75} /> : null}
+      <span className={cn("flex items-center gap-2", centered && "justify-center")}>
+        {Icon ? (
+          <span className={cn("grid size-7 shrink-0 place-items-center rounded-md border border-subtle/60", t.iconBg)}>
+            <Icon className={cn("size-3.5", t.icon)} strokeWidth={1.75} />
+          </span>
+        ) : null}
         <span className="tracking-wider truncate text-10 font-semibold text-tertiary uppercase">{label}</span>
       </span>
-      <span className={cn("text-22 leading-none font-semibold tracking-tight tabular-nums", valueTone)}>{value}</span>
+      <span
+        className={cn(
+          valueVariant === "status"
+            ? "text-13 leading-snug font-semibold"
+            : "text-22 leading-none font-semibold tracking-tight tabular-nums",
+          valueTone,
+          centered && "text-center"
+        )}
+      >
+        {value}
+      </span>
     </Tag>
   );
 }

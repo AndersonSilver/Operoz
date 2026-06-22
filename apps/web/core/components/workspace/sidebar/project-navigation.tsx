@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { EUserPermissionsLevel, EUserPermissions } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-import { FileText } from "lucide-react";
+import { FileText, LifeBuoy } from "lucide-react";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operis/propel/icons";
 import type { EUserProjectRoles } from "@operis/types";
 // plane ui
@@ -135,6 +135,16 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         shouldRender: project?.inbox_view ?? false,
         sortOrder: 7,
       },
+      {
+        i18n_key: "sidebar.support",
+        key: "support",
+        name: "Sustentação",
+        href: `/${workspaceSlug}/projects/${projectId}/sustentacao`,
+        icon: LifeBuoy,
+        access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+        shouldRender: project?.support_view ?? false,
+        sortOrder: 8,
+      },
     ],
     [project]
   );
@@ -186,7 +196,10 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
         const hasAccess = allowPermissions(item.access, EUserPermissionsLevel.PROJECT, workspaceSlug, project.id);
         if (!hasAccess) return null;
 
-        const shouldShowCount = item.key === "intake" && (project.intake_count ?? 0) > 0;
+        const shouldShowCount =
+          (item.key === "intake" && (project.intake_count ?? 0) > 0) ||
+          (item.key === "support" && (project.support_count ?? 0) > 0);
+        const countValue = item.key === "support" ? project.support_count : project.intake_count;
 
         return (
           <Link key={item.key} href={item.href} onClick={handleProjectClick}>
@@ -198,7 +211,7 @@ export const ProjectNavigation = observer(function ProjectNavigation(props: TPro
                   />
                   <span className="text-11 font-medium">{t(item.i18n_key)}</span>
                 </div>
-                {shouldShowCount && <span className="text-11 font-medium text-tertiary">{project.intake_count}</span>}
+                {shouldShowCount && <span className="text-11 font-medium text-tertiary">{countValue}</span>}
               </div>
             </SidebarNavItem>
           </Link>

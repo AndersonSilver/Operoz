@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
@@ -60,6 +59,7 @@ const InstanceGitlabAuthenticationPage = observer(function InstanceGitlabAuthent
   };
   return (
     <PageWrapper
+      size="lg"
       customHeader={
         <AuthenticationMethodCard
           name="GitLab"

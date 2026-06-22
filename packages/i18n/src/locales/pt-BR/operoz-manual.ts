@@ -39,7 +39,7 @@ export const operozManualPtBR = {
         link: "Planejar trabalho",
       },
       knowledge: {
-        description: "Documente com páginas rich-text, status reports e formulários de recepção.",
+        description: "Documente com páginas rich-text, status reports e formulários de sustentação.",
         link: "Explorar conhecimento",
       },
       automation: {
@@ -79,7 +79,7 @@ export const operozManualPtBR = {
     integrations: "Integrações",
   },
   tips_label: "Dicas práticas",
-  footer: "Operoz — plataforma operacional inteligente.",
+  footer: "Operoz — Plataforma Operacional Inteligente.",
   article_not_found: "Página não encontrada na documentação.",
   back_to_home: "Voltar ao início",
   prev_article: "Anterior",
@@ -264,7 +264,7 @@ export const operozManualPtBR = {
       description: "Criação, publicação e estrutura de projetos.",
       p: {
         0: "Projetos vivem dentro de boards (recomendado) ou diretamente no workspace. Cada projeto tem nome, chave (identifier), descrição e membros.",
-        1: "A navegação do projeto mostra módulos ativos: Itens, Ciclos, Módulos, Visualizações, Documentação, Recepção, Status Report.",
+        1: "A navegação do projeto mostra módulos ativos: Itens, Ciclos, Módulos, Visualizações, Documentação, Sustentação, Status Report.",
         2: "Publique projetos para torná-los visíveis a guests ou despublique para restringir acesso.",
       },
       tips: {
@@ -279,7 +279,7 @@ export const operozManualPtBR = {
       p: {
         0: "Itens: lista/kanban de todos os cards do projeto. Núcleo de qualquer projeto.",
         1: "Ciclos: sprints com datas, escopo e burndown. Módulos: agrupamentos de features (ex.: «Checkout v2»).",
-        2: "Pages: wiki/documentação rich-text. Intake: formulários de recepção. Status Report: relatórios periódicos de progresso.",
+        2: "Pages: wiki/documentação rich-text. Sustentação: formulários públicos de chamados. Status Report: relatórios periódicos de progresso.",
       },
       tips: {
         0: "Desative módulos não usados para simplificar a navegação.",
@@ -437,7 +437,7 @@ export const operozManualPtBR = {
       },
     },
     knowledge_intake: {
-      title: "Recepção (Intake)",
+      title: "Sustentação",
       description: "Formulários para capturar solicitações externas.",
       p: {
         0: "Intake permite criar formulários públicos ou internos que geram cards no projeto.",

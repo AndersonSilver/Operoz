@@ -9,7 +9,7 @@ import { cn } from "@operis/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 
-export type Client360IntelligencePanelKind = "explainer" | "brief" | "qbr" | "assistant";
+export type Client360IntelligencePanelKind = "explainer" | "brief" | "portfolio_brief" | "qbr" | "assistant";
 
 const PANEL_META: Record<
   Client360IntelligencePanelKind,
@@ -25,6 +25,12 @@ const PANEL_META: Record<
     icon: Sparkles,
     titleKey: "boards.client_360.ai_title_client",
     subtitleKey: "boards.client_360.ai_subtitle_client",
+    tone: "accent",
+  },
+  portfolio_brief: {
+    icon: Sparkles,
+    titleKey: "boards.client_360.intelligence_weekly_briefing_title",
+    subtitleKey: "boards.client_360.intelligence_weekly_briefing_subtitle",
     tone: "accent",
   },
   qbr: {
@@ -44,12 +50,14 @@ const PANEL_META: Record<
 export function Client360IntelligencePanel({
   kind,
   projectName,
+  subtitleParams,
   onClose,
   headerAction,
   children,
 }: {
   kind: Client360IntelligencePanelKind;
   projectName?: string;
+  subtitleParams?: Record<string, string | number>;
   onClose: () => void;
   headerAction?: ReactNode;
   children: ReactNode;
@@ -59,34 +67,100 @@ export function Client360IntelligencePanel({
   const Icon = meta.icon;
   const tone = CLIENT_360_TONE[meta.tone];
 
+  const portfolioPeriod =
+    kind === "portfolio_brief" && subtitleParams?.period != null ? String(subtitleParams.period) : null;
+
   return (
     <div className="fixed inset-0 z-50 flex justify-end bg-backdrop/70 backdrop-blur-[2px]">
-      <div className="shadow-2xl flex h-full w-full max-w-lg flex-col border-l border-subtle bg-layer-1">
-        <header className="relative border-b border-subtle px-5 py-4">
-          <div className="absolute inset-x-0 top-0 h-1 opacity-80" style={{ backgroundColor: tone.bar }} aria-hidden />
-          <div className="flex items-start justify-between gap-3">
-            <div className="flex min-w-0 items-start gap-3">
-              <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", tone.iconBg)}>
+      <div
+        className={cn(
+          "shadow-2xl flex h-full w-full flex-col border-l border-subtle bg-layer-1",
+          kind === "portfolio_brief" || kind === "explainer" || kind === "brief" || kind === "qbr"
+            ? "max-w-xl"
+            : "max-w-lg"
+        )}
+      >
+        {kind === "portfolio_brief" || kind === "explainer" || kind === "brief" || kind === "qbr" ? (
+          <header className="relative shrink-0 border-b border-subtle px-5 py-5">
+            <div
+              className="absolute inset-x-0 top-0 h-1 opacity-80"
+              style={{ backgroundColor: tone.bar }}
+              aria-hidden
+            />
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={onClose}
+              aria-label={t("common.close")}
+              className="absolute top-4 right-4"
+            >
+              <X className="size-4" />
+            </Button>
+            <div className="flex items-start gap-3 pr-10">
+              <span
+                className={cn("grid size-10 shrink-0 place-items-center rounded-xl border border-subtle", tone.iconBg)}
+              >
                 <Icon className={cn("size-4", tone.icon)} strokeWidth={1.75} />
               </span>
-              <div className="min-w-0">
+              <div className="min-w-0 flex-1">
                 <h2 className="text-15 font-semibold tracking-tight text-primary">{t(meta.titleKey)}</h2>
-                <p className="mt-1 text-12 leading-relaxed text-tertiary">
-                  {kind === "assistant" && projectName
-                    ? t(meta.subtitleKey, { name: projectName })
-                    : t(meta.subtitleKey)}
-                </p>
+                {kind === "portfolio_brief" && portfolioPeriod ? (
+                  <p className="mt-1.5 text-12 text-secondary">{t(meta.subtitleKey, { period: portfolioPeriod })}</p>
+                ) : kind === "brief" && subtitleParams?.period ? (
+                  <p className="mt-1.5 text-12 text-secondary">{String(subtitleParams.period)}</p>
+                ) : kind === "explainer" ? (
+                  <p className="mt-1.5 text-12 leading-relaxed text-secondary">{t(meta.subtitleKey)}</p>
+                ) : kind === "qbr" ? (
+                  <p className="mt-1.5 text-12 leading-relaxed text-secondary">{t(meta.subtitleKey)}</p>
+                ) : null}
               </div>
             </div>
-            <div className="flex shrink-0 items-center gap-1">
-              {headerAction}
-              <Button variant="ghost" size="sm" onClick={onClose} aria-label={t("common.close")}>
-                <X className="size-4" />
-              </Button>
+            {headerAction ? (
+              <div className="mt-4 flex flex-wrap items-center justify-end gap-3 border-t border-subtle/70 pt-4">
+                {headerAction}
+              </div>
+            ) : null}
+          </header>
+        ) : (
+          <header className="relative shrink-0 border-b border-subtle px-5 py-4">
+            <div
+              className="absolute inset-x-0 top-0 h-1 opacity-80"
+              style={{ backgroundColor: tone.bar }}
+              aria-hidden
+            />
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex min-w-0 items-start gap-3">
+                <span className={cn("grid size-9 shrink-0 place-items-center rounded-lg", tone.iconBg)}>
+                  <Icon className={cn("size-4", tone.icon)} strokeWidth={1.75} />
+                </span>
+                <div className="min-w-0">
+                  <h2 className="text-15 font-semibold tracking-tight text-primary">{t(meta.titleKey)}</h2>
+                  <p className="mt-1 text-12 leading-relaxed text-tertiary">
+                    {kind === "assistant" && projectName
+                      ? t(meta.subtitleKey, { name: projectName })
+                      : t(meta.subtitleKey, subtitleParams)}
+                  </p>
+                </div>
+              </div>
+              <div className="flex shrink-0 items-center gap-1">
+                {headerAction}
+                <Button variant="ghost" size="sm" onClick={onClose} aria-label={t("common.close")}>
+                  <X className="size-4" />
+                </Button>
+              </div>
             </div>
-          </div>
-        </header>
-        <div className={cn("flex-1 overflow-y-auto px-5 py-5")}>{children}</div>
+          </header>
+        )}
+        <div
+          className={cn(
+            "flex-1 overflow-y-auto",
+            kind === "portfolio_brief" || kind === "explainer" || kind === "brief" || kind === "qbr"
+              ? "bg-canvas px-5 py-5"
+              : "px-5 py-5"
+          )}
+        >
+          {children}
+        </div>
       </div>
     </div>
   );
@@ -95,6 +169,7 @@ export function Client360IntelligencePanel({
 const RAIL_ITEM_TONE: Record<Client360IntelligencePanelKind, keyof typeof CLIENT_360_TONE> = {
   explainer: "info",
   brief: "accent",
+  portfolio_brief: "accent",
   qbr: "warning",
   assistant: "accent",
 };
@@ -111,7 +186,7 @@ export type Client360IntelligenceRailContext = {
   suggestedActionsCount?: number;
 };
 
-function buildIntelRailHint(
+export function buildIntelRailHint(
   ctx: Client360IntelligenceRailContext,
   t: (key: string, params?: Record<string, string | number>) => string
 ): string {
@@ -138,12 +213,14 @@ export function Client360IntelligenceRail({
   layout = "horizontal",
   context,
   className,
+  fillHeight = false,
 }: {
   onOpen: (kind: Client360IntelligencePanelKind) => void;
   persona?: "management" | "pm";
   layout?: "horizontal" | "vertical";
   context?: Client360IntelligenceRailContext;
   className?: string;
+  fillHeight?: boolean;
 }) {
   const { t } = useTranslation();
 
@@ -233,6 +310,7 @@ export function Client360IntelligenceRail({
       <aside
         className={cn(
           "shadow-xs sticky top-4 flex flex-col gap-3 rounded-xl border border-subtle bg-gradient-to-b from-layer-2/50 to-layer-1 p-4",
+          fillHeight && "h-full px-5",
           className
         )}
       >
@@ -283,9 +361,14 @@ export function Client360IntelligenceRail({
           </dl>
         ) : null}
 
-        <div className="grid grid-cols-2 gap-2">{itemButtons}</div>
+        <div className={cn("grid grid-cols-2 gap-2", fillHeight && "flex-1 content-start")}>{itemButtons}</div>
 
-        <p className="rounded-lg border border-dashed border-subtle/80 bg-layer-2/20 px-2.5 py-2 text-10 leading-relaxed text-tertiary">
+        <p
+          className={cn(
+            "rounded-lg border border-dashed border-subtle/80 bg-layer-2/20 px-2.5 py-2 text-10 leading-relaxed text-tertiary",
+            fillHeight && "mt-auto"
+          )}
+        >
           {t("boards.client_360.detail_intel_rail_tip")}
         </p>
       </aside>

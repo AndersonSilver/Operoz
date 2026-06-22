@@ -161,6 +161,9 @@ importers:
       '@operis/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
+      '@operis/i18n':
+        specifier: workspace:*
+        version: link:../../packages/i18n
       '@operis/propel':
         specifier: workspace:*
         version: link:../../packages/propel

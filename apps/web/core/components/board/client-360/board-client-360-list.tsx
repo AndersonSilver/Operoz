@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Building2, Users } from "lucide-react";
+import { Building2, LifeBuoy, Users } from "lucide-react";
 import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { EUserWorkspaceRoles } from "@operis/types";
@@ -28,6 +28,7 @@ import { useClient360TableColumns } from "@/components/board/client-360/use-clie
 import { useClient360CompactTableView } from "@/components/board/client-360/use-client-360-compact-table-view";
 import { Client360PortfolioKpiStrip } from "@/components/board/client-360/client-360-portfolio-kpi-strip";
 import { Client360PortfolioPulse } from "@/components/board/client-360/client-360-portfolio-pulse";
+import { Client360PortfolioSupport } from "@/components/board/client-360/client-360-portfolio-support";
 import {
   Client360DetailTabList,
   Client360DetailTabPanel,
@@ -83,6 +84,7 @@ export function BoardClient360List({ workspaceSlug, board }: Props) {
   const [view, setView] = useState<Client360ViewMode>(() => loadClient360ViewMode(board.slug));
   const [sort, setSort] = useState<Client360SortState>(() => loadClient360Sort(board.slug));
   const [matrixPage, setMatrixPage] = useState(1);
+  const [listTab, setListTab] = useState<"pulse" | "clients" | "support">("pulse");
   const { persona, setPersona } = useClient360Persona(board.slug);
   const { enabled: periodCompareEnabled, setEnabled: setPeriodCompareEnabled } = useClient360PeriodCompare(board.slug);
 
@@ -93,6 +95,11 @@ export function BoardClient360List({ workspaceSlug, board }: Props) {
       setMatrixPage(1);
     }
   };
+
+  const handleSupportFilter = useCallback((next: Client360FilterKey) => {
+    setFilter(next);
+    setListTab("clients");
+  }, []);
 
   const handlePersonaChange = useCallback(
     (next: Client360Persona) => {
@@ -234,13 +241,16 @@ export function BoardClient360List({ workspaceSlug, board }: Props) {
         <>
           <Client360PortfolioKpiStrip summary={data.summary} onFilterChange={setFilter} />
 
-          <Client360DetailTabs defaultValue="pulse">
+          <Client360DetailTabs value={listTab} onValueChange={(tab) => setListTab(tab as typeof listTab)}>
             <Client360DetailTabList>
               <Client360DetailTabTrigger value="pulse">
                 {t("boards.client_360.detail_tab_pulse")}
               </Client360DetailTabTrigger>
               <Client360DetailTabTrigger value="clients">
                 {t("boards.client_360.detail_tab_clients")}
+              </Client360DetailTabTrigger>
+              <Client360DetailTabTrigger value="support" icon={LifeBuoy}>
+                {t("boards.client_360.detail_tab_support")}
               </Client360DetailTabTrigger>
             </Client360DetailTabList>
 
@@ -337,6 +347,19 @@ export function BoardClient360List({ workspaceSlug, board }: Props) {
                   />
                 )}
               </Client360Section>
+            </Client360DetailTabPanel>
+
+            <Client360DetailTabPanel value="support">
+              <Client360PortfolioSupport
+                workspaceSlug={workspaceSlug}
+                summary={data.summary}
+                clients={data.clients}
+                supportAnalytics={data.support_analytics}
+                periodStart={period.start}
+                periodEnd={period.end}
+                exportScope={{ kind: "board", workspaceSlug, boardSlug: board.slug }}
+                onFilterChange={handleSupportFilter}
+              />
             </Client360DetailTabPanel>
           </Client360DetailTabs>
         </>

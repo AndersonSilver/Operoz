@@ -237,6 +237,30 @@ export class BoardService extends APIService {
       });
   }
 
+  async downloadSupportAnalyticsCsv(
+    workspaceSlug: string,
+    boardSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      export: "support_csv";
+      delimiter?: "semicolon";
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/`,
+      { params },
+      { responseType: "blob" }
+    )
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async getClient360ReminderLogs(
     workspaceSlug: string,
     boardSlug: string

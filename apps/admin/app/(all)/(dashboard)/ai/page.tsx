@@ -1,45 +1,46 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
+import { BrainCog, Sparkles, Zap } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { Loader } from "@operis/ui";
-// components
 import { PageWrapper } from "@/components/common/page-wrapper";
-// hooks
 import { useInstance } from "@/hooks/store";
-// types
 import type { Route } from "./+types/page";
-// local
 import { InstanceAIForm } from "./form";
 
 const InstanceAIPage = observer(function InstanceAIPage(_props: Route.ComponentProps) {
-  // store
+  const { t } = useTranslation();
   const { fetchInstanceConfigurations, formattedConfig } = useInstance();
 
   useSWR("INSTANCE_CONFIGURATIONS", () => fetchInstanceConfigurations());
 
   return (
     <PageWrapper
+      size="lg"
       header={{
-        title: "Inteligência artificial do Operoz",
-        description:
-          "Configure provedor, modelo e credenciais de IA para habilitar o Operoz Assistant e recursos inteligentes em todos os workspaces.",
+        icon: BrainCog,
+        title: t("god_mode.pages.ai.title"),
+        description: t("god_mode.pages.ai.description"),
+        highlights: [
+          { label: t("god_mode.ai.backend"), icon: Zap, tone: "accent" },
+          { label: t("god_mode.ai.frontend"), icon: Sparkles, tone: "success" },
+          { label: t("god_mode.ai.credentials_chip"), icon: BrainCog, tone: "purple" },
+        ],
+        gradientClass: "from-accent-subtle/50",
       }}
     >
       {formattedConfig ? (
         <InstanceAIForm config={formattedConfig} />
       ) : (
-        <Loader className="space-y-8">
-          <Loader.Item height="50px" width="40%" />
-          <div className="grid w-2/3 grid-cols-2 gap-x-8 gap-y-4">
-            <Loader.Item height="50px" />
-            <Loader.Item height="50px" />
-          </div>
-          <Loader.Item height="50px" width="20%" />
+        <Loader className="space-y-4">
+          <Loader.Item height="140px" width="100%" />
+          <Loader.Item height="320px" width="100%" />
         </Loader>
       )}
     </PageWrapper>
   );
 });
 
-export const meta: Route.MetaFunction = () => [{ title: "Inteligência Artificial - Operoz Admin" }];
+export const meta: Route.MetaFunction = () => [{ title: "AI Settings - God Mode" }];
 
 export default InstanceAIPage;

@@ -7,7 +7,6 @@ import { useTranslation } from "@operis/i18n";
 import { Logo } from "@operis/propel/emoji-icon-picker";
 import { Client360DetailContent } from "@/components/board/client-360/client-360-detail-content";
 import { Client360DetailHeader } from "@/components/board/client-360/client-360-detail-header";
-import { useClient360Persona } from "@/components/board/client-360/use-client-360-persona";
 import { Client360PageShell } from "@/components/board/client-360/client-360-ui";
 import {
   CLIENT_360_SWR_CONFIG,
@@ -30,7 +29,6 @@ export function WorkspaceClient360Detail({ workspaceSlug, projectId }: Props) {
   const router = useAppRouter();
   const searchParams = useSearchParams();
   const [period, setPeriod] = useState(() => periodFromQuery(searchParams) ?? defaultWeekPeriod());
-  const { persona } = useClient360Persona("workspace");
 
   const { data, error, isLoading, mutate } = useSWR(
     workspaceSlug && projectId
@@ -116,7 +114,6 @@ export function WorkspaceClient360Detail({ workspaceSlug, projectId }: Props) {
         projectId={projectId}
         period={period}
         data={data}
-        persona={persona}
         statusReportHref={statusReportHref}
         onFinopsSaved={() => void mutate()}
       />

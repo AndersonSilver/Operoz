@@ -1,14 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { DollarSign, Download, Sparkles } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { TClient360FinopsSummary, TClient360Summary } from "@operis/types";
-import { cn } from "@operis/utils";
+import { cn, renderFormattedDate } from "@operis/utils";
+import { Client360IntelligencePanel } from "@/components/board/client-360/client-360-intelligence-panel";
+import {
+  Client360PortfolioBriefDocument,
+  Client360PortfolioBriefPreview,
+} from "@/components/board/client-360/client-360-portfolio-brief-document";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { WorkspaceService } from "@/services/workspace.service";
+import "@/components/exporter/workspace-exports-settings.css";
 
 const workspaceService = new WorkspaceService();
 
@@ -50,6 +56,12 @@ export function Client360PortfolioSidebar({
   const [brief, setBrief] = useState("");
   const [generating, setGenerating] = useState(false);
   const [loadingBrief, setLoadingBrief] = useState(true);
+  const [briefOpen, setBriefOpen] = useState(false);
+
+  const periodLabel = useMemo(
+    () => `${renderFormattedDate(period.start)} — ${renderFormattedDate(period.end)}`,
+    [period.end, period.start]
+  );
 
   const loadCached = useCallback(async () => {
     setLoadingBrief(true);
@@ -100,8 +112,8 @@ export function Client360PortfolioSidebar({
     await workspaceService.downloadClient360FinopsCsv(workspaceSlug);
   };
 
-  const briefPreview = brief.trim().slice(0, 280);
   const hint = buildPortfolioHint(summary, t);
+  const briefTrimmed = brief.trim();
 
   const actions = [
     {
@@ -125,7 +137,7 @@ export function Client360PortfolioSidebar({
           },
           {
             key: "export",
-            label: t("boards.client_360.finops_export_csv"),
+            label: t("boards.client_360.portfolio_sidebar_action_export_short"),
             description: t("boards.client_360.portfolio_sidebar_action_export_desc"),
             icon: Download,
             tone: "neutral" as const,
@@ -136,111 +148,144 @@ export function Client360PortfolioSidebar({
   ];
 
   return (
-    <aside
-      className={cn(
-        "shadow-xs flex h-full min-h-0 w-full flex-col gap-3 overflow-hidden rounded-xl border border-subtle bg-layer-1 p-4",
-        className
-      )}
-    >
-      <div className="flex shrink-0 items-center gap-2.5">
-        <span className="grid size-8 shrink-0 place-items-center rounded-lg border border-subtle bg-layer-2">
-          <Sparkles className="size-4 text-secondary" strokeWidth={1.75} />
-        </span>
-        <div className="min-w-0">
-          <p className="text-13 font-semibold text-primary">{t("boards.client_360.detail_intel_rail_label")}</p>
-          <p className="text-11 leading-relaxed text-tertiary">{t("boards.client_360.portfolio_sidebar_subtitle")}</p>
-        </div>
-      </div>
-
-      <div className="min-h-0 flex-1 space-y-3 overflow-y-auto">
-        <p className="text-11 leading-relaxed text-secondary">{hint}</p>
-
-        <dl className="grid grid-cols-3 gap-2 rounded-lg border border-subtle/80 bg-layer-2/40 px-2.5 py-2">
-          <div className="min-w-0 text-center">
-            <dt className="text-10 font-medium tracking-wide text-tertiary uppercase">
-              {t("boards.client_360.summary_clients")}
-            </dt>
-            <dd className="mt-1 text-14 font-semibold text-primary tabular-nums">{summary.total_clients}</dd>
+    <>
+      <aside
+        className={cn(
+          "client-360-workspace-sidebar workspace-exports-history-panel flex h-full min-h-0 w-full flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1",
+          className
+        )}
+      >
+        <div className="workspace-exports-hero-dot-grid shrink-0 border-b border-subtle bg-gradient-to-br from-accent-subtle/15 via-transparent to-transparent px-5 py-4">
+          <div className="flex items-center gap-3">
+            <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary">
+              <Sparkles className="size-4" strokeWidth={1.75} />
+            </span>
+            <div className="min-w-0">
+              <p className="text-13 font-semibold text-primary">{t("boards.client_360.detail_intel_rail_label")}</p>
+              <p className="mt-0.5 text-11 leading-relaxed text-tertiary">
+                {t("boards.client_360.portfolio_sidebar_subtitle")}
+              </p>
+            </div>
           </div>
-          <div className="min-w-0 border-x border-subtle/60 px-1 text-center">
-            <dt className="text-10 font-medium tracking-wide text-tertiary uppercase">
-              {t("boards.client_360.summary_critical")}
-            </dt>
-            <dd
-              className={cn(
-                "mt-1 text-14 font-semibold tabular-nums",
-                summary.health_critical > 0 ? "text-danger-secondary" : "text-primary"
-              )}
-            >
-              {summary.health_critical}
-            </dd>
-          </div>
-          <div className="min-w-0 text-center">
-            <dt className="text-10 font-medium tracking-wide text-tertiary uppercase">
-              {t("boards.client_360.summary_overdue")}
-            </dt>
-            <dd
-              className={cn(
-                "mt-1 text-14 font-semibold tabular-nums",
-                summary.total_overdue > 0 ? "text-warning-primary" : "text-primary"
-              )}
-            >
-              {summary.total_overdue}
-            </dd>
-          </div>
-        </dl>
-
-        <div className="grid grid-cols-2 gap-2">
-          {actions.map(({ key, label, description, icon: Icon, tone, onClick, loading }) => {
-            const token = CLIENT_360_TONE[tone];
-            return (
-              <button
-                key={key}
-                type="button"
-                disabled={loading}
-                onClick={onClick}
-                className="flex flex-col gap-2 rounded-lg border border-subtle bg-layer-1 px-3 py-2.5 text-left transition-colors hover:border-strong hover:bg-layer-2"
-              >
-                <span className={cn("grid size-6 shrink-0 place-items-center rounded-md", token.iconBg)}>
-                  <Icon className={cn("size-3.5", token.icon)} strokeWidth={1.75} />
-                </span>
-                <span className="flex flex-col gap-0.5">
-                  <span className="text-12 leading-snug font-medium text-primary">{label}</span>
-                  <span className="line-clamp-2 text-10 leading-relaxed text-tertiary">{description}</span>
-                </span>
-              </button>
-            );
-          })}
         </div>
 
-        <div className="rounded-lg border border-subtle/80 bg-layer-2/30 px-3 py-2.5">
-          <p className="text-10 font-medium tracking-wide text-tertiary uppercase">
-            {t("boards.client_360.intelligence_weekly_briefing_title")}
-          </p>
-          {loadingBrief ? (
-            <p className="mt-1.5 text-11 text-tertiary">{t("loading")}…</p>
-          ) : briefPreview ? (
-            <p className="mt-1.5 line-clamp-3 text-11 leading-relaxed text-secondary">{briefPreview}</p>
-          ) : (
-            <p className="mt-1.5 text-11 leading-relaxed text-tertiary">
-              {t("boards.client_360.intelligence_weekly_briefing_empty")}
+        <div className="flex min-h-0 flex-1 flex-col divide-y divide-subtle">
+          <section className="shrink-0 px-5 py-4">
+            <p className="rounded-lg border border-subtle/80 bg-layer-2/40 px-3.5 py-3 text-12 leading-relaxed text-secondary">
+              {hint}
             </p>
-          )}
-          {brief ? (
+          </section>
+
+          <section className="shrink-0 px-5 py-4">
+            <h3 className="tracking-widest mb-3 text-10 font-semibold text-tertiary uppercase">
+              {t("boards.client_360.portfolio_sidebar_section_actions")}
+            </h3>
+            <div
+              className={cn(
+                "grid gap-2",
+                actions.length === 1 ? "grid-cols-1" : actions.length === 2 ? "grid-cols-2" : "grid-cols-3"
+              )}
+            >
+              {actions.map(({ key, label, description, icon: Icon, tone, onClick, loading }) => {
+                const token = CLIENT_360_TONE[tone];
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    disabled={loading}
+                    onClick={onClick}
+                    className="flex min-w-0 flex-col gap-1.5 rounded-xl border border-subtle bg-layer-1 px-2.5 py-2.5 text-left transition-colors hover:border-strong hover:bg-layer-2 disabled:cursor-not-allowed disabled:opacity-60"
+                  >
+                    <span className="flex min-w-0 items-center gap-2">
+                      <span className={cn("grid size-7 shrink-0 place-items-center rounded-md", token.iconBg)}>
+                        <Icon className={cn("size-3.5", token.icon)} strokeWidth={1.75} />
+                      </span>
+                      <span className="line-clamp-2 min-w-0 text-11 leading-snug font-medium text-primary">
+                        {label}
+                      </span>
+                    </span>
+                    <span className="line-clamp-2 text-10 leading-relaxed text-tertiary">{description}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <section className="shrink-0 px-5 py-4">
+            <div className="rounded-xl border border-subtle/80 bg-layer-2/30 p-4">
+              <div className="flex items-start justify-between gap-3">
+                <p className="tracking-widest text-10 font-semibold text-tertiary uppercase">
+                  {t("boards.client_360.intelligence_weekly_briefing_title")}
+                </p>
+                {briefTrimmed ? (
+                  <Button
+                    variant="link"
+                    size="sm"
+                    className="h-auto shrink-0 px-0 py-0"
+                    onClick={() => setBriefOpen(true)}
+                  >
+                    {t("boards.client_360.portfolio_sidebar_open_briefing")}
+                  </Button>
+                ) : null}
+              </div>
+              {loadingBrief ? (
+                <p className="mt-2 text-12 text-tertiary">{t("loading")}…</p>
+              ) : briefTrimmed ? (
+                <button
+                  type="button"
+                  onClick={() => setBriefOpen(true)}
+                  className="mt-3 w-full rounded-lg border border-subtle/60 bg-layer-1/50 px-3 py-2.5 text-left transition-colors hover:border-strong hover:bg-layer-1"
+                >
+                  <Client360PortfolioBriefPreview content={briefTrimmed} />
+                </button>
+              ) : (
+                <p className="mt-2 text-12 leading-relaxed text-tertiary">
+                  {t("boards.client_360.intelligence_weekly_briefing_empty")}
+                </p>
+              )}
+            </div>
+          </section>
+
+          <footer className="mt-auto shrink-0 bg-layer-2/20 px-5 py-3">
+            <p className="text-10 leading-relaxed text-tertiary">{t("boards.client_360.detail_intel_rail_tip")}</p>
+          </footer>
+        </div>
+      </aside>
+
+      {briefOpen ? (
+        <Client360IntelligencePanel
+          kind="portfolio_brief"
+          subtitleParams={{ period: periodLabel }}
+          onClose={() => setBriefOpen(false)}
+          headerAction={
             <Button
-              variant="ghost"
+              variant="primary"
               size="sm"
-              className="mt-2 h-auto px-0 py-0"
               loading={generating}
               onClick={() => void generate()}
+              className="shadow-sm gap-1.5"
             >
-              {t("boards.client_360.ai_regenerate")}
+              <Sparkles className="size-3.5" strokeWidth={1.75} />
+              {briefTrimmed ? t("boards.client_360.ai_regenerate") : t("boards.client_360.ai_generate")}
             </Button>
-          ) : null}
-        </div>
-
-        <p className="text-10 leading-relaxed text-tertiary">{t("boards.client_360.detail_intel_rail_tip")}</p>
-      </div>
-    </aside>
+          }
+        >
+          {loadingBrief ? (
+            <p className="text-13 text-tertiary">{t("loading")}…</p>
+          ) : briefTrimmed ? (
+            <Client360PortfolioBriefDocument content={briefTrimmed} summary={summary} />
+          ) : (
+            <div className="space-y-4">
+              <p className="text-13 leading-relaxed text-tertiary">
+                {t("boards.client_360.intelligence_weekly_briefing_empty")}
+              </p>
+              <Button variant="primary" size="sm" loading={generating} onClick={() => void generate()}>
+                {t("boards.client_360.ai_generate")}
+              </Button>
+            </div>
+          )}
+        </Client360IntelligencePanel>
+      ) : null}
+    </>
   );
 }

@@ -22,7 +22,13 @@ type BreakdownProps = {
   className?: string;
 };
 
-function BreakdownBar({ item, showDetail = true }: { item: TClient360HealthBreakdownItem; showDetail?: boolean }) {
+export function Client360HealthBreakdownBar({
+  item,
+  showDetail = true,
+}: {
+  item: TClient360HealthBreakdownItem;
+  showDetail?: boolean;
+}) {
   const { t } = useTranslation();
   const tone = client360DimensionBarTone(item.score);
   const barColor = CLIENT_360_TONE[tone].bar;
@@ -69,7 +75,7 @@ export function Client360HealthBreakdownTooltipContent({
       </p>
       <div className="space-y-3">
         {breakdown.map((item) => (
-          <BreakdownBar key={item.dimension} item={item} showDetail={false} />
+          <Client360HealthBreakdownBar key={item.dimension} item={item} showDetail={false} />
         ))}
       </div>
       {weightedSum !== healthScore ? (
@@ -122,7 +128,7 @@ export function Client360HealthBreakdownPanel({
       </div>
       <div className={cn(compact ? "mt-3 space-y-2.5" : "mt-5 space-y-4")}>
         {breakdown.map((item) => (
-          <BreakdownBar key={item.dimension} item={item} showDetail={!compact} />
+          <Client360HealthBreakdownBar key={item.dimension} item={item} showDetail={!compact} />
         ))}
       </div>
     </div>

@@ -27,6 +27,7 @@ export interface IPartialProject {
   module_view: boolean;
   page_view: boolean;
   inbox_view: boolean;
+  support_view?: boolean;
   guest_view_all_features?: boolean;
   project_lead?: IUserLite | string | null;
   /** Stakeholder responsável — usado no Status Report (Responsável cliente). */
@@ -39,6 +40,7 @@ export interface IPartialProject {
   created_by?: string;
   updated_by?: string;
   intake_count?: number;
+  support_count?: number;
 }
 
 export interface IProject extends IPartialProject {

@@ -14,7 +14,7 @@ export const OperozDocsHome = observer(function OperozDocsHome() {
 
   return (
     <div className="vertical-scrollbar h-full overflow-y-auto">
-      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10 sm:py-14">
+      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10 sm:py-14 xl:max-w-[84rem]">
         <div className="mb-10 text-center">
           <div className="mb-4 inline-flex items-center justify-center rounded-lg bg-accent-primary/10 p-3">
             <BookOpen className="size-8 text-accent-primary" />
@@ -42,7 +42,7 @@ export const OperozDocsHome = observer(function OperozDocsHome() {
           </div>
         </div>
 
-        <div className="grid gap-4 sm:grid-cols-2">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {OPEROZ_DOCS_CATEGORIES.map((category) => {
             const firstArticle = category.articles[0];
             const href = firstArticle ? getDocsArticlePath(slug, category.key, firstArticle.slug) : `/${slug}/manual`;

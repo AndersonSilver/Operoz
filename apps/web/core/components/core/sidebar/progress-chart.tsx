@@ -1,6 +1,9 @@
+"use client";
+
 import React from "react";
 // plane imports
 import { AreaChart } from "@operis/propel/charts/area-chart";
+import { useTranslation } from "@operis/i18n";
 import type { TChartData, TModuleCompletionChartDistribution } from "@operis/types";
 import { renderFormattedDateWithoutYear } from "@operis/utils";
 
@@ -11,7 +14,10 @@ type Props = {
   plotTitle?: string;
 };
 
-function ProgressChart({ distribution, totalIssues, className = "", plotTitle = "work items" }: Props) {
+function ProgressChart({ distribution, totalIssues, className = "", plotTitle = "" }: Props) {
+  const { t } = useTranslation();
+  const entityLabel = plotTitle || t("work_items");
+
   const chartData: TChartData<string, string>[] = Object.keys(distribution ?? []).map((key, index) => ({
     name: renderFormattedDateWithoutYear(key),
     current: distribution[key] ?? 0,
@@ -25,7 +31,7 @@ function ProgressChart({ distribution, totalIssues, className = "", plotTitle = 
         areas={[
           {
             key: "current",
-            label: `Current ${plotTitle}`,
+            label: `${t("project_cycles.active_cycle.current")} ${entityLabel}`,
             strokeColor: "#3F76FF",
             fill: "#3F76FF33",
             fillOpacity: 1,
@@ -36,7 +42,7 @@ function ProgressChart({ distribution, totalIssues, className = "", plotTitle = 
           },
           {
             key: "ideal",
-            label: `Ideal ${plotTitle}`,
+            label: `${t("project_cycles.active_cycle.ideal")} ${entityLabel}`,
             strokeColor: "#A9BBD0",
             fill: "#A9BBD0",
             fillOpacity: 0,
@@ -50,8 +56,8 @@ function ProgressChart({ distribution, totalIssues, className = "", plotTitle = 
             },
           },
         ]}
-        xAxis={{ key: "name", label: "Date" }}
-        yAxis={{ key: "current", label: "Completion" }}
+        xAxis={{ key: "name", label: t("project_cycles.active_cycle.chart_date") }}
+        yAxis={{ key: "current", label: t("project_cycles.active_cycle.chart_completion") }}
         margin={{ bottom: 30 }}
         className="h-[370px] w-full"
         legend={{

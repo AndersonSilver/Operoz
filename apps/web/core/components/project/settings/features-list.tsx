@@ -66,6 +66,16 @@ const PROJECT_FEATURES_LIST = {
     icon: <IntakeIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
     isPro: false,
     isEnabled: true,
+    href: "intake",
+  },
+  support: {
+    key: "support_feature",
+    property: "support_view",
+    title: "Sustentação",
+    description: "Customer support tickets with queues and service history.",
+    icon: <IntakeIcon className="h-5 w-5 flex-shrink-0 text-tertiary" />,
+    isPro: false,
+    isEnabled: true,
   },
 };
 

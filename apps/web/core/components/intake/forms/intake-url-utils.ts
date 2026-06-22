@@ -1,14 +1,21 @@
-export function formatShortPublicUrl(publicUrl: string, anchor: string): { display: string; full: string } {
+export function formatShortPublicUrl(
+  publicUrl: string,
+  anchor: string
+): { path: string; display: string; host: string; full: string } {
+  const path = `/forms/${anchor}`;
   try {
     const parsed = new URL(publicUrl);
-    const pathSuffix = `/forms/${anchor}`;
     return {
-      display: `${parsed.host}${pathSuffix}`,
+      path,
+      host: parsed.host,
+      display: `${parsed.host}${path}`,
       full: publicUrl,
     };
   } catch {
     return {
-      display: `…/forms/${anchor}`,
+      path,
+      host: "",
+      display: path,
       full: publicUrl,
     };
   }

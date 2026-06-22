@@ -1,6 +1,7 @@
 // plane imports
 import { EUserPermissions, EProjectFeatureKey } from "@operis/constants";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operis/propel/icons";
+import { LifeBuoy } from "lucide-react";
 // components
 import type { TNavigationItem } from "@/components/workspace/sidebar/project-navigation";
 
@@ -13,6 +14,7 @@ export const getProjectFeatureNavigation = (
     issue_views_view: boolean;
     page_view: boolean;
     inbox_view: boolean;
+    support_view?: boolean;
   }
 ): TNavigationItem[] => [
   {
@@ -74,5 +76,15 @@ export const getProjectFeatureNavigation = (
     access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
     shouldRender: project.inbox_view,
     sortOrder: 6,
+  },
+  {
+    i18n_key: "sidebar.support",
+    key: EProjectFeatureKey.SUPPORT,
+    name: "Sustentação",
+    href: `/${workspaceSlug}/projects/${projectId}/sustentacao`,
+    icon: LifeBuoy,
+    access: [EUserPermissions.ADMIN, EUserPermissions.MEMBER, EUserPermissions.GUEST],
+    shouldRender: project.support_view ?? false,
+    sortOrder: 7,
   },
 ];

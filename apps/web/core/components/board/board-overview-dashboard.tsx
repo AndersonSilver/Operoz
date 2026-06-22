@@ -1,14 +1,6 @@
 import { useMemo } from "react";
 import type { LucideIcon } from "lucide-react";
-import {
-  Activity,
-  CheckCircle2,
-  ClipboardList,
-  Layers,
-  Pencil,
-  PieChart as PieChartIcon,
-  Save,
-} from "lucide-react";
+import { Activity, CheckCircle2, ClipboardList, Layers, Pencil, PieChart as PieChartIcon, Save } from "lucide-react";
 import { ISSUE_PRIORITY_FILTERS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { PieChart } from "@operis/propel/charts/pie-chart";
@@ -20,15 +12,16 @@ import { Client360BreakdownRow } from "@/components/board/client-360/client-360-
 import type { Client360Tone } from "@/components/board/client-360/client-360-tokens";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { useAppRouter } from "@/hooks/use-app-router";
+import { aggregateBoardStateDistributionByGroup } from "./board-overview-state.utils";
 
 const PRIORITY_ORDER = ["urgent", "high", "medium", "low", "none"] as const;
 
 const PRIORITY_BAR_COLORS: Record<string, string> = {
-  urgent: "var(--color-priority-urgent)",
-  high: "var(--color-priority-high)",
-  medium: "var(--color-priority-medium)",
-  low: "var(--color-priority-low)",
-  none: "var(--color-priority-none)",
+  urgent: "var(--priority-urgent)",
+  high: "var(--priority-high)",
+  medium: "var(--priority-medium)",
+  low: "var(--priority-low)",
+  none: "var(--priority-none)",
 };
 
 /** Cartão sólido — legível sobre wallpaper, sem vidro extra. */
@@ -84,7 +77,7 @@ function KpiCard({
         <Icon className="size-4" strokeWidth={1.75} />
       </span>
       <div className="min-w-0">
-        <p className="text-20 font-semibold tabular-nums leading-tight text-primary">{value}</p>
+        <p className="text-20 leading-tight font-semibold text-primary tabular-nums">{value}</p>
         <p className="mt-1 text-11 leading-snug text-secondary">{label}</p>
       </div>
     </div>
@@ -129,25 +122,26 @@ export function BoardOverviewStatusChart({ meta }: { meta: IBoardMeta }) {
   const { t } = useTranslation();
   const total = meta.total_issues;
 
+  const groupedStates = useMemo(
+    () => aggregateBoardStateDistributionByGroup(meta.state_distribution),
+    [meta.state_distribution]
+  );
+
   const chartData = useMemo(
     () =>
-      meta.state_distribution.map((row) => ({
-        id: row.state_id ?? row.state_name,
-        key: row.state_id ?? row.state_name,
+      groupedStates.map((row) => ({
+        id: row.group,
+        key: row.group,
         value: row.count,
-        name: row.state_name,
-        color: row.state_color,
+        name: t(`workspace_projects.state.${row.group}`),
+        color: row.color,
       })),
-    [meta.state_distribution]
+    [groupedStates, t]
   );
 
   if (!total) {
     return (
-      <EmptyStateCompact
-        assetKey="work-items"
-        assetClassName="size-16"
-        title={t("boards.overview_status_empty")}
-      />
+      <EmptyStateCompact assetKey="work-items" assetClassName="size-16" title={t("boards.overview_status_empty")} />
     );
   }
 
@@ -169,20 +163,20 @@ export function BoardOverviewStatusChart({ meta }: { meta: IBoardMeta }) {
           showLabel={false}
         />
         <div className="pointer-events-none absolute inset-0 flex flex-col items-center justify-center text-center">
-          <span className="text-22 font-semibold tabular-nums text-primary">{total}</span>
+          <span className="text-22 font-semibold text-primary tabular-nums">{total}</span>
           <span className="mt-0.5 max-w-[7rem] text-11 leading-tight text-tertiary">
             {t("boards.overview_status_total")}
           </span>
         </div>
       </div>
       <ul className="flex max-h-[220px] flex-col gap-2 overflow-y-auto pr-1">
-        {meta.state_distribution.map((row) => (
-          <li key={row.state_id ?? row.state_name} className="flex items-center justify-between gap-2 text-12">
+        {groupedStates.map((row) => (
+          <li key={row.group} className="flex items-center justify-between gap-2 text-12">
             <span className="flex min-w-0 items-center gap-2 text-secondary">
-              <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: row.state_color }} />
-              <span className="truncate uppercase tracking-wide">{row.state_name}</span>
+              <span className="size-2.5 shrink-0 rounded-full" style={{ backgroundColor: row.color }} />
+              <span className="truncate">{t(`workspace_projects.state.${row.group}`)}</span>
             </span>
-            <span className="shrink-0 tabular-nums font-medium text-primary">{row.count}</span>
+            <span className="shrink-0 font-medium text-primary tabular-nums">{row.count}</span>
           </li>
         ))}
       </ul>
@@ -199,7 +193,6 @@ export function BoardOverviewPriorityChart({ meta }: { meta: IBoardMeta }) {
       key,
       count: byKey[key] ?? 0,
       label: t(ISSUE_PRIORITY_FILTERS.find((p) => p.key === key)?.titleTranslationKey ?? "common.none"),
-      color: PRIORITY_BAR_COLORS[key],
     }));
   }, [meta.priority_distribution, t]);
 
@@ -207,32 +200,38 @@ export function BoardOverviewPriorityChart({ meta }: { meta: IBoardMeta }) {
 
   if (!meta.total_issues) {
     return (
-      <EmptyStateCompact
-        assetKey="priority"
-        assetClassName="size-16"
-        title={t("boards.overview_priority_empty")}
-      />
+      <EmptyStateCompact assetKey="priority" assetClassName="size-16" title={t("boards.overview_priority_empty")} />
     );
   }
 
   return (
-    <div className="flex h-[220px] items-end justify-between gap-2 px-1 pt-2">
-      {rows.map((row) => {
-        const heightPct = row.count > 0 ? Math.max((row.count / max) * 100, 8) : 4;
-        return (
-          <div key={row.key} className="flex min-w-0 flex-1 flex-col items-center gap-2">
-            <span className="text-11 tabular-nums text-tertiary">{row.count || ""}</span>
-            <div className="flex w-full max-w-[3.5rem] flex-1 items-end justify-center">
+    <div className="flex flex-col gap-3">
+      <div className="flex h-[168px] items-end justify-between gap-2 px-1">
+        {rows.map((row) => {
+          const barHeight = row.count > 0 ? Math.max(Math.round((row.count / max) * 168), 6) : 3;
+          return (
+            <div key={row.key} className="flex min-w-0 flex-1 items-end justify-center">
               <div
-                className="w-full min-h-[4px] rounded-t-sm transition-all"
-                style={{ height: `${heightPct}%`, backgroundColor: row.color, opacity: row.count ? 0.9 : 0.2 }}
+                className="w-full max-w-[2.75rem] shrink-0 rounded-t-md"
+                style={{
+                  height: barHeight,
+                  backgroundColor: PRIORITY_BAR_COLORS[row.key],
+                  opacity: row.count ? 0.92 : 0.2,
+                }}
                 title={`${row.label}: ${row.count}`}
               />
             </div>
-            <span className="max-w-full truncate text-center text-10 text-tertiary">{row.label}</span>
+          );
+        })}
+      </div>
+      <div className="grid grid-cols-5 gap-1 border-t border-subtle/60 pt-3">
+        {rows.map((row) => (
+          <div key={row.key} className="flex min-w-0 flex-col items-center gap-0.5 text-center">
+            <span className="text-12 font-semibold text-primary tabular-nums">{row.count > 0 ? row.count : "—"}</span>
+            <span className="max-w-full truncate text-10 text-tertiary">{row.label}</span>
           </div>
-        );
-      })}
+        ))}
+      </div>
     </div>
   );
 }
@@ -243,11 +242,7 @@ export function BoardOverviewTypeChart({ meta }: { meta: IBoardMeta }) {
 
   if (!total || meta.type_distribution.length === 0) {
     return (
-      <EmptyStateCompact
-        assetKey="work-items"
-        assetClassName="size-16"
-        title={t("boards.overview_types_empty")}
-      />
+      <EmptyStateCompact assetKey="work-items" assetClassName="size-16" title={t("boards.overview_types_empty")} />
     );
   }
 
@@ -266,11 +261,7 @@ export function BoardOverviewTypeChart({ meta }: { meta: IBoardMeta }) {
   );
 }
 
-function formatActivityMessage(
-  verb: string,
-  field: string | null,
-  t: ReturnType<typeof useTranslation>["t"]
-): string {
+function formatActivityMessage(verb: string, field: string | null, t: ReturnType<typeof useTranslation>["t"]): string {
   if (verb === "created") return t("boards.overview_activity_created");
   if (verb === "deleted") return t("boards.overview_activity_deleted");
   if (field === "state") return t("boards.overview_activity_state");
@@ -280,23 +271,13 @@ function formatActivityMessage(
   return t("boards.overview_activity_updated");
 }
 
-export function BoardOverviewRecentActivity({
-  meta,
-  workspaceSlug,
-}: {
-  meta: IBoardMeta;
-  workspaceSlug: string;
-}) {
+export function BoardOverviewRecentActivity({ meta, workspaceSlug }: { meta: IBoardMeta; workspaceSlug: string }) {
   const { t } = useTranslation();
   const router = useAppRouter();
 
   if (meta.recent_activity.length === 0) {
     return (
-      <EmptyStateCompact
-        assetKey="activity"
-        assetClassName="size-16"
-        title={t("boards.overview_activity_empty")}
-      />
+      <EmptyStateCompact assetKey="activity" assetClassName="size-16" title={t("boards.overview_activity_empty")} />
     );
   }
 
@@ -304,9 +285,7 @@ export function BoardOverviewRecentActivity({
     <ul className="max-h-[280px] space-y-3 overflow-y-auto pr-1">
       {meta.recent_activity.map((item) => {
         const issue = item.issue;
-        const identifier = issue
-          ? `${issue.project_identifier}-${issue.sequence_id}`
-          : null;
+        const identifier = issue ? `${issue.project_identifier}-${issue.sequence_id}` : null;
         const action = formatActivityMessage(item.verb, item.field, t);
 
         return (
@@ -335,11 +314,7 @@ export function BoardOverviewRecentActivity({
                     <button
                       type="button"
                       className="font-medium text-accent-primary hover:underline"
-                      onClick={() =>
-                        router.push(
-                          `/${workspaceSlug}/projects/${issue.project_id}/issues/${issue.id}`
-                        )
-                      }
+                      onClick={() => router.push(`/${workspaceSlug}/projects/${issue.project_id}/issues/${issue.id}`)}
                     >
                       {identifier}
                     </button>
@@ -347,9 +322,7 @@ export function BoardOverviewRecentActivity({
                   </>
                 ) : null}
               </p>
-              <p className="mt-0.5 text-11 text-placeholder">
-                {calculateTimeAgo(item.created_at)}
-              </p>
+              <p className="mt-0.5 text-11 text-placeholder">{calculateTimeAgo(item.created_at)}</p>
             </div>
           </li>
         );
@@ -358,13 +331,7 @@ export function BoardOverviewRecentActivity({
   );
 }
 
-export function BoardOverviewDashboard({
-  meta,
-  workspaceSlug,
-}: {
-  meta: IBoardMeta;
-  workspaceSlug: string;
-}) {
+export function BoardOverviewDashboard({ meta, workspaceSlug }: { meta: IBoardMeta; workspaceSlug: string }) {
   const { t } = useTranslation();
 
   return (
@@ -372,27 +339,15 @@ export function BoardOverviewDashboard({
       <BoardOverviewKpiStrip meta={meta} />
 
       <div className="grid gap-4 lg:grid-cols-2">
-        <BoardOverviewWidget
-          title={t("boards.overview_status_title")}
-          icon={PieChartIcon}
-          iconTone="info"
-        >
+        <BoardOverviewWidget title={t("boards.overview_status_title")} icon={PieChartIcon} iconTone="info">
           <BoardOverviewStatusChart meta={meta} />
         </BoardOverviewWidget>
 
-        <BoardOverviewWidget
-          title={t("boards.overview_activity_title")}
-          icon={Activity}
-          iconTone="accent"
-        >
+        <BoardOverviewWidget title={t("boards.overview_activity_title")} icon={Activity} iconTone="accent">
           <BoardOverviewRecentActivity meta={meta} workspaceSlug={workspaceSlug} />
         </BoardOverviewWidget>
 
-        <BoardOverviewWidget
-          title={t("boards.overview_priority_title")}
-          icon={Layers}
-          iconTone="warning"
-        >
+        <BoardOverviewWidget title={t("boards.overview_priority_title")} icon={Layers} iconTone="warning">
           <BoardOverviewPriorityChart meta={meta} />
         </BoardOverviewWidget>
 

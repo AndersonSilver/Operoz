@@ -6,6 +6,7 @@ import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { TClient360Client, TClient360Summary } from "@operis/types";
 import { renderFormattedDate } from "@operis/utils";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
+import { Client360PortfolioBriefDocument } from "@/components/board/client-360/client-360-portfolio-brief-document";
 import { WorkspaceService } from "@/services/workspace.service";
 
 const workspaceService = new WorkspaceService();
@@ -17,7 +18,7 @@ type Props = {
   clients: TClient360Client[];
 };
 
-export function Client360WeeklyBriefing({ workspaceSlug, period }: Props) {
+export function Client360WeeklyBriefing({ workspaceSlug, period, summary }: Props) {
   const { t } = useTranslation();
   const [brief, setBrief] = useState<string>("");
   const [status, setStatus] = useState<string>("draft");
@@ -96,7 +97,7 @@ export function Client360WeeklyBriefing({ workspaceSlug, period }: Props) {
                 {t("boards.client_360.intelligence_briefing_cached")}
               </p>
             ) : null}
-            <p className="text-13 leading-relaxed whitespace-pre-wrap text-secondary">{brief}</p>
+            <Client360PortfolioBriefDocument content={brief} summary={summary} />
           </>
         ) : (
           <p className="text-13 leading-relaxed text-tertiary">

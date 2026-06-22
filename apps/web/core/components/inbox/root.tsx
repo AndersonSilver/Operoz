@@ -5,7 +5,8 @@ import { PanelLeft } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { EmptyStateCompact } from "@operis/propel/empty-state";
 import { IntakeIcon } from "@operis/propel/icons";
-import { EInboxIssueCurrentTab } from "@operis/types";
+import { EInboxIssueCurrentTab, EHubMode } from "@operis/types";
+import type { THubMode } from "@operis/types";
 import { cn } from "@operis/utils";
 import {
   BOARD_HUB_INTAKE_DETAIL,
@@ -21,6 +22,7 @@ import { InboxLayoutLoader } from "@/components/ui/loader/layouts/project-inbox/
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 
 type TInboxIssueRoot = {
+  hubMode: THubMode;
   workspaceSlug: string;
   projectId: string;
   inboxIssueId: string | undefined;
@@ -29,20 +31,24 @@ type TInboxIssueRoot = {
 };
 
 export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssueRoot) {
-  const { workspaceSlug, projectId, inboxIssueId, inboxAccessible, navigationTab } = props;
+  const { hubMode, workspaceSlug, projectId, inboxIssueId, inboxAccessible, navigationTab } = props;
   // states
   const [isMobileSidebar, setIsMobileSidebar] = useState(true);
   // plane hooks
   const { t } = useTranslation();
   // hooks
-  const { loader, error, currentTab, currentInboxProjectId, handleCurrentTab, fetchInboxIssues } = useProjectInbox();
+  const { loader, error, currentTab, currentInboxProjectId, handleCurrentTab, fetchInboxIssues, setHubMode } =
+    useProjectInbox();
   const insideWorkSurface = useProjectWorkSurface();
   const hasBoardWallpaper = useBoardHubHasBackground();
   const useHubChrome = insideWorkSurface || hasBoardWallpaper;
 
   useEffect(() => {
+    setHubMode(hubMode);
+  }, [hubMode, setHubMode]);
+
+  useEffect(() => {
     if (!inboxAccessible || !workspaceSlug || !projectId) return;
-    // Check if project has changed
     const hasProjectChanged = currentInboxProjectId && currentInboxProjectId !== projectId;
 
     if (navigationTab && navigationTab !== currentTab) {
@@ -58,7 +64,7 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [inboxAccessible, workspaceSlug, projectId]);
+  }, [inboxAccessible, workspaceSlug, projectId, hubMode]);
 
   // loader
   if (loader === "init-loading")
@@ -87,12 +93,7 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
           />
         </div>
       )}
-      <div
-        className={cn(
-          "flex h-full w-full overflow-hidden",
-          useHubChrome ? "bg-transparent" : "bg-surface-1"
-        )}
-      >
+      <div className={cn("flex h-full w-full overflow-hidden", useHubChrome ? "bg-transparent" : "bg-surface-1")}>
         <div
           className={cn(
             "absolute top-[50px] bottom-0 z-10 w-full flex-shrink-0 transition-all lg:!relative lg:!top-0 lg:w-2/6",
@@ -101,6 +102,7 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
           )}
         >
           <InboxSidebar
+            hubMode={hubMode}
             setIsMobileSidebar={setIsMobileSidebar}
             workspaceSlug={workspaceSlug.toString()}
             projectId={projectId.toString()}
@@ -111,6 +113,7 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
         {inboxIssueId ? (
           <div className={cn("min-w-0 flex-1", useHubChrome && BOARD_HUB_INTAKE_DETAIL)}>
             <InboxContentRoot
+              hubMode={hubMode}
               setIsMobileSidebar={setIsMobileSidebar}
               isMobileSidebar={isMobileSidebar}
               workspaceSlug={workspaceSlug.toString()}
@@ -120,14 +123,15 @@ export const InboxIssueRoot = observer(function InboxIssueRoot(props: TInboxIssu
           </div>
         ) : (
           <div
-            className={cn(
-              "flex min-w-0 flex-1 items-center justify-center",
-              useHubChrome && BOARD_HUB_INTAKE_DETAIL
-            )}
+            className={cn("flex min-w-0 flex-1 items-center justify-center", useHubChrome && BOARD_HUB_INTAKE_DETAIL)}
           >
             <EmptyStateCompact
               assetKey="intake"
-              title={t("project_empty_state.intake_main.title")}
+              title={
+                hubMode === EHubMode.SUPPORT
+                  ? t("project_empty_state.support_main.title")
+                  : t("project_empty_state.intake_main.title")
+              }
               assetClassName="size-20"
             />
           </div>

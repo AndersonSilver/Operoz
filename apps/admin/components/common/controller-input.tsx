@@ -16,6 +16,7 @@ type Props = {
   placeholder: string;
   error: boolean;
   required: boolean;
+  variant?: "default" | "admin";
 };
 
 export type TControllerInputFormField = {
@@ -29,13 +30,19 @@ export type TControllerInputFormField = {
 };
 
 export function ControllerInput(props: Props) {
-  const { name, control, type, label, description, placeholder, error, required } = props;
-  // states
+  const { name, control, type, label, description, placeholder, error, required, variant = "default" } = props;
   const [showPassword, setShowPassword] = useState(false);
+  const isAdmin = variant === "admin";
 
   return (
-    <div className="flex flex-col gap-1">
-      <h4 className="text-13 text-tertiary">{label}</h4>
+    <div className="flex flex-col gap-2">
+      {label ? (
+        isAdmin ? (
+          <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">{label}</p>
+        ) : (
+          <h4 className="text-13 text-tertiary">{label}</h4>
+        )
+      ) : null}
       <div className="relative">
         <Controller
           control={control}
@@ -51,7 +58,7 @@ export function ControllerInput(props: Props) {
               ref={ref}
               hasError={error}
               placeholder={placeholder}
-              className={cn("w-full rounded-md font-medium", {
+              className={cn("w-full font-medium", isAdmin ? "rounded-xl" : "rounded-md", {
                 "pr-10": type === "password",
               })}
             />

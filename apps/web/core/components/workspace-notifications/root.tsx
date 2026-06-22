@@ -15,6 +15,7 @@ import { useWorkspaceIssueProperties } from "@/hooks/use-workspace-issue-propert
 // plane web imports
 import { useNotificationPreview } from "@/plane-web/hooks/use-notification-preview";
 // local imports
+import { EHubMode } from "@operis/types";
 import { InboxContentRoot } from "../inbox/content";
 
 type NotificationsRootProps = {
@@ -93,6 +94,7 @@ export const NotificationsRoot = observer(function NotificationsRoot({ workspace
                 </div>
               ) : (
                 <InboxContentRoot
+                  hubMode={EHubMode.SUPPORT}
                   setIsMobileSidebar={() => {}}
                   isMobileSidebar={false}
                   workspaceSlug={workspace_slug}

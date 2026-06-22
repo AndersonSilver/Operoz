@@ -8,8 +8,12 @@ from django.shortcuts import get_object_or_404
 # Module imports
 from operis.app.views.base import BaseAPIView
 from operis.license.api.permissions import InstanceAdminPermission
-from operis.db.models import Workspace, WorkspaceMember, Project
-from operis.license.api.serializers import WorkspaceSerializer, WorkspaceIssueNotificationFlagsSerializer
+from operis.db.models import Profile, Workspace, WorkspaceMember, Project
+from operis.license.api.serializers import (
+    InstanceWorkspaceUpdateSerializer,
+    WorkspaceSerializer,
+    WorkspaceIssueNotificationFlagsSerializer,
+)
 from operis.utils.constants import RESTRICTED_WORKSPACE_SLUGS
 
 
@@ -118,3 +122,41 @@ class InstanceWorkspaceIssueNotificationFlagsEndpoint(BaseAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class InstanceWorkspaceDetailEndpoint(BaseAPIView):
+    """PATCH or DELETE a workspace (instance admin / God Mode)."""
+
+    permission_classes = [InstanceAdminPermission]
+
+    def _annotate_workspace(self, workspace_id):
+        project_count = (
+            Project.objects.filter(workspace_id=OuterRef("id"))
+            .order_by()
+            .annotate(count=Func(F("id"), function="Count"))
+            .values("count")
+        )
+        member_count = (
+            WorkspaceMember.objects.filter(workspace=OuterRef("id"), member__is_bot=False, is_active=True)
+            .order_by()
+            .annotate(count=Func(F("id"), function="Count"))
+            .values("count")
+        )
+        return get_object_or_404(
+            Workspace.objects.annotate(total_projects=project_count, total_members=member_count),
+            pk=workspace_id,
+        )
+
+    def patch(self, request, workspace_id):
+        workspace = self._annotate_workspace(workspace_id)
+        serializer = InstanceWorkspaceUpdateSerializer(workspace, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        workspace = self._annotate_workspace(workspace_id)
+        return Response(WorkspaceSerializer(workspace).data, status=status.HTTP_200_OK)
+
+    def delete(self, request, workspace_id):
+        workspace = get_object_or_404(Workspace, pk=workspace_id)
+        Profile.objects.filter(last_workspace_id=workspace.id).update(last_workspace_id=None)
+        workspace.delete(soft=True)
+        return Response(status=status.HTTP_204_NO_CONTENT)

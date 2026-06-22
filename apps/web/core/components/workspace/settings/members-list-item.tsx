@@ -85,7 +85,7 @@ export const WorkspaceMembersListItem = observer(function WorkspaceMembersListIt
   if (isEmpty(columns)) return <MembersLayoutLoader />;
 
   return (
-    <div className="grid border-t border-subtle">
+    <div className="divide-y divide-subtle overflow-x-auto">
       {removeMemberModal && (
         <ConfirmWorkspaceMemberRemove
           isOpen={removeMemberModal.member.id.length > 0}
@@ -103,11 +103,11 @@ export const WorkspaceMembersListItem = observer(function WorkspaceMembersListIt
           (memberDetails?.filter((member): member is IWorkspaceMember => member !== null) ?? []) as unknown as RowData[]
         }
         keyExtractor={(rowData) => rowData?.member.id ?? ""}
-        tHeadClassName="border-b border-subtle"
-        thClassName="text-left font-medium divide-x-0 text-placeholder"
+        tHeadClassName="border-b border-subtle bg-layer-2/40"
+        thClassName="text-left font-medium divide-x-0 text-placeholder text-11 uppercase tracking-wide first:pl-5 last:pr-5 lg:first:pl-6 lg:last:pr-6"
         tBodyClassName="divide-y-0"
-        tBodyTrClassName="divide-x-0 p-4 h-10 text-secondary"
-        tHeadTrClassName="divide-x-0"
+        tBodyTrClassName="divide-x-0 h-11 text-secondary transition-colors hover:bg-layer-1-hover/50 [&>td:first-child]:pl-5 [&>td:last-child]:pr-5 lg:[&>td:first-child]:pl-6 lg:[&>td:last-child]:pr-6"
+        tHeadTrClassName="divide-x-0 h-10 [&>th:first-child]:pl-5 [&>th:last-child]:pr-5 lg:[&>th:first-child]:pl-6 lg:[&>th:last-child]:pr-6"
       />
     </div>
   );

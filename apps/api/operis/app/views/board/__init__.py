@@ -56,6 +56,15 @@ from .playbooks import (
     BoardPlaybookListEndpoint,
     BoardPlaybookPublishEndpoint,
 )
+from .intake_form import (
+    BoardIntakeFormDetailEndpoint,
+    BoardIntakeFormListCreateEndpoint,
+)
+from .support_queue import (
+    BoardSupportQueueDetailEndpoint,
+    BoardSupportQueueListCreateEndpoint,
+)
+from .support_sla_policy import BoardSupportSlaPolicyEndpoint
 from .automation_packs import (
     BoardAutomationPackInstallEndpoint,
     BoardAutomationPackListEndpoint,

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
@@ -60,6 +59,7 @@ const InstanceGoogleAuthenticationPage = observer(function InstanceGoogleAuthent
   };
   return (
     <PageWrapper
+      size="lg"
       customHeader={
         <AuthenticationMethodCard
           name="Google"

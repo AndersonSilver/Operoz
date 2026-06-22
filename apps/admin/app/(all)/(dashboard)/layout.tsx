@@ -1,8 +1,8 @@
-
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useRouter } from "next/navigation";
 import { Outlet } from "react-router";
+import "@/components/settings/admin-list.css";
 // components
 import { AdminHeader } from "@/components/common/header";
 import { LogoSpinner } from "@/components/common/logo-spinner";

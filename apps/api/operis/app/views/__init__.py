@@ -138,6 +138,11 @@ from .board import (
     BoardPlaybookDetailEndpoint,
     BoardPlaybookListEndpoint,
     BoardPlaybookPublishEndpoint,
+    BoardIntakeFormDetailEndpoint,
+    BoardIntakeFormListCreateEndpoint,
+    BoardSupportQueueDetailEndpoint,
+    BoardSupportQueueListCreateEndpoint,
+    BoardSupportSlaPolicyEndpoint,
     BoardAutomationPackInstallEndpoint,
     BoardAutomationPackListEndpoint,
     BoardAutomationPackUninstallEndpoint,
@@ -264,6 +269,7 @@ from .estimate.base import (
 )
 
 from operis.app.views.intake.form import IntakeFormDetailEndpoint, IntakeFormListCreateEndpoint
+from operis.app.views.intake.support_queue import ProjectSupportQueueListEndpoint
 from .intake.base import (
     IntakeViewSet,
     IntakeIssueViewSet,

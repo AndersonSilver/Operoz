@@ -1,35 +1,32 @@
-
 import { Fragment, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useTheme as useNextTheme } from "next-themes";
-import { LogOut, UserCog2, Palette } from "lucide-react";
+import { LogOut, Moon, Sun, UserCog2 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-// plane internal packages
+import { useTranslation } from "@operis/i18n";
 import { API_BASE_URL } from "@operis/constants";
 import { AuthService } from "@operis/services";
 import { Avatar } from "@operis/ui";
 import { getFileURL, cn } from "@operis/utils";
-// hooks
 import { useTheme, useUser } from "@/hooks/store";
 
-// service initialization
 const authService = new AuthService();
 
 export const AdminSidebarDropdown = observer(function AdminSidebarDropdown() {
-  // store hooks
   const { isSidebarCollapsed } = useTheme();
   const { currentUser, signOut } = useUser();
-  // hooks
   const { resolvedTheme, setTheme } = useNextTheme();
-  // state
+  const { t } = useTranslation();
   const [csrfToken, setCsrfToken] = useState<string | undefined>(undefined);
 
   const handleThemeSwitch = () => {
-    const newTheme = resolvedTheme === "dark" ? "light" : "dark";
-    setTheme(newTheme);
+    setTheme(resolvedTheme === "dark" ? "light" : "dark");
   };
 
   const handleSignOut = () => signOut();
+
+  const themeLabel =
+    resolvedTheme === "dark" ? t("god_mode.sidebar.switch_to_light") : t("god_mode.sidebar.switch_to_dark");
 
   const getSidebarMenuItems = () => (
     <Menu.Items
@@ -50,8 +47,12 @@ export const AdminSidebarDropdown = observer(function AdminSidebarDropdown() {
           className="flex w-full items-center gap-2 rounded-sm px-2 py-1 hover:bg-layer-1-hover"
           onClick={handleThemeSwitch}
         >
-          <Palette className="h-4 w-4 stroke-[1.5]" />
-          Switch to {resolvedTheme === "dark" ? "light" : "dark"} mode
+          {resolvedTheme === "dark" ? (
+            <Sun className="h-4 w-4 stroke-[1.5]" />
+          ) : (
+            <Moon className="h-4 w-4 stroke-[1.5]" />
+          )}
+          {themeLabel}
         </Menu.Item>
       </div>
       <div className="py-2">
@@ -63,7 +64,7 @@ export const AdminSidebarDropdown = observer(function AdminSidebarDropdown() {
             className="flex w-full items-center gap-2 rounded-sm px-2 py-1 hover:bg-layer-1-hover"
           >
             <LogOut className="h-4 w-4 stroke-[1.5]" />
-            Sign out
+            {t("god_mode.sidebar.sign_out")}
           </Menu.Item>
         </form>
       </div>
@@ -113,7 +114,7 @@ export const AdminSidebarDropdown = observer(function AdminSidebarDropdown() {
 
           {!isSidebarCollapsed && (
             <div className="flex w-full gap-2">
-              <h4 className="grow truncate text-body-md-medium text-primary">Instance admin</h4>
+              <h4 className="grow truncate text-body-md-medium text-primary">{t("god_mode.brand.instance_admin")}</h4>
             </div>
           )}
         </div>

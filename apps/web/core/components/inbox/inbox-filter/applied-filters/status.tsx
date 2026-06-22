@@ -2,6 +2,7 @@ import { observer } from "mobx-react";
 import { INBOX_STATUS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { CloseIcon } from "@operis/propel/icons";
+import { EHubMode, EInboxIssueStatus } from "@operis/types";
 import type { TInboxIssueStatus } from "@operis/types";
 // constants
 import { Tag } from "@operis/ui";
@@ -11,7 +12,7 @@ import { InboxStatusIcon } from "../../inbox-status-icon";
 
 export const InboxIssueAppliedFiltersStatus = observer(function InboxIssueAppliedFiltersStatus() {
   // hooks
-  const { inboxFilters, handleInboxIssueFilters } = useProjectInbox();
+  const { hubMode, inboxFilters, handleInboxIssueFilters } = useProjectInbox();
   const { t } = useTranslation();
   // derived values
   const filteredValues = inboxFilters?.status || [];
@@ -32,7 +33,11 @@ export const InboxIssueAppliedFiltersStatus = observer(function InboxIssueApplie
             <div className="relative flex h-3 w-3 flex-shrink-0 items-center justify-center overflow-hidden">
               <InboxStatusIcon type={optionDetail?.status} />
             </div>
-            <div className="truncate text-11">{t(optionDetail?.i18n_title)}</div>
+            <div className="truncate text-11">
+              {hubMode === EHubMode.SUPPORT && optionDetail.status === EInboxIssueStatus.PENDING
+                ? t("inbox_issue.status_support.pending.title")
+                : t(optionDetail?.i18n_title)}
+            </div>
             {handleFilterValue(optionDetail?.status).length >= 1 && (
               <div
                 className="relative flex h-3 w-3 flex-shrink-0 cursor-pointer items-center justify-center overflow-hidden text-tertiary transition-all hover:text-secondary"

@@ -1,4 +1,4 @@
-import { AlertTriangle, CheckCircle2, Clock, XCircle } from "lucide-react";
+import { AlertTriangle, Archive, CheckCircle2, Clock, XCircle } from "lucide-react";
 import { CopyIcon } from "@operis/propel/icons";
 import type { TInboxIssueStatus } from "@operis/types";
 import { EInboxIssueStatus } from "@operis/types";
@@ -29,6 +29,11 @@ export const ICON_PROPERTIES = {
     icon: CopyIcon,
     textColor: (snoozeDatePassed: boolean = false) => (snoozeDatePassed ? "" : "text-secondary"),
     bgColor: (snoozeDatePassed: boolean = false) => (snoozeDatePassed ? "" : "bg-layer-3"),
+  },
+  [EInboxIssueStatus.CLOSED]: {
+    icon: Archive,
+    textColor: () => "text-secondary",
+    bgColor: () => "bg-layer-3",
   },
 };
 export function InboxStatusIcon({

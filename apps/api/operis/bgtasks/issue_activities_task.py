@@ -1469,7 +1469,7 @@ def create_intake_activity(
     issue_activities,
     epoch,
 ):
-    requested_data = json.loads(requested_data) if requested_data is not None else None
+    requested_data = json.loads(requested_data) if requested_data is not None else {}
     current_instance = json.loads(current_instance) if current_instance is not None else None
     status_dict = {
         -2: "Pending",
@@ -1479,20 +1479,53 @@ def create_intake_activity(
         2: "Duplicate",
     }
     if requested_data.get("status") is not None:
+        comment = "updated the intake status"
+        if requested_data.get("decline_reason"):
+            comment = f"declined support ticket ({requested_data.get('decline_category')}): {requested_data.get('decline_reason')}"
+        elif requested_data.get("snooze_reason"):
+            comment = f"snoozed support ticket: {requested_data.get('snooze_reason')}"
+        elif requested_data.get("reopen"):
+            comment = "reopened support ticket"
         issue_activities.append(
             IssueActivity(
                 issue_id=issue_id,
                 project_id=project_id,
                 workspace_id=workspace_id,
-                comment="updated the intake status",
+                comment=comment,
                 field="intake",
                 verb=requested_data.get("status"),
                 actor_id=actor_id,
                 epoch=epoch,
-                old_value=status_dict.get(current_instance.get("status")),
+                old_value=status_dict.get(current_instance.get("status") if current_instance else None),
                 new_value=status_dict.get(requested_data.get("status")),
             )
         )
+
+
+def create_intake_deleted_activity(
+    requested_data,
+    current_instance,
+    issue_id,
+    project_id,
+    workspace_id,
+    actor_id,
+    issue_activities,
+    epoch,
+):
+    requested_data = json.loads(requested_data) if requested_data is not None else {}
+    reason = requested_data.get("delete_reason", "")
+    issue_activities.append(
+        IssueActivity(
+            issue_id=issue_id,
+            project_id=project_id,
+            workspace_id=workspace_id,
+            comment=f"permanently deleted support ticket: {reason}",
+            field="intake",
+            verb="deleted",
+            actor_id=actor_id,
+            epoch=epoch,
+        )
+    )
 
 
 # Receive message from room group
@@ -1561,6 +1594,7 @@ def issue_activity(
             "issue_draft.activity.updated": update_draft_issue_activity,
             "issue_draft.activity.deleted": delete_draft_issue_activity,
             "intake.activity.created": create_intake_activity,
+            "intake.activity.deleted": create_intake_deleted_activity,
         }
 
         func = ACTIVITY_MAPPER.get(type)

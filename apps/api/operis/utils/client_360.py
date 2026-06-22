@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date, timedelta
-from typing import Literal
+from typing import Iterable, Literal
 
 from django.db.models import Count, Q
 from django.utils import timezone
@@ -15,6 +15,7 @@ from operis.utils.client_360_health_alerts import (
 from operis.utils.status_report_export import user_consultor_label
 
 CLOSED_STATE_GROUPS = ("completed", "cancelled")
+# Legacy: sustentação na Visão 360 usa IntakeIssue (hub). Mantido só para referência em docs/tests legados.
 SUPPORT_TYPE_NAME_Q = Q(type__name__icontains="sustent") | Q(type__name__icontains="chamado")
 
 HealthLevel = Literal["ok", "warning", "critical"]
@@ -250,11 +251,9 @@ def compute_health_score(
 
 
 def aggregate_issue_stats(issue_queryset, today: date) -> dict[str, dict[str, int]]:
-    """project_id (str) -> {total, pending, overdue, support_open, support_overdue}."""
+    """project_id (str) -> {total, pending, overdue}. Sustentação: aggregate_client360_issue_stats."""
     pending_filter = ~Q(state__group__in=CLOSED_STATE_GROUPS)
     overdue_filter = pending_filter & Q(target_date__lt=today, target_date__isnull=False)
-    support_open_filter = pending_filter & SUPPORT_TYPE_NAME_Q
-    support_overdue_filter = support_open_filter & Q(target_date__lt=today, target_date__isnull=False)
 
     rows = (
         issue_queryset.values("project_id")
@@ -262,8 +261,6 @@ def aggregate_issue_stats(issue_queryset, today: date) -> dict[str, dict[str, in
             total=Count("pk", distinct=True),
             pending=Count("pk", filter=pending_filter, distinct=True),
             overdue=Count("pk", filter=overdue_filter, distinct=True),
-            support_open=Count("pk", filter=support_open_filter, distinct=True),
-            support_overdue=Count("pk", filter=support_overdue_filter, distinct=True),
         )
     )
     return {
@@ -271,11 +268,48 @@ def aggregate_issue_stats(issue_queryset, today: date) -> dict[str, dict[str, in
             "total": row["total"],
             "pending": row["pending"],
             "overdue": row["overdue"],
-            "support_open": row["support_open"],
-            "support_overdue": row["support_overdue"],
         }
         for row in rows
     }
+
+
+def merge_support_hub_stats(
+    issue_stats_map: dict[str, dict[str, int]],
+    support_stats_map: dict[str, dict[str, int]],
+) -> dict[str, dict[str, int]]:
+    merged: dict[str, dict[str, int]] = {}
+    for pid in set(issue_stats_map) | set(support_stats_map):
+        base = issue_stats_map.get(
+            pid,
+            {"total": 0, "pending": 0, "overdue": 0},
+        )
+        support = support_stats_map.get(
+            pid,
+            {"support_open": 0, "support_overdue": 0},
+        )
+        merged[pid] = {**base, **support}
+    return merged
+
+
+def aggregate_client360_issue_stats(
+    issue_queryset,
+    today: date,
+    *,
+    project_ids: Iterable,
+    project_board_map: dict[str, str | None] | None = None,
+    sla_map: dict[str, int] | None = None,
+) -> dict[str, dict[str, int]]:
+    """Agrega cards do board + sustentação do hub (aba Sustentação)."""
+    from operis.utils.client_360_support_hub import aggregate_support_hub_stats
+
+    issue_stats = aggregate_issue_stats(issue_queryset, today)
+    support_stats = aggregate_support_hub_stats(
+        project_ids,
+        today,
+        project_board_map=project_board_map,
+        sla_map=sla_map,
+    )
+    return merge_support_hub_stats(issue_stats, support_stats)
 
 
 def aggregate_module_counts(project_ids: list) -> dict[str, int]:

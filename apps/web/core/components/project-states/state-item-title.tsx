@@ -2,11 +2,13 @@ import type { SetStateAction } from "react";
 import { observer } from "mobx-react";
 import { GripVertical } from "lucide-react";
 import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 // plane imports
 import { EditIcon, StateGroupIcon } from "@operis/propel/icons";
 import type { IState, TStateOperationsCallbacks } from "@operis/types";
 // local imports
 import { useProjectState } from "@/hooks/store/use-project-state";
+import { getLocalizedStateName } from "./state-display.utils";
 import { StateDelete, StateMarksAsDefault } from "./options";
 
 type TBaseStateItemTitleProps = {
@@ -30,11 +32,13 @@ export type TStateItemTitleProps = TEnabledStateItemTitleProps | TDisabledStateI
 
 export const StateItemTitle = observer(function StateItemTitle(props: TStateItemTitleProps) {
   const { stateCount, setUpdateStateModal, disabled, state, shouldShowDescription = true } = props;
+  const { t } = useTranslation();
   // store hooks
   const { getStatePercentageInGroup } = useProjectState();
   // derived values
   const statePercentage = getStatePercentageInGroup(state.id);
   const percentage = statePercentage ? statePercentage / 100 : undefined;
+  const stateName = getLocalizedStateName(state, t);
 
   return (
     <div className="flex w-full items-center justify-between gap-2">
@@ -51,7 +55,7 @@ export const StateItemTitle = observer(function StateItemTitle(props: TStateItem
         </div>
         {/* state title and description */}
         <div className="min-h-5 px-2 text-13">
-          <h6 className="text-13 font-medium">{state.name}</h6>
+          <h6 className="text-13 font-medium">{stateName}</h6>
           {shouldShowDescription && <p className="text-11 text-secondary">{state.description}</p>}
         </div>
       </div>

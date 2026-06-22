@@ -34,10 +34,11 @@ export const OperozDocsShell = observer(function OperozDocsShell({ children }: P
         </div>
       )}
 
+      <main className="relative min-w-0 flex-1 overflow-hidden bg-surface-1">{children}</main>
+
       <div className="hidden md:flex">
         <OperozDocsSidebar />
       </div>
-      <main className="relative min-w-0 flex-1 overflow-hidden bg-surface-1">{children}</main>
     </div>
   );
 });

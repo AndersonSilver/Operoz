@@ -1,5 +1,4 @@
 import { useState } from "react";
-// ui
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { Calendar } from "@operis/propel/calendar";
@@ -8,15 +7,14 @@ import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
 export type InboxIssueSnoozeModalProps = {
   isOpen: boolean;
   value: Date | undefined;
-  onConfirm: (value: Date) => void;
+  onConfirm: (value: Date, snoozeReason?: string) => void;
   handleClose: () => void;
 };
 
 export function InboxIssueSnoozeModal(props: InboxIssueSnoozeModalProps) {
   const { isOpen, handleClose, value, onConfirm } = props;
-  // states
   const [date, setDate] = useState(value || new Date());
-  //hooks
+  const [snoozeReason, setSnoozeReason] = useState("");
   const { t } = useTranslation();
 
   return (
@@ -27,15 +25,15 @@ export function InboxIssueSnoozeModal(props: InboxIssueSnoozeModalProps) {
       width={EModalWidth.SM}
       className="w-auto"
     >
-      <div className="flex h-full w-full flex-col gap-y-1 px-5 py-8 sm:p-6">
+      <div className="flex h-full w-full flex-col gap-y-3 px-5 py-8 sm:p-6">
         <Calendar
           className="rounded-md border border-subtle p-3"
           captionLayout="dropdown"
           selected={date ? new Date(date) : undefined}
           defaultMonth={date ? new Date(date) : undefined}
-          onSelect={(date: Date | undefined) => {
-            if (!date) return;
-            setDate(date);
+          onSelect={(nextDate: Date | undefined) => {
+            if (!nextDate) return;
+            setDate(nextDate);
           }}
           mode="single"
           disabled={[
@@ -44,11 +42,23 @@ export function InboxIssueSnoozeModal(props: InboxIssueSnoozeModalProps) {
             },
           ]}
         />
+        <div className="space-y-1">
+          <label className="text-12 font-medium text-secondary" htmlFor="snooze-reason">
+            {t("inbox_issue.modals.snooze.reason_label")}
+          </label>
+          <textarea
+            id="snooze-reason"
+            className="min-h-20 w-full rounded-md border border-subtle bg-layer-1 px-3 py-2 text-13"
+            value={snoozeReason}
+            onChange={(event) => setSnoozeReason(event.target.value)}
+            placeholder={t("inbox_issue.modals.snooze.reason_placeholder")}
+          />
+        </div>
         <Button
           variant="primary"
           onClick={() => {
             handleClose();
-            onConfirm(date);
+            onConfirm(date, snoozeReason.trim() || undefined);
           }}
         >
           {t("inbox_issue.actions.snooze")}

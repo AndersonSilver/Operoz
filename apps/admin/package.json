@@ -25,6 +25,7 @@
     "@headlessui/react": "^1.7.19",
     "@operis/constants": "workspace:*",
     "@operis/hooks": "workspace:*",
+    "@operis/i18n": "workspace:*",
     "@operis/propel": "workspace:*",
     "@operis/services": "workspace:*",
     "@operis/types": "workspace:*",

@@ -283,7 +283,7 @@ def build_bi_csv_content(rows: list[dict]) -> str:
 
 def build_instance_rollup(workspaces: list[Workspace]) -> dict:
     from operis.utils.client_360 import (
-        aggregate_issue_stats,
+        aggregate_client360_issue_stats,
         aggregate_module_counts,
         aggregate_status_reports,
         build_client_row,
@@ -294,6 +294,7 @@ def build_instance_rollup(workspaces: list[Workspace]) -> dict:
         load_board_health_config_map,
         load_board_score_alert_threshold_map,
     )
+    from operis.utils.client_360_operational import load_board_support_sla_map
     from operis.db.models import Issue
 
     period = current_week_period()
@@ -317,10 +318,17 @@ def build_instance_rollup(workspaces: list[Workspace]) -> dict:
         project_ids = [p.id for p in projects]
         today = timezone.now().date()
         issue_qs = Issue.issue_objects.filter(workspace=workspace, project_id__in=project_ids)
-        issue_stats_map = aggregate_issue_stats(issue_qs, today)
+        board_ids = list({p.board_id for p in projects if p.board_id})
+        project_board_map = {str(p.id): str(p.board_id) if p.board_id else None for p in projects}
+        issue_stats_map = aggregate_client360_issue_stats(
+            issue_qs,
+            today,
+            project_ids=project_ids,
+            project_board_map=project_board_map,
+            sla_map=load_board_support_sla_map(board_ids),
+        )
         module_counts = aggregate_module_counts(project_ids)
         report_stats_map = aggregate_status_reports(project_ids, period)
-        board_ids = list({p.board_id for p in projects if p.board_id})
         health_config_map = load_board_health_config_map(board_ids)
         alert_threshold_map = load_board_score_alert_threshold_map(board_ids)
         clients = [

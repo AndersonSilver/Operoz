@@ -17,6 +17,8 @@ import { PageHead } from "@/components/core/page-title";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
+import { EHubMode } from "@operis/types";
+import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 // layouts
 import { ProjectAuthWrapper } from "@/layouts/auth-layout/project-wrapper";
@@ -80,10 +82,17 @@ export const IssueDetailsPage = observer(function IssueDetailsPage({ params }: R
   }, [issueDetailSidebarCollapsed, toggleIssueDetailSidebar]);
 
   useEffect(() => {
-    if (data?.is_intake) {
-      router.push(`/${workspaceSlug}/projects/${data.project_id}/intake/?currentTab=open&inboxIssueId=${data?.id}`);
+    if (data?.is_intake && data.project_id) {
+      const project = getProjectById(data.project_id);
+      const hubMode = project?.inbox_view ? EHubMode.INTAKE : EHubMode.SUPPORT;
+      router.push(
+        getInboxHubIssueUrl(workspaceSlug.toString(), data.project_id, hubMode, {
+          currentTab: "open",
+          inboxIssueId: data.id,
+        })
+      );
     }
-  }, [workspaceSlug, data, router]);
+  }, [data, getProjectById, router, workspaceSlug]);
 
   if (error && !isLoading) {
     return (

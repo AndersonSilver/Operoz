@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import useSWR from "swr";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Building2, Users } from "lucide-react";
+import { Building2, LifeBuoy, Users } from "lucide-react";
 import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { EUserWorkspaceRoles } from "@operis/types";
@@ -50,6 +50,7 @@ import {
 import { Client360FinopsDashboard } from "@/components/board/client-360/client-360-finops-dashboard";
 import { Client360PortfolioKpiStrip } from "@/components/board/client-360/client-360-portfolio-kpi-strip";
 import { Client360PortfolioPulse } from "@/components/board/client-360/client-360-portfolio-pulse";
+import { Client360PortfolioSupport } from "@/components/board/client-360/client-360-portfolio-support";
 import { Client360PortfolioSidebar } from "@/components/board/client-360/client-360-portfolio-sidebar";
 import {
   Client360DetailTabList,
@@ -116,7 +117,7 @@ export function WorkspaceClient360List({ workspaceSlug }: Props) {
   );
   const [sort, setSort] = useState<Client360SortState>(() => loadClient360Sort(CLIENT_360_SCOPE));
   const [matrixPage, setMatrixPage] = useState(1);
-  const [listTab, setListTab] = useState<"pulse" | "finops" | "clients">("pulse");
+  const [listTab, setListTab] = useState<"pulse" | "finops" | "clients" | "support">("pulse");
   const searchInputRef = useRef<HTMLInputElement>(null);
   const { density, toggleDensity } = useClient360RowDensity(CLIENT_360_SCOPE);
 
@@ -147,6 +148,11 @@ export function WorkspaceClient360List({ workspaceSlug }: Props) {
     setSort(next);
     saveClient360Sort(CLIENT_360_SCOPE, next);
   };
+
+  const handleSupportFilter = useCallback((next: Client360FilterKey) => {
+    setFilter(next);
+    setListTab("clients");
+  }, []);
 
   const { data, error, isLoading } = useSWR(
     workspaceSlug
@@ -471,175 +477,203 @@ export function WorkspaceClient360List({ workspaceSlug }: Props) {
           }
         />
       }
+      belowHeader={canManageWorkspace ? <Client360OnboardingBanner workspaceSlug={workspaceSlug} /> : undefined}
     >
-      {canManageWorkspace ? <Client360OnboardingBanner workspaceSlug={workspaceSlug} /> : null}
-
       {showPortfolioPulse && scopedSummary ? (
         <>
           <Client360PortfolioKpiStrip summary={scopedSummary} onFilterChange={setFilter} />
 
-          <Client360DetailTabs value={listTab} onValueChange={(tab) => setListTab(tab as typeof listTab)}>
-            <Client360DetailTabList>
-              <Client360DetailTabTrigger value="pulse">
-                {t("boards.client_360.detail_tab_pulse")}
-              </Client360DetailTabTrigger>
-              {showFinops ? (
-                <Client360DetailTabTrigger value="finops">
-                  {t("boards.client_360.detail_tab_finops")}
-                </Client360DetailTabTrigger>
-              ) : null}
-              <Client360DetailTabTrigger value="clients">
-                {t("boards.client_360.detail_tab_clients")}
-              </Client360DetailTabTrigger>
-            </Client360DetailTabList>
+          <section className="client-360-workspace-content-panel workspace-exports-history-panel overflow-hidden rounded-xl border border-subtle bg-layer-1">
+            <Client360DetailTabs
+              className="gap-0"
+              value={listTab}
+              onValueChange={(tab) => setListTab(tab as typeof listTab)}
+            >
+              <div className="border-b border-subtle bg-gradient-to-r from-layer-1 via-layer-1 to-layer-2/20 px-5 py-3 lg:px-6">
+                <Client360DetailTabList contained>
+                  <Client360DetailTabTrigger value="pulse">
+                    {t("boards.client_360.detail_tab_pulse")}
+                  </Client360DetailTabTrigger>
+                  {showFinops ? (
+                    <Client360DetailTabTrigger value="finops">
+                      {t("boards.client_360.detail_tab_finops")}
+                    </Client360DetailTabTrigger>
+                  ) : null}
+                  <Client360DetailTabTrigger value="clients">
+                    {t("boards.client_360.detail_tab_clients")}
+                  </Client360DetailTabTrigger>
+                  <Client360DetailTabTrigger value="support" icon={LifeBuoy}>
+                    {t("boards.client_360.detail_tab_support")}
+                  </Client360DetailTabTrigger>
+                </Client360DetailTabList>
+              </div>
 
-            <Client360DetailTabPanel value="pulse">
-              <Client360PortfolioPulse
-                summary={scopedSummary}
-                clients={boardScopedClients}
-                basePath={basePath}
-                onFilterChange={setFilter}
-                showBoard
-                sidebar={
-                  canManageWorkspace && data?.enterprise?.phase_flags?.["5"] !== false ? (
-                    <Client360PortfolioSidebar
-                      className="w-full"
+              <div className="p-5 lg:p-6">
+                <Client360DetailTabPanel value="pulse" className="mt-0">
+                  <Client360PortfolioPulse
+                    summary={scopedSummary}
+                    clients={boardScopedClients}
+                    basePath={basePath}
+                    onFilterChange={setFilter}
+                    showBoard
+                    sidebar={
+                      canManageWorkspace && data?.enterprise?.phase_flags?.["5"] !== false ? (
+                        <Client360PortfolioSidebar
+                          className="w-full"
+                          workspaceSlug={workspaceSlug}
+                          period={period}
+                          summary={scopedSummary}
+                          finopsSummary={data?.finops_summary}
+                          showFinops={showFinops}
+                          onOpenFinops={() => setListTab("finops")}
+                        />
+                      ) : null
+                    }
+                  />
+                </Client360DetailTabPanel>
+
+                {showFinops && data?.finops_summary ? (
+                  <Client360DetailTabPanel value="finops" className="mt-0">
+                    <Client360FinopsDashboard
                       workspaceSlug={workspaceSlug}
-                      period={period}
-                      summary={scopedSummary}
-                      finopsSummary={data?.finops_summary}
-                      showFinops={showFinops}
-                      onOpenFinops={() => setListTab("finops")}
+                      finopsSummary={data.finops_summary}
+                      basePath={basePath}
+                      boardIdsKey={hasBoardFilter ? selectedBoardIds.join(",") : undefined}
                     />
-                  ) : null
-                }
-              />
-            </Client360DetailTabPanel>
+                  </Client360DetailTabPanel>
+                ) : null}
 
-            {showFinops && data?.finops_summary ? (
-              <Client360DetailTabPanel value="finops">
-                <Client360FinopsDashboard
-                  workspaceSlug={workspaceSlug}
-                  finopsSummary={data.finops_summary}
-                  basePath={basePath}
-                  boardIdsKey={hasBoardFilter ? selectedBoardIds.join(",") : undefined}
-                />
-              </Client360DetailTabPanel>
-            ) : null}
+                <Client360DetailTabPanel value="clients" className="mt-0">
+                  {hasBoardFilter && ready ? (
+                    <Client360BoardFilterChips
+                      boards={selectedBoards}
+                      onRemove={toggleBoard}
+                      onClear={clearBoards}
+                      className="mb-4 rounded-md border border-subtle bg-layer-1"
+                    />
+                  ) : null}
 
-            <Client360DetailTabPanel value="clients">
-              {hasBoardFilter && ready ? (
-                <Client360BoardFilterChips
-                  boards={selectedBoards}
-                  onRemove={toggleBoard}
-                  onClear={clearBoards}
-                  className="mb-4 rounded-md border border-subtle bg-layer-1"
-                />
-              ) : null}
+                  <Client360Section
+                    icon={Building2}
+                    iconTone="neutral"
+                    title={t("boards.client_360.clients_list_title")}
+                    description={listDescription}
+                    action={
+                      <div className="flex flex-wrap items-center gap-2">
+                        <Client360SearchInput
+                          inputRef={searchInputRef}
+                          value={search}
+                          onChange={setSearch}
+                          placeholder={t("boards.client_360.search_placeholder")}
+                        />
+                        <Client360ShortcutsHelpMenu />
+                        <Client360PersonaToggle persona={persona} onChange={handlePersonaChange} />
+                        {showDensityToggle ? (
+                          <Client360DensityToggle density={density} onToggle={toggleDensity} />
+                        ) : null}
+                        {boardOptions.length > 0 ? (
+                          <Client360BoardFilterMenu
+                            boards={boardOptions}
+                            selectedBoardIds={selectedBoardIds}
+                            onToggleBoard={toggleBoard}
+                            onClear={clearBoards}
+                          />
+                        ) : null}
+                        <Client360ExportMenu
+                          workspaceSlug={workspaceSlug}
+                          periodStart={period.start}
+                          periodEnd={period.end}
+                          clients={clients}
+                          tableColumns={tableColumns}
+                          includeBoard={includeBoardColumn}
+                          showPeriodCompare={showPeriodCompare}
+                          qbrParams={{
+                            scope: "workspace-portfolio",
+                            workspaceSlug,
+                            periodStart: period.start,
+                            periodEnd: period.end,
+                            compare: showPeriodCompare,
+                          }}
+                          disabled={showInitialLoading || clients.length === 0}
+                        />
+                        <Client360SavedViewsMenu
+                          views={mergedSavedViews}
+                          defaultViewId={defaultViewId}
+                          activeViewId={activeViewId}
+                          readOnlyViewIds={readOnlySavedViewIds}
+                          onApplyView={applyView}
+                          onSaveView={(name) => {
+                            const result = saveCurrentView(name, currentSavedViewPayload);
+                            return "error" in result ? { error: result.error } : {};
+                          }}
+                          onRenameView={(viewId, name) => {
+                            const result = renameView(viewId, name);
+                            return "error" in result ? { error: result.error } : {};
+                          }}
+                          onDeleteView={deleteView}
+                          onSetDefaultView={setDefaultView}
+                          onOverwriteView={(viewId) => {
+                            if (isWorkspaceSharedSavedViewId(viewId)) return;
+                            overwriteView(viewId, currentSavedViewPayload);
+                          }}
+                          onPublishSharedView={
+                            canManageWorkspace && activeViewId && !isWorkspaceSharedSavedViewId(activeViewId)
+                              ? async () => {
+                                  const active = savedViews.find((view) => view.id === activeViewId);
+                                  if (!active) return;
+                                  await workspaceService.createClient360SharedView(workspaceSlug, {
+                                    name: active.name,
+                                    payload: currentSavedViewPayload,
+                                    is_shared: true,
+                                  });
+                                  void mutateSharedViews();
+                                }
+                              : undefined
+                          }
+                        />
+                        <Client360FilterMenu filter={filter} onFilterChange={setFilter} />
+                        {boardOptions.length > 1 ? (
+                          <Client360BoardGroupToggle
+                            groupByBoard={groupByBoard}
+                            onGroupByBoardChange={setGroupByBoard}
+                            onExpandAll={expandAll}
+                            onCollapseAll={collapseAll}
+                          />
+                        ) : null}
+                        {view === "table" ? (
+                          <Client360TableColumnsMenu
+                            columns={tableColumns}
+                            hasCustomColumns={hasCustomColumns}
+                            onToggleColumn={toggleColumn}
+                            onMoveColumn={moveColumn}
+                            onResetColumns={resetColumns}
+                          />
+                        ) : null}
+                        <Client360ViewToggle view={view} onChange={handleViewChange} />
+                      </div>
+                    }
+                    noPadding
+                  >
+                    {clientsTable}
+                  </Client360Section>
+                </Client360DetailTabPanel>
 
-              <Client360Section
-                icon={Building2}
-                iconTone="neutral"
-                title={t("boards.client_360.clients_list_title")}
-                description={listDescription}
-                action={
-                  <div className="flex flex-wrap items-center gap-2">
-                    <Client360SearchInput
-                      inputRef={searchInputRef}
-                      value={search}
-                      onChange={setSearch}
-                      placeholder={t("boards.client_360.search_placeholder")}
-                    />
-                    <Client360ShortcutsHelpMenu />
-                    <Client360PersonaToggle persona={persona} onChange={handlePersonaChange} />
-                    {showDensityToggle ? <Client360DensityToggle density={density} onToggle={toggleDensity} /> : null}
-                    {boardOptions.length > 0 ? (
-                      <Client360BoardFilterMenu
-                        boards={boardOptions}
-                        selectedBoardIds={selectedBoardIds}
-                        onToggleBoard={toggleBoard}
-                        onClear={clearBoards}
-                      />
-                    ) : null}
-                    <Client360ExportMenu
-                      workspaceSlug={workspaceSlug}
-                      periodStart={period.start}
-                      periodEnd={period.end}
-                      clients={clients}
-                      tableColumns={tableColumns}
-                      includeBoard={includeBoardColumn}
-                      showPeriodCompare={showPeriodCompare}
-                      qbrParams={{
-                        scope: "workspace-portfolio",
-                        workspaceSlug,
-                        periodStart: period.start,
-                        periodEnd: period.end,
-                        compare: showPeriodCompare,
-                      }}
-                      disabled={showInitialLoading || clients.length === 0}
-                    />
-                    <Client360SavedViewsMenu
-                      views={mergedSavedViews}
-                      defaultViewId={defaultViewId}
-                      activeViewId={activeViewId}
-                      readOnlyViewIds={readOnlySavedViewIds}
-                      onApplyView={applyView}
-                      onSaveView={(name) => {
-                        const result = saveCurrentView(name, currentSavedViewPayload);
-                        return "error" in result ? { error: result.error } : {};
-                      }}
-                      onRenameView={(viewId, name) => {
-                        const result = renameView(viewId, name);
-                        return "error" in result ? { error: result.error } : {};
-                      }}
-                      onDeleteView={deleteView}
-                      onSetDefaultView={setDefaultView}
-                      onOverwriteView={(viewId) => {
-                        if (isWorkspaceSharedSavedViewId(viewId)) return;
-                        overwriteView(viewId, currentSavedViewPayload);
-                      }}
-                      onPublishSharedView={
-                        canManageWorkspace && activeViewId && !isWorkspaceSharedSavedViewId(activeViewId)
-                          ? async () => {
-                              const active = savedViews.find((view) => view.id === activeViewId);
-                              if (!active) return;
-                              await workspaceService.createClient360SharedView(workspaceSlug, {
-                                name: active.name,
-                                payload: currentSavedViewPayload,
-                                is_shared: true,
-                              });
-                              void mutateSharedViews();
-                            }
-                          : undefined
-                      }
-                    />
-                    <Client360FilterMenu filter={filter} onFilterChange={setFilter} />
-                    {boardOptions.length > 1 ? (
-                      <Client360BoardGroupToggle
-                        groupByBoard={groupByBoard}
-                        onGroupByBoardChange={setGroupByBoard}
-                        onExpandAll={expandAll}
-                        onCollapseAll={collapseAll}
-                      />
-                    ) : null}
-                    {view === "table" ? (
-                      <Client360TableColumnsMenu
-                        columns={tableColumns}
-                        hasCustomColumns={hasCustomColumns}
-                        onToggleColumn={toggleColumn}
-                        onMoveColumn={moveColumn}
-                        onResetColumns={resetColumns}
-                      />
-                    ) : null}
-                    <Client360ViewToggle view={view} onChange={handleViewChange} />
-                  </div>
-                }
-                noPadding
-              >
-                {clientsTable}
-              </Client360Section>
-            </Client360DetailTabPanel>
-          </Client360DetailTabs>
+                <Client360DetailTabPanel value="support" className="mt-0">
+                  <Client360PortfolioSupport
+                    workspaceSlug={workspaceSlug}
+                    summary={scopedSummary}
+                    clients={boardScopedClients}
+                    supportAnalytics={data?.support_analytics}
+                    periodStart={period.start}
+                    periodEnd={period.end}
+                    exportScope={{ kind: "workspace", workspaceSlug }}
+                    onFilterChange={handleSupportFilter}
+                    showBoard
+                  />
+                </Client360DetailTabPanel>
+              </div>
+            </Client360DetailTabs>
+          </section>
         </>
       ) : (
         <>

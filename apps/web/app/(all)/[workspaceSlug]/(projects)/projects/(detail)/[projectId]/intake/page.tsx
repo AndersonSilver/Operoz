@@ -1,51 +1,50 @@
 import { observer } from "mobx-react";
+import { useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
-// plane imports
 import { EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
-import { EUserProjectRoles, EInboxIssueCurrentTab } from "@operis/types";
-// assets
+import { EUserProjectRoles, EInboxIssueCurrentTab, EHubMode } from "@operis/types";
 import darkIntakeAsset from "@/app/assets/empty-state/disabled-feature/intake-dark.webp?url";
 import lightIntakeAsset from "@/app/assets/empty-state/disabled-feature/intake-light.webp?url";
-// components
 import { PageHead } from "@/components/core/page-title";
 import { DetailedEmptyState } from "@/components/empty-state/detailed-empty-state-root";
 import { InboxIssueRoot } from "@/components/inbox";
-// hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import type { Route } from "./+types/page";
 
 function ProjectInboxPage({ params }: Route.ComponentProps) {
-  /// router
   const router = useAppRouter();
   const { workspaceSlug, projectId } = params;
   const searchParams = useSearchParams();
   const navigationTab = searchParams.get("currentTab");
   const inboxIssueId = searchParams.get("inboxIssueId");
-  // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
   const { t } = useTranslation();
-  // hooks
   const { currentProjectDetails } = useProject();
   const { allowPermissions } = useUserPermissions();
-  // derived values
+
   const canPerformEmptyStateActions = allowPermissions([EUserProjectRoles.ADMIN], EUserPermissionsLevel.PROJECT);
   const resolvedPath = resolvedTheme === "light" ? lightIntakeAsset : darkIntakeAsset;
 
-  // No access to inbox
-  if (currentProjectDetails?.inbox_view === false)
+  useEffect(() => {
+    if (!currentProjectDetails) return;
+    if (!currentProjectDetails.inbox_view && currentProjectDetails.support_view) {
+      router.replace(`/${workspaceSlug}/projects/${projectId}/sustentacao`);
+    }
+  }, [currentProjectDetails, projectId, router, workspaceSlug]);
+
+  if (currentProjectDetails?.inbox_view === false) {
     return (
       <div className="flex h-full w-full items-center justify-center">
         <DetailedEmptyState
-          title={t("disabled_project.empty_state.inbox.title")}
-          description={t("disabled_project.empty_state.inbox.description")}
+          title={t("disabled_project.empty_state.intake.title")}
+          description={t("disabled_project.empty_state.intake.description")}
           assetPath={resolvedPath}
           primaryButton={{
-            text: t("disabled_project.empty_state.inbox.primary_button.text"),
+            text: t("disabled_project.empty_state.intake.primary_button.text"),
             onClick: () => {
               router.push(`/${workspaceSlug}/settings/projects/${projectId}/features`);
             },
@@ -54,15 +53,11 @@ function ProjectInboxPage({ params }: Route.ComponentProps) {
         />
       </div>
     );
+  }
 
-  // derived values
   const pageTitle = currentProjectDetails?.name
-    ? t("inbox_issue.page_label", {
-        workspace: currentProjectDetails?.name,
-      })
-    : t("inbox_issue.page_label", {
-        workspace: "Plane",
-      });
+    ? t("inbox_issue.page_label_intake", { workspace: currentProjectDetails.name })
+    : t("inbox_issue.page_label_intake", { workspace: "Plane" });
 
   const currentNavigationTab = navigationTab
     ? navigationTab === "open"
@@ -75,6 +70,7 @@ function ProjectInboxPage({ params }: Route.ComponentProps) {
       <PageHead title={pageTitle} />
       <div className="h-full min-h-0 w-full overflow-hidden">
         <InboxIssueRoot
+          hubMode={EHubMode.INTAKE}
           workspaceSlug={workspaceSlug}
           projectId={projectId}
           inboxIssueId={inboxIssueId || undefined}

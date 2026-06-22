@@ -10,12 +10,18 @@ from operis.app.views.base import BaseViewSet
 from operis.app.views.board.meta import CLOSED_STATE_GROUPS, _project_permission_filters
 from operis.db.models import Board, BoardStatusReport, Issue, Module, Project, Workspace
 from operis.utils.client_360 import (
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     build_client_row,
     build_module_report_rows,
     parse_week_period,
+)
+from operis.utils.client_360_operational import load_board_support_sla_map
+from operis.utils.client_360_support_hub import (
+    aggregate_support_metrics_analytics,
+    build_support_analytics_csv_content,
+    list_support_hub_issues,
 )
 from operis.utils.client_360_health_settings import (
     load_board_health_config_map,
@@ -43,8 +49,6 @@ from operis.utils.client_360_finops import (
     load_finops_settings,
     month_start,
 )
-
-SUPPORT_TYPE_NAME_Q = Q(type__name__icontains="sustent") | Q(type__name__icontains="chamado")
 
 
 class BoardClient360ViewSet(BaseViewSet):
@@ -105,9 +109,13 @@ class BoardClient360ViewSet(BaseViewSet):
         project_ids = [p.id for p in projects]
         today = timezone.now().date()
 
-        issue_stats_map = aggregate_issue_stats(
+        project_board_map = {str(p.id): str(board.id) for p in projects}
+        issue_stats_map = aggregate_client360_issue_stats(
             self._board_issues_queryset(slug, board.id, project_ids),
             today,
+            project_ids=project_ids,
+            project_board_map=project_board_map,
+            sla_map=load_board_support_sla_map([board.id]),
         )
         module_counts = aggregate_module_counts(project_ids)
         report_stats_map = aggregate_status_reports(project_ids, period)
@@ -142,6 +150,24 @@ class BoardClient360ViewSet(BaseViewSet):
         finops_profiles = load_finops_profiles(project_ids, month_start(today))
         apply_finops_enrichment(clients, profiles=finops_profiles, settings=finops_settings)
 
+        support_analytics = aggregate_support_metrics_analytics(
+            project_ids,
+            period_start=period.start,
+            period_end=period.end,
+        )
+
+        if (request.query_params.get("export") or "").lower() == "support_csv":
+            delimiter = ";" if (request.query_params.get("delimiter") or "") == "semicolon" else ","
+            csv_content = build_support_analytics_csv_content(
+                clients=clients,
+                analytics=support_analytics,
+                delimiter=delimiter,
+            )
+            filename = f"operoz-sustentacao-analytics-{board.slug}-{period.end.isoformat()}"
+            response = HttpResponse("\ufeff" + csv_content, content_type="text/csv; charset=utf-8")
+            response["Content-Disposition"] = f'attachment; filename="{filename}.csv"'
+            return response
+
         summary = build_client360_list_summary(clients)
 
         payload = {
@@ -150,6 +176,7 @@ class BoardClient360ViewSet(BaseViewSet):
             "display": client_360_display_payload(board.workspace),
             "summary": summary,
             "clients": clients,
+            "support_analytics": support_analytics,
         }
 
         if parse_compare_query(request.query_params.get("compare")):
@@ -189,7 +216,14 @@ class BoardClient360ViewSet(BaseViewSet):
         today = timezone.now().date()
         pid = project.id
         issue_qs = self._board_issues_queryset(slug, board.id, [pid])
-        issue_stats_map = aggregate_issue_stats(issue_qs, today)
+        project_board_map = {str(pid): str(board.id)}
+        issue_stats_map = aggregate_client360_issue_stats(
+            issue_qs,
+            today,
+            project_ids=[pid],
+            project_board_map=project_board_map,
+            sla_map=load_board_support_sla_map([board.id]),
+        )
         module_counts = aggregate_module_counts([pid])
         report_stats_map = aggregate_status_reports([pid], period)
         health_config_map = load_board_health_config_map([board.id])
@@ -242,21 +276,7 @@ class BoardClient360ViewSet(BaseViewSet):
                 "state__group",
             )
         )
-        support_issues = list(
-            issue_qs.filter(pending_filter)
-            .filter(SUPPORT_TYPE_NAME_Q)
-            .select_related("state", "type")
-            .order_by("-created_at")[:15]
-            .values(
-                "id",
-                "name",
-                "sequence_id",
-                "target_date",
-                "priority",
-                "state__name",
-                "type__name",
-            )
-        )
+        support_issues = list_support_hub_issues(pid)
 
         operational = build_detail_operational_payload(
             project_id=pid,

@@ -5,12 +5,7 @@
   min-height: 100dvh;
   overflow: hidden;
   background-color: var(--neutral-300);
-  background-image: linear-gradient(
-    180deg,
-    var(--neutral-100) 0%,
-    var(--neutral-200) 42%,
-    var(--neutral-300) 100%
-  );
+  background-image: linear-gradient(180deg, var(--neutral-100) 0%, var(--neutral-200) 42%, var(--neutral-300) 100%);
 }
 
 .intake-public-page-bg {
@@ -25,16 +20,8 @@
   position: absolute;
   inset: 0;
   background-image:
-    linear-gradient(
-      to right,
-      color-mix(in srgb, var(--brand-500) 52%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      to bottom,
-      color-mix(in srgb, var(--brand-500) 52%, transparent) 1px,
-      transparent 1px
-    );
+    linear-gradient(to right, color-mix(in srgb, var(--brand-500) 52%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--brand-500) 52%, transparent) 1px, transparent 1px);
   background-size: 3rem 3rem;
   mask-image: radial-gradient(ellipse 88% 72% at 50% 30%, black 12%, transparent 78%);
   opacity: 0.9;
@@ -406,13 +393,7 @@
 .intake-public-divider {
   margin: 1.5rem 0 1.25rem;
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    var(--border-subtle-1) 12%,
-    var(--border-subtle-1) 88%,
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, var(--border-subtle-1) 12%, var(--border-subtle-1) 88%, transparent);
 }
 
 .intake-public-contact {
@@ -634,4 +615,21 @@
 .intake-public-attachment-error {
   font-size: 0.75rem;
   color: var(--txt-danger-primary);
+}
+
+.intake-theme-minimal .intake-public-hero-accent {
+  background: linear-gradient(90deg, var(--neutral-400), var(--neutral-300));
+}
+
+.intake-theme-support .intake-public-hero-accent {
+  background: linear-gradient(90deg, rgb(37 99 235), rgb(59 130 246));
+}
+
+.intake-theme-incident .intake-public-hero-accent {
+  background: linear-gradient(90deg, rgb(220 38 38), rgb(249 115 22));
+}
+
+.intake-theme-support .intake-public-submit,
+.intake-theme-incident .intake-public-submit {
+  box-shadow: 0 8px 24px -8px color-mix(in srgb, var(--bg-accent-primary) 45%, transparent);
 }

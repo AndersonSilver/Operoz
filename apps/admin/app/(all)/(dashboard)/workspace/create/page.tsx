@@ -1,18 +1,25 @@
-
 import { observer } from "mobx-react";
-// components
+import { LayoutGrid, Link2, Users } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { PageWrapper } from "@/components/common/page-wrapper";
-// types
 import type { Route } from "./+types/page";
-// local
 import { WorkspaceCreateForm } from "./form";
 
 const WorkspaceCreatePage = observer(function WorkspaceCreatePage(_props: Route.ComponentProps) {
+  const { t } = useTranslation();
+
   return (
     <PageWrapper
+      size="lg"
       header={{
-        title: "Create a new workspace on this instance.",
-        description: "You will need to invite users from Workspace Settings after you create this workspace.",
+        icon: LayoutGrid,
+        title: t("god_mode.pages.workspace.create_title"),
+        description: t("god_mode.pages.workspace.create_description"),
+        highlights: [
+          { label: t("god_mode.pages.workspace.create_name_label"), icon: LayoutGrid, tone: "accent" },
+          { label: t("god_mode.pages.workspace.create_url_label"), icon: Link2, tone: "purple" },
+          { label: t("god_mode.pages.workspace.create_size_label"), icon: Users, tone: "success" },
+        ],
       }}
     >
       <WorkspaceCreateForm />

@@ -10,7 +10,7 @@ from operis.utils.client_360 import (
     HealthScoreThresholds,
     HealthScoreWeights,
     WeekPeriod,
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     compute_health_score,
@@ -18,6 +18,7 @@ from operis.utils.client_360 import (
     current_week_period,
 )
 from operis.utils.client_360_health_settings import load_board_health_config_map
+from operis.utils.client_360_operational import load_board_support_sla_map
 
 HEALTH_HISTORY_SCHEMA_VERSION = 1
 DEFAULT_HEALTH_HISTORY_WEEKS = 8
@@ -78,9 +79,14 @@ def compute_live_health_history_item(
 ) -> dict:
     pid = str(project.id)
     modules_total = aggregate_module_counts([project.id]).get(pid, 0)
-    issue_stats = aggregate_issue_stats(
+    board_ids = [project.board_id] if project.board_id else []
+    project_board_map = {pid: str(project.board_id) if project.board_id else None}
+    issue_stats = aggregate_client360_issue_stats(
         issue_queryset.filter(project_id=project.id),
         reference_date,
+        project_ids=[project.id],
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map(board_ids),
     ).get(pid, {"overdue": 0, "support_open": 0, "support_overdue": 0})
     report_stats = aggregate_status_reports([project.id], period).get(pid, {})
 

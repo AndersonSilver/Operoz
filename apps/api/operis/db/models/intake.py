@@ -37,12 +37,18 @@ class SourceType(models.TextChoices):
     EMAIL = "EMAIL"
 
 
+class IntakeTicketKind(models.TextChoices):
+    INTAKE = "intake", "Intake"
+    SUPPORT = "support", "Support"
+
+
 class IntakeIssueStatus(models.IntegerChoices):
     PENDING = -2
     REJECTED = -1
     SNOOZED = 0
     ACCEPTED = 1
     DUPLICATE = 2
+    CLOSED = 3
 
 
 class IntakeIssue(ProjectBaseModel):
@@ -55,10 +61,18 @@ class IntakeIssue(ProjectBaseModel):
             (0, "Snoozed"),
             (1, "Accepted"),
             (2, "Duplicate"),
+            (3, "Closed"),
         ),
         default=-2,
     )
     snoozed_till = models.DateTimeField(null=True)
+    support_queue = models.ForeignKey(
+        "db.BoardSupportQueue",
+        related_name="intake_issues",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
     duplicate_to = models.ForeignKey(
         "db.Issue",
         related_name="intake_duplicate",
@@ -76,6 +90,19 @@ class IntakeIssue(ProjectBaseModel):
         on_delete=models.SET_NULL,
         null=True,
         blank=True,
+    )
+    board_intake_form = models.ForeignKey(
+        "db.BoardIntakeForm",
+        related_name="submissions",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    ticket_kind = models.CharField(
+        max_length=16,
+        choices=IntakeTicketKind.choices,
+        default=IntakeTicketKind.SUPPORT,
+        db_index=True,
     )
 
     class Meta:

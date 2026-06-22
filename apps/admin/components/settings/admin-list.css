@@ -1,0 +1,35 @@
+.admin-hero-dot-grid {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--border-subtle-1) 70%, transparent) 1px,
+    transparent 1px
+  );
+  background-size: 14px 14px;
+}
+
+.admin-card-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 17.5rem), 1fr));
+}
+
+.admin-workspace-grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 18rem), 22rem));
+}
+
+.admin-card-glow-active {
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 18%, transparent),
+    0 8px 24px -12px color-mix(in srgb, var(--bg-accent-primary) 25%, transparent);
+}
+
+.admin-panel-dot-grid {
+  background-image: radial-gradient(
+    circle at center,
+    color-mix(in srgb, var(--border-subtle-1) 45%, transparent) 0.75px,
+    transparent 0.75px
+  );
+  background-size: 12px 12px;
+}

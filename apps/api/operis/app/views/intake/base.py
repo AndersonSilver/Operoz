@@ -1,5 +1,6 @@
 # Python imports
 import json
+from datetime import timedelta
 
 # Django import
 from django.utils import timezone
@@ -40,6 +41,14 @@ from operis.app.serializers import (
     IssueDescriptionVersionDetailSerializer,
 )
 from operis.utils.issue_filters import issue_filters
+from operis.utils.intake_permissions import SUPPORT_TICKET_DELETE_ERROR, user_can_delete_support_ticket
+from operis.utils.board_permission_enforcement import get_project_for_enforcement
+from operis.utils.support_ticket import (
+    SupportTicketValidationError,
+    build_delete_audit_payload,
+    get_board_support_sla_days,
+    validate_delete_reason,
+)
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.bgtasks.issue_description_version_task import issue_description_version_task
 from operis.app.views.base import BaseAPIView
@@ -47,7 +56,7 @@ from operis.utils.timezone_converter import user_timezone_converter
 from operis.utils.global_paginator import paginate
 from operis.utils.host import base_host
 from operis.automation.hooks import emit_intake_submitted, emit_issue_created
-from operis.db.models.intake import SourceType
+from operis.db.models.intake import SourceType, IntakeTicketKind
 
 
 class IntakeViewSet(BaseViewSet):
@@ -180,8 +189,8 @@ class IntakeIssueViewSet(BaseViewSet):
         filters = issue_filters(request.GET, "GET", "issue__")
         intake_issue = (
             IntakeIssue.objects.filter(intake_id=intake.id, project_id=project_id, **filters)
-            .select_related("issue")
-            .prefetch_related("issue__labels")
+            .select_related("issue", "project", "board_intake_form", "intake_form", "support_queue")
+            .prefetch_related("issue__labels", "issue__assignees")
             .annotate(
                 label_ids=Coalesce(
                     ArrayAgg(
@@ -193,10 +202,38 @@ class IntakeIssueViewSet(BaseViewSet):
                 )
             )
         ).order_by(request.GET.get("order_by", "-issue__created_at"))
+
+        ticket_kind = request.GET.get("ticket_kind", IntakeTicketKind.SUPPORT)
+        if ticket_kind in (IntakeTicketKind.INTAKE, IntakeTicketKind.SUPPORT):
+            intake_issue = intake_issue.filter(ticket_kind=ticket_kind)
+
         # Intake status filter
         intake_status = [item for item in request.GET.get("status", "-2").split(",") if item != "null"]
         if intake_status:
             intake_issue = intake_issue.filter(status__in=intake_status)
+
+        queue_filter = request.GET.get("queue_id")
+        if queue_filter:
+            queue_values = [item for item in queue_filter.split(",") if item]
+            if queue_values:
+                intake_issue = intake_issue.filter(support_queue_id__in=queue_values)
+
+        source_filter = request.GET.get("source")
+        if source_filter:
+            source_values = [item for item in source_filter.split(",") if item]
+            if source_values:
+                intake_issue = intake_issue.filter(source__in=source_values)
+
+        if request.GET.get("sla_breached") == "true":
+            sla_days = get_board_support_sla_days(project.board_id)
+            cutoff = timezone.now() - timedelta(days=max(sla_days, 1))
+            intake_issue = intake_issue.filter(status=-2, created_at__lt=cutoff)
+
+        if request.GET.get("has_attachment") == "true":
+            intake_issue = intake_issue.filter(
+                issue__issue_attachment__entity_type=FileAsset.EntityTypeContext.ISSUE_ATTACHMENT,
+                issue__issue_attachment__is_deleted=False,
+            ).distinct()
 
         if (
             ProjectMember.objects.filter(
@@ -259,12 +296,20 @@ class IntakeIssueViewSet(BaseViewSet):
         if serializer.is_valid():
             serializer.save()
             intake_id = Intake.objects.filter(workspace__slug=slug, project_id=project_id).first()
+            ticket_kind = request.data.get("ticket_kind", IntakeTicketKind.INTAKE)
+            if ticket_kind not in (IntakeTicketKind.INTAKE, IntakeTicketKind.SUPPORT):
+                ticket_kind = IntakeTicketKind.INTAKE
+            if ticket_kind == IntakeTicketKind.SUPPORT and not project.support_view:
+                return Response({"error": "Support is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
+            if ticket_kind == IntakeTicketKind.INTAKE and not project.intake_view:
+                return Response({"error": "Intake is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
             # create an intake issue
             intake_issue = IntakeIssue.objects.create(
                 intake_id=intake_id.id,
                 project_id=project_id,
                 issue_id=serializer.data["id"],
                 source=SourceType.IN_APP,
+                ticket_kind=ticket_kind,
             )
             # Create an Issue Activity
             issue_activity.delay(
@@ -328,7 +373,7 @@ class IntakeIssueViewSet(BaseViewSet):
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    @allow_permission(allowed_roles=[ROLE.ADMIN], creator=True, model=Issue)
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], creator=True, model=Issue)
     def partial_update(self, request, slug, project_id, pk):
         skip_activity = request.data.pop("skip_activity", False)
         is_description_update = request.data.get("description_html") is not None
@@ -419,7 +464,7 @@ class IntakeIssueViewSet(BaseViewSet):
         intake_serializer = None
         intake_current_instance = None
 
-        if (project_member and project_member.role > ROLE.MEMBER.value) or is_workspace_admin:
+        if (project_member and project_member.role >= ROLE.MEMBER.value) or is_workspace_admin:
             intake_current_instance = json.dumps(IntakeIssueSerializer(intake_issue).data, cls=DjangoJSONEncoder)
             intake_serializer = IntakeIssueSerializer(intake_issue, data=request.data, partial=True)
 
@@ -546,14 +591,46 @@ class IntakeIssueViewSet(BaseViewSet):
         issue = IntakeIssueDetailSerializer(intake_issue).data
         return Response(issue, status=status.HTTP_200_OK)
 
-    @allow_permission(allowed_roles=[ROLE.ADMIN], creator=True, model=Issue)
+    @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER])
     def destroy(self, request, slug, project_id, pk):
+        project = get_project_for_enforcement(project_id, slug)
+        if not user_can_delete_support_ticket(request.user, project, workspace_slug=slug):
+            return Response(
+                {"error": SUPPORT_TICKET_DELETE_ERROR},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        try:
+            delete_reason = validate_delete_reason(request.data.get("delete_reason"))
+        except SupportTicketValidationError as exc:
+            return Response({exc.field or "delete_reason": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
         intake_id = Intake.objects.filter(workspace__slug=slug, project_id=project_id).first()
         intake_issue = IntakeIssue.objects.get(
             issue_id=pk,
             workspace__slug=slug,
             project_id=project_id,
             intake_id=intake_id,
+        )
+
+        issue_activity.delay(
+            type="intake.activity.deleted",
+            requested_data=json.dumps(
+                build_delete_audit_payload(
+                    reason=delete_reason,
+                    actor_id=str(request.user.id),
+                    intake_issue=intake_issue,
+                ),
+                cls=DjangoJSONEncoder,
+            ),
+            actor_id=str(request.user.id),
+            issue_id=str(pk),
+            project_id=str(project_id),
+            current_instance=json.dumps(IntakeIssueSerializer(intake_issue).data, cls=DjangoJSONEncoder),
+            epoch=int(timezone.now().timestamp()),
+            notification=False,
+            origin=base_host(request=request, is_app=True),
+            intake=str(intake_issue.id),
         )
 
         # Check the issue status

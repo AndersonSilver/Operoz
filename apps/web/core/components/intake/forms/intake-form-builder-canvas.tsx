@@ -1,4 +1,4 @@
-import { ChevronDown, ChevronUp, GripVertical, Lock } from "lucide-react";
+import { ChevronDown, ChevronUp, GripVertical, Lock, Users } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TIntakeFormField } from "@operis/types";
 import { cn } from "@operis/utils";
@@ -21,16 +21,19 @@ export function IntakeFormBuilderCanvas(props: Props) {
     <div className="overflow-hidden rounded-xl border border-subtle bg-surface-1 shadow-raised-100">
       <div className="border-b border-subtle bg-layer-1 px-6 py-5">
         <p className="text-10 font-semibold tracking-[0.08em] text-tertiary uppercase">Operoz</p>
-        <h3 className="mt-1 text-18 font-semibold text-primary">{headerTitle || t("project_settings.features.intake.forms.builder.preview_title")}</h3>
+        <h3 className="mt-1 text-18 font-semibold text-primary">
+          {headerTitle || t("project_settings.features.intake.forms.builder.preview_title")}
+        </h3>
         {formDescription ? <p className="mt-1.5 text-13 text-secondary">{formDescription}</p> : null}
       </div>
 
       <div className="space-y-2 p-4">
         {fields.map((field, index) => {
-          const catalog = getCatalogItem(field.field_type);
-          const Icon = catalog?.icon;
+          const catalog = getCatalogItem(field.field_type === "client" ? "select" : field.field_type);
+          const isSystem =
+            field.field_type === "name" || field.field_type === "description" || field.field_type === "client";
+          const Icon = field.field_type === "client" ? Users : catalog?.icon;
           const isSelected = selectedFieldId === field.id;
-          const isSystem = field.field_type === "name" || field.field_type === "description";
 
           return (
             <div
@@ -44,7 +47,7 @@ export function IntakeFormBuilderCanvas(props: Props) {
               className={cn(
                 "group relative rounded-lg border bg-canvas/40 p-4 text-left transition-all duration-150",
                 isSelected
-                  ? "border-accent-primary/50 bg-accent-subtle/10 shadow-sm ring-1 ring-accent-primary/15"
+                  ? "border-accent-primary/50 shadow-sm ring-accent-primary/15 bg-accent-subtle/10 ring-1"
                   : "border-transparent hover:border-subtle hover:bg-layer-1"
               )}
             >

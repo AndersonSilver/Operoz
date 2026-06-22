@@ -2,6 +2,7 @@ from rest_framework import serializers
 
 from operis.app.serializers.base import BaseSerializer
 from operis.db.models import IntakeForm
+from operis.utils.intake_form_anchor import unique_project_intake_form_anchor
 
 
 class IntakeFormSerializer(BaseSerializer):
@@ -49,6 +50,23 @@ class IntakeFormWriteSerializer(BaseSerializer):
             "submit_message",
             "require_auth",
         ]
+
+    def create(self, validated_data):
+        project = validated_data.get("project")
+        name = validated_data.get("name", "")
+        if project is not None:
+            validated_data["anchor"] = unique_project_intake_form_anchor(project.id, name)
+        return super().create(validated_data)
+
+    def update(self, instance, validated_data):
+        name = validated_data.get("name")
+        if name and name != instance.name and not instance.is_published:
+            validated_data["anchor"] = unique_project_intake_form_anchor(
+                instance.project_id,
+                name,
+                exclude_id=instance.id,
+            )
+        return super().update(instance, validated_data)
 
 
 class IntakeFormPublicSerializer(BaseSerializer):

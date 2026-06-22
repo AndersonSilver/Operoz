@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from operis.db.models import BoardStatusReport, Issue, Module, Project, Workspace
 from operis.utils.client_360 import (
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     build_client_row,
@@ -15,6 +15,8 @@ from operis.utils.client_360 import (
     parse_week_period,
     CLOSED_STATE_GROUPS,
 )
+from operis.utils.client_360_operational import load_board_support_sla_map
+from operis.utils.client_360_support_hub import list_support_hub_issues
 from operis.utils.client_360_health_alerts import build_client360_list_summary
 from operis.utils.client_360_health_history import build_health_history_payload
 from operis.utils.client_360_health_settings import (
@@ -24,9 +26,6 @@ from operis.utils.client_360_health_settings import (
 from operis.utils.client_360_matrix import build_client360_matrix_payload
 from operis.utils.client_360_period_compare import attach_period_compare
 from operis.utils.client_360_qbr_export import QbrBuildInput, build_qbr_payload
-
-SUPPORT_TYPE_NAME_Q = Q(type__name__icontains="sustent") | Q(type__name__icontains="chamado")
-
 
 def build_workspace_portfolio_qbr_context(
     *,
@@ -40,8 +39,15 @@ def build_workspace_portfolio_qbr_context(
     today = timezone.now().date()
     project_ids = [project.id for project in projects]
     module_counts = aggregate_module_counts(project_ids)
-    issue_stats_map = aggregate_issue_stats(issue_queryset, today)
     board_ids = list({project.board_id for project in projects if project.board_id})
+    project_board_map = {str(project.id): str(project.board_id) if project.board_id else None for project in projects}
+    issue_stats_map = aggregate_client360_issue_stats(
+        issue_queryset,
+        today,
+        project_ids=project_ids,
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map(board_ids),
+    )
     health_config_map = load_board_health_config_map(board_ids)
     alert_threshold_map = load_board_score_alert_threshold_map(board_ids)
 
@@ -120,7 +126,15 @@ def build_client_qbr_context(
 ) -> dict:
     today = timezone.now().date()
     pid = project.id
-    issue_stats_map = aggregate_issue_stats(issue_queryset.filter(project_id=pid), today)
+    project_board_map = {str(pid): str(project.board_id) if project.board_id else None}
+    board_ids = [project.board_id] if project.board_id else []
+    issue_stats_map = aggregate_client360_issue_stats(
+        issue_queryset.filter(project_id=pid),
+        today,
+        project_ids=[pid],
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map(board_ids),
+    )
     module_counts = aggregate_module_counts([pid])
     report_stats_map = aggregate_status_reports([pid], period)
     health_config_map = (
@@ -191,13 +205,7 @@ def build_client_qbr_context(
         .order_by("target_date")[:15]
         .values("id", "name", "sequence_id", "target_date", "priority", "state__name")
     )
-    support_issues = list(
-        issue_queryset.filter(project_id=pid)
-        .filter(pending_filter)
-        .filter(SUPPORT_TYPE_NAME_Q)
-        .order_by("-created_at")[:15]
-        .values("id", "name", "sequence_id", "target_date", "priority", "state__name", "type__name")
-    )
+    support_issues = list_support_hub_issues(pid)
 
     client_detail = {
         **client,

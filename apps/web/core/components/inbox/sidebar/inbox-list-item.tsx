@@ -7,6 +7,8 @@ import { PriorityIcon } from "@operis/propel/icons";
 import { Tooltip } from "@operis/propel/tooltip";
 import { Row, Avatar } from "@operis/ui";
 import { cn, renderFormattedDate, getFileURL } from "@operis/utils";
+import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
+import { shouldShowSlaBadge } from "@/utils/support-ticket";
 // components
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
 // hooks
@@ -33,7 +35,7 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
   const searchParams = useSearchParams();
   const selectedInboxIssueId = searchParams.get("inboxIssueId");
   // store
-  const { currentTab, getIssueInboxByIssueId } = useProjectInbox();
+  const { currentTab, hubMode, getIssueInboxByIssueId } = useProjectInbox();
   const { projectLabels } = useLabel();
   const { isMobile } = usePlatformOS();
   const { getUserDetails } = useMember();
@@ -54,7 +56,10 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
       <Link
         id={`inbox-issue-list-item-${issue.id}`}
         key={`${projectId}_${issue.id}`}
-        href={`/${workspaceSlug}/projects/${projectId}/intake?currentTab=${currentTab}&inboxIssueId=${issue.id}`}
+        href={getInboxHubIssueUrl(workspaceSlug, projectId, hubMode, {
+          currentTab,
+          inboxIssueId: issue.id,
+        })}
         onClick={(e) => handleIssueRedirection(e, issue.id)}
       >
         <Row
@@ -69,11 +74,23 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
                 {projectIdentifier}-{issue.sequence_id}
               </div>
               <div className="flex items-center gap-2">
-                {inboxIssue.source && <InboxSourcePill source={inboxIssue.source} />}
-                {inboxIssue.status !== -2 && <InboxIssueStatus inboxIssue={inboxIssue} iconSize={12} />}
+                {inboxIssue.source && (
+                  <InboxSourcePill source={inboxIssue.source} formName={inboxIssue.support_ticket?.form_name} />
+                )}
+                {shouldShowSlaBadge(inboxIssue.support_ticket, inboxIssue.status) && (
+                  <span className="rounded-full border border-danger-subtle bg-danger-subtle px-1.5 py-0.5 text-10 font-medium text-danger-primary">
+                    SLA
+                  </span>
+                )}
+                {inboxIssue.status !== -2 && (
+                  <InboxIssueStatus inboxIssue={inboxIssue} iconSize={12} hubMode={hubMode} />
+                )}
               </div>
             </div>
             <h3 className="w-full truncate text-13">{issue.name}</h3>
+            {inboxIssue.support_ticket?.form_name ? (
+              <p className="truncate text-11 text-tertiary">{inboxIssue.support_ticket.form_name}</p>
+            ) : null}
           </div>
 
           <div className="flex items-center justify-between">
@@ -83,7 +100,11 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
                 tooltipContent={`${renderFormattedDate(issue.created_at ?? "")}`}
                 isMobile={isMobile}
               >
-                <div className="text-11 text-secondary">{renderFormattedDate(issue.created_at ?? "")}</div>
+                <div className="text-11 text-secondary">
+                  {inboxIssue.support_ticket?.queue_age_label
+                    ? inboxIssue.support_ticket.queue_age_label
+                    : renderFormattedDate(issue.created_at ?? "")}
+                </div>
               </Tooltip>
 
               <div className="rounded-full border-2 border-strong-1" />

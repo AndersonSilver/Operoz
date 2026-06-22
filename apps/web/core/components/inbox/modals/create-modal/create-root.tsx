@@ -14,6 +14,8 @@ import { renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { useWorkspace } from "@/hooks/store/use-workspace";
+import { EHubMode } from "@operis/types";
+import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 import useKeypress from "@/hooks/use-keypress";
 import { usePlatformOS } from "@/hooks/use-platform-os";
@@ -162,7 +164,12 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
           setUploadedAssetIds([]);
         }
         if (!createMore) {
-          router.push(`/${workspaceSlug}/projects/${projectId}/intake/?currentTab=open&inboxIssueId=${res?.issue?.id}`);
+          router.push(
+            getInboxHubIssueUrl(workspaceSlug, projectId, EHubMode.INTAKE, {
+              currentTab: "open",
+              inboxIssueId: res?.issue?.id,
+            })
+          );
           handleModalClose();
         } else {
           descriptionEditorRef?.current?.clearEditor();

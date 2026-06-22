@@ -2,5 +2,5 @@ from .instance import InstanceSerializer
 
 from .configuration import InstanceConfigurationSerializer
 from .admin import InstanceAdminSerializer, InstanceAdminMeSerializer
-from .workspace import WorkspaceSerializer
+from .workspace import WorkspaceSerializer, InstanceWorkspaceUpdateSerializer
 from .workspace_issue_notifications import WorkspaceIssueNotificationFlagsSerializer

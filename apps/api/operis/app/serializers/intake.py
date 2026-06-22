@@ -7,7 +7,20 @@ from .issue import IssueIntakeSerializer, LabelLiteSerializer, IssueDetailSerial
 from .project import ProjectLiteSerializer
 from .state import StateLiteSerializer
 from .user import UserLiteSerializer
-from operis.db.models import Intake, IntakeIssue, Issue, StateGroup, State
+from operis.db.models import Intake, IntakeIssue, Issue
+from operis.db.models.intake import IntakeTicketKind
+from operis.utils.intake_workflow import promote_issue_to_backlog
+from operis.utils.support_ticket import (
+    SupportTicketValidationError,
+    apply_support_field_updates,
+    apply_triage_extra_updates,
+    serialize_support_ticket_metadata,
+    validate_accept,
+    validate_close,
+    validate_decline,
+    validate_move_queue,
+    resolve_project_support_queue,
+)
 
 
 class IntakeSerializer(BaseSerializer):
@@ -22,6 +35,19 @@ class IntakeSerializer(BaseSerializer):
 
 class IntakeIssueSerializer(BaseSerializer):
     issue = IssueIntakeSerializer(read_only=True)
+    source_email = serializers.EmailField(read_only=True)
+    extra = serializers.JSONField(read_only=True)
+    support_ticket = serializers.SerializerMethodField(read_only=True)
+    decline_reason = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    decline_category = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    snooze_reason = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    reopen = serializers.BooleanField(write_only=True, required=False, default=False)
+    queue_id = serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    resolution_note = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    support_criticality = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    support_sla_due_at = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    reset_sla_from_criticality = serializers.BooleanField(write_only=True, required=False, default=False)
+    support_ticket_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
 
     class Meta:
         model = IntakeIssue
@@ -31,56 +57,141 @@ class IntakeIssueSerializer(BaseSerializer):
             "duplicate_to",
             "snoozed_till",
             "source",
+            "source_email",
+            "extra",
+            "support_ticket",
             "issue",
             "created_by",
+            "decline_reason",
+            "decline_category",
+            "snooze_reason",
+            "reopen",
+            "queue_id",
+            "resolution_note",
+            "support_criticality",
+            "support_sla_due_at",
+            "reset_sla_from_criticality",
+            "support_ticket_number",
+            "ticket_kind",
         ]
-        read_only_fields = ["project", "workspace"]
+        read_only_fields = ["project", "workspace", "ticket_kind"]
+
+    def get_support_ticket(self, instance):
+        if getattr(instance, "ticket_kind", None) == IntakeTicketKind.INTAKE:
+            return None
+        return serialize_support_ticket_metadata(instance, getattr(instance, "project", None))
 
     def validate(self, attrs):
-        """
-        Validate that if status is being changed to accepted (1),
-        the project has a default state to transition to.
-        """
+        status = attrs.get("status", getattr(self.instance, "status", None))
+        reopen = attrs.pop("reopen", False)
+        attrs["_reopen"] = reopen
+        queue_id = attrs.get("queue_id")
+        project = getattr(self.instance, "project", None) if self.instance else None
+        ticket_kind = getattr(self.instance, "ticket_kind", IntakeTicketKind.SUPPORT)
 
-        # Check if status is being updated to accepted
-        if attrs.get("status") == 1:
-            intake_issue = self.instance
-            issue = intake_issue.issue
+        if status == -1:
+            try:
+                validate_decline(
+                    status=status,
+                    decline_reason=attrs.get("decline_reason"),
+                    decline_category=attrs.get("decline_category"),
+                )
+            except SupportTicketValidationError as exc:
+                field = exc.field or "decline_reason"
+                raise serializers.ValidationError({field: str(exc)}) from exc
 
-            # Check if issue is in TRIAGE state
-            if issue.state and issue.state.group == StateGroup.TRIAGE.value:
-                # Verify default state exists before allowing the update
-                default_state = State.objects.filter(
-                    workspace=intake_issue.workspace, project=intake_issue.project, default=True
-                ).first()
+        if project:
+            try:
+                if ticket_kind == IntakeTicketKind.SUPPORT:
+                    if status == 1:
+                        validate_accept(status=status, queue_id=str(queue_id) if queue_id else None, project=project)
+                    elif status == 3:
+                        validate_close(status=status, current_status=self.instance.status)
+                    elif queue_id is not None and status is None and self.instance.status == 1:
+                        validate_move_queue(
+                            queue_id=str(queue_id),
+                            current_status=self.instance.status,
+                            project=project,
+                        )
+                elif ticket_kind == IntakeTicketKind.INTAKE:
+                    if status == 3:
+                        raise SupportTicketValidationError("Intake tickets cannot be closed.", field="status")
+                    if queue_id is not None:
+                        raise SupportTicketValidationError("Queue is not used for intake.", field="queue_id")
+            except SupportTicketValidationError as exc:
+                field = exc.field or "queue_id"
+                raise serializers.ValidationError({field: str(exc)}) from exc
 
-                if not default_state:
-                    raise serializers.ValidationError(
-                        {"status": "Cannot accept intake issue: No default state found for the project"}
-                    )
+        if reopen and status not in (None, -2):
+            attrs["status"] = -2
 
         return attrs
 
     def update(self, instance, validated_data):
-        # Update the intake issue
+        decline_reason = validated_data.pop("decline_reason", None)
+        decline_category = validated_data.pop("decline_category", None)
+        snooze_reason = validated_data.pop("snooze_reason", None)
+        reopen = validated_data.pop("_reopen", False)
+        queue_id = validated_data.pop("queue_id", None)
+        resolution_note = validated_data.pop("resolution_note", None)
+        support_criticality = validated_data.pop("support_criticality", None)
+        support_sla_due_at = validated_data.pop("support_sla_due_at", None)
+        reset_sla_from_criticality = validated_data.pop("reset_sla_from_criticality", False)
+        support_ticket_number = validated_data.pop("support_ticket_number", None)
+        new_status = validated_data.get("status", instance.status)
+        previous_status = instance.status
+
+        request = self.context.get("request")
+        actor_id = str(request.user.id) if request and getattr(request, "user", None) else None
+        project = getattr(instance, "project", None)
+
+        if queue_id is not None and project and instance.ticket_kind == IntakeTicketKind.SUPPORT:
+            queue = resolve_project_support_queue(project=project, queue_id=str(queue_id))
+            instance.support_queue = queue
+
+        apply_triage_extra_updates(
+            instance,
+            status=new_status if "status" in validated_data else None,
+            decline_reason=decline_reason,
+            decline_category=decline_category,
+            snooze_reason=snooze_reason,
+            reopen=reopen,
+            actor_id=actor_id,
+            resolution_note=resolution_note if instance.ticket_kind == IntakeTicketKind.SUPPORT else None,
+        )
+
+        if instance.ticket_kind == IntakeTicketKind.SUPPORT and (
+            support_criticality is not None
+            or support_sla_due_at is not None
+            or support_ticket_number is not None
+            or reset_sla_from_criticality
+        ):
+            try:
+                apply_support_field_updates(
+                    instance,
+                    criticality=support_criticality if support_criticality else None,
+                    sla_due_at=support_sla_due_at if support_sla_due_at else None,
+                    reset_sla_from_criticality=reset_sla_from_criticality,
+                    ticket_number=support_ticket_number if support_ticket_number is not None else None,
+                    actor_id=actor_id,
+                )
+            except SupportTicketValidationError as exc:
+                field = exc.field or "support_criticality"
+                raise serializers.ValidationError({field: str(exc)}) from exc
+
         instance = super().update(instance, validated_data)
 
-        # If status is accepted (1), transition the issue state from TRIAGE to default
-        if validated_data.get("status") == 1:
-            issue = instance.issue
-            if issue.state and issue.state.group == StateGroup.TRIAGE.value:
-                # Get the default project state
-                default_state = State.objects.filter(
-                    workspace=instance.workspace, project=instance.project, default=True
-                ).first()
-                if default_state:
-                    issue.state = default_state
-                    issue.save()
+        if (
+            instance.ticket_kind == IntakeTicketKind.INTAKE
+            and new_status == 1
+            and previous_status != 1
+            and project
+        ):
+            promote_issue_to_backlog(instance.issue, project)
 
         return instance
 
     def to_representation(self, instance):
-        # Pass the annotated fields to the Issue instance if they exist
         if hasattr(instance, "label_ids"):
             instance.issue.label_ids = instance.label_ids
         return super().to_representation(instance)
@@ -89,6 +200,9 @@ class IntakeIssueSerializer(BaseSerializer):
 class IntakeIssueDetailSerializer(BaseSerializer):
     issue = IssueDetailSerializer(read_only=True)
     duplicate_issue_detail = IssueIntakeSerializer(read_only=True, source="duplicate_to")
+    source_email = serializers.EmailField(read_only=True)
+    extra = serializers.JSONField(read_only=True)
+    support_ticket = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = IntakeIssue
@@ -99,12 +213,17 @@ class IntakeIssueDetailSerializer(BaseSerializer):
             "snoozed_till",
             "duplicate_issue_detail",
             "source",
+            "source_email",
+            "extra",
+            "support_ticket",
             "issue",
         ]
         read_only_fields = ["project", "workspace"]
 
+    def get_support_ticket(self, instance):
+        return serialize_support_ticket_metadata(instance, getattr(instance, "project", None))
+
     def to_representation(self, instance):
-        # Pass the annotated fields to the Issue instance if they exist
         if hasattr(instance, "assignee_ids"):
             instance.issue.assignee_ids = instance.assignee_ids
         if hasattr(instance, "label_ids"):

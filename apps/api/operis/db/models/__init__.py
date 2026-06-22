@@ -25,6 +25,9 @@ from .board_automation import (
 )
 from .board_automation_assets import BoardAutomationEmailTemplate, BoardAutomationScript
 from .board_playbook import BoardPlaybook
+from .board_intake_form import BoardIntakeForm
+from .board_support_queue import BoardSupportQueue
+from .board_support_sla_policy import BoardSupportSlaPolicy
 from .board_status_report import BoardStatusReport
 from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
 from .cycle import Cycle, CycleIssue, CycleUserProperties

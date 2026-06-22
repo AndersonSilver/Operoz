@@ -8,7 +8,6 @@ import type { IBoard } from "@operis/types";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { Client360DetailContent } from "@/components/board/client-360/client-360-detail-content";
 import { Client360DetailHeader } from "@/components/board/client-360/client-360-detail-header";
-import { useClient360Persona } from "@/components/board/client-360/use-client-360-persona";
 import { Client360PageShell } from "@/components/board/client-360/client-360-ui";
 import {
   CLIENT_360_SWR_CONFIG,
@@ -31,7 +30,6 @@ export function BoardClient360Detail({ workspaceSlug, board, projectId }: Props)
   const router = useAppRouter();
   const searchParams = useSearchParams();
   const [period, setPeriod] = useState(() => periodFromQuery(searchParams) ?? defaultWeekPeriod());
-  const { persona } = useClient360Persona(board.slug);
 
   const { data, error, isLoading, mutate } = useSWR(
     workspaceSlug && board.slug && projectId
@@ -118,7 +116,6 @@ export function BoardClient360Detail({ workspaceSlug, board, projectId }: Props)
         projectId={projectId}
         period={period}
         data={data}
-        persona={persona}
         statusReportHref={statusReportHref}
         onFinopsSaved={() => void mutate()}
       />
