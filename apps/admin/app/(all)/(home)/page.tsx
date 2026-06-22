@@ -1,4 +1,3 @@
-
 import { observer } from "mobx-react";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
@@ -40,6 +39,6 @@ function HomePage() {
 export default observer(HomePage);
 
 export const meta: Route.MetaFunction = () => [
-  { title: "Admin – Instance Setup & Sign-In" },
-  { name: "description", content: "Configure your Plane instance or sign in to the admin portal." },
+  { title: "Operoz — God Mode" },
+  { name: "description", content: "Configure sua instância Operoz ou entre no portal de administração." },
 ];

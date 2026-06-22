@@ -6,6 +6,7 @@ import type { ILanguageOption, TLanguage } from "../types";
 
 export type TTranslationStore = {
   t: (key: string, params?: Record<string, unknown>) => string;
+  tRaw: (key: string) => string;
   currentLocale: TLanguage;
   changeLanguage: (lng: TLanguage) => void;
   languages: ILanguageOption[];
@@ -28,6 +29,7 @@ export function useTranslation(): TTranslationStore {
 
   return {
     t: store.t.bind(store),
+    tRaw: store.tRaw.bind(store),
     currentLocale: store.currentLocale,
     changeLanguage: (lng: TLanguage) => store.setLanguage(lng),
     languages: store.availableLanguages,

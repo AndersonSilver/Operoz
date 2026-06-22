@@ -62,12 +62,38 @@ def create_openai_client(api_key: str, *, base_url: str | None = None) -> OpenAI
     return OpenAI(**kwargs)
 
 
+def llm_exception_detail(exc: Exception) -> str:
+    """Extrai mensagem segura do provider (sem vazar a chave)."""
+    body = getattr(exc, "body", None)
+    if isinstance(body, dict):
+        err = body.get("error", body)
+        if isinstance(err, dict):
+            message = err.get("message")
+            if message:
+                return str(message).strip()[:500]
+    message = getattr(exc, "message", None)
+    if message and str(message).strip():
+        return str(message).strip()[:500]
+    return str(exc).strip()[:500]
+
+
 def classify_llm_exception(exc: Exception) -> str:
     name = exc.__class__.__name__
+    if name == "AuthenticationError":
+        return "llm_authentication_failed"
     if name in {"APIConnectionError", "ConnectError", "ConnectTimeout", "ReadTimeout", "TimeoutException"}:
         return "llm_connection_failed"
-    if name in {"RateLimitError", "InternalServerError", "APIStatusError"}:
+    if name in {"RateLimitError", "InternalServerError"}:
         return "llm_rate_limit"
+    if name == "APIStatusError":
+        status_code = getattr(exc, "status_code", None)
+        if status_code == 401:
+            return "llm_authentication_failed"
+        if status_code == 404:
+            return "llm_model_not_found"
+        if status_code in (429, 500, 502, 503, 504):
+            return "llm_rate_limit"
+        return "llm_request_failed"
     status_code = getattr(exc, "status_code", None)
     if status_code in (429, 500, 502, 503, 504):
         return "llm_rate_limit"
@@ -84,6 +110,20 @@ def llm_error_message(code: str) -> str:
             "Não foi possível contactar o provedor de IA (rede/DNS). "
             "Verifique conectividade do servidor com a internet."
         )
+    if code == "llm_authentication_failed":
+        return "Chave de API inválida ou sem permissão. Verifique a chave no God Mode."
+    if code == "llm_model_not_found":
+        return "Modelo não encontrado no provedor. Escolha outro modelo no God Mode (ex.: gemini-2.0-flash)."
     if code == "llm_not_configured":
         return "Modelo de linguagem não configurado nesta instância."
     return "Falha ao consultar o modelo de linguagem."
+
+
+def llm_user_message(code: str, *, detail: str | None = None) -> str:
+    base = llm_error_message(code)
+    if not detail:
+        return base
+    clean = detail.strip()
+    if not clean or clean.lower() in base.lower():
+        return base
+    return f"{base} Detalhe: {clean}"

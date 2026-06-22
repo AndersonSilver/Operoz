@@ -47,9 +47,23 @@ class AnthropicProvider(LLMProvider):
 
 class GeminiProvider(LLMProvider):
     name = "Google Gemini"
-    models = ["gemini-2.0-flash", "gemini-1.5-pro-latest", "gemini-1.5-flash", "gemini-pro"]
-    default_model = "gemini-2.0-flash"
+    models = [
+        "gemini-2.5-flash",
+        "gemini-2.5-flash-lite",
+        "gemini-2.0-flash",
+        "gemini-2.0-flash-lite",
+    ]
+    default_model = "gemini-2.5-flash"
     supports_tools = False
+
+
+# Modelos antigos guardados no God Mode → equivalente atual (Google descontinua IDs legados).
+_GEMINI_MODEL_ALIASES: dict[str, str] = {
+    "gemini-1.5-flash": "gemini-2.5-flash",
+    "gemini-1.5-pro-latest": "gemini-2.5-flash",
+    "gemini-1.5-pro": "gemini-2.5-flash",
+    "gemini-pro": "gemini-2.0-flash",
+}
 
 
 class OpenAICompatibleProvider(LLMProvider):
@@ -69,6 +83,9 @@ SUPPORTED_PROVIDERS = {
     "openai_compatible": OpenAICompatibleProvider,
 }
 
+# OpenAI-compatible surface exposta pelo Google AI Studio / Gemini API.
+GEMINI_OPENAI_BASE_URL = "https://generativelanguage.googleapis.com/v1beta/openai/"
+
 
 def list_llm_providers() -> list[dict[str, object]]:
     return [
@@ -84,12 +101,22 @@ def list_llm_providers() -> list[dict[str, object]]:
     ]
 
 
-def get_llm_base_url() -> str | None:
+def get_configured_llm_base_url() -> str | None:
+    """URL explícita em LLM_BASE_URL (proxy LiteLLM, OpenRouter, etc.)."""
     (base_url,) = get_configuration_value(
         [{"key": "LLM_BASE_URL", "default": os.environ.get("LLM_BASE_URL", "") or None}]
     )
     if base_url:
         return str(base_url).strip() or None
+    return None
+
+
+def get_llm_base_url(*, provider_key: str | None = None) -> str | None:
+    configured = get_configured_llm_base_url()
+    if configured:
+        return configured
+    if (provider_key or "").lower() == "gemini":
+        return GEMINI_OPENAI_BASE_URL
     return None
 
 
@@ -135,6 +162,9 @@ def get_llm_config(
 
     if not model:
         model = provider_cls.default_model
+
+    if (provider_key or "").lower() == "gemini":
+        model = _GEMINI_MODEL_ALIASES.get(model, model)
 
     degraded_active = False
     if degraded is None and workspace is not None:

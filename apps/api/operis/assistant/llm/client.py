@@ -4,8 +4,14 @@ import json
 from typing import Any, Iterator
 
 from operis.assistant.llm.anthropic_client import anthropic_chat_completion, anthropic_stream_chat_completion
-from operis.assistant.llm.config import SUPPORTED_PROVIDERS, get_llm_base_url, get_llm_config
-from operis.assistant.llm.http_client import classify_llm_exception, create_openai_client, is_retryable_llm_error
+from operis.assistant.llm.config import (
+    GEMINI_OPENAI_BASE_URL,
+    SUPPORTED_PROVIDERS,
+    get_configured_llm_base_url,
+    get_llm_base_url,
+    get_llm_config,
+)
+from operis.assistant.llm.http_client import classify_llm_exception, create_openai_client, is_retryable_llm_error, llm_exception_detail
 from operis.assistant.llm.key_pool import iter_available_keys, record_key_failure, record_key_success
 from operis.utils.exception_logger import log_exception
 
@@ -18,12 +24,14 @@ class LLMChatResult:
         tool_calls: list[dict[str, Any]] | None = None,
         model: str | None = None,
         error: str | None = None,
+        error_detail: str | None = None,
         degraded_mode: bool = False,
     ):
         self.content = content
         self.tool_calls = tool_calls or []
         self.model = model
         self.error = error
+        self.error_detail = error_detail
         self.degraded_mode = degraded_mode
 
 
@@ -51,6 +59,7 @@ def chat_completion(
     workspace=None,
 ) -> LLMChatResult:
     last_error = "llm_not_configured"
+    last_detail: str | None = None
     for _ in range(_max_key_attempts()):
         api_key, model, provider_key, degraded_mode = get_llm_config(workspace=workspace)
         if not api_key or not model or not provider_key:
@@ -81,7 +90,10 @@ def chat_completion(
             )
 
         try:
-            client = create_openai_client(api_key, base_url=get_llm_base_url())
+            client = create_openai_client(
+                api_key,
+                base_url=get_llm_base_url(provider_key=provider_key),
+            )
             kwargs: dict[str, Any] = {
                 "model": model,
                 "messages": _openai_messages(messages),
@@ -115,10 +127,11 @@ def chat_completion(
         except Exception as exc:
             log_exception(exc)
             last_error = classify_llm_exception(exc)
+            last_detail = llm_exception_detail(exc)
             record_key_failure(api_key)
             if not is_retryable_llm_error(last_error):
                 break
-    return LLMChatResult(error=last_error)
+    return LLMChatResult(error=last_error, error_detail=last_detail)
 
 
 def _legacy_completion(
@@ -128,18 +141,23 @@ def _legacy_completion(
     provider_key: str,
 ) -> LLMChatResult:
     try:
-        if provider_key.lower() == "gemini":
-            model = f"gemini/{model}"
-        client = create_openai_client(api_key, base_url=get_llm_base_url())
+        provider = provider_key.lower()
+        custom_base = get_configured_llm_base_url()
+        base_url = get_llm_base_url(provider_key=provider_key)
+        model_id = f"gemini/{model}" if provider == "gemini" and custom_base else model
+        client = create_openai_client(api_key, base_url=base_url)
         response = client.chat.completions.create(
-            model=model,
+            model=model_id,
             messages=_openai_messages(messages),
         )
         text = response.choices[0].message.content or ""
-        return LLMChatResult(content=text, model=model)
+        return LLMChatResult(content=text, model=model_id)
     except Exception as exc:
         log_exception(exc)
-        return LLMChatResult(error=classify_llm_exception(exc))
+        return LLMChatResult(
+            error=classify_llm_exception(exc),
+            error_detail=llm_exception_detail(exc),
+        )
 
 
 def stream_chat_completion(
@@ -150,6 +168,7 @@ def stream_chat_completion(
 ) -> Iterator[dict[str, Any]]:
     """Yield token chunks for the final assistant turn; yields tool_calls dict if model requests tools."""
     last_error = "llm_not_configured"
+    last_detail: str | None = None
     for _ in range(_max_key_attempts()):
         api_key, model, provider_key, degraded_mode = get_llm_config(workspace=workspace)
         if not api_key or not model or not provider_key:
@@ -164,6 +183,7 @@ def stream_chat_completion(
             result = _legacy_completion(messages, api_key, model, provider_key)
             if result.error:
                 last_error = result.error
+                last_detail = result.error_detail
                 record_key_failure(api_key)
                 continue
             record_key_success(api_key)
@@ -186,17 +206,24 @@ def stream_chat_completion(
             return
 
         try:
-            yield from _stream_openai(messages, api_key=api_key, model=model, tools=tools)
+            yield from _stream_openai(
+                messages,
+                api_key=api_key,
+                model=model,
+                tools=tools,
+                provider_key=provider_key,
+            )
             record_key_success(api_key)
             return
         except Exception as exc:
             log_exception(exc)
             last_error = classify_llm_exception(exc)
+            last_detail = llm_exception_detail(exc)
             record_key_failure(api_key)
             if not is_retryable_llm_error(last_error):
                 break
 
-    yield {"type": "error", "code": last_error}
+    yield {"type": "error", "code": last_error, "detail": last_detail}
 
 
 def _stream_openai(
@@ -205,8 +232,9 @@ def _stream_openai(
     api_key: str,
     model: str,
     tools: list[dict[str, Any]] | None,
+    provider_key: str,
 ) -> Iterator[dict[str, Any]]:
-    client = create_openai_client(api_key, base_url=get_llm_base_url())
+    client = create_openai_client(api_key, base_url=get_llm_base_url(provider_key=provider_key))
     kwargs: dict[str, Any] = {
         "model": model,
         "messages": _openai_messages(messages),

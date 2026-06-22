@@ -8,6 +8,7 @@ const MENU_ORDER = [
   coreSidebarMenuLinks.authentication,
   coreSidebarMenuLinks.workspace,
   coreSidebarMenuLinks.ai,
+  coreSidebarMenuLinks.discord,
   coreSidebarMenuLinks.preferences,
   coreSidebarMenuLinks.image,
 ] as const;

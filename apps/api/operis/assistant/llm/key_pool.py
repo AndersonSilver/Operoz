@@ -41,7 +41,17 @@ def list_api_keys() -> list[str]:
     if keys:
         return keys
     single = os.environ.get("LLM_API_KEY", "").strip()
-    return [single] if single else []
+    if single:
+        return [single]
+    try:
+        from operis.license.utils.instance_value import get_configuration_value
+
+        (db_key,) = get_configuration_value([{"key": "LLM_API_KEY", "default": None}])
+        if db_key and str(db_key).strip():
+            return [str(db_key).strip()]
+    except Exception:
+        pass
+    return []
 
 
 def _next_index(size: int) -> int:

@@ -1,4 +1,4 @@
-import { Image, BrainCog, Cog, Mail, Palette } from "lucide-react";
+import { Image, BrainCog, Cog, Mail, MessagesSquare, Palette } from "lucide-react";
 import { LockIcon, WorkspaceIcon } from "@operis/propel/icons";
 import type { TCoreSidebarMenuKey, TSidebarMenuItemConfig } from "./types";
 
@@ -34,6 +34,12 @@ export const coreSidebarMenuLinks: Record<TCoreSidebarMenuKey, TSidebarMenuItemC
     nameKey: "god_mode.nav.ai.name",
     descriptionKey: "god_mode.nav.ai.description",
     href: `/ai/`,
+  },
+  discord: {
+    Icon: MessagesSquare,
+    nameKey: "god_mode.nav.discord.name",
+    descriptionKey: "god_mode.nav.discord.description",
+    href: `/discord/`,
   },
   preferences: {
     Icon: Palette,

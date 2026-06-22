@@ -14,18 +14,16 @@ export const OperozDocsHome = observer(function OperozDocsHome() {
 
   return (
     <div className="vertical-scrollbar h-full overflow-y-auto">
-      <div className="mx-auto max-w-4xl px-6 py-10 sm:px-10 sm:py-14 xl:max-w-[84rem]">
-        <div className="mb-10 text-center">
+      <div className="w-full px-6 py-10 sm:px-10 sm:py-14 lg:px-12 xl:px-14">
+        <div className="mb-10 max-w-3xl">
           <div className="mb-4 inline-flex items-center justify-center rounded-lg bg-accent-primary/10 p-3">
             <BookOpen className="size-8 text-accent-primary" />
           </div>
           <h1 className="mb-3 text-24 font-semibold tracking-tight text-primary sm:text-28">
             {t("operoz_manual.home.hero_title")}
           </h1>
-          <p className="text-15 mx-auto max-w-2xl leading-relaxed text-secondary">
-            {t("operoz_manual.home.hero_subtitle")}
-          </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <p className="text-15 max-w-2xl leading-relaxed text-secondary">{t("operoz_manual.home.hero_subtitle")}</p>
+          <div className="mt-6 flex flex-wrap items-center gap-3">
             <Link
               href={getDocsArticlePath(slug, "get-started", "introduction")}
               className="inline-flex items-center gap-2 rounded-md bg-accent-primary px-4 py-2 text-13 font-medium text-on-color hover:bg-accent-primary-hover"
@@ -65,7 +63,7 @@ export const OperozDocsHome = observer(function OperozDocsHome() {
           })}
         </div>
 
-        <p className="mt-10 text-center text-13 text-tertiary">{t("operoz_manual.footer")}</p>
+        <p className="mt-10 text-13 text-tertiary">{t("operoz_manual.footer")}</p>
       </div>
     </div>
   );

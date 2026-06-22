@@ -234,6 +234,17 @@ export class TranslationStore {
    * @param params - The params to format the translation with
    * @returns The translated string
    */
+  /** Texto literal — sem ICU MessageFormat (manual, docs com `{placeholders}`). */
+  tRaw(key: string): string {
+    const message = get(this.translations[this.currentLocale], key);
+    if (typeof message === "string") return message;
+    if (this.currentLocale !== FALLBACK_LANGUAGE) {
+      const fallback = get(this.translations[FALLBACK_LANGUAGE], key);
+      if (typeof fallback === "string") return fallback;
+    }
+    return key;
+  }
+
   t(key: string, params?: Record<string, unknown>): string {
     try {
       // Try current locale

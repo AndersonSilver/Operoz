@@ -29,7 +29,7 @@ from operis.assistant.security.rate_limit import (
     release_active_chat,
 )
 from operis.assistant.tools import handlers as _tool_handlers  # noqa: F401
-from operis.assistant.llm.http_client import llm_error_message
+from operis.assistant.llm.http_client import llm_error_message, llm_user_message
 from operis.assistant.tools.registry import execute_tool, list_openai_tools
 from operis.assistant.types import AssistantActorContext
 from operis.db.models import AssistantMessage, AssistantSession, Board
@@ -283,7 +283,11 @@ def _iter_chat_events_body(
                 round_model = event.get("model")
             elif event["type"] == "error":
                 code = event.get("code", "llm_request_failed")
-                yield _chat_error_event(code, llm_error_message(str(code)))
+                detail = event.get("detail")
+                yield _chat_error_event(
+                    str(code),
+                    llm_user_message(str(code), detail=str(detail) if detail else None),
+                )
                 return
 
         if tool_calls:

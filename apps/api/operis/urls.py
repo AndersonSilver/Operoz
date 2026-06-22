@@ -12,6 +12,7 @@ handler404 = "operis.app.views.error_404.custom_404_view"
 
 urlpatterns = [
     path("api/", include("operis.app.urls")),
+    path("api/discord/", include("operis.discord_integration.urls")),
     path("api/public/", include("operis.space.urls")),
     path("api/instances/", include("operis.license.urls")),
     path("api/v1/", include("operis.api.urls")),

@@ -66,6 +66,7 @@ INSTALLED_APPS = [
     "operis.license",
     "operis.api",
     "operis.authentication",
+    "operis.discord_integration",
     # Third-party things
     "rest_framework",
     "corsheaders",
@@ -420,6 +421,11 @@ FILE_SIZE_LIMIT = int(os.environ.get("FILE_SIZE_LIMIT", 5242880))
 UNSPLASH_ACCESS_KEY = os.environ.get("UNSPLASH_ACCESS_KEY")
 # Github Access Token
 GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", False)
+
+# Discord Bot (slash commands dinâmicos — operis.discord_integration)
+DISCORD_APPLICATION_ID = os.environ.get("DISCORD_APPLICATION_ID", "")
+DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN", "")
+DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY", "")
 
 # Jira OPS → Operis (fallback legado; preferir configuração por workspace)
 JIRA_OPS_CLOUD_ID = os.environ.get("JIRA_OPS_CLOUD_ID", "")

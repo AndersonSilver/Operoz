@@ -79,6 +79,7 @@ export const operozManualEn = {
     integrations: "Integrations",
   },
   tips_label: "Practical tips",
+  steps_label: "Step by step",
   footer: "Operoz — intelligent operations platform.",
   article_not_found: "Documentation page not found.",
   back_to_home: "Back to home",

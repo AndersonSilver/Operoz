@@ -2,7 +2,6 @@
 from typing import Tuple
 
 # Third party import
-from openai import OpenAI
 import requests
 
 from rest_framework import status
@@ -11,7 +10,8 @@ from rest_framework.response import Response
 # Module import
 from operis.app.permissions import ROLE, allow_permission
 from operis.app.serializers import ProjectLiteSerializer, WorkspaceLiteSerializer
-from operis.assistant.llm.config import get_llm_config
+from operis.assistant.llm.config import get_configured_llm_base_url, get_llm_base_url, get_llm_config
+from operis.assistant.llm.http_client import create_openai_client
 from operis.db.models import Project, Workspace
 from operis.license.utils.instance_value import get_configuration_value
 from operis.utils.exception_logger import log_exception
@@ -23,13 +23,12 @@ def get_llm_response(task, prompt, api_key: str, model: str, provider: str) -> T
     """Helper to get LLM completion response"""
     final_text = task + "\n" + prompt
     try:
-        # For Gemini, prepend provider name to model
-        if provider.lower() == "gemini":
-            model = f"gemini/{model}"
-
-        client = OpenAI(api_key=api_key)
+        provider_key = provider.lower()
+        custom_base = get_configured_llm_base_url()
+        model_id = f"gemini/{model}" if provider_key == "gemini" and custom_base else model
+        client = create_openai_client(api_key, base_url=get_llm_base_url(provider_key=provider_key))
         chat_completion = client.chat.completions.create(
-            model=model, messages=[{"role": "user", "content": final_text}]
+            model=model_id, messages=[{"role": "user", "content": final_text}]
         )
         text = chat_completion.choices[0].message.content
         return text, None
