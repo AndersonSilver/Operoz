@@ -1,10 +1,10 @@
-
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
 import type { EAdminAuthErrorCodes, TAdminAuthErrorInfo } from "@operis/constants";
 import { API_BASE_URL } from "@operis/constants";
+import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { AuthService } from "@operis/services";
 import { Input, Spinner } from "@operis/ui";
@@ -13,13 +13,11 @@ import { Banner } from "@/components/common/banner";
 // local components
 import { FormHeader } from "@/components/instance/form-header";
 import { AuthBanner } from "./auth-banner";
-import { AuthHeader } from "./auth-header";
+import { AuthCard } from "./auth-card";
 import { authErrorHandler } from "./auth-helpers";
 
-// service initialization
 const authService = new AuthService();
 
-// error codes
 enum EErrorCodes {
   INSTANCE_NOT_CONFIGURED = "INSTANCE_NOT_CONFIGURED",
   REQUIRED_EMAIL_PASSWORD = "REQUIRED_EMAIL_PASSWORD",
@@ -33,7 +31,6 @@ type TError = {
   message: string | undefined;
 };
 
-// form data
 type TFormData = {
   email: string;
   password: string;
@@ -45,12 +42,12 @@ const defaultFromData: TFormData = {
 };
 
 export function InstanceSignInForm() {
-  // search params
+  const { t } = useTranslation();
   const searchParams = useSearchParams();
   const emailParam = searchParams.get("email") || undefined;
   const errorCode = searchParams.get("error_code") || undefined;
   const errorMessage = searchParams.get("error_message") || undefined;
-  // state
+
   const [showPassword, setShowPassword] = useState(false);
   const [csrfToken, setCsrfToken] = useState<string | undefined>(undefined);
   const [formData, setFormData] = useState<TFormData>(defaultFromData);
@@ -65,16 +62,13 @@ export function InstanceSignInForm() {
       void authService
         .requestCSRFToken()
         .then((data) => data?.csrf_token && setCsrfToken(data.csrf_token))
-        .catch(() => {
-          /* avoid unhandled rejection surfacing as a fatal error if API is down */
-        });
+        .catch(() => undefined);
   }, [csrfToken]);
 
   useEffect(() => {
     if (emailParam) setFormData((prev) => ({ ...prev, email: emailParam }));
   }, [emailParam]);
 
-  // derived values
   const errorData: TError = useMemo(() => {
     if (errorCode && errorMessage) {
       switch (errorCode) {
@@ -91,109 +85,99 @@ export function InstanceSignInForm() {
         default:
           return { type: undefined, message: undefined };
       }
-    } else return { type: undefined, message: undefined };
+    }
+    return { type: undefined, message: undefined };
   }, [errorCode, errorMessage]);
 
-  const isButtonDisabled = useMemo(
-    () => (!isSubmitting && formData.email && formData.password ? false : true),
-    [formData.email, formData.password, isSubmitting]
-  );
+  const canSubmit = Boolean(formData.email.trim() && formData.password && !isSubmitting);
 
   useEffect(() => {
     if (errorCode) {
       const errorDetail = authErrorHandler(errorCode?.toString() as EAdminAuthErrorCodes);
-      if (errorDetail) {
-        setErrorInfo(errorDetail);
-      }
+      if (errorDetail) setErrorInfo(errorDetail);
     }
   }, [errorCode]);
 
   return (
-    <>
-      <AuthHeader />
-      <div className="mt-10 flex w-full flex-grow flex-col items-center justify-center py-6">
-        <div className="relative flex w-full max-w-[22.5rem] flex-col gap-6">
-          <FormHeader
-            heading="Manage your Plane instance"
-            subHeading="Configure instance-wide settings to secure your instance"
-          />
-          <form
-            className="space-y-4"
-            method="POST"
-            action={`${API_BASE_URL}/api/instances/admins/sign-in/`}
-            onSubmit={() => setIsSubmitting(true)}
-            onError={() => setIsSubmitting(false)}
-          >
-            {errorData.type && errorData?.message ? (
-              <Banner type="error" message={errorData?.message} />
-            ) : (
-              <>
-                {errorInfo && <AuthBanner bannerData={errorInfo} handleBannerData={(value) => setErrorInfo(value)} />}
-              </>
-            )}
-            <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
-
-            <div className="w-full space-y-1">
-              <label className="text-13 font-medium text-tertiary" htmlFor="email">
-                Email <span className="text-danger-primary">*</span>
-              </label>
-              <Input
-                className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
-                id="email"
-                name="email"
-                type="email"
-                inputSize="md"
-                placeholder="name@company.com"
-                value={formData.email}
-                onChange={(e) => handleFormChange("email", e.target.value)}
-                autoComplete="off"
-                autoFocus
-              />
-            </div>
-
-            <div className="w-full space-y-1">
-              <label className="text-13 font-medium text-tertiary" htmlFor="password">
-                Password <span className="text-danger-primary">*</span>
-              </label>
-              <div className="relative">
-                <Input
-                  className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
-                  id="password"
-                  name="password"
-                  type={showPassword ? "text" : "password"}
-                  inputSize="md"
-                  placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={(e) => handleFormChange("password", e.target.value)}
-                  autoComplete="off"
-                />
-                {showPassword ? (
-                  <button
-                    type="button"
-                    className="absolute top-3.5 right-3 flex items-center justify-center text-placeholder"
-                    onClick={() => setShowPassword(false)}
-                  >
-                    <EyeOff className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <button
-                    type="button"
-                    className="absolute top-3.5 right-3 flex items-center justify-center text-placeholder"
-                    onClick={() => setShowPassword(true)}
-                  >
-                    <Eye className="h-4 w-4" />
-                  </button>
-                )}
-              </div>
-            </div>
-            <div className="py-2">
-              <Button type="submit" size="xl" className="w-full" disabled={isButtonDisabled}>
-                {isSubmitting ? <Spinner height="20px" width="20px" /> : "Sign in"}
-              </Button>
-            </div>
-          </form>
-        </div>
+    <AuthCard>
+      <div className="space-y-1">
+        <p className="text-12 font-semibold tracking-[0.16em] text-accent-primary uppercase lg:hidden">
+          {t("god_mode.brand.instance_admin")}
+        </p>
+        <FormHeader heading={t("god_mode.auth.sign_in.title")} subHeading={t("god_mode.auth.sign_in.subtitle")} />
       </div>
-    </>
+
+      <form
+        className="space-y-5"
+        method="POST"
+        action={`${API_BASE_URL}/api/instances/admins/sign-in/`}
+        onSubmit={() => setIsSubmitting(true)}
+        onError={() => setIsSubmitting(false)}
+      >
+        {errorData.type && errorData?.message ? (
+          <Banner type="error" message={errorData?.message} />
+        ) : (
+          errorInfo && <AuthBanner bannerData={errorInfo} handleBannerData={(value) => setErrorInfo(value)} />
+        )}
+        <input type="hidden" name="csrfmiddlewaretoken" value={csrfToken} />
+
+        <div className="w-full space-y-1.5">
+          <label className="text-13 font-medium text-secondary" htmlFor="email">
+            {t("god_mode.auth.sign_in.email_label")} <span className="text-danger-primary">*</span>
+          </label>
+          <Input
+            className="h-10 w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
+            id="email"
+            name="email"
+            type="email"
+            inputSize="md"
+            placeholder={t("god_mode.auth.sign_in.email_placeholder")}
+            value={formData.email}
+            onChange={(e) => handleFormChange("email", e.target.value)}
+            autoComplete="email"
+            autoFocus
+          />
+        </div>
+
+        <div className="w-full space-y-1.5">
+          <label className="text-13 font-medium text-secondary" htmlFor="password">
+            {t("god_mode.auth.sign_in.password_label")} <span className="text-danger-primary">*</span>
+          </label>
+          <div className="relative">
+            <Input
+              className="h-10 w-full border border-subtle !bg-surface-1 pr-10 placeholder:text-placeholder"
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              inputSize="md"
+              placeholder={t("god_mode.auth.sign_in.password_placeholder")}
+              value={formData.password}
+              onChange={(e) => handleFormChange("password", e.target.value)}
+              autoComplete="current-password"
+            />
+            <button
+              type="button"
+              className="absolute top-1/2 right-3 flex -translate-y-1/2 items-center justify-center rounded-sm p-0.5 text-tertiary transition-colors hover:text-primary"
+              onClick={() => setShowPassword((prev) => !prev)}
+              aria-label={
+                showPassword ? t("god_mode.auth.sign_in.hide_password") : t("god_mode.auth.sign_in.show_password")
+              }
+            >
+              {showPassword ? <EyeOff size={16} strokeWidth={1.75} /> : <Eye size={16} strokeWidth={1.75} />}
+            </button>
+          </div>
+        </div>
+
+        <Button
+          type="submit"
+          variant="primary"
+          size="xl"
+          className="h-10 w-full text-body-sm-medium"
+          disabled={!canSubmit}
+        >
+          {isSubmitting ? <Spinner height="20px" width="20px" /> : t("god_mode.auth.sign_in.submit")}
+        </Button>
+      </form>
+    </AuthCard>
   );
 }

@@ -1,6 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 
-export type TCoreSidebarMenuKey = "general" | "email" | "workspace" | "authentication" | "ai" | "preferences" | "image";
+export type TCoreSidebarMenuKey =
+  | "general"
+  | "email"
+  | "workspace"
+  | "authentication"
+  | "ai"
+  | "discord"
+  | "preferences"
+  | "image";
 
 export type TSidebarMenuItemConfig = {
   Icon: LucideIcon | React.ComponentType<{ className?: string }>;

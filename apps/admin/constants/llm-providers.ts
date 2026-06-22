@@ -46,9 +46,9 @@ export const LLM_PROVIDERS: TLlmProviderMeta[] = [
   {
     key: "gemini",
     name: "Google Gemini",
-    description: "Gemini Flash, Pro e variantes via API Google AI.",
-    models: ["gemini-2.0-flash", "gemini-1.5-pro-latest", "gemini-1.5-flash", "gemini-pro"],
-    defaultModel: "gemini-2.0-flash",
+    description: "Gemini Flash e variantes via API Google AI.",
+    models: ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-2.0-flash-lite"],
+    defaultModel: "gemini-2.5-flash",
     apiKeyUrl: "https://aistudio.google.com/app/apikey",
     docsUrl: "https://ai.google.dev/gemini-api/docs/models/gemini",
     showBaseUrl: false,

@@ -352,6 +352,10 @@ export const coreRoutes: RouteConfigEntry[] = [
             ":workspaceSlug/settings/jira",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/jira/page.tsx"
           ),
+          route(
+            ":workspaceSlug/settings/discord",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/discord/page.tsx"
+          ),
           layout("./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/layout.tsx", [
             route(
               ":workspaceSlug/settings/boards/:boardSlug",
