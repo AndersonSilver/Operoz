@@ -57,8 +57,8 @@ else
   echo "WARN: serviço migrator não encontrado — aplique migrações manualmente se necessário."
 fi
 
-echo "==> Recriar stack (inclui proxy com Caddyfile do GHCR)"
-operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --pull never
+echo "==> Recriar stack completa (todas as imagens novas, inclui space/proxy/api)"
+operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --pull never --force-recreate
 
 OVERLAY="$(operis_assistant_overlay "${OPERIS_REPO_PATH}")"
 if [[ -f "${OVERLAY}" ]]; then
@@ -68,9 +68,6 @@ if [[ -f "${OVERLAY}" ]]; then
 else
   echo "WARN: overlay assistente não encontrado em ${OVERLAY}"
 fi
-
-echo "==> Forçar recreate proxy e web (imagens novas)"
-operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --pull never --force-recreate proxy web
 
 operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" ps
 
