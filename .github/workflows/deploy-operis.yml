@@ -10,7 +10,8 @@
 #   OPERIS_REPO_PATH  — /root/operis-selfhost/Operis
 #   OPERIS_APP_PATH   — /root/operis-selfhost/plane-app
 #   OPERIS_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operis-runner.sh)
-#   OPERIS_DEPLOY_ON_PUSH — "web" (padrão) ou "full" (build+deploy stack completa em cada push)
+#   OPERIS_DEPLOY_ON_PUSH — "web" (padrão), "full" (stack em cada push), ou deixar vazio e usar [deploy-full] no commit
+#   Push que altera apps/api|space|admin|live|proxy dispara build-full automaticamente (path filter)
 #
 # SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall Hostinger.
 
@@ -52,7 +53,25 @@ jobs:
       image_repo: ${{ steps.lower.outputs.image_repo }}
       use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
       full_deploy: ${{ steps.mode.outputs.full_deploy }}
+      build_stack: ${{ steps.mode.outputs.build_stack }}
     steps:
+      - name: Checkout (path filter em push)
+        uses: actions/checkout@v4
+
+      - name: Detectar mudanças na stack (api, space, admin, live, proxy)
+        uses: dorny/paths-filter@v3
+        id: paths
+        if: github.event_name == 'push'
+        with:
+          filters: |
+            stack:
+              - 'apps/api/**'
+              - 'apps/space/**'
+              - 'apps/admin/**'
+              - 'apps/live/**'
+              - 'apps/proxy/**'
+              - '.github/scripts/vps-deploy-full.sh'
+
       - name: GHCR exige nome do repositório em minúsculas
         id: lower
         run: echo "image_repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
@@ -69,6 +88,8 @@ jobs:
           fi
 
           full=false
+          stack_paths=false
+
           if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
             full=true
           elif [[ "${{ github.event_name }}" == "push" ]]; then
@@ -76,9 +97,19 @@ jobs:
               full=true
             elif echo "${{ github.event.head_commit.message }}" | grep -qF '[deploy-full]'; then
               full=true
+            elif [[ "${{ steps.paths.outputs.stack }}" == "true" ]]; then
+              stack_paths=true
             fi
           fi
+
+          build_stack=false
+          if [[ "$full" == "true" || "$stack_paths" == "true" ]]; then
+            build_stack=true
+          fi
+
           echo "full_deploy=${full}" >> "$GITHUB_OUTPUT"
+          echo "build_stack=${build_stack}" >> "$GITHUB_OUTPUT"
+          echo "Modo: full_deploy=${full} stack_paths=${stack_paths} build_stack=${build_stack}"
 
   build-web:
     needs: meta
@@ -136,7 +167,7 @@ jobs:
 
   build-full:
     needs: meta
-    if: ${{ !inputs.skip_build && needs.meta.outputs.full_deploy == 'true' }}
+    if: ${{ !inputs.skip_build && needs.meta.outputs.build_stack == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
     permissions:
@@ -218,14 +249,14 @@ jobs:
           fi
 
       - name: Deploy web (runner local)
-        if: ${{ needs.meta.outputs.full_deploy != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         env:
           WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
           OPERIS_WEB_URL: ${{ vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-web.sh
 
       - name: Deploy web on VPS (SSH)
-        if: ${{ needs.meta.outputs.full_deploy != 'true' && needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -273,14 +304,14 @@ jobs:
           script_path: .github/scripts/vps-deploy-mcp.sh
 
       - name: Deploy full stack (runner local)
-        if: ${{ needs.meta.outputs.full_deploy == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
+        if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
         env:
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
           OPERIS_WEB_URL: ${{ vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-full.sh
 
       - name: Deploy full stack on VPS (SSH)
-        if: ${{ needs.meta.outputs.full_deploy == 'true' && needs.meta.outputs.use_self_hosted != 'true' }}
+        if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted != 'true' }}
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
