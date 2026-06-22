@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta, timezone
 from unittest.mock import patch
 
 import pytest
@@ -219,11 +220,12 @@ class TestIndexStatus:
             workspace=workspace,
             owned_by=create_user,
         )
+        now = datetime.now(timezone.utc)
         mock_load.return_value = {
             "status": "pending",
-            "updated_at": "2026-06-17T18:00:00+00:00",
-            "queued_at": "2026-06-17T18:00:00+00:00",
-            "eta_at": "2026-06-17T18:01:15+00:00",
+            "updated_at": now.isoformat(),
+            "queued_at": now.isoformat(),
+            "eta_at": (now + timedelta(seconds=75)).isoformat(),
             "chunk_count": 0,
         }
 
