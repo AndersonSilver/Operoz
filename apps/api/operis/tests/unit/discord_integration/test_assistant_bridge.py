@@ -4,6 +4,7 @@ import pytest
 
 from operis.discord_integration.models import CustomSlashCommand
 from operis.discord_integration.services.assistant_bridge import (
+    DISCORD_EXECUTE_TRIGGER,
     DISCORD_OPEN_SCOPE_INSTRUCTIONS,
     _build_user_message,
 )
@@ -44,3 +45,18 @@ def test_build_user_message_omits_discord_scope_when_fixed(workspace, workspace_
     )
     message = _build_user_message(command, "", scope_relaxed=False)
     assert DISCORD_OPEN_SCOPE_INSTRUCTIONS not in message
+    assert DISCORD_EXECUTE_TRIGGER in message
+
+
+def test_build_user_message_includes_stats_block(workspace):
+    command = CustomSlashCommand.objects.create(
+        workspace=workspace,
+        name="status-projeto",
+        description="Status",
+        prompt_instructions="Resuma entregas.",
+        guild_id="123456789012345678",
+    )
+    stats = "## Dados Operoz\n```json\n{}\n```"
+    message = _build_user_message(command, "", scope_relaxed=True, stats_block=stats)
+    assert stats in message
+    assert DISCORD_EXECUTE_TRIGGER in message

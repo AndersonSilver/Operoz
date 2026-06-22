@@ -35,6 +35,10 @@ def build_deferred_response() -> dict[str, int]:
 def extract_user_prompt(data: dict[str, Any]) -> str:
     """Monta texto livre a partir de opções do slash command (se existirem)."""
     options = data.get("options") or []
+    if len(options) == 1 and options[0].get("name") == "foco":
+        value = options[0].get("value")
+        return str(value).strip() if value is not None else ""
+
     parts: list[str] = []
     for option in options:
         name = option.get("name")
