@@ -16,6 +16,16 @@ from operis.discord_integration.services.text_utils import (
 
 logger = logging.getLogger(__name__)
 
+DISCORD_OPEN_SCOPE_INSTRUCTIONS = """## Modo Discord (escopo flexível)
+- O usuário está no Discord: **não** peça para selecionar board ou projeto no painel do Operoz.
+- **Pergunta genérica** (status geral, todos os clientes, visão da squad): use `get_project_stats` **sem** `project_id` \
+para trazer métricas de **todos** os projetos acessíveis no workspace (use `board_slug` só se estiver definido na sessão).
+- **Pergunta sobre um cliente específico** (ex.: «como está o SICREDI?»): identifique o projeto pelo **nome** ou \
+**identifier** em `get_project_stats` ou via `search_issues`; depois aprofunde só nesse projeto.
+- Use `search_issues` sem `project_id` para buscas amplas quando o usuário não citar um cliente.
+- Consulte ferramentas **antes** de responder; não invente números nem peça UUID ao usuário.
+- Resposta **curta** (bullets), em português do Brasil, compatível com Discord."""
+
 
 def _resolve_actor_user(command: CustomSlashCommand):
     if command.created_by_id and command.created_by:
@@ -45,11 +55,13 @@ def _build_session_context(command: CustomSlashCommand) -> dict[str, str]:
     return context
 
 
-def _build_user_message(command: CustomSlashCommand, user_input: str) -> str:
+def _build_user_message(command: CustomSlashCommand, user_input: str, *, scope_relaxed: bool) -> str:
     sections: list[str] = []
     if user_input.strip():
         sections.append(user_input.strip())
     sections.append(f"## Instruções do slash command /{command.name}\n{command.prompt_instructions.strip()}")
+    if scope_relaxed:
+        sections.append(DISCORD_OPEN_SCOPE_INSTRUCTIONS)
     return "\n\n".join(sections)
 
 
@@ -87,10 +99,9 @@ def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> 
         title=f"discord:{command.name}",
         context=_build_session_context(command),
     )
-    user_message = _build_user_message(command, user_input)
-
     scope_relaxed = not (command.board_slug and command.default_project_id)
     settings_patch = {"ASSISTANT_REQUIRE_SESSION_SCOPE": "0"} if scope_relaxed else {}
+    user_message = _build_user_message(command, user_input, scope_relaxed=scope_relaxed)
 
     try:
         if settings_patch:
