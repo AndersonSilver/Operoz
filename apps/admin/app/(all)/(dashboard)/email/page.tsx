@@ -1,20 +1,18 @@
-
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
+import { Mail, Server, Shield } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Loader, ToggleSwitch } from "@operis/ui";
-// components
+import { Loader } from "@operis/ui";
 import { PageWrapper } from "@/components/common/page-wrapper";
-// hooks
+import { AdminEmptyState, AdminSettingsPanel, AdminToggleCard } from "@/components/settings/admin-settings-panel";
 import { useInstance } from "@/hooks/store";
-// types
 import type { Route } from "./+types/page";
-// local
 import { InstanceEmailForm } from "./email-config-form";
 
 const InstanceEmailPage = observer(function InstanceEmailPage(_props: Route.ComponentProps) {
-  // store
+  const { t } = useTranslation();
   const { fetchInstanceConfigurations, formattedConfig, disableEmail } = useInstance();
 
   const { isLoading } = useSWR("INSTANCE_CONFIGURATIONS", () => fetchInstanceConfigurations());
@@ -29,14 +27,14 @@ const InstanceEmailPage = observer(function InstanceEmailPage(_props: Route.Comp
         await disableEmail();
         setIsSMTPEnabled(false);
         setToast({
-          title: "Email feature disabled",
-          message: "Email feature has been disabled",
+          title: t("god_mode.pages.email.disabled_title"),
+          message: t("god_mode.pages.email.disabled_message"),
           type: TOAST_TYPE.SUCCESS,
         });
       } catch (_error) {
         setToast({
-          title: "Error disabling email",
-          message: "Failed to disable email feature. Please try again.",
+          title: t("god_mode.pages.email.disable_error_title"),
+          message: t("god_mode.pages.email.disable_error_message"),
           type: TOAST_TYPE.ERROR,
         });
       } finally {
@@ -46,6 +44,7 @@ const InstanceEmailPage = observer(function InstanceEmailPage(_props: Route.Comp
     }
     setIsSMTPEnabled(true);
   };
+
   useEffect(() => {
     if (formattedConfig) {
       setIsSMTPEnabled(formattedConfig.ENABLE_SMTP === "1");
@@ -54,41 +53,61 @@ const InstanceEmailPage = observer(function InstanceEmailPage(_props: Route.Comp
 
   return (
     <PageWrapper
+      size="lg"
       header={{
-        title: "Secure emails from your own instance",
+        icon: Mail,
+        title: t("god_mode.pages.email.title"),
         description: (
           <>
-            Plane can send useful emails to you and your users from your own instance without talking to the Internet.
-            <div className="text-13 font-regular text-tertiary">
-              Set it up below and please test your settings before you save them.&nbsp;
-              <span className="text-danger-primary">Misconfigs can lead to email bounces and errors.</span>
-            </div>
+            {t("god_mode.pages.email.detail")}
+            <span className="mt-1 block text-danger-primary">{t("god_mode.pages.email.warning")}</span>
           </>
         ),
-        actions: isLoading ? (
-          <Loader>
-            <Loader.Item width="24px" height="16px" className="rounded-full" />
-          </Loader>
-        ) : (
-          <ToggleSwitch value={isSMTPEnabled} onChange={handleToggle} size="sm" disabled={isSubmitting} />
-        ),
+        highlights: [
+          { label: "SMTP", icon: Server, tone: "accent" },
+          { label: t("god_mode.nav.email.name"), icon: Mail, tone: "success" },
+          { label: "TLS / SSL", icon: Shield, tone: "warning" },
+        ],
       }}
     >
-      {isSMTPEnabled && !isLoading && (
-        <>
-          {formattedConfig ? (
-            <InstanceEmailForm config={formattedConfig} />
-          ) : (
-            <Loader className="space-y-10">
-              <Loader.Item height="50px" width="75%" />
-              <Loader.Item height="50px" width="75%" />
-              <Loader.Item height="50px" width="40%" />
-              <Loader.Item height="50px" width="40%" />
-              <Loader.Item height="50px" width="20%" />
+      <div className="space-y-6">
+        <AdminSettingsPanel
+          title={t("god_mode.pages.email.title")}
+          description={t("god_mode.pages.email.description")}
+          icon={Mail}
+          iconClassName="text-accent-primary"
+          glowActive={isSMTPEnabled}
+        >
+          {isLoading ? (
+            <Loader>
+              <Loader.Item height="48px" width="100%" />
             </Loader>
+          ) : (
+            <AdminToggleCard
+              label={t("god_mode.pages.email.title")}
+              description={t("god_mode.pages.email.detail")}
+              value={isSMTPEnabled}
+              onChange={handleToggle}
+              disabled={isSubmitting}
+            />
           )}
-        </>
-      )}
+        </AdminSettingsPanel>
+
+        {isSMTPEnabled && !isLoading && formattedConfig ? (
+          <InstanceEmailForm config={formattedConfig} />
+        ) : !isLoading && !isSMTPEnabled ? (
+          <AdminEmptyState
+            icon={Mail}
+            title={t("god_mode.pages.email.title")}
+            description={t("god_mode.pages.email.description")}
+          />
+        ) : isSMTPEnabled && !formattedConfig ? (
+          <Loader className="space-y-4">
+            <Loader.Item height="140px" width="100%" />
+            <Loader.Item height="280px" width="100%" />
+          </Loader>
+        ) : null}
+      </div>
     </PageWrapper>
   );
 });

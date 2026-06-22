@@ -6,11 +6,12 @@ from operis.db.models import Project
 from operis.utils.client_360 import (
     ReportCoverage,
     WeekPeriod,
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     build_client_row,
 )
+from operis.utils.client_360_operational import load_board_support_sla_map
 from operis.utils.client_360_health_alerts import build_client360_list_summary
 from operis.utils.client_360_health_history import week_period_before
 
@@ -79,7 +80,15 @@ def build_clients_for_period(
 ) -> list[dict]:
     project_ids = [project.id for project in projects]
     counts = module_counts if module_counts is not None else aggregate_module_counts(project_ids)
-    issue_stats_map = aggregate_issue_stats(issue_queryset, reference_date)
+    board_ids = list({project.board_id for project in projects if project.board_id})
+    project_board_map = {str(project.id): str(project.board_id) if project.board_id else None for project in projects}
+    issue_stats_map = aggregate_client360_issue_stats(
+        issue_queryset,
+        reference_date,
+        project_ids=project_ids,
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map(board_ids),
+    )
     report_stats_map = aggregate_status_reports(project_ids, period)
 
     clients: list[dict] = []

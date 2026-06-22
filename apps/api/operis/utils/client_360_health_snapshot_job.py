@@ -10,7 +10,7 @@ from django.utils import timezone
 from operis.db.models import Issue, Project
 from operis.utils.client_360 import (
     WeekPeriod,
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     compute_health_score,
@@ -22,6 +22,7 @@ from operis.utils.client_360_health_history import (
     week_period_before,
 )
 from operis.utils.client_360_health_settings import load_board_health_config_map
+from operis.utils.client_360_operational import load_board_support_sla_map
 
 logger = logging.getLogger("operis.worker")
 
@@ -137,9 +138,13 @@ def run_weekly_health_snapshots(
     for offset in range(0, len(projects), batch_size):
         batch = projects[offset : offset + batch_size]
         batch_ids = [project.id for project in batch]
-        issue_stats_map = aggregate_issue_stats(
+        project_board_map = {str(project.id): str(project.board_id) if project.board_id else None for project in batch}
+        issue_stats_map = aggregate_client360_issue_stats(
             Issue.issue_objects.filter(project_id__in=batch_ids),
             reference_date,
+            project_ids=batch_ids,
+            project_board_map=project_board_map,
+            sla_map=load_board_support_sla_map(board_ids),
         )
         module_counts = aggregate_module_counts(batch_ids)
         report_stats_map = aggregate_status_reports(batch_ids, target_period)

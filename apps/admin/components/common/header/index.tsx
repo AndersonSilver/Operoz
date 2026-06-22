@@ -1,14 +1,11 @@
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { Menu, Settings } from "lucide-react";
-// icons
+import { useTranslation } from "@operis/i18n";
 import { Breadcrumbs } from "@operis/ui";
-// components
 import { BreadcrumbLink } from "../breadcrumb-link";
-// hooks
 import { useTheme } from "@/hooks/store";
-// local imports
-import { CORE_HEADER_SEGMENT_LABELS } from "./core";
+import { BREADCRUMB_SEGMENT_KEYS } from "./core";
 import { EXTENDED_HEADER_SEGMENT_LABELS } from "./extended";
 
 export const HamburgerToggle = observer(function HamburgerToggle() {
@@ -23,28 +20,24 @@ export const HamburgerToggle = observer(function HamburgerToggle() {
   );
 });
 
-const HEADER_SEGMENT_LABELS = {
-  ...CORE_HEADER_SEGMENT_LABELS,
-  ...EXTENDED_HEADER_SEGMENT_LABELS,
-};
-
 export const AdminHeader = observer(function AdminHeader() {
   const pathName = usePathname();
+  const { t } = useTranslation();
 
-  // Function to dynamically generate breadcrumb items based on pathname
   const generateBreadcrumbItems = (pathname: string) => {
-    const pathSegments = pathname.split("/").slice(1); // removing the first empty string.
+    const pathSegments = pathname.split("/").slice(1);
     pathSegments.pop();
 
     let currentUrl = "";
-    const breadcrumbItems = pathSegments.map((segment) => {
+    return pathSegments.map((segment) => {
       currentUrl += "/" + segment;
+      const key = BREADCRUMB_SEGMENT_KEYS[segment];
+      const extended = EXTENDED_HEADER_SEGMENT_LABELS[segment];
       return {
-        title: HEADER_SEGMENT_LABELS[segment] ?? segment.toUpperCase(),
+        title: key ? t(key) : (extended ?? segment.toUpperCase()),
         href: currentUrl,
       };
     });
-    return breadcrumbItems;
   };
 
   const breadcrumbItems = generateBreadcrumbItems(pathName || "");
@@ -60,7 +53,7 @@ export const AdminHeader = observer(function AdminHeader() {
                 component={
                   <BreadcrumbLink
                     href="/general/"
-                    label="Settings"
+                    label={t("god_mode.brand.settings")}
                     icon={<Settings className="h-4 w-4 text-tertiary" />}
                   />
                 }
@@ -69,7 +62,7 @@ export const AdminHeader = observer(function AdminHeader() {
                 (item) =>
                   item.title && (
                     <Breadcrumbs.Item
-                      key={item.title}
+                      key={item.href}
                       component={<BreadcrumbLink href={item.href} label={item.title} />}
                     />
                   )

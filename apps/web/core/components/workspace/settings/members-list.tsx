@@ -66,32 +66,36 @@ export const WorkspaceMembersList = observer(function WorkspaceMembersList(props
 
   return (
     <>
-      <div className="divide-y-[0.5px] divide-subtle overflow-scroll">
+      <div className="overflow-x-auto">
         {searchedMemberIds?.length !== 0 && <WorkspaceMembersListItem memberDetails={memberDetails ?? []} />}
         {searchedInvitationsIds?.length === 0 && searchedMemberIds?.length === 0 && (
-          <h4 className="mt-16 text-center text-body-xs-regular text-placeholder">{t("no_matching_members")}</h4>
+          <div className="flex w-full items-center justify-center px-4 py-12">
+            <p className="text-center text-13 text-placeholder">{t("no_matching_members")}</p>
+          </div>
         )}
       </div>
       {isAdmin && searchedInvitationsIds && searchedInvitationsIds.length > 0 && (
         <Collapsible
           isOpen={showPendingInvites}
           onToggle={() => setShowPendingInvites((prev) => !prev)}
-          buttonClassName="w-full"
+          buttonClassName="w-full border-t border-subtle px-5 lg:px-6"
           className=""
           title={
-            <div className="flex w-full items-center justify-between pt-4">
-              <div className="flex">
-                <h4 className="pt-2 pb-2 text-h5-medium">{t("workspace_settings.settings.members.pending_invites")}</h4>
-                {searchedInvitationsIds && (
-                  <CountChip count={searchedInvitationsIds.length} className="m-auto ml-2 h-5" />
-                )}
-              </div>{" "}
-              <ChevronDownIcon className={`h-5 w-5 transition-all ${showPendingInvites ? "rotate-180" : ""}`} />
+            <div className="flex w-full items-center justify-between py-4">
+              <div className="flex items-center gap-2">
+                <h4 className="text-13 font-semibold text-primary">
+                  {t("workspace_settings.settings.members.pending_invites")}
+                </h4>
+                <CountChip count={searchedInvitationsIds.length} className="h-5" />
+              </div>
+              <ChevronDownIcon
+                className={`size-4 text-tertiary transition-transform ${showPendingInvites ? "rotate-180" : ""}`}
+              />
             </div>
           }
         >
           <Disclosure.Panel>
-            <div className="ml-auto items-center gap-1.5 rounded-md bg-surface-1 py-1.5">
+            <div className="divide-y divide-subtle border-t border-subtle bg-layer-2/20 px-5 pb-2 lg:px-6">
               {searchedInvitationsIds?.map((invitationId) => (
                 <WorkspaceInvitationsListItem key={invitationId} invitationId={invitationId} />
               ))}

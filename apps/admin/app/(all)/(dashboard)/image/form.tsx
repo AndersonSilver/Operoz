@@ -1,11 +1,12 @@
-
+import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
+import { ImageIcon } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IFormattedInstanceConfiguration, TInstanceImageConfigurationKeys } from "@operis/types";
-// components
 import { ControllerInput } from "@/components/common/controller-input";
-// hooks
+import { AdminFormActions, AdminFormFooter, AdminSettingsPanel } from "@/components/settings/admin-settings-panel";
 import { useInstance } from "@/hooks/store";
 
 type IInstanceImageConfigForm = {
@@ -14,11 +15,11 @@ type IInstanceImageConfigForm = {
 
 type ImageConfigFormValues = Record<TInstanceImageConfigurationKeys, string>;
 
-export function InstanceImageConfigForm(props: IInstanceImageConfigForm) {
+export const InstanceImageConfigForm = observer(function InstanceImageConfigForm(props: IInstanceImageConfigForm) {
   const { config } = props;
-  // store hooks
+  const { t } = useTranslation();
   const { updateInstanceConfigurations } = useInstance();
-  // form data
+
   const {
     handleSubmit,
     control,
@@ -30,37 +31,42 @@ export function InstanceImageConfigForm(props: IInstanceImageConfigForm) {
   });
 
   const onSubmit = async (formData: ImageConfigFormValues) => {
-    const payload: Partial<ImageConfigFormValues> = { ...formData };
-
-    await updateInstanceConfigurations(payload)
+    await updateInstanceConfigurations({ ...formData })
       .then(() =>
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success",
-          message: "Image Configuration Settings updated successfully",
+          title: t("god_mode.common.success"),
+          message: t("god_mode.pages.image.saved_message"),
         })
       )
       .catch((err) => console.error(err));
   };
 
   return (
-    <div className="space-y-8">
-      <div className="grid-col grid w-full grid-cols-1 items-center justify-between gap-x-16 gap-y-8 lg:grid-cols-2">
+    <form className="pb-2" onSubmit={handleSubmit(onSubmit)}>
+      <AdminSettingsPanel
+        chip="Unsplash"
+        title={t("god_mode.pages.image.unsplash_key_label")}
+        description={t("god_mode.pages.image.unsplash_key_desc")}
+        icon={ImageIcon}
+        iconClassName="text-accent-primary"
+      >
         <ControllerInput
           control={control}
           type="password"
           name="UNSPLASH_ACCESS_KEY"
-          label="Access key from your Unsplash account"
+          variant="admin"
+          label={t("god_mode.pages.image.unsplash_key_label")}
           description={
             <>
-              You will find your access key in your Unsplash developer console.&nbsp;
+              {t("god_mode.pages.image.unsplash_key_desc")}{" "}
               <a
                 href="https://unsplash.com/documentation#creating-a-developer-account"
                 target="_blank"
-                className="text-accent-primary hover:underline"
+                className="font-medium text-accent-primary hover:underline"
                 rel="noreferrer"
               >
-                Learn more.
+                {t("god_mode.pages.image.unsplash_learn_more")}
               </a>
             </>
           }
@@ -68,13 +74,15 @@ export function InstanceImageConfigForm(props: IInstanceImageConfigForm) {
           error={Boolean(errors.UNSPLASH_ACCESS_KEY)}
           required
         />
-      </div>
+      </AdminSettingsPanel>
 
-      <div>
-        <Button variant="primary" size="lg" onClick={handleSubmit(onSubmit)} loading={isSubmitting}>
-          {isSubmitting ? "Saving" : "Save changes"}
-        </Button>
-      </div>
-    </div>
+      <AdminFormFooter>
+        <AdminFormActions className="w-full justify-end">
+          <Button type="submit" variant="primary" size="lg" loading={isSubmitting}>
+            {isSubmitting ? t("god_mode.common.saving") : t("god_mode.common.save")}
+          </Button>
+        </AdminFormActions>
+      </AdminFormFooter>
+    </form>
   );
-}
+});

@@ -30,6 +30,20 @@ export type TClient360HealthDimensionItem = {
   health: TClient360Health;
 };
 
+export type TClient360SupportMetricBucket = {
+  count: number;
+  median_tta_seconds: number | null;
+  median_ttr_seconds: number | null;
+  median_in_progress_seconds: number | null;
+};
+
+export type TClient360SupportAnalyticsCriticality = import("../intake/intake-form").TSupportCriticality | "unknown";
+
+export type TClient360SupportAnalytics = {
+  by_criticality: Record<TClient360SupportAnalyticsCriticality, TClient360SupportMetricBucket>;
+  by_client: Record<string, Record<TClient360SupportAnalyticsCriticality, TClient360SupportMetricBucket>>;
+};
+
 export type TClient360Client = {
   project_id: string;
   name: string;
@@ -329,6 +343,7 @@ export type TClient360ListResponse = {
   clients: TClient360Client[];
   customer_groups?: TClient360CustomerGroup[];
   period_compare?: TClient360PeriodCompare;
+  support_analytics?: TClient360SupportAnalytics;
 };
 
 export type TClient360ModuleRow = {

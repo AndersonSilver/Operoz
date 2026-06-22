@@ -6,9 +6,24 @@ O pacote `mcp-server/` expõe o Operis a agentes de IA (Cursor, Claude Desktop, 
 
 `/Operis/mcp-server/` (relativo à raiz do monorepo).
 
+## Perfil de ferramentas (Cursor)
+
+Por defeito o MCP usa **`OPERIS_MCP_PROFILE=agent`** — **7 tools** expostas, registo interno com **676 operações**:
+
+| Tool                                               | Função                                              |
+| -------------------------------------------------- | --------------------------------------------------- |
+| `operis_discover`                                  | Encontra operações por intenção (`query`, `domain`) |
+| `operis_execute`                                   | Executa pelo `name` devolvido pelo discover         |
+| `operis_get_capabilities`                          | Mapa de domínios                                    |
+| `operis_sign_in`                                   | Sessão para API app                                 |
+| `operis_api_v1_request` / `operis_api_app_request` | Escape hatch genérico                               |
+| `operis_get_openapi_schema`                        | Schema OpenAPI                                      |
+
+Fluxo: `operis_discover` → `operis_execute`. Perfil `full` (`OPERIS_MCP_PROFILE=full`) expõe 1 tool por endpoint (legado/debug).
+
 ## Cobertura funcional
 
-**671 ferramentas** (665 operações HTTP + 6 meta) geradas a partir do registo em `mcp-server/src/tools/registry/` — cobertura completa das APIs **v1** e **app** (todos os métodos por rota).
+**676 operações** no registo (`mcp-server/src/tools/registry/`) — cobertura completa das APIs **v1** e **app** (todos os métodos por rota).
 
 | Domínio                                       | Exemplos                                                | API      |
 | --------------------------------------------- | ------------------------------------------------------- | -------- |
@@ -26,7 +41,7 @@ O pacote `mcp-server/` expõe o Operis a agentes de IA (Cursor, Claude Desktop, 
 | Jira Ops, assistente IA legado                | sync, preview, ai-assistant                             | app      |
 | Stickies, convites, membros                   | —                                                       | v1 + app |
 
-Use `operis_list_operations` com `domain: "pages"` (ou `boards`, etc.) para listar só esse grupo.
+Use `operis_discover` com `query` e `domain` (ex.: `"list pages"`, `"boards"`) para encontrar a operação correcta antes de `operis_execute`.
 
 ## Assistente Operoz vs MCP externo
 
@@ -35,7 +50,7 @@ Dois caminhos complementares — o MCP expõe as rotas REST; o chat in-app usa t
 | Aspeto         | MCP externo (`mcp-server/`)     | Assistente Operoz (in-app)         |
 | -------------- | ------------------------------- | ---------------------------------- |
 | **Utilizador** | Agente (Cursor, Claude Desktop) | Humano no produto Operoz           |
-| **Tools**      | ~671 (rotas HTTP + meta)        | ~17 curadas (registry interno)     |
+| **Tools**      | 7 expostas (agent) / 676 (full) | ~17 curadas (registry interno)     |
 | **Auth**       | Token / sessão conforme rota    | Sessão workspace + permission gate |
 | **Writes**     | Diretos na API                  | Propostas com confirmação humana   |
 | **RAG**        | Não (agente chama search)       | Híbrido FTS + pgvector integrado   |
@@ -49,7 +64,7 @@ Expandidas na Fase 5 — ver [assistant-api-reference.md](./assistant-api-refere
 
 ### Quando usar cada um
 
-- **Cursor / CI / integrações:** MCP com domínio focado (`operis_list_operations` + `domain`)
+- **Cursor / CI / integrações:** MCP perfil `agent` (`operis_discover` → `operis_execute`)
 - **Equipa no Operoz:** chat nativo + automação `action.mcp_call` para casos que precisem de rota MCP específica
 - **Documentação:** [assistant-user-guide.md](./assistant-user-guide.md), [assistant-adrs.md](./assistant-adrs.md) (ADR-003)
 
@@ -61,7 +76,7 @@ Prefixo `/api/workspaces/{slug}/assistant/` — sessões, chat SSE, feedback, qu
 
 - API **app** (boards, páginas, …) exige **sessão**; API **v1** exige **token**.
 - Upload binário de assets pode precisar de `operis_api_*_request` com corpo adequado.
-- O Cursor pode demorar a carregar centenas de tools; use `operis_list_operations` + domínio se precisar de foco.
+- O Cursor limita ~40 tools entre todos os MCP servers; o perfil `agent` (default) evita esse problema.
 
 ## Implantação empresarial (muitos utilizadores Cursor)
 

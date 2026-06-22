@@ -2,8 +2,9 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operis/i18n";
 import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { TInboxIssueCurrentTab } from "@operis/types";
-import { EInboxIssueCurrentTab } from "@operis/types";
+import type { TInboxIssueCurrentTab, THubMode } from "@operis/types";
+import { EInboxIssueCurrentTab, EHubMode } from "@operis/types";
+import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 // plane imports
 import { Header, Loader, EHeaderVariant } from "@operis/ui";
 import { cn } from "@operis/utils";
@@ -19,27 +20,30 @@ import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { FiltersRoot } from "../inbox-filter";
 import { InboxIssueAppliedFilters } from "../inbox-filter/applied-filters/root";
 import { InboxIssueList } from "./inbox-list";
+import { InboxQueueScope } from "./queue-scope";
+import { InboxSupportQueueFilter } from "./support-queue-filter";
 
 type IInboxSidebarProps = {
+  hubMode: THubMode;
   workspaceSlug: string;
   projectId: string;
   inboxIssueId: string | undefined;
   setIsMobileSidebar: (value: boolean) => void;
 };
 
-const tabNavigationOptions: { key: TInboxIssueCurrentTab; i18n_label: string }[] = [
-  {
-    key: EInboxIssueCurrentTab.OPEN,
-    i18n_label: "inbox_issue.tabs.open",
-  },
-  {
-    key: EInboxIssueCurrentTab.CLOSED,
-    i18n_label: "inbox_issue.tabs.closed",
-  },
+const supportTabNavigationOptions: { key: TInboxIssueCurrentTab; i18n_label: string }[] = [
+  { key: EInboxIssueCurrentTab.OPEN, i18n_label: "inbox_issue.tabs_support.open" },
+  { key: EInboxIssueCurrentTab.IN_PROGRESS, i18n_label: "inbox_issue.tabs.in_progress" },
+  { key: EInboxIssueCurrentTab.CLOSED, i18n_label: "inbox_issue.tabs.closed" },
+];
+
+const intakeTabNavigationOptions: { key: TInboxIssueCurrentTab; i18n_label: string }[] = [
+  { key: EInboxIssueCurrentTab.OPEN, i18n_label: "inbox_issue.tabs.open" },
+  { key: EInboxIssueCurrentTab.CLOSED, i18n_label: "inbox_issue.tabs.closed" },
 ];
 
 export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarProps) {
-  const { workspaceSlug, projectId, inboxIssueId, setIsMobileSidebar } = props;
+  const { hubMode, workspaceSlug, projectId, inboxIssueId, setIsMobileSidebar } = props;
   // router
   const router = useAppRouter();
   // ref
@@ -59,6 +63,10 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
     getAppliedFiltersCount,
   } = useProjectInbox();
   const hasBoardWallpaper = useBoardHubHasBackground();
+  const isSupportHub = hubMode === EHubMode.SUPPORT;
+  const tabNavigationOptions = isSupportHub ? supportTabNavigationOptions : intakeTabNavigationOptions;
+  const hubIssueUrl = (params?: { currentTab?: string; inboxIssueId?: string }) =>
+    getInboxHubIssueUrl(workspaceSlug, projectId, hubMode, params);
   // derived values
   const fetchNextPages = useCallback(() => {
     if (!workspaceSlug || !projectId) return;
@@ -71,12 +79,10 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
   useEffect(() => {
     if (workspaceSlug && projectId && currentTab && filteredInboxIssueIds.length > 0) {
       if (inboxIssueId === undefined) {
-        router.push(
-          `/${workspaceSlug}/projects/${projectId}/intake?currentTab=${currentTab}&inboxIssueId=${filteredInboxIssueIds[0]}`
-        );
+        router.push(hubIssueUrl({ currentTab, inboxIssueId: filteredInboxIssueIds[0] }));
       }
     }
-  }, [currentTab, filteredInboxIssueIds, inboxIssueId, projectId, router, workspaceSlug]);
+  }, [currentTab, filteredInboxIssueIds, hubMode, inboxIssueId, projectId, router, workspaceSlug]);
 
   return (
     <div className="h-full w-full flex-shrink-0">
@@ -95,7 +101,7 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
               onClick={() => {
                 if (currentTab != option?.key) {
                   handleCurrentTab(workspaceSlug, projectId, option?.key);
-                  router.push(`/${workspaceSlug}/projects/${projectId}/intake?currentTab=${option?.key}`);
+                  router.push(hubIssueUrl({ currentTab: option?.key }));
                 }
               }}
             >
@@ -118,6 +124,10 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
           </div>
         </Header>
         <InboxIssueAppliedFilters />
+        {isSupportHub && currentTab === EInboxIssueCurrentTab.OPEN && <InboxQueueScope />}
+        {isSupportHub && currentTab === EInboxIssueCurrentTab.IN_PROGRESS && (
+          <InboxSupportQueueFilter workspaceSlug={workspaceSlug} projectId={projectId} />
+        )}
 
         {loader != undefined && loader === "filter-loading" && !inboxIssuePaginationInfo?.next_page_results ? (
           <InboxSidebarLoader />
@@ -147,26 +157,33 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
                 ) : currentTab === EInboxIssueCurrentTab.OPEN ? (
                   <EmptyStateDetailed
                     assetKey="inbox"
-                    title={t("project_empty_state.intake_sidebar.title")}
-                    description={t("project_empty_state.intake_sidebar.description")}
+                    title={t("inbox_issue.empty_state.sidebar_open_tab.title")}
+                    description={t("inbox_issue.empty_state.sidebar_open_tab.description")}
                     assetClassName="size-20"
                     actions={[
                       {
                         label: t("project_empty_state.intake_sidebar.cta_primary"),
-                        onClick: () => router.push(`/${workspaceSlug}/projects/${projectId}/intake`),
+                        onClick: () => router.push(hubIssueUrl()),
                         variant: "primary",
                       },
                     ]}
                     rootClassName="px-page-x"
                   />
-                ) : (
-                  // TODO: Add translation
+                ) : currentTab === EInboxIssueCurrentTab.IN_PROGRESS ? (
                   <EmptyStateDetailed
                     assetKey="inbox"
-                    title="No request closed yet"
-                    description="All the work items whether accepted or declined can be found here."
+                    title={t("inbox_issue.empty_state.sidebar_in_progress_tab.title")}
+                    description={t("inbox_issue.empty_state.sidebar_in_progress_tab.description")}
                     assetClassName="size-20"
-                    className="px-10"
+                    rootClassName="px-page-x"
+                  />
+                ) : (
+                  <EmptyStateDetailed
+                    assetKey="inbox"
+                    title={t("inbox_issue.empty_state.sidebar_closed_tab.title")}
+                    description={t("inbox_issue.empty_state.sidebar_closed_tab.description")}
+                    assetClassName="size-20"
+                    rootClassName="px-page-x"
                   />
                 )}
               </div>

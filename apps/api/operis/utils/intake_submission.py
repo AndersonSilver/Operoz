@@ -11,6 +11,7 @@ from operis.automation.hooks import emit_intake_submitted, emit_issue_created
 from operis.app.serializers import IssueCreateSerializer
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.db.models import (
+    BoardIntakeForm,
     FileAsset,
     Intake,
     IntakeForm,
@@ -22,8 +23,9 @@ from operis.db.models import (
     State,
     StateGroup,
 )
-from operis.db.models.intake import SourceType
+from operis.db.models.intake import SourceType, IntakeTicketKind
 from operis.utils.host import base_host
+from operis.utils.support_ticket import enrich_intake_extra
 
 
 class IntakeSubmissionError(Exception):
@@ -79,16 +81,23 @@ def _wrap_plain_description(value: str) -> str:
 
 
 def _validate_submission_fields(form: IntakeForm, submission: dict[str, Any]) -> dict[str, Any]:
+    return _validate_submission_fields_from_list(form.fields or [], submission)
+
+
+def _validate_submission_fields_from_list(fields: list[dict[str, Any]], submission: dict[str, Any]) -> dict[str, Any]:
     errors: dict[str, str] = {}
     issue_payload: dict[str, Any] = {}
     custom_values: dict[str, Any] = {}
+    support_extra: dict[str, Any] = {}
     attachment_asset_ids: list[str] = []
 
-    for field in form.fields or []:
+    for field in fields or []:
         field_id = field.get("id")
         if not field_id:
             continue
         field_type = field.get("field_type")
+        if field_type == "client":
+            continue
         required = bool(field.get("required"))
         label = field.get("label") or field_id
         raw = submission.get(field_id)
@@ -129,12 +138,41 @@ def _validate_submission_fields(form: IntakeForm, submission: dict[str, Any]) ->
                 errors[field_id] = f"{label} é obrigatório."
             elif value:
                 maps_to = field.get("maps_to")
-                if maps_to in {"start_date", "target_date"}:
+                if maps_to == "problem_started_at":
+                    support_extra["problem_started_at"] = value
+                elif maps_to in {"start_date", "target_date"}:
                     issue_payload[maps_to] = value
                 else:
                     custom_field_id = field.get("custom_field_id")
                     if custom_field_id:
                         custom_values[custom_field_id] = value
+            continue
+
+        if field_type == "criticality":
+            value = (raw or "").strip() if isinstance(raw, str) else str(raw or "").strip()
+            from operis.utils.support_criticality import is_valid_criticality
+
+            if required and not value:
+                errors[field_id] = f"{label} é obrigatório."
+            elif value and not is_valid_criticality(value):
+                errors[field_id] = f"{label} inválido."
+            elif value:
+                support_extra["criticality"] = value
+            continue
+
+        if field_type == "ticket_number":
+            value = (raw or "").strip() if isinstance(raw, str) else str(raw or "").strip()
+            if required and not value:
+                errors[field_id] = f"{label} é obrigatório."
+            elif value:
+                support_extra["ticket_number"] = value[:64]
+            continue
+
+        if field_type == "sla_due":
+            value = (raw or "").strip() if isinstance(raw, str) else str(raw or "").strip()
+            if value:
+                support_extra["sla_due_at"] = value
+                support_extra["sla_due_at_overridden"] = True
             continue
 
         if field_type == "select":
@@ -241,6 +279,7 @@ def _validate_submission_fields(form: IntakeForm, submission: dict[str, Any]) ->
         "issue": issue_payload,
         "custom_values": custom_values,
         "attachment_asset_ids": list(dict.fromkeys(attachment_asset_ids)),
+        "support_extra": support_extra,
     }
 
 
@@ -280,8 +319,42 @@ def _bind_intake_form_attachments(
     )
 
 
-def _apply_form_defaults(form: IntakeForm, issue_payload: dict[str, Any]) -> dict[str, Any]:
-    defaults = form.defaults or {}
+def _bind_board_intake_form_attachments(
+    *,
+    board_intake_form: BoardIntakeForm,
+    project: Project,
+    issue_id: str,
+    asset_ids: list[str],
+) -> None:
+    if not asset_ids:
+        return
+
+    assets = FileAsset.objects.filter(
+        id__in=asset_ids,
+        workspace_id=board_intake_form.workspace_id,
+        project_id__isnull=True,
+        entity_type=FileAsset.EntityTypeContext.BOARD_INTAKE_FORM_ATTACHMENT,
+        is_uploaded=True,
+        is_deleted=False,
+        issue_id__isnull=True,
+        entity_identifier=str(board_intake_form.id),
+    )
+    found_ids = {str(asset_id) for asset_id in assets.values_list("id", flat=True)}
+    missing = [asset_id for asset_id in asset_ids if asset_id not in found_ids]
+    if missing:
+        raise IntakeSubmissionError(
+            "Anexo inválido ou não enviado.",
+            field_errors={"attachment": "Um ou mais anexos são inválidos ou não foram enviados."},
+        )
+
+    assets.update(
+        issue_id=issue_id,
+        project_id=project.id,
+        entity_type=FileAsset.EntityTypeContext.ISSUE_ATTACHMENT,
+    )
+
+
+def _apply_form_defaults_from_dict(defaults: dict[str, Any], issue_payload: dict[str, Any]) -> dict[str, Any]:
     for key in ("priority", "start_date", "target_date", "parent_id"):
         if key not in issue_payload and defaults.get(key) not in (None, "", []):
             issue_payload[key] = defaults[key]
@@ -291,6 +364,10 @@ def _apply_form_defaults(form: IntakeForm, issue_payload: dict[str, Any]) -> dic
     return issue_payload
 
 
+def _apply_form_defaults(form: IntakeForm, issue_payload: dict[str, Any]) -> dict[str, Any]:
+    return _apply_form_defaults_from_dict(form.defaults or {}, issue_payload)
+
+
 @transaction.atomic
 def create_intake_submission(
     *,
@@ -298,17 +375,31 @@ def create_intake_submission(
     submission: dict[str, Any],
     actor_id: str | None,
     intake_form: IntakeForm | None = None,
+    board_intake_form: BoardIntakeForm | None = None,
     source: str = SourceType.IN_APP,
     submitter_email: str | None = None,
     origin: str | None = None,
     notify: bool = True,
 ) -> IntakeIssue:
-    if not project.intake_view:
-        raise IntakeSubmissionError("Recepção não está ativa neste projeto.")
+    if board_intake_form is not None:
+        if not project.support_view:
+            raise IntakeSubmissionError("Sustentação não está ativa neste projeto.")
+        ticket_kind = IntakeTicketKind.SUPPORT
+    elif intake_form is not None:
+        if not project.intake_view:
+            raise IntakeSubmissionError("Intake não está ativo neste projeto.")
+        ticket_kind = IntakeTicketKind.INTAKE
+    else:
+        if not project.intake_view and not project.support_view:
+            raise IntakeSubmissionError("Intake ou sustentação deve estar ativo neste projeto.")
+        ticket_kind = IntakeTicketKind.INTAKE if project.intake_view else IntakeTicketKind.SUPPORT
 
     intake = Intake.objects.filter(project_id=project.id, workspace_id=project.workspace_id).first()
     if intake is None:
-        raise IntakeSubmissionError("Recepção não configurada para este projeto.")
+        raise IntakeSubmissionError("Intake não configurado para este projeto.")
+
+    if intake_form is not None and board_intake_form is not None:
+        raise IntakeSubmissionError("Formulário inválido.")
 
     if intake_form is not None:
         if intake_form.project_id != project.id:
@@ -316,14 +407,40 @@ def create_intake_submission(
         if not intake_form.is_published:
             raise IntakeSubmissionError("Formulário não publicado.")
 
-    parsed = _validate_submission_fields(intake_form, submission) if intake_form else {
-        "issue": submission.get("issue", submission),
-        "custom_values": submission.get("custom_values", {}),
-        "attachment_asset_ids": [],
-    }
-    issue_payload = _apply_form_defaults(intake_form, dict(parsed["issue"])) if intake_form else dict(parsed["issue"])
+    if board_intake_form is not None:
+        if str(project.board_id) != str(board_intake_form.board_id):
+            raise IntakeSubmissionError("Cliente não pertence a este board.")
+        if not board_intake_form.is_published:
+            raise IntakeSubmissionError("Formulário não publicado.")
+
+    form_fields: list[dict[str, Any]] = []
+    if intake_form is not None:
+        parsed = _validate_submission_fields(intake_form, submission)
+        issue_payload = _apply_form_defaults(intake_form, dict(parsed["issue"]))
+        form_defaults = intake_form.defaults or {}
+        form_fields = intake_form.fields or []
+    elif board_intake_form is not None:
+        parsed = _validate_submission_fields_from_list(board_intake_form.fields or [], submission)
+        defaults = dict(board_intake_form.defaults or {})
+        defaults.pop("assignee_ids", None)
+        issue_payload = _apply_form_defaults_from_dict(defaults, dict(parsed["issue"]))
+        form_defaults = board_intake_form.defaults or {}
+        form_fields = board_intake_form.fields or []
+    else:
+        parsed = {
+            "issue": submission.get("issue", submission),
+            "custom_values": submission.get("custom_values", {}),
+            "attachment_asset_ids": [],
+        }
+        issue_payload = dict(parsed["issue"])
+        form_defaults = {}
+
     custom_values: dict[str, Any] = parsed.get("custom_values") or {}
     attachment_asset_ids: list[str] = parsed.get("attachment_asset_ids") or []
+    support_extra: dict[str, Any] = parsed.get("support_extra") or {}
+
+    if board_intake_form is not None:
+        issue_payload.pop("assignee_ids", None)
 
     triage_state = _ensure_triage_state(project)
     issue_payload["state_id"] = triage_state.id
@@ -346,14 +463,22 @@ def create_intake_submission(
         )
 
     issue = serializer.save()
-    _bind_intake_form_attachments(
-        project=project,
-        intake_form=intake_form,
-        issue_id=str(issue.id),
-        asset_ids=attachment_asset_ids,
-    )
+    if board_intake_form is not None:
+        _bind_board_intake_form_attachments(
+            board_intake_form=board_intake_form,
+            project=project,
+            issue_id=str(issue.id),
+            asset_ids=attachment_asset_ids,
+        )
+    else:
+        _bind_intake_form_attachments(
+            project=project,
+            intake_form=intake_form,
+            issue_id=str(issue.id),
+            asset_ids=attachment_asset_ids,
+        )
     module_ids = _normalize_uuid_list(
-        issue_payload.get("module_ids") or (intake_form.defaults or {}).get("module_ids") if intake_form else issue_payload.get("module_ids")
+        issue_payload.get("module_ids") or form_defaults.get("module_ids")
     )
     if module_ids:
         valid_module_ids = Module.objects.filter(
@@ -396,7 +521,18 @@ def create_intake_submission(
         source=source,
         source_email=submitter_email,
         intake_form=intake_form,
-        extra={"form_id": str(intake_form.id)} if intake_form else {},
+        board_intake_form=board_intake_form,
+        ticket_kind=ticket_kind,
+        extra=enrich_intake_extra(
+            intake_form=intake_form,
+            board_intake_form=board_intake_form,
+            submission=submission,
+            fields=form_fields,
+            support_extra=support_extra if board_intake_form else None,
+            board_id=project.board_id if board_intake_form else None,
+            opened_at=timezone.now(),
+            default_assignee_id=project.default_assignee_id if board_intake_form else None,
+        ),
     )
 
     issue_activity.delay(
@@ -417,6 +553,7 @@ def create_intake_submission(
         issue,
         actor_id=actor_id,
         intake_form_id=str(intake_form.id) if intake_form else None,
+        board_intake_form_id=str(board_intake_form.id) if board_intake_form else None,
         source=source,
     )
 

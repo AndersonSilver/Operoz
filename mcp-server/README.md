@@ -35,7 +35,8 @@ Em **Cursor Settings → MCP** (ou `~/.cursor/mcp.json`):
       "args": ["/caminho/absoluto/para/Operis/Operis/mcp-server/dist/index.js"],
       "env": {
         "OPERIS_API_BASE_URL": "http://localhost:8000",
-        "OPERIS_API_KEY": "seu-token-aqui"
+        "OPERIS_API_KEY": "seu-token-aqui",
+        "OPERIS_MCP_PROFILE": "agent"
       }
     }
   }
@@ -50,17 +51,34 @@ Reinicia o Cursor após guardar.
 2. Entra em http://localhost:3000 → **Definições** → **API tokens** (ou God mode).
 3. Cria um token e cola em `OPERIS_API_KEY`.
 
-## Ferramentas (**671**)
+## Ferramentas
 
-Cobertura completa das APIs **v1** e **app** do Operis (work items, boards, automação, assistente, páginas/PRD, status reports, ciclos, módulos, webhooks, analytics, assets, views, notificações, Jira Ops, IA, etc.).
+### Perfil `agent` (default — Cursor)
 
-- **`operis_get_capabilities`** — mapa por domínio e contagens
-- **`operis_list_operations`** — lista filtrável (`domain`, `surface`)
-- **Escape hatch:** `operis_api_v1_request`, `operis_api_app_request`, `operis_get_openapi_schema`
+**7 tools** expostas; cobertura total via discover → execute:
 
-Domínios principais: `work_items`, `boards`, `automation`, `playbooks`, `assistant`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, …
+| Tool                            | Função                                                         |
+| ------------------------------- | -------------------------------------------------------------- |
+| **`operis_discover`**           | Encontra operações por intenção (`query`, `domain`, `surface`) |
+| **`operis_execute`**            | Executa operação pelo `name` devolvido pelo discover           |
+| **`operis_get_capabilities`**   | Mapa de domínios e contagens                                   |
+| **`operis_sign_in`**            | Sessão para API app (boards, web)                              |
+| **`operis_api_v1_request`**     | Escape hatch `/api/v1/*`                                       |
+| **`operis_api_app_request`**    | Escape hatch `/api/*`                                          |
+| **`operis_get_openapi_schema`** | Schema OpenAPI                                                 |
 
-Cada ferramenta mapeia **um endpoint HTTP** (método + path documentado na descrição).
+Fluxo típico no Agent:
+
+1. `operis_discover` — `{ "query": "list work items", "domain": "work_items" }`
+2. `operis_execute` — `{ "operation": "operis_…", "workspace_slug": "…", … }`
+
+Configure `OPERIS_MCP_PROFILE=agent` no `.env` ou no `mcp.json` (default se omitido).
+
+### Perfil `full` (legado / debug)
+
+`OPERIS_MCP_PROFILE=full` expõe **676** ferramentas (1 por endpoint HTTP). Útil fora do Cursor ou para testes; no Agent do Cursor prefira `agent` (limite ~40 tools entre todos os MCP servers).
+
+Domínios no registo interno: `work_items`, `boards`, `automation`, `playbooks`, `assistant`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, …
 
 ## Servidor HTTP (equipa sem clone)
 

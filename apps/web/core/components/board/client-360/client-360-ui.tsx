@@ -15,18 +15,44 @@ import { BOARD_HUB_GLASS_BAR, useBoardHubHasBackground } from "@/components/boar
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 import { useClient360DetailSection } from "@/components/board/client-360/client-360-detail-section-context";
 import { useClient360SectionOpen } from "@/components/board/client-360/use-client-360-section-open";
+import "@/components/exporter/workspace-exports-settings.css";
+import "@/components/board/client-360/client-360-workspace-polish.css";
 
 export type { Client360Tone };
 
-export function Client360PageShell({ children, header }: { header: ReactNode; children: ReactNode }) {
+export function Client360PageShell({
+  children,
+  header,
+  belowHeader,
+}: {
+  header: ReactNode;
+  children: ReactNode;
+  belowHeader?: ReactNode;
+}) {
   const hasBackground = useBoardHubHasBackground();
 
   return (
-    <div className="flex h-full w-full flex-col overflow-y-auto bg-surface-1">
-      <div className={cn("border-b border-subtle px-6 py-4", hasBackground ? BOARD_HUB_GLASS_BAR : "bg-surface-1")}>
-        {header}
+    <div className="flex h-full w-full flex-col overflow-y-auto bg-canvas">
+      <div
+        className={cn(
+          "relative shrink-0 overflow-hidden border-b border-subtle",
+          hasBackground ? BOARD_HUB_GLASS_BAR : "bg-layer-1"
+        )}
+      >
+        {!hasBackground ? (
+          <div
+            className="workspace-exports-hero-dot-grid pointer-events-none absolute inset-0 bg-gradient-to-br from-accent-subtle/25 via-transparent to-transparent opacity-60"
+            aria-hidden
+          />
+        ) : null}
+        <div className="relative w-full px-page-x py-5 lg:px-8 lg:py-6">
+          {header}
+          {belowHeader}
+        </div>
       </div>
-      <div className="flex flex-col gap-5 bg-surface-1 px-6 py-5">{children}</div>
+      <div className="flex min-h-0 w-full flex-1 flex-col gap-6 px-page-x py-6 lg:px-8 xl:gap-7 xl:py-8">
+        {children}
+      </div>
     </div>
   );
 }
@@ -47,19 +73,20 @@ export function Client360PageTitle({
   const tone = CLIENT_360_TONE[iconTone];
 
   return (
-    <div className="flex flex-wrap items-start justify-between gap-4">
-      <div className="flex min-w-0 items-start gap-3">
+    <div className="flex flex-wrap items-start justify-between gap-4 lg:gap-6">
+      <div className="flex min-w-0 flex-1 items-start gap-3 lg:gap-4">
         <span
           className={cn(
-            "grid size-9 shrink-0 place-items-center rounded-md border border-subtle bg-layer-1",
-            tone.iconBg
+            "shadow-sm grid size-11 shrink-0 place-items-center rounded-xl border border-subtle lg:size-12",
+            iconTone === "neutral" ? "bg-accent-subtle text-accent-primary" : cn("bg-layer-1", tone.iconBg, tone.icon)
           )}
         >
-          <Icon className={cn("size-4.5", tone.icon)} strokeWidth={1.75} />
+          <Icon className="size-5" strokeWidth={1.75} />
         </span>
-        <div className="min-w-0">
-          <h1 className="text-16 font-semibold tracking-tight text-primary">{title}</h1>
-          {subtitle ? <p className="mt-0.5 text-13 text-tertiary">{subtitle}</p> : null}
+        <div className="min-w-0 flex-1">
+          <p className="tracking-widest text-11 font-semibold text-tertiary uppercase">Operoz</p>
+          <h1 className="text-18 font-semibold tracking-tight text-primary lg:text-20">{title}</h1>
+          {subtitle ? <p className="mt-1 max-w-3xl text-13 leading-relaxed text-secondary">{subtitle}</p> : null}
         </div>
       </div>
       {trailing ? <div className="flex shrink-0 flex-wrap items-center gap-2">{trailing}</div> : null}

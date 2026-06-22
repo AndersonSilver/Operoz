@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
@@ -69,6 +68,7 @@ const InstanceGithubAuthenticationPage = observer(function InstanceGithubAuthent
 
   return (
     <PageWrapper
+      size="lg"
       customHeader={
         <AuthenticationMethodCard
           name="GitHub"

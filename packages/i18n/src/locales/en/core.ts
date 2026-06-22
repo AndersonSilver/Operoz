@@ -14,6 +14,7 @@ export default {
     modules: "Modules",
     status_report: "Status Report",
     intake: "Intake",
+    support: "Support",
     drafts: "Drafts",
     favorites: "Favorites",
     pro: "Pro",

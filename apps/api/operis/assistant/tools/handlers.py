@@ -24,7 +24,7 @@ from operis.assistant.tools.registry import register_tool
 from operis.assistant.types import AssistantActorContext, ToolResult
 from operis.db.models import Page, PageReviewComment, PageReviewSession, ProjectPage
 from operis.utils.client_360 import (
-    aggregate_issue_stats,
+    aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     build_client_row,
@@ -46,7 +46,7 @@ from operis.utils.client_360_finops import (
     month_start,
 )
 from operis.utils.client_360_intelligence import build_suggested_actions, retrieve_client_360_history
-from operis.utils.client_360_operational import apply_operational_enrichment
+from operis.utils.client_360_operational import apply_operational_enrichment, load_board_support_sla_map
 from operis.utils.issue_search import search_issues
 
 
@@ -151,7 +151,14 @@ def handle_get_client_360_summary(ctx: AssistantActorContext, args: dict[str, An
     project_ids = [p.id for p in projects]
 
     issues_qs = filter_accessible_issues(ctx).filter(project_id__in=project_ids, project__board_id=board.id)
-    issue_stats_map = aggregate_issue_stats(issues_qs, today)
+    project_board_map = {str(p.id): str(p.board_id) if p.board_id else None for p in projects}
+    issue_stats_map = aggregate_client360_issue_stats(
+        issues_qs,
+        today,
+        project_ids=project_ids,
+        project_board_map=project_board_map,
+        sla_map=load_board_support_sla_map([board.id]),
+    )
     module_counts = aggregate_module_counts(project_ids)
     report_stats_map = aggregate_status_reports(project_ids, period)
     health_config_map = load_board_health_config_map([board.id])

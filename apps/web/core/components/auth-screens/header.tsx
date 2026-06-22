@@ -86,7 +86,7 @@ export function AuthHeaderBase(props: TAuthHeaderBase) {
         >
           <PlaneLockup height={44} className="w-auto max-w-[min(88vw,300px)] sm:max-w-[340px]" />
         </Link>
-        {additionalAction}
+        <div className="ml-auto flex items-center gap-3">{additionalAction}</div>
       </div>
     </>
   );

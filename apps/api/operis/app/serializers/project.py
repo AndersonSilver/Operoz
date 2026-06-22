@@ -22,6 +22,7 @@ from operis.db.models import (
 from operis.utils.content_validator import (
     validate_html_content,
 )
+from operis.utils.project_default_features import apply_default_project_features
 
 
 class ProjectSerializer(BaseSerializer):
@@ -117,6 +118,7 @@ class ProjectSerializer(BaseSerializer):
 
     def create(self, validated_data):
         workspace_id = self.context["workspace_id"]
+        apply_default_project_features(validated_data)
 
         project = Project.objects.create(**validated_data, workspace_id=workspace_id)
 
@@ -149,6 +151,7 @@ class ProjectListSerializer(DynamicBaseSerializer):
     members = serializers.SerializerMethodField()
     cover_image_url = serializers.CharField(read_only=True)
     inbox_view = serializers.BooleanField(read_only=True, source="intake_view")
+    support_count = serializers.IntegerField(read_only=True, required=False)
     next_work_item_sequence = serializers.SerializerMethodField()
 
     def get_members(self, obj):

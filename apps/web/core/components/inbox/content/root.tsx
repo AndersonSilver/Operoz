@@ -9,11 +9,15 @@ import { ContentWrapper } from "@operis/ui";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
+import type { THubMode } from "@operis/types";
+import { EHubMode } from "@operis/types";
+import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 // local imports
 import { InboxIssueActionsHeader } from "./inbox-issue-header";
 import { InboxIssueMainContent } from "./issue-root";
 
 type TInboxContentRoot = {
+  hubMode: THubMode;
   workspaceSlug: string;
   projectId: string;
   inboxIssueId: string;
@@ -25,6 +29,7 @@ type TInboxContentRoot = {
 
 export const InboxContentRoot = observer(function InboxContentRoot(props: TInboxContentRoot) {
   const {
+    hubMode,
     workspaceSlug,
     projectId,
     inboxIssueId,
@@ -48,7 +53,7 @@ export const InboxContentRoot = observer(function InboxContentRoot(props: TInbox
 
   useEffect(() => {
     if (!isIssueAvailable && inboxIssueId && !isNotificationEmbed) {
-      router.replace(`/${workspaceSlug}/projects/${projectId}/intake?currentTab=${currentTab}`);
+      router.replace(getInboxHubIssueUrl(workspaceSlug, projectId, hubMode, { currentTab }));
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isIssueAvailable, isNotificationEmbed]);
@@ -66,9 +71,12 @@ export const InboxContentRoot = observer(function InboxContentRoot(props: TInbox
     }
   );
 
-  const isEditable =
-    allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlug, projectId) ||
-    inboxIssue?.issue.created_by === currentUser?.id;
+  const canTriage = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.PROJECT,
+    workspaceSlug,
+    projectId
+  );
 
   const isGuest = getProjectRoleByWorkspaceSlugAndProjectId(workspaceSlug, projectId) === EUserPermissions.GUEST;
   const isOwner = inboxIssue?.issue.created_by === currentUser?.id;
@@ -76,13 +84,16 @@ export const InboxContentRoot = observer(function InboxContentRoot(props: TInbox
 
   if (!inboxIssue) return <></>;
 
-  const isIssueDisabled = [-1, 1, 2].includes(inboxIssue.status);
+  const isIssueDisabled = [-1, 2, 3].includes(inboxIssue.status);
+
+  const isEditable = !readOnly && !isIssueDisabled && (canTriage || (isGuest && isOwner));
 
   return (
     <>
       <div className="relative flex h-full w-full flex-col overflow-hidden">
         <div className="z-[11] min-h-[52px] flex-shrink-0">
           <InboxIssueActionsHeader
+            hubMode={hubMode}
             setIsMobileSidebar={setIsMobileSidebar}
             isMobileSidebar={isMobileSidebar}
             workspaceSlug={workspaceSlug}
@@ -95,12 +106,11 @@ export const InboxContentRoot = observer(function InboxContentRoot(props: TInbox
         </div>
         <ContentWrapper className="divide-y-2 divide-subtle-1">
           <InboxIssueMainContent
+            hubMode={hubMode}
             workspaceSlug={workspaceSlug}
             projectId={projectId}
             inboxIssue={inboxIssue}
-            isEditable={isEditable && !isIssueDisabled && !readOnly}
-            isSubmitting={isSubmitting}
-            setIsSubmitting={setIsSubmitting}
+            isEditable={isEditable}
           />
         </ContentWrapper>
       </div>

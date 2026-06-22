@@ -1,194 +1,145 @@
+import { useState } from "react";
 import { observer } from "mobx-react";
-
-// plane internal packages
+import { ExternalLink, Mail, Pencil, Trash2 } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { WEB_BASE_URL } from "@operis/constants";
-import { NewTabIcon } from "@operis/propel/icons";
-import { setPromiseToast } from "@operis/propel/toast";
+import { Button } from "@operis/propel/button";
 import { Tooltip } from "@operis/propel/tooltip";
-import { ToggleSwitch } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
-// hooks
+import { getFileURL, cn } from "@operis/utils";
 import { useWorkspace } from "@/hooks/store";
+import { DeleteWorkspaceModal } from "./delete-workspace-modal";
+import { EditWorkspaceModal } from "./edit-workspace-modal";
+import { WorkspaceEmailConfigModal } from "./workspace-email-config-modal";
+import { WORKSPACE_NOTIFICATION_FLAGS } from "./workspace-notification-flags";
 
 type TWorkspaceListItemProps = {
   workspaceId: string;
 };
 
 export const WorkspaceListItem = observer(function WorkspaceListItem({ workspaceId }: TWorkspaceListItemProps) {
-  const { getWorkspaceById, patchWorkspaceIssueNotificationFlags, loader: workspaceLoader } = useWorkspace();
+  const { t } = useTranslation();
+  const { getWorkspaceById } = useWorkspace();
   const workspace = getWorkspaceById(workspaceId);
-  const saving = workspaceLoader === "mutation";
+  const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   if (!workspace) return null;
 
-  const assigneesAlways = Boolean(workspace.issue_notify_assignees_always_email);
-  const extendedActivities = Boolean(workspace.issue_notify_email_include_extended_activities);
-  const descriptionChanges = Boolean(workspace.issue_notify_email_include_description_changes);
-  const immediateDispatch = Boolean(workspace.issue_notify_email_dispatch_immediately);
+  const workspaceUrl = `${WEB_BASE_URL}/${encodeURIComponent(workspace.slug)}`;
+  const activeFlags = WORKSPACE_NOTIFICATION_FLAGS.filter((flag) => Boolean(workspace[flag.key])).length;
+  const totalFlags = WORKSPACE_NOTIFICATION_FLAGS.length;
 
-  const patchFlag = async (
-    payload: Parameters<typeof patchWorkspaceIssueNotificationFlags>[1],
-    successMessage: string
-  ) => {
-    const promise = patchWorkspaceIssueNotificationFlags(workspaceId, payload);
-    setPromiseToast(promise, {
-      loading: "Saving…",
-      success: { title: "Saved", message: () => successMessage },
-      error: { title: "Error", message: () => "Could not save workspace settings" },
-    });
-    await promise;
+  const openWorkspace = () => {
+    window.open(workspaceUrl, "_blank", "noopener,noreferrer");
   };
 
   return (
-    <div className="rounded-lg border border-subtle bg-layer-1 shadow-raised-100">
-      <a
-        href={`${WEB_BASE_URL}/${encodeURIComponent(workspace.slug)}`}
-        target="_blank"
-        className="group flex items-center justify-between gap-2.5 truncate border-b border-subtle p-3 hover:bg-layer-1-hover"
-        rel="noreferrer"
-      >
-        <div className="flex items-start gap-4">
-          <span
-            className={`relative mt-1 flex h-8 w-8 flex-shrink-0 items-center justify-center p-2 text-11 uppercase ${
-              !workspace?.logo_url && "rounded-lg bg-accent-primary text-on-color"
-            }`}
-          >
-            {workspace?.logo_url && workspace.logo_url !== "" ? (
-              <img
-                src={getFileURL(workspace.logo_url)}
-                className="absolute top-0 left-0 h-full w-full rounded-sm object-cover"
-                alt="Workspace Logo"
-              />
-            ) : (
-              (workspace?.name?.[0] ?? "...")
-            )}
-          </span>
-          <div className="flex flex-col items-start gap-1">
-            <div className="flex w-full flex-wrap items-center gap-2.5">
-              <h3 className={`text-14 font-medium capitalize`}>{workspace.name}</h3>
-              <Tooltip tooltipContent="The unique URL of your workspace">
-                <h4 className="text-13 text-tertiary">[{workspace.slug}]</h4>
-              </Tooltip>
-            </div>
-            {workspace.owner.email && (
-              <div className="flex items-center gap-1 text-11">
-                <h3 className="font-medium text-secondary">Owned by:</h3>
-                <h4 className="text-tertiary">{workspace.owner.email}</h4>
-              </div>
-            )}
-            <div className="flex items-center gap-2.5 text-11">
-              {workspace.total_projects !== null && (
-                <span className="flex items-center gap-1">
-                  <h3 className="font-medium text-secondary">Total projects:</h3>
-                  <h4 className="text-tertiary">{workspace.total_projects}</h4>
-                </span>
+    <>
+      <article className="shadow-xs relative flex h-full flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1 transition-all duration-150 hover:border-strong hover:shadow-raised-100">
+        <span
+          className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-accent-primary/30 to-transparent"
+          aria-hidden
+        />
+        <div className="flex items-start justify-between gap-3 border-b border-subtle px-4 py-3">
+          <div className="flex min-w-0 items-start gap-3">
+            <span
+              className={cn(
+                "relative mt-0.5 flex size-9 shrink-0 items-center justify-center text-11 uppercase",
+                !workspace.logo_url && "rounded-xl bg-accent-primary text-on-color"
               )}
-              {workspace.total_members !== null && (
-                <>
-                  •
-                  <span className="flex items-center gap-1">
-                    <h3 className="font-medium text-secondary">Total members:</h3>
-                    <h4 className="text-tertiary">{workspace.total_members}</h4>
+            >
+              {workspace.logo_url ? (
+                <img
+                  src={getFileURL(workspace.logo_url)}
+                  className="absolute inset-0 size-full rounded-xl object-cover"
+                  alt=""
+                />
+              ) : (
+                (workspace.name?.[0] ?? "…")
+              )}
+            </span>
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="truncate text-14 font-semibold text-primary capitalize">{workspace.name}</h3>
+                <Tooltip tooltipContent={workspace.slug}>
+                  <span className="font-mono rounded-full bg-layer-2 px-2 py-0.5 text-10 text-tertiary">
+                    {workspace.slug}
                   </span>
-                </>
+                </Tooltip>
+              </div>
+              <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-11 text-tertiary">
+                {workspace.owner.email ? <span>{workspace.owner.email}</span> : null}
+                {workspace.total_projects !== null ? (
+                  <span>{t("god_mode.pages.workspace.meta_projects", { count: workspace.total_projects })}</span>
+                ) : null}
+                {workspace.total_members !== null ? (
+                  <span>{t("god_mode.pages.workspace.meta_members", { count: workspace.total_members })}</span>
+                ) : null}
+              </div>
+            </div>
+          </div>
+          <Tooltip tooltipContent={t("god_mode.pages.workspace.open_workspace_tooltip")}>
+            <button
+              type="button"
+              onClick={openWorkspace}
+              className="flex shrink-0 items-center justify-center rounded-lg border border-subtle bg-layer-2/60 p-2 text-tertiary transition-colors hover:border-strong hover:bg-layer-1-hover hover:text-accent-primary"
+              aria-label={t("god_mode.pages.workspace.open_button")}
+            >
+              <ExternalLink className="size-3.5" strokeWidth={1.75} />
+            </button>
+          </Tooltip>
+        </div>
+
+        <div className="flex flex-1 flex-col justify-center p-4">
+          <button
+            type="button"
+            onClick={() => setIsConfigOpen(true)}
+            className="group flex w-full flex-col gap-2 rounded-xl border border-subtle bg-layer-2/30 px-3 py-3 text-left transition-colors hover:border-strong hover:bg-layer-1-hover"
+          >
+            <span className="flex items-center gap-2 text-12 font-medium text-primary">
+              <Mail className="size-3.5 text-accent-primary" strokeWidth={1.75} />
+              {t("god_mode.pages.workspace.config_title")}
+            </span>
+            <span
+              className={cn(
+                "inline-flex w-fit rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
+                activeFlags > 0 ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
               )}
-            </div>
-          </div>
+            >
+              {activeFlags > 0
+                ? t("god_mode.pages.workspace.email_flags_summary", { active: activeFlags, total: totalFlags })
+                : t("god_mode.pages.workspace.email_flags_none")}
+            </span>
+          </button>
         </div>
-        <div className="flex-shrink-0">
-          <NewTabIcon width={14} height={16} className="text-placeholder group-hover:text-secondary" />
+
+        <div
+          className="mt-auto flex flex-wrap items-center gap-1.5 border-t border-subtle bg-surface-1/70 px-3 py-2"
+          onClick={(event) => event.stopPropagation()}
+        >
+          <Button variant="secondary" size="sm" className="h-8" onClick={() => setIsConfigOpen(true)}>
+            <Mail className="size-3.5" strokeWidth={1.75} />
+            {t("god_mode.pages.workspace.config_button")}
+          </Button>
+          <Button variant="secondary" size="sm" className="h-8" onClick={() => setIsEditOpen(true)}>
+            <Pencil className="size-3.5" strokeWidth={1.75} />
+            {t("god_mode.pages.workspace.edit_button")}
+          </Button>
+          <Button variant="error-outline" size="sm" className="h-8" onClick={() => setIsDeleteOpen(true)}>
+            <Trash2 className="size-3.5" strokeWidth={1.75} />
+            {t("god_mode.pages.workspace.delete_button")}
+          </Button>
+          <Button variant="secondary" size="sm" className="ml-auto h-8" onClick={openWorkspace}>
+            <ExternalLink className="size-3.5" strokeWidth={1.75} />
+            {t("god_mode.pages.workspace.open_button")}
+          </Button>
         </div>
-      </a>
+      </article>
 
-      <div
-        className="space-y-0 px-3 pb-3 pt-2"
-        onClick={(e) => e.stopPropagation()}
-        onKeyDown={(e) => e.stopPropagation()}
-        role="presentation"
-      >
-        <p className="text-11 leading-5 text-tertiary pb-2">
-          Issue email behaviour for this workspace (off = default Plane-style notifications).
-        </p>
-
-        <div className="flex flex-col divide-y divide-subtle border border-subtle rounded-md">
-          <div className="flex items-start justify-between gap-4 p-3">
-            <div className="min-w-0">
-              <div className="text-13 font-medium">Assignees always get email</div>
-              <div className="text-11 text-tertiary leading-5">
-                Assignees receive issue activity emails even if they turned off email for property changes.
-              </div>
-            </div>
-            <ToggleSwitch
-              value={assigneesAlways}
-              onChange={(next) =>
-                patchFlag({ issue_notify_assignees_always_email: next }, "Assignee email setting updated")
-              }
-              size="sm"
-              disabled={saving}
-            />
-          </div>
-
-          <div className="flex items-start justify-between gap-4 p-3">
-            <div className="min-w-0">
-              <div className="text-13 font-medium">Extended activity types</div>
-              <div className="text-11 text-tertiary leading-5">
-                Notify for cycles, modules, reactions, votes, drafts, and intake (normally skipped).
-              </div>
-            </div>
-            <ToggleSwitch
-              value={extendedActivities}
-              onChange={(next) =>
-                patchFlag(
-                  { issue_notify_email_include_extended_activities: next },
-                  "Extended activity notifications updated"
-                )
-              }
-              size="sm"
-              disabled={saving}
-            />
-          </div>
-
-          <div className="flex items-start justify-between gap-4 p-3">
-            <div className="min-w-0">
-              <div className="text-13 font-medium">Description changes</div>
-              <div className="text-11 text-tertiary leading-5">
-                Send subscriber/assignee notifications when the issue description is edited.
-              </div>
-            </div>
-            <ToggleSwitch
-              value={descriptionChanges}
-              onChange={(next) =>
-                patchFlag(
-                  { issue_notify_email_include_description_changes: next },
-                  "Description notification setting updated"
-                )
-              }
-              size="sm"
-              disabled={saving}
-            />
-          </div>
-
-          <div className="flex items-start justify-between gap-4 p-3">
-            <div className="min-w-0">
-              <div className="text-13 font-medium">Send email queue immediately</div>
-              <div className="text-11 text-tertiary leading-5">
-                After logging notifications, trigger the mail worker right away instead of waiting for the 5-minute job.
-              </div>
-            </div>
-            <ToggleSwitch
-              value={immediateDispatch}
-              onChange={(next) =>
-                patchFlag(
-                  { issue_notify_email_dispatch_immediately: next },
-                  "Immediate dispatch setting updated"
-                )
-              }
-              size="sm"
-              disabled={saving}
-            />
-          </div>
-        </div>
-      </div>
-    </div>
+      <WorkspaceEmailConfigModal workspace={workspace} isOpen={isConfigOpen} onClose={() => setIsConfigOpen(false)} />
+      <EditWorkspaceModal workspace={workspace} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
+      <DeleteWorkspaceModal workspace={workspace} isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} />
+    </>
   );
 });

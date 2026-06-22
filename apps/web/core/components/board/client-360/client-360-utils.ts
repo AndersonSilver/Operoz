@@ -79,3 +79,26 @@ export function periodFromQuery(search: { get: (key: string) => string | null } 
   if (start && end) return { start, end };
   return null;
 }
+
+/** Módulos por página no heatmap do Client 360 (detalhe). */
+export const CLIENT_360_MODULE_HEATMAP_PAGE_SIZE = 4;
+export const CLIENT_360_ATTENTION_PAGE_SIZE = 5;
+
+/** A partir deste total, o heatmap usa paginação em vez de scroll longo. */
+export const CLIENT_360_MODULE_HEATMAP_PAGINATE_FROM = 8;
+
+export type Client360HeatmapReportStatus = "published" | "draft" | "missing";
+
+export type Client360HeatmapKanbanLevel = "ok" | "warning" | "critical";
+
+export function heatmapReportToStatus(report: string): Client360HeatmapReportStatus {
+  if (report === "complete") return "published";
+  if (report === "partial") return "draft";
+  return "missing";
+}
+
+export function heatmapReportToKanbanLevel(report: string): Client360HeatmapKanbanLevel {
+  if (report === "complete") return "ok";
+  if (report === "partial") return "warning";
+  return "critical";
+}

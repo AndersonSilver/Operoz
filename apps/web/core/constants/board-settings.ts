@@ -78,6 +78,7 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
     ],
   },
   { key: "playbooks", href: "/playbooks", i18n_label: "boards.settings.nav.playbooks" },
+  { key: "intake_forms", href: "/sustentacao", i18n_label: "boards.settings.nav.intake_forms" },
   { key: "fields", href: "/campos", i18n_label: "boards.settings.nav.fields" },
   {
     key: "issue_types",

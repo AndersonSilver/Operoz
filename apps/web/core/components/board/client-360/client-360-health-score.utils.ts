@@ -54,3 +54,43 @@ export function hasClient360HealthScoreData(
 ): breakdown is TClient360HealthBreakdownItem[] {
   return typeof healthScore === "number" && Array.isArray(breakdown) && breakdown.length > 0;
 }
+
+export type HealthExplainerWhyInsight = {
+  dimension: TClient360HealthDimension;
+  score: number;
+  weight: number;
+  contribution: number;
+  detail: string;
+  tone: Client360Tone;
+};
+
+export type HealthExplainerWhy = {
+  primaryDrag: HealthExplainerWhyInsight | null;
+  positive: HealthExplainerWhyInsight[];
+  weightedSum: number;
+};
+
+export function buildHealthExplainerWhy(breakdown: TClient360HealthBreakdownItem[]): HealthExplainerWhy {
+  const insights: HealthExplainerWhyInsight[] = breakdown.map((item) => ({
+    dimension: item.dimension,
+    score: item.score,
+    weight: item.weight,
+    contribution: client360WeightedContribution(item),
+    detail: item.detail ?? "",
+    tone: client360DimensionBarTone(item.score),
+  }));
+
+  const weightedSum = insights.reduce((sum, item) => sum + item.contribution, 0);
+  const drags = insights
+    .filter((item) => item.score < 80)
+    .sort((a, b) => a.contribution - b.contribution || b.weight - a.weight);
+  const positive = insights
+    .filter((item) => item.score >= 80 && item.contribution > 0)
+    .sort((a, b) => b.contribution - a.contribution);
+
+  return {
+    primaryDrag: drags[0] ?? null,
+    positive,
+    weightedSum,
+  };
+}

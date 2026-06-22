@@ -126,8 +126,8 @@ export const renderFormattedDateWithoutYear = (date: string | Date): string => {
   if (!parsedDate) return "";
   // Check if the parsed date is valid before formatting
   if (!isValid(parsedDate)) return ""; // Return empty string for invalid dates
-  // Format the date in short format (MMM dd)
-  const formattedDate = format(parsedDate, "MMM dd");
+  const locale = getDateFnsLocale();
+  const formattedDate = format(parsedDate, "MMM dd", { locale });
   return formattedDate;
 };
 

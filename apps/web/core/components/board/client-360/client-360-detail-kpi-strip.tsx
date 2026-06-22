@@ -8,9 +8,12 @@ import { reportCoverageLabelKey } from "@/components/board/client-360/client-360
 export function Client360DetailKpiStrip({
   data,
   onMetricClick,
+  embedded = false,
 }: {
   data: TClient360DetailResponse;
   onMetricClick?: (key: "overdue" | "support" | "pending" | "reports") => void;
+  /** Omits outer card chrome when nested in the command bar. */
+  embedded?: boolean;
 }) {
   const { t } = useTranslation();
   const reportKey = reportCoverageLabelKey(data.status_report.coverage);
@@ -31,9 +34,9 @@ export function Client360DetailKpiStrip({
   return (
     <div
       className={cn(
-        "shadow-xs overflow-hidden rounded-xl border border-subtle bg-layer-1",
         "grid divide-y divide-subtle sm:divide-x sm:divide-y-0",
-        cols
+        cols,
+        embedded ? "bg-transparent" : "shadow-xs overflow-hidden rounded-xl border border-subtle bg-layer-1"
       )}
     >
       <Client360BentoMetric
@@ -41,6 +44,7 @@ export function Client360DetailKpiStrip({
         label={t("boards.client_360.report_column")}
         value={t(reportKey)}
         tone={reportTone}
+        valueVariant="status"
         icon={FileText}
       />
       <Client360BentoMetric
@@ -48,6 +52,7 @@ export function Client360DetailKpiStrip({
         label={t("boards.client_360.overdue_short")}
         value={data.issues.overdue}
         tone="danger"
+        emphasizeValue={data.issues.overdue > 0}
         icon={Clock}
         onClick={data.issues.overdue > 0 ? () => onMetricClick?.("overdue") : undefined}
       />
@@ -56,6 +61,7 @@ export function Client360DetailKpiStrip({
         label={t("boards.client_360.support_short")}
         value={data.support.open_count}
         tone="info"
+        emphasizeValue={data.support.open_count > 0}
         icon={Headphones}
         onClick={data.support.open_count > 0 ? () => onMetricClick?.("support") : undefined}
       />
@@ -64,6 +70,7 @@ export function Client360DetailKpiStrip({
         label={t("boards.overview_pending_kpi")}
         value={data.issues.pending}
         tone="accent"
+        emphasizeValue={data.issues.pending > 0}
         icon={ListTodo}
         onClick={data.issues.pending > 0 ? () => onMetricClick?.("pending") : undefined}
       />

@@ -5,6 +5,7 @@ import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view
 import { PageHead } from "@/components/core/page-title";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
 import { AssistantQualityDashboard } from "@/components/settings/workspace/assistant-quality-dashboard";
+import { WorkspaceAssistantSettingsHero } from "@/components/settings/workspace/workspace-assistant-settings-hero";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
 import type { Route } from "./+types/page";
@@ -26,10 +27,10 @@ function AssistantSettingsPage({ params }: Route.ComponentProps) {
   }
 
   return (
-    <SettingsContentWrapper header={<AssistantWorkspaceSettingsHeader />}>
+    <SettingsContentWrapper header={<AssistantWorkspaceSettingsHeader />} hugging>
       <PageHead title={pageTitle} />
-      <div className="space-y-2 px-6 py-4">
-        <p className="text-sm text-secondary">{t("workspace_settings.settings.assistant.description")}</p>
+      <div className="flex w-full flex-col gap-6">
+        <WorkspaceAssistantSettingsHero />
         <AssistantQualityDashboard workspaceSlug={workspaceSlug} />
       </div>
     </SettingsContentWrapper>

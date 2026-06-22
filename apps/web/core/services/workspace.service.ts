@@ -6,7 +6,6 @@ import type {
   IWorkspaceMemberInvitation,
   ILastActiveWorkspaceDetails,
   IWorkspaceSearchResults,
-  IProductUpdateResponse,
   IWorkspaceBulkInviteFormData,
   IWorkspaceViewProps,
   IUserProjectsRole,
@@ -223,13 +222,6 @@ export class WorkspaceService extends APIService {
       params,
     })
       .then((res) => res?.data)
-      .catch((error) => {
-        throw error?.response?.data;
-      });
-  }
-  async getProductUpdates(): Promise<IProductUpdateResponse[]> {
-    return this.get("/api/release-notes/")
-      .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
@@ -519,6 +511,25 @@ export class WorkspaceService extends APIService {
       });
   }
 
+  async downloadSupportAnalyticsCsv(
+    workspaceSlug: string,
+    params: {
+      period_start?: string;
+      period_end?: string;
+      export: "support_csv";
+      delimiter?: "semicolon";
+    }
+  ): Promise<{ data: Blob; headers: Record<string, string | undefined> }> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/`, { params }, { responseType: "blob" })
+      .then((response) => ({
+        data: response.data as Blob,
+        headers: response.headers as Record<string, string | undefined>,
+      }))
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
   async getClient360Narrative(
     workspaceSlug: string,
     projectId: string,
@@ -737,6 +748,18 @@ export class WorkspaceService extends APIService {
     }).catch((error) => {
       throw error?.response?.data;
     });
+  }
+
+  async getClient360QbrDraft(
+    workspaceSlug: string,
+    projectId: string,
+    params: { period_start: string; period_end: string; quarter?: string }
+  ): Promise<import("@operis/types").TClient360QbrDraft> {
+    return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, { params })
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
   }
 
   async generateClient360QbrDraft(

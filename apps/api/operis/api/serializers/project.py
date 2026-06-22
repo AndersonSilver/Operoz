@@ -12,6 +12,7 @@ from operis.db.models import Project, ProjectIdentifier, WorkspaceMember, State,
 from operis.utils.content_validator import (
     validate_html_content,
 )
+from operis.utils.project_default_features import apply_default_project_features
 from .base import BaseSerializer
 
 
@@ -146,6 +147,8 @@ class ProjectCreateSerializer(BaseSerializer):
                     "color": random.choice(self.PROJECT_ICON_DEFAULT_COLORS),
                 },
             }
+
+        apply_default_project_features(validated_data)
 
         project = Project.objects.create(**validated_data, workspace_id=self.context["workspace_id"])
         return project

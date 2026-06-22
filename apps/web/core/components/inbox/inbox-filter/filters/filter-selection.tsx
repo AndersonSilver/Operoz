@@ -11,6 +11,7 @@ import { FilterLabels } from "./labels";
 import { FilterMember } from "./members";
 import { FilterPriority } from "./priority";
 import { FilterStatus } from "./status";
+import { FilterSupportTicket } from "./support-ticket";
 
 export const InboxIssueFilterSelection = observer(function InboxIssueFilterSelection() {
   // hooks
@@ -47,6 +48,10 @@ export const InboxIssueFilterSelection = observer(function InboxIssueFilterSelec
         {/* status */}
         <div className="py-2">
           <FilterStatus searchQuery={filtersSearchQuery} />
+        </div>
+        {/* Support ticket filters */}
+        <div className="py-2">
+          <FilterSupportTicket searchQuery={filtersSearchQuery} />
         </div>
         {/* Priority */}
         <div className="py-2">

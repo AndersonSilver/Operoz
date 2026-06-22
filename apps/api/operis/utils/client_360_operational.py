@@ -17,7 +17,7 @@ from operis.db.models import (
     Module,
     ModuleIssue,
 )
-from operis.utils.client_360 import CLOSED_STATE_GROUPS, SUPPORT_TYPE_NAME_Q, WeekPeriod
+from operis.utils.client_360 import CLOSED_STATE_GROUPS, WeekPeriod
 
 DEFAULT_SUPPORT_SLA_DAYS = 7
 DEFAULT_INTAKE_TYPE_PATTERNS = ("intake", "entrada")
@@ -340,24 +340,15 @@ def aggregate_support_sla_stats(
     project_board_map: dict[str, str | None],
     sla_map: dict[str, int] | None,
 ) -> dict[str, dict]:
-    pending_filter = ~Q(state__group__in=CLOSED_STATE_GROUPS)
-    rows = (
-        issue_queryset.filter(pending_filter)
-        .filter(SUPPORT_TYPE_NAME_Q)
-        .values("project_id", "created_at")
+    del issue_queryset  # sustentação vem do hub IntakeIssue, não do queryset de Issue
+    from operis.utils.client_360_support_hub import aggregate_support_sla_from_hub
+
+    return aggregate_support_sla_from_hub(
+        project_board_map.keys(),
+        today,
+        project_board_map=project_board_map,
+        sla_map=sla_map,
     )
-    result: dict[str, dict] = {}
-    for row in rows:
-        pid = str(row["project_id"])
-        board_id = project_board_map.get(pid)
-        sla_days = resolve_support_sla_days(board_id, sla_map)
-        created = row["created_at"].date() if row["created_at"] else today
-        age = max(0, (today - created).days)
-        bucket = result.setdefault(pid, {"breach_count": 0, "breached": False})
-        if age > sla_days:
-            bucket["breach_count"] += 1
-            bucket["breached"] = True
-    return result
 
 
 def apply_operational_enrichment(

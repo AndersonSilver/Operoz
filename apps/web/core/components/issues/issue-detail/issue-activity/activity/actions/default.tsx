@@ -1,10 +1,11 @@
 import { observer } from "mobx-react";
 // plane imports
 import { WorkItemsIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operis/i18n";
 import { EInboxIssueSource } from "@operis/types";
 // hooks
-import { capitalizeFirstLetter } from "@operis/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
+import { getInboxSourceLabelKey } from "@/utils/support-ticket";
 // local imports
 import { IssueActivityBlockComponent } from "./";
 
@@ -12,6 +13,7 @@ type TIssueDefaultActivity = { activityId: string; ends: "top" | "bottom" | unde
 
 export const IssueDefaultActivity = observer(function IssueDefaultActivity(props: TIssueDefaultActivity) {
   const { activityId, ends } = props;
+  const { t } = useTranslation();
   // hooks
   const {
     activity: { getActivityById },
@@ -20,7 +22,7 @@ export const IssueDefaultActivity = observer(function IssueDefaultActivity(props
   const activity = getActivityById(activityId);
 
   if (!activity) return <></>;
-  const source = activity.source_data?.source;
+  const source = activity.source_data?.source as EInboxIssueSource | undefined;
 
   return (
     <IssueActivityBlockComponent
@@ -31,15 +33,12 @@ export const IssueDefaultActivity = observer(function IssueDefaultActivity(props
       <>
         {activity.verb === "created" ? (
           source && source !== EInboxIssueSource.IN_APP ? (
-            <span>
-              created the work item via{" "}
-              <span className="font-medium">{capitalizeFirstLetter(source.toLowerCase() || "")}</span>.
-            </span>
+            <span>{t("inbox_issue.activity.created_via_source", { source: t(getInboxSourceLabelKey(source)) })}</span>
           ) : (
-            <span> created the work item.</span>
+            <span>{t("inbox_issue.activity.created_in_app")}</span>
           )
         ) : (
-          <span> deleted a work item.</span>
+          <span>{t("inbox_issue.activity.removed_work_item")}</span>
         )}
       </>
     </IssueActivityBlockComponent>

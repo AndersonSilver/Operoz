@@ -1,35 +1,38 @@
-
 import { observer } from "mobx-react";
 import useSWR from "swr";
+import { ImageIcon, KeyRound } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { Loader } from "@operis/ui";
-// components
 import { PageWrapper } from "@/components/common/page-wrapper";
-// hooks
 import { useInstance } from "@/hooks/store";
-// types
 import type { Route } from "./+types/page";
-// local
 import { InstanceImageConfigForm } from "./form";
 
 const InstanceImagePage = observer(function InstanceImagePage(_props: Route.ComponentProps) {
-  // store
+  const { t } = useTranslation();
   const { formattedConfig, fetchInstanceConfigurations } = useInstance();
 
   useSWR("INSTANCE_CONFIGURATIONS", () => fetchInstanceConfigurations());
 
   return (
     <PageWrapper
+      size="lg"
       header={{
-        title: "Third-party image libraries",
-        description: "Let your users search and choose images from third-party libraries",
+        icon: ImageIcon,
+        title: t("god_mode.pages.image.title"),
+        description: t("god_mode.pages.image.description"),
+        highlights: [
+          { label: t("god_mode.nav.image.name"), icon: ImageIcon, tone: "accent" },
+          { label: "Unsplash", icon: KeyRound, tone: "warning" },
+        ],
       }}
     >
       {formattedConfig ? (
         <InstanceImageConfigForm config={formattedConfig} />
       ) : (
-        <Loader className="space-y-8">
-          <Loader.Item height="50px" width="50%" />
-          <Loader.Item height="50px" width="20%" />
+        <Loader className="space-y-4">
+          <Loader.Item height="140px" width="100%" />
+          <Loader.Item height="200px" width="60%" />
         </Loader>
       )}
     </PageWrapper>

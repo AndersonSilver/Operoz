@@ -97,13 +97,16 @@ export default {
       description: "Arquive páginas que não estão no seu radar. Acesse-as aqui quando necessário.",
     },
     intake_sidebar: {
-      title: "Registrar solicitações de Entrada",
+      title: "Registrar chamados de sustentação",
       description:
-        "Envie novas solicitações para serem revisadas, priorizadas e rastreadas dentro do fluxo de trabalho do seu projeto.",
-      cta_primary: "Criar solicitação de Entrada",
+        "Envie novos chamados para serem revisados, priorizados e rastreados dentro do fluxo de sustentação do projeto.",
+      cta_primary: "Criar chamado de sustentação",
     },
     intake_main: {
-      title: "Selecione um item de trabalho de Entrada para ver seus detalhes",
+      title: "Selecione um item de intake para ver os detalhes",
+    },
+    support_main: {
+      title: "Selecione um chamado de sustentação para ver os detalhes",
     },
   },
   workspace_empty_state: {

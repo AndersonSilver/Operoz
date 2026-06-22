@@ -8,6 +8,12 @@ set -euo pipefail
 : "${GIT_BRANCH:=preview}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=vps-compose-utils.sh
+source "${SCRIPT_DIR}/vps-compose-utils.sh"
+
+ENV_FILE="${OPERIS_APP_PATH}/operis.env"
+
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
@@ -28,16 +34,20 @@ docker tag "${WEB_IMAGE}" myoperis/plane-frontend:preview
 docker tag "${WEB_IMAGE}" myoperis/plane-frontend:stable
 docker tag "${WEB_IMAGE}" myoperis/plane-frontend:local
 
-echo "==> Recriar contentor web"
-cd "${OPERIS_APP_PATH}"
-if [[ ! -f operis.env ]]; then
+if [[ ! -f "${ENV_FILE}" ]]; then
   echo "ERRO: operis.env não encontrado em ${OPERIS_APP_PATH}"
   exit 1
 fi
 
-docker compose --env-file operis.env up -d --no-deps --pull never --force-recreate web
+operis_sync_web_url_env "${ENV_FILE}"
+
+echo "==> Recriar contentor web"
+cd "${OPERIS_APP_PATH}"
+operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --no-deps --pull never --force-recreate web
 
 echo "==> Estado"
-docker compose --env-file operis.env ps web
+operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" ps web
+
+operis_health_check "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" || true
 
 echo "==> Deploy web concluído"

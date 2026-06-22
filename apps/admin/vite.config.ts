@@ -46,6 +46,8 @@ export default defineConfig(({ mode }) => {
       alias: {
         // Use workspace source so SSR/dev never serves a stale packages/utils/dist.
         "@operis/utils": path.resolve(__dirname, "../../packages/utils/src/index.ts"),
+        // Dev: source TS (como apps/web) — evita falha ao resolver packages/i18n/dist no Vite.
+        "@operis/i18n": path.resolve(__dirname, "../../packages/i18n/src/index.ts"),
         // Next.js compatibility shims used within admin
         "next/link": path.resolve(__dirname, "app/compat/next/link.tsx"),
         "next/navigation": path.resolve(__dirname, "app/compat/next/navigation.ts"),

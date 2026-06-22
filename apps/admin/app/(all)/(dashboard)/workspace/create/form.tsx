@@ -1,26 +1,30 @@
-
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+import { LayoutGrid } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { WEB_BASE_URL, ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operis/constants";
 import { Button, getButtonStyling } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import { InstanceWorkspaceService } from "@operis/services";
 import type { IWorkspace } from "@operis/types";
 import { validateSlug, validateWorkspaceName } from "@operis/utils";
-// components
 import { CustomSelect, Input } from "@operis/ui";
-// hooks
+import {
+  AdminFieldLabel,
+  AdminFormActions,
+  AdminFormFooter,
+  AdminSettingsPanel,
+} from "@/components/settings/admin-settings-panel";
 import { useWorkspace } from "@/hooks/store";
 
 const instanceWorkspaceService = new InstanceWorkspaceService();
 
-export function WorkspaceCreateForm() {
-  // router
+export const WorkspaceCreateForm = observer(function WorkspaceCreateForm() {
+  const { t } = useTranslation();
   const router = useRouter();
-  // states
   const [slugError, setSlugError] = useState(false);
   const [invalidSlug, setInvalidSlug] = useState(false);
   const [defaultValues, setDefaultValues] = useState<Partial<IWorkspace>>({
@@ -28,9 +32,8 @@ export function WorkspaceCreateForm() {
     slug: "",
     organization_size: "",
   });
-  // store hooks
   const { createWorkspace } = useWorkspace();
-  // form info
+
   const {
     handleSubmit,
     control,
@@ -38,7 +41,7 @@ export function WorkspaceCreateForm() {
     getValues,
     formState: { errors, isSubmitting, isValid },
   } = useForm<IWorkspace>({ defaultValues, mode: "onChange" });
-  // derived values
+
   const workspaceBaseURL = encodeURI(WEB_BASE_URL || window.location.origin + "/");
 
   const handleCreateWorkspace = async (formData: IWorkspace) => {
@@ -51,16 +54,16 @@ export function WorkspaceCreateForm() {
             .then(async () => {
               setToast({
                 type: TOAST_TYPE.SUCCESS,
-                title: "Success!",
-                message: "Workspace created successfully.",
+                title: t("god_mode.common.success"),
+                message: t("god_mode.pages.workspace.created_message"),
               });
               router.push(`/workspace`);
             })
             .catch(() => {
               setToast({
                 type: TOAST_TYPE.ERROR,
-                title: "Error!",
-                message: "Workspace could not be created. Please try again.",
+                title: t("god_mode.common.error"),
+                message: t("god_mode.pages.workspace.create_error"),
               });
             });
         } else setSlugError(true);
@@ -68,32 +71,34 @@ export function WorkspaceCreateForm() {
       .catch(() => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
-          message: "Some error occurred while creating workspace. Please try again.",
+          title: t("god_mode.common.error"),
+          message: t("god_mode.pages.workspace.create_generic_error"),
         });
       });
   };
 
   useEffect(
     () => () => {
-      // when the component unmounts set the default values to whatever user typed in
       setDefaultValues(getValues());
     },
     [getValues, setDefaultValues]
   );
 
   return (
-    <div className="space-y-8">
-      <div className="grid-col grid w-full max-w-4xl grid-cols-1 items-start justify-between gap-x-10 gap-y-6 lg:grid-cols-2">
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13 text-tertiary">Name your workspace</h4>
-          <div className="flex flex-col gap-1">
+    <form className="pb-2" onSubmit={handleSubmit(handleCreateWorkspace)}>
+      <AdminSettingsPanel
+        title={t("god_mode.pages.workspace.create_title")}
+        description={t("god_mode.pages.workspace.create_description")}
+        icon={LayoutGrid}
+        iconClassName="text-accent-primary"
+      >
+        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+          <div className="space-y-2">
+            <AdminFieldLabel>{t("god_mode.pages.workspace.create_name_label")}</AdminFieldLabel>
             <Controller
               control={control}
               name="name"
-              rules={{
-                validate: (value) => validateWorkspaceName(value, true),
-              }}
+              rules={{ validate: (value) => validateWorkspaceName(value, true) }}
               render={({ field: { value, ref, onChange } }) => (
                 <Input
                   id="workspaceName"
@@ -108,65 +113,66 @@ export function WorkspaceCreateForm() {
                   }}
                   ref={ref}
                   hasError={Boolean(errors.name)}
-                  placeholder="Something familiar and recognizable is always best."
-                  className="w-full"
+                  placeholder={t("god_mode.pages.workspace.create_name_placeholder")}
+                  className="w-full rounded-xl"
                 />
               )}
             />
             <span className="text-11 text-danger-primary">{errors?.name?.message}</span>
           </div>
-        </div>
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13 text-tertiary">Set your workspace&apos;s URL</h4>
-          <div className="flex w-full items-center gap-0.5 rounded-md border-[0.5px] border-subtle px-3">
-            <span className="text-13 whitespace-nowrap text-secondary">{workspaceBaseURL}</span>
-            <Controller
-              control={control}
-              name="slug"
-              rules={{
-                validate: (value) => validateSlug(value),
-              }}
-              render={({ field: { onChange, value, ref } }) => (
-                <Input
-                  id="workspaceUrl"
-                  type="text"
-                  value={value.toLocaleLowerCase().trim().replace(/ /g, "-")}
-                  onChange={(e) => {
-                    if (/^[a-zA-Z0-9_-]+$/.test(e.target.value)) setInvalidSlug(false);
-                    else setInvalidSlug(true);
-                    onChange(e.target.value.toLowerCase());
-                  }}
-                  ref={ref}
-                  hasError={Boolean(errors.slug)}
-                  placeholder="workspace-name"
-                  className="block w-full rounded-md border-none bg-transparent !px-0 py-2 text-13"
-                />
-              )}
-            />
+
+          <div className="space-y-2">
+            <AdminFieldLabel>{t("god_mode.pages.workspace.create_url_label")}</AdminFieldLabel>
+            <div className="flex w-full items-center gap-0.5 rounded-xl border border-subtle bg-layer-2/40 px-3">
+              <span className="text-13 whitespace-nowrap text-secondary">{workspaceBaseURL}</span>
+              <Controller
+                control={control}
+                name="slug"
+                rules={{ validate: (value) => validateSlug(value) }}
+                render={({ field: { onChange, value, ref } }) => (
+                  <Input
+                    id="workspaceUrl"
+                    type="text"
+                    value={value.toLocaleLowerCase().trim().replace(/ /g, "-")}
+                    onChange={(e) => {
+                      if (/^[a-zA-Z0-9_-]+$/.test(e.target.value)) setInvalidSlug(false);
+                      else setInvalidSlug(true);
+                      onChange(e.target.value.toLowerCase());
+                    }}
+                    ref={ref}
+                    hasError={Boolean(errors.slug)}
+                    placeholder={t("god_mode.pages.workspace.create_url_placeholder")}
+                    className="block w-full rounded-xl border-none bg-transparent !px-0 py-2 text-13"
+                  />
+                )}
+              />
+            </div>
+            {slugError && (
+              <p className="text-11 text-danger-primary">{t("god_mode.pages.workspace.create_url_taken")}</p>
+            )}
+            {invalidSlug && (
+              <p className="text-11 text-danger-primary">{t("god_mode.pages.workspace.create_url_invalid")}</p>
+            )}
+            {errors.slug && <span className="text-11 text-danger-primary">{errors.slug.message}</span>}
           </div>
-          {slugError && <p className="text-13 text-danger-primary">This URL is taken. Try something else.</p>}
-          {invalidSlug && (
-            <p className="text-13 text-danger-primary">{`URLs can contain only ( - ), ( _ ) and alphanumeric characters.`}</p>
-          )}
-          {errors.slug && <span className="text-11 text-danger-primary">{errors.slug.message}</span>}
-        </div>
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13 text-tertiary">How many people will use this workspace?</h4>
-          <div className="w-full">
+
+          <div className="space-y-2 lg:col-span-2 lg:max-w-lg">
+            <AdminFieldLabel>{t("god_mode.pages.workspace.create_size_label")}</AdminFieldLabel>
             <Controller
               name="organization_size"
               control={control}
-              rules={{ required: "This is a required field." }}
+              rules={{ required: t("god_mode.pages.workspace.create_required") }}
               render={({ field: { value, onChange } }) => (
                 <CustomSelect
                   value={value}
                   onChange={onChange}
                   label={
                     ORGANIZATION_SIZE.find((c) => c === value) ?? (
-                      <span className="text-placeholder">Select a range</span>
+                      <span className="text-placeholder">{t("god_mode.pages.workspace.create_size_placeholder")}</span>
                     )
                   }
-                  buttonClassName="!border-[0.5px] !border-subtle !shadow-none"
+                  buttonClassName="!w-full !rounded-xl !border !border-subtle !bg-layer-2/50 !px-3 !py-2.5"
+                  className="w-full"
                   input
                 >
                   {ORGANIZATION_SIZE.map((item) => (
@@ -178,25 +184,22 @@ export function WorkspaceCreateForm() {
               )}
             />
             {errors.organization_size && (
-              <span className="text-13 text-danger-primary">{errors.organization_size.message}</span>
+              <span className="text-11 text-danger-primary">{errors.organization_size.message}</span>
             )}
           </div>
         </div>
-      </div>
-      <div className="flex max-w-4xl items-center gap-4 py-1">
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={handleSubmit(handleCreateWorkspace)}
-          disabled={!isValid}
-          loading={isSubmitting}
-        >
-          {isSubmitting ? "Creating workspace" : "Create workspace"}
-        </Button>
-        <Link className={getButtonStyling("secondary", "lg")} href="/workspace">
-          Go back
-        </Link>
-      </div>
-    </div>
+      </AdminSettingsPanel>
+
+      <AdminFormFooter>
+        <AdminFormActions className="w-full justify-end sm:justify-between">
+          <Link className={getButtonStyling("secondary", "lg")} href="/workspace">
+            {t("god_mode.pages.workspace.go_back")}
+          </Link>
+          <Button type="submit" variant="primary" size="lg" disabled={!isValid} loading={isSubmitting}>
+            {isSubmitting ? t("god_mode.pages.workspace.creating") : t("god_mode.pages.workspace.create_button")}
+          </Button>
+        </AdminFormActions>
+      </AdminFormFooter>
+    </form>
   );
-}
+});

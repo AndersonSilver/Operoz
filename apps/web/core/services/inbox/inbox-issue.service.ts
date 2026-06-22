@@ -1,7 +1,7 @@
 // plane imports
 import { API_BASE_URL } from "@operis/constants";
-import type { TInboxIssue, TIssue, TInboxIssueWithPagination } from "@operis/types";
-import { EInboxIssueSource } from "@operis/types";
+import type { TInboxIssue, TIssue, TInboxIssueWithPagination, THubMode } from "@operis/types";
+import { EInboxIssueSource, EHubMode } from "@operis/types";
 // helpers
 // services
 import { APIService } from "@/services/api.service";
@@ -31,9 +31,15 @@ export class InboxIssueService extends APIService {
       });
   }
 
-  async create(workspaceSlug: string, projectId: string, data: Partial<TIssue>): Promise<TInboxIssue> {
+  async create(
+    workspaceSlug: string,
+    projectId: string,
+    data: Partial<TIssue>,
+    options?: { ticket_kind?: THubMode }
+  ): Promise<TInboxIssue> {
     return this.post(`/api/workspaces/${workspaceSlug}/projects/${projectId}/inbox-issues/`, {
       source: EInboxIssueSource.IN_APP,
+      ticket_kind: options?.ticket_kind ?? EHubMode.INTAKE,
       issue: data,
     })
       .then((response) => response?.data)
@@ -70,8 +76,15 @@ export class InboxIssueService extends APIService {
       });
   }
 
-  async destroy(workspaceSlug: string, projectId: string, inboxIssueId: string): Promise<void> {
-    return this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/inbox-issues/${inboxIssueId}/`)
+  async destroy(
+    workspaceSlug: string,
+    projectId: string,
+    inboxIssueId: string,
+    data?: { delete_reason: string }
+  ): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/inbox-issues/${inboxIssueId}/`, {
+      data,
+    })
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;

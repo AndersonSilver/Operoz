@@ -3,6 +3,7 @@ import { EAuthModes } from "@operis/constants";
 // components
 import { ResetPasswordForm } from "@/components/account/auth-forms/reset-password";
 import { AuthHeader } from "@/components/auth-screens/header";
+import { AuthThemeToggle } from "@/components/auth-screens/theme-toggle";
 // helpers
 import { EPageTypes } from "@/helpers/authentication.helper";
 // layouts
@@ -14,6 +15,7 @@ function SetPasswordPage() {
     <DefaultLayout>
       <AuthenticationWrapper pageType={EPageTypes.SET_PASSWORD}>
         <div className="relative z-10 flex h-screen w-screen flex-col items-center overflow-hidden overflow-y-auto px-8 pt-6 pb-10">
+          <AuthThemeToggle />
           <AuthHeader type={EAuthModes.SIGN_IN} />
           <ResetPasswordForm />
         </div>

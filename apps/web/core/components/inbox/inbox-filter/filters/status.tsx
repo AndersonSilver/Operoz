@@ -3,6 +3,7 @@ import { observer } from "mobx-react";
 // types
 import { INBOX_STATUS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
+import { EHubMode, EInboxIssueStatus } from "@operis/types";
 import type { TInboxIssueStatus } from "@operis/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
@@ -18,7 +19,7 @@ type Props = {
 export const FilterStatus = observer(function FilterStatus(props: Props) {
   const { searchQuery } = props;
   // hooks
-  const { currentTab, inboxFilters, handleInboxIssueFilters } = useProjectInbox();
+  const { currentTab, hubMode, inboxFilters, handleInboxIssueFilters } = useProjectInbox();
   const { t } = useTranslation();
   // states
   const [previewEnabled, setPreviewEnabled] = useState(true);
@@ -28,7 +29,8 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
   const filteredOptions = INBOX_STATUS.filter(
     (s) =>
       ((currentTab === "open" && [-2, 0].includes(s.status)) ||
-        (currentTab === "closed" && [-1, 1, 2].includes(s.status))) &&
+        (currentTab === "in_progress" && [1].includes(s.status)) ||
+        (currentTab === "closed" && [-1, 2, 3].includes(s.status))) &&
       s.key.includes(searchQuery.toLowerCase())
   );
 
@@ -56,7 +58,11 @@ export const FilterStatus = observer(function FilterStatus(props: Props) {
                 isChecked={filterValue?.includes(status.status) ? true : false}
                 onClick={() => handleStatusFilterSelect(status.status)}
                 icon={<InboxStatusIcon type={status.status} className={`h-3.5 w-3.5`} />}
-                title={t(status.i18n_title)}
+                title={
+                  hubMode === EHubMode.SUPPORT && status.status === EInboxIssueStatus.PENDING
+                    ? t("inbox_issue.status_support.pending.title")
+                    : t(status.i18n_title)
+                }
               />
             ))
           ) : (

@@ -1,6 +1,8 @@
 import type { LucideIcon } from "lucide-react";
 import {
   AlignLeft,
+  AlertTriangle,
+  AlarmClock,
   Calendar,
   CheckSquare,
   Clock,
@@ -9,6 +11,7 @@ import {
   List,
   Paperclip,
   Tag,
+  Ticket,
   Type,
   User,
 } from "lucide-react";
@@ -33,10 +36,20 @@ export const INTAKE_FORM_FIELD_CATALOG: TIntakeFormFieldCatalogItem[] = [
   { type: "text", labelKey: "project_settings.features.intake.forms.field_types.text", icon: Type },
   { type: "paragraph", labelKey: "project_settings.features.intake.forms.field_types.paragraph", icon: AlignLeft },
   { type: "datetime", labelKey: "project_settings.features.intake.forms.field_types.datetime", icon: Clock },
-  { type: "select", labelKey: "project_settings.features.intake.forms.field_types.select", icon: List, hasOptions: true },
+  {
+    type: "select",
+    labelKey: "project_settings.features.intake.forms.field_types.select",
+    icon: List,
+    hasOptions: true,
+  },
   { type: "date", labelKey: "project_settings.features.intake.forms.field_types.date", icon: Calendar },
   { type: "number", labelKey: "project_settings.features.intake.forms.field_types.number", icon: Hash },
-  { type: "labels", labelKey: "project_settings.features.intake.forms.field_types.labels", icon: Tag, hasOptions: true },
+  {
+    type: "labels",
+    labelKey: "project_settings.features.intake.forms.field_types.labels",
+    icon: Tag,
+    hasOptions: true,
+  },
   {
     type: "checkbox",
     labelKey: "project_settings.features.intake.forms.field_types.checkbox",
@@ -50,6 +63,14 @@ export const INTAKE_FORM_FIELD_CATALOG: TIntakeFormFieldCatalogItem[] = [
     labelKey: "project_settings.features.intake.forms.field_types.attachment",
     icon: Paperclip,
   },
+  {
+    type: "criticality",
+    labelKey: "project_settings.features.intake.forms.field_types.criticality",
+    icon: AlertTriangle,
+    hasOptions: true,
+  },
+  { type: "ticket_number", labelKey: "project_settings.features.intake.forms.field_types.ticket_number", icon: Ticket },
+  { type: "sla_due", labelKey: "project_settings.features.intake.forms.field_types.sla_due", icon: AlarmClock },
 ];
 
 export function getCatalogItem(type: TIntakeFormFieldType): TIntakeFormFieldCatalogItem | undefined {
@@ -124,9 +145,11 @@ export function createIntakeFormField(
   const id = `field-${uuidv4().slice(0, 8)}`;
   const options = source?.settings?.options?.length
     ? [...source.settings.options]
-    : fieldType === "select" || fieldType === "checkbox" || fieldType === "labels"
-      ? ["Opção 1"]
-      : [];
+    : fieldType === "criticality"
+      ? ["p0", "p1", "p2", "p3", "p4", "not_incident"]
+      : fieldType === "select" || fieldType === "checkbox" || fieldType === "labels"
+        ? ["Opção 1"]
+        : [];
 
   return {
     id,
@@ -152,10 +175,13 @@ export function fieldPreviewPlaceholderKey(fieldType: TIntakeFormFieldType): str
   switch (fieldType) {
     case "date":
     case "datetime":
+    case "sla_due":
       return "project_settings.features.intake.forms.builder.preview_date";
     case "number":
       return "project_settings.features.intake.forms.builder.preview_number";
     case "select":
+    case "criticality":
+    case "client":
     case "labels":
     case "checkbox":
     case "priority":
@@ -168,6 +194,8 @@ export function fieldPreviewPlaceholderKey(fieldType: TIntakeFormFieldType): str
     case "description":
     case "paragraph":
       return "project_settings.features.intake.forms.builder.preview_paragraph";
+    case "ticket_number":
+      return "project_settings.features.intake.forms.builder.preview_text";
     default:
       return "project_settings.features.intake.forms.builder.preview_text";
   }

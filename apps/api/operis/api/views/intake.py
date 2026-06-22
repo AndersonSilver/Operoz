@@ -25,6 +25,15 @@ from operis.app.permissions import ProjectLitePermission
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.db.models import Intake, IntakeIssue, Issue, Project, ProjectMember, State, StateGroup
 from operis.utils.host import base_host
+from operis.utils.intake_permissions import SUPPORT_TICKET_DELETE_ERROR, user_can_delete_support_ticket
+from operis.utils.board_permission_enforcement import get_project_for_enforcement
+from operis.utils.support_ticket import (
+    SupportTicketValidationError,
+    build_delete_audit_payload,
+    validate_delete_reason,
+)
+from operis.app.serializers import IntakeIssueSerializer
+from operis.bgtasks.issue_activities_task import issue_activity
 from .base import BaseAPIView
 from operis.db.models.intake import SourceType
 from operis.utils.openapi import (
@@ -467,23 +476,42 @@ class IntakeIssueDetailAPIEndpoint(BaseAPIView):
             intake_id=intake.id,
         )
 
+        project_for_perm = get_project_for_enforcement(project_id, slug)
+        if not user_can_delete_support_ticket(request.user, project_for_perm, workspace_slug=slug):
+            return Response(
+                {"error": SUPPORT_TICKET_DELETE_ERROR},
+                status=status.HTTP_403_FORBIDDEN,
+            )
+
+        try:
+            delete_reason = validate_delete_reason(request.data.get("delete_reason"))
+        except SupportTicketValidationError as exc:
+            return Response({exc.field or "delete_reason": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+
+        issue_activity.delay(
+            type="intake.activity.deleted",
+            requested_data=json.dumps(
+                build_delete_audit_payload(
+                    reason=delete_reason,
+                    actor_id=str(request.user.id),
+                    intake_issue=intake_issue,
+                ),
+                cls=DjangoJSONEncoder,
+            ),
+            actor_id=str(request.user.id),
+            issue_id=str(issue_id),
+            project_id=str(project_id),
+            current_instance=json.dumps(IntakeIssueSerializer(intake_issue).data, cls=DjangoJSONEncoder),
+            epoch=int(timezone.now().timestamp()),
+            notification=False,
+            origin=base_host(request=request, is_app=True),
+            intake=str(intake_issue.id),
+        )
+
         # Check the issue status
         if intake_issue.status in [-2, -1, 0, 2]:
             # Delete the issue also
             issue = Issue.objects.filter(workspace__slug=slug, project_id=project_id, pk=issue_id).first()
-            if issue.created_by_id != request.user.id and (
-                not ProjectMember.objects.filter(
-                    workspace__slug=slug,
-                    member=request.user,
-                    role=20,
-                    project_id=project_id,
-                    is_active=True,
-                ).exists()
-            ):
-                return Response(
-                    {"error": "Only admin or creator can delete the work item"},
-                    status=status.HTTP_403_FORBIDDEN,
-                )
             issue.delete()
 
         intake_issue.delete()

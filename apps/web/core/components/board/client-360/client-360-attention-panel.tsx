@@ -1,5 +1,7 @@
-import { useMemo } from "react";
-import { CheckCircle2, ChevronRight } from "lucide-react";
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TClient360Client } from "@operis/types";
 import { cn } from "@operis/utils";
@@ -12,6 +14,7 @@ import {
 import type { Client360FilterKey } from "@/components/board/client-360/client-360-client-filters";
 import { CLIENT_360_FILTER_OPTIONS } from "@/components/board/client-360/client-360-client-filters";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
+import { CLIENT_360_ATTENTION_PAGE_SIZE } from "@/components/board/client-360/client-360-utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 
 type Props = {
@@ -97,7 +100,7 @@ function AttentionRow({
     return (
       <BoardHubNavLink
         to={`${basePath}/${item.projectId}`}
-        className="group flex h-full w-full min-w-0 items-center gap-3 rounded-lg border border-subtle/80 bg-layer-2/30 px-3 py-2.5 transition-colors hover:border-strong hover:bg-layer-2"
+        className="group flex w-full min-w-0 items-center gap-3 rounded-lg border border-subtle/80 bg-layer-2/30 px-3 py-2.5 transition-colors hover:border-strong hover:bg-layer-2"
       >
         <span className={cn("size-2 shrink-0 rounded-full", tone.dot)} aria-hidden />
         <div className="min-w-0 flex-1">
@@ -138,6 +141,62 @@ function AttentionRow({
   );
 }
 
+function AttentionPagination({
+  page,
+  totalPages,
+  totalItems,
+  pageSize,
+  embedded,
+  onPageChange,
+}: {
+  page: number;
+  totalPages: number;
+  totalItems: number;
+  pageSize: number;
+  embedded?: boolean;
+  onPageChange: (page: number) => void;
+}) {
+  const { t } = useTranslation();
+  const from = (page - 1) * pageSize + 1;
+  const to = Math.min(page * pageSize, totalItems);
+
+  return (
+    <div
+      className={cn(
+        "flex flex-wrap items-center justify-between gap-3 border-t border-subtle bg-layer-2/30",
+        embedded ? "mt-2 rounded-lg px-3 py-2" : "px-4 py-2.5"
+      )}
+    >
+      <p className="text-12 text-tertiary">
+        {t("boards.client_360.attention_pagination", { from, to, total: totalItems })}
+      </p>
+      <div className="flex items-center gap-1">
+        <button
+          type="button"
+          disabled={page <= 1}
+          onClick={() => onPageChange(page - 1)}
+          className="inline-flex size-8 items-center justify-center rounded-sm border border-subtle text-tertiary enabled:hover:bg-layer-2 disabled:opacity-40"
+          aria-label={t("boards.client_360.matrix_page_prev")}
+        >
+          <ChevronLeft className="size-4" />
+        </button>
+        <span className="min-w-16 text-center text-12 text-secondary tabular-nums">
+          {page} / {totalPages}
+        </span>
+        <button
+          type="button"
+          disabled={page >= totalPages}
+          onClick={() => onPageChange(page + 1)}
+          className="inline-flex size-8 items-center justify-center rounded-sm border border-subtle text-tertiary enabled:hover:bg-layer-2 disabled:opacity-40"
+          aria-label={t("boards.client_360.matrix_page_next")}
+        >
+          <ChevronRight className="size-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
 export function Client360AttentionPanel({
   clients,
   basePath,
@@ -147,9 +206,30 @@ export function Client360AttentionPanel({
   filtersInHeader = false,
 }: Props) {
   const { t } = useTranslation();
+  const [page, setPage] = useState(1);
 
   const items = useMemo(() => buildClient360AttentionItems(clients), [clients]);
   const quickFilters = useMemo(() => client360AttentionFilterKeys(items), [items]);
+
+  const pageSize = CLIENT_360_ATTENTION_PAGE_SIZE;
+  const totalPages = Math.max(1, Math.ceil(items.length / pageSize));
+  const safePage = Math.min(page, totalPages);
+  const showPagination = items.length > pageSize;
+
+  useEffect(() => {
+    setPage(1);
+  }, [items.length]);
+
+  useEffect(() => {
+    if (page > totalPages) {
+      setPage(totalPages);
+    }
+  }, [page, totalPages]);
+
+  const visibleItems = useMemo(
+    () => (showPagination ? items.slice((safePage - 1) * pageSize, safePage * pageSize) : items),
+    [items, pageSize, safePage, showPagination]
+  );
 
   const filterButtons =
     !filtersInHeader && onFilterChange && quickFilters.length > 0 ? (
@@ -160,19 +240,31 @@ export function Client360AttentionPanel({
 
   const listBody =
     items.length > 0 ? (
-      <ul
-        className={cn(
-          useCompactGrid
-            ? "grid grid-cols-1 gap-2 md:grid-cols-2 md:items-stretch"
-            : cn("divide-y divide-subtle", embedded && "rounded-lg border border-subtle/80")
-        )}
-      >
-        {items.map((item) => (
-          <li key={item.projectId} className={useCompactGrid ? "flex min-w-0" : undefined}>
-            <AttentionRow item={item} basePath={basePath} showBoard={showBoard} compact={useCompactGrid} />
-          </li>
-        ))}
-      </ul>
+      <>
+        <ul
+          className={cn(
+            useCompactGrid
+              ? "grid grid-cols-1 gap-2"
+              : cn("divide-y divide-subtle", embedded && "rounded-lg border border-subtle/80")
+          )}
+        >
+          {visibleItems.map((item) => (
+            <li key={item.projectId} className={useCompactGrid ? "min-w-0" : undefined}>
+              <AttentionRow item={item} basePath={basePath} showBoard={showBoard} compact={useCompactGrid} />
+            </li>
+          ))}
+        </ul>
+        {showPagination ? (
+          <AttentionPagination
+            page={safePage}
+            totalPages={totalPages}
+            totalItems={items.length}
+            pageSize={pageSize}
+            embedded={embedded}
+            onPageChange={setPage}
+          />
+        ) : null}
+      </>
     ) : (
       <p
         className={cn(

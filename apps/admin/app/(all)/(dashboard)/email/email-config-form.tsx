@@ -1,18 +1,20 @@
-
 import { useMemo, useState } from "react";
+import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
-// types
+import { KeyRound, Server } from "lucide-react";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IFormattedInstanceConfiguration, TInstanceEmailConfigurationKeys } from "@operis/types";
-// ui
 import { CustomSelect } from "@operis/ui";
-// components
 import type { TControllerInputFormField } from "@/components/common/controller-input";
 import { ControllerInput } from "@/components/common/controller-input";
-// hooks
+import {
+  AdminFieldLabel,
+  AdminFormActions,
+  AdminFormFooter,
+  AdminSettingsPanel,
+} from "@/components/settings/admin-settings-panel";
 import { useInstance } from "@/hooks/store";
-// local components
 import { SendTestEmailModal } from "./test-email-modal";
 
 type IInstanceEmailForm = {
@@ -29,13 +31,11 @@ const EMAIL_SECURITY_OPTIONS: { [key in TEmailSecurityKeys]: string } = {
   NONE: "No email security",
 };
 
-export function InstanceEmailForm(props: IInstanceEmailForm) {
+export const InstanceEmailForm = observer(function InstanceEmailForm(props: IInstanceEmailForm) {
   const { config } = props;
-  // states
   const [isSendTestEmailModalOpen, setIsSendTestEmailModalOpen] = useState(false);
-  // store hooks
   const { updateInstanceConfigurations } = useInstance();
-  // form data
+
   const {
     handleSubmit,
     watch,
@@ -54,6 +54,7 @@ export function InstanceEmailForm(props: IInstanceEmailForm) {
       ENABLE_SMTP: config["ENABLE_SMTP"],
     },
   });
+
   const emailFormFields: TControllerInputFormField[] = [
     {
       key: "EMAIL_HOST",
@@ -77,18 +78,18 @@ export function InstanceEmailForm(props: IInstanceEmailForm) {
       label: "Sender's email address",
       description:
         "This is the email address your users will see when getting emails from this instance. You will need to verify this address.",
-      placeholder: "no-reply@projectplane.so",
+      placeholder: "no-reply@operoz.app",
       error: Boolean(errors.EMAIL_FROM),
       required: true,
     },
   ];
 
-  const OptionalEmailFormFields: TControllerInputFormField[] = [
+  const optionalEmailFormFields: TControllerInputFormField[] = [
     {
       key: "EMAIL_HOST_USER",
       type: "text",
       label: "Username",
-      placeholder: "getitdone@projectplane.so",
+      placeholder: "smtp-user@operoz.app",
       error: Boolean(errors.EMAIL_HOST_USER),
       required: false,
     },
@@ -103,9 +104,7 @@ export function InstanceEmailForm(props: IInstanceEmailForm) {
   ];
 
   const onSubmit = async (formData: EmailFormValues) => {
-    const payload: Partial<EmailFormValues> = { ...formData, ENABLE_SMTP: "1" };
-
-    await updateInstanceConfigurations(payload)
+    await updateInstanceConfigurations({ ...formData, ENABLE_SMTP: "1" })
       .then(() =>
         setToast({
           type: TOAST_TYPE.SUCCESS,
@@ -140,58 +139,70 @@ export function InstanceEmailForm(props: IInstanceEmailForm) {
   };
 
   return (
-    <div className="space-y-8">
-      <div>
-        <SendTestEmailModal isOpen={isSendTestEmailModalOpen} handleClose={() => setIsSendTestEmailModalOpen(false)} />
-        <div className="grid-col grid w-full max-w-4xl grid-cols-1 items-start justify-between gap-10 lg:grid-cols-2">
-          {emailFormFields.map((field) => (
-            <ControllerInput
-              key={field.key}
-              control={control}
-              type={field.type}
-              name={field.key}
-              label={field.label}
-              description={field.description}
-              placeholder={field.placeholder}
-              error={field.error}
-              required={field.required}
-            />
-          ))}
-          <div className="flex flex-col gap-1">
-            <h4 className="text-13 text-tertiary">Email security</h4>
-            <CustomSelect
-              value={emailSecurityKey}
-              label={EMAIL_SECURITY_OPTIONS[emailSecurityKey]}
-              onChange={handleEmailSecurityChange}
-              buttonClassName="rounded-md border-subtle"
-              input
-            >
-              {Object.entries(EMAIL_SECURITY_OPTIONS).map(([key, value]) => (
-                <CustomSelect.Option key={key} value={key} className="w-full">
-                  {value}
-                </CustomSelect.Option>
-              ))}
-            </CustomSelect>
-          </div>
-        </div>
-        <div className="my-6 flex flex-col gap-6 border-t border-subtle pt-4">
-          <div className="flex w-full max-w-xl flex-col gap-y-10 px-1">
-            <div className="mr-8 flex items-center gap-10 pt-4">
-              <div className="grow">
-                <div className="text-13 font-medium text-primary">Authentication</div>
-                <div className="text-11 font-regular text-tertiary">
-                  This is optional, but we recommend setting up a username and a password for your SMTP server.
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="grid-col grid w-full max-w-4xl grid-cols-1 items-center justify-between gap-10 lg:grid-cols-2">
-            {OptionalEmailFormFields.map((field) => (
+    <form className="space-y-5 pb-2" onSubmit={handleSubmit(onSubmit)}>
+      <SendTestEmailModal isOpen={isSendTestEmailModalOpen} handleClose={() => setIsSendTestEmailModalOpen(false)} />
+
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+        <AdminSettingsPanel
+          chip="SMTP"
+          title="Server connection"
+          description="Host, port, and sender address for outbound email."
+          icon={Server}
+          iconClassName="text-accent-primary"
+          fillHeight
+        >
+          <div className="grid grid-cols-1 gap-4">
+            {emailFormFields.map((field) => (
               <ControllerInput
                 key={field.key}
                 control={control}
                 type={field.type}
                 name={field.key}
+                variant="admin"
+                label={field.label}
+                description={field.description}
+                placeholder={field.placeholder}
+                error={field.error}
+                required={field.required}
+              />
+            ))}
+            <div className="space-y-2">
+              <AdminFieldLabel>Email security</AdminFieldLabel>
+              <CustomSelect
+                value={emailSecurityKey}
+                label={EMAIL_SECURITY_OPTIONS[emailSecurityKey]}
+                onChange={handleEmailSecurityChange}
+                buttonClassName="!w-full !rounded-xl !border !border-subtle !bg-layer-2/50 !px-3 !py-2.5"
+                className="w-full"
+                input
+              >
+                {Object.entries(EMAIL_SECURITY_OPTIONS).map(([key, value]) => (
+                  <CustomSelect.Option key={key} value={key} className="w-full">
+                    {value}
+                  </CustomSelect.Option>
+                ))}
+              </CustomSelect>
+            </div>
+          </div>
+        </AdminSettingsPanel>
+
+        <AdminSettingsPanel
+          chip="Optional"
+          title="Authentication"
+          description="Username and password for your SMTP server, if required."
+          icon={KeyRound}
+          iconClassName="text-tertiary"
+          accentClassName="bg-tertiary"
+          fillHeight
+        >
+          <div className="grid grid-cols-1 gap-4">
+            {optionalEmailFormFields.map((field) => (
+              <ControllerInput
+                key={field.key}
+                control={control}
+                type={field.type}
+                name={field.key}
+                variant="admin"
                 label={field.label}
                 description={field.description}
                 placeholder={field.placeholder}
@@ -200,28 +211,25 @@ export function InstanceEmailForm(props: IInstanceEmailForm) {
               />
             ))}
           </div>
-        </div>
+        </AdminSettingsPanel>
       </div>
-      <div className="flex max-w-4xl items-center gap-4 py-1">
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={handleSubmit(onSubmit)}
-          loading={isSubmitting}
-          disabled={!isValid || !isDirty}
-        >
-          {isSubmitting ? "Saving" : "Save changes"}
-        </Button>
-        <Button
-          variant="secondary"
-          size="lg"
-          onClick={() => setIsSendTestEmailModalOpen(true)}
-          loading={isSubmitting}
-          disabled={!isValid}
-        >
-          Send test email
-        </Button>
-      </div>
-    </div>
+
+      <AdminFormFooter>
+        <AdminFormActions className="w-full justify-end sm:justify-between">
+          <Button
+            type="button"
+            variant="secondary"
+            size="lg"
+            onClick={() => setIsSendTestEmailModalOpen(true)}
+            disabled={!isValid}
+          >
+            Send test email
+          </Button>
+          <Button type="submit" variant="primary" size="lg" loading={isSubmitting} disabled={!isValid || !isDirty}>
+            {isSubmitting ? "Saving…" : "Save changes"}
+          </Button>
+        </AdminFormActions>
+      </AdminFormFooter>
+    </form>
   );
-}
+});

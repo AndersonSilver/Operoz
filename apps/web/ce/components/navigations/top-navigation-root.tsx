@@ -1,7 +1,6 @@
 // components
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
-import { useTranslation } from "@operis/i18n";
 import { cn } from "@operis/utils";
 import { TopNavPowerK } from "@/components/navigation";
 import { HelpMenuRoot } from "@/components/workspace/sidebar/help-section/root";
@@ -12,16 +11,13 @@ import { useWorkspacePaths } from "@/hooks/use-workspace-paths";
 import { Tooltip } from "@operis/propel/tooltip";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 import { AppSidebarToggleButton } from "@/components/sidebar/sidebar-toggle-button";
-import { BookOpen } from "lucide-react";
 import { InboxIcon } from "@operis/propel/icons";
 import useSWR from "swr";
 import { useWorkspaceNotifications } from "@/hooks/store/notifications";
 export const TopNavigationRoot = observer(function TopNavigationRoot() {
-  const { t } = useTranslation();
   // router
   const { workspaceSlug } = useParams();
   const pathname = usePathname();
-  const isManualPath = pathname?.includes("/manual");
 
   // store hooks
   const { unreadNotificationsCount, getUnreadNotificationsCount } = useWorkspaceNotifications();
@@ -75,18 +71,6 @@ export const TopNavigationRoot = observer(function TopNavigationRoot() {
                 </div>
               ),
               isActive: pathname?.includes("/notifications/"),
-            }}
-          />
-        </Tooltip>
-        <Tooltip tooltipContent={t("operoz_manual.title")} position="bottom">
-          <AppSidebarItem
-            variant="link"
-            item={{
-              href: `/${workspaceSlug?.toString()}/manual`,
-              label: t("operoz_manual.nav_label"),
-              icon: <BookOpen className="size-5" />,
-              isActive: isManualPath,
-              showLabel,
             }}
           />
         </Tooltip>

@@ -44,7 +44,7 @@ export const OperozDocsSidebar = observer(function OperozDocsSidebar() {
   const isHome = normalizePath(pathname ?? "") === normalizePath(manualHome);
 
   return (
-    <aside className="flex h-full w-64 shrink-0 flex-col border-r border-subtle bg-surface-1">
+    <aside className="flex h-full w-full shrink-0 flex-col border-t border-subtle bg-surface-1 md:w-64 md:border-t-0 md:border-l">
       <div className="border-b border-subtle px-3 py-3">
         <Link
           href={manualHome}

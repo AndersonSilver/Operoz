@@ -57,6 +57,7 @@ def emit_intake_submitted(
     *,
     actor_id: str | None,
     intake_form_id: str | None = None,
+    board_intake_form_id: str | None = None,
     source: str = "IN_APP",
 ) -> None:
     emit_issue_event(
@@ -65,6 +66,7 @@ def emit_intake_submitted(
         actor_id=actor_id,
         extra={
             "intake_form_id": intake_form_id,
+            "board_intake_form_id": board_intake_form_id,
             "source": source,
         },
     )

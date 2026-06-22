@@ -1,5 +1,6 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Tabs } from "@operis/propel/tabs";
 import { cn } from "@operis/utils";
@@ -29,11 +30,22 @@ export function Client360DetailTabs({
   );
 }
 
-export function Client360DetailTabList({ children, className }: { children: ReactNode; className?: string }) {
+export function Client360DetailTabList({
+  children,
+  className,
+  contained,
+}: {
+  children: ReactNode;
+  className?: string;
+  /** Tabs inside a content panel (no outer card chrome). */
+  contained?: boolean;
+}) {
   return (
     <Tabs.List
       className={cn(
-        "shadow-xs flex w-full max-w-full justify-start gap-1 rounded-xl border border-subtle bg-layer-1 p-1",
+        contained
+          ? "flex w-full max-w-full !justify-start gap-1.5 border-0 bg-transparent p-0 shadow-none"
+          : "shadow-xs flex w-full max-w-full justify-start gap-1.5 rounded-xl border border-subtle bg-layer-1 p-1.5",
         className
       )}
     >
@@ -42,19 +54,28 @@ export function Client360DetailTabList({ children, className }: { children: Reac
   );
 }
 
-export function Client360DetailTabTrigger({ value, children }: { value: string; children: ReactNode }) {
+export function Client360DetailTabTrigger({
+  value,
+  icon: Icon,
+  children,
+}: {
+  value: string;
+  icon?: LucideIcon;
+  children: ReactNode;
+}) {
   return (
     <Tabs.Trigger
       value={value}
       size="md"
       className={cn(
-        "min-w-0 flex-1 rounded-lg border border-transparent px-4 py-2.5 font-medium",
+        "inline-flex !w-auto min-w-fit shrink-0 items-center gap-1.5 rounded-lg border border-transparent px-3 py-2 font-medium sm:px-4",
         "text-secondary transition-all duration-200",
         "hover:bg-layer-2/70 hover:text-primary",
         "data-[selected]:shadow-xs data-[selected]:border-subtle data-[selected]:bg-layer-2 data-[selected]:font-semibold data-[selected]:text-primary",
         "data-[selected]:raised-200 data-[selected]:hover:bg-layer-2"
       )}
     >
+      {Icon ? <Icon className="size-3.5 shrink-0" strokeWidth={1.75} aria-hidden /> : null}
       {children}
     </Tabs.Trigger>
   );

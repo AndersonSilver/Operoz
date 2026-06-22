@@ -7,7 +7,6 @@ import { Logo } from "@operis/propel/emoji-icon-picker";
 import type { IBoard, IBoardMeta, TPartialProject } from "@operis/types";
 import { cn } from "@operis/utils";
 import { BoardOverviewDashboard } from "@/components/board/board-overview-dashboard";
-import { BoardClient360ReportMissingWidget } from "@/components/board/client-360/board-client-360-report-missing-widget";
 import { CreateProjectModal } from "@/components/project/create-project-modal";
 import { ProjectFavoriteStar } from "@/components/project/project-favorite-star";
 import { useAppRouter } from "@/hooks/use-app-router";
@@ -85,10 +84,7 @@ export function BoardOverview(props: Props) {
             ) : isMetaLoading || !meta ? (
               <DashboardSkeleton />
             ) : (
-              <>
-                <BoardClient360ReportMissingWidget workspaceSlug={workspaceSlug} board={board} />
-                <BoardOverviewDashboard meta={meta} workspaceSlug={workspaceSlug} />
-              </>
+              <BoardOverviewDashboard meta={meta} workspaceSlug={workspaceSlug} />
             )}
           </section>
 

@@ -92,4 +92,29 @@ export class InstanceWorkspaceService extends APIService {
         throw error?.response?.data;
       });
   }
+
+  /**
+   * Updates workspace core fields (instance admin / God Mode).
+   */
+  async update(
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "name" | "slug" | "organization_size">>
+  ): Promise<IWorkspace> {
+    return this.patch(`/api/instances/workspaces/${workspaceId}/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  /**
+   * Deletes a workspace (instance admin / God Mode).
+   */
+  async destroy(workspaceId: string): Promise<void> {
+    return this.delete(`/api/instances/workspaces/${workspaceId}/`)
+      .then(() => undefined)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
 }

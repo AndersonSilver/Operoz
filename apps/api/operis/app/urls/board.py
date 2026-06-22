@@ -24,6 +24,11 @@ from operis.app.views import (
     BoardPlaybookDetailEndpoint,
     BoardPlaybookListEndpoint,
     BoardPlaybookPublishEndpoint,
+    BoardIntakeFormDetailEndpoint,
+    BoardIntakeFormListCreateEndpoint,
+    BoardSupportQueueDetailEndpoint,
+    BoardSupportQueueListCreateEndpoint,
+    BoardSupportSlaPolicyEndpoint,
     BoardAutomationPackInstallEndpoint,
     BoardAutomationPackListEndpoint,
     BoardAutomationPackUninstallEndpoint,
@@ -364,6 +369,31 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/playbooks/<uuid:playbook_id>/publish/",
         BoardPlaybookPublishEndpoint.as_view(),
         name="workspace-board-playbook-publish",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/intake-forms/",
+        BoardIntakeFormListCreateEndpoint.as_view(),
+        name="workspace-board-intake-forms",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/intake-forms/<uuid:form_id>/",
+        BoardIntakeFormDetailEndpoint.as_view(),
+        name="workspace-board-intake-form",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/support-queues/",
+        BoardSupportQueueListCreateEndpoint.as_view(),
+        name="workspace-board-support-queues",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/support-queues/<uuid:queue_id>/",
+        BoardSupportQueueDetailEndpoint.as_view(),
+        name="workspace-board-support-queue",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/support-sla-policy/",
+        BoardSupportSlaPolicyEndpoint.as_view(),
+        name="workspace-board-support-sla-policy",
     ),
     path(
         "workspaces/<str:slug>/boards/<str:board_slug>/automation/secrets/",

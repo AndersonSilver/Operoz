@@ -51,9 +51,16 @@ type ToggleProps = {
   onChange: (enabled: boolean) => void;
   available?: boolean;
   className?: string;
+  compact?: boolean;
 };
 
-export function Client360PeriodCompareToggle({ enabled, onChange, available = true, className }: ToggleProps) {
+export function Client360PeriodCompareToggle({
+  enabled,
+  onChange,
+  available = true,
+  className,
+  compact = false,
+}: ToggleProps) {
   const { t } = useTranslation();
 
   if (!available) return null;
@@ -62,14 +69,14 @@ export function Client360PeriodCompareToggle({ enabled, onChange, available = tr
 
   return (
     <Tooltip tooltipContent={label}>
-      <span className={cn("inline-flex", className)}>
+      <span className={cn("inline-flex h-full", className)}>
         <IconButton
           variant={enabled ? "primary" : "secondary"}
-          size="xl"
           icon={GitCompareArrows}
           aria-label={label}
           aria-pressed={enabled}
-          className="shrink-0 rounded-sm"
+          className={cn("aspect-square !size-auto h-full shrink-0", compact ? "rounded-lg" : "rounded-sm")}
+          iconClassName={compact ? "size-4" : "size-6"}
           onClick={() => onChange(!enabled)}
         />
       </span>

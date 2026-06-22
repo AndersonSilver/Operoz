@@ -37,6 +37,8 @@ import type {
 import { WorkspaceJiraSyncService } from "@/services/workspace-jira-sync.service";
 import { BoardService } from "@/services/board/board.service";
 import { useUserPermissions } from "@/hooks/store/user";
+import { WorkspaceJiraSettingsHero } from "@/components/settings/workspace/workspace-jira-settings-hero";
+import "@/components/exporter/workspace-exports-settings.css";
 
 const syncService = new WorkspaceJiraSyncService();
 const boardService = new BoardService();
@@ -419,6 +421,71 @@ function HorizontalStepTab({
   );
 }
 
+function VerticalStepTab({
+  meta,
+  isActive,
+  isComplete,
+  isLocked,
+  statusLine,
+  onSelect,
+}: {
+  meta: StepMeta;
+  isActive: boolean;
+  isComplete: boolean;
+  isLocked: boolean;
+  statusLine: string;
+  onSelect: () => void;
+}) {
+  const { t } = useTranslation();
+  const Icon = meta.icon;
+  const title = t(meta.titleKey);
+
+  return (
+    <button
+      type="button"
+      onClick={onSelect}
+      disabled={isLocked}
+      title={title}
+      aria-label={title}
+      aria-current={isActive ? "step" : undefined}
+      className={cn(
+        "flex w-full items-start gap-3 rounded-xl border px-3 py-3 text-left transition-colors",
+        isActive
+          ? "border-accent-primary/45 shadow-sm bg-accent-primary/10"
+          : "border-subtle bg-surface-1/40 hover:border-accent-subtle/35 hover:bg-layer-2",
+        isLocked && "cursor-not-allowed opacity-55"
+      )}
+    >
+      <span
+        className={cn(
+          "grid size-8 shrink-0 place-items-center rounded-full border text-11 font-bold",
+          isActive && "border-accent-primary bg-accent-primary text-on-color",
+          isComplete && !isActive && "border-success bg-success/15 text-success",
+          !isActive && !isComplete && "border-subtle bg-layer-2 text-secondary"
+        )}
+      >
+        {isComplete && !isActive ? (
+          <Check className="size-3.5" strokeWidth={2.5} />
+        ) : isLocked ? (
+          <Lock className="size-3" />
+        ) : (
+          meta.number
+        )}
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="flex items-center gap-2">
+          <Icon className={cn("size-3.5 shrink-0", isActive ? "text-accent-primary" : "text-tertiary")} />
+          <span className={cn("truncate text-13 font-medium", isActive ? "text-primary" : "text-secondary")}>
+            {title}
+          </span>
+        </span>
+        <span className="mt-0.5 block truncate text-11 text-tertiary">{statusLine}</span>
+      </span>
+      {isActive ? <ArrowRight className="mt-1 size-4 shrink-0 text-accent-primary" /> : null}
+    </button>
+  );
+}
+
 export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({ workspaceSlug }: Props) {
   const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -686,8 +753,8 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
   const renderStepBody = () => {
     if (activeStep === "app") {
       return (
-        <section className="shadow-sm w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
-          <div className="border-b border-subtle px-5 py-4 lg:px-6">
+        <section className="workspace-exports-form-panel w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
+          <div className="workspace-exports-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-4 lg:px-6">
             <div className="flex gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-primary/12 text-accent-primary">
                 <KeyRound className="size-5" strokeWidth={1.5} />
@@ -725,7 +792,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
           </div>
 
           <div className="space-y-4 px-5 py-5 lg:px-6 lg:py-6">
-            <div className="grid gap-4 lg:grid-cols-2">
+            <div className="grid gap-4 xl:grid-cols-2">
               <IconField
                 label={t("workspace_settings.settings.jira.oauth_client_id_label")}
                 htmlFor="oauth-client-id"
@@ -790,7 +857,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
             ) : null}
           </div>
 
-          <div className="flex flex-col-reverse gap-2 border-t border-subtle bg-layer-2/30 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+          <div className="workspace-exports-form-footer flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
             {oauthAppReady ? (
               <Button variant="ghost" size="base" onClick={goNextStep} className="w-full sm:w-auto">
                 {t("workspace_settings.settings.jira.next_step")}
@@ -832,8 +899,8 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
       }
 
       return (
-        <section className="shadow-sm w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
-          <div className="border-b border-subtle px-5 py-4 lg:px-6">
+        <section className="workspace-exports-form-panel w-full overflow-hidden rounded-xl border border-subtle bg-layer-1">
+          <div className="workspace-exports-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-4 lg:px-6">
             <div className="flex gap-3">
               <span className="grid size-10 shrink-0 place-items-center rounded-lg bg-accent-primary/12 text-accent-primary">
                 <Cloud className="size-5" strokeWidth={1.5} />
@@ -897,7 +964,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
             ) : null}
           </div>
 
-          <div className="flex flex-col-reverse gap-2 border-t border-subtle bg-layer-2/30 px-5 py-4 sm:flex-row sm:items-center sm:justify-between lg:px-6">
+          <div className="workspace-exports-form-footer flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
             {connected ? (
               <Button variant="ghost" size="base" onClick={() => setActiveStep("import")} className="w-full sm:w-auto">
                 {t("workspace_settings.settings.jira.next_step")}
@@ -926,7 +993,7 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
 
     if (stepLocked.import) {
       return (
-        <div className="mx-auto flex max-w-lg flex-col items-center justify-center py-16 text-center">
+        <div className="flex min-h-[16rem] flex-col items-center justify-center rounded-xl border border-dashed border-subtle bg-layer-2/20 px-6 py-16 text-center">
           <Lock className="mb-4 size-10 text-tertiary" />
           <p className="text-14 font-medium text-primary">{t("workspace_settings.settings.jira.import_locked_hint")}</p>
           <Button variant="secondary" className="mt-6" onClick={() => setActiveStep("connect")}>
@@ -944,8 +1011,8 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     return (
       <div className={cn("grid w-full gap-5", showPreviewPanel && "lg:grid-cols-2 lg:items-start")}>
         <div className="space-y-4">
-          <section className="shadow-sm overflow-hidden rounded-xl border border-subtle bg-layer-1">
-            <div className="border-b border-subtle px-5 py-4 lg:px-6">
+          <section className="workspace-exports-form-panel overflow-hidden rounded-xl border border-subtle bg-layer-1">
+            <div className="workspace-exports-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-4 lg:px-6">
               <h3 className="text-14 font-semibold text-primary">
                 {t("workspace_settings.settings.jira.import_card_title")}
               </h3>
@@ -1084,53 +1151,69 @@ export const WorkspaceJiraSyncPanel = observer(function WorkspaceJiraSyncPanel({
     );
   };
 
-  const showImportPreview = activeStep === "import" && (previewLoading || importPreview !== null);
-
-  const layoutShellClass = cn("mx-auto w-full", showImportPreview ? "max-w-6xl" : "max-w-4xl");
-
   if (isLoading && !data) {
     return (
-      <div className={cn(layoutShellClass, "flex min-h-[28rem] animate-pulse flex-col gap-4")}>
-        <div className="h-20 rounded-lg bg-layer-2" />
-        <div className="h-14 rounded-xl bg-layer-2" />
-        <div className="min-h-64 flex-1 rounded-xl bg-layer-2" />
+      <div className="flex min-h-[28rem] w-full animate-pulse flex-col gap-4">
+        <div className="h-28 rounded-xl bg-layer-2" />
+        <div className="grid gap-4 xl:grid-cols-[minmax(220px,280px)_minmax(0,1fr)]">
+          <div className="hidden h-64 rounded-xl bg-layer-2 xl:block" />
+          <div className="min-h-64 rounded-xl bg-layer-2" />
+        </div>
       </div>
     );
   }
 
   return (
-    <div className={layoutShellClass}>
-      <header className="border-b border-subtle pb-6 text-center sm:text-left">
-        <h2 className="text-22 font-semibold tracking-tight text-primary">
-          {t("workspace_settings.settings.jira.heading")}
-        </h2>
-        <p className="mx-auto mt-2 max-w-2xl text-13 leading-relaxed text-tertiary sm:mx-0 sm:max-w-none">
-          {t("workspace_settings.settings.jira.description")}
-        </p>
-      </header>
+    <div className="flex w-full flex-col gap-6">
+      <WorkspaceJiraSettingsHero />
 
-      <nav
-        className="shadow-sm mt-6 overflow-hidden rounded-xl border border-subtle bg-layer-1"
-        aria-label={t("workspace_settings.settings.jira.nav_title")}
-      >
-        <div className="flex">
-          {STEP_META.map((meta) => (
-            <HorizontalStepTab
-              key={meta.id}
-              meta={meta}
-              isActive={activeStep === meta.id}
-              isComplete={stepComplete[meta.id]}
-              isLocked={stepLocked[meta.id]}
-              statusLine={stepStatusLine(meta.id)}
-              onSelect={() => !stepLocked[meta.id] && setActiveStep(meta.id)}
-            />
-          ))}
-        </div>
-      </nav>
+      <div className="grid w-full gap-6 xl:grid-cols-[minmax(220px,280px)_minmax(0,1fr)]">
+        <aside className="hidden xl:sticky xl:top-4 xl:block xl:self-start">
+          <nav className="flex flex-col gap-2" aria-label={t("workspace_settings.settings.jira.nav_title")}>
+            {STEP_META.map((meta) => (
+              <VerticalStepTab
+                key={meta.id}
+                meta={meta}
+                isActive={activeStep === meta.id}
+                isComplete={stepComplete[meta.id]}
+                isLocked={stepLocked[meta.id]}
+                statusLine={stepStatusLine(meta.id)}
+                onSelect={() => !stepLocked[meta.id] && setActiveStep(meta.id)}
+              />
+            ))}
+          </nav>
+          <div className="mt-4 rounded-xl border border-dashed border-subtle bg-layer-2/25 p-4">
+            <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">
+              {t("workspace_settings.settings.jira.flow_short_label")}
+            </p>
+            <p className="mt-2 text-12 leading-relaxed text-secondary">
+              {t("workspace_settings.settings.jira.import_actions_hint")}
+            </p>
+          </div>
+        </aside>
 
-      <div className="mt-6">
-        {renderStepContextBar()}
-        <div className={cn(renderStepContextBar() ? "mt-4" : "")}>{renderStepBody()}</div>
+        <section className="workspace-exports-history-panel min-w-0 overflow-hidden rounded-xl border border-subtle bg-layer-1">
+          <nav className="xl:hidden" aria-label={t("workspace_settings.settings.jira.nav_title")}>
+            <div className="flex border-b border-subtle">
+              {STEP_META.map((meta) => (
+                <HorizontalStepTab
+                  key={meta.id}
+                  meta={meta}
+                  isActive={activeStep === meta.id}
+                  isComplete={stepComplete[meta.id]}
+                  isLocked={stepLocked[meta.id]}
+                  statusLine={stepStatusLine(meta.id)}
+                  onSelect={() => !stepLocked[meta.id] && setActiveStep(meta.id)}
+                />
+              ))}
+            </div>
+          </nav>
+
+          <div className="px-5 py-5 lg:px-8 lg:py-7">
+            {renderStepContextBar()}
+            <div className={cn(renderStepContextBar() ? "mt-4" : "")}>{renderStepBody()}</div>
+          </div>
+        </section>
       </div>
     </div>
   );

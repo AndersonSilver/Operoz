@@ -21,6 +21,11 @@ export interface IWorkspaceStore {
   fetchNextWorkspaces: () => Promise<IWorkspace[]>;
   // curd actions
   createWorkspace: (data: IWorkspace) => Promise<IWorkspace>;
+  updateWorkspace: (
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "name" | "slug" | "organization_size">>
+  ) => Promise<IWorkspace>;
+  deleteWorkspace: (workspaceId: string) => Promise<void>;
   patchWorkspaceIssueNotificationFlags: (
     workspaceId: string,
     data: Partial<
@@ -59,6 +64,8 @@ export class WorkspaceStore implements IWorkspaceStore {
       fetchNextWorkspaces: action,
       // curd actions
       createWorkspace: action,
+      updateWorkspace: action,
+      deleteWorkspace: action,
       patchWorkspaceIssueNotificationFlags: action,
     });
     this.instanceWorkspaceService = new InstanceWorkspaceService();
@@ -155,6 +162,42 @@ export class WorkspaceStore implements IWorkspaceStore {
       return workspace;
     } catch (error) {
       console.error("Error creating workspace", error);
+      throw error;
+    } finally {
+      this.loader = "loaded";
+    }
+  };
+
+  updateWorkspace = async (
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "name" | "slug" | "organization_size">>
+  ): Promise<IWorkspace> => {
+    try {
+      this.loader = "mutation";
+      const workspace = await this.instanceWorkspaceService.update(workspaceId, data);
+      runInAction(() => {
+        set(this.workspaces, [workspace.id], workspace);
+      });
+      return workspace;
+    } catch (error) {
+      console.error("Error updating workspace", error);
+      throw error;
+    } finally {
+      this.loader = "loaded";
+    }
+  };
+
+  deleteWorkspace = async (workspaceId: string): Promise<void> => {
+    try {
+      this.loader = "mutation";
+      await this.instanceWorkspaceService.destroy(workspaceId);
+      runInAction(() => {
+        const next = { ...this.workspaces };
+        delete next[workspaceId];
+        this.workspaces = next;
+      });
+    } catch (error) {
+      console.error("Error deleting workspace", error);
       throw error;
     } finally {
       this.loader = "loaded";

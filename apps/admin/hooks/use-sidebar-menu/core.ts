@@ -1,46 +1,50 @@
-import { Image, BrainCog, Cog, Mail } from "lucide-react";
-// plane imports
+import { Image, BrainCog, Cog, Mail, Palette } from "lucide-react";
 import { LockIcon, WorkspaceIcon } from "@operis/propel/icons";
-// types
-import type { TSidebarMenuItem } from "./types";
+import type { TCoreSidebarMenuKey, TSidebarMenuItemConfig } from "./types";
 
-export type TCoreSidebarMenuKey = "general" | "email" | "workspace" | "authentication" | "ai" | "image";
+export type { TCoreSidebarMenuKey };
 
-export const coreSidebarMenuLinks: Record<TCoreSidebarMenuKey, TSidebarMenuItem> = {
+export const coreSidebarMenuLinks: Record<TCoreSidebarMenuKey, TSidebarMenuItemConfig> = {
   general: {
     Icon: Cog,
-    name: "General",
-    description: "Identify your instances and get key details.",
+    nameKey: "god_mode.nav.general.name",
+    descriptionKey: "god_mode.nav.general.description",
     href: `/general/`,
   },
   email: {
     Icon: Mail,
-    name: "Email",
-    description: "Configure your SMTP controls.",
+    nameKey: "god_mode.nav.email.name",
+    descriptionKey: "god_mode.nav.email.description",
     href: `/email/`,
   },
   workspace: {
     Icon: WorkspaceIcon,
-    name: "Workspaces",
-    description: "Manage all workspaces on this instance.",
+    nameKey: "god_mode.nav.workspace.name",
+    descriptionKey: "god_mode.nav.workspace.description",
     href: `/workspace/`,
   },
   authentication: {
     Icon: LockIcon,
-    name: "Authentication",
-    description: "Configure authentication modes.",
+    nameKey: "god_mode.nav.authentication.name",
+    descriptionKey: "god_mode.nav.authentication.description",
     href: `/authentication/`,
   },
   ai: {
     Icon: BrainCog,
-    name: "Inteligência artificial",
-    description: "Provedor, modelo e credenciais de IA.",
+    nameKey: "god_mode.nav.ai.name",
+    descriptionKey: "god_mode.nav.ai.description",
     href: `/ai/`,
+  },
+  preferences: {
+    Icon: Palette,
+    nameKey: "god_mode.nav.preferences.name",
+    descriptionKey: "god_mode.nav.preferences.description",
+    href: `/preferences/`,
   },
   image: {
     Icon: Image,
-    name: "Images in Plane",
-    description: "Allow third-party image libraries.",
+    nameKey: "god_mode.nav.image.name",
+    descriptionKey: "god_mode.nav.image.description",
     href: `/image/`,
   },
 };

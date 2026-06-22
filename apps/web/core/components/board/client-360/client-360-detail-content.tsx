@@ -1,5 +1,7 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
+import { Activity, DollarSign } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import type { TClient360DetailResponse } from "@operis/types";
 import { Client360DetailKpiStrip } from "@/components/board/client-360/client-360-detail-kpi-strip";
@@ -11,18 +13,14 @@ import {
   Client360DetailTabs,
 } from "@/components/board/client-360/client-360-detail-tabs";
 import { Client360FinopsSections } from "@/components/board/client-360/client-360-finops-sections";
-import { Client360NarrativeSection } from "@/components/board/client-360/client-360-narrative-section";
-import { Client360OperationalSections } from "@/components/board/client-360/client-360-operational-sections";
-import type { Client360Persona } from "@/components/board/client-360/use-client-360-persona";
 
-type DetailTab = "pulse" | "delivery" | "management" | "finops";
+type DetailTab = "pulse" | "finops";
 
 type Props = {
   workspaceSlug: string;
   projectId: string;
   period: { start: string; end: string };
   data: TClient360DetailResponse;
-  persona: Client360Persona;
   statusReportHref: string;
   onFinopsSaved?: () => void;
 };
@@ -32,86 +30,55 @@ export function Client360DetailContent({
   projectId,
   period,
   data,
-  persona,
   statusReportHref,
   onFinopsSaved,
 }: Props) {
   const { t } = useTranslation();
 
-  const tabs: Array<{ id: DetailTab; label: string }> = [
-    { id: "pulse", label: t("boards.client_360.detail_tab_pulse") },
-    { id: "delivery", label: t("boards.client_360.detail_tab_delivery") },
+  const tabs: Array<{ id: DetailTab; label: string; icon: LucideIcon }> = [
+    { id: "pulse", label: t("boards.client_360.detail_tab_pulse"), icon: Activity },
+    { id: "finops", label: t("boards.client_360.detail_tab_finops"), icon: DollarSign },
   ];
 
-  if (persona !== "pm") {
-    tabs.push({ id: "management", label: t("boards.client_360.detail_tab_management") });
-    if (data.finops) {
-      tabs.push({ id: "finops", label: t("boards.client_360.detail_tab_finops") });
-    }
-  }
-
   return (
-    <div className="flex flex-col gap-5">
-      <Client360DetailKpiStrip data={data} />
+    <Client360DetailTabs defaultValue="pulse" className="gap-5">
+      <div className="shadow-xs overflow-hidden rounded-xl border border-subtle bg-layer-1">
+        <Client360DetailKpiStrip data={data} embedded />
+        <div className="border-t border-subtle bg-layer-2/20 px-2 py-2 sm:px-3">
+          <Client360DetailTabList contained className="min-w-0 overflow-x-auto">
+            {tabs.map(({ id, label, icon }) => (
+              <Client360DetailTabTrigger key={id} value={id} icon={icon}>
+                {label}
+              </Client360DetailTabTrigger>
+            ))}
+          </Client360DetailTabList>
+        </div>
+      </div>
 
-      <Client360DetailTabs defaultValue="pulse">
-        <Client360DetailTabList>
-          {tabs.map(({ id, label }) => (
-            <Client360DetailTabTrigger key={id} value={id}>
-              {label}
-            </Client360DetailTabTrigger>
-          ))}
-        </Client360DetailTabList>
+      <Client360DetailTabPanel value="pulse">
+        <Client360DetailPulse
+          workspaceSlug={workspaceSlug}
+          projectId={projectId}
+          period={period}
+          data={data}
+          statusReportHref={statusReportHref}
+        />
+      </Client360DetailTabPanel>
 
-        <Client360DetailTabPanel value="pulse">
-          <Client360DetailPulse
+      <Client360DetailTabPanel value="finops">
+        {data.finops ? (
+          <Client360FinopsSections
             workspaceSlug={workspaceSlug}
             projectId={projectId}
-            period={period}
-            data={data}
-            persona={persona}
-            statusReportHref={statusReportHref}
+            finops={data.finops}
+            onFinopsSaved={onFinopsSaved}
           />
-        </Client360DetailTabPanel>
-
-        <Client360DetailTabPanel value="delivery">
-          {data.operational ? (
-            <Client360OperationalSections
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              data={data}
-              variant="compact"
-              embedded
-            />
-          ) : (
-            <p className="rounded-xl border border-dashed border-subtle bg-layer-2/30 px-4 py-8 text-center text-13 text-tertiary">
-              {t("boards.client_360.detail_delivery_empty")}
-            </p>
-          )}
-        </Client360DetailTabPanel>
-
-        {persona !== "pm" ? (
-          <Client360DetailTabPanel value="management">
-            <Client360NarrativeSection
-              key={`narrative-${projectId}-${period.start}`}
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              period={period}
-            />
-          </Client360DetailTabPanel>
-        ) : null}
-
-        {persona !== "pm" && data.finops ? (
-          <Client360DetailTabPanel value="finops">
-            <Client360FinopsSections
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              finops={data.finops}
-              onFinopsSaved={onFinopsSaved}
-            />
-          </Client360DetailTabPanel>
-        ) : null}
-      </Client360DetailTabs>
-    </div>
+        ) : (
+          <p className="rounded-xl border border-dashed border-subtle bg-layer-2/20 px-4 py-8 text-center text-13 leading-relaxed text-tertiary">
+            {t("boards.client_360.finops_empty")}
+          </p>
+        )}
+      </Client360DetailTabPanel>
+    </Client360DetailTabs>
   );
 }

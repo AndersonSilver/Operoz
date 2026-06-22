@@ -1,82 +1,65 @@
-
 import { useCallback, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
-// plane internal packages
+import { Lock, UserPlus } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { setPromiseToast, setToast, TOAST_TYPE } from "@operis/propel/toast";
 import type { TInstanceConfigurationKeys, TInstanceAuthenticationModes } from "@operis/types";
-import { Loader, ToggleSwitch } from "@operis/ui";
-import { cn, resolveGeneralTheme } from "@operis/utils";
-// components
+import { Loader } from "@operis/ui";
+import { resolveGeneralTheme } from "@operis/utils";
 import { PageWrapper } from "@/components/common/page-wrapper";
-import { AuthenticationMethodCard } from "@/components/authentication/authentication-method-card";
-// helpers
+import { AdminGridCard, AdminSettingsPanel, AdminToggleCard } from "@/components/settings/admin-settings-panel";
+import { AdminSectionHeader } from "@/components/settings/admin-section-header";
 import { canDisableAuthMethod } from "@/helpers/authentication";
-// hooks
 import { useAuthenticationModes } from "@/hooks/oauth";
 import { useInstance } from "@/hooks/store";
-// types
 import type { Route } from "./+types/page";
 
 const InstanceAuthenticationPage = observer(function InstanceAuthenticationPage(_props: Route.ComponentProps) {
-  // theme
+  const { t } = useTranslation();
   const { resolvedTheme: resolvedThemeAdmin } = useTheme();
   const resolvedTheme = resolveGeneralTheme(resolvedThemeAdmin);
-  // Ref to store authentication modes for validation (avoids circular dependency)
   const authenticationModesRef = useRef<TInstanceAuthenticationModes[]>([]);
-  // state
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-  // store hooks
   const { fetchInstanceConfigurations, formattedConfig, updateInstanceConfigurations } = useInstance();
-  // derived values
   const enableSignUpConfig = formattedConfig?.ENABLE_SIGNUP ?? "";
 
   useSWR("INSTANCE_CONFIGURATIONS", () => fetchInstanceConfigurations());
 
-  // Create updateConfig with validation - uses authenticationModesRef for current modes
   const updateConfig = useCallback(
     (key: TInstanceConfigurationKeys, value: string): void => {
-      // Check if trying to disable (value === "0")
       if (value === "0") {
-        // Check if this key is an authentication method key
         const currentAuthModes = authenticationModesRef.current;
         const isAuthMethodKey = currentAuthModes.some((method) => method.enabledConfigKey === key);
 
-        // Only validate if this is an authentication method key
         if (isAuthMethodKey) {
           const canDisable = canDisableAuthMethod(key, currentAuthModes, formattedConfig);
 
           if (!canDisable) {
             setToast({
               type: TOAST_TYPE.ERROR,
-              title: "Cannot disable authentication",
-              message:
-                "At least one authentication method must remain enabled. Please enable another method before disabling this one.",
+              title: t("god_mode.pages.authentication.cannot_disable_title"),
+              message: t("god_mode.pages.authentication.cannot_disable_message"),
             });
             return;
           }
         }
       }
 
-      // Proceed with the update
       setIsSubmitting(true);
 
-      const payload = {
-        [key]: value,
-      };
-
-      const updateConfigPromise = updateInstanceConfigurations(payload);
+      const updateConfigPromise = updateInstanceConfigurations({ [key]: value });
 
       setPromiseToast(updateConfigPromise, {
-        loading: "Saving configuration",
+        loading: t("god_mode.common.config_saving"),
         success: {
-          title: "Success",
-          message: () => "Configuration saved successfully",
+          title: t("god_mode.common.success"),
+          message: () => t("god_mode.common.config_saved"),
         },
         error: {
-          title: "Error",
-          message: () => "Failed to save configuration",
+          title: t("god_mode.common.error"),
+          message: () => t("god_mode.common.config_save_failed"),
         },
       });
 
@@ -90,80 +73,115 @@ const InstanceAuthenticationPage = observer(function InstanceAuthenticationPage(
           setIsSubmitting(false);
         });
     },
-    [formattedConfig, updateInstanceConfigurations]
+    [formattedConfig, updateInstanceConfigurations, t]
   );
 
-  // Get authentication modes - this will use updateConfig which includes validation
   const authenticationModes = useAuthenticationModes({
     disabled: isSubmitting,
     updateConfig,
     resolvedTheme,
   });
 
-  // Update ref with latest authentication modes
   authenticationModesRef.current = authenticationModes;
+
+  const signupEnabled = Boolean(parseInt(enableSignUpConfig));
+  const activeMethodsCount = authenticationModes.filter((method) => {
+    const key = method.enabledConfigKey as TInstanceConfigurationKeys | undefined;
+    if (!key || !formattedConfig) return false;
+    return Boolean(parseInt(formattedConfig[key] ?? "0", 10));
+  }).length;
 
   return (
     <PageWrapper
+      size="lg"
       header={{
-        title: "Manage authentication modes for your instance",
-        description: "Configure authentication modes for your team and restrict sign-ups to be invite only.",
+        icon: Lock,
+        title: t("god_mode.pages.authentication.title"),
+        description: t("god_mode.pages.authentication.description"),
+        highlights: [
+          { label: t("god_mode.nav.authentication.name"), icon: Lock, tone: "accent" },
+          { label: t("god_mode.pages.authentication.signup_toggle_title"), icon: UserPlus, tone: "success" },
+        ],
       }}
     >
       {formattedConfig ? (
-        <div className="space-y-3">
-          <div className={cn("flex w-full items-center gap-14 rounded-sm")}>
-            <div className="flex grow items-center gap-4">
-              <div className="grow">
-                <div className="pb-1 text-16 font-medium">Allow anyone to sign up even without an invite</div>
-                <div className={cn("text-11 leading-5 font-regular text-tertiary")}>
-                  Toggling this off will only let users sign up when they are invited.
-                </div>
-              </div>
-            </div>
-            <div className={`shrink-0 pr-4 ${isSubmitting && "opacity-70"}`}>
-              <div className="flex items-center gap-4">
-                <ToggleSwitch
-                  value={Boolean(parseInt(enableSignUpConfig))}
-                  onChange={() => {
-                    if (Boolean(parseInt(enableSignUpConfig)) === true) {
-                      updateConfig("ENABLE_SIGNUP", "0");
-                    } else {
-                      updateConfig("ENABLE_SIGNUP", "1");
-                    }
-                  }}
-                  size="sm"
-                  disabled={isSubmitting}
-                />
-              </div>
-            </div>
-          </div>
-          <div className="text-lg pt-6 font-medium">Available authentication modes</div>
-          {authenticationModes.map((method) => (
-            <AuthenticationMethodCard
-              key={method.key}
-              name={method.name}
-              description={method.description}
-              icon={method.icon}
-              config={method.config}
+        <div className="space-y-6">
+          <AdminSettingsPanel
+            title={t("god_mode.pages.authentication.signup_toggle_title")}
+            description={t("god_mode.pages.authentication.signup_toggle_desc")}
+            icon={UserPlus}
+            iconClassName="text-accent-primary"
+            glowActive={signupEnabled}
+          >
+            <AdminToggleCard
+              label={t("god_mode.pages.authentication.signup_toggle_title")}
+              description={t("god_mode.pages.authentication.signup_toggle_desc")}
+              value={signupEnabled}
+              onChange={() => updateConfig("ENABLE_SIGNUP", signupEnabled ? "0" : "1")}
               disabled={isSubmitting}
-              unavailable={method.unavailable}
             />
-          ))}
+          </AdminSettingsPanel>
+
+          <section>
+            <AdminSectionHeader
+              title={t("god_mode.pages.authentication.modes_title")}
+              count={authenticationModes.length}
+              hint={
+                activeMethodsCount > 0
+                  ? `${activeMethodsCount} ${t("god_mode.common.active").toLowerCase()}`
+                  : undefined
+              }
+            />
+            <div className="admin-card-grid">
+              {authenticationModes.map((method) => {
+                const configKey = method.enabledConfigKey as TInstanceConfigurationKeys | undefined;
+                const isEnabled = configKey ? Boolean(parseInt(formattedConfig?.[configKey] ?? "0", 10)) : false;
+
+                return (
+                  <AdminGridCard
+                    key={method.key}
+                    title={method.name}
+                    description={method.description}
+                    isActive={isEnabled && !method.unavailable}
+                    icon={
+                      <span
+                        className={
+                          isEnabled
+                            ? "shadow-sm grid size-10 place-items-center rounded-lg border border-subtle bg-accent-subtle/70 text-accent-primary"
+                            : "grid size-10 place-items-center rounded-lg border border-subtle bg-layer-2 text-tertiary"
+                        }
+                      >
+                        {method.icon}
+                      </span>
+                    }
+                    badges={
+                      <span
+                        className={
+                          isEnabled
+                            ? "rounded-full bg-success-subtle px-2 py-0.5 text-10 font-semibold tracking-wide text-success-primary uppercase"
+                            : "rounded-full bg-layer-2 px-2 py-0.5 text-10 font-semibold tracking-wide text-tertiary uppercase"
+                        }
+                      >
+                        {isEnabled ? t("god_mode.common.active") : t("god_mode.common.inactive")}
+                      </span>
+                    }
+                    footer={<div className={method.unavailable ? "opacity-50" : ""}>{method.config}</div>}
+                  />
+                );
+              })}
+            </div>
+          </section>
         </div>
       ) : (
-        <Loader className="space-y-10">
-          <Loader.Item height="50px" width="75%" />
-          <Loader.Item height="50px" width="75%" />
-          <Loader.Item height="50px" width="40%" />
-          <Loader.Item height="50px" width="40%" />
-          <Loader.Item height="50px" width="20%" />
+        <Loader className="space-y-4">
+          <Loader.Item height="140px" width="100%" />
+          <Loader.Item height="280px" width="100%" />
         </Loader>
       )}
     </PageWrapper>
   );
 });
 
-export const meta: Route.MetaFunction = () => [{ title: "Authentication Settings - Plane Web" }];
+export const meta: Route.MetaFunction = () => [{ title: "Authentication Settings - God Mode" }];
 
 export default InstanceAuthenticationPage;

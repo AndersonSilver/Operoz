@@ -82,6 +82,26 @@ class ProjectViewSet(BaseViewSet):
                     workspace__slug=self.kwargs.get("slug"),
                 ).values("anchor")
             )
+            .annotate(
+                intake_count=Count(
+                    "project_intakeissue",
+                    filter=Q(
+                        project_intakeissue__status=IntakeIssueStatus.PENDING.value,
+                        project_intakeissue__ticket_kind="intake",
+                        project_intakeissue__deleted_at__isnull=True,
+                    ),
+                )
+            )
+            .annotate(
+                support_count=Count(
+                    "project_intakeissue",
+                    filter=Q(
+                        project_intakeissue__status=IntakeIssueStatus.PENDING.value,
+                        project_intakeissue__ticket_kind="support",
+                        project_intakeissue__deleted_at__isnull=True,
+                    ),
+                )
+            )
             .annotate(sort_order=Subquery(sort_order))
             .prefetch_related(
                 Prefetch(
@@ -158,6 +178,17 @@ class ProjectViewSet(BaseViewSet):
                     "project_intakeissue",
                     filter=Q(
                         project_intakeissue__status=IntakeIssueStatus.PENDING.value,
+                        project_intakeissue__ticket_kind="intake",
+                        project_intakeissue__deleted_at__isnull=True,
+                    ),
+                )
+            )
+            .annotate(
+                support_count=Count(
+                    "project_intakeissue",
+                    filter=Q(
+                        project_intakeissue__status=IntakeIssueStatus.PENDING.value,
+                        project_intakeissue__ticket_kind="support",
                         project_intakeissue__deleted_at__isnull=True,
                     ),
                 )
@@ -173,6 +204,9 @@ class ProjectViewSet(BaseViewSet):
             "logo_props",
             "member_role",
             "intake_count",
+            "support_count",
+            "intake_view",
+            "support_view",
             "archived_at",
             "workspace",
             "cycle_view",
@@ -180,6 +214,7 @@ class ProjectViewSet(BaseViewSet):
             "module_view",
             "page_view",
             "inbox_view",
+            "support_view",
             "guest_view_all_features",
             "project_lead",
             "network",
@@ -338,6 +373,7 @@ class ProjectViewSet(BaseViewSet):
         project = Project.objects.get(pk=pk, workspace__slug=slug)
         old_board_id = project.board_id
         intake_view = request.data.get("inbox_view", project.intake_view)
+        support_view = request.data.get("support_view", project.support_view)
         current_instance = json.dumps(ProjectSerializer(project).data, cls=DjangoJSONEncoder)
         if project.archived_at:
             return Response(
@@ -347,7 +383,7 @@ class ProjectViewSet(BaseViewSet):
 
         serializer = ProjectSerializer(
             project,
-            data={**request.data, "intake_view": intake_view},
+            data={**request.data, "intake_view": intake_view, "support_view": support_view},
             context={"workspace_id": workspace.id},
             partial=True,
         )
@@ -357,7 +393,7 @@ class ProjectViewSet(BaseViewSet):
             if serializer.instance.board_id and str(old_board_id) != str(serializer.instance.board_id):
                 sync_board_issue_types_to_project(serializer.instance, request.user)
                 sync_board_custom_fields_to_project(serializer.instance, request.user)
-            if intake_view:
+            if intake_view or support_view:
                 intake = Intake.objects.filter(project=project, is_default=True).first()
                 if not intake:
                     Intake.objects.create(

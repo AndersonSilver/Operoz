@@ -4,6 +4,7 @@ import type { EAuthModes } from "@/helpers/authentication.helper";
 import { AuthBrandPanel } from "./brand-panel";
 import { AuthFooter } from "./footer";
 import { AuthHeader } from "./header";
+import { AuthThemeToggle } from "./theme-toggle";
 
 type AuthBaseProps = {
   authType: EAuthModes;
@@ -12,6 +13,7 @@ type AuthBaseProps = {
 export function AuthBase({ authType }: AuthBaseProps) {
   return (
     <div className="relative isolate flex min-h-screen w-full overflow-x-hidden overflow-y-auto bg-surface-1">
+      <AuthThemeToggle />
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div className="absolute -top-32 left-1/2 h-[min(60vh,480px)] w-[min(100vw,720px)] -translate-x-1/2 rounded-full bg-accent-primary/[0.12] blur-[88px] dark:bg-accent-primary/[0.16]" />
         <div className="absolute -right-20 bottom-0 h-[min(45vh,360px)] w-[min(90vw,520px)] rounded-full bg-accent-primary/[0.06] blur-[72px]" />

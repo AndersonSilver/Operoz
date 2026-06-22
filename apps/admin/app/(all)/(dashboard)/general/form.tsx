@@ -1,15 +1,19 @@
-
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-import { Telescope } from "lucide-react";
-// plane imports
+import { Cog, Telescope } from "lucide-react";
+import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
 import type { IInstance, IInstanceAdmin } from "@operis/types";
-import { Input, ToggleSwitch } from "@operis/ui";
-// components
 import { ControllerInput } from "@/components/common/controller-input";
-// hooks
+import {
+  AdminConfigSection,
+  AdminFormActions,
+  AdminFormFooter,
+  AdminReadOnlyField,
+  AdminSettingsPanel,
+  AdminToggleCard,
+} from "@/components/settings/admin-settings-panel";
 import { useInstance } from "@/hooks/store";
 
 export interface IGeneralConfigurationForm {
@@ -19,10 +23,9 @@ export interface IGeneralConfigurationForm {
 
 export const GeneralConfigurationForm = observer(function GeneralConfigurationForm(props: IGeneralConfigurationForm) {
   const { instance, instanceAdmins } = props;
-  // hooks
+  const { t } = useTranslation();
   const { updateInstanceInfo } = useInstance();
 
-  // form data
   const {
     handleSubmit,
     control,
@@ -35,112 +38,85 @@ export const GeneralConfigurationForm = observer(function GeneralConfigurationFo
   });
 
   const onSubmit = async (formData: Partial<IInstance>) => {
-    const payload: Partial<IInstance> = { ...formData };
-
-    await updateInstanceInfo(payload)
+    await updateInstanceInfo({ ...formData })
       .then(() =>
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success",
-          message: "Settings updated successfully",
+          title: t("god_mode.common.success"),
+          message: t("god_mode.pages.general.settings_updated"),
         })
       )
       .catch((err) => console.error(err));
   };
 
   return (
-    <div className="space-y-8">
-      <div className="space-y-4">
-        <div className="text-16 font-medium text-primary">Instance details</div>
-        <div className="grid-col grid w-full grid-cols-1 items-center justify-between gap-8 md:grid-cols-2 lg:grid-cols-3">
-          <ControllerInput
-            key="instance_name"
-            name="instance_name"
-            control={control}
-            type="text"
-            label="Name of instance"
-            placeholder="Instance name"
-            error={Boolean(errors.instance_name)}
-            required
-          />
-
-          <div className="flex flex-col gap-1">
-            <h4 className="text-13 text-tertiary">Email</h4>
-            <Input
-              id="email"
-              name="email"
-              type="email"
-              value={instanceAdmins[0]?.user_detail?.email ?? ""}
-              placeholder="Admin email"
-              className="w-full cursor-not-allowed !text-placeholder"
-              autoComplete="on"
-              disabled
-            />
-          </div>
-
-          <div className="flex flex-col gap-1">
-            <h4 className="text-13 text-tertiary">Instance ID</h4>
-            <Input
-              id="instance_id"
-              name="instance_id"
-              type="text"
-              value={instance.instance_id}
-              className="w-full cursor-not-allowed rounded-md font-medium !text-placeholder"
-              disabled
-            />
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-6">
-        <div className="border-b border-subtle pb-1.5 text-16 font-medium text-primary">Telemetry</div>
-        <div className="flex items-center gap-14">
-          <div className="flex grow items-center gap-4">
-            <div className="shrink-0">
-              <div className="flex size-11 items-center justify-center rounded-lg bg-layer-1">
-                <Telescope className="size-5 text-tertiary" />
-              </div>
-            </div>
-            <div className="grow">
-              <div className="text-13 leading-5 font-medium text-primary">Let Plane collect anonymous usage data</div>
-              <div className="text-11 leading-5 font-regular text-tertiary">
-                No PII is collected.This anonymized data is used to understand how you use Plane and build new features
-                in line with{" "}
-                <a
-                  href="https://developers.plane.so/self-hosting/telemetry"
-                  target="_blank"
-                  className="text-accent-primary hover:underline"
-                  rel="noreferrer"
-                >
-                  our Telemetry Policy.
-                </a>
-              </div>
-            </div>
-          </div>
-          <div className={`shrink-0 ${isSubmitting && "opacity-70"}`}>
-            <Controller
-              control={control}
-              name="is_telemetry_enabled"
-              render={({ field: { value, onChange } }) => (
-                <ToggleSwitch value={value ?? false} onChange={onChange} size="sm" disabled={isSubmitting} />
-              )}
-            />
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <Button
-          variant="primary"
-          size="lg"
-          onClick={() => {
-            void handleSubmit(onSubmit)();
-          }}
-          loading={isSubmitting}
+    <form className="space-y-5 pb-2" onSubmit={handleSubmit(onSubmit)}>
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-2">
+        <AdminSettingsPanel
+          title={t("god_mode.pages.general.instance_details")}
+          description={t("god_mode.pages.general.description")}
+          icon={Cog}
+          iconClassName="text-accent-primary"
+          fillHeight
         >
-          {isSubmitting ? "Saving" : "Save changes"}
-        </Button>
+          <AdminConfigSection title={t("god_mode.pages.general.instance_details")}>
+            <div className="grid grid-cols-1 gap-4">
+              <ControllerInput
+                key="instance_name"
+                name="instance_name"
+                control={control}
+                type="text"
+                variant="admin"
+                label={t("god_mode.pages.general.instance_name_label")}
+                placeholder={t("god_mode.pages.general.instance_name_placeholder")}
+                error={Boolean(errors.instance_name)}
+                required
+              />
+              <AdminReadOnlyField
+                label={t("god_mode.pages.general.email_label")}
+                value={instanceAdmins[0]?.user_detail?.email ?? ""}
+              />
+              <AdminReadOnlyField
+                label={t("god_mode.pages.general.instance_id_label")}
+                value={instance.instance_id}
+                mono
+              />
+            </div>
+          </AdminConfigSection>
+        </AdminSettingsPanel>
+
+        <AdminSettingsPanel
+          title={t("god_mode.pages.general.telemetry_title")}
+          description={t("god_mode.pages.general.telemetry_desc")}
+          icon={Telescope}
+          iconClassName="text-tertiary"
+          accentClassName="bg-tertiary"
+          fillHeight
+          glowActive={Boolean(instance?.is_telemetry_enabled)}
+        >
+          <Controller
+            control={control}
+            name="is_telemetry_enabled"
+            render={({ field: { value, onChange } }) => (
+              <AdminToggleCard
+                label={t("god_mode.pages.general.telemetry_toggle")}
+                description={t("god_mode.pages.general.telemetry_policy")}
+                value={value ?? false}
+                onChange={onChange}
+                disabled={isSubmitting}
+              />
+            )}
+          />
+        </AdminSettingsPanel>
       </div>
-    </div>
+
+      <AdminFormFooter>
+        <AdminFormActions className="w-full justify-end">
+          <Button type="submit" variant="primary" size="lg" loading={isSubmitting}>
+            {isSubmitting ? t("god_mode.common.saving") : t("god_mode.common.save")}
+          </Button>
+        </AdminFormActions>
+      </AdminFormFooter>
+    </form>
   );
 });

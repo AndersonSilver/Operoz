@@ -1,4 +1,4 @@
-import { BarChart2, Briefcase, FileText, Home, Inbox, Layers, PenSquare, Settings } from "lucide-react";
+import { BarChart2, Briefcase, FileText, Home, Inbox, Layers, LifeBuoy, PenSquare, Settings } from "lucide-react";
 // plane imports
 import { EUserPermissionsLevel } from "@operis/constants";
 import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@operis/propel/icons";
@@ -37,6 +37,7 @@ export type TPowerKNavigationCommandKeys =
   | "nav_project_views"
   | "nav_project_pages"
   | "nav_project_intake"
+  | "nav_project_support"
   | "nav_project_archives"
   | "open_project_setting"
   | "nav_project_settings";
@@ -454,6 +455,24 @@ export const usePowerKNavigationCommandsRecord = (): Record<TPowerKNavigationCom
         ]),
       isEnabled: (ctx) => baseProjectConditions(ctx) && !!getContextProject(ctx)?.inbox_view,
       isVisible: (ctx) => baseProjectConditions(ctx) && !!getContextProject(ctx)?.inbox_view,
+      closeOnSelect: true,
+    },
+    nav_project_support: {
+      id: "nav_project_support",
+      type: "action",
+      group: "navigation",
+      i18n_title: "power_k.navigation_actions.nav_project_support",
+      icon: LifeBuoy,
+      keySequence: "gs",
+      action: (ctx) =>
+        handlePowerKNavigate(ctx, [
+          ctx.params.workspaceSlug?.toString(),
+          "projects",
+          ctx.params.projectId?.toString(),
+          "sustentacao",
+        ]),
+      isEnabled: (ctx) => baseProjectConditions(ctx) && !!getContextProject(ctx)?.support_view,
+      isVisible: (ctx) => baseProjectConditions(ctx) && !!getContextProject(ctx)?.support_view,
       closeOnSelect: true,
     },
     nav_project_archives: {
