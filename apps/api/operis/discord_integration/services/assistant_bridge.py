@@ -1,13 +1,22 @@
 from __future__ import annotations
 
+import json
 import logging
 
+from django.db.models import QuerySet
 from django.test.utils import override_settings
 
+from operis.app.permissions import ROLE
 from operis.app.views.external.base import get_llm_response
 from operis.assistant.llm.config import get_llm_config
-from operis.assistant.service import AssistantServiceError, run_chat
-from operis.db.models import AssistantSession, WorkspaceMember
+from operis.assistant.security.access import (
+    filter_accessible_issues,
+    get_board,
+    require_workspace_role_at_least,
+)
+from operis.assistant.service import AssistantServiceError, _actor_from_session, run_chat
+from operis.assistant.types import AssistantActorContext
+from operis.db.models import AssistantSession, Issue, Project, WorkspaceMember
 from operis.discord_integration.models import CustomSlashCommand
 from operis.discord_integration.services.text_utils import (
     build_command_prompt,
@@ -18,13 +27,19 @@ logger = logging.getLogger(__name__)
 
 DISCORD_OPEN_SCOPE_INSTRUCTIONS = """## Modo Discord (escopo flexível)
 - O usuário está no Discord: **não** peça para selecionar board ou projeto no painel do Operoz.
-- **Pergunta genérica** (status geral, todos os clientes, visão da squad): use `get_project_stats` **sem** `project_id` \
-para trazer métricas de **todos** os projetos acessíveis no workspace (use `board_slug` só se estiver definido na sessão).
+- **Pergunta genérica** (status geral, todos os clientes, visão da squad): use os dados de «Dados Operoz» ou `get_project_stats` \
+sem `project_id` para trazer métricas de **todos** os projetos acessíveis no workspace.
 - **Pergunta sobre um cliente específico** (ex.: «como está o SICREDI?»): identifique o projeto pelo **nome** ou \
-**identifier** em `get_project_stats` ou via `search_issues`; depois aprofunde só nesse projeto.
-- Use `search_issues` sem `project_id` para buscas amplas quando o usuário não citar um cliente.
-- Consulte ferramentas **antes** de responder; não invente números nem peça UUID ao usuário.
+**identifier** e aprofunde só nesse projeto.
+- Use `search_issues` sem `project_id` para buscas amplas quando o usuário citar um tema.
+- Consulte ferramentas **antes** de complementar a resposta; não invente números nem peça UUID ao usuário.
 - Resposta **curta** (bullets), em português do Brasil, compatível com Discord."""
+
+DISCORD_EXECUTE_TRIGGER = (
+    "Execute agora o relatório conforme as instruções do slash command. "
+    "Use os dados em «Dados Operoz» quando existirem. "
+    "Proibido cumprimentar, perguntar «como posso ajudar» ou descrever o que vai fazer — entregue o relatório direto."
+)
 
 
 def _resolve_actor_user(command: CustomSlashCommand):
@@ -34,7 +49,7 @@ def _resolve_actor_user(command: CustomSlashCommand):
     admin_membership = (
         WorkspaceMember.objects.filter(
             workspace=command.workspace,
-            role=20,
+            role=ROLE.ADMIN.value,
             deleted_at__isnull=True,
             member__is_active=True,
         )
@@ -55,10 +70,79 @@ def _build_session_context(command: CustomSlashCommand) -> dict[str, str]:
     return context
 
 
-def _build_user_message(command: CustomSlashCommand, user_input: str, *, scope_relaxed: bool) -> str:
+def _discord_admin_read(ctx: AssistantActorContext) -> bool:
+    return require_workspace_role_at_least(ctx, ROLE.ADMIN.value)
+
+
+def _projects_for_discord(ctx: AssistantActorContext) -> QuerySet[Project]:
+    qs = Project.objects.filter(workspace=ctx.workspace, archived_at__isnull=True)
+    if ctx.board_slug:
+        board = get_board(ctx, ctx.board_slug)
+        if not board:
+            return Project.objects.none()
+        qs = qs.filter(board_id=board.id)
+    if ctx.project_id:
+        qs = qs.filter(pk=ctx.project_id)
+
+    if _discord_admin_read(ctx):
+        return qs.distinct()
+
+    return qs.filter(
+        project_projectmember__member=ctx.user,
+        project_projectmember__is_active=True,
+    ).distinct()
+
+
+def _issues_for_discord(ctx: AssistantActorContext, project_id: str):
+    if _discord_admin_read(ctx):
+        return Issue.issue_objects.filter(workspace_id=ctx.workspace.id, project_id=project_id)
+    return filter_accessible_issues(ctx, project_id)
+
+
+def _prefetch_project_stats(session: AssistantSession) -> str:
+    ctx = _actor_from_session(session)
+    projects = list(_projects_for_discord(ctx)[:50])
+    if not projects:
+        return (
+            "## Dados Operoz\n"
+            "Nenhum projeto encontrado para este workspace/escopo. "
+            "Verifique se existem projetos ativos e se o utilizador do comando é membro ou admin do workspace."
+        )
+
+    stats: list[dict[str, object]] = []
+    for project in projects:
+        pid = str(project.id)
+        issues_qs = _issues_for_discord(ctx, pid)
+        total_issues = issues_qs.count()
+        completed_issues = issues_qs.filter(state__group__in=["completed", "cancelled"]).count()
+        stats.append(
+            {
+                "name": project.name,
+                "identifier": project.identifier,
+                "total_issues": total_issues,
+                "completed_issues": completed_issues,
+                "open_issues": max(0, total_issues - completed_issues),
+            }
+        )
+
+    payload = json.dumps({"projects": stats, "count": len(stats)}, ensure_ascii=False, indent=2)
+    return f"## Dados Operoz (consultados agora)\n```json\n{payload}\n```"
+
+
+def _build_user_message(
+    command: CustomSlashCommand,
+    user_input: str,
+    *,
+    scope_relaxed: bool,
+    stats_block: str = "",
+) -> str:
     sections: list[str] = []
     if user_input.strip():
         sections.append(user_input.strip())
+    else:
+        sections.append(DISCORD_EXECUTE_TRIGGER)
+    if stats_block.strip():
+        sections.append(stats_block.strip())
     sections.append(f"## Instruções do slash command /{command.name}\n{command.prompt_instructions.strip()}")
     if scope_relaxed:
         sections.append(DISCORD_OPEN_SCOPE_INSTRUCTIONS)
@@ -73,9 +157,10 @@ def execute_simple_llm(command: CustomSlashCommand, user_input: str = "") -> str
 
     task = (
         "Você responde a um slash command do Discord integrado ao Operoz. "
-        "Seja conciso, em português do Brasil, e use markdown compatível com Discord."
+        "Seja conciso, em português do Brasil, e use markdown compatível com Discord. "
+        "Nunca cumprimente — entregue o relatório pedido."
     )
-    prompt = build_command_prompt(command, user_input)
+    prompt = build_command_prompt(command, user_input or DISCORD_EXECUTE_TRIGGER)
     text, error = get_llm_response(task, prompt, api_key, model, provider)
     if error or not text:
         return "Não foi possível gerar uma resposta agora. Tente novamente em instantes."
@@ -101,7 +186,13 @@ def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> 
     )
     scope_relaxed = not (command.board_slug and command.default_project_id)
     settings_patch = {"ASSISTANT_REQUIRE_SESSION_SCOPE": "0"} if scope_relaxed else {}
-    user_message = _build_user_message(command, user_input, scope_relaxed=scope_relaxed)
+    stats_block = _prefetch_project_stats(session)
+    user_message = _build_user_message(
+        command,
+        user_input,
+        scope_relaxed=scope_relaxed,
+        stats_block=stats_block,
+    )
 
     try:
         if settings_patch:

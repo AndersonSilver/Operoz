@@ -11,7 +11,7 @@ from rest_framework.test import APIRequestFactory
 
 from operis.discord_integration.models import CustomSlashCommand
 from operis.discord_integration.security.signature import verify_discord_signature
-from operis.discord_integration.services.interactions import resolve_slash_command
+from operis.discord_integration.services.interactions import extract_user_prompt, resolve_slash_command
 from operis.discord_integration.views.interactions import DiscordInteractionsEndpoint
 
 
@@ -143,3 +143,8 @@ def test_interactions_endpoint_defers_application_command(mock_task, settings, w
         interaction_token="interaction-token",
         user_input="periodo: semana",
     )
+
+
+def test_extract_user_prompt_reads_foco_option():
+    prompt = extract_user_prompt({"options": [{"name": "foco", "value": "SICREDI"}]})
+    assert prompt == "SICREDI"

@@ -23,13 +23,24 @@ class DiscordSlashCommandPayload:
     name: str
     description: str
     type: int = 1  # CHAT_INPUT
+    include_foco_option: bool = True
 
     def to_dict(self) -> dict[str, Any]:
-        return {
+        payload: dict[str, Any] = {
             "name": self.name,
             "description": self.description,
             "type": self.type,
         }
+        if self.include_foco_option:
+            payload["options"] = [
+                {
+                    "type": 3,
+                    "name": "foco",
+                    "description": "Cliente, tema ou pergunta (ex.: SICREDI, riscos, só backend)",
+                    "required": False,
+                }
+            ]
+        return payload
 
 
 class DiscordSlashCommandService:
