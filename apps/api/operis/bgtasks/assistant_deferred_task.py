@@ -3,7 +3,7 @@ import logging
 from celery import shared_task
 from django.db import OperationalError
 
-from operis.assistant.quality import record_assistant_response
+from operis.assistant.quality import record_assistant_response_sync
 from operis.assistant.security.audit import log_assistant_action_sync
 from operis.assistant.thread_summarization import persist_session_summary
 from operis.db.models import AssistantSession
@@ -76,7 +76,7 @@ def record_assistant_response_task(
     workspace = Workspace.objects.filter(pk=workspace_id).first()
     if not workspace:
         return {"ok": False}
-    record_assistant_response(
+    record_assistant_response_sync(
         workspace,
         used_tools=used_tools,
         first_token_ms=first_token_ms,
