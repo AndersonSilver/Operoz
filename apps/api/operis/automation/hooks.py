@@ -103,3 +103,34 @@ def serialize_issue_snapshot(issue_data: dict | str) -> dict[str, Any]:
     if isinstance(issue_data, str):
         return json.loads(issue_data)
     return issue_data
+
+
+def build_issue_automation_snapshot(issue) -> dict[str, Any]:
+    """Lightweight issue snapshot for automation diffs (no full IssueDetailSerializer)."""
+
+    def _value(field: str) -> Any:
+        if not hasattr(issue, field):
+            return None
+        raw = getattr(issue, field)
+        if hasattr(raw, "hex"):
+            return str(raw)
+        if isinstance(raw, list):
+            return [str(item) if hasattr(item, "hex") else item for item in raw]
+        return raw
+
+    return {
+        "id": str(issue.id),
+        "name": _value("name"),
+        "state_id": _value("state_id"),
+        "type_id": _value("type_id"),
+        "priority": _value("priority"),
+        "assignee_ids": _value("assignee_ids") or [],
+        "label_ids": _value("label_ids") or [],
+        "module_ids": _value("module_ids") or [],
+        "description_html": _value("description_html"),
+        "start_date": _value("start_date"),
+        "target_date": _value("target_date"),
+        "parent_id": _value("parent_id"),
+        "estimate_point": _value("estimate_point_id"),
+        "project_id": _value("project_id"),
+    }

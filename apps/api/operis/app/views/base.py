@@ -92,9 +92,13 @@ class BaseViewSet(TimezoneMixin, ReadReplicaControlMixin, ModelViewSet, BasePagi
                 )
 
             if isinstance(e, KeyError):
+                missing_key = e.args[0] if e.args else "unknown"
                 log_exception(e)
                 return Response(
-                    {"error": "The required key does not exist."},
+                    {
+                        "error": "The required key does not exist.",
+                        "missing_key": str(missing_key),
+                    },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -115,8 +119,7 @@ class BaseViewSet(TimezoneMixin, ReadReplicaControlMixin, ModelViewSet, BasePagi
 
             return response
         except Exception as exc:
-            response = self.handle_exception(exc)
-            return exc
+            return self.handle_exception(exc)
 
     @property
     def workspace_slug(self):
@@ -188,8 +191,13 @@ class BaseAPIView(TimezoneMixin, ReadReplicaControlMixin, APIView, BasePaginator
                 )
 
             if isinstance(e, KeyError):
+                missing_key = e.args[0] if e.args else "unknown"
+                log_exception(e)
                 return Response(
-                    {"error": "The required key does not exist."},
+                    {
+                        "error": "The required key does not exist.",
+                        "missing_key": str(missing_key),
+                    },
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
@@ -210,8 +218,7 @@ class BaseAPIView(TimezoneMixin, ReadReplicaControlMixin, APIView, BasePaginator
             return response
 
         except Exception as exc:
-            response = self.handle_exception(exc)
-            return exc
+            return self.handle_exception(exc)
 
     @property
     def workspace_slug(self):
