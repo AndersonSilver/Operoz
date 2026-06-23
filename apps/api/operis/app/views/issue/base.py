@@ -36,7 +36,12 @@ from operis.app.serializers import (
     IssueSerializer,
     ProjectUserPropertySerializer,
 )
-from operis.automation.hooks import emit_issue_created, emit_issue_updated, serialize_issue_snapshot
+from operis.automation.hooks import (
+    build_issue_automation_snapshot,
+    emit_issue_created,
+    emit_issue_updated,
+    serialize_issue_snapshot,
+)
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.bgtasks.issue_description_version_task import issue_description_version_task
 from operis.bgtasks.recent_visited_task import recent_visited_task
@@ -76,8 +81,21 @@ from operis.utils.board_permission_enforcement import (
     deny_for_issue_patch,
     get_project_for_enforcement,
 )
+from operis.utils.exception_logger import log_exception
 
 from .. import BaseAPIView, BaseViewSet
+
+
+def _mutable_patch_payload(data):
+    if hasattr(data, "copy"):
+        return data.copy()
+    return dict(data)
+
+
+def _coerce_skip_activity(value) -> bool:
+    if isinstance(value, str):
+        return value.lower() in ("true", "1", "yes")
+    return bool(value)
 
 
 class IssueListEndpoint(BaseAPIView):
@@ -631,8 +649,9 @@ class IssueViewSet(BaseViewSet):
         queryset = self.get_queryset()
         queryset = self.apply_annotations(queryset)
 
-        skip_activity = request.data.pop("skip_activity", False)
-        is_description_update = request.data.get("description_html") is not None
+        patch_data = _mutable_patch_payload(request.data)
+        skip_activity = _coerce_skip_activity(patch_data.pop("skip_activity", False))
+        is_description_update = patch_data.get("description_html") is not None
 
         issue = (
             queryset.annotate(
@@ -668,6 +687,22 @@ class IssueViewSet(BaseViewSet):
                     ),
                     Value([], output_field=ArrayField(UUIDField())),
                 ),
+                is_subscribed=Exists(
+                    IssueSubscriber.objects.filter(
+                        workspace__slug=slug,
+                        project_id=project_id,
+                        issue_id=OuterRef("pk"),
+                        subscriber=request.user,
+                    )
+                ),
+                is_intake=Exists(
+                    IntakeIssue.objects.filter(
+                        issue=OuterRef("id"),
+                        status__in=[-2, 0],
+                        workspace__slug=slug,
+                        project_id=project_id,
+                    )
+                ),
             )
             .filter(pk=pk)
             .first()
@@ -676,22 +711,61 @@ class IssueViewSet(BaseViewSet):
         if not issue:
             return Response({"error": "Issue not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        current_instance = json.dumps(IssueDetailSerializer(issue).data, cls=DjangoJSONEncoder)
+        try:
+            current_instance = json.dumps(IssueDetailSerializer(issue).data, cls=DjangoJSONEncoder)
+        except KeyError as exc:
+            log_exception(exc)
+            return Response(
+                {
+                    "error": "The required key does not exist.",
+                    "missing_key": str(exc.args[0]) if exc.args else "unknown",
+                },
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        requested_data = json.dumps(self.request.data, cls=DjangoJSONEncoder)
-        serializer = IssueCreateSerializer(issue, data=request.data, partial=True, context={"project_id": project_id})
+        requested_data = json.dumps(patch_data, cls=DjangoJSONEncoder)
+        serializer = IssueCreateSerializer(issue, data=patch_data, partial=True, context={"project_id": project_id})
         if serializer.is_valid():
             serializer.save()
-            updated_issue = Issue.objects.filter(pk=pk).select_related("project").first()
-            if updated_issue:
-                before_snapshot = serialize_issue_snapshot(current_instance)
-                after_snapshot = IssueDetailSerializer(updated_issue).data
-                emit_issue_updated(
-                    updated_issue,
-                    actor_id=str(request.user.id),
-                    before=before_snapshot,
-                    after=after_snapshot,
+            updated_issue = (
+                Issue.objects.filter(pk=pk)
+                .select_related("project")
+                .annotate(
+                    assignee_ids=Coalesce(
+                        ArrayAgg(
+                            "assignees__id",
+                            distinct=True,
+                            filter=Q(
+                                ~Q(assignees__id__isnull=True)
+                                & Q(assignees__member_project__is_active=True)
+                                & Q(issue_assignee__deleted_at__isnull=True)
+                            ),
+                        ),
+                        Value([], output_field=ArrayField(UUIDField())),
+                    ),
+                    label_ids=Coalesce(
+                        ArrayAgg(
+                            "labels__id",
+                            distinct=True,
+                            filter=Q(~Q(labels__id__isnull=True) & Q(label_issue__deleted_at__isnull=True)),
+                        ),
+                        Value([], output_field=ArrayField(UUIDField())),
+                    ),
                 )
+                .first()
+            )
+            if updated_issue:
+                try:
+                    before_snapshot = serialize_issue_snapshot(current_instance)
+                    after_snapshot = build_issue_automation_snapshot(updated_issue)
+                    emit_issue_updated(
+                        updated_issue,
+                        actor_id=str(request.user.id),
+                        before=before_snapshot,
+                        after=after_snapshot,
+                    )
+                except Exception as exc:
+                    log_exception(exc)
             # Check if the update is a migration description update
             is_migration_description_update = skip_activity and is_description_update
             # Log all the updates
@@ -710,7 +784,7 @@ class IssueViewSet(BaseViewSet):
                 model_activity.delay(
                     model_name="issue",
                     model_id=str(serializer.data.get("id", None)),
-                    requested_data=request.data,
+                    requested_data=patch_data,
                     current_instance=current_instance,
                     actor_id=request.user.id,
                     slug=slug,
