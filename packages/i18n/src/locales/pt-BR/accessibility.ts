@@ -12,6 +12,8 @@ export default {
       close_folder: "Fechar pasta",
       open_favorites_menu: "Abrir menu de favoritos",
       close_favorites_menu: "Fechar menu de favoritos",
+      expand_favorites_list: "Ver todos os favoritos",
+      collapse_favorites_list: "Recolher lista de favoritos",
       enter_folder_name: "Digite o nome da pasta",
       create_new_project: "Criar novo projeto",
       open_projects_menu: "Abrir menu de projetos",

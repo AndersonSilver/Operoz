@@ -15,6 +15,7 @@ if (process.env.VITE_ENABLE_BOARDS === undefined) {
 // Monorepo root — required so Vite can resolve workspace packages (e.g. @operis/propel/dist) outside apps/web
 const workspaceRoot = path.resolve(__dirname, "../..");
 const propelSrcRoot = path.resolve(workspaceRoot, "packages/propel/src");
+const sharedStateSrcEntry = path.resolve(workspaceRoot, "packages/shared-state/src/index.ts");
 
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
 const requireEditor = createRequire(editorPkg);
@@ -63,8 +64,12 @@ export default defineConfig(({ command }) => {
   ];
 
   if (isDevServer) {
-    // Dev: source TS do Propel (como utils/i18n) — não exige packages/propel/dist pré-buildado.
+    // Dev: source TS (como utils/i18n/propel) — não exige packages/*/dist pré-buildado.
     alias.unshift(
+      {
+        find: "@operis/shared-state",
+        replacement: sharedStateSrcEntry,
+      },
       {
         find: /^@operis\/propel\/styles\/(.+\.css)$/,
         replacement: `${propelSrcRoot}/styles/$1`,

@@ -13,7 +13,7 @@ from .workspace_config import JiraOpsCredentials
 
 logger = logging.getLogger(__name__)
 
-BASE_SEARCH_FIELDS = ["summary", "description", "status", "issuetype", "parent", "priority", "attachment"]
+BASE_SEARCH_FIELDS = ["summary", "description", "status", "issuetype", "parent", "priority", "attachment", "resolutiondate"]
 
 DUE_DATE_NAME_HINTS = (
     "due date",

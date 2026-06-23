@@ -3,9 +3,12 @@
 from __future__ import annotations
 
 import html
+import unicodedata
 from collections import defaultdict
 from dataclasses import dataclass, asdict
 from typing import Any
+
+from django.db.models import Max
 
 from operis.app.permissions import ROLE
 from operis.app.serializers import IssueCreateSerializer, ProjectSerializer
@@ -46,6 +49,42 @@ JIRA_STATE_TO_OPERIS = {
     "concluído": "Done",
     "com pendencia": "In Progress",
     "com pendência": "In Progress",
+}
+
+JIRA_MODULE_STATUS_TO_OPERIS: dict[str, str] = {
+    "backlog": ModuleStatus.BACKLOG.value,
+    "planejado": ModuleStatus.PLANNED.value,
+    "para fazer": ModuleStatus.PLANNED.value,
+    "todo": ModuleStatus.PLANNED.value,
+    "iniciado": ModuleStatus.IN_PROGRESS.value,
+    "em andamento": ModuleStatus.IN_PROGRESS.value,
+    "in progress": ModuleStatus.IN_PROGRESS.value,
+    "com pendencia": ModuleStatus.IN_PROGRESS.value,
+    "com pendência": ModuleStatus.IN_PROGRESS.value,
+    "pausado": ModuleStatus.PAUSED.value,
+    "paused": ModuleStatus.PAUSED.value,
+    "concluido": ModuleStatus.COMPLETED.value,
+    "concluído": ModuleStatus.COMPLETED.value,
+    "concluida": ModuleStatus.COMPLETED.value,
+    "concluída": ModuleStatus.COMPLETED.value,
+    "done": ModuleStatus.COMPLETED.value,
+    "finalizado": ModuleStatus.COMPLETED.value,
+    "finalizada": ModuleStatus.COMPLETED.value,
+    "encerrado": ModuleStatus.COMPLETED.value,
+    "encerrada": ModuleStatus.COMPLETED.value,
+    "fechado": ModuleStatus.COMPLETED.value,
+    "fechada": ModuleStatus.COMPLETED.value,
+    "closed": ModuleStatus.COMPLETED.value,
+    "resolvido": ModuleStatus.COMPLETED.value,
+    "resolvida": ModuleStatus.COMPLETED.value,
+    "cancelado": ModuleStatus.CANCELLED.value,
+    "cancelled": ModuleStatus.CANCELLED.value,
+}
+
+JIRA_STATUS_CATEGORY_TO_MODULE: dict[str, str] = {
+    "new": ModuleStatus.PLANNED.value,
+    "indeterminate": ModuleStatus.IN_PROGRESS.value,
+    "done": ModuleStatus.COMPLETED.value,
 }
 
 
@@ -107,6 +146,154 @@ def resolve_state(project: Project, fields: dict) -> State | None:
     if not state:
         state = State.objects.filter(project=project, default=True).first()
     return state
+
+
+def _normalize_jira_status_name(name: str) -> str:
+    normalized = unicodedata.normalize("NFKD", name or "")
+    ascii_name = "".join(ch for ch in normalized if not unicodedata.combining(ch))
+    return ascii_name.lower().strip()
+
+
+def resolve_module_status(fields: dict) -> str:
+    """Map Jira epic (Projeto) status → Operis module status."""
+    status = fields.get("status") or {}
+    status_name = _normalize_jira_status_name(status.get("name") or "")
+    mapped = JIRA_MODULE_STATUS_TO_OPERIS.get(status_name)
+    if mapped:
+        return mapped
+
+    category_key = _normalize_jira_status_name((status.get("statusCategory") or {}).get("key") or "")
+    category_name = _normalize_jira_status_name((status.get("statusCategory") or {}).get("name") or "")
+    for candidate in (category_key, category_name):
+        if candidate in JIRA_STATUS_CATEGORY_TO_MODULE:
+            return JIRA_STATUS_CATEGORY_TO_MODULE[candidate]
+        if candidate in {"done", "complete", "completed", "concluido", "concluida"}:
+            return ModuleStatus.COMPLETED.value
+
+    return ModuleStatus.PLANNED.value
+
+
+def infer_module_status_from_linked_issues(module: Module) -> str | None:
+    """When Jira omits epic status, infer from linked work items."""
+    groups = list(
+        ModuleIssue.objects.filter(
+            module=module,
+            deleted_at__isnull=True,
+            issue__deleted_at__isnull=True,
+            issue__archived_at__isnull=True,
+        ).values_list("issue__state__group", flat=True)
+    )
+    if not groups:
+        return None
+
+    active_groups = [group for group in groups if group != "cancelled"]
+    if not active_groups:
+        return ModuleStatus.CANCELLED.value
+    if all(group == "completed" for group in active_groups):
+        return ModuleStatus.COMPLETED.value
+    if any(group == "started" for group in active_groups):
+        return ModuleStatus.IN_PROGRESS.value
+    return None
+
+
+def _find_module_for_epic(project: Project, epic_key: str, summary: str) -> Module | None:
+    """Localiza módulo importado por external_id (Jira key) ou pelo nome do épico."""
+    mod = Module.objects.filter(project=project, external_id=epic_key, deleted_at__isnull=True).first()
+    if mod:
+        return mod
+
+    mod = Module.objects.filter(project=project, name=summary, deleted_at__isnull=True).first()
+    if not mod:
+        return None
+
+    backfill: list[str] = []
+    if mod.external_id != epic_key:
+        mod.external_id = epic_key
+        backfill.append("external_id")
+    if mod.external_source != "jira":
+        mod.external_source = "jira"
+        backfill.append("external_source")
+    if backfill:
+        backfill.append("updated_at")
+        mod.save(update_fields=backfill)
+    return mod
+
+
+def _sync_module_statuses_from_work_items(board) -> int:
+    """Após sync: módulos com 100% dos itens Done passam a Concluído."""
+    updated = 0
+    modules = Module.objects.filter(project__board=board, deleted_at__isnull=True)
+    for mod in modules:
+        inferred = infer_module_status_from_linked_issues(mod)
+        if not inferred or inferred == mod.status:
+            continue
+        if inferred == ModuleStatus.COMPLETED.value and mod.status in {
+            ModuleStatus.PLANNED.value,
+            ModuleStatus.BACKLOG.value,
+            ModuleStatus.IN_PROGRESS.value,
+        }:
+            mod.status = inferred
+            mod.save(update_fields=["status", "updated_at"])
+            updated += 1
+        elif inferred == ModuleStatus.IN_PROGRESS.value and mod.status in {
+            ModuleStatus.PLANNED.value,
+            ModuleStatus.BACKLOG.value,
+        }:
+            mod.status = inferred
+            mod.save(update_fields=["status", "updated_at"])
+            updated += 1
+    return updated
+
+
+def resolve_module_status_for_module(module: Module, fields: dict) -> str:
+    """Prefer Jira epic status; fall back to linked issues when cards are all Done."""
+    jira_status = resolve_module_status(fields)
+    if jira_status != ModuleStatus.PLANNED.value:
+        return jira_status
+
+    inferred = infer_module_status_from_linked_issues(module)
+    if inferred == ModuleStatus.COMPLETED.value:
+        return inferred
+    if inferred and not (fields.get("status") or {}).get("name"):
+        return inferred
+    return jira_status
+
+
+def _finalize_imported_modules(epic_key_to_module: dict[str, Module], epics: list[dict]) -> None:
+    """Atualiza status e datas dos módulos após cards ligados (fallback de data limite)."""
+    epic_by_key = {e["key"]: e for e in epics if e.get("key")}
+
+    for key, mod in epic_key_to_module.items():
+        epic = epic_by_key.get(key)
+        if not epic:
+            continue
+
+        fields = epic.get("fields") or {}
+        start, target = jira_issue_dates(fields)
+        module_status = resolve_module_status_for_module(mod, fields)
+
+        if target is None:
+            target = (
+                Issue.objects.filter(
+                    issue_module__module=mod,
+                    target_date__isnull=False,
+                    deleted_at__isnull=True,
+                ).aggregate(max_target=Max("target_date"))["max_target"]
+            )
+
+        update_fields: list[str] = []
+        if mod.start_date != start:
+            mod.start_date = start
+            update_fields.append("start_date")
+        if mod.target_date != target:
+            mod.target_date = target
+            update_fields.append("target_date")
+        if mod.status != module_status:
+            mod.status = module_status
+            update_fields.append("status")
+        if update_fields:
+            update_fields.append("updated_at")
+            mod.save(update_fields=update_fields)
 
 
 def issue_would_update(
@@ -347,7 +534,13 @@ def preview_jira_ops_import(
             else:
                 preview.modules_existing += 1
                 start, target = jira_issue_dates(epic_fields)
-                if mod.name != summary or mod.start_date != start or mod.target_date != target:
+                module_status = resolve_module_status_for_module(mod, epic_fields)
+                if (
+                    mod.name != summary
+                    or mod.start_date != start
+                    or mod.target_date != target
+                    or mod.status != module_status
+                ):
                     preview.modules_renamed += 1
 
             epic_context[key] = {"module": mod, "project": project}
@@ -544,7 +737,8 @@ def run_jira_ops_import(
             fields = epic.get("fields") or {}
             summary = (fields.get("summary") or key)[:255]
             start, target = jira_issue_dates(fields)
-            mod = Module.objects.filter(project=project, external_id=key).first()
+            module_status = resolve_module_status(fields)
+            mod = _find_module_for_epic(project, key, summary)
             if not mod:
                 mod = Module.objects.create(
                     project=project,
@@ -552,12 +746,13 @@ def run_jira_ops_import(
                     name=summary,
                     external_id=key,
                     external_source="jira",
-                    status=ModuleStatus.PLANNED.value,
+                    status=module_status,
                     start_date=start,
                     target_date=target,
                     created_by=actor,
                 )
             else:
+                module_status = resolve_module_status_for_module(mod, fields)
                 update_fields: list[str] = []
                 if mod.name != summary:
                     mod.name = summary
@@ -568,12 +763,16 @@ def run_jira_ops_import(
                 if mod.target_date != target:
                     mod.target_date = target
                     update_fields.append("target_date")
+                if mod.status != module_status:
+                    mod.status = module_status
+                    update_fields.append("status")
                 if update_fields:
                     update_fields.append("updated_at")
                     mod.save(update_fields=update_fields)
             epic_key_to_module[key] = mod
 
     if projects_only or not issues_list:
+        _sync_module_statuses_from_work_items(board)
         return result
 
     jira_key_to_issue: dict[str, Issue] = {
@@ -729,5 +928,8 @@ def run_jira_ops_import(
         if not parent_issue:
             continue
         upsert_subtask(issue, parent_issue)
+
+    _finalize_imported_modules(epic_key_to_module, epic_issues)
+    _sync_module_statuses_from_work_items(board)
 
     return result

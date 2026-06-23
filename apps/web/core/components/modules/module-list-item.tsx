@@ -41,15 +41,16 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
     moduleDetails.cancelled_issues;
 
   const moduleCompletedIssues = moduleDetails.completed_issues;
-  const completionPercentage =
-    moduleTotalIssues > 0 ? (moduleCompletedIssues / moduleTotalIssues) * 100 : 0;
+  const completionPercentage = moduleTotalIssues > 0 ? (moduleCompletedIssues / moduleTotalIssues) * 100 : 0;
   const progress = Number.isNaN(completionPercentage) ? 0 : Math.floor(completionPercentage);
 
   const issueLabel =
     moduleTotalIssues === 0
       ? t("project_modules.list.issues_none")
       : moduleTotalIssues === moduleCompletedIssues
-        ? t("project_modules.list.issues_all", { count: moduleTotalIssues })
+        ? moduleTotalIssues === 1
+          ? t("project_modules.list.issues_one")
+          : t("project_modules.list.issues_all", { count: moduleTotalIssues })
         : t("project_modules.list.issues_progress", {
             completed: moduleCompletedIssues,
             total: moduleTotalIssues,
@@ -74,7 +75,7 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
   return (
     <div
       ref={parentRef}
-      className="group border-b border-subtle last:border-b-0 transition-colors hover:bg-layer-transparent-hover"
+      className="group border-b border-subtle transition-colors last:border-b-0 hover:bg-layer-transparent-hover"
     >
       <div className={cn("flex items-center gap-3 px-4 py-2.5", MODULE_LIST_ROW_GRID)}>
         <ControlLink
@@ -88,15 +89,9 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
         >
           <span
             className="grid size-8 shrink-0 place-items-center rounded-sm border border-subtle bg-layer-2"
-            style={
-              statusConfig
-                ? { boxShadow: `inset 3px 0 0 0 ${statusConfig.color}` }
-                : undefined
-            }
+            style={statusConfig ? { boxShadow: `inset 3px 0 0 0 ${statusConfig.color}` } : undefined}
           >
-            {statusConfig ? (
-              <ModuleStatusIcon status={moduleDetails.status} className="size-4" />
-            ) : null}
+            {statusConfig ? <ModuleStatusIcon status={moduleDetails.status} className="size-4" /> : null}
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-1.5">
@@ -113,16 +108,14 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
               </button>
             </div>
             <div className="mt-1 flex min-w-0 flex-wrap items-center gap-x-2 gap-y-1 text-11">
-              <span
-                className={cn("tabular-nums", moduleTotalIssues === 0 ? "text-secondary" : "text-tertiary")}
-              >
+              <span className={cn("tabular-nums", moduleTotalIssues === 0 ? "text-secondary" : "text-tertiary")}>
                 {issueLabel}
               </span>
               {moduleTotalIssues > 0 ? (
                 <>
                   <span className="text-subtle">·</span>
                   <span className="tabular-nums">{progress}%</span>
-                  <span className="h-1 min-w-[3rem] max-w-[4.5rem] flex-1 overflow-hidden rounded-full bg-layer-2 sm:flex-none">
+                  <span className="h-1 max-w-[4.5rem] min-w-[3rem] flex-1 overflow-hidden rounded-full bg-layer-2 sm:flex-none">
                     <span
                       className="block h-full rounded-full bg-accent-primary opacity-90"
                       style={{ width: `${Math.max(progress, progress > 0 ? 8 : 0)}%` }}

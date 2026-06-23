@@ -5582,7 +5582,8 @@ export default {
       add_dates: "Add dates",
       no_lead: "No lead assigned",
       issues_none: "No work items",
-      issues_all: "{count, plural, one {# work item} other {# work items}",
+      issues_one: "1 work item",
+      issues_all: "{count} work items",
       issues_progress: "{completed}/{total} work items",
     },
     detail: {
@@ -5590,7 +5591,7 @@ export default {
       switch_module: "Switch module",
       module_search_placeholder: "Search or select modules…",
       module_search_hint: "One module: open its view. Several: work items from all selected.",
-      work_items_count_tooltip: "{count, plural, one {# work item in this module} other {# work items in this module}",
+      work_items_count_tooltip: "{count} work items in this module",
     },
   },
   cycle: {
