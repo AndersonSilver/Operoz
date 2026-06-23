@@ -12,6 +12,8 @@ export default {
       close_folder: "Close folder",
       open_favorites_menu: "Open favorites menu",
       close_favorites_menu: "Close favorites menu",
+      expand_favorites_list: "Show all favorites",
+      collapse_favorites_list: "Collapse favorites list",
       enter_folder_name: "Enter folder name",
       create_new_project: "Create new project",
       open_projects_menu: "Open projects menu",

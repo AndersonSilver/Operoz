@@ -48,6 +48,27 @@ def test_jira_search_date_fields_includes_all_registered_date_fields():
     assert "customfield_10015" in fields
 
 
+def test_jira_issue_dates_target_from_second_custom_field():
+    """Épicos Jira podem ter início e limite em custom fields distintos (sem duedate)."""
+    fields = {
+        "customfield_10015": "2024-04-21",
+        "customfield_10016": "2024-06-19",
+    }
+    start, target = jira_issue_dates(fields)
+    assert start == date(2024, 4, 21)
+    assert target == date(2024, 6, 19)
+
+
+def test_jira_issue_dates_target_from_resolutiondate():
+    fields = {
+        "customfield_10015": "2024-04-21",
+        "resolutiondate": "2024-06-19T10:00:00.000+0000",
+    }
+    start, target = jira_issue_dates(fields)
+    assert start == date(2024, 4, 21)
+    assert target == date(2024, 6, 19)
+
+
 def test_jira_issue_dates_fallback_when_start_field_empty():
     register_jira_date_fields("cloud-fallback", "customfield_empty", "duedate")
     fields = {

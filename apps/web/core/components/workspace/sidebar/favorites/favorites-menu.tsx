@@ -9,9 +9,13 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { orderBy } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { FolderPlus } from "lucide-react";
+import { Ellipsis, FolderPlus } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-import { IS_FAVORITE_MENU_OPEN } from "@operis/constants";
+import {
+  IS_FAVORITE_MENU_OPEN,
+  IS_FAVORITES_LIST_EXPANDED,
+  SIDEBAR_FAVORITES_COLLAPSED_COUNT,
+} from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { ChevronRightIcon } from "@operis/propel/icons";
 // ui
@@ -20,6 +24,8 @@ import { Tooltip } from "@operis/propel/tooltip";
 import type { IFavorite } from "@operis/types";
 // helpers
 import { cn } from "@operis/utils";
+// components
+import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import useLocalStorage from "@/hooks/use-local-storage";
@@ -44,8 +50,18 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
   const { t } = useTranslation();
   // local storage
   const { setValue: toggleFavoriteMenu, storedValue } = useLocalStorage<boolean>(IS_FAVORITE_MENU_OPEN, false);
+  const { setValue: toggleFavoritesListExpanded, storedValue: isFavoritesListExpandedStored } =
+    useLocalStorage<boolean>(IS_FAVORITES_LIST_EXPANDED, false);
   // derived values
   const isFavoriteMenuOpen = !!storedValue;
+  const isFavoritesListExpanded = !!isFavoritesListExpandedStored;
+  const rootFavorites = orderBy(Object.values(groupedFavorites), "sequence", "desc").filter((fav) => !fav.parent);
+  const totalFavoritesCount = rootFavorites.length;
+  const hasMoreFavorites = totalFavoritesCount > SIDEBAR_FAVORITES_COLLAPSED_COUNT;
+  const displayedFavorites =
+    hasMoreFavorites && !isFavoritesListExpanded
+      ? rootFavorites.slice(0, SIDEBAR_FAVORITES_COLLAPSED_COUNT)
+      : rootFavorites;
   // refs
   const containerRef = useRef<HTMLDivElement>(null);
   const elementRef = useRef<HTMLDivElement>(null);
@@ -144,6 +160,29 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
     [workspaceSlug, reOrderFavorite, t]
   );
 
+  const renderFavoriteItem = (fav: IFavorite, index: number, length: number) => (
+    <React.Fragment key={fav.id}>
+      {fav.is_folder ? (
+        <FavoriteFolder
+          favorite={fav}
+          isLastChild={index === length - 1}
+          handleRemoveFromFavorites={handleRemoveFromFavorites}
+          handleRemoveFromFavoritesFolder={handleRemoveFromFavoritesFolder}
+          handleDrop={handleDrop}
+        />
+      ) : (
+        <FavoriteRoot
+          workspaceSlug={workspaceSlug.toString()}
+          favorite={fav}
+          isLastChild={index === length - 1}
+          parentId={undefined}
+          handleRemoveFromFavorites={handleRemoveFromFavorites}
+          handleDrop={handleDrop}
+        />
+      )}
+    </React.Fragment>
+  );
+
   useEffect(() => {
     const element = elementRef.current;
 
@@ -164,7 +203,6 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
         onDrop: ({ source }) => {
           setIsDragging(false);
           const sourceId = source?.data?.id as string | undefined;
-          console.log({ sourceId });
           if (!sourceId || !groupedFavorites[sourceId].parent) return;
         },
       })
@@ -197,7 +235,12 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
                 : "aria_labels.projects_sidebar.open_favorites_menu"
             )}
           >
-            <span className="text-13 font-semibold">{t("favorites")}</span>
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span className="text-13 font-semibold">{t("favorites")}</span>
+              {totalFavoritesCount > 0 && (
+                <span className="text-11 font-medium text-tertiary tabular-nums">{totalFavoritesCount}</span>
+              )}
+            </span>
           </Disclosure.Button>
           <div className="pointer-events-none flex items-center opacity-0 group-hover/favorites-button:pointer-events-auto group-hover/favorites-button:opacity-100">
             <Tooltip tooltipHeading={t("create_folder")} tooltipContent="">
@@ -243,35 +286,36 @@ export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
           {isFavoriteMenuOpen && (
             <Disclosure.Panel as="div" className="mt-0.5 flex flex-col gap-0.5" static>
               {createNewFolder && <NewFavoriteFolder setCreateNewFolder={setCreateNewFolder} actionType="create" />}
-              {Object.keys(groupedFavorites).length === 0 ? (
-                <>
-                  <span className="px-8 py-1.5 text-11 font-medium text-placeholder">{t("no_favorites_yet")}</span>
-                </>
+              {totalFavoritesCount === 0 ? (
+                <span className="px-8 py-1.5 text-11 font-medium text-placeholder">{t("no_favorites_yet")}</span>
               ) : (
-                orderBy(Object.values(groupedFavorites), "sequence", "desc")
-                  .filter((fav) => !fav.parent)
-                  .map((fav, index, { length }) => (
-                    <React.Fragment key={fav.id}>
-                      {fav?.is_folder ? (
-                        <FavoriteFolder
-                          favorite={fav}
-                          isLastChild={index === length - 1}
-                          handleRemoveFromFavorites={handleRemoveFromFavorites}
-                          handleRemoveFromFavoritesFolder={handleRemoveFromFavoritesFolder}
-                          handleDrop={handleDrop}
-                        />
-                      ) : (
-                        <FavoriteRoot
-                          workspaceSlug={workspaceSlug.toString()}
-                          favorite={fav}
-                          isLastChild={index === length - 1}
-                          parentId={undefined}
-                          handleRemoveFromFavorites={handleRemoveFromFavorites}
-                          handleDrop={handleDrop}
-                        />
-                      )}
-                    </React.Fragment>
-                  ))
+                <>
+                  <div
+                    className={cn("flex min-h-0 w-full flex-col gap-0.5", {
+                      "vertical-scrollbar scrollbar-sm max-h-52 overflow-y-auto overscroll-contain":
+                        hasMoreFavorites && isFavoritesListExpanded,
+                    })}
+                  >
+                    {displayedFavorites.map((fav, index, { length }) => renderFavoriteItem(fav, index, length))}
+                  </div>
+                  {hasMoreFavorites && (
+                    <SidebarNavItem>
+                      <button
+                        type="button"
+                        onClick={() => toggleFavoritesListExpanded(!isFavoritesListExpanded)}
+                        className="flex flex-grow items-center gap-1.5 text-13 font-medium text-tertiary"
+                        aria-label={t(
+                          isFavoritesListExpanded
+                            ? "aria_labels.projects_sidebar.collapse_favorites_list"
+                            : "aria_labels.projects_sidebar.expand_favorites_list"
+                        )}
+                      >
+                        <Ellipsis className="size-4 flex-shrink-0" />
+                        <span>{isFavoritesListExpanded ? t("sidebar_show_less") : t("sidebar_show_more")}</span>
+                      </button>
+                    </SidebarNavItem>
+                  )}
+                </>
               )}
             </Disclosure.Panel>
           )}

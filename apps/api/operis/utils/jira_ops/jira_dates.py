@@ -124,13 +124,52 @@ def jira_search_date_fields() -> list[str]:
     return jira_search_date_fields_for_client(_active_cloud_id)
 
 
+def _resolve_target_date(
+    fields: dict,
+    *,
+    start: date | None,
+    due_field: str | None,
+    start_field: str | None,
+) -> date | None:
+    for key in (due_field, "duedate"):
+        if not key:
+            continue
+        parsed = _parse_jira_date(fields.get(key))
+        if parsed:
+            return parsed
+
+    excluded_keys = {k for k in (due_field, "duedate", start_field) if k}
+    candidate_dates: list[date] = []
+    for key, value in fields.items():
+        if key in excluded_keys:
+            continue
+        if not (
+            str(key).startswith("customfield_")
+            or key in {"resolutiondate", "startdate"}
+        ):
+            continue
+        parsed = _parse_jira_date(value)
+        if parsed:
+            candidate_dates.append(parsed)
+
+    if start and candidate_dates:
+        after_start = [d for d in candidate_dates if d > start]
+        if after_start:
+            return max(after_start)
+
+    if candidate_dates:
+        return max(candidate_dates)
+
+    return _parse_jira_date(fields.get("resolutiondate"))
+
+
 def jira_issue_dates(fields: dict) -> tuple[date | None, date | None]:
     """Retorna (start_date, target_date) para um issue Jira."""
     cid = (_active_cloud_id or "").strip()
     start_field, due_field = _date_registry.get(cid, (None, "duedate"))
 
-    target = _parse_jira_date(fields.get(due_field or "duedate"))
     start: date | None = None
+    used_start_field: str | None = None
 
     start_candidates: list[str] = []
     if start_field:
@@ -141,6 +180,7 @@ def jira_issue_dates(fields: dict) -> tuple[date | None, date | None]:
         if fields.get(key):
             start = _parse_jira_date(fields.get(key))
             if start:
+                used_start_field = key
                 break
 
     if start is None:
@@ -150,8 +190,16 @@ def jira_issue_dates(fields: dict) -> tuple[date | None, date | None]:
             if key == due_field:
                 continue
             parsed = _parse_jira_date(value)
-            if parsed and parsed != target:
+            if parsed:
                 start = parsed
+                used_start_field = key
                 break
+
+    target = _resolve_target_date(
+        fields,
+        start=start,
+        due_field=due_field,
+        start_field=used_start_field or start_field,
+    )
 
     return start, target

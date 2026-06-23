@@ -5810,7 +5810,8 @@ export default {
       add_dates: "Adicionar datas",
       no_lead: "Sem responsável",
       issues_none: "Nenhum item",
-      issues_all: "{count, plural, one {# item} other {# itens}",
+      issues_one: "1 item",
+      issues_all: "{count} itens",
       issues_progress: "{completed}/{total} itens",
     },
     detail: {
@@ -5818,8 +5819,7 @@ export default {
       switch_module: "Trocar módulo",
       module_search_placeholder: "Pesquisar ou selecionar módulos…",
       module_search_hint: "Um módulo: abre a vista dele. Vários: itens de todos os selecionados.",
-      work_items_count_tooltip:
-        "{count, plural, one {# item de trabalho neste módulo} other {# itens de trabalho neste módulo}",
+      work_items_count_tooltip: "{count} itens de trabalho neste módulo",
     },
   },
   cycle: {

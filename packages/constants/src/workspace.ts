@@ -284,6 +284,9 @@ export const WORKSPACE_SIDEBAR_STATIC_PINNED_NAVIGATION_ITEMS_LINKS: IWorkspaceS
 ];
 
 export const IS_FAVORITE_MENU_OPEN = "is_favorite_menu_open";
+export const IS_FAVORITES_LIST_EXPANDED = "is_favorites_list_expanded";
+/** Root favorites shown before "Mais" in the sidebar */
+export const SIDEBAR_FAVORITES_COLLAPSED_COUNT = 5;
 export const WORKSPACE_DEFAULT_SEARCH_RESULT: IWorkspaceSearchResults = {
   results: {
     workspace: [],
