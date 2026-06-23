@@ -5,7 +5,10 @@ from unittest.mock import patch
 import pytest
 from django.test import override_settings
 
+from operis.assistant.quality import record_assistant_response
 from operis.assistant.security.audit import log_assistant_action
+from operis.bgtasks.assistant_deferred_task import record_assistant_response_task
+from operis.db.models import AssistantQualityDaily
 from operis.assistant.thread_summarization import (
     CONTEXT_SUMMARY_KEY,
     build_llm_history,
@@ -19,6 +22,23 @@ from operis.db.models import AssistantMessage, AssistantSession
 @pytest.mark.unit
 @pytest.mark.django_db
 class TestDeferredAssistant:
+    @override_settings(ASSISTANT_DEFER_NONCRITICAL="1")
+    @patch("operis.bgtasks.assistant_deferred_task.record_assistant_response_task")
+    def test_record_assistant_response_defers(self, mock_task, workspace):
+        record_assistant_response(workspace, used_tools=True, first_token_ms=900)
+        mock_task.delay.assert_called_once()
+
+    @override_settings(ASSISTANT_DEFER_NONCRITICAL="1")
+    def test_record_assistant_response_task_persists_without_requeue(self, workspace):
+        record_assistant_response_task(
+            workspace_id=str(workspace.id),
+            used_tools=True,
+            first_token_ms=900,
+        )
+        row = AssistantQualityDaily.objects.get(workspace=workspace)
+        assert row.response_count == 1
+        assert row.tool_response_count == 1
+
     @override_settings(ASSISTANT_DEFER_NONCRITICAL="1")
     @patch("operis.bgtasks.assistant_deferred_task.log_assistant_action_task")
     def test_log_assistant_action_defers(self, mock_task, create_user, workspace):

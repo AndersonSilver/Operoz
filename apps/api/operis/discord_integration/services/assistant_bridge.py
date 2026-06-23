@@ -18,22 +18,29 @@ from operis.assistant.service import AssistantServiceError, _actor_from_session,
 from operis.assistant.types import AssistantActorContext
 from operis.db.models import AssistantSession, Issue, Project, WorkspaceMember
 from operis.discord_integration.models import CustomSlashCommand
-from operis.discord_integration.services.text_utils import (
-    build_command_prompt,
-    truncate_for_discord,
+from operis.discord_integration.services.discord_formatting import (
+    DiscordReply,
+    build_error_reply,
+    build_focus_reply,
+    build_overview_reply,
+    build_text_embed,
 )
+from operis.discord_integration.services.discord_project_stats import enrich_discord_project_stats
+from operis.discord_integration.services.text_utils import build_command_prompt
 
 logger = logging.getLogger(__name__)
 
 DISCORD_OPEN_SCOPE_INSTRUCTIONS = """## Modo Discord (escopo flexível)
 - O usuário está no Discord: **não** peça para selecionar board ou projeto no painel do Operoz.
-- **Pergunta genérica** (status geral, todos os clientes, visão da squad): use os dados de «Dados Operoz» ou `get_project_stats` \
-sem `project_id` para trazer métricas de **todos** os projetos acessíveis no workspace.
-- **Pergunta sobre um cliente específico** (ex.: «como está o SICREDI?»): identifique o projeto pelo **nome** ou \
+- **Pergunta genérica** (status geral, todos os clientes): use os dados de «Dados Operoz» ou `get_project_stats` \
+sem `project_id`.
+- **Pergunta sobre um cliente específico** (ex.: MAGALU, SICREDI): identifique o projeto pelo **nome** ou \
 **identifier** e aprofunde só nesse projeto.
-- Use `search_issues` sem `project_id` para buscas amplas quando o usuário citar um tema.
-- Consulte ferramentas **antes** de complementar a resposta; não invente números nem peça UUID ao usuário.
-- Resposta **curta** (bullets), em português do Brasil, compatível com Discord."""
+- Consulte ferramentas **antes** de complementar; não invente números.
+- Resposta **curta** (máx. ~1200 caracteres), em português do Brasil, markdown Discord.
+- **Formato:** uma frase inicial com números-chave; depois bullets com **negrito** nos títulos.
+- **Omita** secções vazias («Sem registro no Operoz») — só inclua o que tiver dado real.
+- Proibido cumprimentar ou perguntar «como posso ajudar»."""
 
 DISCORD_EXECUTE_TRIGGER = (
     "Execute agora o relatório conforme as instruções do slash command. "
@@ -99,15 +106,16 @@ def _issues_for_discord(ctx: AssistantActorContext, project_id: str):
     return filter_accessible_issues(ctx, project_id)
 
 
-def _prefetch_project_stats(session: AssistantSession) -> str:
+def _prefetch_project_stats(session: AssistantSession) -> tuple[str, list[dict[str, object]]]:
     ctx = _actor_from_session(session)
     projects = list(_projects_for_discord(ctx)[:50])
     if not projects:
-        return (
+        block = (
             "## Dados Operoz\n"
             "Nenhum projeto encontrado para este workspace/escopo. "
             "Verifique se existem projetos ativos e se o utilizador do comando é membro ou admin do workspace."
         )
+        return block, []
 
     stats: list[dict[str, object]] = []
     for project in projects:
@@ -117,6 +125,7 @@ def _prefetch_project_stats(session: AssistantSession) -> str:
         completed_issues = issues_qs.filter(state__group__in=["completed", "cancelled"]).count()
         stats.append(
             {
+                "project_id": pid,
                 "name": project.name,
                 "identifier": project.identifier,
                 "total_issues": total_issues,
@@ -125,8 +134,11 @@ def _prefetch_project_stats(session: AssistantSession) -> str:
             }
         )
 
+    stats = enrich_discord_project_stats(stats, projects)
+
     payload = json.dumps({"projects": stats, "count": len(stats)}, ensure_ascii=False, indent=2)
-    return f"## Dados Operoz (consultados agora)\n```json\n{payload}\n```"
+    block = f"## Dados Operoz (consultados agora)\n```json\n{payload}\n```"
+    return block, stats
 
 
 def _build_user_message(
@@ -149,11 +161,13 @@ def _build_user_message(
     return "\n\n".join(sections)
 
 
-def execute_simple_llm(command: CustomSlashCommand, user_input: str = "") -> str:
+def execute_simple_llm(command: CustomSlashCommand, user_input: str = "") -> DiscordReply:
     """Fallback sem ferramentas — LLM direta com prompt personalizado."""
     api_key, model, provider, degraded = get_llm_config()
     if degraded or not api_key or not model or not provider:
-        return "O assistente Operoz não está configurado nesta instância. Contacte o administrador."
+        return build_error_reply(
+            "O assistente Operoz não está configurado nesta instância. Contacte o administrador."
+        )
 
     task = (
         "Você responde a um slash command do Discord integrado ao Operoz. "
@@ -163,15 +177,18 @@ def execute_simple_llm(command: CustomSlashCommand, user_input: str = "") -> str
     prompt = build_command_prompt(command, user_input or DISCORD_EXECUTE_TRIGGER)
     text, error = get_llm_response(task, prompt, api_key, model, provider)
     if error or not text:
-        return "Não foi possível gerar uma resposta agora. Tente novamente em instantes."
-    return truncate_for_discord(text.strip())
+        return build_error_reply("Não foi possível gerar uma resposta agora. Tente novamente em instantes.")
+    focus = user_input.strip()
+    title = f"Status · {focus}" if focus else "Status dos projetos"
+    return build_text_embed(title=title, description=text.strip())
 
 
-def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> str:
+def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> DiscordReply:
     """
     Executa o comando via assistente Operoz completo (RAG + ferramentas).
 
-    Usa board_slug e default_project do comando como escopo da sessão.
+    Visão geral (sem foco): embed compacto a partir das métricas — sem LLM, sem corte.
+    Com foco: assistente + embed formatado.
     """
     actor = _resolve_actor_user(command)
     if not actor:
@@ -185,8 +202,11 @@ def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> 
         context=_build_session_context(command),
     )
     scope_relaxed = not (command.board_slug and command.default_project_id)
-    settings_patch = {"ASSISTANT_REQUIRE_SESSION_SCOPE": "0"} if scope_relaxed else {}
-    stats_block = _prefetch_project_stats(session)
+    stats_block, stats_list = _prefetch_project_stats(session)
+
+    if not user_input.strip():
+        return build_overview_reply(stats_list)
+
     user_message = _build_user_message(
         command,
         user_input,
@@ -195,21 +215,21 @@ def run_discord_assistant(command: CustomSlashCommand, user_input: str = "") -> 
     )
 
     try:
-        if settings_patch:
-            with override_settings(**settings_patch):
+        if scope_relaxed:
+            with override_settings(ASSISTANT_REQUIRE_SESSION_SCOPE="0"):
                 assistant_message = run_chat(session, user_message)
         else:
             assistant_message = run_chat(session, user_message)
         content = (assistant_message.content or "").strip()
         if not content:
-            return "Sem resposta do assistente."
-        return truncate_for_discord(content)
+            return build_error_reply("Sem resposta do assistente.")
+        return build_focus_reply(focus=user_input, llm_text=content, stats=stats_list)
     except AssistantServiceError as exc:
         logger.warning(
             "discord assistant service error",
             extra={"command_id": str(command.pk), "code": exc.code},
         )
-        return truncate_for_discord(exc.message)
+        return build_error_reply(exc.message)
     except Exception:
         logger.exception("discord assistant unexpected error", extra={"command_id": str(command.pk)})
         return execute_simple_llm(command, user_input)

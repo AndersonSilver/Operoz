@@ -17,10 +17,29 @@ export class OperisApiError extends Error {
     message: string,
     public status: number,
     public body: unknown,
+    /** Tempo sugerido para retry (Retry-After ou estimativa). */
+    public retryAfterMs?: number
   ) {
     super(message);
     this.name = "OperisApiError";
   }
+}
+
+function parseRetryAfterMs(response: Response): number | undefined {
+  const header = response.headers.get("retry-after");
+  if (!header) return undefined;
+
+  const asSeconds = Number(header);
+  if (!Number.isNaN(asSeconds) && asSeconds >= 0) {
+    return asSeconds * 1000;
+  }
+
+  const asDate = Date.parse(header);
+  if (!Number.isNaN(asDate)) {
+    return Math.max(0, asDate - Date.now());
+  }
+
+  return undefined;
 }
 
 export class OperisClient {
@@ -88,12 +107,12 @@ export class OperisClient {
 
     if (surface === "v1" && !this.config.apiKey) {
       throw new Error(
-        "OPERIS_API_KEY é obrigatório para a API v1. Crie um token em Definições → API tokens (ou God mode).",
+        "OPERIS_API_KEY é obrigatório para a API v1. Crie um token em Definições → API tokens (ou God mode)."
       );
     }
     if (surface === "app" && !this.sessionCookie) {
       throw new Error(
-        "Sessão necessária para /api/* (boards, etc.). Use operis_sign_in ou defina OPERIS_SESSION_COOKIE.",
+        "Sessão necessária para /api/* (boards, etc.). Use operis_sign_in ou defina OPERIS_SESSION_COOKIE."
       );
     }
 
@@ -137,10 +156,12 @@ export class OperisClient {
     }
 
     if (response.status >= 400) {
+      const retryAfterMs = response.status === 429 ? parseRetryAfterMs(response) : undefined;
       throw new OperisApiError(
         `Operis API ${method} ${path} → ${response.status}`,
         response.status,
         parsed,
+        retryAfterMs
       );
     }
 

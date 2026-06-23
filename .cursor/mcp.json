@@ -1,8 +1,3 @@
 {
-  "mcpServers": {
-    "operis": {
-      "command": "/home/andersons/Área de trabalho/Projetos/operis/Operis/mcp-server/bin/run-mcp-local.sh",
-      "args": []
-    }
-  }
+  "mcpServers": {}
 }
