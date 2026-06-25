@@ -220,6 +220,7 @@ class TestIndexStatus:
             workspace=workspace,
             owned_by=create_user,
         )
+        _schedule.reset_mock()
         now = datetime.now(timezone.utc)
         mock_load.return_value = {
             "status": "pending",
