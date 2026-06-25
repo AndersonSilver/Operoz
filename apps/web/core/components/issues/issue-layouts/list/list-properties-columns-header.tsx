@@ -9,11 +9,16 @@ import {
   type TListPropertyColumnAlign,
 } from "../properties/list-property-columns";
 import { ListColumnResizeHandle } from "./list-column-resize-handle";
-import { LIST_GRID_ROW_GAP, useListGridColumnsContext } from "./list-grid-columns-context";
+import {
+  LIST_GRID_ROW_GAP,
+  LIST_BULK_SELECT_GUTTER_CLASS,
+  useListGridColumnsContext,
+} from "./list-grid-columns-context";
 
 type Props = {
   displayProperties: IIssueDisplayProperties;
   isEpic?: boolean;
+  showBulkSelectGutter?: boolean;
 };
 
 const headerCellAlign: Record<TListPropertyColumnAlign, string> = {
@@ -37,7 +42,7 @@ function ListHeaderCell(props: { align?: TListPropertyColumnAlign; children: Rea
 }
 
 export const ListPropertiesColumnsHeader = observer(function ListPropertiesColumnsHeader(props: Props) {
-  const { isEpic: _isEpic = false } = props;
+  const { isEpic: _isEpic = false, showBulkSelectGutter = false } = props;
   const { t } = useTranslation();
   const { columns, customFieldColumns, layoutGridTemplateColumns, propertyGridTemplateColumns, resizeColumnByDelta } =
     useListGridColumnsContext();
@@ -48,7 +53,8 @@ export const ListPropertiesColumnsHeader = observer(function ListPropertiesColum
     <div
       className={cn(
         "hidden w-full min-w-0 items-center border-b border-subtle bg-layer-2/80 sm:grid",
-        "py-2 pr-3 pl-3"
+        "py-2 pr-3",
+        showBulkSelectGutter ? LIST_BULK_SELECT_GUTTER_CLASS : "pl-3"
       )}
       style={{ gridTemplateColumns: layoutGridTemplateColumns }}
     >

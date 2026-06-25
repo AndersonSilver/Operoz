@@ -424,11 +424,27 @@ export class ModulesStore implements IModuleStore {
    */
   updateModuleDetails = async (workspaceSlug: string, projectId: string, moduleId: string, data: Partial<IModule>) => {
     const originalModuleDetails = this.getModuleById(moduleId);
+    if (!originalModuleDetails) {
+      throw new Error("Module not found");
+    }
+
     try {
       runInAction(() => {
-        set(this.moduleMap, [moduleId], { ...originalModuleDetails, ...data });
+        const optimistic: Partial<IModule> = { ...data };
+        if (Object.prototype.hasOwnProperty.call(data, "stage_id")) {
+          optimistic.stage_detail =
+            data.stage_id === originalModuleDetails.stage_id ? originalModuleDetails.stage_detail : null;
+        }
+        set(this.moduleMap, [moduleId], { ...originalModuleDetails, ...optimistic });
       });
       const response = await this.moduleService.patchModule(workspaceSlug, projectId, moduleId, data);
+      if (response) {
+        runInAction(() => {
+          const current = this.getModuleById(moduleId);
+          if (!current) return;
+          set(this.moduleMap, [moduleId], { ...current, ...response });
+        });
+      }
       return response;
     } catch (error) {
       console.error("Failed to update module in module store", error);

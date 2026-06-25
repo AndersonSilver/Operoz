@@ -32,4 +32,5 @@ export const BOARD_SETTINGS_ICONS: Record<string, LucideIcon> = {
   board_view: Columns3,
   client_360_health: HeartPulse,
   timeline: GanttChart,
+  module_stages: ListTree,
 };

@@ -91,7 +91,7 @@ export const ModuleListItem = observer(function ModuleListItem(props: Props) {
             className="grid size-8 shrink-0 place-items-center rounded-sm border border-subtle bg-layer-2"
             style={statusConfig ? { boxShadow: `inset 3px 0 0 0 ${statusConfig.color}` } : undefined}
           >
-            {statusConfig ? <ModuleStatusIcon status={moduleDetails.status} className="size-4" /> : null}
+            {statusConfig ? <ModuleStatusIcon status={statusConfig.value} className="size-4" /> : null}
           </span>
           <div className="min-w-0 flex-1">
             <div className="flex min-w-0 items-center gap-1.5">

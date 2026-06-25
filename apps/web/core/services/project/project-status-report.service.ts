@@ -108,13 +108,17 @@ export class ProjectStatusReportService extends APIService {
     projectId: string,
     reportId: string,
     format: TStatusReportExportFormat = "md",
-    draft?: Pick<TStatusReportPreviewData, "executive_summary_html" | "em_execucao" | "pontos_atencao">
+    draft?: Pick<
+      TStatusReportPreviewData,
+      "executive_summary_html" | "em_execucao" | "pontos_atencao" | "proximos_passos"
+    >
   ): Promise<{ data: BlobPart; mime: string; filename: string; pdfFallback?: boolean }> {
     const result = await this.preview(workspaceSlug, projectId, reportId, {
       format,
       executive_summary_html: draft?.executive_summary_html ?? "",
       em_execucao: draft?.em_execucao ?? [],
       pontos_atencao: draft?.pontos_atencao ?? [],
+      proximos_passos: draft?.proximos_passos ?? [],
     });
 
     const stamp = new Date().toISOString().slice(0, 10);

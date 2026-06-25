@@ -1,3 +1,4 @@
+import type { IBoardModuleStage } from "../board/board-module-stage";
 import type { ILinkDetails } from "../issues";
 import type { TIssue } from "../issues/issue";
 import type { IIssueFilterOptions } from "../view-props";
@@ -79,6 +80,8 @@ export interface IModule {
     filters: IIssueFilterOptions;
   };
   status?: TModuleStatus;
+  stage_id: string | null;
+  stage_detail?: IBoardModuleStage | null;
   archived_at: string | null;
   start_date: string | null;
   target_date: string | null;

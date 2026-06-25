@@ -12,14 +12,14 @@ from operis.app.serializers.board_status_report import (
     ProjectStatusReportCreateSerializer,
 )
 from operis.app.views.base import BaseAPIView
-from operis.db.models import BoardStatusReport, Module, Project, ProjectMember
+from operis.db.models import BoardStatusReport, BoardStatusReportModule, Module, Project, ProjectMember
 from operis.utils.board_permission_enforcement import (
     get_effective_board_permission_keys,
     permission_granted,
 )
 from operis.utils.board_status_report import (
     apply_live_entregas_from_module,
-    build_project_module_status_report_content,
+    build_project_status_report_content,
     default_report_title,
 )
 from operis.utils.status_report_export import (
@@ -39,12 +39,19 @@ class ProjectStatusReportEndpoint(BaseAPIView):
             archived_at__isnull=True,
         )
 
-    def _get_module(self, project: Project, module_id: str):
-        return Module.objects.get(
-            project_id=project.id,
-            id=module_id,
-            archived_at__isnull=True,
+    def _get_modules(self, project: Project, module_ids: list):
+        modules = list(
+            Module.objects.filter(
+                project_id=project.id,
+                id__in=module_ids,
+                archived_at__isnull=True,
+            )
+            .select_related("stage")
+            .order_by("sort_order", "created_at")
         )
+        if len(modules) != len(set(module_ids)):
+            raise Module.DoesNotExist
+        return modules
 
     def _is_project_admin(self, request, project: Project) -> bool:
         return ProjectMember.objects.filter(
@@ -99,36 +106,62 @@ class ProjectStatusReportEndpoint(BaseAPIView):
             )
 
         try:
-            module = self._get_module(project, str(data["module_id"]))
+            modules = self._get_modules(project, [str(module_id) for module_id in data["module_ids"]])
         except Module.DoesNotExist:
-            return Response({"module_id": "Module not found in this project."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({"module_ids": "One or more modules not found in this project."}, status=status.HTTP_400_BAD_REQUEST)
 
-        content = build_project_module_status_report_content(
+        content = build_project_status_report_content(
             project=project,
-            module=module,
+            modules=modules,
             user=request.user,
             workspace_slug=slug,
             period_start=data["period_start"],
             period_end=data["period_end"],
+            report_kind=data.get("report_kind"),
         )
         summary_html = data.get("executive_summary_html", "")
         if summary_html:
             content["sections"]["executive_summary"]["html"] = summary_html
 
-        title = (data.get("title") or "").strip() or default_report_title(
-            data["period_start"], data["period_end"], module.name
-        )
+        primary_module = modules[0]
+        report_kind = content.get("report_kind", "module_single")
+        title = (data.get("title") or "").strip()
+        if report_kind == "sprint":
+            if not title:
+                return Response(
+                    {"title": "Informe o nome da sprint (ex.: Sprint 1)."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            content["sections"].setdefault("sprint", {})["label"] = title
+        elif not title:
+            title = default_report_title(
+                data["period_start"],
+                data["period_end"],
+                primary_module.name if report_kind == "module_single" else None,
+                project.name,
+            )
 
         report = BoardStatusReport.objects.create(
             board_id=project.board_id,
             project=project,
-            module=module,
+            module=primary_module,
             workspace_id=project.workspace_id,
             title=title,
             period_start=data["period_start"],
             period_end=data["period_end"],
             content=content,
             created_by=request.user,
+        )
+        BoardStatusReportModule.objects.bulk_create(
+            [
+                BoardStatusReportModule(
+                    report=report,
+                    module=module,
+                    sort_order=index * 1000,
+                    created_by=request.user,
+                )
+                for index, module in enumerate(modules)
+            ]
         )
         return Response(BoardStatusReportSerializer(report).data, status=status.HTTP_201_CREATED)
 
@@ -206,14 +239,19 @@ class ProjectStatusReportDetailEndpoint(BaseAPIView):
             executive = sections.setdefault("executive_summary", {})
             executive["html"] = data["executive_summary_html"]
 
-        if "em_execucao" in data or "pontos_atencao" in data:
+        if "em_execucao" in data or "pontos_atencao" in data or "proximos_passos" in data:
             content = report.content or {}
             sections = content.setdefault("sections", {})
-            obs = sections.setdefault("observacoes", {"em_execucao": [], "pontos_atencao": []})
+            obs = sections.setdefault(
+                "observacoes",
+                {"em_execucao": [], "pontos_atencao": [], "proximos_passos": []},
+            )
             if "em_execucao" in data:
                 obs["em_execucao"] = [line for line in data["em_execucao"] if str(line).strip()]
             if "pontos_atencao" in data:
                 obs["pontos_atencao"] = [line for line in data["pontos_atencao"] if str(line).strip()]
+            if "proximos_passos" in data:
+                obs["proximos_passos"] = [line for line in data["proximos_passos"] if str(line).strip()]
 
         if data.get("publish"):
             report.published_at = timezone.now()
@@ -253,6 +291,9 @@ class ProjectStatusReportExportEndpoint(BaseAPIView):
             qs = qs.filter(published_at__isnull=False)
         report = qs.select_related(
             "board", "project", "module", "created_by", "created_by__avatar_asset", "workspace"
+        ).prefetch_related(
+            "report_modules__module",
+            "report_modules__module__stage",
         ).get()
 
         export_format = (request.GET.get("format") or "md").lower().strip()
@@ -261,7 +302,13 @@ class ProjectStatusReportExportEndpoint(BaseAPIView):
         ctx.content = apply_live_entregas_from_module(report, live_content, request.user)
         if not ctx.title:
             module_name = report.module.name if report.module_id else None
-            ctx.title = default_report_title(report.period_start, report.period_end, module_name)
+            project_name = report.project.name if report.project_id else None
+            ctx.title = default_report_title(
+                report.period_start,
+                report.period_end,
+                module_name,
+                project_name,
+            )
         base_name = f"status-report-{report.period_end.isoformat()}"
 
         if export_format == "html":

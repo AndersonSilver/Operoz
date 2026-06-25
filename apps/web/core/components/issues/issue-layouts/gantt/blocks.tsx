@@ -1,11 +1,13 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
+import type { MouseEvent } from "react";
+import { ChevronRightIcon } from "@operis/propel/icons";
 // plane imports
 import { Popover } from "@operis/propel/popover";
 import { Tooltip } from "@operis/propel/tooltip";
 import { ControlLink } from "@operis/ui";
 import { EIssuesStoreType } from "@operis/types";
-import { findTotalDaysInRange, generateWorkItemLink } from "@operis/utils";
+import { findTotalDaysInRange, generateWorkItemLink, cn } from "@operis/utils";
 // components
 import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
 // hooks
@@ -30,12 +32,20 @@ import { WorkItemPreviewCard } from "../../preview-card";
 import { getBlockViewDetails } from "../utils";
 import type { GanttStoreType } from "./base-gantt-root";
 
-type Props = {
+type SidebarBlockProps = {
+  issueId: string;
+  isEpic?: boolean;
+  isExpanded?: boolean;
+  onToggleExpand?: (event: MouseEvent<HTMLButtonElement>) => void;
+  subIssuesCount?: number;
+};
+
+type IssueGanttChartBlockProps = {
   issueId: string;
   isEpic?: boolean;
 };
 
-export const IssueGanttBlock = observer(function IssueGanttBlock(props: Props) {
+export const IssueGanttBlock = observer(function IssueGanttBlock(props: IssueGanttChartBlockProps) {
   const { issueId, isEpic } = props;
   // router
   const { workspaceSlug: routerWorkspaceSlug } = useParams();
@@ -109,8 +119,8 @@ export const IssueGanttBlock = observer(function IssueGanttBlock(props: Props) {
 });
 
 // rendering issues on gantt sidebar
-export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(props: Props) {
-  const { issueId, isEpic = false } = props;
+export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(props: SidebarBlockProps) {
+  const { issueId, isEpic = false, isExpanded = false, onToggleExpand, subIssuesCount = 0 } = props;
   // router
   const { workspaceSlug: routerWorkspaceSlug } = useParams();
   const workspaceSlug = routerWorkspaceSlug?.toString();
@@ -157,6 +167,12 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
     handleRedirection(workspaceSlug, issueDetails, isMobile);
   };
 
+  const handleToggleExpand = (e: MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    e.preventDefault();
+    onToggleExpand?.(e);
+  };
+
   const workItemLink = generateWorkItemLink({
     workspaceSlug,
     projectId: issueDetails?.project_id,
@@ -167,44 +183,62 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
   });
 
   return (
-    <ControlLink
-      id={`issue-${issueId}`}
-      href={workItemLink}
-      onClick={handleIssuePeekOverview}
-      className="line-clamp-2 w-full cursor-pointer text-13 text-primary"
-      disabled={!!issueDetails?.tempId}
-    >
-      <div className="relative flex h-full w-full cursor-pointer items-center gap-2">
-        {isBoardGantt && issueTypeLogo ? (
-          <BoardGanttRowIcon logo={issueTypeLogo} size={14} className="!border-0 !bg-transparent" />
-        ) : showIssueTypeIcon ? (
-          <IssueTypeIdentifier issueTypeId={issueDetails!.type_id!} projectId={issueDetails!.project_id!} size="xs" />
-        ) : null}
-        {issueDetails?.project_id && (
-          <IssueIdentifier
-            issueId={issueDetails.id}
-            projectId={issueDetails.project_id}
-            size="xs"
-            variant="tertiary"
-            displayProperties={sidebarDisplayProperties}
-          />
-        )}
-        <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile} nativeButton={false}>
-          <span className="flex-grow truncate text-13 font-medium">{issueDetails?.name}</span>
-        </Tooltip>
-        {isCompleted && stateDetails && (
-          <span
-            className="flex-shrink-0 rounded px-1.5 py-0.5 text-9 font-semibold tracking-wide uppercase"
-            style={{
-              backgroundColor: `${stateDetails.color}25`,
-              color: stateDetails.color,
-              border: `1px solid ${stateDetails.color}60`,
-            }}
+    <div className="relative flex h-full w-full min-w-0 items-center gap-2">
+      <div className="grid size-4 flex-shrink-0 place-items-center">
+        {subIssuesCount > 0 && !isEpic && onToggleExpand ? (
+          <button
+            type="button"
+            className="grid size-4 place-items-center rounded-xs text-placeholder hover:text-tertiary"
+            onClick={handleToggleExpand}
           >
-            {stateDetails.name}
-          </span>
-        )}
+            <ChevronRightIcon
+              className={cn("size-4", {
+                "rotate-90": isExpanded,
+              })}
+              strokeWidth={2.5}
+            />
+          </button>
+        ) : null}
       </div>
-    </ControlLink>
+      <ControlLink
+        id={`issue-${issueId}`}
+        href={workItemLink}
+        onClick={handleIssuePeekOverview}
+        className="line-clamp-2 min-w-0 flex-1 cursor-pointer text-13 text-primary"
+        disabled={!!issueDetails?.tempId}
+      >
+        <div className="relative flex h-full w-full cursor-pointer items-center gap-2">
+          {isBoardGantt && issueTypeLogo ? (
+            <BoardGanttRowIcon logo={issueTypeLogo} size={14} className="!border-0 !bg-transparent" />
+          ) : showIssueTypeIcon ? (
+            <IssueTypeIdentifier issueTypeId={issueDetails!.type_id!} projectId={issueDetails!.project_id!} size="xs" />
+          ) : null}
+          {issueDetails?.project_id && (
+            <IssueIdentifier
+              issueId={issueDetails.id}
+              projectId={issueDetails.project_id}
+              size="xs"
+              variant="tertiary"
+              displayProperties={sidebarDisplayProperties}
+            />
+          )}
+          <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile} nativeButton={false}>
+            <span className="flex-grow truncate text-13 font-medium">{issueDetails?.name}</span>
+          </Tooltip>
+          {isCompleted && stateDetails && (
+            <span
+              className="flex-shrink-0 rounded px-1.5 py-0.5 text-9 font-semibold tracking-wide uppercase"
+              style={{
+                backgroundColor: `${stateDetails.color}25`,
+                color: stateDetails.color,
+                border: `1px solid ${stateDetails.color}60`,
+              }}
+            >
+              {stateDetails.name}
+            </span>
+          )}
+        </div>
+      </ControlLink>
+    </div>
   );
 });

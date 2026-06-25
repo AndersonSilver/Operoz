@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isNil } from "lodash-es";
 import { observer } from "mobx-react";
 import { Bell, BellOff } from "lucide-react";
@@ -29,13 +29,28 @@ export const IssueSubscription = observer(function IssueSubscription(props: TIss
     subscription: { getSubscriptionByIssueId },
     createSubscription,
     removeSubscription,
+    fetchSubscriptions,
+    issue: { getIssueById },
   } = useIssueDetail(serviceType);
   // state
   const [loading, setLoading] = useState(false);
+  const [isFetchingStatus, setIsFetchingStatus] = useState(false);
   // hooks
   const { allowPermissions } = useUserPermissions();
 
-  const isSubscribed = getSubscriptionByIssueId(issueId);
+  const issue = getIssueById(issueId);
+  const subscriptionFromMap = getSubscriptionByIssueId(issueId);
+  const isSubscribed = subscriptionFromMap ?? issue?.is_subscribed;
+
+  useEffect(() => {
+    if (!isNil(subscriptionFromMap)) return;
+    if (!workspaceSlug || !projectId || !issueId) return;
+
+    setIsFetchingStatus(true);
+    void fetchSubscriptions(workspaceSlug, projectId, issueId).finally(() => {
+      setIsFetchingStatus(false);
+    });
+  }, [fetchSubscriptions, issueId, projectId, subscriptionFromMap, workspaceSlug]);
   const isEditable = allowPermissions(
     [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
     EUserPermissionsLevel.PROJECT,
@@ -66,12 +81,14 @@ export const IssueSubscription = observer(function IssueSubscription(props: TIss
     }
   };
 
-  if (isNil(isSubscribed))
+  if (isNil(isSubscribed) && isFetchingStatus)
     return (
       <Loader>
         <Loader.Item width="106px" height="28px" />
       </Loader>
     );
+
+  if (isNil(isSubscribed)) return null;
 
   return (
     <div>

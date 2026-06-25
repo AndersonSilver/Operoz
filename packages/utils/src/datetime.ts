@@ -63,6 +63,35 @@ export const renderFormattedDate = (
   return formattedDate;
 };
 
+/**
+ * Formats a date-time string preserving the time component (ISO timestamps).
+ * Date-only strings (`yyyy-mm-dd`) are parsed without timezone offset, like {@link renderFormattedDate}.
+ */
+export const renderFormattedDateTime = (
+  date: string | Date | undefined | null,
+  formatToken: string = "dd MMM yyyy · HH:mm"
+): string | undefined => {
+  if (!date) return;
+
+  let parsedDate: Date | undefined;
+  if (date instanceof Date) {
+    parsedDate = date;
+  } else if (typeof date === "string" && isInDateFormat(date.trim())) {
+    parsedDate = getDate(date);
+  } else if (typeof date === "string") {
+    parsedDate = parseISO(date.trim());
+  }
+
+  if (!parsedDate || !isValid(parsedDate)) return;
+
+  const locale = getDateFnsLocale();
+  try {
+    return format(parsedDate, formatToken, { locale });
+  } catch (_e) {
+    return format(parsedDate, "dd MMM yyyy · HH:mm", { locale });
+  }
+};
+
 /** Capitalizes month names after Portuguese "de" (e.g. "de maio" → "de Maio"). */
 const capitalizePortugueseMonth = (text: string): string =>
   text.replace(/\bde ([\p{L}]+)/gu, (_, month: string) => `de ${month.charAt(0).toUpperCase()}${month.slice(1)}`);

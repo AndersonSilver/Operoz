@@ -28,6 +28,7 @@ function BoardAccessSettingsPage({ params }: Route.ComponentProps) {
 
   return (
     <SettingsContentWrapper
+      hugging
       header={
         <BoardSettingsPageHeader
           workspaceSlug={workspaceSlug}

@@ -11,6 +11,7 @@ from .project_field_layout import (
     BoardProjectFieldLayoutEndpoint,
 )
 from .issue_types import BoardIssueTypeDetailEndpoint, BoardIssueTypeEndpoint
+from .module_stages import BoardModuleStageDetailEndpoint, BoardModuleStageEndpoint
 from .issues import BoardIssuesViewSet
 from .members import BoardMemberDetailEndpoint, BoardMemberEndpoint
 from .client_360 import BoardClient360ViewSet

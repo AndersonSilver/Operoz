@@ -9,6 +9,8 @@ from .project import ProjectLiteSerializer
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
+from django.template.defaultfilters import slugify
+
 from operis.db.models import (
     User,
     Module,
@@ -16,7 +18,25 @@ from operis.db.models import (
     ModuleIssue,
     ModuleLink,
     ModuleUserProperties,
+    BoardIssueType,
 )
+from operis.utils.board_issue_types import board_issue_type_stage_color
+
+
+def serialize_module_stage_detail(board_issue_type: BoardIssueType | None) -> dict | None:
+    """Etapa do módulo = tipo de card habilitado no board (fonte única)."""
+    if board_issue_type is None:
+        return None
+    issue_type = board_issue_type.issue_type
+    return {
+        "id": str(board_issue_type.id),
+        "name": issue_type.name,
+        "slug": slugify(issue_type.name)[:60] or "stage",
+        "color": board_issue_type_stage_color(board_issue_type) or "#00b8a9",
+        "sort_order": board_issue_type.sort_order,
+        "is_default": bool(issue_type.is_default),
+        "is_active": bool(board_issue_type.is_enabled and issue_type.is_active),
+    }
 
 
 class ModuleWriteSerializer(BaseSerializer):
@@ -29,6 +49,12 @@ class ModuleWriteSerializer(BaseSerializer):
         required=False,
         allow_null=True,
         allow_empty=True,
+    )
+    stage_id = serializers.PrimaryKeyRelatedField(
+        source="stage",
+        queryset=BoardIssueType.objects.all(),
+        required=False,
+        allow_null=True,
     )
 
     class Meta:
@@ -59,6 +85,15 @@ class ModuleWriteSerializer(BaseSerializer):
             and data.get("start_date", None) > data.get("target_date", None)
         ):
             raise serializers.ValidationError("Start date cannot exceed target date")
+
+        stage = data.get("stage")
+        project = self.context.get("project") or (self.instance.project if self.instance else None)
+        if stage is not None and project is not None:
+            if stage.board_id != project.board_id or stage.deleted_at is not None:
+                raise serializers.ValidationError({"stage_id": "Stage must belong to the project board."})
+            if not stage.is_enabled or not stage.issue_type.is_active or stage.issue_type.deleted_at is not None:
+                raise serializers.ValidationError({"stage_id": "Stage is not active."})
+
         return data
 
     def create(self, validated_data):
@@ -205,6 +240,8 @@ class ModuleLinkSerializer(BaseSerializer):
 
 class ModuleSerializer(DynamicBaseSerializer):
     member_ids = serializers.ListField(child=serializers.UUIDField(), required=False, allow_null=True)
+    stage_id = serializers.SerializerMethodField()
+    stage_detail = serializers.SerializerMethodField()
     is_favorite = serializers.BooleanField(read_only=True)
     total_issues = serializers.IntegerField(read_only=True)
     cancelled_issues = serializers.IntegerField(read_only=True)
@@ -232,6 +269,8 @@ class ModuleSerializer(DynamicBaseSerializer):
             "status",
             "lead_id",
             "member_ids",
+            "stage_id",
+            "stage_detail",
             "view_props",
             "sort_order",
             "external_source",
@@ -252,6 +291,12 @@ class ModuleSerializer(DynamicBaseSerializer):
             "archived_at",
         ]
         read_only_fields = fields
+
+    def get_stage_id(self, obj):
+        return str(obj.stage_id) if obj.stage_id else None
+
+    def get_stage_detail(self, obj):
+        return serialize_module_stage_detail(obj.stage)
 
 
 class ModuleDetailSerializer(ModuleSerializer):

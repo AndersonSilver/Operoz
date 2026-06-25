@@ -109,11 +109,11 @@ export const InboxIssueListItem = observer(function InboxIssueListItem(props: In
 
               <div className="rounded-full border-2 border-strong-1" />
 
-              {issue.priority && (
-                <Tooltip tooltipHeading="Priority" tooltipContent={`${issue.priority ?? "None"}`}>
+              {issue.priority && issue.priority !== "none" ? (
+                <Tooltip tooltipHeading="Priority" tooltipContent={issue.priority}>
                   <PriorityIcon priority={issue.priority} withContainer className="h-3 w-3" />
                 </Tooltip>
-              )}
+              ) : null}
 
               {issue.label_ids && issue.label_ids.length > 3 ? (
                 <div className="relative flex !h-[17.5px] items-center gap-1 rounded-sm border border-strong px-1 text-11">

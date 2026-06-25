@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBlockUpdateData, TIssue } from "@operis/types";
+import type { IBlockUpdateData, IBlockUpdateDependencyData, IIssueDisplayFilterOptions, TIssue } from "@operis/types";
 import { EIssuesStoreType } from "@operis/types";
 import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
 import { renderFormattedPayloadDate } from "@operis/utils";
@@ -25,6 +25,7 @@ import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-sta
 import { IssueLayoutHOC } from "../issue-layout-HOC";
 import { GanttQuickAddIssueButton, QuickAddIssueRoot } from "../quick-add";
 import { IssueGanttBlock } from "./blocks";
+import { GanttSubIssueExpansionProvider, useGanttSubIssueExpansion } from "./gantt-sub-issue-expansion";
 
 interface IBaseGanttRoot {
   viewId?: string | undefined;
@@ -39,6 +40,84 @@ export type GanttStoreType =
   | EIssuesStoreType.PROJECT_VIEW
   | EIssuesStoreType.BOARD
   | EIssuesStoreType.EPIC;
+
+type GanttChartBodyProps = {
+  isEpic: boolean;
+  isAllowed: boolean;
+  isCompletedCycle: boolean;
+  isBulkOperationsEnabled: boolean;
+  canEditIssue: (issueId: string) => boolean;
+  appliedDisplayFilters: IIssueDisplayFilterOptions | undefined;
+  updateIssueBlockStructure: (issue: TIssue, data: IBlockUpdateData) => Promise<void>;
+  updateBlockDates: (updates: IBlockUpdateDependencyData[]) => Promise<void>;
+  quickAddIssue: ReturnType<typeof useIssuesActions>["quickAddIssue"];
+  loadMoreIssues: () => void;
+  nextPageResults: boolean | undefined;
+  targetDate: Date;
+};
+
+const GanttChartBody = observer(function GanttChartBody(props: GanttChartBodyProps) {
+  const {
+    isEpic,
+    isAllowed,
+    isCompletedCycle,
+    isBulkOperationsEnabled,
+    canEditIssue,
+    appliedDisplayFilters,
+    updateIssueBlockStructure,
+    updateBlockDates,
+    quickAddIssue,
+    loadMoreIssues,
+    nextPageResults,
+    targetDate,
+  } = props;
+  const { t } = useTranslation();
+  const storeType = useIssueStoreType() as GanttStoreType;
+  const { issues } = useIssues(storeType);
+  const { displayBlockIds } = useGanttSubIssueExpansion();
+
+  const { enableIssueCreation } = issues?.viewFlags || {};
+
+  const quickAdd =
+    enableIssueCreation && isAllowed && !isCompletedCycle ? (
+      <QuickAddIssueRoot
+        layout={EIssueLayoutTypes.GANTT}
+        QuickAddButton={GanttQuickAddIssueButton}
+        containerClassName="sticky bottom-0 z-[1]"
+        prePopulatedData={{
+          start_date: renderFormattedPayloadDate(new Date()),
+          target_date: renderFormattedPayloadDate(targetDate),
+        }}
+        quickAddCallback={quickAddIssue}
+        isEpic={isEpic}
+      />
+    ) : undefined;
+
+  return (
+    <GanttChartRoot
+      border={false}
+      title={isEpic ? t("epic.label", { count: 2 }) : t("issue.label", { count: 2 })}
+      loaderTitle={isEpic ? t("epic.label", { count: 2 }) : t("issue.label", { count: 2 })}
+      blockIds={displayBlockIds}
+      blockUpdateHandler={updateIssueBlockStructure}
+      blockToRender={(data: TIssue) => <IssueGanttBlock issueId={data.id} isEpic={isEpic} />}
+      sidebarToRender={(sidebarProps) => <IssueGanttSidebar {...sidebarProps} showAllBlocks isEpic={isEpic} />}
+      enableBlockLeftResize={canEditIssue}
+      enableBlockRightResize={canEditIssue}
+      enableBlockMove={canEditIssue}
+      enableReorder={appliedDisplayFilters?.order_by === "sort_order" ? canEditIssue : false}
+      enableAddBlock={isAllowed}
+      enableSelection={isBulkOperationsEnabled && isAllowed}
+      quickAdd={quickAdd}
+      loadMoreBlocks={loadMoreIssues}
+      canLoadMoreBlocks={nextPageResults}
+      updateBlockDates={updateBlockDates}
+      showAllBlocks
+      enableDependency
+      isEpic={isEpic}
+    />
+  );
+});
 
 export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRoot) {
   const { viewId, isCompletedCycle = false, isEpic = false } = props;
@@ -76,8 +155,6 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
 
   const issuesIds = (issues.groupedIssueIds?.[ALL_ISSUES] as string[]) ?? [];
   const nextPageResults = issues.getPaginationData(undefined, undefined)?.nextPageResults;
-
-  const { enableIssueCreation } = issues?.viewFlags || {};
 
   const loadMoreIssues = useCallback(() => {
     fetchNextIssues();
@@ -128,14 +205,8 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
           projectId?.toString()
         );
   const updateBlockDates = useCallback(
-    (
-      updates: {
-        id: string;
-        start_date?: string;
-        target_date?: string;
-      }[]
-    ) => {
-      if (!workspaceSlug) return Promise.resolve();
+    async (updates: IBlockUpdateDependencyData[]) => {
+      if (!workspaceSlug) return;
 
       const onError = () => {
         setToast({
@@ -147,7 +218,7 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
 
       if (storeType === EIssuesStoreType.BOARD) {
         const getIssueById = issues.rootIssueStore.issues.getIssueById;
-        const updatesByProject: Record<string, typeof updates> = {};
+        const updatesByProject: Record<string, IBlockUpdateDependencyData[]> = {};
 
         for (const update of updates) {
           const projectIdForIssue = getIssueById(update.id)?.project_id;
@@ -156,61 +227,41 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
           updatesByProject[projectIdForIssue].push(update);
         }
 
-        return Promise.all(
+        await Promise.all(
           Object.entries(updatesByProject).map(([projectIdForIssue, projectUpdates]) =>
             issues.updateIssueDates(workspaceSlug.toString(), projectUpdates, projectIdForIssue)
           )
         ).catch(onError);
+        return;
       }
 
-      if (!projectId) return Promise.resolve();
+      if (!projectId) return;
 
-      return issues.updateIssueDates(workspaceSlug.toString(), updates, projectId.toString()).catch(onError);
+      await issues.updateIssueDates(workspaceSlug.toString(), updates, projectId.toString()).catch(onError);
     },
     [issues, projectId, storeType, t, workspaceSlug]
   );
-
-  const quickAdd =
-    enableIssueCreation && isAllowed && !isCompletedCycle ? (
-      <QuickAddIssueRoot
-        layout={EIssueLayoutTypes.GANTT}
-        QuickAddButton={GanttQuickAddIssueButton}
-        containerClassName="sticky bottom-0 z-[1]"
-        prePopulatedData={{
-          start_date: renderFormattedPayloadDate(new Date()),
-          target_date: renderFormattedPayloadDate(targetDate),
-        }}
-        quickAddCallback={quickAddIssue}
-        isEpic={isEpic}
-      />
-    ) : undefined;
 
   return (
     <IssueLayoutHOC layout={EIssueLayoutTypes.GANTT}>
       <TimeLineTypeContext.Provider value={GANTT_TIMELINE_TYPE.ISSUE}>
         <div className="h-full w-full">
-          <GanttChartRoot
-            border={false}
-            title={isEpic ? t("epic.label", { count: 2 }) : t("issue.label", { count: 2 })}
-            loaderTitle={isEpic ? t("epic.label", { count: 2 }) : t("issue.label", { count: 2 })}
-            blockIds={issuesIds}
-            blockUpdateHandler={updateIssueBlockStructure}
-            blockToRender={(data: TIssue) => <IssueGanttBlock issueId={data.id} isEpic={isEpic} />}
-            sidebarToRender={(props) => <IssueGanttSidebar {...props} showAllBlocks isEpic={isEpic} />}
-            enableBlockLeftResize={canEditIssue}
-            enableBlockRightResize={canEditIssue}
-            enableBlockMove={canEditIssue}
-            enableReorder={appliedDisplayFilters?.order_by === "sort_order" ? canEditIssue : false}
-            enableAddBlock={isAllowed}
-            enableSelection={isBulkOperationsEnabled && isAllowed}
-            quickAdd={quickAdd}
-            loadMoreBlocks={loadMoreIssues}
-            canLoadMoreBlocks={nextPageResults}
-            updateBlockDates={updateBlockDates}
-            showAllBlocks
-            enableDependency
-            isEpic={isEpic}
-          />
+          <GanttSubIssueExpansionProvider issueIds={issuesIds} isEpic={isEpic}>
+            <GanttChartBody
+              isEpic={isEpic}
+              isAllowed={isAllowed}
+              isCompletedCycle={isCompletedCycle}
+              isBulkOperationsEnabled={isBulkOperationsEnabled}
+              canEditIssue={canEditIssue}
+              appliedDisplayFilters={appliedDisplayFilters}
+              updateIssueBlockStructure={updateIssueBlockStructure}
+              updateBlockDates={updateBlockDates}
+              quickAddIssue={quickAddIssue}
+              loadMoreIssues={loadMoreIssues}
+              nextPageResults={nextPageResults}
+              targetDate={targetDate}
+            />
+          </GanttSubIssueExpansionProvider>
         </div>
       </TimeLineTypeContext.Provider>
     </IssueLayoutHOC>

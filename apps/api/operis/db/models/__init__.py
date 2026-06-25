@@ -28,7 +28,8 @@ from .board_playbook import BoardPlaybook
 from .board_intake_form import BoardIntakeForm
 from .board_support_queue import BoardSupportQueue
 from .board_support_sla_policy import BoardSupportSlaPolicy
-from .board_status_report import BoardStatusReport
+from .board_module_stage import BoardModuleStage
+from .board_status_report import BoardStatusReport, BoardStatusReportModule
 from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
 from .cycle import Cycle, CycleIssue, CycleUserProperties
 from .client_360_health_snapshot import Client360HealthSnapshot

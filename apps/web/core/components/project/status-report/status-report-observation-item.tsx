@@ -23,7 +23,10 @@ function parseObservationCard(line: string): { title?: string; body: string; dat
   const date = dateMatch?.[1];
   let rest = line;
   if (date) {
-    rest = rest.replace(date, "").replace(/\s*[·|]\s*$/, "").trim();
+    rest = rest
+      .replace(date, "")
+      .replace(/\s*[·|]\s*$/, "")
+      .trim();
   }
 
   const parts = rest.split(/\s+[—–-]\s+/);
@@ -40,7 +43,7 @@ function parseObservationCard(line: string): { title?: string; body: string; dat
 
 type Props = {
   line: string;
-  variant: "exec" | "attention";
+  variant: "exec" | "attention" | "next";
   onEdit?: () => void;
   onRemove?: () => void;
   editLabel?: string;
@@ -50,6 +53,7 @@ type Props = {
 const ACCENT_BAR_CLASS = {
   exec: "bg-[#00d386]",
   attention: "bg-[#ff4a4a]",
+  next: "bg-[#3b82f6]",
 } as const;
 
 export function StatusReportObservationItem(props: Props) {
@@ -60,24 +64,22 @@ export function StatusReportObservationItem(props: Props) {
     <div className={cn("group relative flex gap-2 py-2.5 first:pt-0 last:pb-0", hasActions && "pr-14")}>
       <span className={cn("w-1 shrink-0 self-stretch rounded-sm", ACCENT_BAR_CLASS[variant])} aria-hidden />
       <div className="min-w-0 flex-1">
-      {isObservationHtml(line) ? (
-        <ObservationHtmlView html={line} />
-      ) : (
-        (() => {
-          const { title, body, date } = parseObservationCard(line);
-          const showBody = Boolean(body && body !== title);
-          return (
-            <div className="text-[11px] leading-relaxed text-secondary">
-              {title && <p className="font-medium text-primary">{renderObservationBoldText(title)}</p>}
-              {date && <p className="mt-0.5 text-[10px] text-tertiary">{date}</p>}
-              {showBody && (
-                <p className={cn((title || date) && "mt-0.5")}>{renderObservationBoldText(body)}</p>
-              )}
-              {!title && !showBody && !date && <p>{renderObservationBoldText(line)}</p>}
-            </div>
-          );
-        })()
-      )}
+        {isObservationHtml(line) ? (
+          <ObservationHtmlView html={line} />
+        ) : (
+          (() => {
+            const { title, body, date } = parseObservationCard(line);
+            const showBody = Boolean(body && body !== title);
+            return (
+              <div className="text-[11px] leading-relaxed text-secondary">
+                {title && <p className="font-medium text-primary">{renderObservationBoldText(title)}</p>}
+                {date && <p className="mt-0.5 text-[10px] text-tertiary">{date}</p>}
+                {showBody && <p className={cn((title || date) && "mt-0.5")}>{renderObservationBoldText(body)}</p>}
+                {!title && !showBody && !date && <p>{renderObservationBoldText(line)}</p>}
+              </div>
+            );
+          })()
+        )}
       </div>
       {(onEdit || onRemove) && (
         <div className="absolute top-2 right-0 flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">

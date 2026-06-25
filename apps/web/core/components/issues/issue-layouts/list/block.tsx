@@ -24,7 +24,7 @@ import { useProject } from "@/hooks/store/use-project";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-import { useListGridColumnsContextOptional } from "./list-grid-columns-context";
+import { useListGridColumnsContextOptional, LIST_BULK_SELECT_GUTTER_CLASS } from "./list-grid-columns-context";
 // plane web components
 import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
 import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
@@ -40,7 +40,10 @@ function getBoardListIssueTitle(issueName: string, projectName?: string): string
   if (projectName) {
     const project = projectName.trim();
     if (project && name.startsWith(project)) {
-      name = name.slice(project.length).replace(/^[\s\-–—:]+/, "").trim();
+      name = name
+        .slice(project.length)
+        .replace(/^[\s\-–—:]+/, "")
+        .trim();
     }
   }
 
@@ -161,13 +164,12 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
   const isBoardList = storeType === EIssuesStoreType.BOARD;
   const boardListProjectName =
     isBoardList && issue.project_id ? getPartialProjectById(issue.project_id)?.name : undefined;
-  const issueDisplayName = isBoardList
-    ? getBoardListIssueTitle(issue.name, boardListProjectName)
-    : issue.name;
+  const issueDisplayName = isBoardList ? getBoardListIssueTitle(issue.name, boardListProjectName) : issue.name;
   const isIssueSelected = selectionHelpers.getIsEntitySelected(issue.id);
   const isIssueActive = selectionHelpers.getIsEntityActive(issue.id);
   const isSubIssue = nestingLevel !== 0;
   const canSelectIssues = canEditIssueProperties && !selectionHelpers.isSelectionDisabled;
+  const showBulkSelectCheckbox = Boolean(projectId && canSelectIssues && !isEpic);
 
   const marginLeft = `${spacingLeft}px`;
 
@@ -213,8 +215,12 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
         ref={issueRef}
         className={cn(
           "group/list-block relative min-h-11 bg-layer-transparent text-13 transition-colors hover:bg-layer-transparent-hover",
+          showBulkSelectCheckbox && !useAlignedListGrid && LIST_BULK_SELECT_GUTTER_CLASS,
           useAlignedListGrid
-            ? "grid w-full min-w-0 items-center gap-0 py-2.5 pr-3 pl-3"
+            ? cn(
+                "grid w-full min-w-0 items-center gap-0 py-2.5 pr-3",
+                showBulkSelectCheckbox ? LIST_BULK_SELECT_GUTTER_CLASS : "pl-3"
+              )
             : cn(
                 "flex min-w-full flex-col",
                 useListGridLayout ? "gap-2 py-2.5 sm:flex-row sm:items-center sm:gap-0" : "gap-3 py-3"
@@ -231,9 +237,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
           }
         )}
         style={
-          useAlignedListGrid && listGridCtx
-            ? { gridTemplateColumns: listGridCtx.layoutGridTemplateColumns }
-            : undefined
+          useAlignedListGrid && listGridCtx ? { gridTemplateColumns: listGridCtx.layoutGridTemplateColumns } : undefined
         }
         onDragStart={() => {
           if (!isDraggingAllowed) {
@@ -262,7 +266,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
           >
             <div className="flex items-center gap-1" style={isSubIssue ? { marginLeft } : {}}>
               {/* select checkbox */}
-              {projectId && canSelectIssues && !isEpic && (
+              {showBulkSelectCheckbox && (
                 <Tooltip
                   tooltipContent={
                     <>
@@ -273,7 +277,7 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
                   }
                   disabled={issue.project_id === projectId}
                 >
-                  <div className="absolute left-1 grid w-3.5 flex-shrink-0 place-items-center">
+                  <div className="absolute left-2 grid w-3.5 flex-shrink-0 place-items-center">
                     <MultipleSelectEntityAction
                       className={cn(
                         "pointer-events-none opacity-0 transition-opacity group-hover/list-block:pointer-events-auto group-hover/list-block:opacity-100",
@@ -389,20 +393,14 @@ export const IssueBlock = observer(function IssueBlock(props: IssueBlockProps) {
                 e.stopPropagation();
               }}
             >
-              {!issue?.tempId ? (
-                quickActions({ issue, parentRef: issueRef })
-              ) : (
-                <Spinner className="h-4 w-4" />
-              )}
+              {!issue?.tempId ? quickActions({ issue, parentRef: issueRef }) : <Spinner className="h-4 w-4" />}
             </div>
           </>
         ) : (
           <div
             className={cn(
               "flex shrink-0 items-center",
-              useListGridLayout
-                ? "w-full gap-2 sm:ml-2 sm:w-auto sm:border-l sm:border-subtle sm:pl-3"
-                : "gap-2"
+              useListGridLayout ? "w-full gap-2 sm:ml-2 sm:w-auto sm:border-l sm:border-subtle sm:pl-3" : "gap-2"
             )}
           >
             {!issue?.tempId ? (

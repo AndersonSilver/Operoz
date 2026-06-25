@@ -1,4 +1,5 @@
 export * from "./boards";
+export * from "./board-module-stage";
 export * from "./board-meta";
 export * from "./client-360";
 export * from "./client-360-health-settings";

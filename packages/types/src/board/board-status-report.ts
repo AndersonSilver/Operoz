@@ -4,17 +4,37 @@ export type TStatusReportEntregaRow = {
   mostrar_pct?: boolean;
   data_inicio?: string;
   data_entrega?: string;
+  issue_id?: string;
+  item_label?: string;
+  etapa_atual?: string;
+};
+
+export type TStatusReportSprintModuleRow = {
+  module_id: string;
+  item_label: string;
+  data_inicio: string;
+  data_entrega_etapa: string;
+  etapa_atual: string;
+  etapa_color?: string | null;
+  pct_total: string;
+  sort_order: number;
 };
 
 export type TStatusReportObservacoes = {
   em_execucao?: string[];
   pontos_atencao?: string[];
+  proximos_passos?: string[];
 };
+
+export type TStatusReportKind = "module_single" | "sprint" | "multi_module";
 
 export type TBoardStatusReportContent = {
   schema_version: number;
+  report_kind?: TStatusReportKind;
+  module_ids?: string[];
   sections: {
-    module?: { id?: string; name?: string };
+    sprint?: { label: string; period_label: string };
+    module?: { id?: string; name?: string; start_date?: string; target_date?: string };
     report_row?: {
       produto?: string;
       consultor?: string;
@@ -24,6 +44,7 @@ export type TBoardStatusReportContent = {
     };
     progress?: { pct?: number; omitir_global?: boolean };
     entregas?: TStatusReportEntregaRow[];
+    entregas_sprint?: TStatusReportSprintModuleRow[];
     observacoes?: TStatusReportObservacoes;
     executive_summary?: { html?: string };
     metrics?: Record<string, unknown>;
@@ -62,7 +83,8 @@ export type TBoardStatusReportCreateData = {
 };
 
 export type TProjectStatusReportCreateData = TBoardStatusReportCreateData & {
-  module_id: string;
+  module_ids: string[];
+  report_kind?: TStatusReportKind;
 };
 
 export type TBoardStatusReportUpdateData = {
@@ -73,6 +95,7 @@ export type TBoardStatusReportUpdateData = {
   executive_summary_html?: string;
   em_execucao?: string[];
   pontos_atencao?: string[];
+  proximos_passos?: string[];
   publish?: boolean;
   unpublish?: boolean;
 };
@@ -84,4 +107,5 @@ export type TStatusReportPreviewData = {
   executive_summary_html?: string;
   em_execucao?: string[];
   pontos_atencao?: string[];
+  proximos_passos?: string[];
 };

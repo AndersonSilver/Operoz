@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { observer } from "mobx-react";
+import { useParams } from "next/navigation";
 // plane imports
 import { DRAG_ALLOWED_GROUPS } from "@operis/constants";
 import { useTranslation } from "@operis/i18n";
@@ -97,11 +98,13 @@ export const ListGroup = observer(function ListGroup(props: Props) {
   } = props;
 
   const { t } = useTranslation();
+  const { projectId } = useParams();
+  const showBulkSelectGutter = Boolean(
+    projectId && canEditProperties(projectId?.toString()) && !selectionHelpers.isSelectionDisabled && !isEpic
+  );
   const [isDraggingOverColumn, setIsDraggingOverColumn] = useState(false);
   const groupTitle =
-    group.id === "All Issues"
-      ? t(isEpic ? "issue.epics" : "default_global_view.all_issues")
-      : group.name;
+    group.id === "All Issues" ? t(isEpic ? "issue.epics" : "default_global_view.all_issues") : group.name;
   const [dragColumnOrientation, setDragColumnOrientation] = useState<"justify-start" | "justify-end">("justify-start");
   const isExpanded = !collapsedGroups?.group_by.includes(group.id);
   const groupRef = useRef<HTMLDivElement | null>(null);
@@ -262,7 +265,7 @@ export const ListGroup = observer(function ListGroup(props: Props) {
     >
       <Row
         className={cn("w-full flex-shrink-0 border-b border-subtle bg-layer-1 py-2 pr-3 hover:bg-layer-1-hover", {
-          "sticky top-0 z-[2] shadow-sm": isExpanded && groupIssueCount > 0,
+          "shadow-sm sticky top-0 z-[2]": isExpanded && groupIssueCount > 0,
         })}
       >
         <HeaderGroupByCard
@@ -296,25 +299,29 @@ export const ListGroup = observer(function ListGroup(props: Props) {
           />
           {!group_by && displayProperties && (
             <div className="w-full min-w-0">
-              <ListPropertiesColumnsHeader displayProperties={displayProperties} isEpic={isEpic} />
+              <ListPropertiesColumnsHeader
+                displayProperties={displayProperties}
+                isEpic={isEpic}
+                showBulkSelectGutter={showBulkSelectGutter}
+              />
             </div>
           )}
           {groupIssueIds && (
             <div className="w-full min-w-0">
-            <IssueBlocksList
-              issueIds={groupIssueIds}
-              groupId={group.id}
-              issuesMap={issuesMap}
-              updateIssue={updateIssue}
-              quickActions={quickActions}
-              displayProperties={displayProperties}
-              canEditProperties={canEditProperties}
-              containerRef={containerRef}
-              isDragAllowed={isDragAllowed}
-              canDropOverIssue={!canOverlayBeVisible}
-              selectionHelpers={selectionHelpers}
-              isEpic={isEpic}
-            />
+              <IssueBlocksList
+                issueIds={groupIssueIds}
+                groupId={group.id}
+                issuesMap={issuesMap}
+                updateIssue={updateIssue}
+                quickActions={quickActions}
+                displayProperties={displayProperties}
+                canEditProperties={canEditProperties}
+                containerRef={containerRef}
+                isDragAllowed={isDragAllowed}
+                canDropOverIssue={!canOverlayBeVisible}
+                selectionHelpers={selectionHelpers}
+                isEpic={isEpic}
+              />
             </div>
           )}
 

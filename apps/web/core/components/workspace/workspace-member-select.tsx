@@ -14,10 +14,21 @@ type Props = {
   /** Fallback quando o membro vem da API mas ainda não está no mapa local */
   selectedMemberFromApi?: IUserLite | null;
   isDisabled?: boolean;
+  /** Quando false, oculta opção «Não atribuído» (ex.: modal de adicionar pessoa) */
+  allowEmpty?: boolean;
+  placeholder?: string;
 };
 
 export const WorkspaceMemberSelect = observer(function WorkspaceMemberSelect(props: Props) {
-  const { workspaceSlug, value, onChange, selectedMemberFromApi, isDisabled = false } = props;
+  const {
+    workspaceSlug,
+    value,
+    onChange,
+    selectedMemberFromApi,
+    isDisabled = false,
+    allowEmpty = true,
+    placeholder,
+  } = props;
   const { t } = useTranslation();
   const {
     workspace: { getWorkspaceMemberIds, workspaceMemberMap },
@@ -45,10 +56,7 @@ export const WorkspaceMemberSelect = observer(function WorkspaceMemberSelect(pro
         query: memberDetails.member.display_name ?? "",
         content: (
           <div className="flex items-center gap-2">
-            <Avatar
-              name={memberDetails.member.display_name}
-              src={getFileURL(memberDetails.member.avatar_url)}
-            />
+            <Avatar name={memberDetails.member.display_name} src={getFileURL(memberDetails.member.avatar_url)} />
             {memberDetails.member.display_name}
           </div>
         ),
@@ -66,27 +74,8 @@ export const WorkspaceMemberSelect = observer(function WorkspaceMemberSelect(pro
   const displayMember =
     selectedMember?.member ?? (value && selectedMemberFromApi?.id === value ? selectedMemberFromApi : null);
 
-  return (
-    <CustomSearchSelect
-      value={value ?? ""}
-      label={
-        <div className="flex h-3.5 items-center gap-2">
-          {displayMember && (
-            <Avatar name={displayMember.display_name} src={getFileURL(displayMember.avatar_url)} />
-          )}
-          {displayMember ? (
-            displayMember.display_name
-          ) : (
-            <div className="flex items-center gap-2">
-              <Ban className="h-3.5 w-3.5 rotate-90 text-placeholder" />
-              <span className="text-13 text-placeholder">{t("unassigned")}</span>
-            </div>
-          )}
-        </div>
-      }
-      buttonClassName="!px-3 !py-2 w-full bg-layer-2"
-      options={[
-        ...(options ?? []),
+  const emptyOption = allowEmpty
+    ? [
         {
           value: "none",
           query: "none",
@@ -97,7 +86,24 @@ export const WorkspaceMemberSelect = observer(function WorkspaceMemberSelect(pro
             </div>
           ),
         },
-      ]}
+      ]
+    : [];
+
+  return (
+    <CustomSearchSelect
+      value={value ?? ""}
+      label={
+        <div className="flex h-3.5 min-h-5 items-center gap-2">
+          {displayMember && <Avatar name={displayMember.display_name} src={getFileURL(displayMember.avatar_url)} />}
+          {displayMember ? (
+            <span className="truncate text-13 text-primary">{displayMember.display_name}</span>
+          ) : (
+            <span className="text-13 text-placeholder">{placeholder ?? t("unassigned")}</span>
+          )}
+        </div>
+      }
+      buttonClassName="!px-3 !py-2.5 w-full rounded-md border border-subtle bg-layer-2 text-left"
+      options={[...(options ?? []), ...emptyOption]}
       maxHeight="md"
       onChange={onChange}
       disabled={isDisabled}

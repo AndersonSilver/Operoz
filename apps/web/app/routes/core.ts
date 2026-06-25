@@ -457,6 +457,10 @@ export const coreRoutes: RouteConfigEntry[] = [
               ":workspaceSlug/settings/boards/:boardSlug/cronograma",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/cronograma/page.tsx"
             ),
+            route(
+              ":workspaceSlug/settings/boards/:boardSlug/modulos/etapas",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/modulos/etapas/page.tsx"
+            ),
           ]),
           route(
             ":workspaceSlug/settings/webhooks",

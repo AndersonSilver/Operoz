@@ -189,7 +189,6 @@ export const SupportTicketTrackingPanel = observer(function SupportTicketTrackin
   const { workspaceSlug, projectId, issueId, inboxIssue, disabled = false, requesterLabel } = props;
   const { t } = useTranslation();
   const [expandedUpdates, setExpandedUpdates] = useState(false);
-  const [showSubmission, setShowSubmission] = useState(false);
   const meta = inboxIssue.support_ticket;
   const issue = inboxIssue.issue;
 
@@ -265,7 +264,6 @@ export const SupportTicketTrackingPanel = observer(function SupportTicketTrackin
   );
 
   const { visible: visibleUpdates, hiddenCount } = sliceTrackingEvents(updates, expandedUpdates);
-  const submissionFields = meta?.submission_fields ?? [];
 
   if (!project) return null;
 
@@ -287,31 +285,6 @@ export const SupportTicketTrackingPanel = observer(function SupportTicketTrackin
       ) : (
         <p className="text-13 text-tertiary">{t("inbox_issue.support_tracking.empty")}</p>
       )}
-
-      {submissionFields.length > 0 ? (
-        <div className="rounded-xl border border-subtle bg-layer-1/30">
-          <button
-            type="button"
-            onClick={() => setShowSubmission((current) => !current)}
-            className="flex w-full items-center justify-between gap-2 px-3 py-2.5 text-left"
-          >
-            <span className="text-12 font-medium text-secondary">
-              {t("inbox_issue.support_tracking.view_submission")}
-            </span>
-            <ChevronDown className={cn("size-4 text-tertiary transition-transform", showSubmission && "rotate-180")} />
-          </button>
-          {showSubmission ? (
-            <dl className="space-y-2 border-t border-subtle px-3 py-2.5">
-              {submissionFields.map((field) => (
-                <div key={`${field.label}-${field.value}`} className="grid gap-0.5 sm:grid-cols-[minmax(0,34%)_1fr]">
-                  <dt className="text-11 text-tertiary">{field.label}</dt>
-                  <dd className="text-12 font-medium text-primary">{field.value}</dd>
-                </div>
-              ))}
-            </dl>
-          ) : null}
-        </div>
-      ) : null}
 
       {updates.length > 0 ? (
         <div>

@@ -17,6 +17,9 @@ import {
 
 export const LIST_GRID_ROW_GAP = "0.75rem";
 
+/** Alinhado a GANTT_CHECKBOX_GUTTER_PX — reserva espaço para checkbox de seleção em massa. */
+export const LIST_BULK_SELECT_GUTTER_CLASS = "pl-8";
+
 export const LIST_GRID_CUSTOM_FIELD_WIDTH_PX = 144;
 
 export type TListGridStoredWidths = {

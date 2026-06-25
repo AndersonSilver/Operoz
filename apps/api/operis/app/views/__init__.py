@@ -102,6 +102,8 @@ from .board import (
     BoardCustomFieldEndpoint,
     BoardIssueTypeDetailEndpoint,
     BoardIssueTypeEndpoint,
+    BoardModuleStageDetailEndpoint,
+    BoardModuleStageEndpoint,
     BoardIssuesViewSet,
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,

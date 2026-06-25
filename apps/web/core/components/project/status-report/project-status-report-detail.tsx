@@ -5,6 +5,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import {
   AlertTriangle,
+  ArrowRight,
   Braces,
   CheckCircle2,
   Eye,
@@ -38,6 +39,11 @@ import { isObservationHtml } from "@/components/project/status-report/observatio
 import { StatusReportObservationComposer } from "@/components/project/status-report/status-report-observation-composer";
 import { StatusReportObservationItem } from "@/components/project/status-report/status-report-observation-item";
 import { ProjectStatusReportPreviewPanel } from "@/components/project/status-report/project-status-report-preview-panel";
+import {
+  getSprintModuleCount,
+  isMultiModuleStatusReport,
+  isSprintStatusReport,
+} from "@/components/project/status-report/status-report-utils";
 import { ProjectStatusReportService } from "@/services/project/project-status-report.service";
 import { AIService } from "@/services/ai.service";
 
@@ -47,16 +53,14 @@ const aiService = new AIService();
 function ContextBlock({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div>
-      <p className="mb-1.5 text-[10px] font-semibold uppercase tracking-[0.08em] text-placeholder">{label}</p>
+      <p className="mb-1.5 text-[10px] font-semibold tracking-[0.08em] text-placeholder uppercase">{label}</p>
       {children}
     </div>
   );
 }
 
 function ContextValueCard({ children }: { children: ReactNode }) {
-  return (
-    <div className="rounded-lg border border-subtle bg-layer-2/30 px-3 py-2.5">{children}</div>
-  );
+  return <div className="rounded-lg border border-subtle bg-layer-2/30 px-3 py-2.5">{children}</div>;
 }
 
 function ContextLinkCard({ href, children }: { href: string; children: ReactNode }) {
@@ -82,6 +86,9 @@ function ReportContextPanel({
   periodDatesLabel,
   moduleName,
   moduleId,
+  sprintTitle,
+  multiModuleSelection,
+  sprintModuleCount,
   projectName,
   workspaceSlug,
   projectId,
@@ -92,6 +99,9 @@ function ReportContextPanel({
   periodDatesLabel: string;
   moduleName?: string | null;
   moduleId?: string | null;
+  sprintTitle?: string | null;
+  multiModuleSelection?: boolean;
+  sprintModuleCount?: number;
   projectName: string;
   workspaceSlug: string;
   projectId: string;
@@ -115,23 +125,44 @@ function ReportContextPanel({
             <p className="mt-0.5 text-caption-sm-regular text-tertiary">{periodDatesLabel}</p>
           </ContextValueCard>
         </ContextBlock>
-        {moduleName && (
-          <ContextBlock label={t("project.status_report.module_label")}>
+        {sprintTitle ? (
+          <ContextBlock label={t("project.status_report.multi_module.sprint_title_label")}>
             <ContextValueCard>
-              <p className="leading-snug text-body-xs-regular text-secondary">{moduleName}</p>
+              <p className="text-body-xs-medium text-primary">{sprintTitle}</p>
+              {sprintModuleCount && sprintModuleCount > 1 ? (
+                <p className="mt-0.5 text-caption-sm-regular text-tertiary">
+                  {t("project.status_report.multi_module.selected_count", { count: sprintModuleCount })}
+                </p>
+              ) : null}
             </ContextValueCard>
           </ContextBlock>
-        )}
+        ) : multiModuleSelection ? (
+          <ContextBlock label={t("project.status_report.multi_module.report_kind_selection")}>
+            <ContextValueCard>
+              <p className="text-body-xs-medium text-primary">
+                {t("project.status_report.multi_module.selected_count", {
+                  count: sprintModuleCount ?? 0,
+                })}
+              </p>
+            </ContextValueCard>
+          </ContextBlock>
+        ) : moduleName ? (
+          <ContextBlock label={t("project.status_report.module_label")}>
+            <ContextValueCard>
+              <p className="text-body-xs-regular leading-snug text-secondary">{moduleName}</p>
+            </ContextValueCard>
+          </ContextBlock>
+        ) : null}
         <ContextBlock label={t("project.status_report.section_project")}>
           <ContextValueCard>
-            <p className="leading-snug text-body-xs-regular text-secondary">{projectName}</p>
+            <p className="text-body-xs-regular leading-snug text-secondary">{projectName}</p>
           </ContextValueCard>
         </ContextBlock>
         {metrics?.hasData && (
           <ContextBlock label={t("project.status_report.section_highlights")}>
             <ContextValueCard>
               <div className="mb-2 flex items-baseline justify-between gap-2">
-                <span className="tabular-nums text-body-sm-medium text-primary">
+                <span className="text-body-sm-medium text-primary tabular-nums">
                   {metrics.completed}/{metrics.total}
                 </span>
                 <span className="text-caption-sm-regular text-tertiary">{metrics.pct}%</span>
@@ -168,10 +199,12 @@ export function ProjectStatusReportDetail(props: Props) {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
 
-  const { data: report, isLoading, mutate } = useSWR(
-    workspaceSlug && project.id && reportId
-      ? `PROJECT_STATUS_REPORT_${workspaceSlug}_${project.id}_${reportId}`
-      : null,
+  const {
+    data: report,
+    isLoading,
+    mutate,
+  } = useSWR(
+    workspaceSlug && project.id && reportId ? `PROJECT_STATUS_REPORT_${workspaceSlug}_${project.id}_${reportId}` : null,
     () => service.retrieve(workspaceSlug, project.id, reportId),
     { revalidateOnFocus: false }
   );
@@ -179,22 +212,24 @@ export function ProjectStatusReportDetail(props: Props) {
   const [summary, setSummary] = useState<string | null>(null);
   const [emExecucao, setEmExecucao] = useState<string | null>(null);
   const [pontosAtencao, setPontosAtencao] = useState<string | null>(null);
+  const [proximosPassos, setProximosPassos] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [printingPdf, setPrintingPdf] = useState(false);
   const [exportingFormat, setExportingFormat] = useState<TStatusReportExportFormat | null>(null);
   const [viewMode, setViewMode] = useState<"edit" | "preview">("edit");
+  const [previewRefreshKey, setPreviewRefreshKey] = useState(0);
   const [generatingSummary, setGeneratingSummary] = useState(false);
 
   const linesToText = (items?: string[]) => (items?.length ? items.join("\n") : "");
 
-  const effectiveSummary =
-    summary ?? report?.content?.sections?.executive_summary?.html ?? "";
+  const effectiveSummary = summary ?? report?.content?.sections?.executive_summary?.html ?? "";
 
-  const effectiveEmExecucao =
-    emExecucao ?? linesToText(report?.content?.sections?.observacoes?.em_execucao);
+  const effectiveEmExecucao = emExecucao ?? linesToText(report?.content?.sections?.observacoes?.em_execucao);
 
-  const effectivePontosAtencao =
-    pontosAtencao ?? linesToText(report?.content?.sections?.observacoes?.pontos_atencao);
+  const effectivePontosAtencao = pontosAtencao ?? linesToText(report?.content?.sections?.observacoes?.pontos_atencao);
+
+  const effectiveProximosPassos =
+    proximosPassos ?? linesToText(report?.content?.sections?.observacoes?.proximos_passos);
 
   const textToLines = (text: string) =>
     text
@@ -203,24 +238,23 @@ export function ProjectStatusReportDetail(props: Props) {
       .filter(Boolean);
 
   const moduleName =
-    report?.module_name ??
-    (report?.content?.sections?.module as { name?: string } | undefined)?.name ??
-    "";
+    report?.module_name ?? (report?.content?.sections?.module as { name?: string } | undefined)?.name ?? "";
 
-  const moduleId =
-    report?.module ?? (report?.content?.sections?.module as { id?: string } | undefined)?.id ?? null;
+  const moduleId = report?.module ?? (report?.content?.sections?.module as { id?: string } | undefined)?.id ?? null;
 
   const buildExportDraft = () => ({
     executive_summary_html: effectiveSummary,
     em_execucao: textToLines(effectiveEmExecucao),
     pontos_atencao: textToLines(effectivePontosAtencao),
+    proximos_passos: textToLines(effectiveProximosPassos),
   });
 
   const generateExecutiveSummaryText = async (
     execLines: string[],
-    attLines: string[]
+    attLines: string[],
+    nextLines: string[]
   ): Promise<string | null> => {
-    if (!report || (!execLines.length && !attLines.length)) return null;
+    if (!report || (!execLines.length && !attLines.length && !nextLines.length)) return null;
 
     const weekLabel = formatReportWeekLabel(report.period_start, report.period_end, t);
     const periodDatesLabel = renderFormattedPeriodDatesLong(report.period_start, report.period_end);
@@ -231,6 +265,7 @@ export function ProjectStatusReportDetail(props: Props) {
       projectName: project.name,
       emExecucaoLines: execLines,
       pontosAtencaoLines: attLines,
+      proximosPassosLines: nextLines,
     });
 
     const res = await aiService.createGptTask(workspaceSlug, { task, prompt });
@@ -244,14 +279,15 @@ export function ProjectStatusReportDetail(props: Props) {
 
     const execLines = textToLines(effectiveEmExecucao);
     const attLines = textToLines(effectivePontosAtencao);
+    const nextLines = textToLines(effectiveProximosPassos);
     let summaryToSave = effectiveSummary;
     let summaryGeneratedByAi = false;
 
     try {
-      if (execLines.length || attLines.length) {
+      if (execLines.length || attLines.length || nextLines.length) {
         setGeneratingSummary(true);
         try {
-          const generated = await generateExecutiveSummaryText(execLines, attLines);
+          const generated = await generateExecutiveSummaryText(execLines, attLines, nextLines);
           if (generated) {
             summaryToSave = generated;
             summaryGeneratedByAi = true;
@@ -266,9 +302,7 @@ export function ProjectStatusReportDetail(props: Props) {
           const error = (err as { data?: { error?: string }; status?: number })?.data?.error;
           const status = (err as { status?: number })?.status;
           const errorMessage =
-            status === 429
-              ? error || t("issue_modal_ai_error_rate_limit")
-              : error || t("issue_modal_ai_error_generic");
+            status === 429 ? error || t("issue_modal_ai_error_rate_limit") : error || t("issue_modal_ai_error_generic");
           setToast({ type: TOAST_TYPE.ERROR, title: t("error"), message: errorMessage });
         } finally {
           setGeneratingSummary(false);
@@ -279,12 +313,14 @@ export function ProjectStatusReportDetail(props: Props) {
         executive_summary_html: summaryToSave,
         em_execucao: execLines,
         pontos_atencao: attLines,
+        proximos_passos: nextLines,
         ...extra,
       });
       await mutate();
       setSummary(null);
       setEmExecucao(null);
       setPontosAtencao(null);
+      setProximosPassos(null);
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("toast.success"),
@@ -373,8 +409,9 @@ export function ProjectStatusReportDetail(props: Props) {
       executive_summary_html: effectiveSummary,
       em_execucao: textToLines(effectiveEmExecucao),
       pontos_atencao: textToLines(effectivePontosAtencao),
+      proximos_passos: textToLines(effectiveProximosPassos),
     }),
-    [effectiveEmExecucao, effectivePontosAtencao, effectiveSummary]
+    [effectiveEmExecucao, effectivePontosAtencao, effectiveProximosPassos, effectiveSummary]
   );
 
   if (isLoading || !report) {
@@ -425,7 +462,13 @@ export function ProjectStatusReportDetail(props: Props) {
 
   const weekLabel = formatReportWeekLabel(report.period_start, report.period_end, t);
   const periodDatesLabel = renderFormattedPeriodDatesLong(report.period_start, report.period_end);
-  const pageTitle = moduleName?.trim() || report.title?.trim() || weekLabel;
+  const sprintReport = isSprintStatusReport(report);
+  const multiModuleReport = isMultiModuleStatusReport(report);
+  const pageTitle = sprintReport
+    ? report.title?.trim() || weekLabel
+    : multiModuleReport
+      ? report.title?.trim() || project.name || weekLabel
+      : moduleName?.trim() || report.title?.trim() || weekLabel;
   const detailHeader = (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="min-w-0">
@@ -436,7 +479,12 @@ export function ProjectStatusReportDetail(props: Props) {
       </div>
       <ReportDetailToolbar
         viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        onViewModeChange={(mode) => {
+          if (mode === "preview") {
+            setPreviewRefreshKey((key) => key + 1);
+          }
+          setViewMode(mode);
+        }}
         canManage={canManage}
         canDelete={canDelete}
         isPublished={report.is_published}
@@ -459,8 +507,11 @@ export function ProjectStatusReportDetail(props: Props) {
     <ReportContextPanel
       weekLabel={weekLabel}
       periodDatesLabel={periodDatesLabel}
-      moduleName={moduleName}
-      moduleId={moduleId}
+      moduleName={sprintReport || multiModuleReport ? null : moduleName}
+      moduleId={sprintReport || multiModuleReport ? null : moduleId}
+      sprintTitle={sprintReport ? report.title?.trim() || null : null}
+      multiModuleSelection={multiModuleReport}
+      sprintModuleCount={sprintReport || multiModuleReport ? getSprintModuleCount(report) : undefined}
       projectName={project.name}
       workspaceSlug={workspaceSlug}
       projectId={project.id}
@@ -480,6 +531,7 @@ export function ProjectStatusReportDetail(props: Props) {
             <div className="mx-auto w-full max-w-[1440px] px-4 py-5 sm:px-6 sm:py-6 lg:px-8">
               <div className="overflow-hidden rounded-lg border border-subtle bg-layer-1">
                 <ProjectStatusReportPreviewPanel
+                  key={`status-report-preview-${previewRefreshKey}`}
                   workspaceSlug={workspaceSlug}
                   projectId={project.id}
                   reportId={reportId}
@@ -492,9 +544,7 @@ export function ProjectStatusReportDetail(props: Props) {
       ) : (
         <div className="flex min-h-0 flex-1 flex-col xl:flex-row">
           <div className="flex min-h-0 min-w-0 flex-1 flex-col">
-            <div className="shrink-0 border-b border-subtle bg-layer-1 px-4 py-5 sm:px-6 lg:px-8">
-              {detailHeader}
-            </div>
+            <div className="shrink-0 border-b border-subtle bg-layer-1 px-4 py-5 sm:px-6 lg:px-8">{detailHeader}</div>
             <div
               className={cn(
                 "min-h-0 flex-1 overflow-y-auto px-4 py-5 sm:px-6 sm:py-6 lg:px-8",
@@ -503,7 +553,7 @@ export function ProjectStatusReportDetail(props: Props) {
             >
               <div className="flex w-full min-w-0 flex-col gap-6 xl:max-w-[calc(100%-2rem)]">
                 <section className="space-y-5">
-                  <div className="flex items-start gap-3 rounded-lg border border-accent-primary/20 bg-accent-primary/5 px-4 py-3.5">
+                  <div className="border-accent-primary/20 flex items-start gap-3 rounded-lg border bg-accent-primary/5 px-4 py-3.5">
                     <ListChecks className="mt-0.5 size-5 shrink-0 text-accent-primary" strokeWidth={1.75} />
                     <div className="min-w-0">
                       <h2 className="text-body-sm-medium text-primary">
@@ -514,7 +564,7 @@ export function ProjectStatusReportDetail(props: Props) {
                       </p>
                     </div>
                   </div>
-                  <div className="grid gap-4 lg:grid-cols-2 lg:items-stretch">
+                  <div className="grid gap-4">
                     <ObservationField
                       variant="exec"
                       label={t("project.status_report.em_execucao")}
@@ -541,11 +591,24 @@ export function ProjectStatusReportDetail(props: Props) {
                       reportId={reportId}
                       t={t}
                     />
+                    <ObservationField
+                      variant="next"
+                      label={t("project.status_report.proximos_passos")}
+                      value={effectiveProximosPassos}
+                      onChange={canManage ? setProximosPassos : undefined}
+                      emptyHint={t("project.status_report.proximos_passos_placeholder")}
+                      readOnly={!canManage}
+                      workspaceSlug={workspaceSlug}
+                      workspaceId={workspaceId}
+                      projectId={project.id}
+                      reportId={reportId}
+                      t={t}
+                    />
                   </div>
                 </section>
 
                 {!canManage && effectiveSummary ? (
-                  <section className="overflow-hidden rounded-xl border border-subtle bg-layer-1 shadow-sm">
+                  <section className="shadow-sm overflow-hidden rounded-xl border border-subtle bg-layer-1">
                     <PanelSectionHeader
                       icon={FileText}
                       iconClassName="border-violet-500/20 bg-violet-500/10 text-violet-400"
@@ -615,7 +678,6 @@ export function ProjectStatusReportDetail(props: Props) {
           </p>
         }
       />
-
     </div>
   );
 }
@@ -695,7 +757,7 @@ function ReportDetailToolbar({
         </Tooltip>
       </div>
 
-      <span className="mx-0.5 h-4 w-px shrink-0 bg-subtle" aria-hidden />
+      <span className="bg-subtle mx-0.5 h-4 w-px shrink-0" aria-hidden />
 
       <ReportExportMenu
         onExportHtml={onExportHtml}
@@ -750,7 +812,7 @@ function ReportDetailToolbar({
 
       {canDelete && (
         <>
-          <span className="mx-0.5 h-4 w-px shrink-0 bg-subtle" aria-hidden />
+          <span className="bg-subtle mx-0.5 h-4 w-px shrink-0" aria-hidden />
           <Tooltip tooltipContent={t("project.status_report.delete")}>
             <button
               type="button"
@@ -852,13 +914,7 @@ function ReportExportMenu({
   );
 }
 
-function StatusBadge({
-  published,
-  t,
-}: {
-  published: boolean;
-  t: ReturnType<typeof useTranslation>["t"];
-}) {
+function StatusBadge({ published, t }: { published: boolean; t: ReturnType<typeof useTranslation>["t"] }) {
   const Icon = published ? CheckCircle2 : ScrollText;
 
   return (
@@ -876,7 +932,7 @@ function StatusBadge({
 
 function ReadOnlyBlock({ value }: { value: string }) {
   return (
-    <p className="min-h-[72px] whitespace-pre-wrap rounded-xl border border-subtle bg-layer-2/30 px-4 py-3 text-body-sm-regular leading-relaxed text-secondary">
+    <p className="min-h-[72px] rounded-xl border border-subtle bg-layer-2/30 px-4 py-3 text-body-sm-regular leading-relaxed whitespace-pre-wrap text-secondary">
       {value || "—"}
     </p>
   );
@@ -896,6 +952,13 @@ const OBS_FIELD_THEME = {
     composerBorder: "border-amber-500/40",
     submitBtn: "bg-amber-600 text-on-color hover:bg-amber-700",
     rowHover: "hover:border-amber-500/40",
+  },
+  next: {
+    Icon: ArrowRight,
+    iconClass: "text-blue-400",
+    composerBorder: "border-blue-500/40",
+    submitBtn: "bg-blue-600 text-on-color hover:bg-blue-700",
+    rowHover: "hover:border-blue-500/40",
   },
 } as const;
 
@@ -937,10 +1000,7 @@ function lineToEditorHtml(line: string): string {
   const trimmed = line.trim();
   if (!trimmed) return "<p></p>";
   if (isObservationHtml(trimmed)) return trimmed;
-  const escaped = trimmed
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;");
+  const escaped = trimmed.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   return `<p>${escaped}</p>`;
 }
 
@@ -1118,4 +1178,3 @@ function ObservationField({
     </div>
   );
 }
-
