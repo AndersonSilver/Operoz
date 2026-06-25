@@ -1,8 +1,7 @@
 import { useTranslation } from "@operis/i18n";
 import { cn } from "@operis/utils";
 
-const MODULE_LIST_GRID =
-  "lg:grid lg:grid-cols-[minmax(0,1fr)_10rem_7rem_2.5rem_3.5rem] lg:items-center lg:gap-3";
+const MODULE_LIST_GRID = "lg:grid lg:grid-cols-[minmax(0,1fr)_10rem_7rem_7rem_6rem_4.5rem] lg:items-center lg:gap-3";
 
 export function ModuleListHeader() {
   const { t } = useTranslation();
@@ -15,12 +14,19 @@ export function ModuleListHeader() {
       )}
     >
       <span className="text-13 font-medium text-tertiary">{t("project_modules.list.col_module")}</span>
-      <span className="hidden text-13 font-medium text-tertiary lg:block">{t("project_modules.list.col_dates")}</span>
-      <span className="hidden text-13 font-medium text-tertiary lg:block">{t("project_modules.list.col_status")}</span>
       <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
+        {t("project_modules.list.col_dates")}
+      </span>
+      <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
+        {t("project_modules.list.col_status")}
+      </span>
+      <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
+        {t("project_modules.list.col_stage")}
+      </span>
+      <span className="hidden min-w-0 text-center text-13 font-medium text-tertiary lg:block">
         {t("project_modules.list.col_lead")}
       </span>
-      <span className="hidden text-right text-13 font-medium text-tertiary lg:block">
+      <span className="hidden border-l border-subtle pl-2 text-center text-13 font-medium text-tertiary lg:block">
         {t("project_modules.list.col_actions")}
       </span>
     </div>

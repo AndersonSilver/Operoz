@@ -16,6 +16,7 @@ if (process.env.VITE_ENABLE_BOARDS === undefined) {
 const workspaceRoot = path.resolve(__dirname, "../..");
 const propelSrcRoot = path.resolve(workspaceRoot, "packages/propel/src");
 const sharedStateSrcEntry = path.resolve(workspaceRoot, "packages/shared-state/src/index.ts");
+const servicesSrcEntry = path.resolve(workspaceRoot, "packages/services/src/index.ts");
 
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
 const requireEditor = createRequire(editorPkg);
@@ -56,6 +57,10 @@ export default defineConfig(({ command }) => {
     {
       find: "@operis/i18n",
       replacement: path.resolve(__dirname, "../../packages/i18n/src/index.ts"),
+    },
+    {
+      find: "@operis/services",
+      replacement: servicesSrcEntry,
     },
     ...Object.entries(prosemirrorAliases).map(([find, replacement]) => ({ find, replacement })),
     { find: "next/link", replacement: path.resolve(__dirname, "app/compat/next/link.tsx") },

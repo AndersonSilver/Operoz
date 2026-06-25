@@ -16,6 +16,7 @@ type PreviewDraft = {
   executive_summary_html: string;
   em_execucao: string[];
   pontos_atencao: string[];
+  proximos_passos: string[];
 };
 
 type Props = {
@@ -50,6 +51,7 @@ export function ProjectStatusReportPreviewPanel(props: Props) {
           executive_summary_html: currentDraft.executive_summary_html,
           em_execucao: currentDraft.em_execucao,
           pontos_atencao: currentDraft.pontos_atencao,
+          proximos_passos: currentDraft.proximos_passos,
         });
 
         if (format === "md") {
@@ -85,6 +87,7 @@ export function ProjectStatusReportPreviewPanel(props: Props) {
         executive_summary_html: currentDraft.executive_summary_html,
         em_execucao: currentDraft.em_execucao,
         pontos_atencao: currentDraft.pontos_atencao,
+        proximos_passos: currentDraft.proximos_passos,
       });
 
       if (result.blob && !result.pdfFallback) {
@@ -171,7 +174,7 @@ export function ProjectStatusReportPreviewPanel(props: Props) {
         )}
 
         {format === "md" && markdown !== null && (
-          <pre className="max-h-[70vh] overflow-auto whitespace-pre-wrap bg-layer-1 p-5 text-body-xs-regular leading-relaxed text-secondary">
+          <pre className="max-h-[70vh] overflow-auto bg-layer-1 p-5 text-body-xs-regular leading-relaxed whitespace-pre-wrap text-secondary">
             {markdown}
           </pre>
         )}
@@ -208,7 +211,7 @@ function FormatTab({
       aria-selected={active}
       className={cn(
         "inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-body-xs-medium transition-colors",
-        active ? "bg-layer-1 text-primary shadow-sm" : "text-tertiary hover:bg-layer-1/60 hover:text-primary"
+        active ? "shadow-sm bg-layer-1 text-primary" : "text-tertiary hover:bg-layer-1/60 hover:text-primary"
       )}
       onClick={onClick}
     >

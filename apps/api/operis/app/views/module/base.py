@@ -45,6 +45,7 @@ from operis.app.serializers import (
     ModuleUserPropertiesSerializer,
     ModuleWriteSerializer,
 )
+from operis.app.serializers.module import serialize_module_stage_detail
 from operis.bgtasks.issue_activities_task import issue_activity
 from operis.db.models import (
     Issue,
@@ -284,6 +285,7 @@ class ModuleViewSet(BaseViewSet):
                     Value([], output_field=ArrayField(UUIDField())),
                 )
             )
+            .select_related("stage")
             .order_by("-is_favorite", "-created_at")
         )
 
@@ -666,6 +668,7 @@ class ModuleViewSet(BaseViewSet):
 
         if serializer.is_valid():
             serializer.save()
+            updated_module = module_queryset.select_related("stage__issue_type").first()
             module = module_queryset.values(
                 # Required fields
                 "id",
@@ -681,6 +684,7 @@ class ModuleViewSet(BaseViewSet):
                 "status",
                 "lead_id",
                 "member_ids",
+                "stage_id",
                 "view_props",
                 "sort_order",
                 "external_source",
@@ -699,6 +703,10 @@ class ModuleViewSet(BaseViewSet):
                 "created_at",
                 "updated_at",
             ).first()
+            module["stage_id"] = str(updated_module.stage_id) if updated_module and updated_module.stage_id else None
+            module["stage_detail"] = serialize_module_stage_detail(
+                updated_module.stage if updated_module else None
+            )
 
             # Send the model activity
             model_activity.delay(

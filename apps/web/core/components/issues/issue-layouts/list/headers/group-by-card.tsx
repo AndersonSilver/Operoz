@@ -20,6 +20,7 @@ import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { CreateUpdateEpicModal } from "@/plane-web/components/epics/epic-modal";
 // Plane-web
 import { WorkFlowGroupTree } from "@/plane-web/components/workflow";
+import { LIST_BULK_SELECT_GUTTER_CLASS } from "../list-grid-columns-context";
 
 interface IHeaderGroupByCard {
   groupID: string;
@@ -88,9 +89,14 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
 
   return (
     <>
-      <div className="group/list-header flex w-full flex-shrink-0 items-center gap-2 py-1.5">
+      <div
+        className={cn(
+          "group/list-header relative flex w-full flex-shrink-0 items-center gap-2 py-1.5",
+          canSelectIssues && LIST_BULK_SELECT_GUTTER_CLASS
+        )}
+      >
         {canSelectIssues && (
-          <div className="absolute left-1 flex w-3.5 flex-shrink-0 items-center">
+          <div className="absolute left-2 flex w-3.5 flex-shrink-0 items-center">
             <MultipleSelectGroupAction
               className={cn(
                 "pointer-events-none size-3.5 opacity-0 !outline-none group-hover/list-header:pointer-events-auto group-hover/list-header:opacity-100",
@@ -113,7 +119,7 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
           onClick={() => handleCollapsedGroups(groupID)}
         >
           <div className="line-clamp-1 inline-block truncate text-13 font-medium text-primary">{title}</div>
-          <div className="pl-2 text-13 font-medium tabular-nums text-tertiary">{count || 0}</div>
+          <div className="pl-2 text-13 font-medium text-tertiary tabular-nums">{count || 0}</div>
           <div className="px-2.5">
             <WorkFlowGroupTree groupBy={groupBy} groupId={groupID} />
           </div>

@@ -14,6 +14,7 @@ import { isObservationHtml } from "@/components/project/status-report/observatio
 import {
   getReportProgressPct,
   getReportSummarySnippet,
+  getStatusReportHeadline,
   stripHtmlToText,
 } from "@/components/project/status-report/status-report-utils";
 import { ProjectStatusReportService } from "@/services/project/project-status-report.service";
@@ -35,9 +36,7 @@ export function StatusReportPeekPanel(props: Props) {
   const peekReport = searchParams.get("peekReport");
 
   const { data: report, isLoading } = useSWR(
-    peekReport && workspaceSlug && projectId
-      ? `PEEK_STATUS_REPORT_${workspaceSlug}_${projectId}_${peekReport}`
-      : null,
+    peekReport && workspaceSlug && projectId ? `PEEK_STATUS_REPORT_${workspaceSlug}_${projectId}_${peekReport}` : null,
     () => service.retrieve(workspaceSlug, projectId, peekReport!),
     { revalidateOnFocus: false }
   );
@@ -91,19 +90,19 @@ export function StatusReportPeekPanel(props: Props) {
   return (
     <div
       className={cn(
-        "absolute inset-y-0 right-0 z-[12] flex h-full w-full max-w-md flex-col border-l border-subtle/60 bg-surface-1/95 shadow-xl backdrop-blur-xl",
+        "shadow-xl absolute inset-y-0 right-0 z-[12] flex h-full w-full max-w-md flex-col border-l border-subtle/60 bg-surface-1/95 backdrop-blur-xl",
         "md:relative md:max-w-sm"
       )}
     >
       <div className="flex shrink-0 items-center justify-between gap-2 border-b border-subtle/60 px-4 py-3">
         <div className="min-w-0">
           <p className="truncate text-13 font-semibold text-primary">
-            {report?.module_name ?? report?.title ?? t("project.status_report.title")}
+            {report
+              ? getStatusReportHeadline(report) || t("project.status_report.title")
+              : t("project.status_report.title")}
           </p>
           {report ? (
-            <p className="text-11 text-tertiary">
-              {formatReportWeekLabel(report.period_start, report.period_end, t)}
-            </p>
+            <p className="text-11 text-tertiary">{formatReportWeekLabel(report.period_start, report.period_end, t)}</p>
           ) : null}
         </div>
         <IconButton variant="ghost" size="sm" icon={X} aria-label={t("common.close")} onClick={handleClose} />
@@ -123,20 +122,15 @@ export function StatusReportPeekPanel(props: Props) {
                 <p className="mb-1 text-11 font-medium text-tertiary">{t("project.status_report.col_progress")}</p>
                 <div className="flex items-center gap-2">
                   <div className="h-2 flex-1 overflow-hidden rounded-full bg-layer-2">
-                    <span
-                      className="block h-full rounded-full bg-accent-primary"
-                      style={{ width: `${progress}%` }}
-                    />
+                    <span className="block h-full rounded-full bg-accent-primary" style={{ width: `${progress}%` }} />
                   </div>
-                  <span className="tabular-nums text-13 text-secondary">{progress}%</span>
+                  <span className="text-13 text-secondary tabular-nums">{progress}%</span>
                 </div>
               </div>
             ) : null}
 
             <div>
-              <p className="mb-1.5 text-11 font-medium text-tertiary">
-                {t("project.status_report.executive_summary")}
-              </p>
+              <p className="mb-1.5 text-11 font-medium text-tertiary">{t("project.status_report.executive_summary")}</p>
               {summaryHtml && isObservationHtml(summaryHtml) ? (
                 <div className="rounded-md border border-subtle/50 bg-layer-2/30 p-3 text-13 text-secondary">
                   <ObservationHtmlView html={summaryHtml} />

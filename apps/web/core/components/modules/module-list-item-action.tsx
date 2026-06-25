@@ -6,14 +6,15 @@ import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MEN
 import { useLocalStorage } from "@operis/hooks";
 import { useTranslation } from "@operis/i18n";
 import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
 import type { IModule } from "@operis/types";
 import { FavoriteStar } from "@operis/ui";
 import { cn, renderFormattedPayloadDate, getDate } from "@operis/utils";
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
+import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ModuleQuickActions } from "@/components/modules";
 import { ModuleStatusDropdown } from "@/components/modules/module-status-dropdown";
-import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
+import { ModuleStageDropdown } from "@/components/modules/module-stage-dropdown";
+import { useProjectBoardModuleStages } from "@/hooks/use-project-board-module-stages";
 import { useMember } from "@/hooks/store/use-member";
 import { useModule } from "@/hooks/store/use-module";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -26,7 +27,7 @@ type Props = {
 
 const dateButtonClass = (isDisabled: boolean, hasDates: boolean) =>
   cn(
-    "flex h-7 w-full min-w-0 max-w-[11rem] items-center gap-1.5 truncate rounded-sm border border-subtle bg-layer-2 px-2 text-11 transition-colors",
+    "flex h-7 w-full max-w-[11rem] min-w-0 items-center gap-1.5 truncate rounded-sm border border-subtle bg-layer-2 px-2 text-11 transition-colors lg:w-auto lg:max-w-[10rem]",
     isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-strong hover:bg-layer-1",
     hasDates ? "text-secondary" : "text-tertiary"
   );
@@ -39,6 +40,7 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
   const { getUserDetails } = useMember();
   const { t } = useTranslation();
   const { setValue: toggleFavoriteMenu, storedValue } = useLocalStorage<boolean>(IS_FAVORITE_MENU_OPEN, false);
+  const { stages } = useProjectBoardModuleStages(workspaceSlug?.toString(), projectId?.toString());
 
   const moduleStatus = MODULE_STATUS.find((status) => status.value === moduleDetails.status);
   const isEditingAllowed = allowPermissions(
@@ -63,9 +65,15 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     );
 
     setPromiseToast(addToFavoritePromise, {
-      loading: "Adding module to favorites...",
-      success: { title: "Success!", message: () => "Module added to favorites." },
-      error: { title: "Error!", message: () => "Couldn't add the module to favorites. Please try again." },
+      loading: t("project_modules.toast.favorite_add_loading"),
+      success: {
+        title: t("toast.success"),
+        message: () => t("project_modules.toast.favorite_add_success"),
+      },
+      error: {
+        title: t("toast.error"),
+        message: () => t("project_modules.toast.favorite_add_error"),
+      },
     });
   };
 
@@ -81,9 +89,15 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     );
 
     setPromiseToast(removeFromFavoritePromise, {
-      loading: "Removing module from favorites...",
-      success: { title: "Success!", message: () => "Module removed from favorites." },
-      error: { title: "Error!", message: () => "Couldn't remove the module from favorites. Please try again." },
+      loading: t("project_modules.toast.favorite_remove_loading"),
+      success: {
+        title: t("toast.success"),
+        message: () => t("project_modules.toast.favorite_remove_success"),
+      },
+      error: {
+        title: t("toast.error"),
+        message: () => t("project_modules.toast.favorite_remove_error"),
+      },
     });
   };
 
@@ -94,15 +108,15 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
       .then(() => {
         setToast({
           type: TOAST_TYPE.SUCCESS,
-          title: "Success!",
-          message: "Module updated successfully.",
+          title: t("toast.success"),
+          message: t("project_modules.toast.update_success"),
         });
       })
       .catch((err) => {
         setToast({
           type: TOAST_TYPE.ERROR,
-          title: "Error!",
-          message: err?.detail ?? "Module could not be updated. Please try again.",
+          title: t("toast.error"),
+          message: err?.detail ?? t("project_modules.toast.update_error"),
         });
       });
   };
@@ -121,7 +135,7 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
       placement="bottom-start"
       buttonContainerClassName={dateButtonClass(isDisabled, hasDates)}
       buttonVariant="transparent-with-text"
-      className="h-7 w-full min-w-0"
+      className="h-7 w-full min-w-0 lg:w-auto"
       value={{ from: startDate, to: endDate }}
       onSelect={(val) => {
         handleModuleDetailsChange({
@@ -138,12 +152,35 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     />
   );
 
+  const leadDropdown = (
+    <MemberDropdown
+      value={moduleDetails.lead_id ?? null}
+      onChange={(val) => handleModuleDetailsChange({ lead_id: val })}
+      projectId={projectId?.toString()}
+      multiple={false}
+      disabled={isDisabled}
+      placeholder={t("lead")}
+      placement="bottom-end"
+      optionsClassName="z-10"
+      icon={SquareUser}
+      buttonVariant={moduleDetails.lead_id ? "transparent-without-text" : "border-without-text"}
+      buttonClassName={cn(
+        "rounded-sm",
+        moduleDetails.lead_id ? "px-0 hover:bg-transparent" : "size-7 min-w-7 justify-center border-dashed"
+      )}
+      buttonContainerClassName="flex justify-center"
+      className="h-7"
+      showTooltip
+      tooltipContent={moduleLeadDetails?.display_name ?? t("project_modules.list.no_lead")}
+    />
+  );
+
   return (
     <>
       <div className="hidden min-w-0 lg:contents" onClick={stopNav}>
-        <div className="min-w-0 lg:col-start-2">{dateDropdown}</div>
+        <div className="flex min-w-0 justify-center lg:col-start-2">{dateDropdown}</div>
 
-        <div className="flex shrink-0 lg:col-start-3">
+        <div className="flex shrink-0 justify-center lg:col-start-3">
           {moduleStatus ? (
             <ModuleStatusDropdown
               isDisabled={isDisabled}
@@ -154,18 +191,17 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
         </div>
 
         <div className="flex shrink-0 justify-center lg:col-start-4">
-          {moduleLeadDetails ? (
-            <ButtonAvatars showTooltip userIds={moduleLeadDetails.id} />
-          ) : (
-            <Tooltip tooltipContent={t("project_modules.list.no_lead")}>
-              <span className="grid size-7 place-items-center rounded-sm border border-dashed border-subtle text-tertiary">
-                <SquareUser className="size-3.5" strokeWidth={1.75} />
-              </span>
-            </Tooltip>
-          )}
+          <ModuleStageDropdown
+            isDisabled={isDisabled}
+            moduleDetails={moduleDetails}
+            stages={stages}
+            handleModuleDetailsChange={handleModuleDetailsChange}
+          />
         </div>
 
-        <div className="flex shrink-0 items-center justify-end gap-1 lg:col-start-5 lg:border-l lg:border-subtle lg:pl-2">
+        <div className="flex shrink-0 justify-center lg:col-start-5">{leadDropdown}</div>
+
+        <div className="flex shrink-0 items-center justify-center gap-1 lg:col-start-6 lg:border-l lg:border-subtle lg:pl-2">
           {isEditingAllowed && !moduleDetails.archived_at ? (
             <FavoriteStar
               onClick={(e) => {
@@ -195,7 +231,13 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
             handleModuleDetailsChange={handleModuleDetailsChange}
           />
         ) : null}
-        {moduleLeadDetails ? <ButtonAvatars showTooltip={false} userIds={moduleLeadDetails.id} /> : null}
+        <ModuleStageDropdown
+          isDisabled={isDisabled}
+          moduleDetails={moduleDetails}
+          stages={stages}
+          handleModuleDetailsChange={handleModuleDetailsChange}
+        />
+        {leadDropdown}
         {isEditingAllowed && !moduleDetails.archived_at ? (
           <FavoriteStar
             onClick={(e) => {

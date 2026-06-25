@@ -2,6 +2,7 @@ import { createContext, useContext, type ReactNode } from "react";
 
 export type OpenCreateModalOptions = {
   moduleId?: string;
+  moduleIds?: string[];
   periodStart?: string;
   periodEnd?: string;
 };

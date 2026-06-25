@@ -1,20 +1,13 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { usePathname, useSearchParams } from "next/navigation";
-import {
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight,
-  FilePlus2,
-  History,
-  ScrollText,
-} from "lucide-react";
+import { CheckCircle2, ChevronLeft, ChevronRight, FilePlus2, History, ScrollText } from "lucide-react";
 import { useTranslation } from "@operis/i18n";
 import { Button } from "@operis/propel/button";
 import { IconButton } from "@operis/propel/icon-button";
 import { Tooltip } from "@operis/propel/tooltip";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardStatusReport, IProject } from "@operis/types";
+import type { IBoardStatusReport, IProject, TStatusReportKind } from "@operis/types";
 import { cn, generateQueryParams } from "@operis/utils";
 import {
   BOARD_HUB_HISTORY_PANEL,
@@ -37,12 +30,12 @@ import {
   type OpenCreateModalOptions,
 } from "@/components/project/status-report/status-report-hub-context";
 import {
-  buildModuleCoverage,
   defaultWeekPeriod,
   filterReportsList,
   getRecentWeekPeriods,
   groupReportsByModule,
   isStaleDraft,
+  mapWeekModuleCoverage,
   periodsMatch,
   shiftWeekPeriod,
   type HistorySortOrder,
@@ -76,10 +69,13 @@ export function ProjectStatusReportList(props: Props) {
   const canManage = canManageReports();
 
   const currentWeek = useMemo(() => defaultWeekPeriod(), []);
+  const [weekViewPeriod, setWeekViewPeriod] = useState(currentWeek);
   const [periodStart, setPeriodStart] = useState(currentWeek.start);
   const [periodEnd, setPeriodEnd] = useState(currentWeek.end);
   const [summary, setSummary] = useState("");
-  const [moduleId, setModuleId] = useState("");
+  const [moduleIds, setModuleIds] = useState<string[]>([]);
+  const [sprintTitle, setSprintTitle] = useState("");
+  const [reportScope, setReportScope] = useState<Extract<TStatusReportKind, "sprint" | "multi_module">>("sprint");
   const [filterModuleId, setFilterModuleId] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<StatusReportStatusFilter>("all");
@@ -91,10 +87,7 @@ export function ProjectStatusReportList(props: Props) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [batchExporting, setBatchExporting] = useState(false);
 
-  const createWeekLabel = useMemo(
-    () => formatReportWeekLabel(periodStart, periodEnd, t),
-    [periodEnd, periodStart, t]
-  );
+  const createWeekLabel = useMemo(() => formatReportWeekLabel(periodStart, periodEnd, t), [periodEnd, periodStart, t]);
 
   const { data: modules } = useSWR(
     workspaceSlug && project.id ? `PROJECT_MODULES_${workspaceSlug}_${project.id}` : null,
@@ -102,17 +95,21 @@ export function ProjectStatusReportList(props: Props) {
     { revalidateOnFocus: false }
   );
 
-  const { data: reports, isLoading, mutate } = useSWR(
+  const {
+    data: reports,
+    isLoading,
+    mutate,
+  } = useSWR(
     workspaceSlug && project.id ? `PROJECT_STATUS_REPORTS_${workspaceSlug}_${project.id}` : null,
     () => reportService.list(workspaceSlug, project.id),
     { revalidateOnFocus: false }
   );
 
-  const defaultModuleId = modules?.[0]?.id;
+  const defaultModuleIds = modules?.[0]?.id ? [modules[0].id] : [];
 
   useEffect(() => {
-    if (!moduleId && defaultModuleId) setModuleId(defaultModuleId);
-  }, [defaultModuleId, moduleId]);
+    if (moduleIds.length === 0 && defaultModuleIds.length > 0) setModuleIds(defaultModuleIds);
+  }, [defaultModuleIds, moduleIds.length]);
 
   const filteredReports = useMemo(
     () =>
@@ -151,13 +148,10 @@ export function ProjectStatusReportList(props: Props) {
 
   const moduleCoverage = useMemo(() => {
     if (!modules?.length) return [];
-    return buildModuleCoverage(modules, reports ?? [], currentWeek).map((row) => ({
-      moduleId: row.module.id,
-      moduleName: row.module.name,
-      status: row.status,
-      reportId: row.report?.id,
-    }));
-  }, [currentWeek, modules, reports]);
+    return mapWeekModuleCoverage(modules, reports ?? [], weekViewPeriod);
+  }, [weekViewPeriod, modules, reports]);
+
+  const isViewingCurrentWeek = weekViewPeriod.start === currentWeek.start;
 
   const stats = useMemo(() => {
     const list = reports ?? [];
@@ -182,18 +176,41 @@ export function ProjectStatusReportList(props: Props) {
   const openCreateModal = useCallback(
     (opts?: OpenCreateModalOptions) => {
       const week =
-        opts?.periodStart && opts?.periodEnd
-          ? { start: opts.periodStart, end: opts.periodEnd }
-          : defaultWeekPeriod();
+        opts?.periodStart && opts?.periodEnd ? { start: opts.periodStart, end: opts.periodEnd } : defaultWeekPeriod();
       setPeriodStart(week.start);
       setPeriodEnd(week.end);
       setSummary("");
-      if (opts?.moduleId) setModuleId(opts.moduleId);
-      else if (filterModuleId) setModuleId(filterModuleId);
-      else if (!moduleId && modules?.length) setModuleId(modules[0].id);
+      if (opts?.moduleIds?.length) setModuleIds(opts.moduleIds);
+      else if (opts?.moduleId) setModuleIds([opts.moduleId]);
+      else if (filterModuleId) setModuleIds([filterModuleId]);
+      else if (moduleIds.length === 0 && modules?.length) setModuleIds([modules[0].id]);
       setIsCreateModalOpen(true);
     },
-    [filterModuleId, moduleId, modules]
+    [filterModuleId, moduleIds.length, modules]
+  );
+
+  const openModulePeek = useCallback(
+    (moduleId: string) => {
+      const query = generateQueryParams(searchParams, ["peekModule"]);
+      router.push(`${pathname}?${query && `${query}&`}peekModule=${moduleId}`);
+    },
+    [pathname, router, searchParams]
+  );
+
+  const handleWeekViewShift = useCallback((delta: number) => {
+    setWeekViewPeriod((prev) => shiftWeekPeriod(prev.start, delta));
+  }, []);
+
+  const handleWeekCreateReport = useCallback(
+    (moduleIds?: string[]) => {
+      openCreateModal({
+        periodStart: weekViewPeriod.start,
+        periodEnd: weekViewPeriod.end,
+        moduleIds: moduleIds?.length ? moduleIds : undefined,
+        moduleId: moduleIds?.length === 1 ? moduleIds[0] : undefined,
+      });
+    },
+    [openCreateModal, weekViewPeriod.end, weekViewPeriod.start]
   );
 
   const openPeek = useCallback(
@@ -218,7 +235,7 @@ export function ProjectStatusReportList(props: Props) {
   };
 
   const handleCreate = async () => {
-    if (!moduleId) {
+    if (moduleIds.length === 0) {
       setToast({
         type: TOAST_TYPE.ERROR,
         title: t("toast.error"),
@@ -226,16 +243,32 @@ export function ProjectStatusReportList(props: Props) {
       });
       return;
     }
+    if (moduleIds.length > 1 && reportScope === "sprint" && !sprintTitle.trim()) {
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("toast.error"),
+        message: t("project.status_report.multi_module.sprint_title_required"),
+      });
+      return;
+    }
     setCreating(true);
     try {
       const report = await reportService.create(workspaceSlug, project.id, {
-        module_id: moduleId,
+        module_ids: moduleIds,
         period_start: periodStart,
         period_end: periodEnd,
         executive_summary_html: summary,
+        ...(moduleIds.length > 1
+          ? {
+              report_kind: reportScope,
+              ...(reportScope === "sprint" ? { title: sprintTitle.trim() } : {}),
+            }
+          : {}),
       });
       await mutate();
       setIsCreateModalOpen(false);
+      setSprintTitle("");
+      setReportScope("sprint");
       navigate(`/${workspaceSlug}/projects/${project.id}/status-report/${report.id}`);
     } catch {
       setToast({ type: TOAST_TYPE.ERROR, title: t("toast.error"), message: t("something_went_wrong") });
@@ -259,17 +292,19 @@ export function ProjectStatusReportList(props: Props) {
     try {
       const html = source.content?.sections?.executive_summary?.html ?? "";
       const created = await reportService.create(workspaceSlug, project.id, {
-        module_id: source.module,
+        module_ids: [source.module],
         period_start: week.start,
         period_end: week.end,
         executive_summary_html: html,
       });
       const em = source.content?.sections?.observacoes?.em_execucao ?? [];
       const pontos = source.content?.sections?.observacoes?.pontos_atencao ?? [];
-      if (em.length || pontos.length) {
+      const proximos = source.content?.sections?.observacoes?.proximos_passos ?? [];
+      if (em.length || pontos.length || proximos.length) {
         await reportService.update(workspaceSlug, project.id, created.id, {
           em_execucao: em,
           pontos_atencao: pontos,
+          proximos_passos: proximos,
         });
       }
       await mutate();
@@ -356,7 +391,10 @@ export function ProjectStatusReportList(props: Props) {
               {
                 label: t("project.status_report.stat_drafts"),
                 value: stats.drafts,
-                sub: stats.staleDrafts > 0 ? t("project.status_report.stale_count", { count: stats.staleDrafts }) : undefined,
+                sub:
+                  stats.staleDrafts > 0
+                    ? t("project.status_report.stale_count", { count: stats.staleDrafts })
+                    : undefined,
                 icon: ScrollText,
                 warn: stats.staleDrafts > 0,
               },
@@ -371,108 +409,124 @@ export function ProjectStatusReportList(props: Props) {
           />
         </div>
 
-        <div className="flex min-h-0 flex-1 flex-col overflow-hidden p-4 md:p-5">
+        <div className="flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto p-4 md:p-5">
           {modules && modules.length > 0 ? (
             <StatusReportCurrentWeekCard
-              week={currentWeek}
+              week={weekViewPeriod}
+              isCurrentWeek={isViewingCurrentWeek}
+              onShiftWeek={handleWeekViewShift}
               coverage={moduleCoverage}
-              filterQuery={searchQuery}
               canManage={canManage}
-              onGenerate={(id) => openCreateModal({ moduleId: id, ...currentWeek })}
+              onCreateReport={canManage ? handleWeekCreateReport : undefined}
               onContinue={openDetail}
               onOpen={openPeek}
+              onOpenModule={openModulePeek}
+              historySectionId="status-report-history"
             />
           ) : null}
 
-          <div className="relative flex min-h-0 flex-1 gap-0">
-            <div className={cn(BOARD_HUB_HISTORY_PANEL, "min-h-0 min-w-0 flex-1")}>
-              <StatusReportHistoryHeader
-                count={filteredReports.length}
-                toolbar={
-                  <StatusReportListToolbar
-                    searchQuery={searchQuery}
-                    onSearchChange={setSearchQuery}
-                    historySort={historySort}
-                    onToggleSort={() => setHistorySort((c) => (c === "desc" ? "asc" : "desc"))}
-                    filterModuleId={filterModuleId}
-                    setFilterModuleId={setFilterModuleId}
-                    statusFilter={statusFilter}
-                    setStatusFilter={setStatusFilter}
-                    periodFilter={periodFilter}
-                    setPeriodFilter={setPeriodFilter}
-                    listView={listView}
-                    setListView={setListView}
-                    modules={modules}
-                    canManage={canManage}
-                    onBatchExport={() => void handleBatchExport()}
-                    batchExporting={batchExporting}
-                  />
-                }
-              />
-
-              {isLoading && (
-                <div className="flex flex-1 flex-col">
-                  {[1, 2, 3, 4, 5, 6].map((key) => (
-                    <div key={key} className="h-11 animate-pulse border-b border-subtle/60 bg-layer-2/40" />
-                  ))}
-                </div>
-              )}
-
-              {!isLoading && filteredReports.length === 0 && (
-                <EmptyHistoryState
-                  t={t}
-                  showCreateHint={canManage}
-                  className="m-4 flex-1"
-                  onCreateClick={canManage ? () => openCreateModal() : undefined}
-                />
-              )}
-
-              {!isLoading && sortedReports.length > 0 && listView === "list" && (
-                <div className="flex min-h-0 flex-1 flex-col px-1 pb-2">
-                  <StatusReportListTable
-                    reports={displayReports}
-                    onOpen={openDetail}
-                    onPeek={openPeek}
-                    onDuplicate={canManage ? handleDuplicate : undefined}
-                    onExportPdf={handleExportPdf}
-                    canManage={canManage}
-                  />
-                  <HistoryPagination
-                    page={historyPage}
-                    totalPages={totalHistoryPages}
-                    total={sortedReports.length}
-                    onPageChange={setHistoryPage}
-                    t={t}
-                  />
-                </div>
-              )}
-
-              {!isLoading && sortedReports.length > 0 && listView === "modules" && (
-                <StatusReportListByModule groups={groupedByModule} onPeek={openPeek} />
-              )}
-
-              {!isLoading && sortedReports.length > 0 && listView === "timeline" && modules && (
-                <StatusReportListTimeline
+          <div
+            id="status-report-history"
+            className={cn(
+              BOARD_HUB_HISTORY_PANEL,
+              "flex min-h-[320px] flex-1 scroll-mt-4 flex-col overflow-hidden border-t border-subtle/50 pt-4"
+            )}
+          >
+            <StatusReportHistoryHeader
+              count={filteredReports.length}
+              toolbar={
+                <StatusReportListToolbar
+                  searchQuery={searchQuery}
+                  onSearchChange={setSearchQuery}
+                  historySort={historySort}
+                  onToggleSort={() => setHistorySort((c) => (c === "desc" ? "asc" : "desc"))}
+                  filterModuleId={filterModuleId}
+                  setFilterModuleId={setFilterModuleId}
+                  statusFilter={statusFilter}
+                  setStatusFilter={setStatusFilter}
+                  periodFilter={periodFilter}
+                  setPeriodFilter={setPeriodFilter}
+                  listView={listView}
+                  setListView={setListView}
                   modules={modules}
-                  reports={filteredReports}
-                  weeks={timelineWeeks}
-                  onPeek={openPeek}
+                  canManage={canManage}
+                  onBatchExport={() => void handleBatchExport()}
+                  batchExporting={batchExporting}
                 />
-              )}
-            </div>
+              }
+            />
 
-            <StatusReportPeekPanel workspaceSlug={workspaceSlug} projectId={project.id} />
+            {isLoading && (
+              <div className="flex flex-1 flex-col">
+                {[1, 2, 3, 4, 5, 6].map((key) => (
+                  <div key={key} className="h-11 animate-pulse border-b border-subtle/60 bg-layer-2/40" />
+                ))}
+              </div>
+            )}
+
+            {!isLoading && filteredReports.length === 0 && (
+              <EmptyHistoryState
+                t={t}
+                showCreateHint={canManage}
+                className="m-4 flex-1"
+                onCreateClick={canManage ? () => openCreateModal() : undefined}
+              />
+            )}
+
+            {!isLoading && sortedReports.length > 0 && listView === "list" && (
+              <div className="flex min-h-0 flex-1 flex-col overflow-y-auto px-1 pb-2">
+                <StatusReportListTable
+                  reports={displayReports}
+                  onOpen={openDetail}
+                  onPeek={openPeek}
+                  onDuplicate={canManage ? handleDuplicate : undefined}
+                  onExportPdf={handleExportPdf}
+                  canManage={canManage}
+                />
+                <HistoryPagination
+                  page={historyPage}
+                  totalPages={totalHistoryPages}
+                  total={sortedReports.length}
+                  onPageChange={setHistoryPage}
+                  t={t}
+                />
+              </div>
+            )}
+
+            {!isLoading && sortedReports.length > 0 && listView === "modules" && (
+              <StatusReportListByModule groups={groupedByModule} onPeek={openPeek} />
+            )}
+
+            {!isLoading && sortedReports.length > 0 && listView === "timeline" && modules && (
+              <StatusReportListTimeline
+                modules={modules}
+                reports={filteredReports}
+                weeks={timelineWeeks}
+                onPeek={openPeek}
+              />
+            )}
           </div>
+
+          <StatusReportPeekPanel workspaceSlug={workspaceSlug} projectId={project.id} />
         </div>
       </div>
 
       {canManage && (
         <ProjectStatusReportCreateModal
           isOpen={isCreateModalOpen}
-          onClose={() => !creating && setIsCreateModalOpen(false)}
+          onClose={() => {
+            if (creating) return;
+            setIsCreateModalOpen(false);
+            setSprintTitle("");
+            setReportScope("sprint");
+          }}
           modules={modules}
-          moduleId={moduleId}
-          setModuleId={setModuleId}
+          moduleIds={moduleIds}
+          setModuleIds={setModuleIds}
+          reportScope={reportScope}
+          setReportScope={setReportScope}
+          sprintTitle={sprintTitle}
+          setSprintTitle={setSprintTitle}
           periodStart={periodStart}
           periodEnd={periodEnd}
           onShiftWeek={handleShiftWeek}
@@ -506,9 +560,7 @@ function HistoryPagination({
 
   return (
     <div className="mt-auto flex flex-wrap items-center justify-between gap-2 border-t border-subtle/60 px-3 pt-3">
-      <p className="text-13 text-tertiary">
-        {t("project.status_report.pagination_range", { start, end, total })}
-      </p>
+      <p className="text-13 text-tertiary">{t("project.status_report.pagination_range", { start, end, total })}</p>
       <div className="flex items-center gap-1">
         <Tooltip tooltipContent={t("project.status_report.pagination_prev")}>
           <IconButton
@@ -574,7 +626,7 @@ function StatMetrics({ items }: { items: StatItem[] }) {
               <span className="text-11 font-medium text-tertiary">{item.label}</span>
               <p
                 className={cn(
-                  "tabular-nums text-18 font-semibold leading-tight tracking-tight",
+                  "text-18 leading-tight font-semibold tracking-tight tabular-nums",
                   item.accent ? "text-accent-primary" : "text-primary"
                 )}
               >
@@ -619,7 +671,12 @@ function EmptyHistoryState({
         {showCreateHint ? t("project.status_report.empty_description") : t("project.status_report.empty_readonly")}
       </p>
       {showCreateHint && onCreateClick && (
-        <Button variant="primary" className="mt-5" onClick={onCreateClick} prependIcon={<FilePlus2 className="size-4" />}>
+        <Button
+          variant="primary"
+          className="mt-5"
+          onClick={onCreateClick}
+          prependIcon={<FilePlus2 className="size-4" />}
+        >
           {t("project.status_report.create_button")}
         </Button>
       )}

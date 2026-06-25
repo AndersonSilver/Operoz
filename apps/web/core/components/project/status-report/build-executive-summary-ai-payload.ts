@@ -12,14 +12,22 @@ export function buildExecutiveSummaryAiPayload(params: {
   projectName: string;
   emExecucaoLines: string[];
   pontosAtencaoLines: string[];
+  proximosPassosLines?: string[];
 }): { task: string; prompt: string } {
-  const { weekLabel, periodDatesLabel, moduleName, projectName, emExecucaoLines, pontosAtencaoLines } =
-    params;
+  const {
+    weekLabel,
+    periodDatesLabel,
+    moduleName,
+    projectName,
+    emExecucaoLines,
+    pontosAtencaoLines,
+    proximosPassosLines = [],
+  } = params;
 
   const task =
     "Redija um resumo executivo conciso em português do Brasil para um status report semanal. " +
     "Use um único parágrafo (3 a 6 frases), tom profissional e objetivo. " +
-    "Integre andamento e riscos quando existirem. Não use listas com marcadores nem títulos. " +
+    "Integre andamento, riscos e próximos passos quando existirem. Não use listas com marcadores nem títulos. " +
     "Não invente fatos, números ou datas que não estejam nas observações fornecidas.";
 
   const prompt = [
@@ -33,6 +41,9 @@ export function buildExecutiveSummaryAiPayload(params: {
     "",
     "Pontos de atenção:",
     formatLines(pontosAtencaoLines, "(nenhum item)"),
+    "",
+    "Próximos passos:",
+    formatLines(proximosPassosLines, "(nenhum item)"),
   ]
     .filter((line) => line !== null)
     .join("\n");

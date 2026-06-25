@@ -231,7 +231,7 @@ export const WorkItemDetailQuickActions = observer(function WorkItemDetailQuickA
         placement={placements}
         customButton={<IconButton size="lg" variant="secondary" icon={Ellipsis} />}
         portalElement={portalElement}
-        menuItemsClassName="z-[14]"
+        menuItemsClassName={isPeekMode ? "z-[30]" : "z-[14]"}
         maxHeight="lg"
         closeOnSelect
       >

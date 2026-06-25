@@ -79,6 +79,13 @@ class Module(ProjectBaseModel):
         default="planned",
         max_length=20,
     )
+    stage = models.ForeignKey(
+        "db.BoardIssueType",
+        on_delete=models.SET_NULL,
+        related_name="modules",
+        null=True,
+        blank=True,
+    )
     lead = models.ForeignKey("db.User", on_delete=models.SET_NULL, related_name="module_leads", null=True)
     members = models.ManyToManyField(
         settings.AUTH_USER_MODEL,

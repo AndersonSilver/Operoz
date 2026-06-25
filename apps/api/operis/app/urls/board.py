@@ -47,6 +47,8 @@ from operis.app.views import (
     BoardCustomFieldEndpoint,
     BoardIssueTypeDetailEndpoint,
     BoardIssueTypeEndpoint,
+    BoardModuleStageDetailEndpoint,
+    BoardModuleStageEndpoint,
     BoardIssuesViewSet,
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,
@@ -164,6 +166,16 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/issue-types/<uuid:pk>/",
         BoardIssueTypeDetailEndpoint.as_view(),
         name="workspace-board-issue-type",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/module-stages/",
+        BoardModuleStageEndpoint.as_view(),
+        name="workspace-board-module-stages",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/module-stages/<uuid:pk>/",
+        BoardModuleStageDetailEndpoint.as_view(),
+        name="workspace-board-module-stage",
     ),
     path(
         "workspaces/<str:slug>/custom-fields/",

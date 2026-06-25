@@ -18,6 +18,7 @@ import { formatReportWeekLabel } from "@/components/project/status-report/format
 import {
   getReportProgressPct,
   getReportSummarySnippet,
+  getStatusReportHeadline,
   hasAttentionPoints,
   hasEmExecucao,
   isStaleDraft,
@@ -108,7 +109,7 @@ function ReportRow({
 }) {
   const period = formatReportWeekLabel(report.period_start, report.period_end, t);
   const periodDates = formatPeriodLabel(report.period_start, report.period_end);
-  const headline = report.module_name ?? report.title;
+  const headline = getStatusReportHeadline(report) || period;
   const published = Boolean(report.is_published);
   const stale = isStaleDraft(report);
   const progress = getReportProgressPct(report);
@@ -148,13 +149,13 @@ function ReportRow({
       <td className={cn(TD, "py-3")}>
         {progress !== null ? (
           <div className="flex min-w-0 flex-col gap-1">
-            <div className="h-2 w-full min-w-[4rem] overflow-hidden rounded-full bg-layer-2 ring-1 ring-inset ring-subtle/30">
+            <div className="h-2 w-full min-w-[4rem] overflow-hidden rounded-full bg-layer-2 ring-1 ring-subtle/30 ring-inset">
               <span
                 className="block h-full rounded-full bg-gradient-to-r from-accent-primary/80 to-accent-primary"
                 style={{ width: `${Math.max(progress, 6)}%` }}
               />
             </div>
-            <span className="tabular-nums text-11 font-medium text-tertiary">{progress}%</span>
+            <span className="text-11 font-medium text-tertiary tabular-nums">{progress}%</span>
           </div>
         ) : (
           <span className="text-11 text-placeholder">—</span>
@@ -169,7 +170,7 @@ function ReportRow({
             {snippet}
           </p>
         ) : (
-          <span className="text-11 italic text-placeholder">{t("project.status_report.summary_empty")}</span>
+          <span className="text-11 text-placeholder italic">{t("project.status_report.summary_empty")}</span>
         )}
       </td>
       <td className={TD}>
@@ -226,22 +227,11 @@ function ReportRow({
   );
 }
 
-function SignalIcon({
-  icon: Icon,
-  label,
-  warn,
-}: {
-  icon: typeof ListChecks;
-  label: string;
-  warn?: boolean;
-}) {
+function SignalIcon({ icon: Icon, label, warn }: { icon: typeof ListChecks; label: string; warn?: boolean }) {
   return (
     <Tooltip tooltipContent={label}>
       <span
-        className={cn(
-          "grid size-5 place-items-center rounded-sm",
-          warn ? "text-warning-primary" : "text-tertiary"
-        )}
+        className={cn("grid size-5 place-items-center rounded-sm", warn ? "text-warning-primary" : "text-tertiary")}
       >
         <Icon className="size-3" strokeWidth={1.75} />
       </span>
@@ -268,7 +258,7 @@ function StatusBadge({
   return (
     <span
       className={cn(
-        "inline-flex max-w-full items-center gap-1 whitespace-nowrap rounded-full px-2 py-0.5 text-11 font-medium",
+        "inline-flex max-w-full items-center gap-1 rounded-full px-2 py-0.5 text-11 font-medium whitespace-nowrap",
         published
           ? "bg-accent-primary/15 text-accent-primary"
           : stale

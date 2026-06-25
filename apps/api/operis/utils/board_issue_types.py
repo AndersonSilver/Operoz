@@ -25,6 +25,17 @@ DEFAULT_ISSUE_TYPE_ICON_BY_NAME = {
 }
 
 
+def board_issue_type_stage_color(board_issue_type) -> str | None:
+    """Cor de exibição da etapa de módulo (mesma do ícone do tipo de card)."""
+    if board_issue_type is None:
+        return None
+    issue_type = board_issue_type.issue_type
+    logo = (issue_type.logo_props if issue_type else None) or {}
+    icon = logo.get("icon") or {}
+    color = icon.get("color")
+    return color if isinstance(color, str) and color else None
+
+
 def ensure_default_issue_type_icons(board: Board) -> int:
     """Corrige tipos do catálogo que ainda usam emoji (não renderizam no picker material)."""
     updated = 0

@@ -1,4 +1,4 @@
-import type { IBoardStatusReport, IModule } from "@operis/types";
+import type { IBoardStatusReport, IModule, TModuleStatus } from "@operis/types";
 import { observationLineToPlainText } from "@/components/project/status-report/observation-content";
 
 export type HistorySortOrder = "desc" | "asc";
@@ -13,6 +13,154 @@ export type StatusReportStatusFilter = "all" | "draft" | "published";
 export type StatusReportPeriodFilter = "all" | "4w" | "8w" | "current_week";
 
 export type ModuleWeekStatus = "none" | "draft" | "published" | "stale_draft";
+
+/** Filtro dos cards de cobertura / report da semana. */
+export type StatusReportCoverageFilter = "all" | "published" | "draft" | "stale" | "pending";
+
+export type WeekModuleCoverage = {
+  moduleId: string;
+  moduleName: string;
+  moduleStatus?: TModuleStatus;
+  stageName: string | null;
+  stageColor: string | null;
+  progressPct: number;
+  status: ModuleWeekStatus;
+  reportId?: string;
+  projectId: string;
+};
+
+/** Filtro de status do módulo na lista «semana em curso». `active` = exclui concluídos (padrão). */
+export type StatusReportWeekModuleFilter = "active" | "all" | TModuleStatus;
+
+export function resolveModuleStatus(status: TModuleStatus | undefined): TModuleStatus {
+  return status ?? "backlog";
+}
+
+export function matchesWeekModuleStatusFilter(
+  moduleStatus: TModuleStatus | undefined,
+  filter: StatusReportWeekModuleFilter
+): boolean {
+  const resolved = resolveModuleStatus(moduleStatus);
+  if (filter === "all") return true;
+  if (filter === "active") return resolved !== "completed";
+  return resolved === filter;
+}
+
+export function matchesCoverageFilter(reportStatus: ModuleWeekStatus, filter: StatusReportCoverageFilter): boolean {
+  if (filter === "all") return true;
+  if (filter === "published") return reportStatus === "published";
+  if (filter === "draft") return reportStatus === "draft";
+  if (filter === "stale") return reportStatus === "stale_draft";
+  if (filter === "pending") return reportStatus === "none";
+  return true;
+}
+
+export function getModuleIssueProgressPct(module: IModule): number {
+  const total =
+    module.backlog_issues +
+    module.unstarted_issues +
+    module.started_issues +
+    module.completed_issues +
+    module.cancelled_issues;
+  if (total <= 0) return 0;
+  return Math.round((module.completed_issues / total) * 100);
+}
+
+export type ParsedModuleDisplayName = {
+  client?: string;
+  category?: string;
+  code?: string;
+  title: string;
+  subtitle?: string;
+};
+
+/** Extrai cliente / categoria / código de nomes no formato `[ CLIENT ] [ CAT ] - [ ID ] - 'Título'`. */
+export function parseModuleDisplayName(raw: string): ParsedModuleDisplayName {
+  const bracketMatches = [...raw.matchAll(/\[\s*([^\]]+?)\s*\]/g)].map((m) => m[1].trim());
+  const quoteMatch = raw.match(/['"]([^'"]+)['"]/);
+  const quotedTitle = quoteMatch?.[1]?.trim();
+
+  if (bracketMatches.length >= 3) {
+    const subtitle = [bracketMatches[0], bracketMatches[1], bracketMatches[2]].join(" · ");
+    return {
+      client: bracketMatches[0],
+      category: bracketMatches[1],
+      code: bracketMatches[2],
+      title: quotedTitle ?? raw,
+      subtitle,
+    };
+  }
+  if (bracketMatches.length === 2) {
+    return {
+      client: bracketMatches[0],
+      category: bracketMatches[1],
+      title: quotedTitle ?? raw,
+      subtitle: `${bracketMatches[0]} · ${bracketMatches[1]}`,
+    };
+  }
+  if (bracketMatches.length === 1) {
+    return {
+      client: bracketMatches[0],
+      title: quotedTitle ?? raw,
+      subtitle: bracketMatches[0],
+    };
+  }
+  return { title: raw };
+}
+
+export function isSprintStatusReport(report: Pick<IBoardStatusReport, "content" | "title">): boolean {
+  const kind = report.content?.report_kind;
+  if (kind === "sprint") return true;
+  if (kind === "multi_module" || kind === "module_single") return false;
+  const sprintRows = report.content?.sections?.entregas_sprint;
+  return Boolean(sprintRows && sprintRows.length > 1);
+}
+
+export function isMultiModuleStatusReport(report: Pick<IBoardStatusReport, "content">): boolean {
+  return report.content?.report_kind === "multi_module";
+}
+
+export function isModuleRowsStatusReport(report: Pick<IBoardStatusReport, "content" | "title">): boolean {
+  return isSprintStatusReport(report) || isMultiModuleStatusReport(report);
+}
+
+export function getStatusReportHeadline(report: Pick<IBoardStatusReport, "content" | "title" | "module_name">): string {
+  if (isSprintStatusReport(report) && report.title?.trim()) {
+    return report.title.trim();
+  }
+  if (isMultiModuleStatusReport(report)) {
+    return report.title?.trim() || "";
+  }
+  return report.module_name?.trim() || report.title?.trim() || "";
+}
+
+export function getSprintModuleCount(report: Pick<IBoardStatusReport, "content">): number {
+  const moduleIds = report.content?.module_ids;
+  if (moduleIds?.length) return moduleIds.length;
+  return report.content?.sections?.entregas_sprint?.length ?? 0;
+}
+
+export function mapWeekModuleCoverage(
+  modules: IModule[],
+  reports: IBoardStatusReport[],
+  week: { start: string; end: string }
+): WeekModuleCoverage[] {
+  return buildModuleCoverage(modules, reports, week).map((row) => ({
+    moduleId: row.module.id,
+    moduleName: row.module.name,
+    moduleStatus: row.module.status,
+    stageName: row.module.stage_detail?.name ?? null,
+    stageColor: row.module.stage_detail?.color ?? null,
+    progressPct: getModuleIssueProgressPct(row.module),
+    status: row.status,
+    reportId: row.report?.id,
+    projectId: row.module.project_id,
+  }));
+}
+
+export function countActiveModules(modules: IModule[]): number {
+  return modules.filter((m) => resolveModuleStatus(m.status) !== "completed").length;
+}
 
 export function defaultWeekPeriod(): { start: string; end: string } {
   const today = new Date();

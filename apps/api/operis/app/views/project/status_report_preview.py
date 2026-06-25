@@ -26,12 +26,17 @@ def _merge_preview_content(report: BoardStatusReport, data: dict) -> dict:
     if "executive_summary_html" in data:
         sections.setdefault("executive_summary", {})["html"] = data["executive_summary_html"]
 
-    if "em_execucao" in data or "pontos_atencao" in data:
-        obs = sections.setdefault("observacoes", {"em_execucao": [], "pontos_atencao": []})
+    if "em_execucao" in data or "pontos_atencao" in data or "proximos_passos" in data:
+        obs = sections.setdefault(
+            "observacoes",
+            {"em_execucao": [], "pontos_atencao": [], "proximos_passos": []},
+        )
         if "em_execucao" in data:
             obs["em_execucao"] = data["em_execucao"]
         if "pontos_atencao" in data:
             obs["pontos_atencao"] = data["pontos_atencao"]
+        if "proximos_passos" in data:
+            obs["proximos_passos"] = data["proximos_passos"]
 
     return content
 
@@ -63,6 +68,7 @@ class ProjectStatusReportPreviewEndpoint(BaseAPIView):
                 report.period_start,
                 report.period_end,
                 report.module.name if report.module_id else None,
+                report.project.name if report.project_id else None,
             )
 
         no_cache = {"Cache-Control": "no-store, no-cache, must-revalidate", "Pragma": "no-cache"}

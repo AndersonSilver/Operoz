@@ -67,6 +67,7 @@ import type {
   IBoardAccessStore,
   IBoardCustomFieldStore,
   IBoardIssueTypeStore,
+  IBoardModuleStageStore,
   IBoardPermissionsStore,
   IBoardStore,
 } from "./board";
@@ -74,6 +75,7 @@ import {
   BoardAccessStore,
   BoardCustomFieldStore,
   BoardIssueTypeStore,
+  BoardModuleStageStore,
   BoardPermissionsStore,
   BoardStore,
 } from "./board";
@@ -114,6 +116,7 @@ export class CoreRootStore {
   powerK: IPowerKStore;
   boardStore: IBoardStore;
   boardIssueTypeStore: IBoardIssueTypeStore;
+  boardModuleStageStore: IBoardModuleStageStore;
   boardCustomFieldStore: IBoardCustomFieldStore;
   boardAccessStore: IBoardAccessStore;
   boardPermissionsStore: IBoardPermissionsStore;
@@ -151,6 +154,7 @@ export class CoreRootStore {
     this.powerK = new PowerKStore();
     this.boardStore = new BoardStore(this);
     this.boardIssueTypeStore = new BoardIssueTypeStore();
+    this.boardModuleStageStore = new BoardModuleStageStore();
     this.boardCustomFieldStore = new BoardCustomFieldStore();
     this.boardAccessStore = new BoardAccessStore();
     this.boardPermissionsStore = new BoardPermissionsStore();
@@ -190,6 +194,7 @@ export class CoreRootStore {
     this.powerK = new PowerKStore();
     this.boardStore = new BoardStore(this);
     this.boardIssueTypeStore = new BoardIssueTypeStore();
+    this.boardModuleStageStore = new BoardModuleStageStore();
     this.boardCustomFieldStore = new BoardCustomFieldStore();
     this.boardAccessStore = new BoardAccessStore();
     this.boardPermissionsStore = new BoardPermissionsStore();

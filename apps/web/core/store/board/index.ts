@@ -2,6 +2,8 @@ export type { IBoardStore } from "./board.store";
 export { BoardStore } from "./board.store";
 export type { IBoardIssueTypeStore } from "./board-issue-type.store";
 export { BoardIssueTypeStore } from "./board-issue-type.store";
+export type { IBoardModuleStageStore } from "./board-module-stage.store";
+export { BoardModuleStageStore } from "./board-module-stage.store";
 export type { IBoardCustomFieldStore } from "./board-custom-field.store";
 export { BoardCustomFieldStore } from "./board-custom-field.store";
 export type { IBoardAccessStore } from "./board-access.store";

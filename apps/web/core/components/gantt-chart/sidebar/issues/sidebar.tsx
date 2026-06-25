@@ -1,4 +1,4 @@
-import type { RefObject } from "react";
+import type { MouseEvent, RefObject } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
 // ui
@@ -8,6 +8,10 @@ import { Loader } from "@operis/ui";
 // components
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { GanttLayoutListItemLoader } from "@/components/ui/loader/layouts/gantt-layout-loader";
+import {
+  useGanttSubIssueExpansionOptional,
+  type TGanttDisplayRow,
+} from "@/components/issues/issue-layouts/gantt/gantt-sub-issue-expansion";
 //hooks
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
@@ -46,6 +50,7 @@ export const IssueGanttSidebar = observer(function IssueGanttSidebar(props: Prop
   } = props;
 
   const { getBlockById } = useTimeLineChart(GANTT_TIMELINE_TYPE.ISSUE);
+  const expansionCtx = useGanttSubIssueExpansionOptional();
 
   const {
     issues: { getIssueLoader },
@@ -54,6 +59,12 @@ export const IssueGanttSidebar = observer(function IssueGanttSidebar(props: Prop
   const [intersectionElement, setIntersectionElement] = useState<HTMLDivElement | null>(null);
 
   const isPaginating = !!getIssueLoader();
+
+  const rowsToRender: TGanttDisplayRow[] = expansionCtx?.isTreeMode
+    ? expansionCtx.displayRows
+    : blockIds.map((issueId) => ({ issueId, nestingLevel: 0 }));
+
+  const visibleBlockIds = rowsToRender.map((row) => row.issueId);
 
   useIntersectionObserver(
     ganttContainerRef,
@@ -67,19 +78,39 @@ export const IssueGanttSidebar = observer(function IssueGanttSidebar(props: Prop
     droppedBlockId: string | undefined,
     dropAtEndOfList: boolean
   ) => {
-    handleOrderChange(draggingBlockId, droppedBlockId, dropAtEndOfList, blockIds, getBlockById, blockUpdateHandler);
+    handleOrderChange(
+      draggingBlockId,
+      droppedBlockId,
+      dropAtEndOfList,
+      visibleBlockIds,
+      getBlockById,
+      blockUpdateHandler
+    );
   };
 
   return (
     <div>
       {blockIds ? (
         <>
-          {blockIds.map((blockId, index) => {
+          {rowsToRender.map((row, index) => {
+            const blockId = row.issueId;
             const block = getBlockById(blockId);
             const isBlockVisibleOnSidebar = block?.start_date && block?.target_date;
 
             // hide the block if it doesn't have start and target dates and showAllBlocks is false
             if (!block || (!showAllBlocks && !isBlockVisibleOnSidebar)) return;
+
+            const subIssuesCount = block.data?.sub_issues_count ?? 0;
+            const isExpanded = expansionCtx?.isExpanded(blockId) ?? false;
+            const onToggleExpand =
+              expansionCtx && subIssuesCount > 0 && !isEpic
+                ? (event: MouseEvent<HTMLButtonElement>) => {
+                    event.stopPropagation();
+                    event.preventDefault();
+                    const projectId = block.data?.project_id;
+                    if (projectId) expansionCtx.toggleExpanded(blockId, projectId);
+                  }
+                : undefined;
 
             return (
               <RenderIfVisible
@@ -92,8 +123,8 @@ export const IssueGanttSidebar = observer(function IssueGanttSidebar(props: Prop
               >
                 <GanttDnDHOC
                   id={block.id}
-                  isLastChild={index === blockIds.length - 1}
-                  isDragEnabled={enableReorder}
+                  isLastChild={index === rowsToRender.length - 1}
+                  isDragEnabled={enableReorder && row.nestingLevel === 0}
                   onDrop={handleOnDrop}
                 >
                   {(isDragging: boolean) => (
@@ -103,6 +134,10 @@ export const IssueGanttSidebar = observer(function IssueGanttSidebar(props: Prop
                       isDragging={isDragging}
                       selectionHelpers={selectionHelpers}
                       isEpic={isEpic}
+                      nestingLevel={row.nestingLevel}
+                      isExpanded={isExpanded}
+                      onToggleExpand={onToggleExpand}
+                      subIssuesCount={subIssuesCount}
                     />
                   )}
                 </GanttDnDHOC>

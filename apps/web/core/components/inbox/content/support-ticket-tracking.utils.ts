@@ -1,7 +1,7 @@
 import { EInboxIssueStatus } from "@operis/types";
 import type { TSupportTicketSubmissionField } from "@operis/types";
 import type { TIssueActivity } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { renderFormattedDateTime } from "@operis/utils";
 
 export type SupportTrackingEventKind =
   | "opened"
@@ -46,7 +46,7 @@ const VISIBLE_UPDATES_DEFAULT = 4;
 
 export function formatTrackingDateTime(iso: string | undefined | null): string | undefined {
   if (!iso) return undefined;
-  return renderFormattedDate(iso, "dd MMM yyyy · HH:mm");
+  return renderFormattedDateTime(iso, "dd MMM yyyy · HH:mm");
 }
 
 export function formatTrackingDuration(totalSeconds: number): string {
