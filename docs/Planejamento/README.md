@@ -47,6 +47,7 @@ aos padrões reais já existentes no codebase Operis e com ênfase em
 | [10](./10-Advanced-Roadmaps-Plans/) | **Advanced Roadmaps (Plans)** | P2 | Sem capacity/cenários cross-project |
 | [11](./11-Service-Management-SLA/) | **Service Management & SLA** | P2 | SLA/filas incompletos |
 | [12](./12-DevOps-Smart-Commits/) | **DevOps & Smart Commits** | P2 | Sem dev panel / smart commits |
+| [13](./13-Notificacoes-Alertas/) | **Notificações & Alertas Multi-Canal** | P0 | Sem alertas de due date, sem Google Calendar, sem Discord DM |
 
 ## Princípios não-negociáveis
 
