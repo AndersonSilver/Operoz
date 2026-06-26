@@ -356,6 +356,28 @@ export const coreRoutes: RouteConfigEntry[] = [
             ":workspaceSlug/settings/discord",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/discord/page.tsx"
           ),
+          layout("./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/layout.tsx", [
+            route(
+              ":workspaceSlug/settings/notifications",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/notifications/rules",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/rules/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/notifications/preferences",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/preferences/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/notifications/external-accounts",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/external-accounts/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/notifications/logs",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/logs/page.tsx"
+            ),
+          ]),
           layout("./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/layout.tsx", [
             route(
               ":workspaceSlug/settings/boards/:boardSlug",

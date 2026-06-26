@@ -64,6 +64,13 @@ export const WORKSPACE_SETTINGS: Record<TWorkspaceSettingsTabs, TWorkspaceSettin
     access: [EUserWorkspaceRoles.ADMIN],
     highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/settings/jira/`,
   },
+  notifications: {
+    key: "notifications",
+    i18n_label: "workspace_settings.settings.notifications.title",
+    href: `/settings/notifications`,
+    access: [EUserWorkspaceRoles.ADMIN, EUserWorkspaceRoles.MEMBER],
+    highlight: (pathname: string, baseUrl: string) => new RegExp(`^${baseUrl}/settings/notifications/`).test(pathname),
+  },
   webhooks: {
     key: "webhooks",
     i18n_label: "workspace_settings.settings.webhooks.title",
@@ -86,6 +93,7 @@ export const GROUPED_WORKSPACE_SETTINGS: Record<WORKSPACE_SETTINGS_CATEGORY, TWo
   [WORKSPACE_SETTINGS_CATEGORY.FEATURES]: [
     WORKSPACE_SETTINGS["boards"],
     WORKSPACE_SETTINGS["assistant"],
+    WORKSPACE_SETTINGS["notifications"],
     WORKSPACE_SETTINGS["discord"],
     WORKSPACE_SETTINGS["jira"],
   ],

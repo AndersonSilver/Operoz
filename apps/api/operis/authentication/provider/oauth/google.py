@@ -98,12 +98,15 @@ class GoogleOAuthProvider(OauthAdapter):
 
     def set_user_data(self):
         user_info_response = self.get_user_response()
+        first_name = user_info_response.get("given_name") or ""
+        last_name = user_info_response.get("family_name") or ""
         user_data = {
             "email": user_info_response.get("email"),
             "user": {
                 "avatar": user_info_response.get("picture"),
-                "first_name": user_info_response.get("given_name"),
-                "last_name": user_info_response.get("family_name"),
+                "first_name": first_name,
+                "last_name": last_name,
+                "display_name": f"{first_name} {last_name}".strip() or None,
                 "provider_id": user_info_response.get("id"),
                 "is_password_autoset": True,
             },

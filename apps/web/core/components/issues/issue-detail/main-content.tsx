@@ -85,69 +85,79 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
   const isPeekModeActive = Boolean(peekIssue);
 
   return (
-    <>
-      <div className="space-y-4 rounded-lg">
-        {issue.parent_id && (
-          <IssueParentDetail
-            workspaceSlug={workspaceSlug}
-            projectId={projectId}
-            issueId={issueId}
-            issue={issue}
-            issueOperations={issueOperations}
-          />
-        )}
-
-        <div className="mb-2.5 flex items-center justify-between gap-4">
-          <IssueTypeSwitcher issueId={issueId} disabled={isArchived || !isEditable} />
-          <div className="flex items-center gap-3">
-            <NameDescriptionUpdateStatus isSubmitting={isSubmitting} />
-            {duplicateIssues?.length > 0 && (
-              <DeDupeIssuePopoverRoot
+    <div className="flex flex-col gap-4">
+      <section className="shadow-sm overflow-hidden rounded-xl border border-subtle bg-layer-1">
+        <div className="px-5 pt-5 pb-4">
+          {issue.parent_id && (
+            <div className="mb-3">
+              <IssueParentDetail
                 workspaceSlug={workspaceSlug}
-                projectId={issue.project_id}
-                rootIssueId={issueId}
-                issues={duplicateIssues}
+                projectId={projectId}
+                issueId={issueId}
+                issue={issue}
                 issueOperations={issueOperations}
-                renderDeDupeActionModals={!isPeekModeActive}
               />
-            )}
+            </div>
+          )}
+
+          <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
+            <div className="flex min-w-0 flex-wrap items-center gap-2">
+              <span className="inline-flex items-center rounded-md border border-subtle bg-layer-2 px-2 py-0.5">
+                <IssueTypeSwitcher issueId={issueId} disabled={isArchived || !isEditable} />
+              </span>
+            </div>
+            <div className="flex shrink-0 items-center gap-3">
+              <NameDescriptionUpdateStatus isSubmitting={isSubmitting} />
+              {duplicateIssues?.length > 0 && (
+                <DeDupeIssuePopoverRoot
+                  workspaceSlug={workspaceSlug}
+                  projectId={issue.project_id}
+                  rootIssueId={issueId}
+                  issues={duplicateIssues}
+                  issueOperations={issueOperations}
+                  renderDeDupeActionModals={!isPeekModeActive}
+                />
+              )}
+            </div>
+          </div>
+
+          <IssueTitleInput
+            workspaceSlug={workspaceSlug}
+            projectId={issue.project_id}
+            issueId={issue.id}
+            isSubmitting={isSubmitting}
+            setIsSubmitting={(value) => setIsSubmitting(value)}
+            issueOperations={issueOperations}
+            disabled={isArchived || !isEditable}
+            value={issue.name}
+            containerClassName="-ml-3"
+          />
+
+          <div className="mt-4 border-t border-subtle pt-4">
+            <DescriptionInput
+              issueSequenceId={issue.sequence_id}
+              containerClassName="-ml-6 border-none p-0! pl-6!"
+              disabled={isArchived || !isEditable}
+              editorRef={editorRef}
+              entityId={issue.id}
+              fileAssetType={EFileAssetType.ISSUE_DESCRIPTION}
+              initialValue={issue.description_html}
+              key={issue.id}
+              onSubmit={async (value, isMigrationUpdate) => {
+                if (!issue.id || !issue.project_id) return;
+                await issueOperations.update(workspaceSlug, issue.project_id, issue.id, {
+                  description_html: value.description_html,
+                  ...(isMigrationUpdate ? { skip_activity: "true" } : {}),
+                });
+              }}
+              projectId={issue.project_id}
+              setIsSubmitting={(value) => setIsSubmitting(value)}
+              workspaceSlug={workspaceSlug}
+            />
           </div>
         </div>
 
-        <IssueTitleInput
-          workspaceSlug={workspaceSlug}
-          projectId={issue.project_id}
-          issueId={issue.id}
-          isSubmitting={isSubmitting}
-          setIsSubmitting={(value) => setIsSubmitting(value)}
-          issueOperations={issueOperations}
-          disabled={isArchived || !isEditable}
-          value={issue.name}
-          containerClassName="-ml-3"
-        />
-
-        <DescriptionInput
-          issueSequenceId={issue.sequence_id}
-          containerClassName="-ml-6 border-none p-0! pl-6!"
-          disabled={isArchived || !isEditable}
-          editorRef={editorRef}
-          entityId={issue.id}
-          fileAssetType={EFileAssetType.ISSUE_DESCRIPTION}
-          initialValue={issue.description_html}
-          key={issue.id}
-          onSubmit={async (value, isMigrationUpdate) => {
-            if (!issue.id || !issue.project_id) return;
-            await issueOperations.update(workspaceSlug, issue.project_id, issue.id, {
-              description_html: value.description_html,
-              ...(isMigrationUpdate ? { skip_activity: "true" } : {}),
-            });
-          }}
-          projectId={issue.project_id}
-          setIsSubmitting={(value) => setIsSubmitting(value)}
-          workspaceSlug={workspaceSlug}
-        />
-
-        <div className="flex items-center justify-between gap-2">
+        <div className="flex items-center justify-between gap-2 border-t border-subtle bg-surface-1 px-5 py-2.5">
           {currentUser && (
             <IssueReaction
               className="flex-shrink-0"
@@ -179,28 +189,34 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
             />
           )}
         </div>
-      </div>
+      </section>
 
-      <IssueDetailWidgets
-        workspaceSlug={workspaceSlug}
-        projectId={projectId}
-        issueId={issueId}
-        disabled={!isEditable || isArchived}
-        renderWidgetModals={!isPeekModeActive}
-        issueServiceType={EIssueServiceType.ISSUES}
-      />
-
-      {windowSize[0] < 768 && (
-        <PeekOverviewProperties
+      <section className="shadow-sm rounded-xl border border-subtle bg-layer-1 p-5">
+        <IssueDetailWidgets
           workspaceSlug={workspaceSlug}
           projectId={projectId}
           issueId={issueId}
-          issueOperations={issueOperations}
           disabled={!isEditable || isArchived}
+          renderWidgetModals={!isPeekModeActive}
+          issueServiceType={EIssueServiceType.ISSUES}
         />
+      </section>
+
+      {windowSize[0] < 768 && (
+        <section className="shadow-sm rounded-xl border border-subtle bg-layer-1 p-5">
+          <PeekOverviewProperties
+            workspaceSlug={workspaceSlug}
+            projectId={projectId}
+            issueId={issueId}
+            issueOperations={issueOperations}
+            disabled={!isEditable || isArchived}
+          />
+        </section>
       )}
 
-      <IssueActivity workspaceSlug={workspaceSlug} projectId={projectId} issueId={issueId} disabled={isArchived} />
-    </>
+      <section className="shadow-sm rounded-xl border border-subtle bg-layer-1 p-5">
+        <IssueActivity workspaceSlug={workspaceSlug} projectId={projectId} issueId={issueId} disabled={isArchived} />
+      </section>
+    </div>
   );
 });

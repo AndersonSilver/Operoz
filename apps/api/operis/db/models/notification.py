@@ -74,6 +74,15 @@ def get_default_preference():
     }
 
 
+def default_alert_channels():
+    return {
+        "email": {"enabled": True, "frequency": "immediate"},
+        "discord_dm": {"enabled": False},
+        "google_calendar": {"enabled": False, "auto_create_events": True},
+        "in_app": {"enabled": True},
+    }
+
+
 class UserNotificationPreference(BaseModel):
     # user it is related to
     user = models.ForeignKey(
@@ -102,6 +111,15 @@ class UserNotificationPreference(BaseModel):
     comment = models.BooleanField(default=True)
     mention = models.BooleanField(default=True)
     issue_completed = models.BooleanField(default=True)
+
+    # Multi-channel alert preferences (Feature 13)
+    channels = models.JSONField(default=default_alert_channels)
+    due_date_alert = models.BooleanField(default=True)
+    missing_due_date_alert = models.BooleanField(default=True)
+    issue_created_alert = models.BooleanField(default=True)
+    quiet_hours_start = models.TimeField(null=True, blank=True)
+    quiet_hours_end = models.TimeField(null=True, blank=True)
+    quiet_hours_timezone = models.CharField(max_length=50, default="UTC")
 
     class Meta:
         verbose_name = "UserNotificationPreference"

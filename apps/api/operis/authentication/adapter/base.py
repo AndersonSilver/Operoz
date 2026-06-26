@@ -293,11 +293,16 @@ class Adapter:
         # Get email
         email = self.user_data.get("email")
 
-        # Get display name
+        # Get display name — prioriza nome do IdP, não o handle do e-mail
+        from operis.utils.user_display import display_name_from_identity
+
         display_name = self.user_data.get("user", {}).get("display_name")
-        # If display name is not provided, generate a random display name
         if not display_name:
-            display_name = User.get_display_name(email)
+            display_name = display_name_from_identity(
+                first_name=first_name,
+                last_name=last_name,
+                email=email,
+            )
 
         # Set display name
         user.display_name = display_name
@@ -354,6 +359,13 @@ class Adapter:
             last_name = self.user_data.get("user", {}).get("last_name", "")
             user.first_name = first_name if first_name else ""
             user.last_name = last_name if last_name else ""
+            from operis.utils.user_display import display_name_from_identity
+
+            user.display_name = display_name_from_identity(
+                first_name=user.first_name,
+                last_name=user.last_name,
+                email=email,
+            )
 
             user.save()
 

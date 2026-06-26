@@ -232,19 +232,23 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
           }}
         />
       ) : (
-        <div className="flex h-full w-full overflow-hidden">
-          <div className="h-full w-full space-y-6 overflow-y-auto px-9 py-5">
-            <IssueMainContent
-              workspaceSlug={workspaceSlug}
-              projectId={projectId}
-              issueId={issueId}
-              issueOperations={issueOperations}
-              isEditable={isEditable}
-              isArchived={is_archived}
-            />
+        <div className="flex h-full w-full overflow-hidden bg-surface-1">
+          <div className="flex h-full min-w-0 flex-1 flex-col overflow-hidden">
+            <div className="h-full w-full overflow-y-auto">
+              <div className="mx-auto flex w-full max-w-[60rem] flex-col px-6 py-6 lg:px-10 xl:max-w-[68rem] 2xl:max-w-[76rem]">
+                <IssueMainContent
+                  workspaceSlug={workspaceSlug}
+                  projectId={projectId}
+                  issueId={issueId}
+                  issueOperations={issueOperations}
+                  isEditable={isEditable}
+                  isArchived={is_archived}
+                />
+              </div>
+            </div>
           </div>
-          <div
-            className="fixed right-0 z-[5] h-full w-full min-w-[300px] border-l border-subtle bg-surface-1 sm:w-1/2 md:relative md:w-1/4 lg:min-w-80 xl:min-w-96"
+          <aside
+            className="fixed right-0 z-[5] flex h-full w-full min-w-[300px] flex-col border-l border-subtle bg-layer-1 sm:w-1/2 md:relative md:w-[23rem] md:shrink-0 xl:w-[25rem]"
             style={issueDetailSidebarCollapsed ? { right: `-${window?.innerWidth || 0}px` } : {}}
           >
             <IssueDetailsSidebar
@@ -254,7 +258,7 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
               issueOperations={issueOperations}
               isEditable={!is_archived && isEditable}
             />
-          </div>
+          </aside>
         </div>
       )}
 

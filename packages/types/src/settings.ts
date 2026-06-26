@@ -12,6 +12,7 @@ export type TWorkspaceSettingsTabs =
   | "assistant"
   | "discord"
   | "jira"
+  | "notifications"
   | "webhooks";
 export type TWorkspaceSettingsItem = {
   key: TWorkspaceSettingsTabs;

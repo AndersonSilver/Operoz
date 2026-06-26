@@ -1,3 +1,4 @@
+export * from "./alert.service";
 export * from "./invitation.service";
 export * from "./member.service";
 export * from "./notification.service";
