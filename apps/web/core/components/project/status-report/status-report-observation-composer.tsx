@@ -5,6 +5,7 @@ import { EFileAssetType } from "@operis/types";
 import { cn, isEditorEmpty } from "@operis/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/components/issue-modal-editor-toolbar";
+import { StatusReportObservationAiAssistant } from "@/components/project/status-report/status-report-observation-ai-assistant";
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
 import { WorkspaceService } from "@/services/workspace.service";
 
@@ -59,6 +60,14 @@ export function StatusReportObservationComposer(props: Props) {
       <div className="border-b border-subtle bg-layer-2/30" data-prevent-outside-click>
         <IssueModalEditorToolbar editorRef={editorRef} editorReady={isEditorReady} />
       </div>
+      <StatusReportObservationAiAssistant
+        editorRef={editorRef}
+        descriptionHtml={descriptionHtml}
+        onDescriptionChange={setDescriptionHtml}
+        workspaceSlug={workspaceSlug}
+        workspaceId={workspaceId}
+        projectId={projectId}
+      />
       <RichTextEditor
         editable
         id={`status-report-observation-${reportId}-${composerKey}`}
@@ -75,8 +84,8 @@ export function StatusReportObservationComposer(props: Props) {
         dragDropEnabled={false}
         handleEditorReady={setIsEditorReady}
         containerClassName={cn(
-          "min-h-[72px] max-h-[200px] overflow-y-auto pl-3 pt-2 pb-1",
-          "[&_.ProseMirror_ul]:!pl-6 [&_.ProseMirror_ol]:!pl-6",
+          "max-h-[200px] min-h-[72px] overflow-y-auto pt-2 pb-1 pl-3",
+          "[&_.ProseMirror_ol]:!pl-6 [&_.ProseMirror_ul]:!pl-6",
           "[&_.ProseMirror_blockquote]:!border-l-0 [&_.ProseMirror_blockquote]:!pl-0"
         )}
         searchMentionCallback={async (payload) =>

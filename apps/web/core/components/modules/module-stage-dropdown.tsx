@@ -41,10 +41,10 @@ function stagePillStyle(color: string | undefined) {
 }
 
 const STAGE_PILL_CLASS =
-  "box-border flex h-6 w-[7rem] min-w-[7rem] max-w-[7rem] shrink-0 items-center justify-center truncate rounded-sm px-1.5 text-center text-11";
+  "box-border flex h-7 min-h-7 w-full min-w-0 items-center justify-center rounded-sm px-2.5 py-1 text-center text-11 font-medium leading-tight";
 
-const STAGE_SELECT_CLASS = "w-[7rem] shrink-0";
-const STAGE_SELECT_BUTTON_CLASS = "h-6 w-[7rem] min-w-[7rem] shrink-0 justify-center p-0 hover:bg-transparent";
+const STAGE_SELECT_CLASS = "w-full max-w-[9rem] shrink-0";
+const STAGE_SELECT_BUTTON_CLASS = "h-7 w-full min-w-0 shrink-0 justify-center p-0 hover:bg-transparent";
 
 export const ModuleStageDropdown = observer(function ModuleStageDropdown(props: Props) {
   const { isDisabled, moduleDetails, stages, handleModuleDetailsChange } = props;
@@ -75,8 +75,9 @@ export const ModuleStageDropdown = observer(function ModuleStageDropdown(props: 
         <span
           className={cn(STAGE_PILL_CLASS, isDisabled ? "cursor-not-allowed" : "cursor-pointer")}
           style={stagePillStyle(stageOptionColor(currentStage))}
+          title={currentStage?.name ?? t("project_modules.stage.select_stage")}
         >
-          {currentStage?.name ?? t("project_modules.stage.select_stage")}
+          <span className="truncate">{currentStage?.name ?? t("project_modules.stage.select_stage")}</span>
         </span>
       }
       value={currentStage?.id ?? ""}
