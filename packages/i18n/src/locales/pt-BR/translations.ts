@@ -5923,6 +5923,10 @@ export default {
     list: {
       col_module: "Módulo",
       col_dates: "Datas",
+      col_start_date: "Data de início",
+      col_end_date: "Data de fim",
+      add_start_date: "Início",
+      add_end_date: "Fim",
       col_status: "Status",
       col_stage: "Etapa",
       col_lead: "Responsável",

@@ -9,7 +9,7 @@ import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
 import type { IModule } from "@operis/types";
 import { FavoriteStar } from "@operis/ui";
 import { cn, renderFormattedPayloadDate, getDate } from "@operis/utils";
-import { DateRangeDropdown } from "@/components/dropdowns/date-range";
+import { DateDropdown } from "@/components/dropdowns/date";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ModuleQuickActions } from "@/components/modules";
 import { ModuleStatusDropdown } from "@/components/modules/module-status-dropdown";
@@ -25,11 +25,11 @@ type Props = {
   parentRef: RefObject<HTMLDivElement | null>;
 };
 
-const dateButtonClass = (isDisabled: boolean, hasDates: boolean) =>
+const dateButtonClass = (isDisabled: boolean, hasDate: boolean) =>
   cn(
-    "flex h-7 w-full max-w-[11rem] min-w-0 items-center gap-1.5 truncate rounded-sm border border-subtle bg-layer-2 px-2 text-11 transition-colors lg:w-auto lg:max-w-[10rem]",
+    "flex h-7 w-full min-w-0 items-center gap-1.5 truncate rounded-sm border border-subtle bg-layer-2 px-2 text-11 transition-colors lg:max-w-[7.5rem]",
     isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-strong hover:bg-layer-1",
-    hasDates ? "text-secondary" : "text-tertiary"
+    hasDate ? "text-secondary" : "text-tertiary"
   );
 
 export const ModuleListItemAction = observer(function ModuleListItemAction(props: Props) {
@@ -51,7 +51,6 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
 
   const startDate = getDate(moduleDetails.start_date);
   const endDate = getDate(moduleDetails.target_date);
-  const hasDates = Boolean(startDate || endDate);
 
   const handleAddToFavorites = (e: MouseEvent<HTMLButtonElement>) => {
     e.stopPropagation();
@@ -128,27 +127,41 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
     e.preventDefault();
   };
 
-  const dateDropdown = (
-    <DateRangeDropdown
-      mergeDates
-      renderInPortal
-      placement="bottom-start"
-      buttonContainerClassName={dateButtonClass(isDisabled, hasDates)}
+  const startDateDropdown = (
+    <DateDropdown
+      buttonContainerClassName={dateButtonClass(isDisabled, Boolean(startDate))}
       buttonVariant="transparent-with-text"
-      className="h-7 w-full min-w-0 lg:w-auto"
-      value={{ from: startDate, to: endDate }}
-      onSelect={(val) => {
+      className="h-7 w-full min-w-0"
+      value={moduleDetails.start_date}
+      maxDate={endDate ?? undefined}
+      onChange={(val) => {
         handleModuleDetailsChange({
-          start_date: val?.from ? renderFormattedPayloadDate(val.from) : null,
-          target_date: val?.to ? renderFormattedPayloadDate(val.to) : null,
+          start_date: val ? renderFormattedPayloadDate(val) : null,
         });
       }}
-      placeholder={{
-        from: t("project_modules.list.add_dates"),
-        to: "",
-      }}
+      placeholder={t("project_modules.list.add_start_date")}
       disabled={isDisabled}
-      hideIcon={{ from: true, to: true }}
+      hideIcon
+      clearIconClassName="size-3 text-tertiary opacity-0 transition-opacity group-hover:opacity-100"
+    />
+  );
+
+  const endDateDropdown = (
+    <DateDropdown
+      buttonContainerClassName={dateButtonClass(isDisabled, Boolean(endDate))}
+      buttonVariant="transparent-with-text"
+      className="h-7 w-full min-w-0"
+      value={moduleDetails.target_date}
+      minDate={startDate ?? undefined}
+      onChange={(val) => {
+        handleModuleDetailsChange({
+          target_date: val ? renderFormattedPayloadDate(val) : null,
+        });
+      }}
+      placeholder={t("project_modules.list.add_end_date")}
+      disabled={isDisabled}
+      hideIcon
+      clearIconClassName="size-3 text-tertiary opacity-0 transition-opacity group-hover:opacity-100"
     />
   );
 
@@ -178,9 +191,10 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
   return (
     <>
       <div className="hidden min-w-0 lg:contents" onClick={stopNav}>
-        <div className="flex min-w-0 justify-center lg:col-start-2">{dateDropdown}</div>
+        <div className="flex min-w-0 justify-center lg:col-start-2">{startDateDropdown}</div>
+        <div className="flex min-w-0 justify-center lg:col-start-3">{endDateDropdown}</div>
 
-        <div className="flex shrink-0 justify-center lg:col-start-3">
+        <div className="flex shrink-0 justify-center lg:col-start-4">
           {moduleStatus ? (
             <ModuleStatusDropdown
               isDisabled={isDisabled}
@@ -190,7 +204,7 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
           ) : null}
         </div>
 
-        <div className="flex shrink-0 justify-center lg:col-start-4">
+        <div className="flex shrink-0 justify-center lg:col-start-5">
           <ModuleStageDropdown
             isDisabled={isDisabled}
             moduleDetails={moduleDetails}
@@ -199,9 +213,9 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
           />
         </div>
 
-        <div className="flex shrink-0 justify-center lg:col-start-5">{leadDropdown}</div>
+        <div className="flex shrink-0 justify-center lg:col-start-6">{leadDropdown}</div>
 
-        <div className="flex shrink-0 items-center justify-center gap-1 lg:col-start-6 lg:border-l lg:border-subtle lg:pl-2">
+        <div className="flex shrink-0 items-center justify-center gap-1 lg:col-start-7 lg:border-l lg:border-subtle lg:pl-2">
           {isEditingAllowed && !moduleDetails.archived_at ? (
             <FavoriteStar
               onClick={(e) => {
@@ -223,7 +237,8 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
       </div>
 
       <div className="flex w-full flex-wrap items-center gap-2 lg:hidden" onClick={stopNav}>
-        {dateDropdown}
+        {startDateDropdown}
+        {endDateDropdown}
         {moduleStatus ? (
           <ModuleStatusDropdown
             isDisabled={isDisabled}

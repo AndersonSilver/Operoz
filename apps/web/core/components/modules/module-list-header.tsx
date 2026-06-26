@@ -1,7 +1,8 @@
 import { useTranslation } from "@operis/i18n";
 import { cn } from "@operis/utils";
 
-const MODULE_LIST_GRID = "lg:grid lg:grid-cols-[minmax(0,1fr)_10rem_7rem_7rem_6rem_4.5rem] lg:items-center lg:gap-3";
+const MODULE_LIST_GRID =
+  "lg:grid lg:grid-cols-[minmax(0,1fr)_7.5rem_7.5rem_7rem_7rem_6rem_4.5rem] lg:items-center lg:gap-3";
 
 export function ModuleListHeader() {
   const { t } = useTranslation();
@@ -15,7 +16,10 @@ export function ModuleListHeader() {
     >
       <span className="text-13 font-medium text-tertiary">{t("project_modules.list.col_module")}</span>
       <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
-        {t("project_modules.list.col_dates")}
+        {t("project_modules.list.col_start_date")}
+      </span>
+      <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
+        {t("project_modules.list.col_end_date")}
       </span>
       <span className="hidden text-center text-13 font-medium text-tertiary lg:block">
         {t("project_modules.list.col_status")}
