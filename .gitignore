@@ -57,7 +57,8 @@ staticfiles
 mediafiles
 .env
 .DS_Store
-logs/
+/logs/
+apps/api/operis/logs/
 htmlcov/
 .coverage
 
