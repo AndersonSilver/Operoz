@@ -56,6 +56,7 @@ from operis.utils.timezone_converter import user_timezone_converter
 from operis.utils.global_paginator import paginate
 from operis.utils.host import base_host
 from operis.automation.hooks import emit_intake_submitted, emit_issue_created
+from operis.bgtasks.alert_dispatch_task import dispatch_support_alert
 from operis.db.models.intake import SourceType, IntakeTicketKind
 
 
@@ -368,6 +369,12 @@ class IntakeIssueViewSet(BaseViewSet):
                 actor_id=str(request.user.id),
                 source=SourceType.IN_APP,
             )
+            if ticket_kind == IntakeTicketKind.SUPPORT:
+                dispatch_support_alert.delay(
+                    intake_issue_id=str(intake_issue.id),
+                    alert_type="support_ticket_created",
+                    actor_id=str(request.user.id),
+                )
             serializer = IntakeIssueDetailSerializer(intake_issue)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:
@@ -500,6 +507,7 @@ class IntakeIssueViewSet(BaseViewSet):
                     )
 
         if intake_serializer:
+            previous_status = intake_issue.status
             intake_serializer.save()
             # create a activity for status change
             issue_activity.delay(
@@ -514,6 +522,21 @@ class IntakeIssueViewSet(BaseViewSet):
                 origin=base_host(request=request, is_app=True),
                 intake=str(intake_issue.id),
             )
+            if intake_issue.ticket_kind == IntakeTicketKind.SUPPORT:
+                new_status = intake_serializer.instance.status
+                actor = str(request.user.id)
+                if previous_status != 1 and new_status == 1:
+                    dispatch_support_alert.delay(
+                        intake_issue_id=str(intake_issue.id),
+                        alert_type="support_ticket_accepted",
+                        actor_id=actor,
+                    )
+                if previous_status != 3 and new_status == 3:
+                    dispatch_support_alert.delay(
+                        intake_issue_id=str(intake_issue.id),
+                        alert_type="support_ticket_closed",
+                        actor_id=actor,
+                    )
 
         # Fetch and return the updated intake issue
         intake_issue = (

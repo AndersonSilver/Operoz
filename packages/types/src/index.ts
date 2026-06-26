@@ -1,5 +1,6 @@
 export * from "./activity";
 export * from "./ai";
+export * from "./alert";
 export * from "./analytics";
 export * from "./api_token";
 export * from "./auth";

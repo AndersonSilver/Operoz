@@ -139,9 +139,7 @@ export const WorkItemCustomFieldsProperties = observer(function WorkItemCustomFi
   if (layout === "inbox") {
     return (
       <div className={cn("mt-3 border-t-2 border-subtle-1 pt-3", !isEditable && "opacity-60")}>
-        <h6 className="mb-2 text-12 font-medium text-secondary">
-          {t("boards.settings.fields.issue_form_section")}
-        </h6>
+        <h6 className="mb-2 text-12 font-medium text-secondary">{t("boards.settings.fields.issue_form_section")}</h6>
         <div className="flex flex-col gap-3">
           {visibleFields.map((field) => (
             <div key={field.id} className="flex min-h-8 items-start gap-2">
@@ -158,7 +156,7 @@ export const WorkItemCustomFieldsProperties = observer(function WorkItemCustomFi
                     onChange={(val) => void persistValue(field.id, val)}
                   />
                 ) : (
-                  <p className="pt-1.5 text-13 text-primary break-words">
+                  <p className="pt-1.5 text-13 break-words text-primary">
                     {formatCustomFieldDisplay(field, values[field.id], getMemberName)}
                   </p>
                 )}
@@ -173,7 +171,7 @@ export const WorkItemCustomFieldsProperties = observer(function WorkItemCustomFi
   return (
     <>
       {visibleFields.map((field) => (
-        <SidebarPropertyListItem key={field.id} icon={WorkItemsIcon} label={field.name}>
+        <SidebarPropertyListItem key={field.id} label={field.name}>
           {isEditable ? (
             <div className="w-full min-w-0 py-0.5">
               <BoardCustomFieldFormField
@@ -184,7 +182,7 @@ export const WorkItemCustomFieldsProperties = observer(function WorkItemCustomFi
               />
             </div>
           ) : (
-            <span className="text-body-xs-regular text-primary break-words">
+            <span className="text-body-xs-regular break-words text-primary">
               {formatCustomFieldDisplay(field, values[field.id], getMemberName)}
             </span>
           )}

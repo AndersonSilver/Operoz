@@ -93,6 +93,14 @@ app.conf.beat_schedule = {
         "task": "operis.bgtasks.client_360_status_report_reminder_task.friday_status_report_reminder",
         "schedule": crontab(hour="*", minute=0, day_of_week=5),  # hourly on Fridays
     },
+    "check-due-date-alerts-hourly": {
+        "task": "operis.bgtasks.alert_scan_task.check_due_date_alerts",
+        "schedule": crontab(minute=0),  # every hour
+    },
+    "send-daily-alert-digests": {
+        "task": "operis.bgtasks.alert_digest_task.send_daily_alert_digests",
+        "schedule": crontab(hour=7, minute=0),  # UTC 07:00
+    },
 }
 
 

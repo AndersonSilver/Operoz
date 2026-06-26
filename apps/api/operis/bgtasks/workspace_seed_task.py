@@ -559,6 +559,10 @@ def workspace_seed(workspace_id: uuid.UUID) -> None:
         # create project pages
         create_pages(workspace, project_map, bot_user)
 
+        from operis.alerts.seed import seed_default_alert_rules
+
+        seed_default_alert_rules(workspace_id=str(workspace_id))
+
         logger.info(f"Task: workspace_seed_task -> Workspace {workspace_id} seeded successfully")
         return
     except Exception as e:

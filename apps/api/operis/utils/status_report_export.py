@@ -217,21 +217,9 @@ def default_observacoes_block() -> dict:
 
 def user_consultor_label(user) -> str:
     """Consultor = nome de exibição; fallback nome+sobrenome, depois e-mail."""
-    if user is None:
-        return "—"
-    display = (getattr(user, "display_name", None) or "").strip()
-    if display:
-        return display
-    first = (getattr(user, "first_name", None) or "").strip()
-    last = (getattr(user, "last_name", None) or "").strip()
-    combined = f"{first} {last}".strip()
-    if combined:
-        return combined
-    full_name = getattr(user, "full_name", None) or ""
-    if isinstance(full_name, str) and full_name.strip():
-        return full_name.strip()
-    email = getattr(user, "email", None)
-    return email or "—"
+    from operis.utils.user_display import user_display_label
+
+    return user_display_label(user)
 
 
 def project_responsavel_cliente_label(project) -> str:

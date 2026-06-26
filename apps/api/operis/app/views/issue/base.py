@@ -46,6 +46,7 @@ from operis.bgtasks.issue_activities_task import issue_activity
 from operis.bgtasks.issue_description_version_task import issue_description_version_task
 from operis.bgtasks.recent_visited_task import recent_visited_task
 from operis.bgtasks.webhook_task import model_activity
+from operis.bgtasks.alert_dispatch_task import dispatch_creation_alert, dispatch_issue_update_alerts
 from operis.db.models import (
     Cycle,
     CycleIssue,
@@ -502,6 +503,11 @@ class IssueViewSet(BaseViewSet):
             created_issue = Issue.objects.filter(pk=serializer.data["id"]).select_related("project").first()
             if created_issue:
                 emit_issue_created(created_issue, actor_id=str(request.user.id))
+                dispatch_creation_alert.delay(
+                    issue_id=str(created_issue.id),
+                    workspace_id=str(created_issue.workspace_id),
+                    actor_id=str(request.user.id),
+                )
             return Response(issue, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -756,10 +762,16 @@ class IssueViewSet(BaseViewSet):
             )
             if updated_issue:
                 try:
-                    before_snapshot = serialize_issue_snapshot(current_instance)
+                    before_snapshot = build_issue_automation_snapshot(issue)
                     after_snapshot = build_issue_automation_snapshot(updated_issue)
                     emit_issue_updated(
                         updated_issue,
+                        actor_id=str(request.user.id),
+                        before=before_snapshot,
+                        after=after_snapshot,
+                    )
+                    dispatch_issue_update_alerts.delay(
+                        issue_id=str(pk),
                         actor_id=str(request.user.id),
                         before=before_snapshot,
                         after=after_snapshot,

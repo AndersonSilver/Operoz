@@ -292,6 +292,30 @@ def build_focus_reply(*, focus: str, llm_text: str, stats: list[dict[str, object
     return DiscordReply.embeds([embed])
 
 
+def build_branded_embed(
+    *,
+    subtitle: str = "Notificação",
+    title: str,
+    description: str = "",
+    color: int = OPERIS_EMBED_COLOR,
+    fields: list[dict[str, Any]] | None = None,
+    url: str = "",
+    footer_extra: str = "",
+) -> dict[str, Any]:
+    embed = _base_embed(
+        title=title,
+        description=description,
+        color=color,
+        footer_extra=footer_extra,
+    )
+    embed["author"] = _embed_author(subtitle=subtitle)
+    if url:
+        embed["url"] = url[:512]
+    if fields:
+        embed["fields"] = fields
+    return embed
+
+
 def build_text_embed(*, title: str, description: str) -> DiscordReply:
     embed = _base_embed(title=title, description=description)
     return DiscordReply.embeds([embed])
