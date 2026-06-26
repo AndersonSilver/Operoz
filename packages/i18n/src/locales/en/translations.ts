@@ -5694,6 +5694,10 @@ export default {
     list: {
       col_module: "Module",
       col_dates: "Dates",
+      col_start_date: "Start date",
+      col_end_date: "End date",
+      add_start_date: "Start",
+      add_end_date: "End",
       col_status: "Status",
       col_stage: "Stage",
       col_lead: "Lead",
