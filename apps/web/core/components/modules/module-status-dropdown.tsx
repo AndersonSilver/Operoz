@@ -6,6 +6,7 @@ import type { TModuleStatus } from "@operis/propel/icons";
 import { ModuleStatusIcon } from "@operis/propel/icons";
 import type { IModule } from "@operis/types";
 import { CustomSelect } from "@operis/ui";
+import { cn } from "@operis/utils";
 
 type Props = {
   isDisabled: boolean;
@@ -24,17 +25,22 @@ export const ModuleStatusDropdown = observer(function ModuleStatusDropdown(props
     <CustomSelect
       customButton={
         <span
-          className={`flex h-6 w-20 items-center justify-center rounded-sm text-center text-11 ${
+          className={cn(
+            "box-border flex h-7 min-h-7 w-full max-w-[9rem] items-center justify-center rounded-sm px-2.5 py-1 text-center text-11 leading-tight font-medium",
             isDisabled ? "cursor-not-allowed" : "cursor-pointer"
-          }`}
+          )}
           style={{
             color: moduleStatus ? moduleStatus.color : "#a3a3a2",
             backgroundColor: moduleStatus ? `${moduleStatus.color}20` : "#a3a3a220",
           }}
         >
-          {(moduleStatus && t(moduleStatus?.i18n_label)) ?? t("project_modules.status.backlog")}
+          <span className="truncate">
+            {(moduleStatus && t(moduleStatus?.i18n_label)) ?? t("project_modules.status.backlog")}
+          </span>
         </span>
       }
+      className="w-full max-w-[9rem] shrink-0"
+      customButtonClassName="h-7 w-full min-w-0 shrink-0 justify-center p-0 hover:bg-transparent"
       value={moduleStatus?.value}
       onChange={(val: TModuleStatus) => {
         handleModuleDetailsChange({ status: val });

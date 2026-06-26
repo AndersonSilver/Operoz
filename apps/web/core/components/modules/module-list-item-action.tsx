@@ -9,7 +9,7 @@ import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
 import type { IModule } from "@operis/types";
 import { FavoriteStar } from "@operis/ui";
 import { cn, renderFormattedPayloadDate, getDate } from "@operis/utils";
-import { DateDropdown } from "@/components/dropdowns/date";
+import { ModuleListDateField } from "@/components/modules/module-list-date-field";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ModuleQuickActions } from "@/components/modules";
 import { ModuleStatusDropdown } from "@/components/modules/module-status-dropdown";
@@ -24,13 +24,6 @@ type Props = {
   moduleDetails: IModule;
   parentRef: RefObject<HTMLDivElement | null>;
 };
-
-const dateButtonClass = (isDisabled: boolean, hasDate: boolean) =>
-  cn(
-    "flex h-7 w-full min-w-0 items-center gap-1.5 truncate rounded-sm border border-subtle bg-layer-2 px-2 text-11 transition-colors lg:max-w-[7.5rem]",
-    isDisabled ? "cursor-not-allowed opacity-60" : "cursor-pointer hover:border-strong hover:bg-layer-1",
-    hasDate ? "text-secondary" : "text-tertiary"
-  );
 
 export const ModuleListItemAction = observer(function ModuleListItemAction(props: Props) {
   const { moduleId, moduleDetails, parentRef } = props;
@@ -128,40 +121,30 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
   };
 
   const startDateDropdown = (
-    <DateDropdown
-      buttonContainerClassName={dateButtonClass(isDisabled, Boolean(startDate))}
-      buttonVariant="transparent-with-text"
-      className="h-7 w-full min-w-0"
+    <ModuleListDateField
       value={moduleDetails.start_date}
       maxDate={endDate ?? undefined}
+      disabled={isDisabled}
+      placeholder={t("project_modules.list.date_empty")}
       onChange={(val) => {
         handleModuleDetailsChange({
           start_date: val ? renderFormattedPayloadDate(val) : null,
         });
       }}
-      placeholder={t("project_modules.list.add_start_date")}
-      disabled={isDisabled}
-      hideIcon
-      clearIconClassName="size-3 text-tertiary opacity-0 transition-opacity group-hover:opacity-100"
     />
   );
 
   const endDateDropdown = (
-    <DateDropdown
-      buttonContainerClassName={dateButtonClass(isDisabled, Boolean(endDate))}
-      buttonVariant="transparent-with-text"
-      className="h-7 w-full min-w-0"
+    <ModuleListDateField
       value={moduleDetails.target_date}
       minDate={startDate ?? undefined}
+      disabled={isDisabled}
+      placeholder={t("project_modules.list.date_empty")}
       onChange={(val) => {
         handleModuleDetailsChange({
           target_date: val ? renderFormattedPayloadDate(val) : null,
         });
       }}
-      placeholder={t("project_modules.list.add_end_date")}
-      disabled={isDisabled}
-      hideIcon
-      clearIconClassName="size-3 text-tertiary opacity-0 transition-opacity group-hover:opacity-100"
     />
   );
 
@@ -191,8 +174,8 @@ export const ModuleListItemAction = observer(function ModuleListItemAction(props
   return (
     <>
       <div className="hidden min-w-0 lg:contents" onClick={stopNav}>
-        <div className="flex min-w-0 justify-center lg:col-start-2">{startDateDropdown}</div>
-        <div className="flex min-w-0 justify-center lg:col-start-3">{endDateDropdown}</div>
+        <div className="flex w-full min-w-0 lg:col-start-2">{startDateDropdown}</div>
+        <div className="flex w-full min-w-0 lg:col-start-3">{endDateDropdown}</div>
 
         <div className="flex shrink-0 justify-center lg:col-start-4">
           {moduleStatus ? (
