@@ -81,7 +81,12 @@ export const UserImageUploadModal = observer(function UserImageUploadModal(props
       }
       await handleRemove();
     } catch (error) {
-      console.log("Error in uploading user asset:", error);
+      console.error("Error in removing user avatar:", error);
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: "Error!",
+        message: "Failed to remove image. Please try again.",
+      });
     } finally {
       setIsRemoving(false);
     }

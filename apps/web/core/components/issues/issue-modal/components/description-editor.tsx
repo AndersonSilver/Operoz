@@ -226,7 +226,8 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
           )}
         </button>
       )}
-      {config?.has_llm_configured && projectId &&
+      {config?.has_llm_configured &&
+        projectId &&
         (isCreateModal ? (
           <button
             type="button"
@@ -276,7 +277,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
     <div
       className={cn(
         cn(
-          "relative rounded-[3px] bg-layer-2 shadow-sm transition-[border-color,box-shadow]",
+          "shadow-sm relative rounded-[3px] bg-layer-2 transition-[border-color,box-shadow]",
           issueFormControlBorderClass,
           issueFormControlFocusWithinClass
         ),
@@ -285,10 +286,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
       )}
     >
       {isCreateModal && (
-        <div
-          className="relative z-0 overflow-visible border-b border-subtle bg-layer-1"
-          data-prevent-outside-click
-        >
+        <div className="relative z-0 overflow-visible border-b border-subtle bg-layer-1" data-prevent-outside-click>
           <IssueModalEditorToolbar editorRef={editorRef} editorReady={isEditorReady} endSlot={aiActions} />
           {isAiPanelOpen && projectId && (
             <GptAssistantPanel
@@ -361,7 +359,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                     project_id: projectId?.toString() ?? "",
                   })
                 }
-                containerClassName={cn("min-h-[100px] pl-3 pt-2", isCreateModal && "pb-2")}
+                containerClassName={cn("min-h-[100px] pt-2 pl-3", isCreateModal && "pb-2")}
                 uploadFile={async (blockId, file) => {
                   try {
                     const { asset_id } = await uploadEditorAsset({
@@ -379,7 +377,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                     onAssetUpload(asset_id);
                     return asset_id;
                   } catch (error) {
-                    console.log("Error in uploading issue asset:", error);
+                    console.error("Error in uploading issue asset:", error);
                     throw new Error("Asset upload failed. Please try again later.");
                   }
                 }}

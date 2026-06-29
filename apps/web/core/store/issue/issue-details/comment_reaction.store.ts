@@ -117,7 +117,7 @@ export class IssueCommentReactionStore implements IIssueCommentReactionStore {
 
       return response;
     } catch (error) {
-      console.log("error", error);
+      console.error("Error fetching comment reactions:", error);
       throw error;
     }
   };
@@ -157,7 +157,7 @@ export class IssueCommentReactionStore implements IIssueCommentReactionStore {
 
       return response;
     } catch (error) {
-      console.log("error", error);
+      console.error("Error creating comment reaction:", error);
       throw error;
     }
   };

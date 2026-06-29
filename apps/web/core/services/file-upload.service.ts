@@ -27,9 +27,10 @@ export class FileUploadService extends APIService {
       .then((response) => response?.data)
       .catch((error) => {
         if (axios.isCancel(error)) {
-          console.log(error.message);
+          console.warn("Upload canceled:", error.message);
         } else {
-          throw error?.response?.data;
+          console.error("File upload failed:", error);
+          throw error?.response?.data ?? error;
         }
       });
   }

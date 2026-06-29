@@ -69,12 +69,13 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
       );
       updateWorkspaceLogo(workspaceSlug.toString(), asset_url);
       onSuccess(asset_url);
-    } catch (error: any) {
-      console.log("error", error);
+    } catch (error) {
+      console.error("Failed to upload workspace image:", error);
+      const message = error instanceof Error ? error.message : "Something went wrong";
       setToast({
         type: TOAST_TYPE.ERROR,
         title: "Error",
-        message: error.error || "Something went wrong",
+        message,
       });
     } finally {
       setIsImageUploading(false);
@@ -94,7 +95,12 @@ export const WorkspaceImageUploadModal = observer(function WorkspaceImageUploadM
       await handleRemove();
       handleClose();
     } catch (error) {
-      console.log("Error in removing workspace asset:", error);
+      console.error("Error in removing workspace asset:", error);
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: "Error!",
+        message: "Failed to remove image. Please try again.",
+      });
     } finally {
       setIsRemoving(false);
     }

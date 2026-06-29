@@ -52,7 +52,7 @@ export function StateForm(props: TStateForm) {
     try {
       await onSubmit(formData);
     } catch (error) {
-      console.log("error", error);
+      console.error("Failed to submit state form:", error);
     }
   };
 

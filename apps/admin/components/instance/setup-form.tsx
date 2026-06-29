@@ -83,7 +83,9 @@ export function InstanceSetupForm() {
       void authService
         .requestCSRFToken()
         .then((data) => data?.csrf_token && setCsrfToken(data.csrf_token))
-        .catch(() => {});
+        .catch((error) => {
+          console.error("Failed to fetch CSRF token:", error);
+        });
   }, [csrfToken]);
 
   useEffect(() => {

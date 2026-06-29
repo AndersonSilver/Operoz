@@ -169,9 +169,10 @@ export class ProjectViewStore implements IProjectViewStore {
         });
         return response;
       });
-    } catch (_error) {
+    } catch (error) {
+      console.error("Failed to fetch project views:", error);
       this.loader = false;
-      return undefined;
+      throw error;
     }
   };
 

@@ -152,9 +152,7 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
         filterParams = {};
       }
       filterParams["module"] =
-        this.scopedModuleIds?.length && this.scopedModuleIds.length > 0
-          ? this.scopedModuleIds.join(",")
-          : moduleId;
+        this.scopedModuleIds?.length && this.scopedModuleIds.length > 0 ? this.scopedModuleIds.join(",") : moduleId;
 
       const paginationParams = this.getPaginationParams(filterParams, options, cursor, groupId, subGroupId);
       return paginationParams;
@@ -185,8 +183,7 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
       displayFilters = { ...displayFilters, order_by: "-created_at" };
     }
 
-    const hadListGroupedByState =
-      displayFilters.layout === EIssueLayoutTypes.LIST && displayFilters.group_by != null;
+    const hadListGroupedByState = displayFilters.layout === EIssueLayoutTypes.LIST && displayFilters.group_by != null;
     const hadCalendarGroupedByState =
       displayFilters.layout === EIssueLayoutTypes.CALENDAR && displayFilters.group_by != null;
 
@@ -201,8 +198,7 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     }
 
     const hadKanbanWrongGroupBy =
-      displayFilters.layout === EIssueLayoutTypes.KANBAN &&
-      displayFilters.group_by !== MODULE_KANBAN_GROUP_BY;
+      displayFilters.layout === EIssueLayoutTypes.KANBAN && displayFilters.group_by !== MODULE_KANBAN_GROUP_BY;
     const hadKanbanEmptyGroupsHidden =
       displayFilters.layout === EIssueLayoutTypes.KANBAN && displayFilters.show_empty_groups === false;
 
@@ -263,18 +259,13 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
     ) {
       try {
         await this.issueFilterService.patchModuleIssueFilters(workspaceSlug, projectId, moduleId, {
-          ...(hadNoVisibleColumns || hadListMissingWorkflowColumns
-            ? { display_properties: displayProperties }
-            : {}),
-          ...(hadListGroupedByState ||
-          hadCalendarGroupedByState ||
-          hadKanbanWrongGroupBy ||
-          hadKanbanEmptyGroupsHidden
+          ...(hadNoVisibleColumns || hadListMissingWorkflowColumns ? { display_properties: displayProperties } : {}),
+          ...(hadListGroupedByState || hadCalendarGroupedByState || hadKanbanWrongGroupBy || hadKanbanEmptyGroupsHidden
             ? { display_filters: displayFilters }
             : {}),
         });
       } catch (error) {
-        console.warn("could not persist module list filters", error);
+        console.error("Failed to persist module list filters:", error);
       }
     }
   };
@@ -305,7 +296,7 @@ export class ModuleIssuesFilter extends IssueFilterHelperStore implements IModul
         rich_filters: filters,
       });
     } catch (error) {
-      console.log("error while updating rich filters", error);
+      console.error("Error while updating rich filters:", error);
       throw error;
     }
   };

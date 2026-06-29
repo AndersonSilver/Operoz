@@ -179,7 +179,7 @@ export class WorkspaceDraftIssuesFilter extends IssueFilterHelperStore implement
         }
       );
     } catch (error) {
-      console.log("error while updating rich filters", error);
+      console.error("Error while updating rich filters:", error);
       throw error;
     }
   };

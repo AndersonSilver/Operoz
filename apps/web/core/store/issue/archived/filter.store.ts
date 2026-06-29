@@ -181,7 +181,7 @@ export class ArchivedIssuesFilter extends IssueFilterHelperStore implements IArc
         }
       );
     } catch (error) {
-      console.log("error while updating rich filters", error);
+      console.error("Error while updating rich filters:", error);
       throw error;
     }
   };

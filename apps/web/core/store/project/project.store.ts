@@ -377,7 +377,7 @@ export class ProjectStore implements IProjectStore {
       });
       return response;
     } catch (error) {
-      console.log("Error while fetching project details", error);
+      console.error("Error while fetching project details:", error);
       throw error;
     }
   };
@@ -401,7 +401,7 @@ export class ProjectStore implements IProjectStore {
       });
       return response;
     } catch (error) {
-      console.log("Failed to fetch project analytics count", error);
+      console.error("Failed to fetch project analytics count:", error);
       throw error;
     }
   };

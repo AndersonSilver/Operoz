@@ -89,7 +89,7 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
         try {
           await updateIssue(workspaceSlug, projectId, issueId, data);
         } catch (error) {
-          console.log("Error in updating issue:", error);
+          console.error("Error in updating issue:", error);
           setToast({
             title: t("common.error.label"),
             type: TOAST_TYPE.ERROR,
@@ -107,7 +107,7 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
             message: t("entity.delete.success", { entity: t("issue.label") }),
           });
         } catch (error) {
-          console.log("Error in deleting issue:", error);
+          console.error("Error in deleting issue:", error);
           setToast({
             title: t("common.error.label"),
             type: TOAST_TYPE.ERROR,
@@ -119,7 +119,12 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
         try {
           await archiveIssue(workspaceSlug, projectId, issueId);
         } catch (error) {
-          console.log("Error in archiving issue:", error);
+          console.error("Error in archiving issue:", error);
+          setToast({
+            title: t("common.error.label"),
+            type: TOAST_TYPE.ERROR,
+            message: t("entity.archive.failed", { entity: t("issue.label") }),
+          });
         }
       },
       addCycleToIssue: async (workspaceSlug: string, projectId: string, cycleId: string, issueId: string) => {
@@ -160,7 +165,7 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
           });
           await removeFromCyclePromise;
         } catch (error) {
-          console.log("Error in removing issue from cycle:", error);
+          console.error("Error in removing issue from cycle:", error);
         }
       },
       removeIssueFromModule: async (workspaceSlug: string, projectId: string, moduleId: string, issueId: string) => {
@@ -179,7 +184,7 @@ export const IssueDetailRoot = observer(function IssueDetailRoot(props: TIssueDe
           });
           await removeFromModulePromise;
         } catch (error) {
-          console.log("Error in removing issue from module:", error);
+          console.error("Error in removing issue from module:", error);
         }
       },
       changeModulesInIssue: async (

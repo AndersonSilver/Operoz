@@ -192,7 +192,7 @@ export class CycleIssuesFilter extends IssueFilterHelperStore implements ICycleI
         rich_filters: filters,
       });
     } catch (error) {
-      console.log("error while updating rich filters", error);
+      console.error("Error while updating rich filters:", error);
       throw error;
     }
   };

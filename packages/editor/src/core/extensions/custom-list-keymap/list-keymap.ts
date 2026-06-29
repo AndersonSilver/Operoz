@@ -75,7 +75,7 @@ export const ListKeymap = ({ tabIndex }: { tabIndex?: number }) =>
 
             return handled;
           } catch (e) {
-            console.log("Error in handling Delete:", e);
+            console.error("Error in handling Delete:", e);
             return false;
           }
         },
@@ -110,7 +110,7 @@ export const ListKeymap = ({ tabIndex }: { tabIndex?: number }) =>
 
             return handled;
           } catch (e) {
-            console.log("Error in handling Backspace:", e);
+            console.error("Error in handling Backspace:", e);
             return false;
           }
         },

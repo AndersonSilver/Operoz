@@ -244,7 +244,7 @@ export class BoardIssuesFilter extends IssueFilterHelperStore implements IBoardI
 
       this.rootIssueStore.boardIssues.fetchIssuesWithExistingPagination(workspaceSlug, viewId, "mutation");
     } catch (error) {
-      console.log("error while updating rich filters", error);
+      console.error("Error while updating rich filters:", error);
       throw error;
     }
   };
