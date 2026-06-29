@@ -26,6 +26,7 @@ export * from "./project-views";
 export * from "./project";
 export * from "./rich-filters";
 export * from "./router";
+export * from "./sanitize-html";
 export * from "./string";
 export * from "./subscription";
 export * from "./tab-indices";

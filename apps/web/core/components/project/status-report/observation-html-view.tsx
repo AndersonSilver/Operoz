@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn, sanitizeHtmlForRender } from "@operis/utils";
 
 function cleanListClasses(html: string): string {
   return html.replace(/<(ul|ol)([^>]*)\sclass="([^"]*)"/gi, (_match, tag, attrs, classNames) => {
@@ -33,7 +33,7 @@ const OBS_HTML_CLASS = cn(
   "[&_a]:text-accent-primary [&_a]:underline",
   "[&_blockquote]:my-1.5 [&_blockquote]:border-0 [&_blockquote]:p-0",
   "[&_.editor-callout-component]:my-1.5 [&_.editor-callout-component]:rounded-md [&_.editor-callout-component]:border [&_.editor-callout-component]:border-subtle",
-  "[&_.editor-callout-component]:bg-layer-3/40 [&_.editor-callout-component]:p-2.5 [&_.editor-callout-component]:!border-l-0",
+  "[&_.editor-callout-component]:!border-l-0 [&_.editor-callout-component]:bg-layer-3/40 [&_.editor-callout-component]:p-2.5",
   "[&_.editor-callout-component]:flex [&_.editor-callout-component]:flex-col [&_.editor-callout-component]:gap-1"
 );
 
@@ -41,7 +41,7 @@ export function ObservationHtmlView({ html }: { html: string }) {
   return (
     <div
       className={OBS_HTML_CLASS}
-      dangerouslySetInnerHTML={{ __html: normalizeObservationHtmlForDisplay(html) }}
+      dangerouslySetInnerHTML={{ __html: sanitizeHtmlForRender(normalizeObservationHtmlForDisplay(html)) }}
     />
   );
 }

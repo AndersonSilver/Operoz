@@ -46,7 +46,12 @@ for _cidr in _webhook_allowed_ips_raw.split(","):
         _logger.warning("WEBHOOK_ALLOWED_IPS: skipping invalid entry %r", _cidr)
 
 # Allowed Hosts
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+_allowed_hosts_raw = os.environ.get("ALLOWED_HOSTS", "")
+ALLOWED_HOSTS = (
+    [h.strip() for h in _allowed_hosts_raw.split(",") if h.strip()]
+    if _allowed_hosts_raw
+    else ["localhost", "127.0.0.1", "[::1]"]
+)
 
 # Application definition
 INSTALLED_APPS = [
@@ -140,8 +145,12 @@ if cors_allowed_origins:
     CORS_ALLOWED_ORIGINS = cors_allowed_origins
     secure_origins = False if [origin for origin in cors_allowed_origins if "http:" in origin] else True
 else:
-    CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://localhost:3001"]
     secure_origins = False
+    _logger.warning(
+        "CORS_ALLOWED_ORIGINS not set — defaulting to localhost only. "
+        "Set this variable in production."
+    )
 
 CORS_ALLOW_HEADERS = [*default_headers, "X-API-Key"]
 
@@ -264,12 +273,12 @@ USE_MINIO = int(os.environ.get("USE_MINIO", 0)) == 1
 
 STORAGES = {"staticfiles": {"BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage"}}
 STORAGES["default"] = {"BACKEND": "operis.settings.storage.S3Storage"}
-AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "access-key")
-AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "secret-key")
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_S3_BUCKET_NAME", "uploads")
 AWS_REGION = os.environ.get("AWS_REGION", "")
-AWS_DEFAULT_ACL = "public-read"
-AWS_QUERYSTRING_AUTH = False
+AWS_DEFAULT_ACL = "private"
+AWS_QUERYSTRING_AUTH = True
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", None) or os.environ.get("MINIO_ENDPOINT_URL", None)
 if AWS_S3_ENDPOINT_URL and USE_MINIO:

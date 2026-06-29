@@ -2,6 +2,7 @@
 
 import useSWR from "swr";
 import { useTranslation } from "@operis/i18n";
+import { sanitizeHtmlForRender } from "@operis/utils";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { fetchGuestQbr } from "@/services/guest-qbr.service";
 
@@ -60,7 +61,7 @@ export function GuestQbrPage({ token }: Props) {
         ) : null}
         <article
           className="prose-sm max-w-none text-primary prose [&_h1]:text-18 [&_h2]:mt-6 [&_h2]:text-14 [&_table]:text-12"
-          dangerouslySetInnerHTML={{ __html: data.html }}
+          dangerouslySetInnerHTML={{ __html: sanitizeHtmlForRender(data.html) }}
         />
         <p className="mt-10 text-11 text-tertiary">{t("boards.client_360.guest_link_footer")}</p>
       </main>
