@@ -9,8 +9,7 @@ import type { IEmailCheckData } from "@operis/types";
 // ui
 import { Input, Spinner } from "@operis/ui";
 // helpers
-import { cn } from "@operis/utils";
-import { checkEmailValidity } from "@/helpers/string.helper";
+import { cn, checkEmailValidity } from "@operis/utils";
 
 type TAuthEmailForm = {
   defaultEmail: string;

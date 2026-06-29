@@ -5,8 +5,7 @@ import { Listbox, Transition } from "@headlessui/react";
 // ui
 import { LinkIcon, CenterPanelIcon, FullScreenPanelIcon, SidePanelIcon } from "@operis/propel/icons";
 import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-// helpers
-import { copyTextToClipboard } from "@/helpers/string.helper";
+import { copyTextToClipboard } from "@operis/utils";
 // hooks
 import { useIssueDetails } from "@/hooks/store/use-issue-details";
 import useClipboardWritePermission from "@/hooks/use-clipboard-write-permission";

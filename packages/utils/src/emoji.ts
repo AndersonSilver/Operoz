@@ -77,6 +77,26 @@ export const groupReactions: (reactions: any[], key: string) => { [key: string]:
 };
 
 /**
+ * Renders an emoji character from a code-point string, or an icon from an object descriptor.
+ * @param emoji - Decimal code-point string (e.g. "128512") or an icon descriptor { name, color }.
+ * @returns The rendered emoji string or a `<span>` element for icon descriptors.
+ */
+export const renderEmoji = (
+  emoji:
+    | string
+    | {
+        name: string;
+        color: string;
+      }
+): string | undefined => {
+  if (!emoji) return undefined;
+
+  if (typeof emoji === "object") return emoji.name;
+
+  return isNaN(parseInt(emoji)) ? emoji : String.fromCodePoint(parseInt(emoji));
+};
+
+/**
  * Returns a random emoji code from the RANDOM_EMOJI_CODES array
  * @returns {string} A random emoji code
  */

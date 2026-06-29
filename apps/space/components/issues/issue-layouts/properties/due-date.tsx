@@ -1,10 +1,7 @@
 import { observer } from "mobx-react";
 import { DueDatePropertyIcon } from "@operis/propel/icons";
 import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
-// helpers
-import { renderFormattedDate } from "@/helpers/date-time.helper";
-import { shouldHighlightIssueDueDate } from "@/helpers/issue.helper";
+import { cn, renderFormattedDate, shouldHighlightIssueDueDate } from "@operis/utils";
 // hooks
 import { useStates } from "@/hooks/store/use-state";
 

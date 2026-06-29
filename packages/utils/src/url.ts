@@ -1,5 +1,34 @@
 import tlds from "./tlds";
 
+type TQueryParamValue = string | string[] | boolean | number | bigint | undefined | null;
+
+/**
+ * Generates a query-string and a structured query object from a record of values,
+ * skipping empty / nullish entries.
+ */
+export const queryParamGenerator = (queryObject: Record<string, TQueryParamValue>) => {
+  const queryParamObject: Record<string, TQueryParamValue> = {};
+  const queryParam = new URLSearchParams();
+
+  Object.entries(queryObject).forEach(([key, value]) => {
+    if (typeof value === "number" || typeof value === "bigint" || typeof value === "boolean") {
+      queryParamObject[key] = value;
+      queryParam.append(key, value.toString());
+    } else if (typeof value === "string" && value.length > 0) {
+      queryParamObject[key] = value.split(",");
+      queryParam.append(key, value);
+    } else if (Array.isArray(value) && value.length > 0) {
+      queryParamObject[key] = value;
+      queryParam.append(key, value.toString());
+    }
+  });
+
+  return {
+    query: queryParamObject,
+    queryParam: queryParam.toString(),
+  };
+};
+
 const PROTOCOL_REGEX = /^[a-zA-Z]+:\/\//;
 const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const LOCALHOST_ADDRESSES = ["localhost", "127.0.0.1", "0.0.0.0"];

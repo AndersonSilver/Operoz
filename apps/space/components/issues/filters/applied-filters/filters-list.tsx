@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import { useTranslation } from "@operis/i18n";
 import { CloseIcon } from "@operis/propel/icons";
+import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
 // types
 import type { TFilters } from "@/types/issue";
 // components
@@ -12,8 +13,6 @@ type Props = {
   handleRemoveAllFilters: () => void;
   handleRemoveFilter: (key: keyof TFilters, value: string | null) => void;
 };
-
-export const replaceUnderscoreIfSnakeCase = (str: string) => str.replace(/_/g, " ");
 
 export const AppliedFiltersList = observer(function AppliedFiltersList(props: Props) {
   const { appliedFilters = {}, handleRemoveAllFilters, handleRemoveFilter } = props;

@@ -4,11 +4,9 @@ import { LinkIcon, ViewsIcon } from "@operis/propel/icons";
 // plane imports
 import { Tooltip } from "@operis/propel/tooltip";
 import type { IIssueDisplayProperties } from "@operis/types";
-import { cn } from "@operis/utils";
+import { cn, getDate } from "@operis/utils";
 // components
 import { WithDisplayPropertiesHOC } from "@/components/issues/issue-layouts/with-display-properties-HOC";
-// helpers
-import { getDate } from "@/helpers/date-time.helper";
 //// hooks
 import type { IIssue } from "@/types/issue";
 import { IssueBlockCycle } from "./cycle";
