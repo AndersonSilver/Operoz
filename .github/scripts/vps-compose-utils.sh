@@ -1,6 +1,19 @@
 #!/usr/bin/env bash
 # Funções partilhadas pelos scripts de deploy no VPS (plane-app + overlay assistente).
 
+# Resolve operoz.env ou fallback legado operis.env (VPS pré-rebrand).
+operoz_app_env_file() {
+  local app_path="${1:?app_path required}"
+  if [[ -f "${app_path}/operoz.env" ]]; then
+    echo "${app_path}/operoz.env"
+  elif [[ -f "${app_path}/operis.env" ]]; then
+    echo "${app_path}/operis.env"
+  else
+    echo "ERRO: operoz.env ou operis.env não encontrado em ${app_path}" >&2
+    return 1
+  fi
+}
+
 operoz_compose_base() {
   local app_path="${1:?app_path required}"
   if [[ -f "${app_path}/docker-compose.yaml" ]]; then
@@ -24,15 +37,16 @@ operoz_dc() {
   local repo_path="${2:?repo_path required}"
   shift 2
 
-  local base overlay
+  local base overlay env_file
   base="$(operoz_compose_base "${app_path}")"
   overlay="$(operoz_assistant_overlay "${repo_path}")"
+  env_file="$(operoz_app_env_file "${app_path}")"
 
   local -a args=(-f "${base}")
   if [[ -f "${overlay}" ]]; then
     args+=(-f "${overlay}")
   fi
-  args+=(--env-file "${app_path}/operoz.env")
+  args+=(--env-file "${env_file}")
 
   docker compose "${args[@]}" "$@"
 }
@@ -99,8 +113,8 @@ operoz_listen_http_port() {
 operoz_health_check() {
   local app_path="${1:?app_path required}"
   local repo_path="${2:?repo_path required}"
-  local env_file="${app_path}/operoz.env"
-  local port
+  local env_file port
+  env_file="$(operoz_app_env_file "${app_path}")"
   port="$(operoz_listen_http_port "${env_file}")"
 
   echo "==> Health check (http://127.0.0.1:${port}/api/instances/)"

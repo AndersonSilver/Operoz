@@ -12,7 +12,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
-ENV_FILE="${OPEROZ_APP_PATH}/operoz.env"
+ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
 
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
@@ -35,7 +35,7 @@ docker tag "${WEB_IMAGE}" myoperoz/plane-frontend:stable
 docker tag "${WEB_IMAGE}" myoperoz/plane-frontend:local
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "ERRO: operoz.env não encontrado em ${OPEROZ_APP_PATH}"
+  echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"
   exit 1
 fi
 

@@ -7,8 +7,8 @@
 #
 # Variables recomendadas (Settings → Variables):
 #   OPEROZ_WEB_URL    — https://www.operoz.io (URL pública; build do frontend + sync operoz.env)
-#   OPEROZ_REPO_PATH  — /root/operoz-selfhost/Operoz
-#   OPEROZ_APP_PATH   — /root/operoz-selfhost/plane-app
+#   OPEROZ_REPO_PATH  — /root/operis-selfhost/Operis (legado operis-selfhost OK)
+#   OPEROZ_APP_PATH   — /root/operis-selfhost/plane-app
 #   OPEROZ_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operoz-runner.sh)
 #   OPEROZ_DEPLOY_ON_PUSH — "web" (padrão), "full" (stack em cada push), ou deixar vazio e usar [deploy-full] no commit
 #   Push que altera apps/api|space|admin|live|proxy dispara build-full automaticamente (path filter)
@@ -81,7 +81,7 @@ jobs:
       - name: Modo de deploy
         id: mode
         run: |
-          if [[ "${{ vars.OPEROZ_SELF_HOSTED_RUNNER }}" == "true" ]]; then
+          if [[ "${{ vars.OPEROZ_SELF_HOSTED_RUNNER || vars.OPERIS_SELF_HOSTED_RUNNER }}" == "true" ]]; then
             echo "use_self_hosted=true" >> "$GITHUB_OUTPUT"
           else
             echo "use_self_hosted=false" >> "$GITHUB_OUTPUT"
@@ -148,7 +148,7 @@ jobs:
             ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
           build-args: |
             VITE_ENABLE_BOARDS=true
-            VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+            VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -226,8 +226,8 @@ jobs:
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operoz-selfhost/Operoz' }}
-      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operoz-selfhost/plane-app' }}
+      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
+      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/plane-app' }}
       GIT_BRANCH: preview
       GITHUB_ACTOR: ${{ github.actor }}
     steps:
@@ -252,7 +252,7 @@ jobs:
         if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         env:
           WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
-          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-web.sh
 
       - name: Deploy web on VPS (SSH)
@@ -261,7 +261,7 @@ jobs:
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
-          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
           GIT_BRANCH: preview
@@ -307,7 +307,7 @@ jobs:
         if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
         env:
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
-          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-full.sh
 
       - name: Deploy full stack on VPS (SSH)
@@ -316,7 +316,7 @@ jobs:
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
-          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
           GIT_BRANCH: preview

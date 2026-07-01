@@ -29,21 +29,22 @@ Não é preciso rebuild manual do proxy na VPS nem correr `vps-setup-assistant-w
 
 ### Variables (obrigatórias para produção)
 
-| Variable                    | Valor recomendado                 |
-| --------------------------- | --------------------------------- |
-| `OPEROZ_WEB_URL`            | `https://www.operoz.io`           |
-| `OPEROZ_REPO_PATH`          | `/root/operoz-selfhost/Operoz`    |
-| `OPEROZ_APP_PATH`           | `/root/operoz-selfhost/plane-app` |
-| `OPEROZ_DEPLOY_ON_PUSH`     | `web` ou `full` (opcional)        |
-| `OPEROZ_SELF_HOSTED_RUNNER` | `true` se usar runner no VPS      |
+| Variable                    | Valor recomendado                                             |
+| --------------------------- | ------------------------------------------------------------- |
+| `OPEROZ_WEB_URL`            | `https://www.operoz.io` (ou `https://operoz.webcycle.com.br`) |
+| `OPEROZ_REPO_PATH`          | `/root/operis-selfhost/Operis`                                |
+| `OPEROZ_APP_PATH`           | `/root/operis-selfhost/plane-app`                             |
+| `OPEROZ_DEPLOY_ON_PUSH`     | `web` ou `full` (opcional)                                    |
+| `OPEROZ_SELF_HOSTED_RUNNER` | `true` se usar runner no VPS                                  |
 
 **Importante:** `OPEROZ_WEB_URL` controla o build do frontend (`VITE_API_BASE_URL`) e sincroniza `WEB_URL` / `CORS_ALLOWED_ORIGINS` no `operoz.env` durante o deploy.
 
 ### VPS
 
 - Docker e docker compose instalados.
-- `operoz.env` com `DOCKERHUB_USER=myoperoz`, `APP_RELEASE=stable`, `PULL_POLICY=never`.
+- `operis.env` ou `operoz.env` em `plane-app` (`DOCKERHUB_USER=myoperoz`, `APP_RELEASE=stable`, `PULL_POLICY=never`).
 - Clone do repo em `OPEROZ_REPO_PATH` (branch `preview`).
+- Setup pós-rebrand (uma vez na VPS): `bash scripts/vps-rebrand-setup.sh`
 - Nginx Proxy Manager: forward para `172.17.0.1:8080` (fora do Actions — configuração única).
 
 ## Como publicar
