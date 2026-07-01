@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 // plane types
-import type { TInboxIssueFilterMemberKeys } from "@operis/types";
+import type { TInboxIssueFilterMemberKeys } from "@operoz/types";
 // plane ui
-import { Avatar, Loader } from "@operis/ui";
+import { Avatar, Loader } from "@operoz/ui";
 // components
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // helpers
 // hooks

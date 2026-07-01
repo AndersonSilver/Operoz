@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-import type { IBoardIssueType, IProjectIssueTypeLite, TBoardIssueTypeFormData } from "@operis/types";
+import type { IBoardIssueType, IProjectIssueTypeLite, TBoardIssueTypeFormData } from "@operoz/types";
 import { BoardIssueTypeService } from "@/services/board/board-issue-type.service";
 
 export interface IBoardIssueTypeStore {
@@ -59,9 +59,7 @@ export class BoardIssueTypeStore implements IBoardIssueTypeStore {
     const created = await this.service.createBoardIssueType(workspaceSlug, boardSlug, data);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
-      const list = [...(this.boardIssueTypesByKey[key] ?? []), created].sort(
-        (a, b) => a.sort_order - b.sort_order
-      );
+      const list = [...(this.boardIssueTypesByKey[key] ?? []), created].sort((a, b) => a.sort_order - b.sort_order);
       this.boardIssueTypesByKey[key] = list;
     });
     return created;

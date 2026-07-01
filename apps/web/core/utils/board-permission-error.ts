@@ -1,8 +1,9 @@
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 type TranslateFn = (key: string, params?: Record<string, string>) => string;
 
 export const isBoardPermissionDeniedError = (error: unknown): boolean => {
-  const payload = (error as { error?: string }) ?? (error as { response?: { data?: { error?: string } } })?.response?.data;
+  const payload =
+    (error as { error?: string }) ?? (error as { response?: { data?: { error?: string } } })?.response?.data;
   return payload?.error === "BOARD_PERMISSION_DENIED";
 };
 
@@ -14,9 +15,7 @@ export const showBoardPermissionDeniedToast = (error: unknown, t: TranslateFn) =
   setToast({
     type: TOAST_TYPE.ERROR,
     title: t("boards.settings.permissions.denied"),
-    message: permission
-      ? t("boards.settings.permissions.denied_detail", { permission })
-      : t("something_went_wrong"),
+    message: permission ? t("boards.settings.permissions.denied_detail", { permission }) : t("something_went_wrong"),
   });
   return true;
 };

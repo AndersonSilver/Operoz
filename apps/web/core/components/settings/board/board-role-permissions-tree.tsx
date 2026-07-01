@@ -1,12 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardPermissionTreeNode, TBoardRolePermissionsMap } from "@operis/types";
-import { Checkbox } from "@operis/ui";
-import {
-  boardPermissionI18nKey,
-  flattenPermissionTree,
-  setPermissionWithChildren,
-} from "./board-permission-utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardPermissionTreeNode, TBoardRolePermissionsMap } from "@operoz/types";
+import { Checkbox } from "@operoz/ui";
+import { boardPermissionI18nKey, flattenPermissionTree, setPermissionWithChildren } from "./board-permission-utils";
 
 type Props = {
   boardName: string;

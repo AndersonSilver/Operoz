@@ -3,13 +3,13 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { CircleUserRound } from "lucide-react";
 // plane imports
-import { useTranslation, DEFAULT_LOCALE } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
-import { EFileAssetType } from "@operis/types";
-import type { IUser, TUserProfile } from "@operis/types";
-import { Input } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { useTranslation, DEFAULT_LOCALE } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operoz/propel/toast";
+import { EFileAssetType } from "@operoz/types";
+import type { IUser, TUserProfile } from "@operoz/types";
+import { Input } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 // components
 import { DeactivateAccountModal } from "@/components/account/deactivate-account-modal";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";
@@ -23,7 +23,7 @@ import { handleCoverImageChange } from "@/helpers/cover-image.helper";
 import { useInstance } from "@/hooks/store/use-instance";
 import { useUser, useUserProfile } from "@/hooks/store/user";
 // utils
-import { validatePersonName, validateDisplayName } from "@operis/utils";
+import { validatePersonName, validateDisplayName } from "@operoz/utils";
 
 type TUserProfileForm = {
   avatar_url: string;

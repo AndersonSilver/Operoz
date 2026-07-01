@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUserEmailNotificationSettings } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUserEmailNotificationSettings } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
 // components
 import { SettingsControlItem } from "@/components/settings/control-item";
 // services

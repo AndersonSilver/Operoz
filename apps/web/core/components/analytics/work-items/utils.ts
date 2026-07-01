@@ -1,6 +1,6 @@
 // plane package imports
-import type { ChartYAxisMetric, IState } from "@operis/types";
-import { ChartXAxisProperty } from "@operis/types";
+import type { ChartYAxisMetric, IState } from "@operoz/types";
+import { ChartXAxisProperty } from "@operoz/types";
 
 interface ParamsProps {
   x_axis: ChartXAxisProperty;

@@ -3,8 +3,8 @@ import useSWR from "swr";
 import { useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { Client360DetailContent } from "@/components/board/client-360/client-360-detail-content";
 import { Client360DetailHeader } from "@/components/board/client-360/client-360-detail-header";
 import { Client360PageShell } from "@/components/board/client-360/client-360-ui";
@@ -15,7 +15,7 @@ import {
 } from "@/components/board/client-360/client-360-utils";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { WorkspaceService } from "@/services/workspace.service";
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 
 type Props = {
   workspaceSlug: string;

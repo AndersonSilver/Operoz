@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 import { ImageIcon } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IFormattedInstanceConfiguration, TInstanceImageConfigurationKeys } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IFormattedInstanceConfiguration, TInstanceImageConfigurationKeys } from "@operoz/types";
 import { ControllerInput } from "@/components/common/controller-input";
 import { AdminFormActions, AdminFormFooter, AdminSettingsPanel } from "@/components/settings/admin-settings-panel";
 import { useInstance } from "@/hooks/store";

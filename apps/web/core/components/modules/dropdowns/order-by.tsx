@@ -1,13 +1,13 @@
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
-import { MODULE_ORDER_BY_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { TModuleOrderByOptions } from "@operis/types";
+import { MODULE_ORDER_BY_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { TModuleOrderByOptions } from "@operoz/types";
 // ui
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // types
 // constants
 

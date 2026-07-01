@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane package imports
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { TChartData } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { TChartData } from "@operoz/types";
 // hooks
 import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
@@ -16,7 +16,7 @@ import AnalyticsSectionWrapper from "../analytics-section-wrapper";
 import { ProjectInsightsLoader } from "../loaders";
 
 const RadarChart = lazy(function RadarChart() {
-  return import("@operis/propel/charts/radar-chart").then((mod) => ({
+  return import("@operoz/propel/charts/radar-chart").then((mod) => ({
     default: mod.RadarChart,
   }));
 });

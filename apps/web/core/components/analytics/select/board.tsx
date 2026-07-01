@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useBoard } from "@/hooks/store/use-board";
 
 type Props = {

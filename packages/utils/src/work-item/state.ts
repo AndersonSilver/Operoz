@@ -1,7 +1,7 @@
 // plane imports
-import type { TDraggableData } from "@operis/constants";
-import { STATE_GROUPS } from "@operis/constants";
-import type { IState, IStateResponse } from "@operis/types";
+import type { TDraggableData } from "@operoz/constants";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { IState, IStateResponse } from "@operoz/types";
 
 export const orderStateGroups = (unorderedStateGroups: IStateResponse | undefined): IStateResponse | undefined => {
   if (!unorderedStateGroups) return undefined;

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { LabelPropertyIcon } from "@operis/propel/icons";
+import { LabelPropertyIcon } from "@operoz/propel/icons";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useLabel } from "@/hooks/store/use-label";

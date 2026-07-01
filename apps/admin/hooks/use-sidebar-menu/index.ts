@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { coreSidebarMenuLinks } from "./core";
 import type { TSidebarMenuItem } from "./types";
 

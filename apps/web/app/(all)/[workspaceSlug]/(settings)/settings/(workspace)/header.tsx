@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { WORKSPACE_SETTINGS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Breadcrumbs } from "@operis/ui";
+import { WORKSPACE_SETTINGS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Breadcrumbs } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SettingsPageHeader } from "@/components/settings/page-header";

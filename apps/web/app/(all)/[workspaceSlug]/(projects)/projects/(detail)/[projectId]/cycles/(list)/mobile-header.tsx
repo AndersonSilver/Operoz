@@ -1,11 +1,11 @@
 import type React from "react";
 import { observer } from "mobx-react";
 // ui
-import type { ISvgIcons } from "@operis/propel/icons";
-import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operoz/propel/icons";
 // plane package imports
-import type { TCycleLayoutOptions } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import type { TCycleLayoutOptions } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 // hooks
 import { useCycleFilter } from "@/hooks/store/use-cycle-filter";
 import { useProject } from "@/hooks/store/use-project";

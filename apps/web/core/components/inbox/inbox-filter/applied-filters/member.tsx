@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 
 // plane types
-import { CloseIcon } from "@operis/propel/icons";
-import type { TInboxIssueFilterMemberKeys } from "@operis/types";
+import { CloseIcon } from "@operoz/propel/icons";
+import type { TInboxIssueFilterMemberKeys } from "@operoz/types";
 // plane ui
-import { Avatar, Tag } from "@operis/ui";
+import { Avatar, Tag } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";

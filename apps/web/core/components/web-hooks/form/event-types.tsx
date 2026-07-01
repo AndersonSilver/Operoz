@@ -1,6 +1,6 @@
 // types
-import { useTranslation } from "@operis/i18n";
-import type { TWebhookEventTypes } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TWebhookEventTypes } from "@operoz/types";
 
 type Props = {
   value: string;

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // plane imports
-import { ENotificationFilterType, FILTER_TYPE_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
-import { Header, EHeaderVariant, Tag } from "@operis/ui";
+import { ENotificationFilterType, FILTER_TYPE_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
+import { Header, EHeaderVariant, Tag } from "@operoz/ui";
 // hooks
 import { useWorkspaceNotifications } from "@/hooks/store/notifications";
 

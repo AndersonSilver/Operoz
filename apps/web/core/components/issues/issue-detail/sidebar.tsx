@@ -14,7 +14,7 @@ import {
   User,
   Users,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import {
   cn,
   getDate,
@@ -22,13 +22,13 @@ import {
   renderFormattedPayloadDate,
   renderFormattedTime,
   shouldHighlightIssueDueDate,
-} from "@operis/utils";
+} from "@operoz/utils";
 import { DateDropdown } from "@/components/dropdowns/date";
 import { EstimateDropdown } from "@/components/dropdowns/estimate";
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { PriorityDropdown } from "@/components/dropdowns/priority";
-import { StateDropdown } from "@/components/dropdowns/state/dropdown";
+import { IssueWorkflowStateControl } from "./issue-workflow-state-control";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";
@@ -47,6 +47,7 @@ import {
   IssueDetailPropertyGroup,
   IssueDetailPropertyRow,
   IssueDetailSidebarAccordion,
+  issueDetailPropertyDropdownProps,
 } from "./sidebar-property-field";
 import type { TIssueOperations } from "./root";
 
@@ -56,13 +57,6 @@ type Props = {
   issueId: string;
   issueOperations: TIssueOperations;
   isEditable: boolean;
-};
-
-const jiraDropdownProps = {
-  buttonVariant: "transparent-with-text" as const,
-  className: "group w-full",
-  buttonContainerClassName: "w-full text-left",
-  buttonClassName: "h-auto min-h-0 justify-start px-0 py-0.5 text-13 text-primary",
 };
 
 export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: Props) {
@@ -111,11 +105,14 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
           }}
         >
           <span className="absolute inset-y-0 left-0 w-1" style={{ backgroundColor: stateColor }} />
-          <StateDropdown
+          <IssueWorkflowStateControl
+            workspaceSlug={workspaceSlug}
+            issueId={issueId}
             value={issue?.state_id}
             onChange={(val) => issueOperations.update(workspaceSlug, projectId, issueId, { state_id: val })}
             projectId={projectId?.toString() ?? ""}
             disabled={!isEditable}
+            variant="sidebar"
             buttonVariant="transparent-with-text"
             className="w-full"
             buttonContainerClassName="w-full"
@@ -138,10 +135,10 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                 projectId={projectId?.toString() ?? ""}
                 placeholder={t("issue.add.assignee")}
                 multiple
-                {...jiraDropdownProps}
+                {...issueDetailPropertyDropdownProps}
                 buttonVariant={issue?.assignee_ids?.length > 1 ? "transparent-without-text" : "transparent-with-text"}
                 buttonClassName={cn(
-                  jiraDropdownProps.buttonClassName,
+                  issueDetailPropertyDropdownProps.buttonClassName,
                   issue?.assignee_ids?.length > 0 ? "text-primary" : "text-placeholder"
                 )}
                 hideIcon={issue.assignee_ids?.length === 0}
@@ -177,8 +174,8 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                 value={issue?.priority}
                 onChange={(val) => issueOperations.update(workspaceSlug, projectId, issueId, { priority: val })}
                 disabled={!isEditable}
-                {...jiraDropdownProps}
-                buttonClassName={cn(jiraDropdownProps.buttonClassName, "px-0 [&_svg]:size-3.5")}
+                {...issueDetailPropertyDropdownProps}
+                buttonClassName={cn(issueDetailPropertyDropdownProps.buttonClassName, "px-0 [&_svg]:size-3.5")}
               />
             </IssueDetailPropertyRow>
           </IssueDetailPropertyGroup>
@@ -195,9 +192,9 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                 }
                 maxDate={maxDate ?? undefined}
                 disabled={!isEditable}
-                {...jiraDropdownProps}
+                {...issueDetailPropertyDropdownProps}
                 buttonClassName={cn(
-                  jiraDropdownProps.buttonClassName,
+                  issueDetailPropertyDropdownProps.buttonClassName,
                   issue?.start_date ? "text-primary" : "text-placeholder"
                 )}
                 hideIcon
@@ -205,7 +202,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </IssueDetailPropertyRow>
 
-            <IssueDetailPropertyRow icon={CalendarClock} label={t("common.order_by.due_date")}>
+            <IssueDetailPropertyRow icon={CalendarClock} label={t("common.order_by.due_date")} layout="stacked">
               <div className="flex w-full flex-col items-start gap-1.5">
                 <DateDropdown
                   placeholder={t("common.none")}
@@ -217,8 +214,8 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                   }
                   minDate={minDate ?? undefined}
                   disabled={!isEditable}
-                  {...jiraDropdownProps}
-                  buttonClassName={cn(jiraDropdownProps.buttonClassName, {
+                  {...issueDetailPropertyDropdownProps}
+                  buttonClassName={cn(issueDetailPropertyDropdownProps.buttonClassName, {
                     "text-placeholder": !issue.target_date,
                     "text-danger-primary": shouldHighlightIssueDueDate(issue.target_date, stateDetails?.group),
                   })}
@@ -240,9 +237,9 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
                   }
                   projectId={projectId}
                   disabled={!isEditable}
-                  {...jiraDropdownProps}
+                  {...issueDetailPropertyDropdownProps}
                   buttonClassName={cn(
-                    jiraDropdownProps.buttonClassName,
+                    issueDetailPropertyDropdownProps.buttonClassName,
                     issue?.estimate_point !== null ? "text-primary" : "text-placeholder"
                   )}
                   placeholder={t("common.none")}
@@ -298,7 +295,7 @@ export const IssueDetailsSidebar = observer(function IssueDetailsSidebar(props: 
               />
             </IssueDetailPropertyRow>
 
-            <IssueDetailPropertyRow icon={Tags} label={t("common.labels")}>
+            <IssueDetailPropertyRow icon={Tags} label={t("common.labels")} layout="stacked">
               <IssueLabel
                 workspaceSlug={workspaceSlug}
                 projectId={projectId}

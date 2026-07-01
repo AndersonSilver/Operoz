@@ -4,7 +4,7 @@ import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-sc
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { ALL_ISSUES } from "@operis/constants";
+import { ALL_ISSUES } from "@operoz/constants";
 // types
 import type {
   GroupByColumnTypes,
@@ -16,8 +16,8 @@ import type {
   TIssueOrderByOptions,
   IGroupByColumn,
   TIssueKanbanFilters,
-} from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+} from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 // hooks

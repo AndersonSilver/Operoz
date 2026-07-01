@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // plane ui
-import { CycleIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { CycleIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 //hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 

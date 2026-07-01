@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
-import type { TIntakeForm } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { copyTextToClipboard } from "@operis/utils";
+import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operoz/propel/toast";
+import type { TIntakeForm } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { copyTextToClipboard } from "@operoz/utils";
 import { useProject } from "@/hooks/store/use-project";
 import { intakeFormService } from "@/services/intake/intake-form.service";
 import { IntakeEmptyState } from "./intake-empty-state";
@@ -24,7 +24,8 @@ type Props = {
 };
 
 function buildPublicFormUrl(anchor: string): string {
-  const base = (SPACE_BASE_URL.trim() || (typeof window !== "undefined" ? window.location.origin : "")) + SPACE_BASE_PATH;
+  const base =
+    (SPACE_BASE_URL.trim() || (typeof window !== "undefined" ? window.location.origin : "")) + SPACE_BASE_PATH;
   return `${base.replace(/\/$/, "")}/forms/${anchor}`;
 }
 
@@ -47,7 +48,8 @@ export const IntakeSettingsView = observer(function IntakeSettingsView(props: Pr
   const publishedCount = useMemo(() => forms.filter((form) => form.is_published).length, [forms]);
 
   const sortedForms = useMemo(
-    () => [...forms].sort((a, b) => (b.updated_at ?? b.created_at ?? "").localeCompare(a.updated_at ?? a.created_at ?? "")),
+    () =>
+      [...forms].sort((a, b) => (b.updated_at ?? b.created_at ?? "").localeCompare(a.updated_at ?? a.created_at ?? "")),
     [forms]
   );
 
@@ -59,7 +61,10 @@ export const IntakeSettingsView = observer(function IntakeSettingsView(props: Pr
     const promise = updateProject(workspaceSlug, projectId, { inbox_view: !project.inbox_view });
     setPromiseToast(promise, {
       loading: t("common.updating"),
-      success: { title: t("common.success"), message: () => t("project_settings.features.intake.setup.toggle_success") },
+      success: {
+        title: t("common.success"),
+        message: () => t("project_settings.features.intake.setup.toggle_success"),
+      },
       error: { title: t("common.error.label"), message: () => t("something_went_wrong") },
     });
   }, [getProjectById, projectId, t, updateProject, workspaceSlug]);
@@ -177,11 +182,7 @@ export const IntakeSettingsView = observer(function IntakeSettingsView(props: Pr
 
   return (
     <div className="intake-settings-page">
-      <IntakeSettingsHero
-        intakeEnabled={intakeEnabled}
-        creating={creating}
-        onCreate={() => void handleCreate()}
-      />
+      <IntakeSettingsHero intakeEnabled={intakeEnabled} creating={creating} onCreate={() => void handleCreate()} />
 
       <div className="intake-settings-body">
         <main className="intake-settings-main">

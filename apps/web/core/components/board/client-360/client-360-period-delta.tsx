@@ -1,5 +1,5 @@
 import { ArrowDown, ArrowUp } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 export type Client360PeriodDeltaMode = "lower_is_better" | "higher_is_better";
 

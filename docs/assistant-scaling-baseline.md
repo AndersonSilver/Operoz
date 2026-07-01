@@ -2,7 +2,7 @@
 
 Documento de governança do epic **Escala do Chat**: metas quantitativas, baseline pós-implementação e validação reproduzível.
 
-Relacionado: [ADR-004](./operis-assistant-adr-004-chat-scaling.md) · [assistant-scaling.md](./assistant-scaling.md)
+Relacionado: [ADR-004](./operoz-assistant-adr-004-chat-scaling.md) · [assistant-scaling.md](./assistant-scaling.md)
 
 ## SLAs acordados (pós-escala)
 
@@ -46,8 +46,8 @@ docker compose -f docker-compose-local.yml exec api \
 
 | Artefacto              | Caminho                                                       |
 | ---------------------- | ------------------------------------------------------------- |
-| Validação completa     | `operis/db/management/commands/validate_assistant_scaling.py` |
-| Carga 150 VUs (pytest) | `operis/tests/unit/assistant/test_scaling_validation.py`      |
+| Validação completa     | `operoz/db/management/commands/validate_assistant_scaling.py` |
+| Carga 150 VUs (pytest) | `operoz/tests/unit/assistant/test_scaling_validation.py`      |
 | Carga k6 (staging)     | `tests/load/assistant-chat-scaling.k6.js`                     |
 
 ## Matriz de dependências entre fases

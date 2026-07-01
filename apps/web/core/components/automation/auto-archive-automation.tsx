@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ArchiveRestore } from "lucide-react";
 // plane imports
-import { PROJECT_AUTOMATION_MONTHS, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IProject } from "@operis/types";
-import { CustomSelect, Loader, ToggleSwitch } from "@operis/ui";
+import { PROJECT_AUTOMATION_MONTHS, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IProject } from "@operoz/types";
+import { CustomSelect, Loader, ToggleSwitch } from "@operoz/ui";
 // component
 import { SelectMonthModal } from "@/components/automation";
 import { SettingsControlItem } from "@/components/settings/control-item";

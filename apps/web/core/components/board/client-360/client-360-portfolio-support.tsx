@@ -12,11 +12,11 @@ import {
   ShieldAlert,
   Users,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TClient360Client, TClient360Summary, TClient360SupportAnalytics } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TClient360Client, TClient360Summary, TClient360SupportAnalytics } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   Client360BentoGrid,
   Client360BentoMetric,

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   children: ReactNode;

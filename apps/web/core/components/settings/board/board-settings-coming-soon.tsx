@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { SettingsHeading } from "@/components/settings/heading";
 
 type Props = {
@@ -15,7 +15,11 @@ export function BoardSettingsComingSoon(props: Props) {
     <div className="w-full">
       <SettingsHeading title={t(titleKey)} description={t(descriptionKey)} />
       <div className="mt-8 flex justify-center">
-        <EmptyStateCompact assetKey="project" title={t("boards.settings.coming_soon_title")} description={t(descriptionKey)} />
+        <EmptyStateCompact
+          assetKey="project"
+          title={t("boards.settings.coming_soon_title")}
+          description={t(descriptionKey)}
+        />
       </div>
     </div>
   );

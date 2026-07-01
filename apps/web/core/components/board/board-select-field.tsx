@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { Controller, useFormContext } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { CustomSelect } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { CustomSelect } from "@operoz/ui";
 import { useBoard } from "@/hooks/store/use-board";
 
 type Props = {
@@ -64,20 +64,18 @@ export const BoardSelectField = observer(function BoardSelectField(props: Props)
                 tabIndex={tabIndex}
               >
                 {boards.map((board) => (
-                    <CustomSelect.Option key={board.id} value={board.id}>
-                      <div className="flex items-center gap-2">
-                        <span className="grid size-4 shrink-0 place-items-center">
-                          <Logo logo={board.logo_props} size={16} />
-                        </span>
-                        <span>{board.name}</span>
-                      </div>
-                    </CustomSelect.Option>
-                  ))}
+                  <CustomSelect.Option key={board.id} value={board.id}>
+                    <div className="flex items-center gap-2">
+                      <span className="grid size-4 shrink-0 place-items-center">
+                        <Logo logo={board.logo_props} size={16} />
+                      </span>
+                      <span>{board.name}</span>
+                    </div>
+                  </CustomSelect.Option>
+                ))}
               </CustomSelect>
             </div>
-            {errors[name] && (
-              <p className="text-11 text-danger-primary">{String(errors[name]?.message ?? "")}</p>
-            )}
+            {errors[name] && <p className="text-11 text-danger-primary">{String(errors[name]?.message ?? "")}</p>}
           </div>
         );
       }}

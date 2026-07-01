@@ -12,9 +12,9 @@ import { attachInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree
 import { observer } from "mobx-react";
 import { createRoot } from "react-dom/client";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import type { IFavorite, InstructionType } from "@operis/types";
-import { DropIndicator } from "@operis/ui";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import type { IFavorite, InstructionType } from "@operoz/types";
+import { DropIndicator } from "@operoz/ui";
 // hooks
 import { useFavoriteItemDetails } from "@/hooks/use-favorite-item-details";
 // local imports

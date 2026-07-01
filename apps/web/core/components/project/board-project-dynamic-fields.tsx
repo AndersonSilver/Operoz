@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-import { NETWORK_CHOICES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardProjectFieldLayout, IProject, TProjectStandardFieldKey } from "@operis/types";
-import { CustomSelect, Input, TextArea } from "@operis/ui";
-import { cn, projectIdentifierSanitizer } from "@operis/utils";
+import { NETWORK_CHOICES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardProjectFieldLayout, IProject, TProjectStandardFieldKey } from "@operoz/types";
+import { CustomSelect, Input, TextArea } from "@operoz/ui";
+import { cn, projectIdentifierSanitizer } from "@operoz/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";
 import { TimezoneSelect } from "@/components/global";
@@ -15,8 +15,8 @@ import {
   issueFormControlBaseClass,
   IssueFormField,
 } from "@/plane-web/components/issues/issue-modal/issue-form-field";
-import type { IProjectCustomFieldLite } from "@operis/types";
-import type { TCustomFieldValue } from "@operis/types";
+import type { IProjectCustomFieldLite } from "@operoz/types";
+import type { TCustomFieldValue } from "@operoz/types";
 import { projectFieldRequiredRules } from "./project-layout-validation";
 import {
   ProjectFormFieldError,
@@ -253,39 +253,39 @@ export function BoardProjectDynamicFields(props: Props) {
                   const current = NETWORK_CHOICES.find((n) => n.key === value);
                   return (
                     <>
-                    <CustomSelect
-                      value={value}
-                      onChange={onChange}
-                      label={
-                        <div className="flex h-full items-center gap-1 px-2">
-                          {current ? (
-                            <>
-                              <ProjectNetworkIcon iconKey={current.iconKey} />
-                              {t(current.i18n_label)}
-                            </>
-                          ) : (
-                            <span className="text-placeholder">{t("select_network")}</span>
-                          )}
-                        </div>
-                      }
-                      buttonClassName={withProjectFormControlError(
-                        Boolean(fieldState.error),
-                        issueFormControlBaseClass,
-                        "w-full"
-                      )}
-                      className="w-full"
-                      disabled={disabled}
-                    >
-                      {NETWORK_CHOICES.map((network) => (
-                        <CustomSelect.Option key={network.key} value={network.key}>
-                          <div className="flex items-center gap-2">
-                            <ProjectNetworkIcon iconKey={network.iconKey} />
-                            {t(network.i18n_label)}
+                      <CustomSelect
+                        value={value}
+                        onChange={onChange}
+                        label={
+                          <div className="flex h-full items-center gap-1 px-2">
+                            {current ? (
+                              <>
+                                <ProjectNetworkIcon iconKey={current.iconKey} />
+                                {t(current.i18n_label)}
+                              </>
+                            ) : (
+                              <span className="text-placeholder">{t("select_network")}</span>
+                            )}
                           </div>
-                        </CustomSelect.Option>
-                      ))}
-                    </CustomSelect>
-                    <ProjectFormFieldError message={fieldState.error?.message} />
+                        }
+                        buttonClassName={withProjectFormControlError(
+                          Boolean(fieldState.error),
+                          issueFormControlBaseClass,
+                          "w-full"
+                        )}
+                        className="w-full"
+                        disabled={disabled}
+                      >
+                        {NETWORK_CHOICES.map((network) => (
+                          <CustomSelect.Option key={network.key} value={network.key}>
+                            <div className="flex items-center gap-2">
+                              <ProjectNetworkIcon iconKey={network.iconKey} />
+                              {t(network.i18n_label)}
+                            </div>
+                          </CustomSelect.Option>
+                        ))}
+                      </CustomSelect>
+                      <ProjectFormFieldError message={fieldState.error?.message} />
                     </>
                   );
                 }}
@@ -343,9 +343,7 @@ export function BoardProjectDynamicFields(props: Props) {
 
   return (
     <div className="grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2">
-      {sorted.map((item) =>
-        item.field_source === "system" ? renderSystem(item) : renderCustom(item)
-      )}
+      {sorted.map((item) => (item.field_source === "system" ? renderSystem(item) : renderCustom(item)))}
     </div>
   );
 }

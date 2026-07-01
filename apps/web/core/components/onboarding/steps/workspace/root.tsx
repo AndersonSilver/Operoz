@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { IWorkspaceMemberInvitation } from "@operis/types";
-import { ECreateOrJoinWorkspaceViews, EOnboardingSteps } from "@operis/types";
+import type { IWorkspaceMemberInvitation } from "@operoz/types";
+import { ECreateOrJoinWorkspaceViews, EOnboardingSteps } from "@operoz/types";
 // hooks
 import { useUser } from "@/hooks/store/user";
 // local components

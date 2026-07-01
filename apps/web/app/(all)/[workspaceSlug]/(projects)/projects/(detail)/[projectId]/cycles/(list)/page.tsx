@@ -2,14 +2,14 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { useTheme } from "next-themes";
-import { EUserPermissionsLevel, CYCLE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { TCycleFilters } from "@operis/types";
-import { EUserProjectRoles } from "@operis/types";
+import { EUserPermissionsLevel, CYCLE_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import type { TCycleFilters } from "@operoz/types";
+import { EUserProjectRoles } from "@operoz/types";
 // components
-import { Header, EHeaderVariant } from "@operis/ui";
-import { calculateTotalFilters } from "@operis/utils";
+import { Header, EHeaderVariant } from "@operoz/ui";
+import { calculateTotalFilters } from "@operoz/utils";
 // assets
 import darkEmptyState from "@/app/assets/empty-state/disabled-feature/cycles-dark.webp?url";
 import lightEmptyState from "@/app/assets/empty-state/disabled-feature/cycles-light.webp?url";

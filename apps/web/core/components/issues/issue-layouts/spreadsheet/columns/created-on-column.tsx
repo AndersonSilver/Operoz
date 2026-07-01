@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // helpers
-import { Row } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { Row } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 
 type Props = {
   issue: TIssue;

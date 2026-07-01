@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 // Plane imports
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
-import type { IWorkItemPeekOverview, TIssue } from "@operis/types";
-import { EIssueServiceType, EIssuesStoreType } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operoz/propel/toast";
+import type { IWorkItemPeekOverview, TIssue } from "@operoz/types";
+import { EIssueServiceType, EIssuesStoreType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";

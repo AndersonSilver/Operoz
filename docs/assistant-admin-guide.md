@@ -87,7 +87,7 @@ Ver [assistant-quality-metrics.md](./assistant-quality-metrics.md) e ritual de a
 - Ações destrutivas: fluxo propose → confirm
 - HTML sanitizado nas respostas (`nh3`)
 
-Detalhes: [operis-assistant-security.md](./operis-assistant-security.md)
+Detalhes: [operoz-assistant-security.md](./operoz-assistant-security.md)
 
 ## CI e testes
 

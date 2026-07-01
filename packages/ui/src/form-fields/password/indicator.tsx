@@ -1,7 +1,7 @@
 import { CircleCheck } from "lucide-react";
 import React from "react";
-import { E_PASSWORD_STRENGTH } from "@operis/constants";
-import { cn, getPasswordStrength, getPasswordCriteria } from "@operis/utils";
+import { E_PASSWORD_STRENGTH } from "@operoz/constants";
+import { cn, getPasswordStrength, getPasswordCriteria } from "@operoz/utils";
 import { getStrengthInfo, getFragmentColor } from "./helper";
 
 export interface PasswordStrengthIndicatorProps {

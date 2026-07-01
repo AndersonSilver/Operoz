@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { WORKSPACE_SETTINGS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Breadcrumbs } from "@operis/ui";
+import { WORKSPACE_SETTINGS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Breadcrumbs } from "@operoz/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SettingsPageHeader } from "@/components/settings/page-header";
 import { WORKSPACE_SETTINGS_ICONS } from "@/components/settings/workspace/sidebar/item-icon";

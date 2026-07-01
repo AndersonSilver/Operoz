@@ -1,7 +1,7 @@
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIdentifierTextProps, TIdentifierTextVariant, TIssueIdentifierSize } from "@operis/types";
-import { cn } from "@operis/utils";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIdentifierTextProps, TIdentifierTextVariant, TIssueIdentifierSize } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 const SIZE_MAP: Record<TIssueIdentifierSize, string> = {
   xs: "text-caption-sm-regular",

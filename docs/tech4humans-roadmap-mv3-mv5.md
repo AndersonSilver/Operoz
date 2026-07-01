@@ -31,13 +31,13 @@ MV6 (fecho)          Rebranding **Kortex** (marca + opcional `@kortex/*`) — **
 
 ## Tipo de card vs etiqueta (decisão de produto)
 
-| | **Etiqueta (Label)** | **Tipo de card (IssueType)** |
-|--|----------------------|------------------------------|
-| **O que classifica** | Tema transversal (ex.: «urgente», «cliente X») | **Natureza do trabalho** (Kickoff, Deploy, Bug…) |
-| **Escopo no Plane hoje** | Por **projeto** | Por **workspace**, ligado ao projeto via `ProjectIssueType` |
-| **Quem cria hoje** | Membros do projeto (conforme permissões) | Plane EE / God mode; no fork CE os stubs estão vazios |
-| **UI Jira** | Labels coloridas | Ícone + tipo fixo no card |
-| **Tech4Humans (alvo)** | Mantém como está no projeto | **Catálogo do board**, CRUD só **ADMIN** em configurações |
+|                          | **Etiqueta (Label)**                           | **Tipo de card (IssueType)**                                |
+| ------------------------ | ---------------------------------------------- | ----------------------------------------------------------- |
+| **O que classifica**     | Tema transversal (ex.: «urgente», «cliente X») | **Natureza do trabalho** (Kickoff, Deploy, Bug…)            |
+| **Escopo no Plane hoje** | Por **projeto**                                | Por **workspace**, ligado ao projeto via `ProjectIssueType` |
+| **Quem cria hoje**       | Membros do projeto (conforme permissões)       | Plane EE / God mode; no fork CE os stubs estão vazios       |
+| **UI Jira**              | Labels coloridas                               | Ícone + tipo fixo no card                                   |
+| **Tech4Humans (alvo)**   | Mantém como está no projeto                    | **Catálogo do board**, CRUD só **ADMIN** em configurações   |
 
 **Não misturar:** um card tem **um** `type_id` (tipo) e **várias** etiquetas.
 
@@ -66,11 +66,11 @@ Alternativa futura: entrada também em **God mode** para tipos globais do worksp
 
 O fork **já tem** `IssueType` (workspace) + `ProjectIssueType` (quais tipos cada projeto usa).
 
-| Camada | Entidade | Papel |
-|--------|----------|--------|
-| Catálogo | `IssueType` | Nome, `logo_props`, `is_active`, `is_default`, `level` |
-| Board | `BoardIssueType` **(nova)** | `board_id` + `issue_type_id` + `sort_order` + `is_enabled` |
-| Projeto | `ProjectIssueType` | Ao associar projeto ao board, sincronizar tipos habilitados do board → projeto |
+| Camada   | Entidade                    | Papel                                                                          |
+| -------- | --------------------------- | ------------------------------------------------------------------------------ |
+| Catálogo | `IssueType`                 | Nome, `logo_props`, `is_active`, `is_default`, `level`                         |
+| Board    | `BoardIssueType` **(nova)** | `board_id` + `issue_type_id` + `sort_order` + `is_enabled`                     |
+| Projeto  | `ProjectIssueType`          | Ao associar projeto ao board, sincronizar tipos habilitados do board → projeto |
 
 **Porquê `BoardIssueType` e não duplicar `IssueType` por board?**
 
@@ -82,12 +82,12 @@ O fork **já tem** `IssueType` (workspace) + `ProjectIssueType` (quais tipos cad
 
 ### API (esboço)
 
-| Método | Path | Quem |
-|--------|------|------|
-| GET | `/api/workspaces/{slug}/boards/{board_slug}/issue-types/` | ADMIN, MEMBER (leitura), GUEST (leitura) |
-| POST | `…/issue-types/` | **ADMIN** |
-| PATCH | `…/issue-types/{id}/` | **ADMIN** |
-| DELETE | `…/issue-types/{id}/` | **ADMIN** (soft / `is_active=false`) |
+| Método | Path                                                      | Quem                                     |
+| ------ | --------------------------------------------------------- | ---------------------------------------- |
+| GET    | `/api/workspaces/{slug}/boards/{board_slug}/issue-types/` | ADMIN, MEMBER (leitura), GUEST (leitura) |
+| POST   | `…/issue-types/`                                          | **ADMIN**                                |
+| PATCH  | `…/issue-types/{id}/`                                     | **ADMIN**                                |
+| DELETE | `…/issue-types/{id}/`                                     | **ADMIN** (soft / `is_active=false`)     |
 
 POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiza nome/ícone. DELETE desativa no board (não apaga issues históricas).
 
@@ -114,13 +114,13 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 
 ### Escopo provável (a detalhar na abertura do MV3)
 
-| Área | Ideia |
-|------|--------|
-| Conteúdo | Progresso por projeto, riscos, bloqueios, entregas da semana, métricas do `meta/` |
-| Formato | Página no board + export PDF/Markdown + opcional envio email |
-| Período | Semanal / quinzenal; comparação com período anterior |
-| Permissões | Leitura: MEMBER+; publicar/editar template: ADMIN |
-| Dados | Reutilizar `GET …/boards/{slug}/meta/` + issues filtradas por data |
+| Área       | Ideia                                                                             |
+| ---------- | --------------------------------------------------------------------------------- |
+| Conteúdo   | Progresso por projeto, riscos, bloqueios, entregas da semana, métricas do `meta/` |
+| Formato    | Página no board + export PDF/Markdown + opcional envio email                      |
+| Período    | Semanal / quinzenal; comparação com período anterior                              |
+| Permissões | Leitura: MEMBER+; publicar/editar template: ADMIN                                 |
+| Dados      | Reutilizar `GET …/boards/{slug}/meta/` + issues filtradas por data                |
 
 ### Fora de MV3.0 (10a — MVP)
 
@@ -138,13 +138,13 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 
 ### Escopo provável
 
-| Área | Ideia |
-|------|--------|
-| Entidade | `PRD` ligado a `board_id` e/ou `project_id` |
-| Conteúdo | Editor rich text (reutilizar `@operis/editor` / Pages) |
-| Secções | Objetivo, requisitos, fora de escopo, critérios de aceite, ligação a cards |
-| Ligação | Cards referenciam PRD; filtro «cards deste PRD» |
-| Permissões | Editar: ADMIN + MEMBER (definir); ver: GUEST se projeto público |
+| Área       | Ideia                                                                      |
+| ---------- | -------------------------------------------------------------------------- |
+| Entidade   | `PRD` ligado a `board_id` e/ou `project_id`                                |
+| Conteúdo   | Editor rich text (reutilizar `@operoz/editor` / Pages)                     |
+| Secções    | Objetivo, requisitos, fora de escopo, critérios de aceite, ligação a cards |
+| Ligação    | Cards referenciam PRD; filtro «cards deste PRD»                            |
+| Permissões | Editar: ADMIN + MEMBER (definir); ver: GUEST se projeto público            |
 
 ### Relação com Plane hoje
 
@@ -161,12 +161,12 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 
 ### Escopo provável
 
-| Área | Ideia |
-|------|--------|
-| Modelo | `CustomRole` + `Permission` flags (criar board, editar tipo de card, publicar status report, editar PRD, …) |
-| Atribuição | Por workspace e/ou por board e/ou por projeto |
-| UI | Settings → Acessos → criar papel → checklist de permissões |
-| Migração | Mapear roles atuais (`ROLE.ADMIN`, etc.) para não quebrar instalações |
+| Área       | Ideia                                                                                                       |
+| ---------- | ----------------------------------------------------------------------------------------------------------- |
+| Modelo     | `CustomRole` + `Permission` flags (criar board, editar tipo de card, publicar status report, editar PRD, …) |
+| Atribuição | Por workspace e/ou por board e/ou por projeto                                                               |
+| UI         | Settings → Acessos → criar papel → checklist de permissões                                                  |
+| Migração   | Mapear roles atuais (`ROLE.ADMIN`, etc.) para não quebrar instalações                                       |
 
 ### Complexidade
 
@@ -188,12 +188,12 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 
 ### Escopo por ondas (resumo)
 
-| Onda | O quê | Esforço | Risco |
-|------|--------|---------|-------|
-| **MV6.1** | Marca visível: i18n, `SITE_NAME`, logos, favicon, emails, remover links `plane.so` | 1–3 dias | Baixo |
-| **MV6.2** | Instância self-hosted: nome/logo em God Mode | 1–2 dias | Baixo |
-| **MV6.3** | (Opcional) Renomear pacotes npm `@operis/*` → `@kortex/*` | 1–2 semanas | Médio |
-| **Fora do MVP** | Pacote Python `plane/`, Docker `operis-db`, pasta monorepo | — | Alto — adiar |
+| Onda            | O quê                                                                              | Esforço     | Risco        |
+| --------------- | ---------------------------------------------------------------------------------- | ----------- | ------------ |
+| **MV6.1**       | Marca visível: i18n, `SITE_NAME`, logos, favicon, emails, remover links `plane.so` | 1–3 dias    | Baixo        |
+| **MV6.2**       | Instância self-hosted: nome/logo em God Mode                                       | 1–2 dias    | Baixo        |
+| **MV6.3**       | (Opcional) Renomear pacotes npm `@operoz/*` → `@kortex/*`                          | 1–2 semanas | Médio        |
+| **Fora do MVP** | Pacote Python `plane/`, Docker `operoz-db`, pasta monorepo                         | —           | Alto — adiar |
 
 ### Critérios de aceite MV6 (mínimo para fechar MVP)
 
@@ -203,20 +203,20 @@ POST cria `IssueType` no workspace **e** liga em `BoardIssueType`. PATCH atualiz
 - [ ] `pnpm dev` + smoke Boards + Status Report sem regressão (checklist §8 do doc de rebranding).
 - [ ] Licença AGPL e copyright upstream **mantidos** no código (obrigação legal).
 
-**Estimativa MV6.1+6.2:** ~1 semana. Pacotes npm já renomeados para `@operis/*` (mai/2026).
+**Estimativa MV6.1+6.2:** ~1 semana. Pacotes npm já renomeados para `@operoz/*` (mai/2026).
 
 ---
 
 ## Ordem recomendada (resumo)
 
-| Fase | Entregável | Depende de |
-|------|------------|------------|
-| **BC-0…BC-3** | Config board (shell, tipos, campos, schema Projeto) | M2-12 |
-| **BC-4** | Acesso (4a simples ou 4b RBAC) | BC-0 |
-| **MV3** | Status Report | M2-9 meta, BC-0; plano em [board-config-mvp3-plano](./tech4humans-board-config-mvp3-plano.md) |
-| MV4 | PRD | MV3 opcional |
-| MV5 | RBAC custom (se BC-4b não couber antes) | BC-0 |
-| **MV6** | **Rebranding Kortex** (marca; pacotes opcionais) | MV3 estável; ideal MV4/MV5 ou BC fechado |
+| Fase          | Entregável                                          | Depende de                                                                                    |
+| ------------- | --------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **BC-0…BC-3** | Config board (shell, tipos, campos, schema Projeto) | M2-12                                                                                         |
+| **BC-4**      | Acesso (4a simples ou 4b RBAC)                      | BC-0                                                                                          |
+| **MV3**       | Status Report                                       | M2-9 meta, BC-0; plano em [board-config-mvp3-plano](./tech4humans-board-config-mvp3-plano.md) |
+| MV4           | PRD                                                 | MV3 opcional                                                                                  |
+| MV5           | RBAC custom (se BC-4b não couber antes)             | BC-0                                                                                          |
+| **MV6**       | **Rebranding Kortex** (marca; pacotes opcionais)    | MV3 estável; ideal MV4/MV5 ou BC fechado                                                      |
 
 **Cancelado:** M2-13…M2-15 (ícones).
 

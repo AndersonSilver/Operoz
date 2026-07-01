@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/plan.py
 ├── plans/
 │   ├── sources.py       # resolve_sources(plan, user) → project_ids acessíveis
@@ -32,23 +32,23 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| `resolve_sources` exclui projeto inacessível | id ausente |
-| `apply_overlay` muda só as issues do scenario | baseline intacto |
-| deteção de conflito de dependência | conflito reportado |
-| capacity vs committed (sobre-alocação) | flag over |
-| release report completion | percentagem certa |
+| Caso                                          | Esperado           |
+| --------------------------------------------- | ------------------ |
+| `resolve_sources` exclui projeto inacessível  | id ausente         |
+| `apply_overlay` muda só as issues do scenario | baseline intacto   |
+| deteção de conflito de dependência            | conflito reportado |
+| capacity vs committed (sobre-alocação)        | flag over          |
+| release report completion                     | percentagem certa  |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| timeline para user com acesso parcial | só fontes acessíveis |
-| issue restrita | invisível no Gantt |
-| `scenario/commit` sem `issue.edit` num projeto | `403`, nada alterado |
-| `scenario/commit` válido | issues atualizadas + audit |
-| `source_type=oql` | aplica visibilidade |
+| Caso                                           | Esperado                   |
+| ---------------------------------------------- | -------------------------- |
+| timeline para user com acesso parcial          | só fontes acessíveis       |
+| issue restrita                                 | invisível no Gantt         |
+| `scenario/commit` sem `issue.edit` num projeto | `403`, nada alterado       |
+| `scenario/commit` válido                       | issues atualizadas + audit |
+| `source_type=oql`                              | aplica visibilidade        |
 
 ### e2e
 

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
-import { EAuthModes, EAuthSteps } from "@operis/constants";
-import type { IEmailCheckData } from "@operis/types";
+import { EAuthModes, EAuthSteps } from "@operoz/constants";
+import type { IEmailCheckData } from "@operoz/types";
 // helpers
 import type { TAuthErrorInfo } from "@/helpers/authentication.helper";
 import { authErrorHandler } from "@/helpers/authentication.helper";

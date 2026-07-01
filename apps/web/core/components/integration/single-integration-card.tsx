@@ -3,13 +3,13 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR, { mutate } from "swr";
 import { CheckCircle } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IAppIntegration, IWorkspaceIntegration } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IAppIntegration, IWorkspaceIntegration } from "@operoz/types";
 // ui
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 // assets
 import GithubLogo from "@/app/assets/services/github.png?url";
 import SlackLogo from "@/app/assets/services/slack.png?url";

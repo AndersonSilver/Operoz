@@ -5,7 +5,7 @@ Automation Packs são pacotes instaláveis por board, no estilo plugins do Claud
 ## Estrutura
 
 ```text
-operis-pack-exemplo/
+operoz-pack-exemplo/
 ├── pack.json
 ├── hooks/
 │   └── hooks.json
@@ -45,11 +45,11 @@ Schema: `packs/automation-packs/schema.json`
 ## Validar localmente
 
 ```bash
-docker compose -f Operis/docker-compose-local.yml exec api \
+docker compose -f Operoz/docker-compose-local.yml exec api \
   python manage.py validate_automation_pack --all
 
-docker compose -f Operis/docker-compose-local.yml exec api \
-  python manage.py validate_automation_pack operis-pack-gestao-operacional
+docker compose -f Operoz/docker-compose-local.yml exec api \
+  python manage.py validate_automation_pack operoz-pack-gestao-operacional
 ```
 
 ## Instalar num board (API)
@@ -72,7 +72,7 @@ Body install (opcional):
 
 ## Pack oficial
 
-`operis-pack-gestao-operacional` — status report semanal, lembrete SLA sustentação, alerta sem assignee + hook de métrica pós-ação.
+`operoz-pack-gestao-operacional` — status report semanal, lembrete SLA sustentação, alerta sem assignee + hook de métrica pós-ação.
 
 ## CI
 
@@ -80,5 +80,5 @@ Incluir no pipeline de API:
 
 ```bash
 python manage.py validate_automation_pack --all
-pytest operis/tests/unit/automation/test_packs_registry.py -q
+pytest operoz/tests/unit/automation/test_packs_registry.py -q
 ```

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useUserPermissions } from "@/hooks/store/user";
 import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";

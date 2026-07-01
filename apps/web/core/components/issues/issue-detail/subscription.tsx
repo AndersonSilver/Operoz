@@ -3,13 +3,13 @@ import { isNil } from "lodash-es";
 import { observer } from "mobx-react";
 import { Bell, BellOff } from "lucide-react";
 // plane-i18n
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // UI
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EIssueServiceType } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EIssueServiceType } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useUserPermissions } from "@/hooks/store/user";

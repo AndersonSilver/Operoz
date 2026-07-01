@@ -2,19 +2,19 @@ import type { FormEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import type { EditorRefApi } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
-import { renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
+import { ETabIndices } from "@operoz/constants";
+import type { EditorRefApi } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
+import { renderFormattedPayloadDate, getTabIndex } from "@operoz/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-import { EHubMode } from "@operis/types";
+import { EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 import useKeypress from "@/hooks/use-keypress";

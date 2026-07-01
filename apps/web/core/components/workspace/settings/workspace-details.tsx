@@ -2,13 +2,13 @@ import { useEffect, useState, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Copy, Link2, Pencil, Save } from "lucide-react";
-import { ORGANIZATION_SIZE, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspace } from "@operis/types";
-import { CustomSelect, Input } from "@operis/ui";
-import { cn, copyUrlToClipboard, getFileURL, validateWorkspaceName } from "@operis/utils";
+import { ORGANIZATION_SIZE, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspace } from "@operoz/types";
+import { CustomSelect, Input } from "@operoz/ui";
+import { cn, copyUrlToClipboard, getFileURL, validateWorkspaceName } from "@operoz/utils";
 import { WorkspaceImageUploadModal } from "@/components/core/modals/workspace-image-upload-modal";
 import { TimezoneSelect } from "@/components/global/timezone-select";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -150,7 +150,7 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
         <div className="workspace-general-split-grid">
           <section className="workspace-general-identity-panel flex min-h-full flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1">
             <div className="workspace-general-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-5 lg:px-6">
-              <p className="text-11 font-semibold uppercase tracking-wide text-tertiary">
+              <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">
                 {t("workspace_settings.settings.general.sections.identity")}
               </p>
 
@@ -174,7 +174,7 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
                         alt={t("workspace_settings.settings.general.upload_logo")}
                       />
                     ) : (
-                      <span className="grid size-full place-items-center rounded-lg bg-accent-primary text-22 font-semibold text-on-color uppercase">
+                      <span className="text-22 grid size-full place-items-center rounded-lg bg-accent-primary font-semibold text-on-color uppercase">
                         {currentWorkspace.name?.charAt(0) ?? "W"}
                       </span>
                     )}
@@ -195,13 +195,11 @@ export const WorkspaceDetails = observer(function WorkspaceDetails() {
                   <h2 className="truncate text-16 font-semibold tracking-tight text-primary">
                     {workspaceName || currentWorkspace.name}
                   </h2>
-                  <p className="mt-1 text-12 text-tertiary">
-                    {t("workspace_settings.settings.general.identity_hint")}
-                  </p>
+                  <p className="mt-1 text-12 text-tertiary">{t("workspace_settings.settings.general.identity_hint")}</p>
                   <button
                     type="button"
                     onClick={handleCopyUrl}
-                    className="mt-2.5 inline-flex max-w-full items-center gap-1.5 truncate rounded-full border border-subtle bg-surface-1/90 px-2.5 py-1 font-mono text-11 text-secondary backdrop-blur-sm transition-colors hover:border-strong hover:bg-layer-1-hover hover:text-primary"
+                    className="font-mono mt-2.5 inline-flex max-w-full items-center gap-1.5 truncate rounded-full border border-subtle bg-surface-1/90 px-2.5 py-1 text-11 text-secondary backdrop-blur-sm transition-colors hover:border-strong hover:bg-layer-1-hover hover:text-primary"
                   >
                     <Link2 className="size-3 shrink-0 opacity-60" />
                     <span className="truncate">{workspaceUrl}</span>

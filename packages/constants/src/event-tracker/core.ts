@@ -1,4 +1,4 @@
-import type { EProductSubscriptionEnum } from "@operis/types";
+import type { EProductSubscriptionEnum } from "@operoz/types";
 
 /**
  * ===========================================================================

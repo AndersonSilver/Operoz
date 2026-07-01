@@ -3,13 +3,13 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
 import { ListFilter } from "lucide-react";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // plane helpers
 // types
-import type { TModuleFilters } from "@operis/types";
-import { cn, calculateTotalFilters } from "@operis/utils";
+import type { TModuleFilters } from "@operoz/types";
+import { cn, calculateTotalFilters } from "@operoz/utils";
 // components
 import { ArchiveTabsList } from "@/components/archives";
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";

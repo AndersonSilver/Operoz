@@ -1,4 +1,4 @@
-import type { TClient360Client, TClient360Summary } from "@operis/types";
+import type { TClient360Client, TClient360Summary } from "@operoz/types";
 
 export const CLIENT_360_BOARD_IDS_PARAM = "board_ids";
 const SESSION_KEY_PREFIX = "client360_board_filter_";

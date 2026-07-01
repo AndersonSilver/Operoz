@@ -1,6 +1,6 @@
 // plane imports
-import { getButtonStyling } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { getButtonStyling } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 // components
 import { ProIcon } from "@/components/common/pro-icon";
 

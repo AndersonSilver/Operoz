@@ -1,7 +1,7 @@
 import { useRef } from "react";
 //types
 import { observer } from "mobx-react";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
 //components
 import { shouldRenderColumn } from "@/helpers/issue-filter.helper";
 import { WithDisplayPropertiesHOC } from "../properties/with-display-properties-HOC";

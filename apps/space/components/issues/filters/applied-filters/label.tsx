@@ -1,4 +1,4 @@
-import { CloseIcon } from "@operis/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 // types
 import type { IIssueLabel } from "@/types/issue";
 

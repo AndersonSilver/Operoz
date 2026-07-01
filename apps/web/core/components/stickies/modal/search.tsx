@@ -3,13 +3,13 @@ import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane hooks
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // helpers
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 import { useSticky } from "@/hooks/use-stickies";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export const StickySearch = observer(function StickySearch() {
   // router

@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 
 // components
-import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronLeftIcon, ChevronRightIcon } from "@operis/propel/icons";
-import type { TSupportedFilterForUpdate } from "@operis/types";
-import { Row } from "@operis/ui";
+import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronLeftIcon, ChevronRightIcon } from "@operoz/propel/icons";
+import type { TSupportedFilterForUpdate } from "@operoz/types";
+import { Row } from "@operoz/ui";
 // icons
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import type { ICycleIssuesFilter } from "@/store/issue/cycle";

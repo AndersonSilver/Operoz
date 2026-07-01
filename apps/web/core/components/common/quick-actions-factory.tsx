@@ -1,7 +1,7 @@
 import { Pencil, ExternalLink, Link, Trash2, ArchiveRestoreIcon } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { ArchiveIcon } from "@operis/propel/icons";
-import type { TContextMenuItem } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { ArchiveIcon } from "@operoz/propel/icons";
+import type { TContextMenuItem } from "@operoz/ui";
 
 /**
  * Unified factory for creating menu items across all entities (cycles, modules, views, epics)

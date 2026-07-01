@@ -5,7 +5,7 @@ Padrões em [`00-VISAO-GERAL/01-padroes-backend.md`](../00-VISAO-GERAL/01-padroe
 ## Endpoints
 
 ```text
-# Webhooks de entrada (provider → Operis)
+# Webhooks de entrada (provider → Operoz)
 POST /api/webhooks/github/        # JÁ EXISTE — estender p/ PR/branch/commit/build
 POST /api/webhooks/gitlab/        # novo, mesmo handler normalizado
 POST /api/webhooks/ci/            # build/deploy status genérico (assinado)
@@ -15,7 +15,7 @@ GET  /api/workspaces/{slug}/projects/{pid}/issues/{iid}/dev-links/
 GET  /api/workspaces/{slug}/projects/{pid}/issues/{iid}/builds/
 GET  /api/workspaces/{slug}/projects/{pid}/issues/{iid}/deployments/
 
-# Branch a partir da issue (provider ← Operis)
+# Branch a partir da issue (provider ← Operoz)
 POST /api/workspaces/{slug}/projects/{pid}/issues/{iid}/create-branch/  { repo, base }
 
 # Config de integração
@@ -24,12 +24,12 @@ GET/POST /api/workspaces/{slug}/integrations/{provider}/
 
 ## Permissões
 
-| Ação | Regra |
-| --- | --- |
-| Webhooks de entrada | Assinatura HMAC do provider (não RBAC de utilizador) |
-| Ver dev panel | quem pode ver a issue |
-| Criar branch | `issue.edit` + integração configurada |
-| Configurar integração | `ROLE.ADMIN` (workspace) |
+| Ação                  | Regra                                                |
+| --------------------- | ---------------------------------------------------- |
+| Webhooks de entrada   | Assinatura HMAC do provider (não RBAC de utilizador) |
+| Ver dev panel         | quem pode ver a issue                                |
+| Criar branch          | `issue.edit` + integração configurada                |
+| Configurar integração | `ROLE.ADMIN` (workspace)                             |
 
 ## Webhook → normalização
 

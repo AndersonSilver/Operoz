@@ -1,4 +1,4 @@
-import type { IBoardProjectFieldLayout } from "@operis/types";
+import type { IBoardProjectFieldLayout } from "@operoz/types";
 
 type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 

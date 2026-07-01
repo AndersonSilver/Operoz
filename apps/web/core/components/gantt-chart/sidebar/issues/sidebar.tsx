@@ -2,9 +2,9 @@ import type { MouseEvent, RefObject } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
 // ui
-import { GANTT_TIMELINE_TYPE } from "@operis/types";
-import type { IBlockUpdateData } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { GANTT_TIMELINE_TYPE } from "@operoz/types";
+import type { IBlockUpdateData } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // components
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { GanttLayoutListItemLoader } from "@/components/ui/loader/layouts/gantt-layout-loader";

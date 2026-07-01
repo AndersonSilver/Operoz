@@ -1,6 +1,6 @@
 import React from "react";
 // plane utils
-import { calculateTimeAgo, cn, getIconForLink } from "@operis/utils";
+import { calculateTimeAgo, cn, getIconForLink } from "@operoz/utils";
 // plane ui
 import type { TContextMenuItem } from "../dropdowns/context-menu/root";
 import { CustomMenu } from "../dropdowns/custom-menu";

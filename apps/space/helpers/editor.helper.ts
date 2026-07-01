@@ -1,8 +1,8 @@
 // plane imports
-import { MAX_FILE_SIZE } from "@operis/constants";
-import type { TFileHandler } from "@operis/editor";
-import { SitesFileService } from "@operis/services";
-import { getFileURL } from "@operis/utils";
+import { MAX_FILE_SIZE } from "@operoz/constants";
+import type { TFileHandler } from "@operoz/editor";
+import { SitesFileService } from "@operoz/services";
+import { getFileURL } from "@operoz/utils";
 // services
 const sitesFileService = new SitesFileService();
 

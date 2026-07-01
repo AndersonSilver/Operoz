@@ -1,6 +1,6 @@
 // plane imports
-import type { IMarking } from "@operis/editor";
-import { cn } from "@operis/utils";
+import type { IMarking } from "@operoz/editor";
+import { cn } from "@operoz/utils";
 
 export type THeadingComponentProps = {
   marking: IMarking;

@@ -1,9 +1,9 @@
 import { BellRing } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
 import type {
   TAlertChannel,
   TAlertRule,
@@ -11,8 +11,8 @@ import type {
   TAlertRulesPayload,
   TAlertType,
   TEscalationStep,
-} from "@operis/types";
-import { EModalPosition, EModalWidth, Input, ModalCore, ToggleSwitch } from "@operis/ui";
+} from "@operoz/types";
+import { EModalPosition, EModalWidth, Input, ModalCore, ToggleSwitch } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { useAlertStore } from "@/hooks/store/notifications/use-alert";
 import { DueDateThresholds } from "./due-date-thresholds";
@@ -49,8 +49,12 @@ function readConfig(rule: TAlertRule | null): TAlertRuleConfig {
   return rule.config as TAlertRuleConfig;
 }
 
+function isSupportAlertType(alertType: TAlertType): boolean {
+  return alertType.startsWith("support_");
+}
+
 function supportsNotifyToggles(alertType: TAlertType): boolean {
-  return !alertType.startsWith("support_ticket_") || alertType === "support_ticket_created";
+  return !isSupportAlertType(alertType) || alertType.startsWith("support_");
 }
 
 function supportsThresholdsDays(alertType: TAlertType): boolean {
@@ -112,7 +116,7 @@ export const AlertRuleFormModal = observer(function AlertRuleFormModal({
         grace_period_days: ruleConfig.grace_period_days ?? 3,
         thresholds_minutes: ruleConfig.thresholds_minutes ?? DEFAULT_SLA_MINUTES,
         notify_assignees: ruleConfig.notify_assignees ?? true,
-        notify_creator: ruleConfig.notify_creator ?? false,
+        notify_creator: ruleConfig.notify_creator ?? (isSupportAlertType(rule.alert_type) ? true : false),
       });
       setEscalationSchedule(rule.escalation_schedule?.length ? [...rule.escalation_schedule] : []);
       return;
@@ -169,7 +173,11 @@ export const AlertRuleFormModal = observer(function AlertRuleFormModal({
     }
     if (supportsNotifyToggles(alertType)) {
       payloadConfig.notify_assignees = config.notify_assignees ?? true;
-      payloadConfig.notify_creator = config.notify_creator ?? false;
+      payloadConfig.notify_creator = config.notify_creator ?? (isSupportAlertType(alertType) ? true : false);
+    }
+    if (isSupportAlertType(alertType)) {
+      payloadConfig.notify_project_lead = true;
+      payloadConfig.notify_support_team = false;
     }
 
     return {

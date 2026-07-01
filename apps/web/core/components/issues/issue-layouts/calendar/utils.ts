@@ -1,8 +1,8 @@
 import { addDays } from "date-fns/addDays";
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
-import type { IIssueDisplayFilterOptions, IssuePaginationOptions } from "@operis/types";
-import type { TIssue } from "@operis/types";
-import { getDate, renderFormattedPayloadDate } from "@operis/utils";
+import type { IIssueDisplayFilterOptions, IssuePaginationOptions } from "@operoz/types";
+import type { TIssue } from "@operoz/types";
+import { getDate, renderFormattedPayloadDate } from "@operoz/utils";
 import type { ICalendarStore } from "@/store/issue/issue_calendar_view.store";
 
 type TIssuesFilterWithGet = {

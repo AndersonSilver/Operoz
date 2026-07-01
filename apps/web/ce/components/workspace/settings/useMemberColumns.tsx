@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { EUserPermissions, EUserPermissionsLevel, LOGIN_MEDIUM_LABELS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { renderFormattedDate } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel, LOGIN_MEDIUM_LABELS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { renderFormattedDate } from "@operoz/utils";
 import { MemberHeaderColumn } from "@/components/project/member-header-column";
 import type { RowData } from "@/components/workspace/settings/member-columns";
 import { AccountTypeColumn, NameColumn } from "@/components/workspace/settings/member-columns";

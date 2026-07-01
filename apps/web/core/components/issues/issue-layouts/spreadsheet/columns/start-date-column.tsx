@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { StartDatePropertyIcon } from "@operis/propel/icons";
+import { StartDatePropertyIcon } from "@operoz/propel/icons";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // components
-import { getDate, renderFormattedPayloadDate } from "@operis/utils";
+import { getDate, renderFormattedPayloadDate } from "@operoz/utils";
 import { DateDropdown } from "@/components/dropdowns/date";
 // helpers
 

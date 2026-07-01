@@ -1,8 +1,8 @@
 import { ChevronDown, ChevronUp, MoreHorizontal } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardProjectFieldLayout, TBoardFieldFormSpan } from "@operis/types";
-import { CustomMenu, ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardProjectFieldLayout, TBoardFieldFormSpan } from "@operoz/types";
+import { CustomMenu, ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 import { getBoardProjectFieldDisplayName } from "./board-project-field-display";
 import { isProjectStandardLayoutField } from "./board-project-schema-constants";
@@ -47,21 +47,16 @@ export function BoardProjectSchemaFieldRow(props: Props) {
           <ChevronDown className="size-3.5" />
         </button>
       </div>
-      <BoardCustomFieldTypeGlyph
-        fieldType={isStandard ? "standard" : item.field_type}
-        size="sm"
-      />
+      <BoardCustomFieldTypeGlyph fieldType={isStandard ? "standard" : item.field_type} size="sm" />
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-        <span className="truncate text-13 font-medium text-primary">
-          {getBoardProjectFieldDisplayName(item, t)}
-        </span>
+        <span className="truncate text-13 font-medium text-primary">{getBoardProjectFieldDisplayName(item, t)}</span>
         {isStandard && (
-          <span className="shrink-0 rounded bg-layer-2 px-1.5 py-0.5 text-10 font-medium uppercase tracking-wide text-secondary">
+          <span className="shrink-0 rounded bg-layer-2 px-1.5 py-0.5 text-10 font-medium tracking-wide text-secondary uppercase">
             {t("boards.settings.project_schema.standard_badge")}
           </span>
         )}
         {item.is_required && (
-          <span className="shrink-0 rounded bg-accent-primary/15 px-1.5 py-0.5 text-10 font-semibold uppercase tracking-wide text-accent-primary">
+          <span className="shrink-0 rounded bg-accent-primary/15 px-1.5 py-0.5 text-10 font-semibold tracking-wide text-accent-primary uppercase">
             {t("boards.settings.project_schema.required_badge")}
           </span>
         )}
@@ -97,9 +92,7 @@ export function BoardProjectSchemaFieldRow(props: Props) {
             {t("boards.settings.fields.form_span_full")}
           </CustomMenu.MenuItem>
           {canHide && (
-            <CustomMenu.MenuItem onClick={onHide}>
-              {t("boards.settings.project_schema.hide_field")}
-            </CustomMenu.MenuItem>
+            <CustomMenu.MenuItem onClick={onHide}>{t("boards.settings.project_schema.hide_field")}</CustomMenu.MenuItem>
           )}
           {!isStandard && (
             <CustomMenu.MenuItem onClick={onRemove}>

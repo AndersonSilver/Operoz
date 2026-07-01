@@ -4,11 +4,11 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Ellipsis } from "lucide-react";
 // plane imports
-import { ARCHIVABLE_STATE_GROUPS } from "@operis/constants";
-import type { TIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { ContextMenu, CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ARCHIVABLE_STATE_GROUPS } from "@operoz/constants";
+import type { TIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
@@ -23,7 +23,7 @@ import { CreateUpdateIssueModal } from "../../issue-modal/modal";
 import type { IQuickActionProps } from "../list/list-view-types";
 import type { MenuItemFactoryProps } from "./helper";
 import { useWorkItemDetailMenuItems } from "./helper";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 type TWorkItemDetailQuickActionProps = IQuickActionProps & {
   toggleEditIssueModal?: (value: boolean) => void;

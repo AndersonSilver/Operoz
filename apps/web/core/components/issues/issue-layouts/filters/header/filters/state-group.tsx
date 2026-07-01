@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { STATE_GROUPS } from "@operis/constants";
-import { StateGroupIcon } from "@operis/propel/icons";
+import { STATE_GROUPS } from "@operoz/constants";
+import { StateGroupIcon } from "@operoz/propel/icons";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 

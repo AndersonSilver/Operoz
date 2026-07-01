@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { TCycleFilters } from "@operis/types";
-import { calculateTotalFilters } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import type { TCycleFilters } from "@operoz/types";
+import { calculateTotalFilters } from "@operoz/utils";
 // components
 import { CycleModuleListLayoutLoader } from "@/components/ui/loader/cycle-module-list-loader";
 // hooks

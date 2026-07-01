@@ -1,5 +1,5 @@
 import { computedFn } from "mobx-utils";
-import type { EUserProjectRoles } from "@operis/types";
+import type { EUserProjectRoles } from "@operoz/types";
 // plane imports
 // plane web imports
 import type { RootStore } from "@/plane-web/store/root.store";

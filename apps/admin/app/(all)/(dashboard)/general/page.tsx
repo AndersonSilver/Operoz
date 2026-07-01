@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Cog, Gauge, Telescope } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { useInstance } from "@/hooks/store";
 import { GeneralConfigurationForm } from "./form";

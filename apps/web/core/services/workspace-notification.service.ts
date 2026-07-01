@@ -1,12 +1,12 @@
 /* eslint-disable no-useless-catch */
 
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   TNotificationPaginatedInfo,
   TNotificationPaginatedInfoQueryParams,
   TNotification,
   TUnreadNotificationsCount,
-} from "@operis/types";
+} from "@operoz/types";
 // helpers
 // services
 import { APIService } from "@/services/api.service";

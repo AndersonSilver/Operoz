@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { TInboxIssueDeclineCategory } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TInboxIssueDeclineCategory } from "@operoz/types";
 // hooks
-import { IntakeIcon } from "@operis/propel/icons";
+import { IntakeIcon } from "@operoz/propel/icons";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // components
 import { IssueActivityBlockComponent } from "./";

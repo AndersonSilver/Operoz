@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // local imports
 import { IssueAttachmentItemList } from "../../attachment/attachment-item-list";
 import { useAttachmentOperations } from "./helper";

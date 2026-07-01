@@ -1,5 +1,5 @@
-import { logger } from "@operis/logger";
-import type { TDocumentPayload, TPage } from "@operis/types";
+import { logger } from "@operoz/logger";
+import type { TDocumentPayload, TPage } from "@operoz/types";
 // services
 import { AppError } from "@/lib/errors";
 import { APIService } from "../api.service";

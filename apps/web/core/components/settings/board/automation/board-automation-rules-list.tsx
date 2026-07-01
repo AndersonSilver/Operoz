@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import { Filter, GitBranch, Play, Workflow, Zap } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardAutomationRule } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardAutomationRule } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { AutomationCardMeta } from "./automation-card-meta";
 import { AutomationCreateCard } from "./automation-create-card";
 import { AutomationFlowStrip } from "./automation-flow-strip";
@@ -53,10 +53,7 @@ export function BoardAutomationRulesList(props: Props) {
 
   const activeCount = rules.filter((r) => r.enabled && r.is_published).length;
   const triggerOptions = useMemo(() => collectRuleTriggerOptions(rules), [rules]);
-  const filteredRules = useMemo(
-    () => filterAndSortAutomationRules(rules, filters),
-    [rules, filters]
-  );
+  const filteredRules = useMemo(() => filterAndSortAutomationRules(rules, filters), [rules, filters]);
   const hasActiveFilters = hasActiveAutomationRulesFilters(filters);
 
   const patchFilters = (patch: Partial<AutomationRulesFilterState>) => {
@@ -78,9 +75,7 @@ export function BoardAutomationRulesList(props: Props) {
       <section>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <h2 className="text-13 font-semibold text-secondary">
-              {t("boards.settings.automation.rules_list.title")}
-            </h2>
+            <h2 className="text-13 font-semibold text-secondary">{t("boards.settings.automation.rules_list.title")}</h2>
             <span className="rounded-full bg-layer-2 px-2 py-0.5 text-11 text-tertiary">{rules.length}</span>
           </div>
           {activeCount > 0 && (
@@ -142,7 +137,7 @@ export function BoardAutomationRulesList(props: Props) {
                   icon={
                     <span
                       className={cn(
-                        "grid size-10 place-items-center rounded-lg border border-subtle shadow-sm",
+                        "shadow-sm grid size-10 place-items-center rounded-lg border border-subtle",
                         rule.enabled && rule.is_published
                           ? "bg-accent-subtle/70 text-accent-primary"
                           : "bg-layer-2 text-tertiary"
@@ -151,14 +146,12 @@ export function BoardAutomationRulesList(props: Props) {
                       <Workflow className="size-4" strokeWidth={1.75} />
                     </span>
                   }
-                  description={
-                    rule.description || t("boards.settings.automation.rules_list.no_description")
-                  }
+                  description={rule.description || t("boards.settings.automation.rules_list.no_description")}
                   badges={
                     <>
                       <span
                         className={cn(
-                          "rounded-full px-2 py-0.5 text-10 font-semibold uppercase tracking-wide",
+                          "rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
                           publicationToneClass
                         )}
                       >

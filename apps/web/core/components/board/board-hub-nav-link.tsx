@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";
 
 type Props = {
@@ -13,11 +13,7 @@ export function BoardHubNavLink({ to, className, children }: Props) {
   const navigate = useBoardHubNavigate();
 
   return (
-    <button
-      type="button"
-      className={cn(className)}
-      onClick={() => navigate(to)}
-    >
+    <button type="button" className={cn(className)} onClick={() => navigate(to)}>
       {children}
     </button>
   );

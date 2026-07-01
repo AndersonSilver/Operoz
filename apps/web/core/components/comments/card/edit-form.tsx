@@ -1,11 +1,11 @@
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
-import type { EditorRefApi } from "@operis/editor";
-import { CheckIcon, CloseIcon } from "@operis/propel/icons";
+import type { EditorRefApi } from "@operoz/editor";
+import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TCommentsOperations, TIssueComment } from "@operis/types";
-import { cn, isCommentEmpty } from "@operis/utils";
+import type { TCommentsOperations, TIssueComment } from "@operoz/types";
+import { cn, isCommentEmpty } from "@operoz/utils";
 // components
 import { LiteTextEditor } from "@/components/editor/lite-text";
 

@@ -2,11 +2,11 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import type { IInsightField } from "@operis/constants";
-import { ANALYTICS_INSIGHTS_FIELDS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IAnalyticsResponse, TAnalyticsTabsBase } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { IInsightField } from "@operoz/constants";
+import { ANALYTICS_INSIGHTS_FIELDS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IAnalyticsResponse, TAnalyticsTabsBase } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";

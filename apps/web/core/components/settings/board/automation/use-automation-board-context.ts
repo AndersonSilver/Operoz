@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import type { IBoard, IBoardMember } from "@operis/types";
+import type { IBoard, IBoardMember } from "@operoz/types";
 import { BoardService } from "@/services/board/board.service";
 import { BoardAccessService } from "@/services/board/board-access.service";
 import { useProject } from "@/hooks/store/use-project";
@@ -18,10 +18,7 @@ export type AutomationBoardContext = {
   emailTemplates: AutomationBoardOption[];
 };
 
-export function useAutomationBoardContext(
-  workspaceSlug: string,
-  board: IBoard
-): AutomationBoardContext {
+export function useAutomationBoardContext(workspaceSlug: string, board: IBoard): AutomationBoardContext {
   const { getProjectIdsForBoard, getProjectById, fetchProjects } = useProject();
   const [states, setStates] = useState<AutomationBoardOption[]>([]);
   const [members, setMembers] = useState<AutomationBoardOption[]>([]);

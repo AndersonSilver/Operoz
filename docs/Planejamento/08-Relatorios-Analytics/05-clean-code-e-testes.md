@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/analytics/
+apps/api/operoz/analytics/
 ├── metrics/
 │   ├── registry.py       # METRIC_REGISTRY + MetricSpec
 │   ├── burndown.py       # compute_burndown(base, scope, ctx) → series (puro)
@@ -35,24 +35,24 @@ app/views/analytic/metrics.py   # MetricViewSet (fino)
 
 ### Unit (dataset sintético)
 
-| Caso | Esperado |
-| --- | --- |
-| burndown de ciclo conhecido | curva ideal/actual correta |
-| velocity últimos N sprints | committed/completed certos |
-| cfd a partir de snapshots | série empilhada coerente |
-| time_in_status de issue com transições | somas por estado corretas |
-| created_vs_resolved | contagens diárias certas |
-| scope kind incompatível | erro |
+| Caso                                   | Esperado                   |
+| -------------------------------------- | -------------------------- |
+| burndown de ciclo conhecido            | curva ideal/actual correta |
+| velocity últimos N sprints             | committed/completed certos |
+| cfd a partir de snapshots              | série empilhada coerente   |
+| time_in_status de issue com transições | somas por estado corretas  |
+| created_vs_resolved                    | contagens diárias certas   |
+| scope kind incompatível                | erro                       |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| métrica só conta issues visíveis | exclui restritas/sem acesso |
-| `scope=oql` | aplica whitelist + visibilidade |
-| export csv/pdf | herda permissão; ficheiro correto |
-| métrica pesada sem `from/to` | exige janela |
-| throttle excedido | `429` |
+| Caso                             | Esperado                          |
+| -------------------------------- | --------------------------------- |
+| métrica só conta issues visíveis | exclui restritas/sem acesso       |
+| `scope=oql`                      | aplica whitelist + visibilidade   |
+| export csv/pdf                   | herda permissão; ficheiro correto |
+| métrica pesada sem `from/to`     | exige janela                      |
+| throttle excedido                | `429`                             |
 
 ### e2e
 

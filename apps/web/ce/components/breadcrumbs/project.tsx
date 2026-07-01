@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ProjectIcon } from "@operis/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ProjectIcon } from "@operoz/propel/icons";
 // plane imports
-import type { ICustomSearchSelectOption } from "@operis/types";
-import { BreadcrumbNavigationSearchDropdown, Breadcrumbs } from "@operis/ui";
+import type { ICustomSearchSelectOption } from "@operoz/types";
+import { BreadcrumbNavigationSearchDropdown, Breadcrumbs } from "@operoz/ui";
 import { SwitcherLabel } from "@/components/common/switcher-label";
 // hooks
 import { useProject } from "@/hooks/store/use-project";

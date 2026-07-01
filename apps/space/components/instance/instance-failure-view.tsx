@@ -1,32 +1,42 @@
-import { useTheme } from "next-themes";
-import { Button } from "@operis/propel/button";
-// assets
-import InstanceFailureDarkImage from "@/app/assets/instance/instance-failure-dark.svg?url";
-import InstanceFailureImage from "@/app/assets/instance/instance-failure.svg?url";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { RefreshCw, Unplug } from "lucide-react";
+
+function InstanceFailureIllustration() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex flex-col items-center gap-4" aria-hidden>
+      <div className="flex h-24 w-24 items-center justify-center rounded-full border border-subtle bg-accent-primary/5">
+        <Unplug className="h-10 w-10 text-accent-primary" strokeWidth={1.5} />
+      </div>
+      <span className="text-11 font-medium tracking-wide text-tertiary uppercase">
+        {t("instance_failure.status_badge")}
+      </span>
+    </div>
+  );
+}
 
 export function InstanceFailureView() {
-  const { resolvedTheme } = useTheme();
-
-  const instanceImage = resolvedTheme === "dark" ? InstanceFailureDarkImage : InstanceFailureImage;
+  const { t } = useTranslation();
 
   const handleRetry = () => {
     window.location.reload();
   };
 
   return (
-    <div className="relative container mx-auto flex h-screen items-center justify-center overflow-x-hidden overflow-y-auto px-5">
-      <div className="relative w-auto max-w-2xl space-y-8 py-10">
-        <div className="relative flex flex-col items-center justify-center space-y-4">
-          <img src={instanceImage} alt="Plane instance failure image" />
-          <h3 className="text-20 font-medium text-on-color">Unable to fetch instance details.</h3>
-          <p className="text-center text-14 font-medium">
-            We were unable to fetch the details of the instance. <br />
-            Fret not, it might just be a connectivity work items.
-          </p>
+    <div className="shadow-sm w-full max-w-md rounded-lg border border-subtle bg-layer-1 p-8">
+      <InstanceFailureIllustration />
+
+      <div className="mt-8 flex flex-col gap-5">
+        <div className="flex flex-col gap-2 text-center">
+          <h1 className="text-18 font-semibold text-primary">{t("instance_failure.title")}</h1>
+          <p className="text-13 text-secondary">{t("instance_failure.description")}</p>
         </div>
+
         <div className="flex justify-center">
-          <Button size="lg" onClick={handleRetry}>
-            Retry
+          <Button variant="primary" size="lg" prependIcon={<RefreshCw className="h-4 w-4" />} onClick={handleRetry}>
+            {t("instance_failure.retry")}
           </Button>
         </div>
       </div>

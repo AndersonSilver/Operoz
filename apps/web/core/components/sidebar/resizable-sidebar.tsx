@@ -1,7 +1,7 @@
 import type { Dispatch, ReactElement, SetStateAction } from "react";
 import React, { useCallback, useEffect, useState, useRef } from "react";
-import { usePlatformOS } from "@operis/hooks";
-import { cn } from "@operis/utils";
+import { usePlatformOS } from "@operoz/hooks";
+import { cn } from "@operoz/utils";
 import { SIDEBAR_HOVER_STRIP_WIDTH, SIDEBAR_PEEK_CLOSE_DURATION } from "@/constants/collapsible-sidebar";
 import { clearSidebarPeekTimer, scheduleSidebarPeekClose } from "@/lib/sidebar-peek-timer";
 
@@ -169,12 +169,12 @@ export function ResizableSidebar({
         )}
 
         {isOpen && (
-        <aside
-          className={cn(
-            "group/sidebar relative flex h-full w-full flex-col overflow-hidden bg-canvas",
-            isAnyExtendedSidebarExpanded && "rounded-none"
-          )}
-        >
+          <aside
+            className={cn(
+              "group/sidebar relative flex h-full w-full flex-col overflow-hidden bg-canvas",
+              isAnyExtendedSidebarExpanded && "rounded-none"
+            )}
+          >
             {children}
 
             <div

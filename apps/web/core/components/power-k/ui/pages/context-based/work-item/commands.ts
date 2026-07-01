@@ -13,13 +13,13 @@ import {
   Users,
 } from "lucide-react";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, TrashIcon, ContrastIcon, DiceIcon, DoubleCircleIcon } from "@operis/propel/icons";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import type { ICycle, IIssueLabel, IModule, TIssue, TIssuePriorities } from "@operis/types";
-import { EIssueServiceType, EUserPermissions } from "@operis/types";
-import { copyTextToClipboard } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, TrashIcon, ContrastIcon, DiceIcon, DoubleCircleIcon } from "@operoz/propel/icons";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import type { ICycle, IIssueLabel, IModule, TIssue, TIssuePriorities } from "@operoz/types";
+import { EIssueServiceType, EUserPermissions } from "@operoz/types";
+import { copyTextToClipboard } from "@operoz/utils";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

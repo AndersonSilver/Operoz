@@ -4,14 +4,14 @@ import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { Sparkle } from "lucide-react";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import type { EditorRefApi } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue } from "@operis/types";
-import { EFileAssetType } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { cn, getDescriptionPlaceholderI18n, getTabIndex, isEditorEmpty } from "@operis/utils";
+import { ETabIndices } from "@operoz/constants";
+import type { EditorRefApi } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue } from "@operoz/types";
+import { EFileAssetType } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { cn, getDescriptionPlaceholderI18n, getTabIndex, isEditorEmpty } from "@operoz/utils";
 // components
 import { GptAssistantPanel, GptAssistantPopover } from "@/components/core/modals/gpt-assistant-popover";
 import { RichTextEditor } from "@/components/editor/rich-text";
@@ -226,7 +226,8 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
           )}
         </button>
       )}
-      {config?.has_llm_configured && projectId &&
+      {config?.has_llm_configured &&
+        projectId &&
         (isCreateModal ? (
           <button
             type="button"
@@ -276,7 +277,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
     <div
       className={cn(
         cn(
-          "relative rounded-[3px] bg-layer-2 shadow-sm transition-[border-color,box-shadow]",
+          "shadow-sm relative rounded-[3px] bg-layer-2 transition-[border-color,box-shadow]",
           issueFormControlBorderClass,
           issueFormControlFocusWithinClass
         ),
@@ -285,10 +286,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
       )}
     >
       {isCreateModal && (
-        <div
-          className="relative z-0 overflow-visible border-b border-subtle bg-layer-1"
-          data-prevent-outside-click
-        >
+        <div className="relative z-0 overflow-visible border-b border-subtle bg-layer-1" data-prevent-outside-click>
           <IssueModalEditorToolbar editorRef={editorRef} editorReady={isEditorReady} endSlot={aiActions} />
           {isAiPanelOpen && projectId && (
             <GptAssistantPanel
@@ -361,7 +359,7 @@ export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(p
                     project_id: projectId?.toString() ?? "",
                   })
                 }
-                containerClassName={cn("min-h-[100px] pl-3 pt-2", isCreateModal && "pb-2")}
+                containerClassName={cn("min-h-[100px] pt-2 pl-3", isCreateModal && "pb-2")}
                 uploadFile={async (blockId, file) => {
                   try {
                     const { asset_id } = await uploadEditorAsset({

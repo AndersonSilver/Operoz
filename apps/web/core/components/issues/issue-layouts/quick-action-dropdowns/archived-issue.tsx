@@ -2,10 +2,10 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // ui
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { EIssuesStoreType } from "@operis/types";
-import { ContextMenu, CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { EIssuesStoreType } from "@operoz/types";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 import { useUserPermissions } from "@/hooks/store/user";

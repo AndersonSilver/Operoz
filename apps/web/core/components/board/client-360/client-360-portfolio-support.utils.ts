@@ -4,7 +4,7 @@ import type {
   TClient360SupportAnalytics,
   TClient360SupportAnalyticsCriticality,
   TClient360SupportMetricBucket,
-} from "@operis/types";
+} from "@operoz/types";
 
 export const SUPPORT_ANALYTICS_CRITICALITY_ORDER: TClient360SupportAnalyticsCriticality[] = [
   "p0",

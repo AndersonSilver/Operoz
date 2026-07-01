@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_GLASS_PANEL, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // assets
 import emptyModule from "@/app/assets/empty-state/module.svg?url";
@@ -64,9 +64,9 @@ function ModuleIssuesPage({ params }: Route.ComponentProps) {
           {!isSidebarCollapsed && (
             <div
               className={cn(
-                "vertical-scrollbar flex h-full w-[24rem] shrink-0 flex-col gap-3.5 overflow-y-auto border-l px-6 scrollbar-sm duration-300",
+                "vertical-scrollbar flex scrollbar-sm h-full w-[24rem] shrink-0 flex-col gap-3.5 overflow-y-auto border-l px-6 duration-300",
                 hasBoardWallpaper
-                  ? cn(BOARD_HUB_GLASS_PANEL, "border-subtle/50 shadow-sm")
+                  ? cn(BOARD_HUB_GLASS_PANEL, "shadow-sm border-subtle/50")
                   : "border-subtle bg-surface-1 shadow-raised-200"
               )}
             >

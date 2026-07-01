@@ -1,11 +1,11 @@
 import { useState } from "react";
 import useSWR from "swr";
 import { ChevronDown, ChevronRight, ExternalLink, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoard, IBoardMeta, TPartialProject } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoard, IBoardMeta, TPartialProject } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { BoardOverviewDashboard } from "@/components/board/board-overview-dashboard";
 import { CreateProjectModal } from "@/components/project/create-project-modal";
 import { ProjectFavoriteStar } from "@/components/project/project-favorite-star";

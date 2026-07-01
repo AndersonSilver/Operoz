@@ -1,5 +1,5 @@
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoard } from "@operis/types";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoard } from "@operoz/types";
 import { PowerKMenuBuilder } from "./builder";
 
 type Props = {

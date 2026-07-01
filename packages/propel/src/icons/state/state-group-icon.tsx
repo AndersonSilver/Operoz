@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { EIconSize } from "@operis/constants";
+import { EIconSize } from "@operoz/constants";
 import { BacklogGroupIcon } from "./backlog-group-icon";
 import { CancelledGroupIcon } from "./cancelled-group-icon";
 import { CompletedGroupIcon } from "./completed-group-icon";

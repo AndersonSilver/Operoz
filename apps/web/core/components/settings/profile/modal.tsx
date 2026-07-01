@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import { X } from "lucide-react";
 import { observer } from "mobx-react";
 // plane imports
-import { IconButton } from "@operis/propel/icon-button";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { IconButton } from "@operoz/propel/icon-button";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 // local imports

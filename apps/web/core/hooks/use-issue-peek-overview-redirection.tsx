@@ -1,9 +1,9 @@
 import { useRouter } from "next/navigation";
 // types
-import type { TIssue } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssue } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // helpers
-import { generateWorkItemLink } from "@operis/utils";
+import { generateWorkItemLink } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "./store/use-issue-detail";
 import { useProject } from "./store/use-project";

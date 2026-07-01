@@ -1,9 +1,9 @@
 import React from "react";
 // plane imports
-import { LiteTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operis/editor";
-import type { MakeOptional } from "@operis/types";
-import { cn, isCommentEmpty } from "@operis/utils";
+import { LiteTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operoz/editor";
+import type { MakeOptional } from "@operoz/types";
+import { cn, isCommentEmpty } from "@operoz/utils";
 // helpers
 import { getEditorFileHandlers } from "@/helpers/editor.helper";
 // hooks

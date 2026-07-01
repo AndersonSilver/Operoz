@@ -4,14 +4,16 @@ Referência consolidada para deploy, Docker Compose e God mode (instance configu
 
 ## LLM e embeddings
 
-| Variável                    | Default                  | Descrição                                                         |
-| --------------------------- | ------------------------ | ----------------------------------------------------------------- |
-| `LLM_API_KEY`               | —                        | Chave da API do provider (obrigatória para chat e embeddings)     |
-| `LLM_API_KEYS`              | —                        | Lista CSV de chaves para round-robin e circuit breaker (opcional) |
-| `LLM_PROVIDER`              | `openai`                 | Provider LLM (`openai`, `anthropic`, …)                           |
-| `LLM_MODEL`                 | `gpt-4o-mini`            | Modelo de chat                                                    |
-| `LLM_MODEL_FALLBACK`        | —                        | Modelo alternativo em modo degradado (ex. `gpt-4o-mini`)          |
-| `ASSISTANT_EMBEDDING_MODEL` | `text-embedding-3-small` | Modelo de embedding para RAG                                      |
+| Variável                    | Default                                                             | Descrição                                                                                                                                                                                                 |
+| --------------------------- | ------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `LLM_API_KEY`               | —                                                                   | Chave da API do provider (obrigatória para chat e embeddings)                                                                                                                                             |
+| `LLM_API_KEYS`              | —                                                                   | Lista CSV de chaves para round-robin e circuit breaker (opcional)                                                                                                                                         |
+| `LLM_PROVIDER`              | `openai`                                                            | Provider LLM (`openai`, `anthropic`, …)                                                                                                                                                                   |
+| `LLM_MODEL`                 | `gpt-4o-mini`                                                       | Modelo de chat                                                                                                                                                                                            |
+| `LLM_MODEL_FALLBACK`        | —                                                                   | Modelo alternativo em modo degradado (ex. `gpt-4o-mini`)                                                                                                                                                  |
+| `ASSISTANT_EMBEDDING_MODEL` | `text-embedding-3-small` (OpenAI) / `gemini-embedding-001` (Gemini) | Modelo de embedding para RAG. Se `LLM_PROVIDER=gemini` e o env ainda tiver um modelo OpenAI, o default vira `gemini-embedding-001`. Chaves `AIza…` também activam Gemini mesmo com `LLM_PROVIDER=openai`. |
+
+**Embeddings:** seguem `LLM_PROVIDER` e `LLM_BASE_URL` (mesma rota do chat). OpenAI usa `api.openai.com`; Gemini usa `generativelanguage.googleapis.com/v1beta/openai/`. Ambos gravam vetores de **1536** dimensões (pgvector). Ao trocar de provider, rode `reindex_assistant` — os espaços vetoriais não são compatíveis entre modelos.
 
 ## Feature flags e limites de uso
 
@@ -39,10 +41,12 @@ Referência consolidada para deploy, Docker Compose e God mode (instance configu
 
 ## Workers Celery
 
-| Variável                       | Default     | Descrição                            |
-| ------------------------------ | ----------- | ------------------------------------ |
-| `ASSISTANT_CELERY_QUEUE`       | `assistant` | Fila de indexação RAG                |
-| `ASSISTANT_WORKER_CONCURRENCY` | `2`         | Processos `-c` do `assistant-worker` |
+| Variável                                     | Default     | Descrição                                   |
+| -------------------------------------------- | ----------- | ------------------------------------------- |
+| `ASSISTANT_CELERY_QUEUE`                     | `assistant` | Fila de indexação RAG                       |
+| `ASSISTANT_INDEX_RATE_LIMIT_MAX_RETRIES`     | `8`         | Tentativas Celery após 429/503 no embedding |
+| `ASSISTANT_INDEX_RATE_LIMIT_BACKOFF_SECONDS` | `30`        | Backoff base (exponencial) entre retries    |
+| `ASSISTANT_WORKER_CONCURRENCY`               | `2`         | Processos `-c` do `assistant-worker`        |
 
 Serviço Docker: `assistant-worker` (`docker-entrypoint-assistant-worker.sh`). Ver também [automation-workers.md](./automation-workers.md).
 

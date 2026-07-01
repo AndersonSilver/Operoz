@@ -1,5 +1,5 @@
 // ui
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 
 function ErrorPage() {
   const handleRetry = () => {

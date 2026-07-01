@@ -1,5 +1,5 @@
 import useSWR from "swr";
-import type { TTimezoneObject } from "@operis/types";
+import type { TTimezoneObject } from "@operoz/types";
 // services
 import timezoneService from "@/services/timezone.service";
 

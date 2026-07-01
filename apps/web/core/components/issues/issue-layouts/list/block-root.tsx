@@ -5,12 +5,12 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { attachInstruction, extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree-item";
 import { observer } from "mobx-react";
 // plane helpers
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // types
-import type { IIssueDisplayProperties, TIssue, TIssueMap } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { IIssueDisplayProperties, TIssue, TIssueMap } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // components
-import { DropIndicator } from "@operis/ui";
+import { DropIndicator } from "@operoz/ui";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { ListLoaderItemRow } from "@/components/ui/loader/layouts/list-layout-loader";
 // hooks
@@ -121,40 +121,46 @@ export const IssueBlockRoot = observer(function IssueBlockRoot(props: Props) {
     issueBlockRef?.current?.classList?.remove(HIGHLIGHT_CLASS);
   });
 
-  if (!issueId || !issuesMap[issueId]?.created_at) return null;
+  if (!issueId || !issuesMap[issueId]) return null;
 
   const subIssues = subIssuesStore.subIssuesByIssueId(issueId);
   return (
-    <div className="relative" ref={issueBlockRef} id={getIssueBlockId(issueId, groupId)}>
-      <DropIndicator classNames={"absolute top-0 z-[2]"} isVisible={instruction === "DRAG_OVER"} />
-      <RenderIfVisible
-        key={`${issueId}`}
-        root={containerRef}
-        classNames={`relative ${isLastChild && !isExpanded ? "" : "border-b border-b-subtle"}`}
-        verticalOffset={100}
-        defaultValue={shouldRenderByDefault || (issuesMap[issueId] ? isIssueNew(issuesMap[issueId]) : false)}
-        placeholderChildren={<ListLoaderItemRow shouldAnimate={false} renderForPlaceHolder defaultPropertyCount={4} />}
-        shouldRecordHeights={isMobile}
-      >
-        <IssueBlock
-          issueId={issueId}
-          issuesMap={issuesMap}
-          groupId={groupId}
-          updateIssue={updateIssue}
-          quickActions={quickActions}
-          canEditProperties={canEditProperties}
-          displayProperties={displayProperties}
-          isExpanded={isExpanded}
-          setExpanded={setExpanded}
-          nestingLevel={nestingLevel}
-          spacingLeft={spacingLeft}
-          selectionHelpers={selectionHelpers}
-          canDrag={!isSubIssue && isDragAllowed}
-          isCurrentBlockDragging={isParentIssueBeingDragged || isCurrentBlockDragging}
-          setIsCurrentBlockDragging={setIsCurrentBlockDragging}
-          isEpic={isEpic}
-        />
-      </RenderIfVisible>
+    <>
+      <div className="relative" ref={issueBlockRef} id={getIssueBlockId(issueId, groupId)}>
+        <DropIndicator classNames={"absolute top-0 z-[2]"} isVisible={instruction === "DRAG_OVER"} />
+        <RenderIfVisible
+          key={`${issueId}`}
+          root={containerRef}
+          classNames={`relative ${isLastChild && !isExpanded ? "" : "border-b border-b-subtle"}`}
+          verticalOffset={100}
+          defaultValue={shouldRenderByDefault || (issuesMap[issueId] ? isIssueNew(issuesMap[issueId]) : false)}
+          forceRender={shouldRenderByDefault}
+          placeholderChildren={
+            <ListLoaderItemRow shouldAnimate={false} renderForPlaceHolder defaultPropertyCount={4} />
+          }
+          shouldRecordHeights={isMobile}
+        >
+          <IssueBlock
+            issueId={issueId}
+            issuesMap={issuesMap}
+            groupId={groupId}
+            updateIssue={updateIssue}
+            quickActions={quickActions}
+            canEditProperties={canEditProperties}
+            displayProperties={displayProperties}
+            isExpanded={isExpanded}
+            setExpanded={setExpanded}
+            nestingLevel={nestingLevel}
+            spacingLeft={spacingLeft}
+            selectionHelpers={selectionHelpers}
+            canDrag={!isSubIssue && isDragAllowed}
+            isCurrentBlockDragging={isParentIssueBeingDragged || isCurrentBlockDragging}
+            setIsCurrentBlockDragging={setIsCurrentBlockDragging}
+            isEpic={isEpic}
+          />
+        </RenderIfVisible>
+        {isLastChild && <DropIndicator classNames={"absolute z-[2]"} isVisible={instruction === "DRAG_BELOW"} />}
+      </div>
 
       {isExpanded &&
         !isEpic &&
@@ -178,7 +184,6 @@ export const IssueBlockRoot = observer(function IssueBlockRoot(props: Props) {
             shouldRenderByDefault={isExpanded}
           />
         ))}
-      {isLastChild && <DropIndicator classNames={"absolute z-[2]"} isVisible={instruction === "DRAG_BELOW"} />}
-    </div>
+    </>
   );
 });

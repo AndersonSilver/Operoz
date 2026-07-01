@@ -2,8 +2,8 @@ import { set, sortBy } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { EUserPermissions } from "@operis/constants";
-import type { IWorkspaceBulkInviteFormData, IWorkspaceMember, IWorkspaceMemberInvitation } from "@operis/types";
+import type { EUserPermissions } from "@operoz/constants";
+import type { IWorkspaceBulkInviteFormData, IWorkspaceMember, IWorkspaceMemberInvitation } from "@operoz/types";
 // plane-web constants
 // services
 import { WorkspaceService } from "@/services/workspace.service";

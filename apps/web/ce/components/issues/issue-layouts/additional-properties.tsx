@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import type { IIssueDisplayProperties, TCustomFieldValue, TIssue } from "@operis/types";
+import type { IIssueDisplayProperties, TCustomFieldValue, TIssue } from "@operoz/types";
 import {
   BoardCustomFieldLayoutCell,
   readIssueLayoutCustomValue,

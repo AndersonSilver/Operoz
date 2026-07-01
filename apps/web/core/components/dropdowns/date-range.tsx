@@ -6,13 +6,13 @@ import { usePopper } from "react-popper";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import type { DateRange, Matcher } from "@operis/propel/calendar";
-import { Calendar } from "@operis/propel/calendar";
-import { CloseIcon, DueDatePropertyIcon } from "@operis/propel/icons";
-import { ComboDropDown } from "@operis/ui";
-import { cn, renderFormattedDate } from "@operis/utils";
+import type { DateRange, Matcher } from "@operoz/propel/calendar";
+import { Calendar } from "@operoz/propel/calendar";
+import { CloseIcon, DueDatePropertyIcon } from "@operoz/propel/icons";
+import { ComboDropDown } from "@operoz/ui";
+import { cn, renderFormattedDate } from "@operoz/utils";
 // helpers
 // hooks
 import { useUserProfile } from "@/hooks/store/user";

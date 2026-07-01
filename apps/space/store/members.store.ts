@@ -1,7 +1,7 @@
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import { SitesMemberService } from "@operis/services";
+import { SitesMemberService } from "@operoz/services";
 import type { TPublicMember } from "@/types/member";
 import type { RootStore } from "./root.store";
 

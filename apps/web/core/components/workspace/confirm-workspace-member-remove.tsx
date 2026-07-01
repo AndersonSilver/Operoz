@@ -2,9 +2,9 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { AlertTriangle } from "lucide-react";
 // ui
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useUser } from "@/hooks/store/user";
 

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-import { MODULE_STATUS } from "@operis/constants";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TModuleStatus } from "@operis/types";
-import { findTotalDaysInRange } from "@operis/utils";
+import { MODULE_STATUS } from "@operoz/constants";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TModuleStatus } from "@operoz/types";
+import { findTotalDaysInRange } from "@operoz/utils";
 import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

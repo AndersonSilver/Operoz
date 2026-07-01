@@ -4,13 +4,13 @@ import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Component, Loader } from "lucide-react";
 import { Combobox } from "@headlessui/react";
-import { getRandomLabelColor } from "@operis/constants";
+import { getRandomLabelColor } from "@operoz/constants";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, SearchIcon, LabelPropertyIcon } from "@operis/propel/icons";
-import type { IIssueLabel } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, SearchIcon, LabelPropertyIcon } from "@operoz/propel/icons";
+import type { IIssueLabel } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { IssueLabelsList } from "@/components/ui/labels-list";
 // hooks
@@ -168,7 +168,9 @@ export const WorkItemLabelSelectBase = observer(function WorkItemLabelSelectBase
         {label ? (
           label
         ) : value && value.length > 0 ? (
-          <span className={cn("flex h-full w-full items-center justify-start gap-2 text-left text-11", buttonClassName)}>
+          <span
+            className={cn("flex h-full w-full items-center justify-start gap-2 text-left text-11", buttonClassName)}
+          >
             <IssueLabelsList
               labels={value.map((v) => labelsList?.find((l) => l.id === v)) ?? []}
               length={3}

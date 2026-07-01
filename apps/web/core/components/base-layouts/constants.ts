@@ -1,5 +1,5 @@
-import { BoardLayoutIcon, ListLayoutIcon, TimelineLayoutIcon } from "@operis/propel/icons";
-import type { IBaseLayoutConfig } from "@operis/types";
+import { BoardLayoutIcon, ListLayoutIcon, TimelineLayoutIcon } from "@operoz/propel/icons";
+import type { IBaseLayoutConfig } from "@operoz/types";
 
 export const BASE_LAYOUTS: IBaseLayoutConfig[] = [
   {

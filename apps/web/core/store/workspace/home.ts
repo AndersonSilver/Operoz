@@ -1,7 +1,7 @@
 import { orderBy, clone, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import type { THomeWidgetKeys, TWidgetEntityData } from "@operis/types";
+import type { THomeWidgetKeys, TWidgetEntityData } from "@operoz/types";
 // plane web services
 import { WorkspaceService } from "@/services/workspace.service";
 // store

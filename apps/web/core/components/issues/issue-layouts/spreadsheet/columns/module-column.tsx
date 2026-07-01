@@ -3,7 +3,7 @@ import { xor } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // components
 import { ModuleDropdown } from "@/components/dropdowns/module/dropdown";
 // hooks

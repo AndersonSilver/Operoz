@@ -1,8 +1,8 @@
 import { useRouter } from "next/navigation";
 // plane types
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { TActivityEntityData, TProjectEntityData } from "@operis/types";
-import { calculateTimeAgo } from "@operis/utils";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { TActivityEntityData, TProjectEntityData } from "@operoz/types";
+import { calculateTimeAgo } from "@operoz/utils";
 // components
 import { ListItem } from "@/components/core/list";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import type { IBaseLayoutsListItem, IBaseLayoutsListProps } from "@operis/types";
-import { cn } from "@operis/ui";
+import type { IBaseLayoutsListItem, IBaseLayoutsListProps } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { useLayoutState } from "../hooks/use-layout-state";
 import { BaseListGroup } from "./group";
 

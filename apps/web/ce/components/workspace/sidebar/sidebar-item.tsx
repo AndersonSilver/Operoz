@@ -1,4 +1,4 @@
-import type { IWorkspaceSidebarNavigationItem } from "@operis/constants";
+import type { IWorkspaceSidebarNavigationItem } from "@operoz/constants";
 import { SidebarItemBase } from "@/components/workspace/sidebar/sidebar-item";
 
 type Props = {

@@ -1,12 +1,11 @@
-
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoardIssueType, TBoardIssueTypeFormData, TLogoProps } from "@operis/types";
-import { EModalPosition, EModalWidth, Input, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoardIssueType, TBoardIssueTypeFormData, TLogoProps } from "@operoz/types";
+import { EModalPosition, EModalWidth, Input, ModalCore } from "@operoz/ui";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 
 type Props = {

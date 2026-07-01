@@ -1,9 +1,9 @@
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 // plane imports
-import { CloseIcon, SearchIcon } from "@operis/propel/icons";
-import { ScrollArea } from "@operis/propel/scrollarea";
-import { Input } from "@operis/ui";
+import { CloseIcon, SearchIcon } from "@operoz/propel/icons";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import { Input } from "@operoz/ui";
 // hooks
 import { usePowerK } from "@/hooks/store/use-power-k";
 // local imports

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   GithubRepositoriesResponse,
   IProjectUserPropertiesResponse,
@@ -6,7 +6,7 @@ import type {
   TProjectAnalyticsCount,
   TProjectAnalyticsCountParams,
   TProjectIssuesSearchParams,
-} from "@operis/types";
+} from "@operoz/types";
 // helpers
 // plane web types
 import type { TProject, TPartialProject } from "@/plane-web/types";

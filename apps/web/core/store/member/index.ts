@@ -1,7 +1,7 @@
 import { makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { IUserLite } from "@operis/types";
+import type { IUserLite } from "@operoz/types";
 // plane web imports
 import type { IProjectMemberStore } from "@/plane-web/store/member/project-member.store";
 import { ProjectMemberStore } from "@/plane-web/store/member/project-member.store";

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { PriorityIcon, StateGroupIcon } from "@operis/propel/icons";
-import type { TIssue, TStateGroups } from "@operis/types";
+import { PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
+import type { TIssue, TStateGroups } from "@operoz/types";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";

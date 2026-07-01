@@ -4,12 +4,12 @@ import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Combobox } from "@headlessui/react";
 // plane ui
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import { Checkbox, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import { Checkbox, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // assets
 import darkProjectAsset from "@/app/assets/empty-state/search/project-dark.webp?url";
 import lightProjectAsset from "@/app/assets/empty-state/search/project-light.webp?url";

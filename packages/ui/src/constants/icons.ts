@@ -155,7 +155,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
   ChevronUpIcon,
-} from "@operis/propel/icons";
+} from "@operoz/propel/icons";
 
 export const MATERIAL_ICONS_LIST = [
   {

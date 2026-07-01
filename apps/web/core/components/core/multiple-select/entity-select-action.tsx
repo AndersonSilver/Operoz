@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // ui
-import { Checkbox } from "@operis/ui";
+import { Checkbox } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 
@@ -25,6 +25,9 @@ export const MultipleSelectEntityAction = observer(function MultipleSelectEntity
     <Checkbox
       className={cn("size-3.5 !outline-none", className)}
       iconClassName="size-3"
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
       onClick={(e) => {
         e.stopPropagation();
         selectionHelpers.handleEntityClick(e, id, groupId);
@@ -33,7 +36,6 @@ export const MultipleSelectEntityAction = observer(function MultipleSelectEntity
       data-entity-group-id={groupId}
       data-entity-id={id}
       disabled={disabled}
-      readOnly
     />
   );
 });

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { projectSupportQueueService } from "@/services/inbox/project-support-queue.service";
 

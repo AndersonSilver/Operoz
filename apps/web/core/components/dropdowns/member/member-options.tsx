@@ -6,12 +6,13 @@ import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, SearchIcon, SuspendedUserIcon } from "@operis/propel/icons";
-import { EPillSize, EPillVariant, Pill } from "@operis/propel/pill";
-import type { IUserLite } from "@operis/types";
-import { Avatar } from "@operis/ui";
-import { cn, getFileURL, sortByCurrentUserThenSelected } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, SearchIcon, SuspendedUserIcon } from "@operoz/propel/icons";
+import { EPillSize, EPillVariant, Pill } from "@operoz/propel/pill";
+import type { IUserLite } from "@operoz/types";
+import { Avatar } from "@operoz/ui";
+import { cn, getFileURL, sortByCurrentUserThenSelected } from "@operoz/utils";
+import { getIssueDropdownPopperOptions, ISSUE_DROPDOWN_PORTAL_Z_CLASS } from "@/components/dropdowns/popper-config";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser } from "@/hooks/store/user";
@@ -56,17 +57,7 @@ export const MemberOptions = observer(function MemberOptions(props: Props) {
   } = useMember();
   const { isMobile } = usePlatformOS();
   // popper-js init
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ?? "bottom-start",
-    modifiers: [
-      {
-        name: "preventOverflow",
-        options: {
-          padding: 12,
-        },
-      },
-    ],
-  });
+  const { styles, attributes } = usePopper(referenceElement, popperElement, getIssueDropdownPopperOptions(placement));
 
   useEffect(() => {
     if (isOpen) {
@@ -120,10 +111,10 @@ export const MemberOptions = observer(function MemberOptions(props: Props) {
   );
 
   return createPortal(
-    <Combobox.Options data-prevent-outside-click static>
+    <Combobox.Options className={cn("fixed", ISSUE_DROPDOWN_PORTAL_Z_CLASS)} data-prevent-outside-click static>
       <div
         className={cn(
-          "z-30 my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none",
+          "my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none",
           optionsClassName
         )}
         ref={setPopperElement}

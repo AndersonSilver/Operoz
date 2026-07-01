@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { PageIcon } from "@operis/propel/icons";
-import type { ICustomSearchSelectOption } from "@operis/types";
-import { Header } from "@operis/ui";
-import { getPageName } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { PageIcon } from "@operoz/propel/icons";
+import type { ICustomSearchSelectOption } from "@operoz/types";
+import { Header } from "@operoz/ui";
+import { getPageName } from "@operoz/utils";
 // components
 import { PageAccessIcon } from "@/components/common/page-access-icon";
 import { SwitcherIcon, SwitcherLabel } from "@/components/common/switcher-label";

@@ -1,4 +1,4 @@
-import { GROUPED_WORKSPACE_SETTINGS, PROJECT_SETTINGS_FLAT_MAP } from "@operis/constants";
+import { GROUPED_WORKSPACE_SETTINGS, PROJECT_SETTINGS_FLAT_MAP } from "@operoz/constants";
 import { BOARD_SETTINGS_FLAT } from "@/constants/board-settings";
 
 const hrefToLabelMap = (options: Record<string, Array<{ href: string; i18n_label: string; [key: string]: any }>>) =>
@@ -59,9 +59,7 @@ export const isBoardDetailSettingsPath = (pathname: string) => /\/settings\/boar
 export const isProjectDetailSettingsPath = (pathname: string) => /\/settings\/projects\/[^/]+/.test(pathname);
 
 export const isWorkspaceSettingsNavPath = (pathname: string) =>
-  /\/settings(\/|$)/.test(pathname) &&
-  !isBoardDetailSettingsPath(pathname) &&
-  !isProjectDetailSettingsPath(pathname);
+  /\/settings(\/|$)/.test(pathname) && !isBoardDetailSettingsPath(pathname) && !isProjectDetailSettingsPath(pathname);
 
 export const isNotificationsPath = (pathname: string, workspaceSlug?: string) =>
   Boolean(workspaceSlug && pathname.includes(`/${workspaceSlug}/notifications`));

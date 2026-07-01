@@ -1,6 +1,6 @@
 // Types and utilities for member filtering
-import type { EUserPermissions, TMemberOrderByOptions } from "@operis/constants";
-import type { IUserLite, TProjectMembership } from "@operis/types";
+import type { EUserPermissions, TMemberOrderByOptions } from "@operoz/constants";
+import type { IUserLite, TProjectMembership } from "@operoz/types";
 
 export interface IMemberFilters {
   order_by?: TMemberOrderByOptions;

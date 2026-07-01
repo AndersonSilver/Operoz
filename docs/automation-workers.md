@@ -46,7 +46,7 @@ Em produção (`docker-compose.yml`), use o mesmo padrão `docker compose scale 
 
 ## Benchmark 300 regras / minuto
 
-Teste automatizado: `pytest operis/tests/unit/automation/test_automation_scale.py -k benchmark`.
+Teste automatizado: `pytest operoz/tests/unit/automation/test_automation_scale.py -k benchmark`.
 
 Resultados de referência (CI local, mock Celery, sem RabbitMQ):
 

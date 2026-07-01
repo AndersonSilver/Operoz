@@ -1,8 +1,8 @@
 import type { Editor } from "@tiptap/core";
 import { Plugin, PluginKey } from "@tiptap/pm/state";
 // plane imports
-import { convertHTMLToMarkdown } from "@operis/utils";
-import type { TCustomComponentsMetaData } from "@operis/utils";
+import { convertHTMLToMarkdown } from "@operoz/utils";
+import type { TCustomComponentsMetaData } from "@operoz/utils";
 
 type TArgs = {
   editor: Editor;

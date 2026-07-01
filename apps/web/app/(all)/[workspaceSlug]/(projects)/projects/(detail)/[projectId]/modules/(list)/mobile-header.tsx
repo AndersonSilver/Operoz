@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { MODULE_VIEW_LAYOUTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { CustomMenu, Row } from "@operis/ui";
+import { MODULE_VIEW_LAYOUTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { CustomMenu, Row } from "@operoz/ui";
 import { ModuleLayoutIcon } from "@/components/modules";
 import { useModuleFilter } from "@/hooks/store/use-module-filter";
 import { useProject } from "@/hooks/store/use-project";

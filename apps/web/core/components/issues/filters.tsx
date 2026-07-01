@@ -2,12 +2,12 @@ import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { ChartNoAxesColumn, SlidersHorizontal } from "lucide-react";
 // plane imports
-import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
-import { cn } from "@operis/utils";
+import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   ProjectHubPrimaryAction,
   ProjectHubToolbar,

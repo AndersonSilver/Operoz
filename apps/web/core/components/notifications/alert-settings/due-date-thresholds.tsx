@@ -1,7 +1,7 @@
 import { Plus, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Input } from "@operoz/ui";
 
 type Props = {
   value: number[];

@@ -1,6 +1,6 @@
-import type { IWorkspace } from "@operis/types";
+import type { IWorkspace } from "@operoz/types";
 
-/** Nomes iguais ignorando maiúsculas (ex.: OPERIS + Operis). */
+/** Nomes iguais ignorando maiúsculas (ex.: OPEROZ + Operoz). */
 export function hasAmbiguousWorkspaceNames(workspaces: IWorkspace[]) {
   const normalized = workspaces.map((w) => w.name.trim().toLowerCase());
   return normalized.length !== new Set(normalized).size;

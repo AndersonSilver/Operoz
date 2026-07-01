@@ -3,17 +3,13 @@ import { intersection } from "lodash-es";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Download, FileJson, FileSpreadsheet, FileText } from "lucide-react";
-import {
-  EUserPermissions,
-  EUserPermissionsLevel,
-  EXPORTERS_LIST,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TWorkItemFilterExpression } from "@operis/types";
-import { cn } from "@operis/ui";
-import { CustomSearchSelect } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel, EXPORTERS_LIST } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TWorkItemFilterExpression } from "@operoz/types";
+import { cn } from "@operoz/ui";
+import { CustomSearchSelect } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { ProjectExportService } from "@/services/project/project-export.service";
@@ -137,7 +133,7 @@ export const ExportForm = observer(function ExportForm(props: Props) {
       className="workspace-exports-form-panel flex flex-col overflow-hidden rounded-xl border border-subtle bg-layer-1"
     >
       <div className="workspace-exports-hero-dot-grid relative border-b border-subtle bg-gradient-to-br from-accent-subtle/20 via-transparent to-transparent px-5 py-5 lg:px-6">
-        <p className="text-11 font-semibold uppercase tracking-wide text-tertiary">
+        <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">
           {t("workspace_settings.settings.exports.new_export")}
         </p>
         <p className="mt-1 text-12 text-tertiary">{t("workspace_settings.settings.exports.new_export_hint")}</p>
@@ -185,7 +181,11 @@ export const ExportForm = observer(function ExportForm(props: Props) {
               name="provider"
               disabled={fieldsDisabled}
               render={({ field: { value, onChange } }) => (
-                <div className="workspace-exports-format-options" role="group" aria-label={t("workspace_settings.settings.exports.format")}>
+                <div
+                  className="workspace-exports-format-options"
+                  role="group"
+                  aria-label={t("workspace_settings.settings.exports.format")}
+                >
                   {EXPORTERS_LIST.map((service) => {
                     const Icon = FORMAT_ICONS[service.provider as keyof typeof FORMAT_ICONS] ?? FileText;
                     const isActive = value.provider === service.provider;
@@ -199,7 +199,10 @@ export const ExportForm = observer(function ExportForm(props: Props) {
                         className="workspace-exports-format-option"
                         onClick={() => onChange(service)}
                       >
-                        <Icon className={cn("size-3.5", isActive ? "text-accent-primary" : "text-tertiary")} strokeWidth={1.75} />
+                        <Icon
+                          className={cn("size-3.5", isActive ? "text-accent-primary" : "text-tertiary")}
+                          strokeWidth={1.75}
+                        />
                         {t(service.i18n_title)}
                       </button>
                     );

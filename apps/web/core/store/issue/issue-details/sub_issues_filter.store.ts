@@ -1,7 +1,7 @@
 import { set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-import type { EIssueFilterType } from "@operis/constants";
+import type { EIssueFilterType } from "@operoz/constants";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
@@ -9,7 +9,7 @@ import type {
   ISubWorkItemFilters,
   TGroupedIssues,
   TIssue,
-} from "@operis/types";
+} from "@operoz/types";
 import { getFilteredWorkItems, getGroupedWorkItemIds, updateSubWorkItemFilters } from "../helpers/base-issues-utils";
 import type { IssueSubIssuesStore } from "./sub_issues.store";
 
@@ -17,9 +17,9 @@ export const DEFAULT_DISPLAY_PROPERTIES = {
   key: true,
   issue_type: true,
   assignee: true,
-  start_date: true,
-  due_date: true,
-  labels: true,
+  start_date: false,
+  due_date: false,
+  labels: false,
   priority: true,
   state: true,
 };

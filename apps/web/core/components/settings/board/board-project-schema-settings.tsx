@@ -1,16 +1,16 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type {
   IBoardProjectFieldLayout,
   TBoardFieldFormSpan,
   TBoardProjectFieldSection,
   TProjectStandardFieldKey,
-} from "@operis/types";
-import { Loader } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { getBoardProjectFieldDisplayName } from "./board-project-field-display";
@@ -60,11 +60,7 @@ function LayoutSectionBlock(props: {
       )}
       onFocus={onSelectSection}
     >
-      <button
-        type="button"
-        className="w-full border-b border-subtle px-4 py-3 text-left"
-        onClick={onSelectSection}
-      >
+      <button type="button" className="w-full border-b border-subtle px-4 py-3 text-left" onClick={onSelectSection}>
         <p className="text-13 font-semibold text-primary">{title}</p>
         <p className="text-11 text-tertiary">{hint}</p>
         {isTargetSection && (
@@ -122,9 +118,7 @@ export const BoardProjectSchemaSettings = observer(function BoardProjectSchemaSe
   );
 
   const allLayout = getBoardProjectFieldLayout(workspaceSlug, boardSlug);
-  const layout = [...allLayout]
-    .filter((f) => f.is_enabled)
-    .sort((a, b) => a.sort_order - b.sort_order);
+  const layout = [...allLayout].filter((f) => f.is_enabled).sort((a, b) => a.sort_order - b.sort_order);
 
   const descriptionItems = layout.filter((f) => f.section === "description");
   const contextItems = layout.filter((f) => f.section === "context");
@@ -136,10 +130,7 @@ export const BoardProjectSchemaSettings = observer(function BoardProjectSchemaSe
   );
   const hiddenSystemKeys = PROJECT_STANDARD_FIELD_KEYS.filter((k) => !enabledSystemKeys.has(k));
 
-  const layoutCustomIds = useMemo(
-    () => new Set(layout.map((f) => f.custom_field_id).filter(Boolean)),
-    [layout]
-  );
+  const layoutCustomIds = useMemo(() => new Set(layout.map((f) => f.custom_field_id).filter(Boolean)), [layout]);
   const availableCustomFields = getBoardCustomFields(workspaceSlug, boardSlug).filter(
     (f) => f.is_enabled && f.custom_field_id && !layoutCustomIds.has(f.custom_field_id)
   );

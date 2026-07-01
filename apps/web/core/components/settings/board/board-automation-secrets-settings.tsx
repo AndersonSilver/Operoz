@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationSecret } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationSecret } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import type { SecretFormValues } from "./automation/automation-secret-form-modal";
 import { AutomationSecretsPanel } from "./automation/automation-secrets-panel";
@@ -76,12 +76,7 @@ export const BoardAutomationSecretsSettings = observer(function BoardAutomationS
         description: values.description,
       };
       if (values.value) payload.value = values.value;
-      const updated = await boardService.updateAutomationSecret(
-        workspaceSlug,
-        board.slug,
-        secretId,
-        payload
-      );
+      const updated = await boardService.updateAutomationSecret(workspaceSlug, board.slug, secretId, payload);
       setSecrets((prev) => prev.map((item) => (item.id === secretId ? updated : item)));
       setToast({
         type: TOAST_TYPE.SUCCESS,

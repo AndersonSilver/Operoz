@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { FavoriteStar } from "@operis/ui";
+import { FavoriteStar } from "@operoz/ui";
 import { useBoardFavorite } from "@/hooks/use-board-favorite";
 
 type Props = {

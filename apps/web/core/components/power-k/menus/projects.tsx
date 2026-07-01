@@ -1,6 +1,6 @@
 import React from "react";
 // components
-import { Logo } from "@operis/propel/emoji-icon-picker";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
 // plane imports
 import type { TPartialProject } from "@/plane-web/types";
 // local imports

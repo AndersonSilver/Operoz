@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { CycleDateCheckData, ICycle, TIssuesResponse, IWorkspaceActiveCyclesResponse } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { CycleDateCheckData, ICycle, TIssuesResponse, IWorkspaceActiveCyclesResponse } from "@operoz/types";
 import { APIService } from "../api.service";
 
 /**

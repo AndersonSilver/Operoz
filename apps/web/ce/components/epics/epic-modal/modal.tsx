@@ -1,5 +1,5 @@
 import React from "react";
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 
 export interface EpicModalProps {
   data?: Partial<TIssue>;

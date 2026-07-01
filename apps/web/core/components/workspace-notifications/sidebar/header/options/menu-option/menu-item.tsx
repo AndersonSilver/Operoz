@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // local imports
 import type { TPopoverMenuOptions } from "./root";
 

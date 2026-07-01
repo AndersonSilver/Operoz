@@ -1,7 +1,7 @@
 import { CheckCircle2, AlertTriangle, XCircle } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Health } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Health } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 
 type Props = {
@@ -9,10 +9,7 @@ type Props = {
   className?: string;
 };
 
-const HEALTH_CONFIG: Record<
-  TClient360Health,
-  { tone: keyof typeof CLIENT_360_TONE; Icon: typeof CheckCircle2 }
-> = {
+const HEALTH_CONFIG: Record<TClient360Health, { tone: keyof typeof CLIENT_360_TONE; Icon: typeof CheckCircle2 }> = {
   ok: { tone: "success", Icon: CheckCircle2 },
   warning: { tone: "warning", Icon: AlertTriangle },
   critical: { tone: "danger", Icon: XCircle },

@@ -1,7 +1,7 @@
 import { Plus, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Input } from "@operoz/ui";
 
 type Props = {
   options: string[];
@@ -49,7 +49,7 @@ export function BoardCustomFieldOptionsEditor(props: Props) {
             <button
               type="button"
               onClick={() => removeOption(index)}
-              className="grid size-8 shrink-0 place-items-center rounded-md text-placeholder transition-colors hover:bg-layer-transparent-hover hover:text-danger disabled:opacity-30"
+              className="hover:text-danger grid size-8 shrink-0 place-items-center rounded-md text-placeholder transition-colors hover:bg-layer-transparent-hover disabled:opacity-30"
               disabled={options.length === 1 && !option.trim()}
               aria-label={t("boards.settings.fields.option_remove")}
             >

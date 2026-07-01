@@ -1,9 +1,9 @@
 // plane imports
 import { isRouteErrorResponse } from "react-router";
-import { Banner } from "@operis/propel/banner";
-import { Button } from "@operis/propel/button";
-import { Card, ECardVariant } from "@operis/propel/card";
-import { InfoFillIcon } from "@operis/propel/icons";
+import { Banner } from "@operoz/propel/banner";
+import { Button } from "@operoz/propel/button";
+import { Card, ECardVariant } from "@operoz/propel/card";
+import { InfoFillIcon } from "@operoz/propel/icons";
 
 interface ErrorActionsProps {
   onGoHome: () => void;

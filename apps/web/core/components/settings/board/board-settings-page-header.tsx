@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Breadcrumbs } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Breadcrumbs } from "@operoz/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SettingsPageHeader } from "@/components/settings/page-header";
 import type { TBoardSettingsNavItem } from "@/constants/board-settings";
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 import { BOARD_SETTINGS_ICONS } from "./sidebar/item-icon";
 
 type Props = {

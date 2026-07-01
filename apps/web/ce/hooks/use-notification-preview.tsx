@@ -1,5 +1,5 @@
-import type { IWorkItemPeekOverview } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { IWorkItemPeekOverview } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TPeekIssue } from "@/store/issue/issue-details/root.store";

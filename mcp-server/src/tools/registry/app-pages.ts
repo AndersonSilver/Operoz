@@ -7,7 +7,7 @@ const page = "page_id";
 export const APP_PAGE_OPERATIONS = [
   op(
     "pages",
-    "operis_list_pages_summary",
+    "operoz_list_pages_summary",
     "Resumo de páginas (PRD/docs)",
     "app",
     "GET",
@@ -16,7 +16,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_list_pages",
+    "operoz_list_pages",
     "Lista páginas do projeto",
     "app",
     "GET",
@@ -25,7 +25,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_get_page",
+    "operoz_get_page",
     "Detalhe página",
     "app",
     "GET",
@@ -34,7 +34,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_create_page",
+    "operoz_create_page",
     "Cria página (PRD, spec, doc)",
     "app",
     "POST",
@@ -44,7 +44,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_update_page",
+    "operoz_update_page",
     "Atualiza página",
     "app",
     "PATCH",
@@ -56,7 +56,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_delete_page",
+    "operoz_delete_page",
     "Remove página",
     "app",
     "DELETE",
@@ -65,7 +65,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_favorite_page",
+    "operoz_favorite_page",
     "Favorita página",
     "app",
     "POST",
@@ -77,7 +77,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_unfavorite_page",
+    "operoz_unfavorite_page",
     "Remove favorito",
     "app",
     "DELETE",
@@ -86,7 +86,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_archive_page",
+    "operoz_archive_page",
     "Arquiva página",
     "app",
     "POST",
@@ -98,7 +98,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_unarchive_page",
+    "operoz_unarchive_page",
     "Desarquiva página",
     "app",
     "DELETE",
@@ -107,7 +107,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_lock_page",
+    "operoz_lock_page",
     "Bloqueia página",
     "app",
     "POST",
@@ -117,7 +117,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_unlock_page",
+    "operoz_unlock_page",
     "Desbloqueia página",
     "app",
     "DELETE",
@@ -126,7 +126,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_set_page_access",
+    "operoz_set_page_access",
     "Define acesso público/privado",
     "app",
     "POST",
@@ -138,7 +138,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_get_page_description",
+    "operoz_get_page_description",
     "Descrição da página",
     "app",
     "GET",
@@ -147,7 +147,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_update_page_description",
+    "operoz_update_page_description",
     "Atualiza descrição (conteúdo PRD)",
     "app",
     "PATCH",
@@ -157,7 +157,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_list_page_versions",
+    "operoz_list_page_versions",
     "Versões da página",
     "app",
     "GET",
@@ -166,7 +166,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_get_page_version",
+    "operoz_get_page_version",
     "Detalhe versão",
     "app",
     "GET",
@@ -175,7 +175,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_duplicate_page",
+    "operoz_duplicate_page",
     "Duplica página",
     "app",
     "POST",
@@ -187,7 +187,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_create_prd_review_session",
+    "operoz_create_prd_review_session",
     "Cria sessão de review PRD (convite cliente)",
     "app",
     "POST",
@@ -197,7 +197,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_list_prd_review_sessions",
+    "operoz_list_prd_review_sessions",
     "Lista sessões de review PRD da página",
     "app",
     "GET",
@@ -206,7 +206,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_get_prd_review_status",
+    "operoz_get_prd_review_status",
     "Detalhe sessão review PRD (status, comentários, convites)",
     "app",
     "GET",
@@ -215,7 +215,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_add_prd_review_invites",
+    "operoz_add_prd_review_invites",
     "Adiciona convites e-mail à sessão review PRD",
     "app",
     "POST",
@@ -225,7 +225,7 @@ export const APP_PAGE_OPERATIONS = [
   ),
   op(
     "pages",
-    "operis_list_prd_review_comments",
+    "operoz_list_prd_review_comments",
     "Lista comentários da sessão review PRD (via detalhe sessão)",
     "app",
     "GET",

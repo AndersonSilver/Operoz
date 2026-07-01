@@ -1,16 +1,13 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
-import { EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import { EUserProjectRoles } from "@operis/types";
-import { ContentWrapper, Row, ERowVariant } from "@operis/ui";
-import { cn } from "@operis/utils";
-import {
-  BOARD_HUB_MODULE_CARD,
-  BOARD_HUB_MODULE_LIST_PANEL,
-} from "@/components/board/board-hub-background";
+import { EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import { EUserProjectRoles } from "@operoz/types";
+import { ContentWrapper, Row, ERowVariant } from "@operoz/ui";
+import { cn } from "@operoz/utils";
+import { BOARD_HUB_MODULE_CARD, BOARD_HUB_MODULE_LIST_PANEL } from "@/components/board/board-hub-background";
 import { ListLayout } from "@/components/core/list";
 import {
   ModuleCardItem,
@@ -110,7 +107,7 @@ export const ModulesListView = observer(function ModulesListView() {
           {displayFilters?.layout === "board" && (
             <Row
               className={cn(
-                "grid auto-rows-max grid-cols-1 gap-4 p-4 transition-all vertical-scrollbar scrollbar-lg",
+                "vertical-scrollbar grid scrollbar-lg auto-rows-max grid-cols-1 gap-4 p-4 transition-all",
                 peekModule
                   ? "3xl:grid-cols-3 lg:grid-cols-1 xl:grid-cols-2"
                   : "3xl:grid-cols-4 lg:grid-cols-2 xl:grid-cols-3"

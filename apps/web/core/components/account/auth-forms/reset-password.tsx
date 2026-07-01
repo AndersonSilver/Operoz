@@ -4,12 +4,12 @@ import { useSearchParams } from "next/navigation";
 // icons
 import { Eye, EyeOff } from "lucide-react";
 // ui
-import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Input, PasswordStrengthIndicator } from "@operis/ui";
+import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Input, PasswordStrengthIndicator } from "@operoz/ui";
 // components
-import { getPasswordStrength } from "@operis/utils";
+import { getPasswordStrength } from "@operoz/utils";
 // helpers
 import type { EAuthenticationErrorCodes, TAuthErrorInfo } from "@/helpers/authentication.helper";
 import { EErrorAlertType, authErrorHandler } from "@/helpers/authentication.helper";

@@ -1,9 +1,9 @@
 import useSWR from "swr";
 import { useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, TClient360IntakeType } from "@operis/types";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, TClient360IntakeType } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
 import { BoardService } from "@/services/board/board.service";
 
 const boardService = new BoardService();

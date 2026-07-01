@@ -1,7 +1,7 @@
 import { CloudOff, Dot } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Badge } from "@operis/propel/badge";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Badge } from "@operoz/propel/badge";
 
 type Props = {
   syncStatus: "syncing" | "synced" | "error";

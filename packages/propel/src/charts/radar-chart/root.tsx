@@ -8,7 +8,7 @@ import {
   Tooltip,
   Legend,
 } from "recharts";
-import type { TRadarChartProps } from "@operis/types";
+import type { TRadarChartProps } from "@operoz/types";
 import { getLegendProps } from "../components/legend";
 import { CustomRadarAxisTick } from "../components/tick";
 import { CustomTooltip } from "../components/tooltip";

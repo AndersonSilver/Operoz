@@ -4,7 +4,7 @@ import Link from "next/link";
 import useSWR from "swr";
 // icons
 import { History, MessageSquare } from "lucide-react";
-import { calculateTimeAgo, getFileURL } from "@operis/utils";
+import { calculateTimeAgo, getFileURL } from "@operoz/utils";
 // hooks
 import { ActivityIcon, ActivityMessage } from "@/components/core/activity";
 import { RichTextEditor } from "@/components/editor/rich-text";

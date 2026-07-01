@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import { DragHandle } from "@operis/ui";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { DragHandle } from "@operoz/ui";
 // helper
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // types
 // plane imports
-import { getButtonStyling } from "@operis/propel/button";
-import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { getButtonStyling } from "@operoz/propel/button";
+import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // local imports
 import { BasePaidPlanCard } from "./base-paid-plan-card";
 

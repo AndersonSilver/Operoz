@@ -1,6 +1,6 @@
 import * as React from "react";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "../utils";
 
 type BreadcrumbsProps = {
@@ -37,57 +37,52 @@ function Breadcrumbs({ className, children, onBack, isLoading = false }: Breadcr
   const childrenArray = React.Children.toArray(children);
 
   return (
-    <div
-      className={cn(
-        "min-w-0 flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:thin]",
-        className
-      )}
-    >
+    <div className={cn("min-w-0 flex-1 overflow-x-auto overflow-y-hidden [scrollbar-width:thin]", className)}>
       <div className="flex w-max max-w-none flex-nowrap items-center gap-0.5">
-      {!isSmallScreen && (
-        <>
-          {childrenArray.map((child, index) => {
-            if (isLoading) {
-              return (
-                <>
-                  <BreadcrumbItemLoader />
-                </>
-              );
-            }
-            if (React.isValidElement<BreadcrumbItemProps>(child)) {
-              return React.cloneElement(child, {
-                isLast: index === childrenArray.length - 1,
-              });
-            }
-            return child;
-          })}
-        </>
-      )}
+        {!isSmallScreen && (
+          <>
+            {childrenArray.map((child, index) => {
+              if (isLoading) {
+                return (
+                  <>
+                    <BreadcrumbItemLoader />
+                  </>
+                );
+              }
+              if (React.isValidElement<BreadcrumbItemProps>(child)) {
+                return React.cloneElement(child, {
+                  isLast: index === childrenArray.length - 1,
+                });
+              }
+              return child;
+            })}
+          </>
+        )}
 
-      {isSmallScreen && childrenArray.length > 1 && (
-        <>
-          <div className="flex items-center gap-2.5 p-1">
-            {onBack && (
-              <span onClick={onBack} className="text-secondary">
-                ...
-              </span>
-            )}
-            <ChevronRightIcon className="h-3.5 w-3.5 flex-shrink-0 text-placeholder" aria-hidden="true" />
-          </div>
-          <div className="flex items-center gap-2.5 p-1">
-            {isLoading ? (
-              <BreadcrumbItemLoader />
-            ) : React.isValidElement(childrenArray[childrenArray.length - 1]) ? (
-              React.cloneElement(childrenArray[childrenArray.length - 1] as React.ReactElement, {
-                isLast: true,
-              })
-            ) : (
-              childrenArray[childrenArray.length - 1]
-            )}
-          </div>
-        </>
-      )}
-      {isSmallScreen && childrenArray.length === 1 && childrenArray}
+        {isSmallScreen && childrenArray.length > 1 && (
+          <>
+            <div className="flex items-center gap-2.5 p-1">
+              {onBack && (
+                <span onClick={onBack} className="text-secondary">
+                  ...
+                </span>
+              )}
+              <ChevronRightIcon className="h-3.5 w-3.5 flex-shrink-0 text-placeholder" aria-hidden="true" />
+            </div>
+            <div className="flex items-center gap-2.5 p-1">
+              {isLoading ? (
+                <BreadcrumbItemLoader />
+              ) : React.isValidElement(childrenArray[childrenArray.length - 1]) ? (
+                React.cloneElement(childrenArray[childrenArray.length - 1] as React.ReactElement, {
+                  isLast: true,
+                })
+              ) : (
+                childrenArray[childrenArray.length - 1]
+              )}
+            </div>
+          </>
+        )}
+        {isSmallScreen && childrenArray.length === 1 && childrenArray}
       </div>
     </div>
   );
@@ -129,11 +124,7 @@ type BreadcrumbLabelProps = {
 
 function BreadcrumbLabel(props: BreadcrumbLabelProps) {
   const { children, className } = props;
-  return (
-    <div className={cn("relative whitespace-nowrap", className)}>
-      {children}
-    </div>
-  );
+  return <div className={cn("relative whitespace-nowrap", className)}>{children}</div>;
 }
 
 // breadcrumb separator

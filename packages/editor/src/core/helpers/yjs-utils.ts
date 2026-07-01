@@ -5,13 +5,13 @@ import { generateHTML, generateJSON } from "@tiptap/html";
 import { prosemirrorJSONToYDoc, yXmlFragmentToProseMirrorRootNode } from "y-prosemirror";
 import * as Y from "yjs";
 // extensions
-import type { TDocumentPayload } from "@operis/types";
+import type { TDocumentPayload } from "@operoz/types";
 import {
   CoreEditorExtensionsWithoutProps,
   DocumentEditorExtensionsWithoutProps,
 } from "@/extensions/core-without-props";
 import { TitleExtensions } from "@/extensions/title-extension";
-import { sanitizeHTML } from "@operis/utils";
+import { sanitizeHTML } from "@operoz/utils";
 
 // editor extension configs
 const RICH_TEXT_EDITOR_EXTENSIONS = CoreEditorExtensionsWithoutProps;

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import "./admin-list.css";
 
 export type AdminHighlight = {

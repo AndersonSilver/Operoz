@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // types
 import type { IIssueFilterOptions, TIssueFilterKeys } from "@/types/issue";
 // local imports

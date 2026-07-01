@@ -5,14 +5,14 @@ import Link from "next/link";
 import useSWR, { mutate } from "swr";
 import { CheckCircle2 } from "lucide-react";
 // plane imports
-import { ROLE } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { ROLE } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // types
-import { Button } from "@operis/propel/button";
-import { PlaneLogo } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspaceMemberInvitation } from "@operis/types";
-import { truncateText } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { PlaneLogo } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspaceMemberInvitation } from "@operoz/types";
+import { truncateText } from "@operoz/utils";
 // assets
 import emptyInvitation from "@/app/assets/empty-state/invitation.svg?url";
 // components

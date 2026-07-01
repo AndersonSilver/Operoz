@@ -2,8 +2,8 @@ import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 // ui
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Loader } from "@operis/ui";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Loader } from "@operoz/ui";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks

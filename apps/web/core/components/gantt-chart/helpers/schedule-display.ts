@@ -1,5 +1,5 @@
-import type { IGanttBlock } from "@operis/types";
-import { findTotalDaysInRange, renderFormattedDate } from "@operis/utils";
+import type { IGanttBlock } from "@operoz/types";
+import { findTotalDaysInRange, renderFormattedDate } from "@operoz/utils";
 
 export type GanttScheduleDisplay = {
   label: string;

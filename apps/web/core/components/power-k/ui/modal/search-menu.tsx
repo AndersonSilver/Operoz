@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 // plane imports
-import { WORKSPACE_DEFAULT_SEARCH_RESULT } from "@operis/constants";
-import type { IWorkspaceSearchResults } from "@operis/types";
-import { cn } from "@operis/utils";
+import { WORKSPACE_DEFAULT_SEARCH_RESULT } from "@operoz/constants";
+import type { IWorkspaceSearchResults } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { usePowerK } from "@/hooks/store/use-power-k";
 import useDebounce from "@/hooks/use-debounce";

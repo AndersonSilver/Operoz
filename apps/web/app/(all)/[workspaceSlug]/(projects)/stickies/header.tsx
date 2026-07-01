@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { Button } from "@operis/propel/button";
-import { RecentStickyIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { RecentStickyIcon } from "@operoz/propel/icons";
+import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { StickySearch } from "@/components/stickies/modal/search";

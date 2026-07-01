@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { History } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TDescriptionVersion } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { calculateTimeAgo } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TDescriptionVersion } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { calculateTimeAgo } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 // local imports

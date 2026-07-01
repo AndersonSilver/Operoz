@@ -4,8 +4,8 @@ import { createPortal } from "react-dom";
 import { useParams } from "next/navigation";
 // plane imports
 // components
-import type { ChartDataType, IBlockUpdateData, IBlockUpdateDependencyData, TGanttViews } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { ChartDataType, IBlockUpdateData, IBlockUpdateDependencyData, TGanttViews } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { useBoardHubHasBackground, BOARD_HUB_GANTT_SURFACE } from "@/components/board/board-hub-background";
 import { GanttChartHeader, GanttChartMainContent } from "@/components/gantt-chart";
 import {

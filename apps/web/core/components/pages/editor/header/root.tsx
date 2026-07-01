@@ -2,8 +2,8 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { SmilePlus } from "lucide-react";
 // plane imports
-import { EmojiPicker, EmojiIconPickerTypes } from "@operis/propel/emoji-icon-picker";
-import { cn } from "@operis/utils";
+import { EmojiPicker, EmojiIconPickerTypes } from "@operoz/propel/emoji-icon-picker";
+import { cn } from "@operoz/utils";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

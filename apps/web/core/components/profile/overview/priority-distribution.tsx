@@ -1,10 +1,10 @@
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { BarChart } from "@operis/propel/charts/bar-chart";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { IUserProfileData } from "@operis/types";
-import { Loader, Card } from "@operis/ui";
-import { capitalizeFirstLetter } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { BarChart } from "@operoz/propel/charts/bar-chart";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { IUserProfileData } from "@operoz/types";
+import { Loader, Card } from "@operoz/ui";
+import { capitalizeFirstLetter } from "@operoz/utils";
 
 type Props = {
   userProfile: IUserProfileData | undefined;

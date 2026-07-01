@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { copyUrlToClipboard, generateWorkItemLink } from "@operis/utils";
+import { copyUrlToClipboard, generateWorkItemLink } from "@operoz/utils";
 // plane imports
 // helpers
 // hooks

@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 // types
-import type { TIssue } from "@operis/types";
-import { Row } from "@operis/ui";
+import type { TIssue } from "@operoz/types";
+import { Row } from "@operoz/ui";
 
 type Props = {
   issue: TIssue;

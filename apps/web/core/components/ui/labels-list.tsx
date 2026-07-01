@@ -1,6 +1,6 @@
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueLabel } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueLabel } from "@operoz/types";
 // types
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // hooks

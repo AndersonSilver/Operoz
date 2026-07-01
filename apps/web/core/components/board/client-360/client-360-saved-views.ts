@@ -59,7 +59,7 @@ export function isWorkspaceSharedSavedViewId(viewId: string): boolean {
 }
 
 export function sharedViewToSavedView(
-  row: import("@operis/types").TClient360SharedView,
+  row: import("@operoz/types").TClient360SharedView,
   includeBoard: boolean
 ): Client360SavedView | null {
   const payload = parseClient360SavedViewPayload(row.payload, includeBoard);

@@ -1,8 +1,8 @@
 import React from "react";
 import { Transition } from "@headlessui/react";
 // plane imports
-import type { SingleOrArray, IFilterOption, TFilterValue } from "@operis/types";
-import { cn, toFilterArray } from "@operis/utils";
+import type { SingleOrArray, IFilterOption, TFilterValue } from "@operoz/types";
+import { cn, toFilterArray } from "@operoz/utils";
 import { EMPTY_FILTER_PLACEHOLDER_TEXT } from "../../shared";
 
 type TSelectedOptionsDisplayProps<V extends TFilterValue> = {

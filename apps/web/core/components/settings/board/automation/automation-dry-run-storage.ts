@@ -1,6 +1,6 @@
-import type { TAutomationDryRunResult, TAutomationGraph } from "@operis/types";
+import type { TAutomationDryRunResult, TAutomationGraph } from "@operoz/types";
 
-const STORAGE_KEY = "operis:automation-dry-run";
+const STORAGE_KEY = "operoz:automation-dry-run";
 
 export type TAutomationDryRunSessionStatus = "pending" | "running" | "completed" | "failed";
 

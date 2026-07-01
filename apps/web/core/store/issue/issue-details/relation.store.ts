@@ -1,12 +1,13 @@
-import { uniq, get, set } from "lodash-es";
+import { uniq, get, isEqual } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TIssueRelationIdMap, TIssueRelationMap, TIssueRelation, TIssue } from "@operis/types";
+import type { TIssueRelationIdMap, TIssueRelationMap, TIssueRelation, TIssue } from "@operoz/types";
 // components
 import type { TRelationObject } from "@/components/issues/issue-detail-widgets/relations";
 // Plane-web
 import { REVERSE_RELATIONS } from "@/constants/gantt-chart";
+import { issuePayloadIncludesRelations, parseIssueRelationsFromPayload } from "@/store/timeline/parse-issue-relations";
 import type { TIssueRelationTypes } from "@/plane-web/types";
 // services
 import { IssueRelationService } from "@/services/issue";
@@ -15,6 +16,7 @@ import type { IIssueDetail } from "./root.store";
 export interface IIssueRelationStoreActions {
   // actions
   fetchRelations: (workspaceSlug: string, projectId: string, issueId: string) => Promise<TIssueRelation>;
+  fetchRelationsForIssues: (workspaceSlug: string, projectId: string, issueIds: string[]) => Promise<void>;
   createRelation: (
     workspaceSlug: string,
     projectId: string,
@@ -51,6 +53,8 @@ export interface IIssueRelationStore extends IIssueRelationStoreActions {
 export class IssueRelationStore implements IIssueRelationStore {
   // observables
   relationMap: TIssueRelationMap = {};
+  /** Issue ids whose relations were loaded via issue-relation API (sub-issues list omits expand). */
+  private hydratedRelationIssueIds = new Set<string>();
   // root store
   rootIssueDetailStore: IIssueDetail;
   // services
@@ -64,6 +68,7 @@ export class IssueRelationStore implements IIssueRelationStore {
       issueRelations: computed,
       // actions
       fetchRelations: action,
+      fetchRelationsForIssues: action,
       createRelation: action,
       createCurrentRelation: action,
       removeRelation: action,
@@ -105,6 +110,22 @@ export class IssueRelationStore implements IIssueRelationStore {
     return this.relationMap?.[issueId]?.[relationType] ?? undefined;
   };
 
+  /** MobX-safe merge — lodash `set` on relationMap can miss dependency sync observers. */
+  private assignIssueRelations(issueId: string, partial: TIssueRelationIdMap) {
+    this.relationMap[issueId] = {
+      ...(this.relationMap[issueId] ?? {}),
+      ...partial,
+    };
+  }
+
+  private appendReverseRelation(relatedId: string, reverseRelatedType: TIssueRelationTypes, issueId: string) {
+    const existing = this.relationMap[relatedId]?.[reverseRelatedType] ?? [];
+    if (existing.includes(issueId)) return;
+    this.assignIssueRelations(relatedId, {
+      [reverseRelatedType]: uniq([...existing, issueId]),
+    });
+  }
+
   // actions
   fetchRelations = async (workspaceSlug: string, projectId: string, issueId: string) => {
     const response = await this.issueRelationService.listIssueRelations(workspaceSlug, projectId, issueId);
@@ -115,15 +136,41 @@ export class IssueRelationStore implements IIssueRelationStore {
         const relation_issues = response[relation_key];
         const issues = relation_issues.flat().map((issue) => issue);
         if (issues && issues.length > 0) this.rootIssueDetailStore.rootIssueStore.issues.addIssue(issues);
-        set(
-          this.relationMap,
-          [issueId, relation_key],
-          issues && issues.length > 0 ? issues.map((issue) => issue.id) : []
-        );
+        const relatedIds = issues && issues.length > 0 ? issues.map((issue) => issue.id) : [];
+        this.assignIssueRelations(issueId, { [relation_key]: relatedIds });
+
+        const reverseRelatedType = REVERSE_RELATIONS[relation_key];
+        for (const relatedId of relatedIds) {
+          this.appendReverseRelation(relatedId, reverseRelatedType, issueId);
+        }
       });
     });
 
+    runInAction(() => {
+      this.hydratedRelationIssueIds.add(issueId);
+    });
+
     return response;
+  };
+
+  /**
+   * Loads relations for many issues (e.g. Gantt sub-issues). The sub-issues endpoint
+   * does not include issue_relation expand, so dependency lines need this hydration.
+   */
+  fetchRelationsForIssues = async (workspaceSlug: string, projectId: string, issueIds: string[]) => {
+    const pending = uniq(issueIds).filter((id) => id && !this.hydratedRelationIssueIds.has(id));
+    if (!pending.length) return;
+
+    await Promise.all(
+      pending.map((issueId) =>
+        this.fetchRelations(workspaceSlug, projectId, issueId).catch(() => {
+          // Mark as attempted so a single failure does not block retries for siblings.
+          runInAction(() => {
+            this.hydratedRelationIssueIds.add(issueId);
+          });
+        })
+      )
+    );
   };
 
   createRelation = async (
@@ -145,17 +192,11 @@ export class IssueRelationStore implements IIssueRelationStore {
     if (response && response.length > 0)
       runInAction(() => {
         response.forEach((issue) => {
-          const issuesOfRelated = get(this.relationMap, [issue.id, reverseRelatedType]);
           this.rootIssueDetailStore.rootIssueStore.issues.addIssue([issue]);
           issuesOfRelation.push(issue.id);
-
-          if (!issuesOfRelated) {
-            set(this.relationMap, [issue.id, reverseRelatedType], [issueId]);
-          } else {
-            set(this.relationMap, [issue.id, reverseRelatedType], uniq([...issuesOfRelated, issueId]));
-          }
+          this.appendReverseRelation(issue.id, reverseRelatedType, issueId);
         });
-        set(this.relationMap, [issueId, relationType], uniq(issuesOfRelation));
+        this.assignIssueRelations(issueId, { [relationType]: uniq(issuesOfRelation) });
       });
 
     // fetching activity
@@ -184,17 +225,12 @@ export class IssueRelationStore implements IIssueRelationStore {
     try {
       // update relations before API call
       runInAction(() => {
-        if (!issuesOfRelation) {
-          set(this.relationMap, [issueId, relationType], [relatedIssueId]);
-        } else {
-          set(this.relationMap, [issueId, relationType], uniq([...issuesOfRelation, relatedIssueId]));
-        }
-
-        if (!issuesOfRelated) {
-          set(this.relationMap, [relatedIssueId, reverseRelatedType], [issueId]);
-        } else {
-          set(this.relationMap, [relatedIssueId, reverseRelatedType], uniq([...issuesOfRelated, issueId]));
-        }
+        this.assignIssueRelations(issueId, {
+          [relationType]: issuesOfRelation ? uniq([...issuesOfRelation, relatedIssueId]) : [relatedIssueId],
+        });
+        this.assignIssueRelations(relatedIssueId, {
+          [reverseRelatedType]: issuesOfRelated ? uniq([...issuesOfRelated, issueId]) : [issueId],
+        });
       });
 
       // perform API call
@@ -206,11 +242,19 @@ export class IssueRelationStore implements IIssueRelationStore {
       // Revert back store changes if API fails
       runInAction(() => {
         if (issuesOfRelation) {
-          set(this.relationMap, [issueId, relationType], issuesOfRelation);
+          this.assignIssueRelations(issueId, { [relationType]: issuesOfRelation });
+        } else {
+          const next = { ...(this.relationMap[issueId] ?? {}) };
+          delete next[relationType];
+          this.relationMap[issueId] = next;
         }
 
         if (issuesOfRelated) {
-          set(this.relationMap, [relatedIssueId, reverseRelatedType], issuesOfRelated);
+          this.assignIssueRelations(relatedIssueId, { [reverseRelatedType]: issuesOfRelated });
+        } else {
+          const next = { ...(this.relationMap[relatedIssueId] ?? {}) };
+          delete next[reverseRelatedType];
+          this.relationMap[relatedIssueId] = next;
         }
       });
 
@@ -268,35 +312,15 @@ export class IssueRelationStore implements IIssueRelationStore {
     try {
       runInAction(() => {
         for (const issue of issues) {
-          const { issue_relation, issue_related, id: issueId } = issue;
+          // List responses without expand omit these keys — do not wipe relationMap entries.
+          if (!issuePayloadIncludesRelations(issue)) continue;
 
-          const issueRelations: { [key in TIssueRelationTypes]?: string[] } = {};
+          const issueRelations = parseIssueRelationsFromPayload(issue);
+          const existing = this.relationMap[issue.id];
+          if (isEqual(existing, issueRelations)) continue;
 
-          if (issue_relation && Array.isArray(issue_relation) && issue_relation.length) {
-            for (const relation of issue_relation) {
-              const { relation_type, id } = relation;
-
-              if (!relation_type) continue;
-
-              if (issueRelations[relation_type]) issueRelations[relation_type]?.push(id);
-              else issueRelations[relation_type] = [id];
-            }
-          }
-
-          if (issue_related && Array.isArray(issue_related) && issue_related.length) {
-            for (const relation of issue_related) {
-              const { relation_type, id } = relation;
-
-              if (!relation_type) continue;
-
-              const reverseRelatedType = REVERSE_RELATIONS[relation_type as TIssueRelationTypes];
-
-              if (issueRelations[reverseRelatedType]) issueRelations[reverseRelatedType]?.push(id);
-              else issueRelations[reverseRelatedType] = [id];
-            }
-          }
-
-          set(this.relationMap, [issueId], issueRelations);
+          // Direct assignment so MobX reliably notifies observers (lodash set can miss).
+          this.relationMap[issue.id] = issueRelations;
         }
       });
     } catch (_e) {

@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
+import { AlertsSettingsSection } from "@/components/notifications/alerts-settings-section";
 import { ExternalAccountsList } from "@/components/notifications/external-accounts/external-accounts-list";
 import type { Route } from "./+types/page";
 
@@ -8,10 +9,9 @@ function ExternalAccountsSettingsPage({ params }: Route.ComponentProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-14 font-medium text-primary">{t("alert.accounts.title")}</h2>
+    <AlertsSettingsSection title={t("alert.accounts.title")} description={t("alert.accounts.lead")}>
       <ExternalAccountsList workspaceSlug={workspaceSlug} />
-    </div>
+    </AlertsSettingsSection>
   );
 }
 

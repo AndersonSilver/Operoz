@@ -1,11 +1,11 @@
 import { ArrowLeft, Clock3, History, Play, Rocket, Save, Workflow } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Switch } from "@operis/propel/switch";
-import { cn } from "@operis/ui";
-import type { IBoardAutomationRule } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Switch } from "@operoz/propel/switch";
+import { cn } from "@operoz/ui";
+import type { IBoardAutomationRule } from "@operoz/types";
 import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
 import { automationHasLocalDraftChanges } from "./automation-publication";
 import "./automation-list.css";

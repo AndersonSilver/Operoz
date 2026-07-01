@@ -1,6 +1,6 @@
 import React from "react";
 // ui
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 import { InboxSidebarLoader } from "./inbox-sidebar-loader";
 
 export function InboxLayoutLoader() {

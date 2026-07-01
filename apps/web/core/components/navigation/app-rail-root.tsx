@@ -2,9 +2,9 @@
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
 import { SettingsIcon } from "lucide-react";
-import { ContextMenu } from "@operis/propel/context-menu";
-import { CheckIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { ContextMenu } from "@operoz/propel/context-menu";
+import { CheckIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 // components
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 // hooks

@@ -1,5 +1,5 @@
-import { EIssueGroupByToServerOptions, EServerGroupByToFilterOptions } from "@operis/constants";
-import type { IssuePaginationOptions, TIssueParams } from "@operis/types";
+import { EIssueGroupByToServerOptions, EServerGroupByToFilterOptions } from "@operoz/constants";
+import type { IssuePaginationOptions, TIssueParams } from "@operoz/types";
 
 /**
  * This Method is used to construct the url params along with paginated values

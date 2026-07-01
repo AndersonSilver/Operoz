@@ -1,7 +1,7 @@
 // types
-import { API_BASE_URL } from "@operis/constants";
-import type { IModule, ILinkDetails, ModuleLink, TIssuesResponse } from "@operis/types";
-import { isAxiosCancelError } from "@operis/utils";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IModule, ILinkDetails, ModuleLink, TIssuesResponse } from "@operoz/types";
+import { isAxiosCancelError } from "@operoz/utils";
 // services
 import { APIService } from "@/services/api.service";
 

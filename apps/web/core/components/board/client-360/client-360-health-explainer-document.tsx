@@ -1,9 +1,9 @@
 "use client";
 
 import { Activity, HeartPulse, Lightbulb } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360DetailResponse } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";

@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
 
 export function StickiesEmptyState() {
   const { t } = useTranslation();

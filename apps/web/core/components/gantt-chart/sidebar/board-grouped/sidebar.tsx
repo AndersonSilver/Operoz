@@ -1,14 +1,11 @@
 import type { RefObject } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { GANTT_TIMELINE_TYPE } from "@operis/types";
-import type { IBlockUpdateData } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { GANTT_TIMELINE_TYPE } from "@operoz/types";
+import type { IBlockUpdateData } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
-import {
-  isBoardModuleBlockId,
-  isBoardProjectBlockId,
-} from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
+import { isBoardModuleBlockId, isBoardProjectBlockId } from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
 import { GanttLayoutListItemLoader } from "@/components/ui/loader/layouts/gantt-layout-loader";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";

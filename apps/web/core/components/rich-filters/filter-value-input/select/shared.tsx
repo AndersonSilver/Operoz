@@ -1,6 +1,6 @@
 // plane imports
-import type { TSupportedFilterFieldConfigs, IFilterOption, TFilterValue } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { TSupportedFilterFieldConfigs, IFilterOption, TFilterValue } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // local imports
 import { COMMON_FILTER_ITEM_BORDER_CLASSNAME } from "../../shared";
 

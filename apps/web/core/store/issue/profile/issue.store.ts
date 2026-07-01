@@ -8,7 +8,7 @@ import type {
   ViewFlags,
   TBulkOperationsPayload,
   TProfileViews,
-} from "@operis/types";
+} from "@operoz/types";
 import { UserService } from "@/services/user.service";
 
 // services

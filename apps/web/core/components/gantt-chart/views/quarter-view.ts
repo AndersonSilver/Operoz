@@ -1,5 +1,5 @@
 //
-import type { ChartDataType } from "@operis/types";
+import type { ChartDataType } from "@operoz/types";
 import { quarters } from "../data";
 import { getNumberOfDaysBetweenTwoDates } from "./helpers";
 import type { IMonthBlock } from "./month-view";

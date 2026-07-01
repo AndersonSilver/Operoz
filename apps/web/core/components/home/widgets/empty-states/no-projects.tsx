@@ -5,11 +5,11 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Hotel } from "lucide-react";
 // plane ui
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { MembersPropertyIcon, CheckIcon, ProjectIcon, CloseIcon } from "@operis/propel/icons";
-import { cn, getFileURL } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { MembersPropertyIcon, CheckIcon, ProjectIcon, CloseIcon } from "@operoz/propel/icons";
+import { cn, getFileURL } from "@operoz/utils";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useProject } from "@/hooks/store/use-project";

@@ -7,8 +7,8 @@ import express from "express";
 import expressWs from "express-ws";
 import helmet from "helmet";
 // plane imports
-import { registerController } from "@operis/decorators";
-import { logger, loggerMiddleware } from "@operis/logger";
+import { registerController } from "@operoz/decorators";
+import { logger, loggerMiddleware } from "@operoz/logger";
 // controllers
 import { CONTROLLERS } from "@/controllers";
 // env

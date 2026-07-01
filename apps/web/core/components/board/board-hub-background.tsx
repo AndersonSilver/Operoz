@@ -1,11 +1,11 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
 import { Image, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import {
   GANTT_BACKGROUND_PRESETS,
   getSavedGanttChartBackground,
@@ -55,7 +55,8 @@ export const BOARD_HUB_PROJECT_WORK_SURFACE =
   "rounded-xl border border-white/10 bg-surface-1/45 shadow-lg backdrop-blur-xl supports-[backdrop-filter]:bg-surface-1/30";
 
 /** Área interna legível (lista/tabela) dentro do cartão com vidro. */
-export const BOARD_HUB_PROJECT_WORK_SURFACE_INNER = "bg-surface-1/88 backdrop-blur-sm supports-[backdrop-filter]:bg-surface-1/82";
+export const BOARD_HUB_PROJECT_WORK_SURFACE_INNER =
+  "bg-surface-1/88 backdrop-blur-sm supports-[backdrop-filter]:bg-surface-1/82";
 
 /** Cartão de métrica do ciclo ativo (progresso, burndown, stats). */
 export const BOARD_HUB_CYCLE_METRIC_CARD =
@@ -70,8 +71,7 @@ export const BOARD_HUB_MODULE_LIST_PANEL =
   "w-full rounded-lg border border-subtle/50 bg-layer-1/60 shadow-sm backdrop-blur-sm";
 
 /** Cartão de módulo na vista galeria. */
-export const BOARD_HUB_MODULE_CARD =
-  "border border-subtle/50 bg-layer-1/75 shadow-sm backdrop-blur-sm";
+export const BOARD_HUB_MODULE_CARD = "border border-subtle/50 bg-layer-1/75 shadow-sm backdrop-blur-sm";
 
 /** Painel de histórico (status report, listas densas). */
 export const BOARD_HUB_HISTORY_PANEL =

@@ -1,6 +1,6 @@
-import { API_BASE_URL } from "@operis/constants";
-import { EIssueServiceType } from "@operis/types";
-import type { TIssueCommentReaction, TIssueReaction, TIssueServiceType } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import { EIssueServiceType } from "@operoz/types";
+import type { TIssueCommentReaction, TIssueReaction, TIssueServiceType } from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
 // types

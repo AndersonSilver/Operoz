@@ -40,7 +40,7 @@ Gate final antes de activar escala completa numa instância cliente.
 - [ ] **Gate automatizado (recomendado):**
 
 ```bash
-cd Operis
+cd Operoz
 chmod +x bin/validate-assistant-go-live.sh
 ./bin/validate-assistant-go-live.sh
 ```

@@ -1,8 +1,8 @@
 import React from "react";
 // ui
-import { Button } from "@operis/propel/button";
-import { CopyIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { Button } from "@operoz/propel/button";
+import { CopyIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 
 type Props = {
   label: string;

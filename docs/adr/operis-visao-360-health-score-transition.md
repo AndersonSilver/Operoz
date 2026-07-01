@@ -61,6 +61,6 @@ Tool `get_client_360_summary` devolve cada cliente com `health`, `health_score`,
 
 ## Referências
 
-- `Operis/apps/api/operis/utils/client_360.py`
-- `Operis/apps/api/operis/utils/client_360_display.py`
-- `Operis/docs/operis-visao-360-roadmap.md`
+- `Operoz/apps/api/operoz/utils/client_360.py`
+- `Operoz/apps/api/operoz/utils/client_360_display.py`
+- `Operoz/docs/operoz-visao-360-roadmap.md`

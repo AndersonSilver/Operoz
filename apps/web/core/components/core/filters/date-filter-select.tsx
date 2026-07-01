@@ -1,8 +1,8 @@
 import React from "react";
 import { CalendarDays } from "lucide-react";
 // ui
-import { CalendarAfterIcon, CalendarBeforeIcon } from "@operis/propel/icons";
-import { CustomSelect } from "@operis/ui";
+import { CalendarAfterIcon, CalendarBeforeIcon } from "@operoz/propel/icons";
+import { CustomSelect } from "@operoz/ui";
 
 type Props = {
   title: string;

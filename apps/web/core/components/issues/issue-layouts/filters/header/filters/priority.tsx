@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane constants
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { PriorityIcon } from "@operis/propel/icons";
+import { PriorityIcon } from "@operoz/propel/icons";
 
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";

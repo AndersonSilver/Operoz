@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useTheme as useNextTheme } from "next-themes";
 // ui
-import { Button, getButtonStyling } from "@operis/propel/button";
-import { resolveGeneralTheme } from "@operis/utils";
+import { Button, getButtonStyling } from "@operoz/propel/button";
+import { resolveGeneralTheme } from "@operoz/utils";
 // hooks
 import TakeoffIconDark from "@/app/assets/logos/takeoff-icon-dark.svg?url";
 import TakeoffIconLight from "@/app/assets/logos/takeoff-icon-light.svg?url";

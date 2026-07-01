@@ -1,7 +1,7 @@
 // plane package imports
 import React from "react";
-import type { IAnalyticsResponseFields } from "@operis/types";
-import { Loader } from "@operis/ui";
+import type { IAnalyticsResponseFields } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 
 export type InsightCardProps = {
   data?: IAnalyticsResponseFields;

@@ -1,5 +1,5 @@
 import type { Config } from "@react-router/dev/config";
-import { joinUrlPath } from "@operis/utils";
+import { joinUrlPath } from "@operoz/utils";
 
 const basePath = joinUrlPath(process.env.VITE_ADMIN_BASE_PATH ?? "", "/") ?? "/";
 

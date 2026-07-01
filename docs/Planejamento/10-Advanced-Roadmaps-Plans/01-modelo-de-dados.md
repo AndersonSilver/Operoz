@@ -83,7 +83,7 @@ class ProjectVersion(ProjectBaseModel):
   dependência.
 - **Scenario como overlay:** `changes` guarda só os deltas por issue; o baseline
   permanece intacto. Comparar baseline vs scenario é diff de overlay.
-- **Capacity por board (squad):** alinha com o modelo de equipa do Operis; por
+- **Capacity por board (squad):** alinha com o modelo de equipa do Operoz; por
   ciclo permite over/under allocation.
 
 ## Migração

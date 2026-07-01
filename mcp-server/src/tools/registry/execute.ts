@@ -1,4 +1,4 @@
-import type { OperisClient } from "../../client.js";
+import type { OperozClient } from "../../client.js";
 import type { ToolOperation } from "./types.js";
 
 type Args = Record<string, unknown>;
@@ -36,7 +36,7 @@ export function buildPath(template: string, args: Args): string {
   });
 }
 
-export async function executeOperation(client: OperisClient, operation: ToolOperation, args: Args) {
+export async function executeOperation(client: OperozClient, operation: ToolOperation, args: Args) {
   const path = buildPath(operation.path, args);
   const surface =
     operation.surface === "instances"

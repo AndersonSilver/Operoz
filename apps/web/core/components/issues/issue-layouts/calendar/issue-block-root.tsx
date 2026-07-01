@@ -4,9 +4,9 @@ import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import { observer } from "mobx-react";
 // plane helpers
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // components
-import { cn, renderFormattedPayloadDate } from "@operis/utils";
+import { cn, renderFormattedPayloadDate } from "@operoz/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TRenderQuickActions } from "../list/list-view-types";
 import { HIGHLIGHT_CLASS } from "../utils";

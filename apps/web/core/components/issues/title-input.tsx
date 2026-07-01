@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { TNameDescriptionLoader } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TNameDescriptionLoader } from "@operoz/types";
 // components
-import { TextArea } from "@operis/ui";
+import { TextArea } from "@operoz/ui";
 // types
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import useDebounce from "@/hooks/use-debounce";
 import type { TIssueOperations } from "./issue-detail";
 // hooks

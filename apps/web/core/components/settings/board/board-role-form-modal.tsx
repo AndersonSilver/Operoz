@@ -1,10 +1,10 @@
 import { useEffect, useMemo } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardRole, TBoardRoleFormData, TBoardRolePermissionsMap } from "@operis/types";
-import { EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardRole, TBoardRoleFormData, TBoardRolePermissionsMap } from "@operoz/types";
+import { EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@operoz/ui";
 import { useBoardAccess } from "@/hooks/store/use-board-access";
 import { BoardRolePermissionsTree } from "./board-role-permissions-tree";
 import { emptyPermissionsMap, rolePermissionsToMap } from "./board-permission-utils";
@@ -61,7 +61,12 @@ export function BoardRoleFormModal(props: Props) {
   useEffect(() => {
     if (!isOpen) return;
     reset({
-      name: mode === "edit" && role ? role.name : role ? `${role.name} (${t("boards.settings.roles.duplicate_suffix")})` : "",
+      name:
+        mode === "edit" && role
+          ? role.name
+          : role
+            ? `${role.name} (${t("boards.settings.roles.duplicate_suffix")})`
+            : "",
       description: role?.description ?? "",
       permissions: defaultPerms,
     });

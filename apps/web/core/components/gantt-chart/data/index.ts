@@ -1,6 +1,6 @@
 // types
-import type { WeekMonthDataType, ChartDataType, TGanttViews } from "@operis/types";
-import { EStartOfTheWeek } from "@operis/types";
+import type { WeekMonthDataType, ChartDataType, TGanttViews } from "@operoz/types";
+import { EStartOfTheWeek } from "@operoz/types";
 
 // constants
 export const generateWeeks = (startOfWeek: EStartOfTheWeek = EStartOfTheWeek.SUNDAY): WeekMonthDataType[] => [

@@ -1,15 +1,15 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ISSUE_LAYOUT_MAP } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon } from "@operis/propel/icons";
-import { EIssueLayoutTypes } from "@operis/types";
-import { Dropdown } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ISSUE_LAYOUT_MAP } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon } from "@operoz/propel/icons";
+import { EIssueLayoutTypes } from "@operoz/types";
+import { Dropdown } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";
-import { getIconButtonStyling } from "@operis/propel/icon-button";
+import { getIconButtonStyling } from "@operoz/propel/icon-button";
 
 type TLayoutDropDown = {
   onChange: (value: EIssueLayoutTypes) => void;

@@ -3,10 +3,10 @@ import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { AlertTriangleIcon } from "lucide-react";
 // Plane imports
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IProject } from "@operis/types";
-import { Input, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IProject } from "@operoz/types";
+import { Input, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";

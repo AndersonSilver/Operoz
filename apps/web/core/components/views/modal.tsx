@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // types
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IProjectView } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IProjectView } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProjectView } from "@/hooks/store/use-project-view";

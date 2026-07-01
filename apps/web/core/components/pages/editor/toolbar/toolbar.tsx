@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FileCode2 } from "lucide-react";
-import type { EditorRefApi } from "@operis/editor";
+import type { EditorRefApi } from "@operoz/editor";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // constants
 import type { ToolbarMenuItem } from "@/constants/editor";
 import { TOOLBAR_ITEMS, TYPOGRAPHY_ITEMS } from "@/constants/editor";

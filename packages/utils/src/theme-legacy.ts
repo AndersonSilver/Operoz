@@ -13,7 +13,7 @@
  * - migrateLegacyTheme: Converts old 5-color theme to new 2-color system
  *
  * For new implementations:
- * - Use: import { applyCustomTheme, clearCustomTheme } from '@operis/utils/theme'
+ * - Use: import { applyCustomTheme, clearCustomTheme } from '@operoz/utils/theme'
  * - See: packages/utils/src/theme/theme-application.ts
  */
 

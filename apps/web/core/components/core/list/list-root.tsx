@@ -1,5 +1,5 @@
 import React from "react";
-import { Row, ERowVariant } from "@operis/ui";
+import { Row, ERowVariant } from "@operoz/ui";
 
 interface IListContainer {
   children: React.ReactNode;

@@ -2,8 +2,8 @@ import { cloneDeep, isEqual, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane internal
-import { ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@operis/constants";
-import type { IssuePaginationOptions, TIssueParams } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@operoz/constants";
+import type { IssuePaginationOptions, TIssueParams } from "@operoz/types";
 // store
 import type { RootStore } from "@/store/root.store";
 // types

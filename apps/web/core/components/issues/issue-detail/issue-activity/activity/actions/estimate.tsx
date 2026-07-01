@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { EstimatePropertyIcon } from "@operis/propel/icons";
+import { EstimatePropertyIcon } from "@operoz/propel/icons";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // components

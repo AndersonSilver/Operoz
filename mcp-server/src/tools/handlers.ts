@@ -1,11 +1,11 @@
-import type { OperisClient } from "../client.js";
-import { OperisApiError } from "../client.js";
+import type { OperozClient } from "../client.js";
+import { OperozApiError } from "../client.js";
 import { loadMcpProfile } from "../config.js";
 import { discoverOperations } from "./discover.js";
 import { ALL_OPERATIONS, OPERATIONS_BY_NAME, groupByDomain } from "./registry/index.js";
 import { executeOperation, findOperation } from "./registry/execute.js";
 import { AGENT_TOOL_NAMES, FULL_META_TOOL_NAMES } from "./registry/meta.js";
-import { OPERIS_REGISTRY_OPERATION_COUNT, OPERIS_MCP_PROFILE } from "./definitions.js";
+import { OPEROZ_REGISTRY_OPERATION_COUNT, OPEROZ_MCP_PROFILE } from "./definitions.js";
 
 type Args = Record<string, unknown>;
 
@@ -39,7 +39,7 @@ function jsonResult(data: unknown) {
 }
 
 function errorResult(error: unknown) {
-  if (error instanceof OperisApiError) {
+  if (error instanceof OperozApiError) {
     return jsonResult({ error: error.message, status: error.status, body: error.body });
   }
   return jsonResult({
@@ -58,24 +58,24 @@ function buildCapabilities() {
   return {
     profile,
     exposed_tools: profile === "agent" ? AGENT_TOOL_NAMES.size : FULL_META_TOOL_NAMES.size + ALL_OPERATIONS.length,
-    registry_operations: OPERIS_REGISTRY_OPERATION_COUNT,
+    registry_operations: OPEROZ_REGISTRY_OPERATION_COUNT,
     workflow:
-      profile === "agent" ? ["operis_discover", "operis_execute"] : ["operis_list_operations ou endpoint directo"],
+      profile === "agent" ? ["operoz_discover", "operoz_execute"] : ["operoz_list_operations ou endpoint directo"],
     auth: {
-      v1: "Header X-Api-Key → OPERIS_API_KEY ou Authorization: Bearer",
-      app: "Cookie de sessão → operis_sign_in, OPERIS_SESSION_COOKIE ou X-Operis-Session",
+      v1: "Header X-Api-Key → OPEROZ_API_KEY ou Authorization: Bearer",
+      app: "Cookie de sessão → operoz_sign_in, OPEROZ_SESSION_COOKIE ou X-Operoz-Session",
     },
     domains,
     surfaces: {
       v1: ALL_OPERATIONS.filter((o) => o.surface === "v1").length,
       app: ALL_OPERATIONS.filter((o) => o.surface === "app").length,
     },
-    escape_hatch: ["operis_api_v1_request", "operis_api_app_request", "operis_get_openapi_schema"],
+    escape_hatch: ["operoz_api_v1_request", "operoz_api_app_request", "operoz_get_openapi_schema"],
   };
 }
 
 export async function handleToolCall(
-  client: OperisClient,
+  client: OperozClient,
   name: string,
   args: Args
 ): Promise<{ content: Array<{ type: "text"; text: string }> }> {
@@ -84,10 +84,10 @@ export async function handleToolCall(
       return handleMetaTool(client, name, args);
     }
 
-    if (OPERIS_MCP_PROFILE === "agent") {
+    if (OPEROZ_MCP_PROFILE === "agent") {
       return jsonResult({
         error: `Ferramenta "${name}" não exposta no perfil agent.`,
-        hint: "Use operis_discover → operis_execute, ou operis_api_v1_request / operis_api_app_request.",
+        hint: "Use operoz_discover → operoz_execute, ou operoz_api_v1_request / operoz_api_app_request.",
       });
     }
 
@@ -95,7 +95,7 @@ export async function handleToolCall(
     if (!operation) {
       return jsonResult({
         error: `Ferramenta desconhecida: ${name}`,
-        hint: "Use operis_discover, operis_list_operations ou operis_get_capabilities",
+        hint: "Use operoz_discover, operoz_list_operations ou operoz_get_capabilities",
       });
     }
 
@@ -106,15 +106,15 @@ export async function handleToolCall(
 }
 
 async function handleMetaTool(
-  client: OperisClient,
+  client: OperozClient,
   name: string,
   args: Args
 ): Promise<{ content: Array<{ type: "text"; text: string }> }> {
   switch (name) {
-    case "operis_get_capabilities":
+    case "operoz_get_capabilities":
       return jsonResult(buildCapabilities());
 
-    case "operis_discover": {
+    case "operoz_discover": {
       const query = typeof args.query === "string" ? args.query : undefined;
       const domain = typeof args.domain === "string" ? args.domain : undefined;
       const surface = args.surface === "v1" || args.surface === "app" ? args.surface : undefined;
@@ -126,20 +126,20 @@ async function handleMetaTool(
       });
 
       return jsonResult({
-        profile: OPERIS_MCP_PROFILE,
+        profile: OPEROZ_MCP_PROFILE,
         count: matches.length,
-        next_step: "Chame operis_execute com operation=<name> e path params no top-level.",
+        next_step: "Chame operoz_execute com operation=<name> e path params no top-level.",
         matches,
       });
     }
 
-    case "operis_execute": {
+    case "operoz_execute": {
       const operationName = str(args, "operation");
       const operation = OPERATIONS_BY_NAME.get(operationName) ?? findOperation(ALL_OPERATIONS, operationName);
       if (!operation) {
         return jsonResult({
           error: `Operação desconhecida: ${operationName}`,
-          hint: "Use operis_discover com query descritiva para obter o name correcto.",
+          hint: "Use operoz_discover com query descritiva para obter o name correcto.",
         });
       }
 
@@ -149,7 +149,7 @@ async function handleMetaTool(
       return jsonResult(await executeOperation(client, operation, executeArgs));
     }
 
-    case "operis_list_operations": {
+    case "operoz_list_operations": {
       let ops = ALL_OPERATIONS;
       if (typeof args.domain === "string" && args.domain.trim()) {
         ops = ops.filter((o) => o.domain === args.domain);
@@ -169,8 +169,8 @@ async function handleMetaTool(
       );
     }
 
-    case "operis_get_openapi_schema": {
-      const base = process.env.OPERIS_API_BASE_URL ?? "http://localhost:8000";
+    case "operoz_get_openapi_schema": {
+      const base = process.env.OPEROZ_API_BASE_URL ?? "http://localhost:8000";
       const data = await fetch(`${base.replace(/\/$/, "")}/api/schema/`, {
         headers: client.getSessionCookie() ? { Cookie: client.getSessionCookie()! } : {},
       });
@@ -182,7 +182,7 @@ async function handleMetaTool(
       }
     }
 
-    case "operis_api_v1_request":
+    case "operoz_api_v1_request":
       return jsonResult(
         await client.request({
           surface: "v1",
@@ -193,7 +193,7 @@ async function handleMetaTool(
         })
       );
 
-    case "operis_api_app_request":
+    case "operoz_api_app_request":
       return jsonResult(
         await client.request({
           surface: "app",
@@ -204,7 +204,7 @@ async function handleMetaTool(
         })
       );
 
-    case "operis_sign_in": {
+    case "operoz_sign_in": {
       const result = await client.signIn(str(args, "email"), str(args, "password"));
       return jsonResult({
         ok: true,

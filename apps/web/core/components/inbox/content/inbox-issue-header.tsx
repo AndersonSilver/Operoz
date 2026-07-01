@@ -2,10 +2,10 @@ import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Clock, FileStack, MoreHorizontal, MoveRight } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton, getIconButtonStyling } from "@operis/propel/icon-button";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton, getIconButtonStyling } from "@operoz/propel/icon-button";
 import {
   LinkIcon,
   CopyIcon,
@@ -14,13 +14,13 @@ import {
   ChevronUpIcon,
   CheckCircleFilledIcon,
   CloseCircleFilledIcon,
-} from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TNameDescriptionLoader, THubMode } from "@operis/types";
-import { EInboxIssueStatus, EInboxIssueCurrentTab, EHubMode } from "@operis/types";
+} from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TNameDescriptionLoader, THubMode } from "@operoz/types";
+import { EInboxIssueStatus, EInboxIssueCurrentTab, EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
-import { CustomMenu, Row } from "@operis/ui";
-import { copyUrlToClipboard, findHowManyDaysLeft } from "@operis/utils";
+import { CustomMenu, Row } from "@operoz/ui";
+import { copyUrlToClipboard, findHowManyDaysLeft } from "@operoz/utils";
 // components
 import { NameDescriptionUpdateStatus } from "@/components/issues/issue-update-status";
 // hooks
@@ -189,7 +189,7 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
   };
 
   const handleInboxIssueDecline = async (payload: {
-    decline_category: import("@operis/types").TInboxIssueDeclineCategory;
+    decline_category: import("@operoz/types").TInboxIssueDeclineCategory;
     decline_reason: string;
   }) => {
     const nextOrPreviousIssueId = redirectIssue();

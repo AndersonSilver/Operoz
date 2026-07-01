@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // ui
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useEstimate } from "@/hooks/store/estimates/use-estimate";

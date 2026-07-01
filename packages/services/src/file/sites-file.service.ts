@@ -1,7 +1,7 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // local services
-import type { TFileEntityInfo, TFileSignedURLResponse } from "@operis/types";
+import type { TFileEntityInfo, TFileSignedURLResponse } from "@operoz/types";
 import { FileUploadService } from "./file-upload.service";
 // helpers
 import { FileService } from "./file.service";

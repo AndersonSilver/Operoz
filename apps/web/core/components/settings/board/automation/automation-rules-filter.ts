@@ -1,4 +1,4 @@
-import type { IBoardAutomationRule } from "@operis/types";
+import type { IBoardAutomationRule } from "@operoz/types";
 import { automationGraphForDisplay } from "./automation-publication";
 import { summarizeAutomationGraph } from "./automation-utils";
 

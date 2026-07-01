@@ -57,19 +57,24 @@ export class WorklogStore implements IWorklogStore {
 
 ```ts
 export class WorklogService extends APIService {
-  constructor() { super(API_BASE_URL); }
+  constructor() {
+    super(API_BASE_URL);
+  }
 
   async list(slug: string, projectId: string, issueId: string) {
-    return this.get(
-      `/api/workspaces/${slug}/projects/${projectId}/issues/${issueId}/worklogs/`
-    ).then((r) => r?.data).catch((e) => { throw e?.response; });
+    return this.get(`/api/workspaces/${slug}/projects/${projectId}/issues/${issueId}/worklogs/`)
+      .then((r) => r?.data)
+      .catch((e) => {
+        throw e?.response;
+      });
   }
 
   async create(slug: string, projectId: string, issueId: string, data: Partial<TWorklog>) {
-    return this.post(
-      `/api/workspaces/${slug}/projects/${projectId}/issues/${issueId}/worklogs/`,
-      data
-    ).then((r) => r?.data).catch((e) => { throw e?.response; });
+    return this.post(`/api/workspaces/${slug}/projects/${projectId}/issues/${issueId}/worklogs/`, data)
+      .then((r) => r?.data)
+      .catch((e) => {
+        throw e?.response;
+      });
   }
 }
 ```
@@ -79,7 +84,7 @@ export class WorklogService extends APIService {
 
 ## 4. Tipos partilhados (`packages/types/`)
 
-- Domínio tipado em `@operis/types` (ex.: `TWorklog`, `TWorkflow`,
+- Domínio tipado em `@operoz/types` (ex.: `TWorklog`, `TWorkflow`,
   `TAutomationGraph`). Os mesmos tipos descrevem payloads da API.
 - Para grafos (Workflow/Rule Builder) reutilizar `TAutomationGraph`,
   `TAutomationGraphNode`, `TAutomationGraphEdge`.
@@ -87,6 +92,7 @@ export class WorklogService extends APIService {
 ## 5. React Flow — editor de grafo (reuso crítico)
 
 Localização base: `core/components/settings/board/automation/`
+
 - `board-automation-canvas.tsx` — canvas com `ReactFlowProvider`, `Background`,
   `Controls`, `MiniMap`, `nodeTypes`.
 - `automation-utils.ts` — `flowToGraph()`/`graphToFlow()` (conversão UI ↔
@@ -99,9 +105,9 @@ Localização base: `core/components/settings/board/automation/`
 
 ## 6. UI e i18n
 
-- Componentes de base em `@operis/ui` (Button, Card, Dropdown, Table, Tabs,
+- Componentes de base em `@operoz/ui` (Button, Card, Dropdown, Table, Tabs,
   form fields). Não recriar primitivos.
-- Toda string visível via `TranslationStore` (`@operis/i18n`), chave em
+- Toda string visível via `TranslationStore` (`@operoz/i18n`), chave em
   `locales/pt-BR`. Sem texto hard-coded.
 
 ## 7. Rotas

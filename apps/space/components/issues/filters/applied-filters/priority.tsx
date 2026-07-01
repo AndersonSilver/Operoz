@@ -1,5 +1,5 @@
-import { CloseIcon, PriorityIcon } from "@operis/propel/icons";
-import type { TIssuePriorities } from "@operis/propel/icons";
+import { CloseIcon, PriorityIcon } from "@operoz/propel/icons";
+import type { TIssuePriorities } from "@operoz/propel/icons";
 
 type Props = {
   handleRemove: (val: string) => void;

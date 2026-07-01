@@ -1,8 +1,8 @@
 "use client";
 
 import { Bot, FileText, HeartPulse, Sparkles } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import {
   buildIntelRailHint,
   type Client360IntelligencePanelKind,

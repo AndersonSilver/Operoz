@@ -1,5 +1,5 @@
-import type { TCustomFieldType } from "@operis/types";
-import { cn } from "@operis/ui";
+import type { TCustomFieldType } from "@operoz/types";
+import { cn } from "@operoz/ui";
 
 const FIELD_TYPE_ICON_COLOR = "#2684FF";
 
@@ -27,13 +27,13 @@ export function BoardCustomFieldTypeGlyph(props: Props) {
   switch (fieldType) {
     case "text":
       return wrap(
-        <span className="font-semibold leading-none" style={{ fontSize: size === "lg" ? 22 : 16, color: stroke }}>
+        <span className="leading-none font-semibold" style={{ fontSize: size === "lg" ? 22 : 16, color: stroke }}>
           Aa
         </span>
       );
     case "number":
       return wrap(
-        <span className="font-semibold leading-none" style={{ fontSize: size === "lg" ? 18 : 14, color: stroke }}>
+        <span className="leading-none font-semibold" style={{ fontSize: size === "lg" ? 18 : 14, color: stroke }}>
           123
         </span>
       );
@@ -67,12 +67,7 @@ export function BoardCustomFieldTypeGlyph(props: Props) {
     case "categories":
       return wrap(
         <svg width={dim} height={dim} viewBox="0 0 24 24" fill="none">
-          <path
-            d="M7 6l8-2 4 3-9 2-3-3z"
-            stroke={stroke}
-            strokeWidth="2"
-            strokeLinejoin="round"
-          />
+          <path d="M7 6l8-2 4 3-9 2-3-3z" stroke={stroke} strokeWidth="2" strokeLinejoin="round" />
           <circle cx="10" cy="8" r="1" fill={stroke} />
         </svg>
       );
@@ -101,11 +96,7 @@ export function BoardCustomFieldTypeGlyph(props: Props) {
     case "url":
       return wrap(
         <svg width={dim} height={dim} viewBox="0 0 24 24" fill="none">
-          <path
-            d="M8 6h10a2 2 0 0 1 2 2v10H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z"
-            stroke={stroke}
-            strokeWidth="2"
-          />
+          <path d="M8 6h10a2 2 0 0 1 2 2v10H8a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2z" stroke={stroke} strokeWidth="2" />
           <path d="M6 10h12" stroke={stroke} strokeWidth="2" />
         </svg>
       );

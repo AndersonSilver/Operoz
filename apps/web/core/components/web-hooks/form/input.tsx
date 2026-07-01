@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Input } from "@operoz/ui";
 
 type Props = {
   value: string;

@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { useTheme as useNextTheme } from "next-themes";
 import { LogOut, Moon, Sun, UserCog2 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-import { useTranslation } from "@operis/i18n";
-import { API_BASE_URL } from "@operis/constants";
-import { AuthService } from "@operis/services";
-import { Avatar } from "@operis/ui";
-import { getFileURL, cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { API_BASE_URL } from "@operoz/constants";
+import { AuthService } from "@operoz/services";
+import { Avatar } from "@operoz/ui";
+import { getFileURL, cn } from "@operoz/utils";
 import { useTheme, useUser } from "@/hooks/store";
 
 const authService = new AuthService();

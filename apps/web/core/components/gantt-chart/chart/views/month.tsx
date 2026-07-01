@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
+import { useTranslation } from "@operoz/i18n";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
 import { HEADER_HEIGHT } from "@/components/gantt-chart/constants";
 // helpers
@@ -9,11 +10,13 @@ import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 // types
 import type { IMonthView } from "../../views";
 import { getNumberOfDaysBetweenTwoDates } from "../../views/helpers";
+import { formatGanttMonthTitle } from "../../helpers/gantt-date-labels";
 
 export const MonthChartView = observer(function MonthChartView(_props: any) {
   // chart hook
   const { currentViewData, renderView } = useTimeLineChartStore();
   const { sidebarWidth } = useGanttSidebarWidth();
+  const { t, currentLocale } = useTranslation();
   const monthView: IMonthView = renderView;
 
   if (!monthView?.months?.length || !monthView?.weeks?.length) return null;
@@ -50,7 +53,7 @@ export const MonthChartView = observer(function MonthChartView(_props: any) {
                       left: `${sidebarWidth}px`,
                     }}
                   >
-                    {monthBlock?.title}
+                    {formatGanttMonthTitle(new Date(monthBlock.year, monthBlock.month, 1), currentLocale)}
                     {monthBlock.today && (
                       <span className={cn("ml-2 rounded-sm bg-accent-primary px-1 text-9 font-medium text-on-color")}>
                         Current
@@ -82,7 +85,9 @@ export const MonthChartView = observer(function MonthChartView(_props: any) {
                       {weekBlock.startDate.getDate()}-{weekBlock.endDate.getDate()}
                     </span>
                   </div>
-                  <div className="space-x-1 text-11 font-medium">{weekBlock.weekData.shortTitle}</div>
+                  <div className="space-x-1 text-11 font-medium">
+                    {t("issue.gantt.week_label", { week: weekBlock.weekNumber })}
+                  </div>
                 </div>
               ))}
             </div>

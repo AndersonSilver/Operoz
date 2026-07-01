@@ -1,15 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { GripVertical, Plus, Trash2, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TIntakeFormCreatableFieldType, TIntakeFormField } from "@operis/types";
-import { Input, TextArea, CustomSelect, ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
-import {
-  INTAKE_FORM_FIELD_CATALOG,
-  createIntakeFormField,
-  getCatalogItem,
-} from "./intake-form-field-catalog";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TIntakeFormCreatableFieldType, TIntakeFormField } from "@operoz/types";
+import { Input, TextArea, CustomSelect, ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
+import { INTAKE_FORM_FIELD_CATALOG, createIntakeFormField, getCatalogItem } from "./intake-form-field-catalog";
 
 type DrawerMode = "create" | "edit";
 
@@ -119,7 +115,9 @@ export function IntakeFormFieldDrawer(props: Props) {
       <div className="flex-1 space-y-5 overflow-y-auto px-5 py-5">
         {canChangeFieldType ? (
           <div className="space-y-2">
-            <FieldLabel required={mode === "create"}>{t("project_settings.features.intake.forms.builder.field_type")}</FieldLabel>
+            <FieldLabel required={mode === "create"}>
+              {t("project_settings.features.intake.forms.builder.field_type")}
+            </FieldLabel>
             <CustomSelect
               value={fieldType}
               label={

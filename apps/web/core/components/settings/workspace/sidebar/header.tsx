@@ -1,9 +1,9 @@
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react";
 // plane imports
-import { ROLE_DETAILS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
+import { ROLE_DETAILS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
 // components
 import { WorkspaceLogo } from "@/components/workspace/logo";
 // hooks

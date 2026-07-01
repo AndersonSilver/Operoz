@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Check, ChevronLeft, Plus, Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import type { IWorkspaceCustomField, TCustomFieldType } from "@operis/types";
-import { cn } from "@operis/utils";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import type { IWorkspaceCustomField, TCustomFieldType } from "@operoz/types";
+import { cn } from "@operoz/utils";
+import { Input } from "@operoz/ui";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldCreateForm } from "./board-custom-field-create-form";
 import { getBoardFieldDisplayName } from "./board-field-display";
@@ -137,12 +137,8 @@ export const BoardCustomFieldAddModal = observer(function BoardCustomFieldAddMod
     if (selected.size === 0) return;
     setIsSubmitting(true);
     try {
-      const standardBoardFieldIds = boardFieldsAll
-        .filter((f) => f.is_system && selected.has(f.id))
-        .map((f) => f.id);
-      const workspaceCustomFieldIds = Array.from(selected).filter(
-        (id) => !standardBoardFieldIds.includes(id)
-      );
+      const standardBoardFieldIds = boardFieldsAll.filter((f) => f.is_system && selected.has(f.id)).map((f) => f.id);
+      const workspaceCustomFieldIds = Array.from(selected).filter((id) => !standardBoardFieldIds.includes(id));
 
       await Promise.all(
         standardBoardFieldIds.map((boardFieldId) =>
@@ -210,13 +206,7 @@ export const BoardCustomFieldAddModal = observer(function BoardCustomFieldAddMod
         <Button variant="secondary" size="sm" type="button" onClick={handleClose}>
           {t("cancel")}
         </Button>
-        <Button
-          variant="primary"
-          size="sm"
-          onClick={onConfirm}
-          loading={isSubmitting}
-          disabled={selected.size === 0}
-        >
+        <Button variant="primary" size="sm" onClick={onConfirm} loading={isSubmitting} disabled={selected.size === 0}>
           {selected.size > 0 ? addButtonLabel : t("boards.settings.fields.add_selected")}
         </Button>
       </div>
@@ -255,7 +245,7 @@ export const BoardCustomFieldAddModal = observer(function BoardCustomFieldAddMod
         <div className="flex min-h-0 flex-1 flex-col">
           <div className="shrink-0 px-5 py-3">
             <div className="relative">
-              <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-placeholder" />
+              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-placeholder" />
               <Input
                 className="pl-9"
                 value={search}

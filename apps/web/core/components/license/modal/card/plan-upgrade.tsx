@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { TALK_TO_SALES_URL } from "@operis/constants";
-import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operis/types";
-import { calculateYearlyDiscount, getSubscriptionName, getSubscriptionPriceDetails } from "@operis/utils";
+import { TALK_TO_SALES_URL } from "@operoz/constants";
+import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operoz/types";
+import { calculateYearlyDiscount, getSubscriptionName, getSubscriptionPriceDetails } from "@operoz/utils";
 // components
 import { BasePaidPlanCard, TalkToSalesCard } from "@/components/license";
 // local components

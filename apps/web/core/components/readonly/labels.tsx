@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // hooks
 import { useLabel } from "@/hooks/store/use-label";
 import { usePlatformOS } from "@/hooks/use-platform-os";

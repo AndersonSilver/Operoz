@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { observer } from "mobx-react";
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType, EIssuesStoreType } from "@operis/types";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType, EIssuesStoreType } from "@operoz/types";
 // components
 import { DeleteIssueModal } from "@/components/issues/delete-issue-modal";
 // hooks
@@ -10,6 +10,7 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { CreateUpdateIssueModal } from "../../issue-modal/modal";
 import { useSubIssueOperations } from "./helper";
 import { SubIssuesListRoot } from "./issues-list/root";
+import { SubIssuesProgressBar } from "./sub-issues-progress";
 
 type Props = {
   workspaceSlug: string;
@@ -110,18 +111,21 @@ export const SubIssuesCollapsibleContent = observer(function SubIssuesCollapsibl
   return (
     <>
       {subIssueHelpers.issue_visibility.includes(parentIssueId) && (
-        <SubIssuesListRoot
-          storeType={EIssuesStoreType.PROJECT}
-          workspaceSlug={workspaceSlug}
-          projectId={projectId}
-          parentIssueId={parentIssueId}
-          rootIssueId={parentIssueId}
-          spacingLeft={6}
-          canEdit={!disabled}
-          handleIssueCrudState={handleIssueCrudState}
-          subIssueOperations={subIssueOperations}
-          issueServiceType={issueServiceType}
-        />
+        <>
+          <SubIssuesProgressBar parentIssueId={parentIssueId} issueServiceType={issueServiceType} />
+          <SubIssuesListRoot
+            storeType={EIssuesStoreType.PROJECT}
+            workspaceSlug={workspaceSlug}
+            projectId={projectId}
+            parentIssueId={parentIssueId}
+            rootIssueId={parentIssueId}
+            spacingLeft={6}
+            canEdit={!disabled}
+            handleIssueCrudState={handleIssueCrudState}
+            subIssueOperations={subIssueOperations}
+            issueServiceType={issueServiceType}
+          />
+        </>
       )}
 
       {shouldRenderDeleteIssueModal && (

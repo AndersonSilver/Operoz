@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IWorkspace } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IWorkspace } from "@operoz/types";
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 import { useUser } from "@/hooks/store/user";
 import { TransferOwnershipModal } from "./transfer-ownership-modal";

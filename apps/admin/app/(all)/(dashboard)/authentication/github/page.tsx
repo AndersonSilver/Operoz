@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
 // plane internal packages
-import { setPromiseToast } from "@operis/propel/toast";
-import { Loader, ToggleSwitch } from "@operis/ui";
-import { resolveGeneralTheme } from "@operis/utils";
+import { setPromiseToast } from "@operoz/propel/toast";
+import { Loader, ToggleSwitch } from "@operoz/ui";
+import { resolveGeneralTheme } from "@operoz/utils";
 // assets
 import githubLightModeImage from "@/app/assets/logos/github-black.png?url";
 import githubDarkModeImage from "@/app/assets/logos/github-white.png?url";

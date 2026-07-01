@@ -1,6 +1,6 @@
 import React from "react";
 // ui
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 // assets
 import EmptyWebhook from "@/app/assets/empty-state/web-hook.svg?url";
 

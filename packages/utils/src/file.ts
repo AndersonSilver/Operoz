@@ -1,5 +1,5 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 
 /**
  * @description combine the file path with the base URL

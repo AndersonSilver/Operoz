@@ -1,7 +1,7 @@
 "use client";
 
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { fetchGuestQbr } from "@/services/guest-qbr.service";
 

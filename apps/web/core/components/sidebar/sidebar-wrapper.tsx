@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { PreferencesIcon } from "@operis/propel/icons";
-import { ScrollArea } from "@operis/propel/scrollarea";
-import { cn } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { PreferencesIcon } from "@operoz/propel/icons";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import { cn } from "@operoz/utils";
 import { CustomizeNavigationDialog } from "@/components/navigation/customize-navigation-dialog";
 import { WorkspaceMenuRoot } from "@/components/workspace/sidebar/workspace-menu-root";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import useSize from "@/hooks/use-window-size";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 type TSidebarWrapperProps = {
   title: string;
@@ -65,9 +65,7 @@ export const SidebarWrapper = observer(function SidebarWrapper(props: TSidebarWr
           scrollType="hover"
           size="sm"
           rootClassName="size-full overflow-x-hidden overflow-y-auto"
-          viewportClassName={cn(
-            "flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto px-2 pb-3"
-          )}
+          viewportClassName={cn("flex h-full w-full flex-col gap-2 overflow-x-hidden overflow-y-auto px-2 pb-3")}
         >
           {children}
         </ScrollArea>

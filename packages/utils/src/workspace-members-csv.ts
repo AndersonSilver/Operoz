@@ -1,5 +1,5 @@
-import { EUserPermissions } from "@operis/constants";
-import type { IWorkspaceBulkInviteFormData, TUserPermissions } from "@operis/types";
+import { EUserPermissions } from "@operoz/constants";
+import type { IWorkspaceBulkInviteFormData, TUserPermissions } from "@operoz/types";
 
 export type TWorkspaceMemberCsvRow = {
   email: string;
@@ -158,9 +158,7 @@ export const parseWorkspaceMembersCsv = (content: string): TWorkspaceMemberCsvPa
   return { valid, invalid };
 };
 
-export const workspaceMembersCsvToInvitePayload = (
-  rows: TWorkspaceMemberCsvRow[]
-): IWorkspaceBulkInviteFormData => ({
+export const workspaceMembersCsvToInvitePayload = (rows: TWorkspaceMemberCsvRow[]): IWorkspaceBulkInviteFormData => ({
   emails: rows.map((row) => ({
     email: row.email,
     role: row.role,

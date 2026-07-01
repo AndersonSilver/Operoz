@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/worklog.py
 ├── app/views/time_tracking/worklog.py
 ├── app/views/time_tracking/timer.py
@@ -32,27 +32,27 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| `parseDuration("2h 30m")` | 9000 |
-| `parseDuration("1d")` (8h) | 28800 |
-| `formatDuration(9000)` | "2h 30m" |
-| soma de worklogs por issue | total correto |
-| duração inválida (negativa, >24h) | rejeitada |
-| `started_at` no futuro | rejeitada |
+| Caso                              | Esperado      |
+| --------------------------------- | ------------- |
+| `parseDuration("2h 30m")`         | 9000          |
+| `parseDuration("1d")` (8h)        | 28800         |
+| `formatDuration(9000)`            | "2h 30m"      |
+| soma de worklogs por issue        | total correto |
+| duração inválida (negativa, >24h) | rejeitada     |
+| `started_at` no futuro            | rejeitada     |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| criar worklog (MEMBER) | `201`; aparece na lista |
-| editar worklog de outro (edit_own) | `403` |
-| editar worklog de outro (admin edit_all) | `200` + audit |
-| GUEST cria worklog | `403` |
-| timesheet de terceiro sem `view_all` | `403` |
-| start timer com timer já ativo | `409` |
-| stop timer | cria worklog com duração correta |
-| worklog em issue de projeto restrito | `403/404` |
+| Caso                                     | Esperado                         |
+| ---------------------------------------- | -------------------------------- |
+| criar worklog (MEMBER)                   | `201`; aparece na lista          |
+| editar worklog de outro (edit_own)       | `403`                            |
+| editar worklog de outro (admin edit_all) | `200` + audit                    |
+| GUEST cria worklog                       | `403`                            |
+| timesheet de terceiro sem `view_all`     | `403`                            |
+| start timer com timer já ativo           | `409`                            |
+| stop timer                               | cria worklog com duração correta |
+| worklog em issue de projeto restrito     | `403/404`                        |
 
 ### e2e
 

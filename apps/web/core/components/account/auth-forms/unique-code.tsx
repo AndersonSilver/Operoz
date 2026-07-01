@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { CircleCheck, XCircle } from "lucide-react";
-import { API_BASE_URL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Input, Spinner } from "@operis/ui";
+import { API_BASE_URL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Input, Spinner } from "@operoz/ui";
 // constants
 // helpers
 import { EAuthModes } from "@/helpers/authentication.helper";

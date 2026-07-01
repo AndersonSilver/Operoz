@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import type { E_SORT_ORDER, TActivityFilters, EActivityFilterType } from "@operis/constants";
-import { BASE_ACTIVITY_FILTER_TYPES, filterActivityOnSelectedFilters } from "@operis/constants";
-import type { TCommentsOperations } from "@operis/types";
+import type { E_SORT_ORDER } from "@operoz/constants";
+import { EActivityFilterType, BASE_ACTIVITY_FILTER_TYPES } from "@operoz/constants";
+import type { TCommentsOperations, TIssueActivityComment } from "@operoz/types";
 // components
 import { CommentCard } from "@/components/comments/card/root";
 // hooks
@@ -13,17 +13,30 @@ import { IssueActivityWorklog } from "@/plane-web/components/issues/worklog/acti
 // local imports
 import { IssueActivityItem } from "./activity/activity-list";
 import { IssueActivityLoader } from "./loader";
+import { EActivityViewTab } from "./activity-view-tabs.config";
 
 type TIssueActivityCommentRoot = {
   workspaceSlug: string;
   projectId: string;
   isIntakeIssue: boolean;
   issueId: string;
-  selectedFilters: TActivityFilters[];
+  viewTab: EActivityViewTab;
   activityOperations: TCommentsOperations;
   showAccessSpecifier?: boolean;
   disabled?: boolean;
   sortOrder: E_SORT_ORDER;
+};
+
+const filterActivityByViewTab = (activity: TIssueActivityComment[], viewTab: EActivityViewTab) => {
+  if (viewTab === EActivityViewTab.COMMENTS) {
+    return activity.filter((item) => item.activity_type === EActivityFilterType.COMMENT);
+  }
+
+  if (viewTab === EActivityViewTab.HISTORY) {
+    return activity.filter((item) => item.activity_type !== EActivityFilterType.COMMENT);
+  }
+
+  return activity;
 };
 
 export const IssueActivityCommentRoot = observer(function IssueActivityCommentRoot(props: TIssueActivityCommentRoot) {
@@ -31,7 +44,7 @@ export const IssueActivityCommentRoot = observer(function IssueActivityCommentRo
     workspaceSlug,
     isIntakeIssue,
     issueId,
-    selectedFilters,
+    viewTab,
     activityOperations,
     showAccessSpecifier,
     projectId,
@@ -50,7 +63,9 @@ export const IssueActivityCommentRoot = observer(function IssueActivityCommentRo
 
   if (activityAndComments.length <= 0) return null;
 
-  const filteredActivityAndComments = filterActivityOnSelectedFilters(activityAndComments, selectedFilters);
+  const filteredActivityAndComments = filterActivityByViewTab(activityAndComments, viewTab);
+
+  if (filteredActivityAndComments.length <= 0) return null;
 
   return (
     <div>

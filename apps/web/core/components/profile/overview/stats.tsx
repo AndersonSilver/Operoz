@@ -2,10 +2,10 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 
 // ui
-import { useTranslation } from "@operis/i18n";
-import { UserCirclePropertyIcon, CreateIcon, LayerStackIcon } from "@operis/propel/icons";
-import type { IUserProfileData } from "@operis/types";
-import { Loader, Card, ECardSpacing, ECardDirection } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { UserCirclePropertyIcon, CreateIcon, LayerStackIcon } from "@operoz/propel/icons";
+import type { IUserProfileData } from "@operoz/types";
+import { Loader, Card, ECardSpacing, ECardDirection } from "@operoz/ui";
 // types
 
 type Props = {

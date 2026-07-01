@@ -1,8 +1,7 @@
-
 import React from "react";
 import { Link } from "react-router";
 // ui
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 // images
 import Image404 from "@/app/assets/images/404.svg?url";
 

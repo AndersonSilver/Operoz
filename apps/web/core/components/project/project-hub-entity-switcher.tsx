@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { ICustomSearchSelectOption } from "@operis/types";
-import { CustomSearchSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { ICustomSearchSelectOption } from "@operoz/types";
+import { CustomSearchSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type ProjectHubEntitySwitcherProps = {
   value: string;
@@ -26,7 +26,7 @@ export function ProjectHubEntitySwitcher(props: ProjectHubEntitySwitcherProps) {
   const trigger = (
     <span
       className={cn(
-        "inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-subtle/50 bg-layer-1/60 text-tertiary shadow-sm backdrop-blur-sm transition-colors",
+        "shadow-sm inline-flex size-7 shrink-0 items-center justify-center rounded-md border border-subtle/50 bg-layer-1/60 text-tertiary backdrop-blur-sm transition-colors",
         "hover:border-subtle hover:bg-layer-1 hover:text-primary",
         isOpen && "border-subtle bg-layer-1 text-primary",
         disabled && "pointer-events-none opacity-50",

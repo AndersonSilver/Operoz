@@ -1,12 +1,12 @@
 import { useMemo } from "react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { getButtonStyling } from "@operis/propel/button";
+import { getButtonStyling } from "@operoz/propel/button";
 // types
-import { CheckIcon } from "@operis/propel/icons";
-import type { TPageFiltersSortBy, TPageFiltersSortKey } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { CheckIcon } from "@operoz/propel/icons";
+import type { TPageFiltersSortBy, TPageFiltersSortKey } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 
 type Props = {
   onChange: (value: { key?: TPageFiltersSortKey; order?: TPageFiltersSortBy }) => void;

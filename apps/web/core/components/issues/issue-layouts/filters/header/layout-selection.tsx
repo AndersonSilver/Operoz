@@ -1,9 +1,9 @@
 // plane imports
-import { ISSUE_LAYOUTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { EIssueLayoutTypes } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ISSUE_LAYOUTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { EIssueLayoutTypes } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";
 import { PROJECT_HUB_LAYOUT_TOGGLE_GROUP } from "@/components/project/project-hub-toolbar";
@@ -35,7 +35,7 @@ export function LayoutSelection(props: Props) {
             className={cn(
               "group grid h-7 w-8 place-items-center overflow-hidden rounded-md transition-all hover:bg-layer-transparent-hover",
               {
-                "bg-layer-transparent-active shadow-sm ring-1 ring-inset ring-subtle/50 hover:bg-layer-transparent-active":
+                "shadow-sm bg-layer-transparent-active ring-1 ring-subtle/50 ring-inset hover:bg-layer-transparent-active":
                   selectedLayout === layout.key,
               }
             )}

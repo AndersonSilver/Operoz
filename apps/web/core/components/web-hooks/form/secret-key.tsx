@@ -4,14 +4,14 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
 import { Eye, EyeOff, RefreshCw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CopyIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IWebhook } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CopyIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IWebhook } from "@operoz/types";
 // ui
-import { csvDownload, copyTextToClipboard } from "@operis/utils";
+import { csvDownload, copyTextToClipboard } from "@operoz/utils";
 // hooks
 import { useWebhook } from "@/hooks/store/use-webhook";
 import { useWorkspace } from "@/hooks/store/use-workspace";

@@ -2,15 +2,15 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // constants
-import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operis/constants";
+import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operoz/constants";
 // types
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUser, IWorkspace, TOnboardingSteps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUser, IWorkspace, TOnboardingSteps } from "@operoz/types";
 // ui
-import { CustomSelect, Input, Spinner } from "@operis/ui";
-import { validateWorkspaceName, validateSlug } from "@operis/utils";
+import { CustomSelect, Input, Spinner } from "@operoz/ui";
+import { validateWorkspaceName, validateSlug } from "@operoz/utils";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserProfile, useUserSettings } from "@/hooks/store/user";

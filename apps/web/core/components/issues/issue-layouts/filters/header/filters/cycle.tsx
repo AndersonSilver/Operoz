@@ -2,10 +2,10 @@ import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { CycleGroupIcon } from "@operis/propel/icons";
-import type { TCycleGroups } from "@operis/types";
+import { CycleGroupIcon } from "@operoz/propel/icons";
+import type { TCycleGroups } from "@operoz/types";
 // components
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useCycle } from "@/hooks/store/use-cycle";
 // ui

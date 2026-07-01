@@ -1,9 +1,9 @@
 import type { LucideIcon } from "lucide-react";
-import { VIEW_ACCESS_SPECIFIERS as VIEW_ACCESS_SPECIFIERS_CONSTANTS } from "@operis/constants";
-import { GlobeIcon, LockIcon } from "@operis/propel/icons";
+import { VIEW_ACCESS_SPECIFIERS as VIEW_ACCESS_SPECIFIERS_CONSTANTS } from "@operoz/constants";
+import { GlobeIcon, LockIcon } from "@operoz/propel/icons";
 
-import type { ISvgIcons } from "@operis/propel/icons";
-import { EViewAccess } from "@operis/types";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { EViewAccess } from "@operoz/types";
 
 const VIEW_ACCESS_ICONS = {
   [EViewAccess.PUBLIC]: GlobeIcon,

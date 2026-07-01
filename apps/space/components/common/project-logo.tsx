@@ -1,7 +1,7 @@
 // types
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   className?: string;

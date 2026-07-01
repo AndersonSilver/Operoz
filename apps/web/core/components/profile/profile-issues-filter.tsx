@@ -2,12 +2,12 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
+import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
 // components
 import { DisplayFiltersSelection, FiltersDropdown, LayoutSelection } from "@/components/issues/issue-layouts/filters";
 import { WorkItemFiltersToggle } from "@/components/work-item-filters/filters-toggle";

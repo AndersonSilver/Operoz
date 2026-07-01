@@ -4,8 +4,8 @@ import { Controller } from "react-hook-form";
 // icons
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
-import { Input } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Input } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   control: Control<any>;

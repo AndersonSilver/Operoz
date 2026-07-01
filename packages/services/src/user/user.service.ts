@@ -1,6 +1,6 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
-import type { IUser, TUserProfile } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IUser, TUserProfile } from "@operoz/types";
 // api service
 import { APIService } from "../api.service";
 

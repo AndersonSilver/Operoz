@@ -40,13 +40,18 @@ core/store/time-tracking/timer.store.ts    → TimerStore
 `deleteWorklog`, `startTimer`, `stopTimer`, `currentTimer`, `timesheet`,
 `timeReport`, `activityTypes`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TWorklog = {
-  id: string; issue: string; author: string;
-  time_spent_seconds: number; started_at: string; description: string;
-  is_billable: boolean; activity_type?: string;
+  id: string;
+  issue: string;
+  author: string;
+  time_spent_seconds: number;
+  started_at: string;
+  description: string;
+  is_billable: boolean;
+  activity_type?: string;
 };
 export type TTimerSession = { id: string; issue: string; started_at: string };
 ```

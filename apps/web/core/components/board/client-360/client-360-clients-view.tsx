@@ -12,11 +12,11 @@ import {
   Headphones,
   Inbox,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { TClient360Client } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { TClient360Client } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";
 import {

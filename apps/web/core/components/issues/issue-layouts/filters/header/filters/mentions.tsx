@@ -2,9 +2,9 @@ import { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 // plane ui
-import { Loader, Avatar } from "@operis/ui";
+import { Loader, Avatar } from "@operoz/ui";
 // components
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // helpers
 // hooks

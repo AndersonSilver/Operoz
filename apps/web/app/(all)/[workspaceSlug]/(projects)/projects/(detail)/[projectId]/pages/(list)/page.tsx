@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TPageNavigationTabs } from "@operis/types";
-import { EUserProjectRoles } from "@operis/types";
-import { cn } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TPageNavigationTabs } from "@operoz/types";
+import { EUserProjectRoles } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // assets
 import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import darkPagesAsset from "@/app/assets/empty-state/disabled-feature/pages-dark.webp?url";

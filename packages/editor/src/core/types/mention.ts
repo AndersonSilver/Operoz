@@ -1,5 +1,5 @@
 // plane types
-import type { TSearchEntities } from "@operis/types";
+import type { TSearchEntities } from "@operoz/types";
 
 export type TMentionSuggestion = {
   entity_identifier: string;

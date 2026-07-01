@@ -1,8 +1,8 @@
 import { action, observable, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import { APITokenService } from "@operis/services";
-import type { IApiToken } from "@operis/types";
+import { APITokenService } from "@operoz/services";
+import type { IApiToken } from "@operoz/types";
 // services
 // store
 import type { CoreRootStore } from "../root.store";

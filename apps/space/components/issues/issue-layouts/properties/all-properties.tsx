@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { Paperclip } from "lucide-react";
-import { LinkIcon, ViewsIcon } from "@operis/propel/icons";
+import { LinkIcon, ViewsIcon } from "@operoz/propel/icons";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueDisplayProperties } from "@operis/types";
-import { cn } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueDisplayProperties } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { WithDisplayPropertiesHOC } from "@/components/issues/issue-layouts/with-display-properties-HOC";
 // helpers

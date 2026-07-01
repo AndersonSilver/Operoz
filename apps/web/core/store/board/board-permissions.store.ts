@@ -1,17 +1,11 @@
 import { makeAutoObservable, runInAction } from "mobx";
-import type { IProjectBoardPermissions } from "@operis/types";
+import type { IProjectBoardPermissions } from "@operoz/types";
 import { BoardPermissionsService } from "@/services/board/board-permissions.service";
 import { canPerformBoardPermission } from "@/utils/board-permissions";
 
 export interface IBoardPermissionsStore {
-  fetchProjectBoardPermissions: (
-    workspaceSlug: string,
-    projectId: string
-  ) => Promise<IProjectBoardPermissions>;
-  getProjectBoardPermissions: (
-    workspaceSlug: string,
-    projectId: string
-  ) => IProjectBoardPermissions | undefined;
+  fetchProjectBoardPermissions: (workspaceSlug: string, projectId: string) => Promise<IProjectBoardPermissions>;
+  getProjectBoardPermissions: (workspaceSlug: string, projectId: string) => IProjectBoardPermissions | undefined;
   canBoardPermission: (workspaceSlug: string, projectId: string, permissionKey: string) => boolean;
   clearProjectBoardPermissions: () => void;
 }

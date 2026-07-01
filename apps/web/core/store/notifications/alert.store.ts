@@ -1,5 +1,5 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
-import { AlertService } from "@operis/services";
+import { AlertService } from "@operoz/services";
 import type {
   TAlertLog,
   TAlertLogFilters,
@@ -8,7 +8,7 @@ import type {
   TConnectAccountPayload,
   TUserAlertPreferences,
   TUserExternalAccount,
-} from "@operis/types";
+} from "@operoz/types";
 import type { CoreRootStore } from "../root.store";
 
 export interface IAlertStore {

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { EEstimateSystem } from "@operis/constants";
-import { convertMinutesToHoursMinutesString } from "@operis/utils";
+import { EEstimateSystem } from "@operoz/constants";
+import { convertMinutesToHoursMinutesString } from "@operoz/utils";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 // hooks

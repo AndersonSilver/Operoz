@@ -2,10 +2,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Link } from "react-router";
 // plane imports
-import { ROLE } from "@operis/constants";
-import { Popover } from "@operis/propel/popover";
-import { Avatar } from "@operis/ui";
-import { cn, getFileURL } from "@operis/utils";
+import { ROLE } from "@operoz/constants";
+import { Popover } from "@operoz/propel/popover";
+import { Avatar } from "@operoz/ui";
+import { cn, getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser } from "@/hooks/store/user";

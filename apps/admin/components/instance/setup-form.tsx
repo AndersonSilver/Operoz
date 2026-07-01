@@ -3,11 +3,11 @@ import { useSearchParams } from "next/navigation";
 // icons
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
-import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { AuthService } from "@operis/services";
-import { Checkbox, Input, PasswordStrengthIndicator, Spinner } from "@operis/ui";
-import { getPasswordStrength, validatePersonName, validateCompanyName } from "@operis/utils";
+import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { AuthService } from "@operoz/services";
+import { Checkbox, Input, PasswordStrengthIndicator, Spinner } from "@operoz/ui";
+import { getPasswordStrength, validatePersonName, validateCompanyName } from "@operoz/utils";
 // components
 import { Banner } from "../common/banner";
 import { FormHeader } from "./form-header";

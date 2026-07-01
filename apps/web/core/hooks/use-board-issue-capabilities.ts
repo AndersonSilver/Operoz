@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useBoardPermissions } from "@/hooks/store/use-board-permissions";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
@@ -118,10 +118,7 @@ export function useCanEditIssueOnProject() {
 }
 
 /** Carrega permissões de board uma vez por projeto (evita loop no Gantt/lista). */
-export function usePrefetchBoardProjectPermissions(
-  workspaceSlug: string | undefined,
-  projectIds: string[]
-) {
+export function usePrefetchBoardProjectPermissions(workspaceSlug: string | undefined, projectIds: string[]) {
   const { fetchProjectBoardPermissions } = useBoardPermissions();
   const { getProjectById } = useProject();
 

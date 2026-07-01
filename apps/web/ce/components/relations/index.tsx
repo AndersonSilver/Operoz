@@ -1,5 +1,5 @@
 import { CircleDot, XCircle } from "lucide-react";
-import { RelatedIcon, DuplicatePropertyIcon } from "@operis/propel/icons";
+import { RelatedIcon, DuplicatePropertyIcon } from "@operoz/propel/icons";
 import type { TRelationObject } from "@/components/issues/issue-detail-widgets/relations";
 import type { TIssueRelationTypes } from "../../types";
 
@@ -32,6 +32,35 @@ export const ISSUE_RELATION_OPTIONS: Record<TIssueRelationTypes, TRelationObject
     i18n_label: "issue.relation.blocking",
     className: "bg-yellow-500/20 text-yellow-700",
     icon: (size) => <XCircle size={size} className="text-secondary" />,
+    placeholder: "None",
+  },
+  // Temporal dependency types — Gantt Finish-to-Start variants (P3 UI, declared for type completeness)
+  start_before: {
+    key: "start_before",
+    i18n_label: "issue.relation.start_before",
+    className: "bg-layer-1 text-secondary",
+    icon: (size) => <RelatedIcon height={size} width={size} className="text-secondary" />,
+    placeholder: "None",
+  },
+  start_after: {
+    key: "start_after",
+    i18n_label: "issue.relation.start_after",
+    className: "bg-layer-1 text-secondary",
+    icon: (size) => <RelatedIcon height={size} width={size} className="text-secondary" />,
+    placeholder: "None",
+  },
+  finish_before: {
+    key: "finish_before",
+    i18n_label: "issue.relation.finish_before",
+    className: "bg-layer-1 text-secondary",
+    icon: (size) => <RelatedIcon height={size} width={size} className="text-secondary" />,
+    placeholder: "None",
+  },
+  finish_after: {
+    key: "finish_after",
+    i18n_label: "issue.relation.finish_after",
+    className: "bg-layer-1 text-secondary",
+    icon: (size) => <RelatedIcon height={size} width={size} className="text-secondary" />,
     placeholder: "None",
   },
 };

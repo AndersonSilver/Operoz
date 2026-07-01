@@ -13,7 +13,7 @@ export type E2ETestData = {
   issueName: string;
 };
 
-const DEFAULT_PASSWORD = "OperisE2E!2026";
+const DEFAULT_PASSWORD = "OperozE2E!2026";
 
 async function fetchCsrf(request: APIRequestContext, apiUrl: string): Promise<string> {
   const response = await request.get(`${apiUrl}/auth/get-csrf-token/`);
@@ -72,9 +72,9 @@ export async function signUp(request: APIRequestContext, apiUrl: string, email: 
   }
 }
 
-export async function seedOperisF0Data(request: APIRequestContext, apiUrl: string): Promise<E2ETestData> {
+export async function seedOperozF0Data(request: APIRequestContext, apiUrl: string): Promise<E2ETestData> {
   const stamp = Date.now();
-  const email = `e2e-f0-${stamp}@operis.test`;
+  const email = `e2e-f0-${stamp}@operoz.test`;
   const password = DEFAULT_PASSWORD;
   const workspaceSlug = `e2e-ws-${stamp}`;
   const boardSlug = `e2e-board-${stamp}`;
@@ -82,11 +82,17 @@ export async function seedOperisF0Data(request: APIRequestContext, apiUrl: strin
 
   await signUp(request, apiUrl, email, password);
 
-  const workspace = await apiJson<{ id: string; slug: string; name: string }>(request, apiUrl, "POST", "/api/workspaces/", {
-    name: `E2E Workspace ${stamp}`,
-    slug: workspaceSlug,
-    company_name: "Operis E2E",
-  });
+  const workspace = await apiJson<{ id: string; slug: string; name: string }>(
+    request,
+    apiUrl,
+    "POST",
+    "/api/workspaces/",
+    {
+      name: `E2E Workspace ${stamp}`,
+      slug: workspaceSlug,
+      company_name: "Operoz E2E",
+    }
+  );
 
   await apiJson(request, apiUrl, "PATCH", "/api/users/me/profile/", {
     last_workspace_id: workspace.id,

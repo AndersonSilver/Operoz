@@ -1,7 +1,7 @@
 import { Disclosure, Transition } from "@headlessui/react";
-import { WORKSPACE_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { ChevronDownIcon, ChevronUpIcon } from "@operis/propel/icons";
+import { WORKSPACE_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { ChevronDownIcon, ChevronUpIcon } from "@operoz/propel/icons";
 
 type Props = {
   openDeleteModal: () => void;

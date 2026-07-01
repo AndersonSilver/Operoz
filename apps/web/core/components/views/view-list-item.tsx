@@ -1,10 +1,10 @@
 import { useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ViewsIcon } from "@operis/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ViewsIcon } from "@operoz/propel/icons";
 // types
-import type { IProjectView } from "@operis/types";
+import type { IProjectView } from "@operoz/types";
 // components
 import { ListItem } from "@/components/core/list";
 // hooks

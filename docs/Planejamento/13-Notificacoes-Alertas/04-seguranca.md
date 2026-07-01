@@ -6,21 +6,21 @@ tokens OAuth e interação com APIs externas.
 
 ## Threat-model específico
 
-| Ameaça | Vetor | Mitigação |
-| --- | --- | --- |
-| Token leak (Google OAuth) | Tokens de acesso/refresh em DB expostos via SQL injection ou backup | Encriptar `token_data` via `license.utils.encryption` (mesmo padrão de `automation/secrets.py`); nunca devolver tokens na API; redigir em logs |
-| Token leak (Discord bot) | DISCORD_BOT_TOKEN exposto em código ou logs | Manter em variável de ambiente (`settings.DISCORD_BOT_TOKEN`); nunca serializar; nunca logar |
-| OAuth CSRF / state hijacking | Atacante manipula callback do Google Calendar com state forjado | `state` parameter assinado com HMAC (segredo do servidor); validar na callback; state single-use (expirar após uso) |
-| Redirect URI manipulado | Atacante altera redirect_uri para capturar code OAuth | `redirect_uri` fixo na config do Google Console; validar no callback que bate com o configurado |
-| Spam via alertas | Atacante cria muitas issues para flood de emails/DMs | Rate-limit por workspace (max 50 alertas/hora, via `governance.py`); throttling por user (max 10/hora/canal); dedup Redis |
-| Discord DM spam ao user | Bot envia DMs excessivas | Rate-limit Discord API: max 5 req/seg (respeitar); backoff exponencial; cap diário por user |
-| Escalação de privilégio via AlertRule | MEMBER cria regras para enviar alertas a outros | Apenas `ROLE.ADMIN` pode criar/editar AlertRules; user só configura as **próprias** preferências |
-| IDOR em contas externas | User desconecta conta de outro user | Queryset filtrado por `request.user.id`; endpoint é `/me/external-accounts/` |
-| Google Calendar event injection | Criar eventos com conteúdo malicioso (XSS, phishing) | Sanitizar título e descrição antes de enviar ao Google; escapar HTML; limitar tamanho |
-| Refresh token expirado / revogado | Google revoga token; alertas falham silenciosamente | Retry com exponential backoff (max 3); marcar `is_active=False` após falhas consecutivas; notificar user in-app para reconectar |
-| Alert fatigue | Excesso de alertas → user ignora alertas reais | Digest configurável (diário/semanal); quiet hours; dedup por issue+type em janela temporal; cap diário |
-| DoS via alert scan | `check_due_date_alerts` faz query pesada em todas as issues | `.iterator(chunk_size=500)` para limitar memória; index em `target_date`; skip issues completed/cancelled; query por workspace |
-| Informação sensível em alertas | Título/descrição da issue em email/Discord/Calendar visível | Respeitar permissões: só enviar alerta a quem pode ver a issue; não incluir conteúdo sensível no subject do email |
+| Ameaça                                | Vetor                                                               | Mitigação                                                                                                                                      |
+| ------------------------------------- | ------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Token leak (Google OAuth)             | Tokens de acesso/refresh em DB expostos via SQL injection ou backup | Encriptar `token_data` via `license.utils.encryption` (mesmo padrão de `automation/secrets.py`); nunca devolver tokens na API; redigir em logs |
+| Token leak (Discord bot)              | DISCORD_BOT_TOKEN exposto em código ou logs                         | Manter em variável de ambiente (`settings.DISCORD_BOT_TOKEN`); nunca serializar; nunca logar                                                   |
+| OAuth CSRF / state hijacking          | Atacante manipula callback do Google Calendar com state forjado     | `state` parameter assinado com HMAC (segredo do servidor); validar na callback; state single-use (expirar após uso)                            |
+| Redirect URI manipulado               | Atacante altera redirect_uri para capturar code OAuth               | `redirect_uri` fixo na config do Google Console; validar no callback que bate com o configurado                                                |
+| Spam via alertas                      | Atacante cria muitas issues para flood de emails/DMs                | Rate-limit por workspace (max 50 alertas/hora, via `governance.py`); throttling por user (max 10/hora/canal); dedup Redis                      |
+| Discord DM spam ao user               | Bot envia DMs excessivas                                            | Rate-limit Discord API: max 5 req/seg (respeitar); backoff exponencial; cap diário por user                                                    |
+| Escalação de privilégio via AlertRule | MEMBER cria regras para enviar alertas a outros                     | Apenas `ROLE.ADMIN` pode criar/editar AlertRules; user só configura as **próprias** preferências                                               |
+| IDOR em contas externas               | User desconecta conta de outro user                                 | Queryset filtrado por `request.user.id`; endpoint é `/me/external-accounts/`                                                                   |
+| Google Calendar event injection       | Criar eventos com conteúdo malicioso (XSS, phishing)                | Sanitizar título e descrição antes de enviar ao Google; escapar HTML; limitar tamanho                                                          |
+| Refresh token expirado / revogado     | Google revoga token; alertas falham silenciosamente                 | Retry com exponential backoff (max 3); marcar `is_active=False` após falhas consecutivas; notificar user in-app para reconectar                |
+| Alert fatigue                         | Excesso de alertas → user ignora alertas reais                      | Digest configurável (diário/semanal); quiet hours; dedup por issue+type em janela temporal; cap diário                                         |
+| DoS via alert scan                    | `check_due_date_alerts` faz query pesada em todas as issues         | `.iterator(chunk_size=500)` para limitar memória; index em `target_date`; skip issues completed/cancelled; query por workspace                 |
+| Informação sensível em alertas        | Título/descrição da issue em email/Discord/Calendar visível         | Respeitar permissões: só enviar alerta a quem pode ver a issue; não incluir conteúdo sensível no subject do email                              |
 
 ## Princípios de segurança
 
@@ -28,7 +28,7 @@ tokens OAuth e interação com APIs externas.
 
 ```python
 # Armazenamento encriptado (mesmo padrão de automation/secrets.py)
-from operis.license.utils.encryption import encrypt, decrypt
+from operoz.license.utils.encryption import encrypt, decrypt
 
 def store_google_tokens(user_account, tokens):
     user_account.token_data = encrypt(json.dumps(tokens))
@@ -100,19 +100,19 @@ def throttle_check(user_id, issue_id, alert_type, channel):
 def rate_limit_check(workspace_id, user_id, channel):
     ws_key = f"alert_rate:{workspace_id}:{current_hour()}"
     user_key = f"alert_rate:{user_id}:{channel}:{current_hour()}"
-    
+
     ws_count = redis.incr(ws_key)
     if ws_count == 1:
         redis.expire(ws_key, 3600)
     if ws_count > ALERT_RATE_LIMIT_WORKSPACE:
         return False
-    
+
     user_count = redis.incr(user_key)
     if user_count == 1:
         redis.expire(user_key, 3600)
     if user_count > ALERT_RATE_LIMIT_USER:
         return False
-    
+
     return True
 ```
 
@@ -137,7 +137,8 @@ class UserExternalAccountViewSet(BaseViewSet):
 
 ### Discord Bot Permissions
 
-O bot Discord do Operis precisa das seguintes permissões (scoped):
+O bot Discord do Operoz precisa das seguintes permissões (scoped):
+
 - `Send Messages` — enviar DMs
 - `Create Instant Invite` — não necessário (não adicionar)
 - `Manage Server` — não necessário (não adicionar)

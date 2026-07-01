@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 // plane imports
-import { DocumentEditorWithRef } from "@operis/editor";
-import type { IEditorPropsExtended, EditorRefApi, IDocumentEditorProps, TFileHandler } from "@operis/editor";
-import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operis/types";
-import { cn } from "@operis/utils";
+import { DocumentEditorWithRef } from "@operoz/editor";
+import type { IEditorPropsExtended, EditorRefApi, IDocumentEditorProps, TFileHandler } from "@operoz/editor";
+import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useEditorConfig, useEditorMention } from "@/hooks/editor";
 import { useMember } from "@/hooks/store/use-member";

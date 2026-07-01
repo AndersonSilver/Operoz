@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useOutletContext } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
 import { PageHead } from "@/components/core/page-title";
 import { BoardInformationsForm } from "@/components/settings/board/board-informations-form";
 import { BoardSettingsPageHeader } from "@/components/settings/board/board-settings-page-header";
@@ -24,9 +24,7 @@ function BoardInformationsSettingsPage({ params }: Route.ComponentProps) {
   const { t } = useTranslation();
   const section = BOARD_SETTINGS_NAV[0];
 
-  const pageTitle = board?.name
-    ? `${board.name} - ${t("boards.settings.nav.informations")}`
-    : undefined;
+  const pageTitle = board?.name ? `${board.name} - ${t("boards.settings.nav.informations")}` : undefined;
 
   return (
     <SettingsContentWrapper

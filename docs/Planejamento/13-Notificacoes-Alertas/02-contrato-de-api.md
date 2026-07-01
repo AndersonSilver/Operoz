@@ -40,16 +40,16 @@ PATCH  /api/users/me/notification-preferences/      # JÁ EXISTE — aceitar nov
 
 ## Permissões
 
-| Ação | Regra |
-| --- | --- |
-| Criar/editar/deletar regras de alerta | `ROLE.ADMIN` (workspace) |
-| Ver regras de alerta | `ROLE.ADMIN`, `ROLE.MEMBER` |
-| Gerenciar próprias preferências de alerta | `ROLE.ADMIN`, `ROLE.MEMBER`, `ROLE.GUEST` |
-| Gerenciar próprias contas externas | `ROLE.ADMIN`, `ROLE.MEMBER` |
-| Google Calendar OAuth | `ROLE.ADMIN`, `ROLE.MEMBER` (própria conta) |
-| Discord link | `ROLE.ADMIN`, `ROLE.MEMBER` (própria conta) |
-| Ver logs de alerta | `ROLE.ADMIN`, `ROLE.MEMBER` |
-| Google Calendar OAuth callback | `AllowAny` (validação via state HMAC) |
+| Ação                                      | Regra                                       |
+| ----------------------------------------- | ------------------------------------------- |
+| Criar/editar/deletar regras de alerta     | `ROLE.ADMIN` (workspace)                    |
+| Ver regras de alerta                      | `ROLE.ADMIN`, `ROLE.MEMBER`                 |
+| Gerenciar próprias preferências de alerta | `ROLE.ADMIN`, `ROLE.MEMBER`, `ROLE.GUEST`   |
+| Gerenciar próprias contas externas        | `ROLE.ADMIN`, `ROLE.MEMBER`                 |
+| Google Calendar OAuth                     | `ROLE.ADMIN`, `ROLE.MEMBER` (própria conta) |
+| Discord link                              | `ROLE.ADMIN`, `ROLE.MEMBER` (própria conta) |
+| Ver logs de alerta                        | `ROLE.ADMIN`, `ROLE.MEMBER`                 |
+| Google Calendar OAuth callback            | `AllowAny` (validação via state HMAC)       |
 
 ## Detalhes dos endpoints
 
@@ -104,9 +104,9 @@ Cria uma regra de alerta. Cada workspace/projeto pode ter uma regra por
   "enabled": true,
   "config": {
     "notify_assignees": true,
-    "notify_creator": false
+    "notify_creator": false,
   },
-  "channels": ["email", "discord_dm", "google_calendar", "in_app"]
+  "channels": ["email", "discord_dm", "google_calendar", "in_app"],
 }
 ```
 
@@ -121,9 +121,9 @@ Cria uma regra de alerta. Cada workspace/projeto pode ter uma regra por
   "config": {
     "grace_period_days": 3,
     "notify_assignees": true,
-    "notify_creator": true
+    "notify_creator": true,
   },
-  "channels": ["email", "in_app"]
+  "channels": ["email", "in_app"],
 }
 ```
 
@@ -197,7 +197,7 @@ Inicia fluxo OAuth2 com Google Calendar. Retorna URL de redirect.
 ```jsonc
 // Response 200
 {
-  "redirect_url": "https://accounts.google.com/o/oauth2/v2/auth?client_id=...&scope=https://www.googleapis.com/auth/calendar.events&state=hmac_signed_state&redirect_uri=..."
+  "redirect_url": "https://accounts.google.com/o/oauth2/v2/auth?client_id=...&scope=https://www.googleapis.com/auth/calendar.events&state=hmac_signed_state&redirect_uri=...",
 }
 ```
 
@@ -229,26 +229,26 @@ Logs de auditoria paginados e filtráveis.
         "id": "uuid",
         "sequence_id": 42,
         "name": "Corrigir validação de login",
-        "identifier": "OPS-42"
+        "identifier": "OPS-42",
       },
       "receiver": {
         "id": "uuid",
-        "display_name": "João Silva"
+        "display_name": "João Silva",
       },
       "sent_at": "2024-01-15T10:05:00Z",
       "error": "",
-      "created_at": "2024-01-15T10:05:00Z"
-    }
+      "created_at": "2024-01-15T10:05:00Z",
+    },
   ],
   "next_cursor": "...",
-  "prev_cursor": "..."
+  "prev_cursor": "...",
 }
 ```
 
 ## Fluxo Backend — Issue criada → alertas multi-canal
 
 ```python
-# 1. API View (apps/api/operis/app/views/issue/base.py)
+# 1. API View (apps/api/operoz/app/views/issue/base.py)
 def create(self, request, ...):
     issue = serializer.save()
     issue_activity.delay(...)                     # existente

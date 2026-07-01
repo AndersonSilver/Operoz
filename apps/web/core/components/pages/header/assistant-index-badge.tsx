@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import useSWR from "swr";
 import { Bot, CheckCircle2, AlertCircle, Loader2, Clock } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
 import type { TAssistantPageIndexStatus } from "@/services/assistant.service";
 import { AssistantService } from "@/services/assistant.service";
 

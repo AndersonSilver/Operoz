@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { CycleIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
+import { CycleIcon } from "@operoz/propel/icons";
+import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 // plane web components

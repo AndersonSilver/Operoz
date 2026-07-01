@@ -1,10 +1,10 @@
 import { Copy, ExternalLink, FileText, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIntakeForm } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIntakeForm } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { formatShortPublicUrl } from "./intake-url-utils";
 import "./intake-settings.css";
 

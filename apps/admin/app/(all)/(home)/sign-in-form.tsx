@@ -2,12 +2,12 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
 // plane internal packages
-import type { EAdminAuthErrorCodes, TAdminAuthErrorInfo } from "@operis/constants";
-import { API_BASE_URL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { AuthService } from "@operis/services";
-import { Input, Spinner } from "@operis/ui";
+import type { EAdminAuthErrorCodes, TAdminAuthErrorInfo } from "@operoz/constants";
+import { API_BASE_URL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { AuthService } from "@operoz/services";
+import { Input, Spinner } from "@operoz/ui";
 // components
 import { Banner } from "@/components/common/banner";
 // local components

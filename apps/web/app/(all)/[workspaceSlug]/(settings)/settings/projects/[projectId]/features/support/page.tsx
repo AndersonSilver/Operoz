@@ -2,10 +2,10 @@ import { observer } from "mobx-react";
 import { Link } from "react-router";
 import { ExternalLink } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 // components
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";

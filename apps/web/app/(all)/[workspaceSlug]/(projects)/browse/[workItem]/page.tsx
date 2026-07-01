@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // assets
 import emptyIssueDark from "@/app/assets/empty-state/search/issues-dark.webp?url";
 import emptyIssueLight from "@/app/assets/empty-state/search/issues-light.webp?url";
@@ -17,7 +17,7 @@ import { PageHead } from "@/components/core/page-title";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
-import { EHubMode } from "@operis/types";
+import { EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 // layouts

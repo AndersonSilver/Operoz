@@ -1,9 +1,9 @@
 "use client";
 
 import { AlertTriangle, FileWarning, Sparkles, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Summary } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Summary } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Table } from "@operis/ui";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Table } from "@operoz/ui";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser, useUserPermissions } from "@/hooks/store/user";

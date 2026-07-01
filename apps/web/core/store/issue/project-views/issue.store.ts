@@ -7,7 +7,7 @@ import type {
   IssuePaginationOptions,
   TIssuesResponse,
   TBulkOperationsPayload,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 // types
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";

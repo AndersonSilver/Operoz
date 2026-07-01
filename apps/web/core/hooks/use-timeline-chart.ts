@@ -1,6 +1,6 @@
 import { useContext } from "react";
 // types
-import type { TTimelineType } from "@operis/types";
+import type { TTimelineType } from "@operoz/types";
 // lib
 import { StoreContext } from "@/lib/store-context";
 // Plane-web

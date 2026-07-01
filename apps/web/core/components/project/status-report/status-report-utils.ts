@@ -1,4 +1,4 @@
-import type { IBoardStatusReport, IModule, TModuleStatus } from "@operis/types";
+import type { IBoardStatusReport, IModule, TModuleStatus } from "@operoz/types";
 import { observationLineToPlainText } from "@/components/project/status-report/observation-content";
 
 export type HistorySortOrder = "desc" | "asc";

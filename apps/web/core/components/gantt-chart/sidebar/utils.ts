@@ -1,4 +1,4 @@
-import type { ChartDataType, IBlockUpdateData, IGanttBlock } from "@operis/types";
+import type { ChartDataType, IBlockUpdateData, IGanttBlock } from "@operoz/types";
 
 export const handleOrderChange = (
   draggingBlockId: string | undefined,

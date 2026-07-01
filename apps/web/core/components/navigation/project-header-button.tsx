@@ -1,8 +1,8 @@
 import type { TPartialProject } from "@/plane-web/types";
 // plane propel imports
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 
 type TProjectHeaderButtonProps = {
   project: TPartialProject;

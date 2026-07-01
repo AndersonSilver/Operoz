@@ -1,5 +1,5 @@
 // FIXME: fix this!!!
-import type { ICustomSearchSelectOption } from "@operis/types";
+import type { ICustomSearchSelectOption } from "@operoz/types";
 
 type Placement =
   | "top"

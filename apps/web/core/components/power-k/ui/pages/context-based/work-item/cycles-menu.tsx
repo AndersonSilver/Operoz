@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane types
-import type { ICycle, TIssue } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { ICycle, TIssue } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 // components
 import { PowerKCyclesMenu } from "@/components/power-k/menus/cycles";
 // hooks

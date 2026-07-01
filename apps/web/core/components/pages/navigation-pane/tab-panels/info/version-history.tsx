@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TPageVersion } from "@operis/types";
-import { Avatar } from "@operis/ui";
-import { cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TPageVersion } from "@operoz/types";
+import { Avatar } from "@operoz/ui";
+import { cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 // components
 import type { TPageRootHandlers } from "@/components/pages/editor/page-root";
 // hooks

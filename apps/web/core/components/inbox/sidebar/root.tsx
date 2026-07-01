@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { TInboxIssueCurrentTab, THubMode } from "@operis/types";
-import { EInboxIssueCurrentTab, EHubMode } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import type { TInboxIssueCurrentTab, THubMode } from "@operoz/types";
+import { EInboxIssueCurrentTab, EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 // plane imports
-import { Header, Loader, EHeaderVariant } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Header, Loader, EHeaderVariant } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // components
 import { InboxSidebarLoader } from "@/components/ui/loader/layouts/project-inbox/inbox-sidebar-loader";

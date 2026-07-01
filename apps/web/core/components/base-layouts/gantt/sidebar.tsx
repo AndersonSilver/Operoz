@@ -1,9 +1,9 @@
 import type { RefObject } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
-import type { IBaseLayoutsBaseItem, IBlockUpdateData } from "@operis/types";
-import { Loader, Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { IBaseLayoutsBaseItem, IBlockUpdateData } from "@operoz/types";
+import { Loader, Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";
 import { GanttDnDHOC } from "@/components/gantt-chart/sidebar/gantt-dnd-HOC";

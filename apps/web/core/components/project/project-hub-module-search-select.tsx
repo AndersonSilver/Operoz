@@ -1,10 +1,10 @@
 import { useMemo, useState, type ComponentType } from "react";
 import { ChevronDown, Search, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { ModuleIcon } from "@operis/propel/icons";
-import type { ICustomSearchSelectOption, IModule } from "@operis/types";
-import { CustomSearchSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ModuleIcon } from "@operoz/propel/icons";
+import type { ICustomSearchSelectOption, IModule } from "@operoz/types";
+import { CustomSearchSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { SwitcherLabel } from "@/components/common/switcher-label";
 
 type ProjectHubModuleSearchSelectProps = {
@@ -79,8 +79,8 @@ export function ProjectHubModuleSearchSelect(props: ProjectHubModuleSearchSelect
         "flex w-full min-w-0 items-center text-left transition-colors",
         isToolbar
           ? "h-8 max-w-[14rem] gap-1.5 rounded-md border-0 bg-transparent px-2"
-          : "min-h-10 gap-2.5 rounded-lg border border-subtle/55 bg-layer-1/75 px-3 py-2 shadow-sm backdrop-blur-md hover:border-subtle hover:bg-layer-1",
-        !isToolbar && isOpen && "border-subtle bg-layer-1 ring-1 ring-accent-primary/25",
+          : "shadow-sm min-h-10 gap-2.5 rounded-lg border border-subtle/55 bg-layer-1/75 px-3 py-2 backdrop-blur-md hover:border-subtle hover:bg-layer-1",
+        !isToolbar && isOpen && "ring-accent-primary/25 border-subtle bg-layer-1 ring-1",
         isToolbar && isOpen && "bg-layer-transparent-hover",
         disabled && "pointer-events-none opacity-60",
         className
@@ -149,7 +149,7 @@ export function ProjectHubModuleSearchSelect(props: ProjectHubModuleSearchSelect
       noResultsMessage={t("common.search.no_matches_found")}
       onOpen={() => setIsOpen(true)}
       onClose={() => setIsOpen(false)}
-      className={cn(isToolbar ? "w-[14rem] shrink-0" : "w-full min-w-0 max-w-xl")}
+      className={cn(isToolbar ? "w-[14rem] shrink-0" : "w-full max-w-xl min-w-0")}
       customButtonClassName="!h-auto !w-full min-w-0 border-0 bg-transparent p-0 hover:bg-transparent"
       customButton={trigger}
       footerOption={

@@ -37,7 +37,7 @@ core/store/reports/report.store.ts → ReportStore
 `report.service.ts`: `catalog`, `metric(metricKey, scope)`, `sprintReport`,
 `export(metricKey, format, scope)`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TMetricSeries =

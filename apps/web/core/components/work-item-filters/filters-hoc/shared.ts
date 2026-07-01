@@ -1,7 +1,12 @@
 // plane imports
-import type { TSaveViewOptions, TUpdateViewOptions } from "@operis/constants";
-import type { IWorkItemFilterInstance } from "@operis/shared-state";
-import type { EIssuesStoreType, IIssueFilters, TWorkItemFilterExpression, TWorkItemFilterProperty } from "@operis/types";
+import type { TSaveViewOptions, TUpdateViewOptions } from "@operoz/constants";
+import type { IWorkItemFilterInstance } from "@operoz/shared-state";
+import type {
+  EIssuesStoreType,
+  IIssueFilters,
+  TWorkItemFilterExpression,
+  TWorkItemFilterProperty,
+} from "@operoz/types";
 
 export type TSharedWorkItemFiltersProps = {
   entityType: EIssuesStoreType; // entity type (project, cycle, workspace, teamspace, etc)

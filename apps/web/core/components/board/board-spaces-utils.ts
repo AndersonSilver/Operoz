@@ -1,4 +1,4 @@
-import type { IBoard, TBoardSpaceType } from "@operis/types";
+import type { IBoard, TBoardSpaceType } from "@operoz/types";
 
 export function getBoardIdentifier(board: Pick<IBoard, "identifier" | "slug">): string {
   const id = board.identifier?.trim();

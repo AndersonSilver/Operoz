@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageHead } from "@/components/core/page-title";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { ProjectStatusReportDetail } from "@/components/project/status-report/project-status-report-detail";

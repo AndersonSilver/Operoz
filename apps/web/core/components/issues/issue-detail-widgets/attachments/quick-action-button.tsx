@@ -2,10 +2,10 @@ import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import type { FileRejection } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
-import { PlusIcon } from "@operis/propel/icons";
+import { PlusIcon } from "@operoz/propel/icons";
 // plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssueServiceType } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssueServiceType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // plane web hooks

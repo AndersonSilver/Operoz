@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { SUPPORTED_LANGUAGES, useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { CustomSelect } from "@operis/ui";
+import { SUPPORTED_LANGUAGES, useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { CustomSelect } from "@operoz/ui";
 // components
 import { TimezoneSelect } from "@/components/global";
 import { StartOfWeekPreference } from "@/components/profile/start-of-week-preference";

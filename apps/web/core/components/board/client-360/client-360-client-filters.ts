@@ -11,7 +11,7 @@ import {
   Inbox,
   LayoutGrid,
 } from "lucide-react";
-import type { TClient360Client } from "@operis/types";
+import type { TClient360Client } from "@operoz/types";
 
 export type Client360FilterKey =
   | "all"

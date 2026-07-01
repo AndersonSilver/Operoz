@@ -1,9 +1,9 @@
 // plane imports
-import { STATE_GROUPS } from "@operis/constants";
+import { STATE_GROUPS } from "@operoz/constants";
 // types
-import { useTranslation } from "@operis/i18n";
-import type { IUserStateDistribution } from "@operis/types";
-import { Card, ECardDirection, ECardSpacing } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IUserStateDistribution } from "@operoz/types";
+import { Card, ECardDirection, ECardSpacing } from "@operoz/ui";
 // constants
 
 type Props = {

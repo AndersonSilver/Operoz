@@ -1,4 +1,4 @@
-import type { IProjectView } from "@operis/types";
+import type { IProjectView } from "@operoz/types";
 
 type Props = {
   isOpen: boolean;

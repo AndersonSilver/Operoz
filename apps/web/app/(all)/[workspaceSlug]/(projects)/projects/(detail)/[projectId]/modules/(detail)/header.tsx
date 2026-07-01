@@ -8,16 +8,16 @@ import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { ModuleIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
-import { Header } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { ModuleIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { Header } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_TOOLBAR_CLUSTER } from "@/components/board/board-hub-background";
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
 import { CountChip } from "@/components/common/count-chip";
@@ -34,10 +34,7 @@ import {
   ProjectFeaturePageTitle,
 } from "@/components/project/project-feature-page-header";
 import { ProjectHubModuleSearchSelect } from "@/components/project/project-hub-module-search-select";
-import {
-  ProjectHubPrimaryAction,
-  ProjectHubToolbarDivider,
-} from "@/components/project/project-hub-toolbar";
+import { ProjectHubPrimaryAction, ProjectHubToolbarDivider } from "@/components/project/project-hub-toolbar";
 import { WorkItemFiltersToggle } from "@/components/work-item-filters/filters-toggle";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useIssues } from "@/hooks/store/use-issues";
@@ -253,7 +250,7 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
                     </span>
                   </Button>
                   <ProjectHubPrimaryAction
-                    className="hidden sm:flex shrink-0"
+                    className="hidden shrink-0 sm:flex"
                     onClick={() => {
                       toggleCreateIssueModal(true, EIssuesStoreType.MODULE);
                     }}

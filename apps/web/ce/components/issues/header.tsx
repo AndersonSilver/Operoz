@@ -10,16 +10,13 @@ import {
   SPACE_BASE_PATH,
   SPACE_BASE_URL,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { NewTabIcon } from "@operis/propel/icons";
-import { EIssuesStoreType } from "@operis/types";
-import { Header } from "@operis/ui";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { NewTabIcon } from "@operoz/propel/icons";
+import { EIssuesStoreType } from "@operoz/types";
+import { Header } from "@operoz/ui";
 import { HeaderFilters } from "@/components/issues/filters";
-import {
-  ProjectFeaturePageHeader,
-  ProjectFeaturePageTitle,
-} from "@/components/project/project-feature-page-header";
+import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
 import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useIssues } from "@/hooks/store/use-issues";
@@ -72,7 +69,7 @@ export const IssuesHeader = observer(function IssuesHeader() {
           {currentProjectDetails?.anchor ? (
             <a
               href={publishedURL}
-              className="group flex items-center gap-1.5 rounded-md border border-subtle/50 bg-layer-1/55 px-2.5 py-1 text-11 font-medium text-accent-primary shadow-sm backdrop-blur-sm"
+              className="group shadow-sm flex items-center gap-1.5 rounded-md border border-subtle/50 bg-layer-1/55 px-2.5 py-1 text-11 font-medium text-accent-primary backdrop-blur-sm"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -90,11 +87,7 @@ export const IssuesHeader = observer(function IssuesHeader() {
             currentProjectDetails={currentProjectDetails}
             workspaceSlug={workspaceSlug?.toString() ?? ""}
             canUserCreateIssue={canUserCreateIssue}
-            onAddIssue={
-              canUserCreateIssue
-                ? () => toggleCreateIssueModal(true, EIssuesStoreType.PROJECT)
-                : undefined
-            }
+            onAddIssue={canUserCreateIssue ? () => toggleCreateIssueModal(true, EIssuesStoreType.PROJECT) : undefined}
             addIssueTrackerElement={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.WORK_ITEMS}
           />
         </div>

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TContextMenuItem } from "@operis/ui";
-import { ContextMenu, CustomMenu } from "@operis/ui";
-import { copyUrlToClipboard, cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TContextMenuItem } from "@operoz/ui";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
+import { copyUrlToClipboard, cn } from "@operoz/utils";
 // components
 import { useModuleMenuItems } from "@/components/common/quick-actions-helper";
 import { ArchiveModuleModal, CreateUpdateModuleModal, DeleteModuleModal } from "@/components/modules";

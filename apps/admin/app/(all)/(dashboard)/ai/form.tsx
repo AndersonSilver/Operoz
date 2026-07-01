@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { Bot, ChevronDown, KeyRound, Sparkles } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IFormattedInstanceConfiguration, TInstanceAIConfigurationKeys } from "@operis/types";
-import { CustomSelect, Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IFormattedInstanceConfiguration, TInstanceAIConfigurationKeys } from "@operoz/types";
+import { CustomSelect, Input } from "@operoz/ui";
 import {
   AdminConfigCallout,
   AdminConfigSection,

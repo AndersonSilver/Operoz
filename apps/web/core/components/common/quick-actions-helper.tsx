@@ -1,6 +1,6 @@
 // types
-import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@operis/types";
-import type { TContextMenuItem } from "@operis/ui";
+import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@operoz/types";
+import type { TContextMenuItem } from "@operoz/ui";
 // hooks
 import { useQuickActionsFactory } from "@/plane-web/components/common/quick-actions-factory";
 

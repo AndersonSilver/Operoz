@@ -1,10 +1,10 @@
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 import { ChevronDown, ChevronRight } from "lucide-react";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import type { IGanttBlock } from "@operis/types";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import type { IGanttBlock } from "@operoz/types";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardGanttRowIcon } from "@/components/board/gantt/board-gantt-row-icon";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";
@@ -13,7 +13,7 @@ import {
   isBoardModuleBlockId,
 } from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
 import { getGanttScheduleDisplay } from "@/components/gantt-chart/helpers/schedule-display";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 
 type Props = {

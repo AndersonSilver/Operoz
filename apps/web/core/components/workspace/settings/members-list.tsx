@@ -4,9 +4,9 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { Disclosure } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { Collapsible } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { Collapsible } from "@operoz/ui";
 // components
 import { CountChip } from "@/components/common/count-chip";
 import { MembersSettingsLoader } from "@/components/ui/loader/settings/members";

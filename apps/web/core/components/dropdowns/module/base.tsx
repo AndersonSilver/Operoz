@@ -2,10 +2,10 @@ import type { ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { IModule } from "@operis/types";
-import { ComboDropDown } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IModule } from "@operoz/types";
+import { ComboDropDown } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
 import { usePlatformOS } from "@/hooks/use-platform-os";

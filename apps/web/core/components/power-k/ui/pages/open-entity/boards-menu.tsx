@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import type { IBoard } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { IBoard } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 import { PowerKBoardsMenu } from "@/components/power-k/menus/boards";
 import { useBoard } from "@/hooks/store/use-board";
 

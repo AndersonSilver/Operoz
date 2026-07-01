@@ -1,7 +1,7 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // api service
-import type { TPublicModule } from "@operis/types";
+import type { TPublicModule } from "@operoz/types";
 import { APIService } from "../api.service";
 
 /**

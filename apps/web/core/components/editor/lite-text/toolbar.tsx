@@ -1,18 +1,18 @@
 import React, { useEffect, useState, useCallback } from "react";
 import type { LucideIcon } from "lucide-react";
 
-import { EIssueCommentAccessSpecifier } from "@operis/constants";
+import { EIssueCommentAccessSpecifier } from "@operoz/constants";
 // editor
-import type { EditorRefApi } from "@operis/editor";
+import type { EditorRefApi } from "@operoz/editor";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { Button } from "@operis/propel/button";
-import { GlobeIcon, LockIcon } from "@operis/propel/icons";
-import type { ISvgIcons } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { Button } from "@operoz/propel/button";
+import { GlobeIcon, LockIcon } from "@operoz/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 // constants
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import type { ToolbarMenuItem } from "@/constants/editor";
 import { TOOLBAR_ITEMS } from "@/constants/editor";
 // helpers

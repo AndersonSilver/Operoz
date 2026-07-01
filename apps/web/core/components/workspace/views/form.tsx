@@ -1,13 +1,13 @@
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IWorkspaceView, IIssueFilters } from "@operis/types";
-import { EViewAccess, EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
-import { Input, TextArea } from "@operis/ui";
-import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operis/utils";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IWorkspaceView, IIssueFilters } from "@operoz/types";
+import { EViewAccess, EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
+import { Input, TextArea } from "@operoz/ui";
+import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operoz/utils";
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { WorkspaceLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/workspace-level";

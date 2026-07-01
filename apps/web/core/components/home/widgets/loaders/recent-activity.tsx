@@ -1,6 +1,6 @@
 import { range } from "lodash-es";
 // ui
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 
 export function RecentActivityWidgetLoader() {
   return (

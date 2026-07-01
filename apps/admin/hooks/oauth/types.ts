@@ -1,4 +1,4 @@
-import type { TInstanceAuthenticationMethodKeys } from "@operis/types";
+import type { TInstanceAuthenticationMethodKeys } from "@operoz/types";
 
 export type TGetAuthenticationModeProps = {
   disabled: boolean;

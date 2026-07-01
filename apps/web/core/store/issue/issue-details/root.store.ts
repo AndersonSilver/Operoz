@@ -9,7 +9,7 @@ import type {
   TIssueReaction,
   TIssueServiceType,
   TWorkItemWidgets,
-} from "@operis/types";
+} from "@operoz/types";
 // plane web store
 import { IssueActivityStore } from "@/plane-web/store/issue/issue-details/activity.store";
 import type {
@@ -362,6 +362,8 @@ export abstract class IssueDetail implements IIssueDetail {
   // relations
   fetchRelations = async (workspaceSlug: string, projectId: string, issueId: string) =>
     this.relation.fetchRelations(workspaceSlug, projectId, issueId);
+  fetchRelationsForIssues = async (workspaceSlug: string, projectId: string, issueIds: string[]) =>
+    this.relation.fetchRelationsForIssues(workspaceSlug, projectId, issueIds);
   createRelation = async (
     workspaceSlug: string,
     projectId: string,

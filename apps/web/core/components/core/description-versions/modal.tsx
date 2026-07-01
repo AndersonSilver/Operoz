@@ -1,21 +1,21 @@
 import { useCallback, useRef } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CopyIcon, ChevronLeftIcon, ChevronRightIcon } from "@operis/propel/icons";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TDescriptionVersion } from "@operis/types";
-import { Avatar, EModalPosition, EModalWidth, Loader, ModalCore } from "@operis/ui";
-import { calculateTimeAgo, cn, getFileURL } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CopyIcon, ChevronLeftIcon, ChevronRightIcon } from "@operoz/propel/icons";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TDescriptionVersion } from "@operoz/types";
+import { Avatar, EModalPosition, EModalWidth, Loader, ModalCore } from "@operoz/ui";
+import { calculateTimeAgo, cn, getFileURL } from "@operoz/utils";
 // components
 import { RichTextEditor } from "@/components/editor/rich-text";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 type Props = {
   activeVersionDescription: string | undefined;

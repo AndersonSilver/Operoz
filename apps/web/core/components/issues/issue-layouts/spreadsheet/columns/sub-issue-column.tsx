@@ -2,10 +2,10 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // helpers
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
 import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";

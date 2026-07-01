@@ -11,8 +11,8 @@ import {
   CartesianGrid,
 } from "recharts";
 // plane imports
-import { AXIS_LABEL_CLASSNAME } from "@operis/constants";
-import type { TBarChartProps } from "@operis/types";
+import { AXIS_LABEL_CLASSNAME } from "@operoz/constants";
+import type { TBarChartProps } from "@operoz/types";
 // local components
 import { getLegendProps } from "../components/legend";
 import { CustomXAxisTick, CustomYAxisTick } from "../components/tick";

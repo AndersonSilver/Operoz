@@ -2,13 +2,13 @@ import { useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Star, StarOff, Users } from "lucide-react";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, ModuleStatusIcon } from "@operis/propel/icons";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import type { IModule, TModuleStatus } from "@operis/types";
-import { EUserPermissions } from "@operis/types";
-import { copyTextToClipboard } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, ModuleStatusIcon } from "@operoz/propel/icons";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import type { IModule, TModuleStatus } from "@operoz/types";
+import { EUserPermissions } from "@operoz/types";
+import { copyTextToClipboard } from "@operoz/utils";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

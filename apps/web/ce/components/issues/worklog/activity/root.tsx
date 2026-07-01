@@ -1,4 +1,4 @@
-import type { TIssueActivityComment } from "@operis/types";
+import type { TIssueActivityComment } from "@operoz/types";
 
 type TIssueActivityWorklog = {
   workspaceSlug: string;

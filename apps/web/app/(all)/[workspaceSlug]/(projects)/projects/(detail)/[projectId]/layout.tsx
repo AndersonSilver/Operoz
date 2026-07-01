@@ -1,9 +1,12 @@
 import { observer } from "mobx-react";
 import { Outlet } from "react-router";
 // plane imports
-import { Header } from "@operis/ui";
+import { Header } from "@operoz/ui";
 // components
-import { ProjectBoardBackgroundRoot, ProjectTabNavigationChrome } from "@/components/board/project-board-background-root";
+import {
+  ProjectBoardBackgroundRoot,
+  ProjectTabNavigationChrome,
+} from "@/components/board/project-board-background-root";
 import { TabNavigationRoot } from "@/components/navigation/tab-navigation-root";
 // hooks
 import { useProjectNavigationPreferences } from "@/hooks/use-navigation-preferences";

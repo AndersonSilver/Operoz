@@ -1,0 +1,332 @@
+# Build da imagem web no GitHub Actions, push para GHCR e deploy no VPS (Operoz self-host).
+#
+# Secrets obrigatórios (Settings → Secrets and variables → Actions):
+#   VPS_HOST          — ex. 72.61.51.247
+#   VPS_USER          — ex. root
+#   VPS_SSH_KEY       — chave privada SSH (conteúdo completo do id_rsa)
+#
+# Variables recomendadas (Settings → Variables):
+#   OPEROZ_WEB_URL    — https://www.operoz.io (URL pública; build do frontend + sync operoz.env)
+#   OPEROZ_REPO_PATH  — /root/operoz-selfhost/Operoz
+#   OPEROZ_APP_PATH   — /root/operoz-selfhost/plane-app
+#   OPEROZ_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operoz-runner.sh)
+#   OPEROZ_DEPLOY_ON_PUSH — "web" (padrão), "full" (stack em cada push), ou deixar vazio e usar [deploy-full] no commit
+#   Push que altera apps/api|space|admin|live|proxy dispara build-full automaticamente (path filter)
+#
+# SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall Hostinger.
+
+name: Deploy Operoz
+
+on:
+  push:
+    branches: [preview]
+  workflow_dispatch:
+    inputs:
+      deploy_target:
+        description: "O que publicar"
+        required: true
+        default: full
+        type: choice
+        options:
+          - web
+          - mcp
+          - full
+      skip_build:
+        description: "Só redeploy (pula build; usa tag preview já no GHCR)"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: deploy-operoz-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  SSH_TIMEOUT: 180s
+  SSH_COMMAND_TIMEOUT: 45m
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    outputs:
+      image_repo: ${{ steps.lower.outputs.image_repo }}
+      use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
+      full_deploy: ${{ steps.mode.outputs.full_deploy }}
+      build_stack: ${{ steps.mode.outputs.build_stack }}
+    steps:
+      - name: Checkout (path filter em push)
+        uses: actions/checkout@v4
+
+      - name: Detectar mudanças na stack (api, space, admin, live, proxy)
+        uses: dorny/paths-filter@v3
+        id: paths
+        if: github.event_name == 'push'
+        with:
+          filters: |
+            stack:
+              - 'apps/api/**'
+              - 'apps/space/**'
+              - 'apps/admin/**'
+              - 'apps/live/**'
+              - 'apps/proxy/**'
+              - '.github/scripts/vps-deploy-full.sh'
+
+      - name: GHCR exige nome do repositório em minúsculas
+        id: lower
+        run: echo "image_repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Modo de deploy
+        id: mode
+        run: |
+          if [[ "${{ vars.OPEROZ_SELF_HOSTED_RUNNER }}" == "true" ]]; then
+            echo "use_self_hosted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "use_self_hosted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+          full=false
+          stack_paths=false
+
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
+            full=true
+          elif [[ "${{ github.event_name }}" == "push" ]]; then
+            if [[ "${{ vars.OPEROZ_DEPLOY_ON_PUSH }}" == "full" ]]; then
+              full=true
+            elif echo "${{ github.event.head_commit.message }}" | grep -qF '[deploy-full]'; then
+              full=true
+            elif [[ "${{ steps.paths.outputs.stack }}" == "true" ]]; then
+              stack_paths=true
+            fi
+          fi
+
+          build_stack=false
+          if [[ "$full" == "true" || "$stack_paths" == "true" ]]; then
+            build_stack=true
+          fi
+
+          echo "full_deploy=${full}" >> "$GITHUB_OUTPUT"
+          echo "build_stack=${build_stack}" >> "$GITHUB_OUTPUT"
+          echo "Modo: full_deploy=${full} stack_paths=${stack_paths} build_stack=${build_stack}"
+
+  build-web:
+    needs: meta
+    if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' || inputs.deploy_target == 'mcp') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    env:
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push plane-frontend
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: apps/web/Dockerfile.web
+          push: true
+          tags: |
+            ${{ env.WEB_IMAGE_NAME }}:preview
+            ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
+          build-args: |
+            VITE_ENABLE_BOARDS=true
+            VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push operoz-mcp
+        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: mcp-server
+          file: mcp-server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.MCP_IMAGE_NAME }}:preview
+            ${{ env.MCP_IMAGE_NAME }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  build-full:
+    needs: meta
+    if: ${{ !inputs.skip_build && needs.meta.outputs.build_stack == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 180
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - service: plane-backend
+            context: apps/api
+            file: apps/api/Dockerfile.api
+          - service: plane-space
+            context: .
+            file: apps/space/Dockerfile.space
+          - service: plane-admin
+            context: .
+            file: apps/admin/Dockerfile.admin
+          - service: plane-live
+            context: .
+            file: apps/live/Dockerfile.live
+          - service: plane-proxy
+            context: apps/proxy
+            file: apps/proxy/Dockerfile.ce
+    steps:
+      - uses: actions/checkout@v4
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          file: ${{ matrix.file }}
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:preview
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: [meta, build-web, build-full]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      packages: read
+    env:
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
+      IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operoz-selfhost/Operoz' }}
+      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operoz-selfhost/plane-app' }}
+      GIT_BRANCH: preview
+      GITHUB_ACTOR: ${{ github.actor }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Preflight SSH (só modo remoto)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
+        run: |
+          set +e
+          nc -zv -w 15 "${{ secrets.VPS_HOST }}" 22
+          code=$?
+          if [[ $code -ne 0 ]]; then
+            echo "::error::Porta 22 inacessível a partir do runner GitHub (timeout/firewall Hostinger)."
+            echo "Soluções: (1) abrir SSH no firewall do painel Hostinger para 0.0.0.0/0"
+            echo "          (2) instalar runner no VPS: .github/scripts/install-operoz-runner.sh"
+            echo "          (3) variável OPEROZ_SELF_HOSTED_RUNNER=true"
+            exit 1
+          fi
+
+      - name: Deploy web (runner local)
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        env:
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+        run: bash .github/scripts/vps-deploy-web.sh
+
+      - name: Deploy web on VPS (SSH)
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
+          OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
+          envs: GHCR_TOKEN,WEB_IMAGE,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-web.sh
+
+      - name: Deploy MCP (runner local)
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
+        env:
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
+        run: bash .github/scripts/vps-deploy-mcp.sh
+
+      - name: Deploy MCP on VPS (SSH)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
+          OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
+          envs: GHCR_TOKEN,MCP_IMAGE,OPEROZ_REPO_PATH,OPEROZ_MCP_ENV,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-mcp.sh
+
+      - name: Deploy full stack (runner local)
+        if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
+        env:
+          IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+        run: bash .github/scripts/vps-deploy-full.sh
+
+      - name: Deploy full stack on VPS (SSH)
+        if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted != 'true' }}
+        uses: appleboy/ssh-action@v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+          OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://www.operoz.io' }}
+          OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
+          OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
+          GIT_BRANCH: preview
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
+          envs: GHCR_TOKEN,IMAGE_PREFIX,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-full.sh

@@ -83,28 +83,28 @@ importers:
       '@headlessui/react':
         specifier: ^1.7.19
         version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../../packages/constants
-      '@operis/hooks':
+      '@operoz/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
-      '@operis/i18n':
+      '@operoz/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@operis/propel':
+      '@operoz/propel':
         specifier: workspace:*
         version: link:../../packages/propel
-      '@operis/services':
+      '@operoz/services':
         specifier: workspace:*
         version: link:../../packages/services
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@operis/ui':
+      '@operoz/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@react-router/node':
@@ -159,10 +159,10 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
     devDependencies:
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@react-router/dev':
@@ -228,16 +228,16 @@ importers:
       '@hocuspocus/transformer':
         specifier: 2.15.2
         version: 2.15.2(@tiptap/core@2.26.3(@tiptap/pm@3.6.6))(@tiptap/pm@3.6.6)(y-prosemirror@1.3.7(prosemirror-model@1.25.4)(prosemirror-state@1.4.4)(prosemirror-view@1.40.0)(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27))(yjs@13.6.27)
-      '@operis/decorators':
+      '@operoz/decorators':
         specifier: workspace:*
         version: link:../../packages/decorators
-      '@operis/editor':
+      '@operoz/editor':
         specifier: workspace:*
         version: link:../../packages/editor
-      '@operis/logger':
+      '@operoz/logger':
         specifier: workspace:*
         version: link:../../packages/logger
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../../packages/types
       '@react-pdf/renderer':
@@ -304,7 +304,7 @@ importers:
         specifier: ^3.25.76
         version: 3.25.76
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@types/compression':
@@ -364,28 +364,28 @@ importers:
       '@headlessui/react':
         specifier: ^1.7.19
         version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../../packages/constants
-      '@operis/editor':
+      '@operoz/editor':
         specifier: workspace:*
         version: link:../../packages/editor
-      '@operis/i18n':
+      '@operoz/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@operis/propel':
+      '@operoz/propel':
         specifier: workspace:*
         version: link:../../packages/propel
-      '@operis/services':
+      '@operoz/services':
         specifier: workspace:*
         version: link:../../packages/services
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@operis/ui':
+      '@operoz/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@popperjs/core':
@@ -452,10 +452,10 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
     devDependencies:
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@react-router/dev':
@@ -524,34 +524,34 @@ importers:
       '@headlessui/react':
         specifier: ^1.7.19
         version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../../packages/constants
-      '@operis/editor':
+      '@operoz/editor':
         specifier: workspace:*
         version: link:../../packages/editor
-      '@operis/hooks':
+      '@operoz/hooks':
         specifier: workspace:*
         version: link:../../packages/hooks
-      '@operis/i18n':
+      '@operoz/i18n':
         specifier: workspace:*
         version: link:../../packages/i18n
-      '@operis/propel':
+      '@operoz/propel':
         specifier: workspace:*
         version: link:../../packages/propel
-      '@operis/services':
+      '@operoz/services':
         specifier: workspace:*
         version: link:../../packages/services
-      '@operis/shared-state':
+      '@operoz/shared-state':
         specifier: workspace:*
         version: link:../../packages/shared-state
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../../packages/types
-      '@operis/ui':
+      '@operoz/ui':
         specifier: workspace:*
         version: link:../../packages/ui
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../../packages/utils
       '@popperjs/core':
@@ -672,10 +672,10 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
     devDependencies:
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../../packages/tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../../packages/typescript-config
       '@react-router/dev':
@@ -763,11 +763,11 @@ importers:
 
   packages/constants:
     dependencies:
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
@@ -785,7 +785,7 @@ importers:
 
   packages/decorators:
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/express':
@@ -821,22 +821,22 @@ importers:
       '@hocuspocus/provider':
         specifier: 2.15.2
         version: 2.15.2(y-protocols@1.0.6(yjs@13.6.27))(yjs@13.6.27)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/hooks':
+      '@operoz/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@operis/propel':
+      '@operoz/propel':
         specifier: workspace:*
         version: link:../propel
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
-      '@operis/ui':
+      '@operoz/ui':
         specifier: workspace:*
         version: link:../ui
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../utils
       '@tiptap/core':
@@ -975,10 +975,10 @@ importers:
         specifier: ^13.6.20
         version: 13.6.27
     devDependencies:
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/lodash-es':
@@ -1009,7 +1009,7 @@ importers:
         specifier: 'catalog:'
         version: 18.3.1
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
@@ -1027,7 +1027,7 @@ importers:
 
   packages/i18n:
     dependencies:
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../utils
       intl-messageformat:
@@ -1046,7 +1046,7 @@ importers:
         specifier: 'catalog:'
         version: 18.3.1
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/lodash-es':
@@ -1074,7 +1074,7 @@ importers:
         specifier: ^3.17.0
         version: 3.17.0
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/express':
@@ -1095,16 +1095,16 @@ importers:
       '@base-ui-components/react':
         specifier: 1.0.0-beta.3
         version: 1.0.0-beta.3(@types/react@18.3.11)(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/hooks':
+      '@operoz/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../utils
       '@tanstack/react-table':
@@ -1147,10 +1147,10 @@ importers:
         specifier: ^1.3.0
         version: 1.3.0(react@18.3.1)
     devDependencies:
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@storybook/addon-designs':
@@ -1180,10 +1180,10 @@ importers:
 
   packages/services:
     dependencies:
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
       axios:
@@ -1193,7 +1193,7 @@ importers:
         specifier: ^21.3.1
         version: 21.3.3
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       tsdown:
@@ -1205,13 +1205,13 @@ importers:
 
   packages/shared-state:
     dependencies:
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../utils
       lodash-es:
@@ -1230,7 +1230,7 @@ importers:
         specifier: ^3.22.2
         version: 3.25.76
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/lodash-es':
@@ -1268,7 +1268,7 @@ importers:
         specifier: 'catalog:'
         version: 18.3.1(react@18.3.1)
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/node':
@@ -1306,19 +1306,19 @@ importers:
       '@headlessui/react':
         specifier: ^1.7.3
         version: 1.7.19(react-dom@18.3.1(react@18.3.1))(react@18.3.1)
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/hooks':
+      '@operoz/hooks':
         specifier: workspace:*
         version: link:../hooks
-      '@operis/propel':
+      '@operoz/propel':
         specifier: workspace:*
         version: link:../propel
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
-      '@operis/utils':
+      '@operoz/utils':
         specifier: workspace:*
         version: link:../utils
       '@popperjs/core':
@@ -1361,10 +1361,10 @@ importers:
       '@chromatic-com/storybook':
         specifier: ^1.4.0
         version: 1.9.0(react@18.3.1)
-      '@operis/tailwind-config':
+      '@operoz/tailwind-config':
         specifier: workspace:*
         version: link:../tailwind-config
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@storybook/addon-essentials':
@@ -1433,10 +1433,10 @@ importers:
 
   packages/utils:
     dependencies:
-      '@operis/constants':
+      '@operoz/constants':
         specifier: workspace:*
         version: link:../constants
-      '@operis/types':
+      '@operoz/types':
         specifier: workspace:*
         version: link:../types
       chroma-js:
@@ -1491,7 +1491,7 @@ importers:
         specifier: 14.0.0
         version: 14.0.0
     devDependencies:
-      '@operis/typescript-config':
+      '@operoz/typescript-config':
         specifier: workspace:*
         version: link:../typescript-config
       '@types/chroma-js':

@@ -2,7 +2,7 @@
 
 **Gestão de projetos, squads e custos** — com boards, Cliente 360, integrações Git e métricas de pipeline (Harness), num monorepo self-host.
 
-O produto chama-se **Operoz**. No código e na infraestrutura persistem prefixos legados `operis` (pacotes `@operis/*`, `apps/api/operis`, serviços Docker `operis-*`).
+O produto chama-se **Operoz**. No código e na infraestrutura persistem prefixos legados `operoz` (pacotes `@operoz/*`, `apps/api/operoz`, serviços Docker `operoz-*`).
 
 ---
 
@@ -26,14 +26,14 @@ Plataforma para equipas de entrega que precisam de:
 | Caminho       | Função                                          |
 | ------------- | ----------------------------------------------- |
 | `apps/web`    | Aplicação principal (React Router, Turbo)       |
-| `apps/api`    | API Django (`operis/`) + Celery workers         |
+| `apps/api`    | API Django (`operoz/`) + Celery workers         |
 | `apps/space`  | Portal público / intake                         |
 | `apps/admin`  | God mode / administração da instância           |
 | `apps/live`   | Colaboração em tempo real                       |
 | `apps/e2e`    | Testes end-to-end (Playwright)                  |
-| `packages/*`  | Tipos, i18n, UI, ESLint, Tailwind (`@operis/*`) |
+| `packages/*`  | Tipos, i18n, UI, ESLint, Tailwind (`@operoz/*`) |
 | `mcp-server/` | Servidor MCP                                    |
-| `docs/`       | Documentação interna (ex.: `operis-mcp.md`)     |
+| `docs/`       | Documentação interna (ex.: `operoz-mcp.md`)     |
 
 ---
 
@@ -51,11 +51,20 @@ Na raiz do repositório:
 
 ```bash
 ./setup.sh
-docker compose -f docker-compose-local.yml up -d
+./scripts/docker-local.sh up --build
 pnpm dev
 ```
 
 O `setup.sh` copia `.env.example` → `.env` (raiz e apps), gera `SECRET_KEY` e instala dependências com pnpm.
+
+Use **`./scripts/docker-local.sh`** em vez de `docker compose` direto: o project Compose chama-se **`operoz`** (fixo no ficheiro) e cada `up`/`down` passa **`--remove-orphans`**, para apagar containers de serviços renomeados (ex. `operis-db` → `operoz-db`) sem ficarem órfãos a ocupar portas.
+
+Se ainda tiveres containers do project legado **`operis`** (nome da pasta), limpa uma vez:
+
+```bash
+docker compose -p operis -f docker-compose-local.yml down --remove-orphans -v
+./scripts/docker-local.sh up --build
+```
 
 ### URLs locais
 
@@ -70,16 +79,18 @@ O `setup.sh` copia `.env.example` → `.env` (raiz e apps), gera `SECRET_KEY` e 
 
 ### Infra Docker
 
-Serviços: `operis-db`, `operis-redis`, `operis-mq`, `operis-minio`, `api`, `worker`, `beat-worker`, `automation-worker`, `automation-email-worker`, `assistant-worker`, `migrator`.
+Serviços: `operoz-db`, `operoz-redis`, `operoz-mq`, `operoz-minio`, `api`, `worker`, `beat-worker`, `automation-worker`, `automation-email-worker`, `assistant-worker`, `migrator`.
 
 O `docker compose up -d` **sem nome de serviço** sobe todos os workers acima. Se fizeste `git pull` e um worker novo não aparece, volta a correr `up -d` (o Compose não cria serviços novos só por estarem no ficheiro).
 
 Se migraste de nomes antigos de volumes, recria-os antes do `up`:
 
 ```bash
-docker compose -f docker-compose-local.yml down -v
-docker compose -f docker-compose-local.yml up -d
+./scripts/docker-local.sh down -v
+./scripts/docker-local.sh up --build
 ```
+
+Ou num passo: `./scripts/docker-local.sh reset`
 
 ### Comandos úteis
 
@@ -90,13 +101,13 @@ pnpm test:f0            # smoke API + e2e F0
 pnpm test:f0:api        # só smoke da API
 ```
 
-Backend Python: `apps/api/operis/`. Configuração local: `operis.settings.local`.
+Backend Python: `apps/api/operoz/`. Configuração local: `operoz.settings.local`.
 
 ---
 
 ## Deploy (self-host)
 
-O workflow [`.github/workflows/deploy-operis.yml`](./.github/workflows/deploy-operis.yml) faz build, push para GHCR e deploy no VPS.
+O workflow [`.github/workflows/deploy-operoz.yml`](./.github/workflows/deploy-operoz.yml) faz build, push para GHCR e deploy no VPS.
 
 | Gatilho                      | Comportamento                                    |
 | ---------------------------- | ------------------------------------------------ |
@@ -106,7 +117,7 @@ O workflow [`.github/workflows/deploy-operis.yml`](./.github/workflows/deploy-op
 | `workflow_dispatch` → `full` | Stack completa (API, Space, migrations, workers) |
 
 Secrets necessários: `VPS_HOST`, `VPS_USER`, `VPS_SSH_KEY`.  
-Variables recomendadas: `OPERIS_WEB_URL`, `OPERIS_REPO_PATH`, `OPERIS_APP_PATH`.
+Variables recomendadas: `OPEROZ_WEB_URL`, `OPEROZ_REPO_PATH`, `OPEROZ_APP_PATH`.
 
 Para alterações que exigem migrações Django ou novos serviços (ex.: `automation-worker`), usa o alvo **`full`**.
 
@@ -114,12 +125,12 @@ Para alterações que exigem migrações Django ou novos serviços (ex.: `automa
 
 ## MCP (agentes de IA)
 
-Pacote em [`mcp-server/`](./mcp-server/README.md). Expõe workspaces, projetos, work items, boards, Cliente 360, páginas, ciclos e mais — ver [`docs/operis-mcp.md`](./docs/operis-mcp.md).
+Pacote em [`mcp-server/`](./mcp-server/README.md). Expõe workspaces, projetos, work items, boards, Cliente 360, páginas, ciclos e mais — ver [`docs/operoz-mcp.md`](./docs/operoz-mcp.md).
 
 ```bash
 cd mcp-server
 cp .env.example .env
-# OPERIS_API_BASE_URL e OPERIS_API_KEY (ou sessão via operis_sign_in)
+# OPEROZ_API_BASE_URL e OPEROZ_API_KEY (ou sessão via operoz_sign_in)
 npm install && npm run build
 ```
 

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // components
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
 import { SingleIntegrationCard } from "@/components/integration/single-integration-card";

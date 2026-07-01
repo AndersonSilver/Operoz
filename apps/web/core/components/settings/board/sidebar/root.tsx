@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { ScrollArea } from "@operis/propel/scrollarea";
-import type { IBoard } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import type { IBoard } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { BoardSettingsSidebarHeader } from "./header";
 import { BoardSettingsSidebarItemList } from "./item-list";
 

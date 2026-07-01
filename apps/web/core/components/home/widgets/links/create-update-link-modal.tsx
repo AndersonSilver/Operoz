@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane types
 // plane ui
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TLinkEditableFields } from "@operis/types";
-import { Input, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TLinkEditableFields } from "@operoz/types";
+import { Input, ModalCore } from "@operoz/ui";
 import type { TLinkOperations } from "./use-links";
 
 export type TLinkOperationsModal = Exclude<TLinkOperations, "remove">;

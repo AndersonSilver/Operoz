@@ -1,4 +1,4 @@
-import type { IWorkspace } from "@operis/types";
+import type { IWorkspace } from "@operoz/types";
 
 type TProps = {
   workspace?: IWorkspace;

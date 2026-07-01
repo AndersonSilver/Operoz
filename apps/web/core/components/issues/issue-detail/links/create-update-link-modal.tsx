@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane types
-import { Button } from "@operis/propel/button";
-import type { TIssueLinkEditableFields, TIssueServiceType } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { TIssueLinkEditableFields, TIssueServiceType } from "@operoz/types";
 // plane ui
-import { Input, ModalCore } from "@operis/ui";
+import { Input, ModalCore } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // types

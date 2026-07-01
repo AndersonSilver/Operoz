@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { THomeWidgetProps } from "@operoz/types";
 import { UserService } from "@/services/user.service";
 import { WorkspaceDraftService } from "@/services/issue/workspace_draft.service";
 import { WorkspaceNotificationService } from "@/services/workspace-notification.service";
@@ -43,10 +43,7 @@ export const DaySummaryWidget = observer(function DaySummaryWidget(props: THomeW
     workspaceSlug ? `HOME_SUMMARY_NOTIFICATIONS_${workspaceSlug}` : null,
     async () => {
       const response = await workspaceNotificationService.fetchUnreadNotificationsCount(workspaceSlug);
-      return (
-        (response?.total_unread_notifications_count ?? 0) +
-        (response?.mention_unread_notifications_count ?? 0)
-      );
+      return (response?.total_unread_notifications_count ?? 0) + (response?.mention_unread_notifications_count ?? 0);
     },
     { revalidateOnFocus: false }
   );

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { AssistantService } from "@/services/assistant.service";
 import "@/components/exporter/workspace-exports-settings.css";
 

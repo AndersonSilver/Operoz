@@ -1,8 +1,8 @@
 import { set } from "lodash-es";
 import { observable, action, makeObservable, runInAction } from "mobx";
 // plane imports
-import { InstanceService } from "@operis/services";
-import type { IInstance, IInstanceConfig } from "@operis/types";
+import { InstanceService } from "@operoz/services";
+import type { IInstance, IInstanceConfig } from "@operoz/types";
 // store
 import type { RootStore } from "@/store/root.store";
 

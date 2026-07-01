@@ -1,4 +1,4 @@
-# @operis/decorators
+# @operoz/decorators
 
 A lightweight TypeScript decorator library for building Express.js controllers with a clean, declarative syntax.
 
@@ -17,7 +17,7 @@ This package is part of the Plane workspace and can be used by adding it to your
 ```json
 {
   "dependencies": {
-    "@operis/decorators": "workspace:*"
+    "@operoz/decorators": "workspace:*"
   }
 }
 ```
@@ -27,7 +27,7 @@ This package is part of the Plane workspace and can be used by adding it to your
 ### Basic REST Controller
 
 ```typescript
-import { Controller, Get, Post, BaseController } from "@operis/decorators";
+import { Controller, Get, Post, BaseController } from "@operoz/decorators";
 import { Router, Request, Response } from "express";
 
 @Controller("/api/users")
@@ -52,7 +52,7 @@ userController.registerRoutes(router);
 ### WebSocket Controller
 
 ```typescript
-import { Controller, WebSocket, BaseWebSocketController } from "@operis/decorators";
+import { Controller, WebSocket, BaseWebSocketController } from "@operoz/decorators";
 import { Request } from "express";
 import { WebSocket as WS } from "ws";
 

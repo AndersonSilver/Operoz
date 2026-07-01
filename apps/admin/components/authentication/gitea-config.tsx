@@ -3,10 +3,10 @@ import Link from "next/link";
 // icons
 import { Settings2 } from "lucide-react";
 // plane internal packages
-import { getButtonStyling } from "@operis/propel/button";
-import type { TInstanceAuthenticationMethodKeys } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { getButtonStyling } from "@operoz/propel/button";
+import type { TInstanceAuthenticationMethodKeys } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useInstance } from "@/hooks/store";
 

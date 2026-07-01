@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { ICycle, TCycleEstimateType } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { ICycle, TCycleEstimateType } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // assets
 import darkChartAsset from "@/app/assets/empty-state/active-cycle/chart-dark.webp?url";
 import lightChartAsset from "@/app/assets/empty-state/active-cycle/chart-light.webp?url";
@@ -13,7 +13,7 @@ import lightChartAsset from "@/app/assets/empty-state/active-cycle/chart-light.w
 import ProgressChart from "@/components/core/sidebar/progress-chart";
 import { BOARD_HUB_CYCLE_METRIC_CARD } from "@/components/board/board-hub-background";
 import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { EstimateTypeDropdown } from "../dropdowns/estimate-type-dropdown";

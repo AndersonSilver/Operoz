@@ -1,9 +1,9 @@
 import { useState } from "react";
 // ui
-import { Button } from "@operis/propel/button";
-import type { IExportData } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { IExportData } from "@operoz/types";
 // helpers
-import { getDate, renderFormattedDate } from "@operis/utils";
+import { getDate, renderFormattedDate } from "@operoz/utils";
 // types
 
 type Props = {

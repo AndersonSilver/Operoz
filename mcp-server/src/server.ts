@@ -1,15 +1,15 @@
 import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
-import type { OperisClient } from "./client.js";
+import type { OperozClient } from "./client.js";
 import { CONSULTORIA_TOOLS, handleConsultoriaCall } from "./consultoria/index.js";
-import { OPERIS_TOOLS } from "./tools/definitions.js";
+import { OPEROZ_TOOLS } from "./tools/definitions.js";
 import { handleToolCall } from "./tools/handlers.js";
 
-export function createOperisMcpServer(client: OperisClient): Server {
+export function createOperozMcpServer(client: OperozClient): Server {
   const server = new Server(
     {
-      name: "operis",
+      name: "operoz",
       version: "1.0.0",
     },
     {
@@ -20,7 +20,7 @@ export function createOperisMcpServer(client: OperisClient): Server {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: [...OPERIS_TOOLS, ...CONSULTORIA_TOOLS],
+    tools: [...OPEROZ_TOOLS, ...CONSULTORIA_TOOLS],
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {

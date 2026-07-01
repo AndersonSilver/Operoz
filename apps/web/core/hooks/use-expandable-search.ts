@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 
 type UseExpandableSearchOptions = {
   onClose?: () => void;

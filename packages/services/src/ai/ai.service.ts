@@ -1,6 +1,6 @@
 // plane web constants
-import type { AI_EDITOR_TASKS } from "@operis/constants";
-import { API_BASE_URL } from "@operis/constants";
+import type { AI_EDITOR_TASKS } from "@operoz/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // services
 import { APIService } from "../api.service";
 

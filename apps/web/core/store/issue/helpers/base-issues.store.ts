@@ -2,7 +2,7 @@ import { isEqual, concat, get, indexOf, isEmpty, orderBy, pull, set, uniq, updat
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane constants
-import { ALL_ISSUES, ISSUE_PRIORITIES } from "@operis/constants";
+import { ALL_ISSUES, ISSUE_PRIORITIES } from "@operoz/constants";
 // types
 import type {
   TIssue,
@@ -19,10 +19,10 @@ import type {
   TPaginationData,
   TBulkOperationsPayload,
   IBlockUpdateDependencyData,
-} from "@operis/types";
-import { EIssueServiceType, EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/types";
+import { EIssueServiceType, EIssueLayoutTypes } from "@operoz/types";
 // helpers
-import { convertToISODateString, renderFormattedPayloadDate } from "@operis/utils";
+import { convertToISODateString, renderFormattedPayloadDate } from "@operoz/utils";
 // plane web imports
 import { workItemSortWithOrderByExtended } from "@/plane-web/store/issue/helpers/base-issue.store";
 // services
@@ -51,6 +51,9 @@ export enum EIssueGroupedAction {
 export interface IBaseIssuesStore {
   // observable
   loader: Record<string, TLoader>;
+
+  // root store — available on all issue stores via BaseIssuesStore
+  rootIssueStore: IIssueRootStore;
 
   groupedIssueIds: TGroupedIssues | TSubGroupedIssues | undefined; // object to store Issue Ids based on group or subgroup
   groupedIssueCount: TGroupedIssueCount; // map of groupId/subgroup and issue count of that particular group/subgroup

@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationDeadLetter, IBoardAutomationRule } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationDeadLetter, IBoardAutomationRule } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import { AutomationDeadLetterPanel } from "./automation/automation-dead-letter-panel";
 
@@ -75,11 +75,6 @@ export const BoardAutomationDeadLettersSettings = observer(function BoardAutomat
   }
 
   return (
-    <AutomationDeadLetterPanel
-      entries={entries}
-      rules={rules}
-      refreshing={refreshing}
-      onRefresh={handleRefresh}
-    />
+    <AutomationDeadLetterPanel entries={entries} rules={rules} refreshing={refreshing} onRefresh={handleRefresh} />
   );
 });

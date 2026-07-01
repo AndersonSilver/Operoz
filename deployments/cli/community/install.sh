@@ -17,7 +17,7 @@ UPPER_CPU_ARCH=$(tr '[:lower:]' '[:upper:]' <<< "$CPU_ARCH")
 
 mkdir -p $PLANE_INSTALL_DIR/archive
 DOCKER_FILE_PATH=$PLANE_INSTALL_DIR/docker-compose.yaml
-DOCKER_ENV_PATH=$PLANE_INSTALL_DIR/operis.env
+DOCKER_ENV_PATH=$PLANE_INSTALL_DIR/operoz.env
 
 function print_header() {
 clear
@@ -162,10 +162,10 @@ function updateCustomVariables(){
 
 function syncEnvFile(){
     echo "Syncing environment variables..." >&2
-    if [ -f "$PLANE_INSTALL_DIR/operis.env.bak" ]; then
+    if [ -f "$PLANE_INSTALL_DIR/operoz.env.bak" ]; then
         updateCustomVariables
         
-        # READ keys of operis.env and update the values from operis.env.bak
+        # READ keys of operoz.env and update the values from operoz.env.bak
         while IFS= read -r line
         do
             # ignore is the line is empty or starts with #
@@ -173,7 +173,7 @@ function syncEnvFile(){
                 continue
             fi
             key=$(echo "$line" | cut -d'=' -f1)
-            value=$(getEnvValue "$key" "$PLANE_INSTALL_DIR/operis.env.bak")
+            value=$(getEnvValue "$key" "$PLANE_INSTALL_DIR/operoz.env.bak")
             if [ -n "$value" ]; then
                 updateEnvFile "$key" "$value" "$DOCKER_ENV_PATH"
             fi
@@ -295,7 +295,7 @@ function download() {
     if [ -f "$DOCKER_ENV_PATH" ];
     then
         cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/archive/$TS.env"
-        cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/operis.env.bak"
+        cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/operoz.env.bak"
     fi
 
     mv $PLANE_INSTALL_DIR/variables-upgrade.env $DOCKER_ENV_PATH
@@ -331,7 +331,7 @@ function download() {
     echo ""
     echo "Most recent version of Plane is now available for you to use"
     echo ""
-    echo "In case of 'Upgrade', please check the 'operis.env 'file for any new variables and update them accordingly"
+    echo "In case of 'Upgrade', please check the 'operoz.env 'file for any new variables and update them accordingly"
     echo ""
 }
 function startServices() {
@@ -512,10 +512,10 @@ function viewLogs(){
                 5) viewSpecificLogs "beat-worker";;
                 6) viewSpecificLogs "migrator";;
                 7) viewSpecificLogs "proxy";;
-                8) viewSpecificLogs "operis-redis";;
-                9) viewSpecificLogs "operis-db";;
-                10) viewSpecificLogs "operis-minio";;
-                11) viewSpecificLogs "operis-mq";;
+                8) viewSpecificLogs "operoz-redis";;
+                9) viewSpecificLogs "operoz-db";;
+                10) viewSpecificLogs "operoz-minio";;
+                11) viewSpecificLogs "operoz-mq";;
                 0) askForAction;;
                 *) echo "INVALID SERVICE NAME SUPPLIED";;
             esac
@@ -531,10 +531,10 @@ function viewLogs(){
             beat-worker) viewSpecificLogs "beat-worker";;
             migrator) viewSpecificLogs "migrator";;
             proxy) viewSpecificLogs "proxy";;
-            redis) viewSpecificLogs "operis-redis";;
-            postgres) viewSpecificLogs "operis-db";;
-            minio) viewSpecificLogs "operis-minio";;
-            rabbitmq) viewSpecificLogs "operis-mq";;
+            redis) viewSpecificLogs "operoz-redis";;
+            postgres) viewSpecificLogs "operoz-db";;
+            minio) viewSpecificLogs "operoz-minio";;
+            rabbitmq) viewSpecificLogs "operoz-mq";;
             *) echo "INVALID SERVICE NAME SUPPLIED";;
         esac
     else
@@ -596,10 +596,10 @@ function backupData() {
         exit 1
     fi
 
-    backup_container_dir "$BACKUP_FOLDER" "operis-db" "/var/lib/postgresql/data" "pgdata" || exit 1
-    backup_container_dir "$BACKUP_FOLDER" "operis-minio" "/export" "uploads" || exit 1
-    backup_container_dir "$BACKUP_FOLDER" "operis-mq" "/var/lib/rabbitmq" "rabbitmq_data" || exit 1
-    backup_container_dir "$BACKUP_FOLDER" "operis-redis" "/data" "redisdata" || exit 1
+    backup_container_dir "$BACKUP_FOLDER" "operoz-db" "/var/lib/postgresql/data" "pgdata" || exit 1
+    backup_container_dir "$BACKUP_FOLDER" "operoz-minio" "/export" "uploads" || exit 1
+    backup_container_dir "$BACKUP_FOLDER" "operoz-mq" "/var/lib/rabbitmq" "rabbitmq_data" || exit 1
+    backup_container_dir "$BACKUP_FOLDER" "operoz-redis" "/data" "redisdata" || exit 1
 
     echo ""
     echo "Backup completed successfully. Backup files are stored in $BACKUP_FOLDER"

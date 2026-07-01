@@ -1,5 +1,5 @@
 // plane imports
-import type { TOAuthConfigs } from "@operis/types";
+import type { TOAuthConfigs } from "@operoz/types";
 // local imports
 import { useCoreOAuthConfig } from "./core";
 import { useExtendedOAuthConfig } from "./extended";

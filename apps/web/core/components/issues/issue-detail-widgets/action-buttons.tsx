@@ -1,9 +1,9 @@
 import React from "react";
 import { Paperclip } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, ViewsIcon, RelationPropertyIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, ViewsIcon, RelationPropertyIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TIssueServiceType, TWorkItemWidgets } from "@operis/types";
+import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 // plane web imports
 import { WorkItemAdditionalWidgetActionButtons } from "@/plane-web/components/issues/issue-detail-widgets/action-buttons";
 // local imports

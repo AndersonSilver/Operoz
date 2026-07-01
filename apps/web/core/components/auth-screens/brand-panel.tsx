@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BarChart3, Layers, Zap } from "lucide-react";
-import { PlaneLockup } from "@operis/propel/icons";
+import { PlaneLockup } from "@operoz/propel/icons";
 
 const features = [
   {

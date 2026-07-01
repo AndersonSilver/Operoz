@@ -9,13 +9,13 @@ import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/
 import { isInitializeRequest } from "@modelcontextprotocol/sdk/types.js";
 
 import { configFromRequest } from "./auth-from-request.js";
-import { OperisClient } from "./client.js";
+import { OperozClient } from "./client.js";
 import { loadConfig } from "./config.js";
-import { createOperisMcpServer } from "./server.js";
+import { createOperozMcpServer } from "./server.js";
 
 type SessionState = {
   transport: StreamableHTTPServerTransport;
-  client: OperisClient;
+  client: OperozClient;
 };
 
 const baseConfig = loadConfig();
@@ -48,11 +48,11 @@ async function mcpPostHandler(req: Request, res: Response) {
     if (!sid && isInitializeRequest(req.body)) {
       const userConfig = configFromRequest(req, baseConfig);
       if (!userConfig.apiKey && !userConfig.sessionCookie) {
-        reject(res, 401, "Credenciais em falta. Envie Authorization: Bearer <token> ou X-Api-Key (token Operis).");
+        reject(res, 401, "Credenciais em falta. Envie Authorization: Bearer <token> ou X-Api-Key (token Operoz).");
         return;
       }
 
-      const client = new OperisClient(userConfig);
+      const client = new OperozClient(userConfig);
       const transport = new StreamableHTTPServerTransport({
         sessionIdGenerator: () => randomUUID(),
         onsessioninitialized: (newSessionId) => {
@@ -67,7 +67,7 @@ async function mcpPostHandler(req: Request, res: Response) {
         }
       };
 
-      const server = createOperisMcpServer(client);
+      const server = createOperozMcpServer(client);
       await server.connect(transport);
       await transport.handleRequest(req, res, req.body);
       return;
@@ -75,7 +75,7 @@ async function mcpPostHandler(req: Request, res: Response) {
 
     reject(res, 400, "Pedido inválido: falta mcp-session-id ou initialize.");
   } catch (error) {
-    console.error("operis-mcp http:", error);
+    console.error("operoz-mcp http:", error);
     if (!res.headersSent) {
       reject(res, 500, "Erro interno do servidor MCP.");
     }
@@ -97,7 +97,7 @@ async function main() {
 
   const root = express();
   root.get("/health", (_req: Request, res: Response) => {
-    res.json({ ok: true, service: "operis-mcp", operis: baseConfig.baseUrl });
+    res.json({ ok: true, service: "operoz-mcp", operoz: baseConfig.baseUrl });
   });
 
   const mcpApp = createMcpExpressApp({
@@ -109,7 +109,7 @@ async function main() {
   root.use(mcpApp);
 
   root.listen(port, listenHost, () => {
-    console.error(`Operis MCP HTTP em http://${listenHost}:${port}/mcp → ${baseConfig.baseUrl}`);
+    console.error(`Operoz MCP HTTP em http://${listenHost}:${port}/mcp → ${baseConfig.baseUrl}`);
   });
 }
 

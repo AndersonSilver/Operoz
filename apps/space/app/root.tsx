@@ -1,5 +1,5 @@
 import { Links, Meta, Outlet, Scripts } from "react-router";
-import { DEFAULT_LOCALE } from "@operis/i18n";
+import { DEFAULT_LOCALE } from "@operoz/i18n";
 // assets
 import appleTouchIcon from "@/app/assets/favicon/apple-touch-icon.png?url";
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";
@@ -20,7 +20,8 @@ import "@fontsource/material-symbols-rounded";
 import "@fontsource/ibm-plex-mono";
 
 const APP_TITLE = "Operoz OS | Torne seus fóruns do Operoz OS públicos com um clique";
-const APP_DESCRIPTION = "Operoz OS Publish é uma ferramenta de gerenciamento de feedback do cliente construída sobre o operoz.com";
+const APP_DESCRIPTION =
+  "Operoz OS Publish é uma ferramenta de gerenciamento de feedback do cliente construída sobre o operoz.com";
 
 export const links: Route.LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },

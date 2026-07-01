@@ -1,8 +1,8 @@
 // plane imports
-import type { TIssuePriorities } from "@operis/constants";
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import type { TFilterProperty, TSupportedOperators } from "@operis/types";
-import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operis/types";
+import type { TIssuePriorities } from "@operoz/constants";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import type { TFilterProperty, TSupportedOperators } from "@operoz/types";
+import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operoz/types";
 // local imports
 import type { TCreateFilterConfigParams, IFilterIconConfig, TCreateFilterConfig } from "../../../rich-filters";
 import { createFilterConfig, getMultiSelectConfig, createOperatorConfigEntry } from "../../../rich-filters";

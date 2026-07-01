@@ -20,4 +20,4 @@ python manage.py clear_cache
 PORT="${PORT:-8001}"
 
 # Local dev uses runserver (gunicorn is production-only in requirements).
-exec python manage.py runserver "0.0.0.0:${PORT}" --settings=operis.settings.local
+exec python manage.py runserver "0.0.0.0:${PORT}" --settings=operoz.settings.local

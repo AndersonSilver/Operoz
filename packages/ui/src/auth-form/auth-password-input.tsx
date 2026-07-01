@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import type { E_PASSWORD_STRENGTH } from "@operis/constants";
-import { cn, getPasswordStrength } from "@operis/utils";
+import type { E_PASSWORD_STRENGTH } from "@operoz/constants";
+import { cn, getPasswordStrength } from "@operoz/utils";
 import { PasswordStrengthIndicator } from "../form-fields/password/indicator";
 import { AuthInput } from "./auth-input";
 

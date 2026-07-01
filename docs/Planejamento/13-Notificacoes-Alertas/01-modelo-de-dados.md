@@ -134,7 +134,7 @@ class UserAlertPreference(BaseModel):
 
 ```python
 class UserExternalAccount(BaseModel):
-    """Mapeia user Operis → conta externa (Discord ID, Google Calendar)."""
+    """Mapeia user Operoz → conta externa (Discord ID, Google Calendar)."""
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE,
                              related_name="external_accounts")
     workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE,
@@ -209,7 +209,7 @@ class AlertLog(BaseModel):
 
 ```python
 class GoogleCalendarEvent(BaseModel):
-    """Tracking de eventos sincronizados entre Operis e Google Calendar."""
+    """Tracking de eventos sincronizados entre Operoz e Google Calendar."""
     issue = models.ForeignKey("db.Issue", on_delete=models.CASCADE,
                               related_name="calendar_events")
     user_external_account = models.ForeignKey(UserExternalAccount, on_delete=models.CASCADE,

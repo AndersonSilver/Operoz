@@ -1,7 +1,7 @@
 import { ChevronRight } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardStatusReport } from "@operis/types";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardStatusReport } from "@operoz/types";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
 import { getReportSummarySnippet, isStaleDraft } from "@/components/project/status-report/status-report-utils";
@@ -27,7 +27,7 @@ export function StatusReportListByModule(props: Props) {
           <div className={cn(BOARD_HUB_CYCLE_SECTION_HEADER, "px-4 py-2.5")}>
             <div className="flex items-center justify-between gap-2">
               <h3 className="truncate text-13 font-semibold text-primary">{module.name}</h3>
-              <span className="shrink-0 rounded-md bg-layer-2 px-1.5 py-0.5 text-11 tabular-nums text-tertiary">
+              <span className="shrink-0 rounded-md bg-layer-2 px-1.5 py-0.5 text-11 text-tertiary tabular-nums">
                 {reports.length}
               </span>
             </div>
@@ -41,7 +41,7 @@ export function StatusReportListByModule(props: Props) {
                 <li key={report.id}>
                   <button
                     type="button"
-                    className="flex w-full items-center gap-3 border-b border-subtle/40 px-4 py-3 text-left transition-colors hover:bg-layer-2/40 last:border-b-0"
+                    className="flex w-full items-center gap-3 border-b border-subtle/40 px-4 py-3 text-left transition-colors last:border-b-0 hover:bg-layer-2/40"
                     onClick={() => onPeek(report.id)}
                   >
                     <div className="min-w-0 flex-1">
@@ -67,9 +67,7 @@ export function StatusReportListByModule(props: Props) {
                       <p className="mt-0.5 text-11 text-tertiary">
                         {renderFormattedDate(report.period_start)} — {renderFormattedDate(report.period_end)}
                       </p>
-                      {snippet ? (
-                        <p className="mt-1 line-clamp-1 text-13 text-tertiary">{snippet}</p>
-                      ) : null}
+                      {snippet ? <p className="mt-1 line-clamp-1 text-13 text-tertiary">{snippet}</p> : null}
                     </div>
                     <ChevronRight className="size-4 shrink-0 text-placeholder" />
                   </button>

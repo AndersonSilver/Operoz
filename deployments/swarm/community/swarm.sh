@@ -17,7 +17,7 @@ OS_NAME=$(uname)
 mkdir -p $PLANE_INSTALL_DIR/archive
 
 DOCKER_FILE_PATH=$PLANE_INSTALL_DIR/docker-compose.yml
-DOCKER_ENV_PATH=$PLANE_INSTALL_DIR/operis.env
+DOCKER_ENV_PATH=$PLANE_INSTALL_DIR/operoz.env
 
 function print_header() {
 clear
@@ -72,8 +72,8 @@ function getStackName() {
 
 function syncEnvFile(){
     echo "Syncing environment variables..." >&2
-    if [ -f "$PLANE_INSTALL_DIR/operis.env.bak" ]; then        
-        # READ keys of operis.env and update the values from operis.env.bak
+    if [ -f "$PLANE_INSTALL_DIR/operoz.env.bak" ]; then        
+        # READ keys of operoz.env and update the values from operoz.env.bak
         while IFS= read -r line
         do
             # ignore if the line is empty or starts with #
@@ -81,19 +81,19 @@ function syncEnvFile(){
                 continue
             fi
             key=$(echo "$line" | cut -d'=' -f1)
-            value=$(getEnvValue "$key" "$PLANE_INSTALL_DIR/operis.env.bak")
+            value=$(getEnvValue "$key" "$PLANE_INSTALL_DIR/operoz.env.bak")
             if [ -n "$value" ]; then
                 updateEnvFile "$key" "$value" "$DOCKER_ENV_PATH"
             fi
         done < "$DOCKER_ENV_PATH"
 
-        value=$(getEnvValue "STACK_NAME" "$PLANE_INSTALL_DIR/operis.env.bak")
+        value=$(getEnvValue "STACK_NAME" "$PLANE_INSTALL_DIR/operoz.env.bak")
         if [ -n "$value" ]; then
             updateEnvFile "STACK_NAME" "$value" "$DOCKER_ENV_PATH"
         fi
     fi
     echo "Environment variables synced successfully" >&2
-    rm -f $PLANE_INSTALL_DIR/operis.env.bak
+    rm -f $PLANE_INSTALL_DIR/operoz.env.bak
 }
 
 function getEnvValue() {
@@ -205,7 +205,7 @@ function download() {
     if [ -f "$DOCKER_ENV_PATH" ];
     then
         cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/archive/$TS.env"
-        cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/operis.env.bak"
+        cp "$DOCKER_ENV_PATH" "$PLANE_INSTALL_DIR/operoz.env.bak"
     fi
 
     mv $PLANE_INSTALL_DIR/variables-upgrade.env $DOCKER_ENV_PATH
@@ -505,10 +505,10 @@ function viewLogs(){
                 5) viewSpecificLogs "beat-worker";;
                 6) viewSpecificLogs "migrator";;
                 7) viewSpecificLogs "proxy";;
-                8) viewSpecificLogs "operis-redis";;
-                9) viewSpecificLogs "operis-db";;
-                10) viewSpecificLogs "operis-minio";;
-                11) viewSpecificLogs "operis-mq";;
+                8) viewSpecificLogs "operoz-redis";;
+                9) viewSpecificLogs "operoz-db";;
+                10) viewSpecificLogs "operoz-minio";;
+                11) viewSpecificLogs "operoz-mq";;
                 0) askForAction;;
                 *) echo "INVALID SERVICE NAME SUPPLIED";;
             esac
@@ -524,10 +524,10 @@ function viewLogs(){
             beat-worker) viewSpecificLogs "beat-worker";;
             migrator) viewSpecificLogs "migrator";;
             proxy) viewSpecificLogs "proxy";;
-            redis) viewSpecificLogs "operis-redis";;
-            postgres) viewSpecificLogs "operis-db";;
-            minio) viewSpecificLogs "operis-minio";;
-            rabbitmq) viewSpecificLogs "operis-mq";;
+            redis) viewSpecificLogs "operoz-redis";;
+            postgres) viewSpecificLogs "operoz-db";;
+            minio) viewSpecificLogs "operoz-minio";;
+            rabbitmq) viewSpecificLogs "operoz-mq";;
             *) echo "INVALID SERVICE NAME SUPPLIED";;
         esac
     else

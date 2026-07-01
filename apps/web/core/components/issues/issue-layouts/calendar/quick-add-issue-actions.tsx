@@ -3,14 +3,14 @@ import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { PlusIcon } from "@operis/propel/icons";
-import { setPromiseToast } from "@operis/propel/toast";
-import type { ISearchIssueResponse, TIssue } from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { PlusIcon } from "@operoz/propel/icons";
+import { setPromiseToast } from "@operoz/propel/toast";
+import type { ISearchIssueResponse, TIssue } from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 // hooks

@@ -1,4 +1,4 @@
-import { EIssueLayoutTypes } from "@operis/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 import { WorkspaceListRoot } from "@/components/issues/issue-layouts/list/roots/workspace-root";
 import { WorkspaceSpreadsheetRoot } from "@/components/issues/issue-layouts/spreadsheet/roots/workspace-root";
 import { WorkspaceAdditionalLayouts } from "@/plane-web/components/views/helper";

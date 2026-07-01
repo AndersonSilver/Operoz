@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Plus, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardAutomationHook, TAutomationHookEvent, TAutomationHookHandler } from "@operis/types";
-import { TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardAutomationHook, TAutomationHookEvent, TAutomationHookHandler } from "@operoz/types";
+import { TextArea } from "@operoz/ui";
 
 export type HookFormValues = {
   name: string;

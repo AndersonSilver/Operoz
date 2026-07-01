@@ -1,4 +1,4 @@
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 import { AppError } from "@/lib/errors";
 import { Server } from "./server";
 

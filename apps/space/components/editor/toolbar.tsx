@@ -1,10 +1,10 @@
 import React, { useEffect, useState, useCallback } from "react";
 // plane imports
-import { TOOLBAR_ITEMS } from "@operis/editor";
-import type { ToolbarMenuItem, EditorRefApi } from "@operis/editor";
-import { Button } from "@operis/propel/button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { TOOLBAR_ITEMS } from "@operoz/editor";
+import type { ToolbarMenuItem, EditorRefApi } from "@operoz/editor";
+import { Button } from "@operoz/propel/button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 
 type Props = {
   executeCommand: (item: ToolbarMenuItem) => void;

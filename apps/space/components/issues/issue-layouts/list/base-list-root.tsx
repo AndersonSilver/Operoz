@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // types
-import type { IIssueDisplayProperties, TGroupedIssues } from "@operis/types";
+import type { IIssueDisplayProperties, TGroupedIssues } from "@operoz/types";
 // constants
 // components
 import { IssueLayoutHOC } from "@/components/issues/issue-layouts/issue-layout-HOC";

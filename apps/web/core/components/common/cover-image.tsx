@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // helpers
 import { getCoverImageDisplayURL, DEFAULT_COVER_IMAGE_URL } from "@/helpers/cover-image.helper";
 

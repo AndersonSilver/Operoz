@@ -1,6 +1,6 @@
 import { Download } from "lucide-react";
-import type { IExportData } from "@operis/types";
-import { getDate, getFileURL, renderFormattedDate } from "@operis/utils";
+import type { IExportData } from "@operoz/types";
+import { getDate, getFileURL, renderFormattedDate } from "@operoz/utils";
 
 type RowData = IExportData;
 const checkExpiry = (inputDateString: string) => {

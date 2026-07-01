@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { AlertModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { AlertModalCore } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { projectSupportQueueService } from "@/services/inbox/project-support-queue.service";
 

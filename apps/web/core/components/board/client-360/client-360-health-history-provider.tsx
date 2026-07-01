@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import type { TClient360HealthHistoryItem } from "@operis/types";
+import type { TClient360HealthHistoryItem } from "@operoz/types";
 import { BoardService } from "@/services/board/board.service";
 import { WorkspaceService } from "@/services/workspace.service";
 

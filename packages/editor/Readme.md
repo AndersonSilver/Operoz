@@ -1,8 +1,8 @@
-# @operis/editor
+# @operoz/editor
 
 ## Description
 
-The `@operis/editor` package serves as the foundation for our editor system. It provides the base functionality for our other editor packages, but it will not be used directly in any of the projects but only for extending other editors.
+The `@operoz/editor` package serves as the foundation for our editor system. It provides the base functionality for our other editor packages, but it will not be used directly in any of the projects but only for extending other editors.
 
 ## Utilities
 

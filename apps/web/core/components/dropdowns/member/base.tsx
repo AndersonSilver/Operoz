@@ -1,13 +1,13 @@
 import { startTransition, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
 // plane imports
-import type { IUserLite } from "@operis/types";
-import { ComboDropDown } from "@operis/ui";
+import type { IUserLite } from "@operoz/types";
+import { ComboDropDown } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
 // local imports

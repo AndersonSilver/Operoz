@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EIssuesStoreType } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EIssuesStoreType } from "@operoz/types";
 // components
 import { ProfileIssuesKanBanLayout } from "@/components/issues/issue-layouts/kanban/roots/profile-issues-root";
 import { ProfileIssuesListLayout } from "@/components/issues/issue-layouts/list/roots/profile-issues-root";

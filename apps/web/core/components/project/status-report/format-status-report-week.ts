@@ -1,5 +1,5 @@
-import type { useTranslation } from "@operis/i18n";
-import { getReportPeriodISOWeekInfo, renderFormattedDate } from "@operis/utils";
+import type { useTranslation } from "@operoz/i18n";
+import { getReportPeriodISOWeekInfo, renderFormattedDate } from "@operoz/utils";
 
 function formatPeriodFallback(start: string, end: string): string {
   try {
@@ -9,11 +9,7 @@ function formatPeriodFallback(start: string, end: string): string {
   }
 }
 
-export function formatReportWeekLabel(
-  start: string,
-  end: string,
-  t: ReturnType<typeof useTranslation>["t"]
-): string {
+export function formatReportWeekLabel(start: string, end: string, t: ReturnType<typeof useTranslation>["t"]): string {
   const info = getReportPeriodISOWeekInfo(start, end);
   if (!info) {
     return formatPeriodFallback(start, end);

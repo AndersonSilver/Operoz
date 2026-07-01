@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageHead } from "@/components/core/page-title";
 import { WorkspacePrdReviewInbox } from "@/components/workspace/prd-review/workspace-prd-review-inbox";
 import { useWorkspace } from "@/hooks/store/use-workspace";

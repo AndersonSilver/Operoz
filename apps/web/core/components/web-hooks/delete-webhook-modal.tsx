@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 // ui
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { AlertModalCore } from "@operis/ui";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { AlertModalCore } from "@operoz/ui";
 // hooks
 import { useWebhook } from "@/hooks/store/use-webhook";
 import { useAppRouter } from "@/hooks/use-app-router";

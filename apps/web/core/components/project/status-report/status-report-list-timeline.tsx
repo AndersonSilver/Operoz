@@ -1,6 +1,6 @@
-import { useTranslation } from "@operis/i18n";
-import type { IBoardStatusReport, IModule } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardStatusReport, IModule } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import { getModuleWeekStatus, periodsMatch } from "@/components/project/status-report/status-report-utils";
 
@@ -23,9 +23,7 @@ export function StatusReportListTimeline(props: Props) {
   const { t } = useTranslation();
 
   if (modules.length === 0) {
-    return (
-      <p className="p-6 text-center text-13 text-tertiary">{t("project.status_report.timeline_empty")}</p>
-    );
+    return <p className="p-6 text-center text-13 text-tertiary">{t("project.status_report.timeline_empty")}</p>;
   }
 
   return (
@@ -63,7 +61,7 @@ export function StatusReportListTimeline(props: Props) {
                       type="button"
                       disabled={status === "none"}
                       className={cn(
-                        "mx-auto flex h-8 w-full min-w-[2.5rem] max-w-[4.5rem] items-center justify-center rounded-md border text-11 font-medium transition-colors",
+                        "mx-auto flex h-8 w-full max-w-[4.5rem] min-w-[2.5rem] items-center justify-center rounded-md border text-11 font-medium transition-colors",
                         CELL[status],
                         status === "none" && "cursor-default"
                       )}

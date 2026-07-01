@@ -1,6 +1,6 @@
 import React from "react";
-import type { ISvgIcons } from "@operis/propel/icons";
-import { DropdownIcon } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { DropdownIcon } from "@operoz/propel/icons";
 import { cn } from "../utils";
 
 type Props = {

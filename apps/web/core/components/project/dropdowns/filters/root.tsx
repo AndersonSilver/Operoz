@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TProjectDisplayFilters, TProjectFilters } from "@operis/types";
+import type { TProjectDisplayFilters, TProjectFilters } from "@operoz/types";
 // components
 import { FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks

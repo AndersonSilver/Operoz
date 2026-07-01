@@ -1,4 +1,4 @@
-import type { TClient360Client } from "@operis/types";
+import type { TClient360Client } from "@operoz/types";
 
 const GROUP_BY_STORAGE_KEY = "client360_group_by_board";
 const COLLAPSED_STORAGE_KEY = "client360_group_collapsed_boards";

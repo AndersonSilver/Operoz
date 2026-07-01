@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import type { IIssueFilterOptions, IState } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import type { IIssueFilterOptions, IState } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   FilterAssignees,
   FilterDueDate,

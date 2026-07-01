@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { BrainCog, Sparkles, Zap } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Loader } from "@operoz/ui";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { useInstance } from "@/hooks/store";
 import type { Route } from "./+types/page";

@@ -12,8 +12,8 @@ import type {
   TDateFilterFieldConfig,
   TDateRangeFilterFieldConfig,
   TFilterConditionNodeForDisplay,
-} from "@operis/types";
-import { FILTER_FIELD_TYPE } from "@operis/types";
+} from "@operoz/types";
+import { FILTER_FIELD_TYPE } from "@operoz/types";
 // local imports
 import { AdditionalFilterValueInput } from "@/plane-web/components/rich-filters/filter-value-input/root";
 import type { TFilterValueInputProps } from "../shared";

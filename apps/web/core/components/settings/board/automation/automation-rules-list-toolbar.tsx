@@ -1,7 +1,7 @@
 import { ArrowDownWideNarrow, Search, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Input, cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Input, cn } from "@operoz/ui";
 import type {
   AutomationRulesFilterState,
   AutomationRulesSort,
@@ -20,11 +20,7 @@ type Props = {
   hasActiveFilters: boolean;
 };
 
-function FilterChip(props: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
+function FilterChip(props: { active: boolean; onClick: () => void; children: React.ReactNode }) {
   const { active, onClick, children } = props;
   return (
     <button
@@ -43,15 +39,7 @@ function FilterChip(props: {
 }
 
 export function AutomationRulesListToolbar(props: Props) {
-  const {
-    filters,
-    onChange,
-    onClear,
-    triggerOptions,
-    totalCount,
-    filteredCount,
-    hasActiveFilters,
-  } = props;
+  const { filters, onChange, onClear, triggerOptions, totalCount, filteredCount, hasActiveFilters } = props;
   const { t } = useTranslation();
 
   const statusOptions: { value: AutomationRulesStatusFilter; label: string }[] = [
@@ -71,17 +59,17 @@ export function AutomationRulesListToolbar(props: Props) {
     <div className="mb-4 space-y-3 rounded-xl border border-subtle bg-layer-1 p-3">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
         <div className="relative min-w-0 flex-1">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-placeholder" />
+          <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-placeholder" />
           <Input
             value={filters.search}
             onChange={(e) => onChange({ search: e.target.value })}
             placeholder={t("boards.settings.automation.rules_list.filters.search_placeholder")}
-            className="w-full rounded-lg border-subtle bg-surface-1 pl-8 pr-8 text-13"
+            className="w-full rounded-lg border-subtle bg-surface-1 pr-8 pl-8 text-13"
           />
           {filters.search && (
             <button
               type="button"
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded p-0.5 text-tertiary hover:text-primary"
+              className="absolute top-1/2 right-2 -translate-y-1/2 rounded p-0.5 text-tertiary hover:text-primary"
               onClick={() => onChange({ search: "" })}
               aria-label={t("boards.settings.automation.rules_list.filters.clear")}
             >
@@ -126,10 +114,7 @@ export function AutomationRulesListToolbar(props: Props) {
             <span className="ml-1 text-11 font-medium text-placeholder">
               {t("boards.settings.automation.rules_list.filters.trigger_label")}
             </span>
-            <FilterChip
-              active={filters.triggerKey === "all"}
-              onClick={() => onChange({ triggerKey: "all" })}
-            >
+            <FilterChip active={filters.triggerKey === "all"} onClick={() => onChange({ triggerKey: "all" })}>
               {t("boards.settings.automation.rules_list.filters.trigger_all")}
             </FilterChip>
             {triggerOptions.map((opt) => (

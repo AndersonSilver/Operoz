@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import type { TTourSteps } from "./tour-steps";
 import { TOUR_STEPS } from "./tour-steps";
 

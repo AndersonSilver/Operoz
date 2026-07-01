@@ -1,8 +1,8 @@
 import { format } from "date-fns";
 import { get, set } from "lodash-es";
 // plane imports
-import { COMPLETED_STATE_GROUPS, STATE_DISTRIBUTION } from "@operis/constants";
-import type { ICycle, IEstimatePoint, IModule, IState, TIssue } from "@operis/types";
+import { COMPLETED_STATE_GROUPS, STATE_DISTRIBUTION } from "@operoz/constants";
+import type { ICycle, IEstimatePoint, IModule, IState, TIssue } from "@operoz/types";
 // helper
 import { getDate } from "./datetime";
 

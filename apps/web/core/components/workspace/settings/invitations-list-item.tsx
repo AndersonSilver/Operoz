@@ -2,13 +2,13 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ROLE, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, TrashIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TContextMenuItem } from "@operis/ui";
-import { CustomSelect, CustomMenu } from "@operis/ui";
-import { cn, copyTextToClipboard } from "@operis/utils";
+import { ROLE, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, TrashIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TContextMenuItem } from "@operoz/ui";
+import { CustomSelect, CustomMenu } from "@operoz/ui";
+import { cn, copyTextToClipboard } from "@operoz/utils";
 // components
 import { ConfirmWorkspaceMemberRemove } from "@/components/workspace/confirm-workspace-member-remove";
 // hooks

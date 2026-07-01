@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { AlertOctagon, Copy, RefreshCw, Skull, Workflow } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardAutomationDeadLetter, IBoardAutomationRule } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore, cn } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardAutomationDeadLetter, IBoardAutomationRule } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore, cn } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 import { AutomationListHero } from "./automation-list-hero";
 import "./automation-list.css";
 import "./automation-ops.css";
@@ -45,37 +45,35 @@ export function AutomationDeadLetterPanel(props: Props) {
         {detail && (
           <div className="flex max-h-[85vh] flex-col">
             <div className="border-b border-subtle px-5 py-4">
-              <p className="text-11 font-medium uppercase tracking-wide text-tertiary">
+              <p className="text-11 font-medium tracking-wide text-tertiary uppercase">
                 {t("boards.settings.automation.ops.dead_letters.detail_badge")}
               </p>
               <h3 className="mt-1 text-16 font-semibold text-primary">{resolveRuleName(detail.rule_id)}</h3>
-              <p className="mt-1 font-mono text-11 text-placeholder">{detail.event_id}</p>
+              <p className="font-mono mt-1 text-11 text-placeholder">{detail.event_id}</p>
             </div>
 
             <div className="space-y-4 overflow-y-auto px-5 py-4">
               <div className="rounded-lg border border-danger-subtle bg-danger-subtle/25 p-4">
-                <p className="text-11 font-semibold uppercase tracking-wide text-danger-primary">
+                <p className="text-11 font-semibold tracking-wide text-danger-primary uppercase">
                   {t("boards.settings.automation.ops.dead_letters.error_label")}
                 </p>
-                <p className="mt-2 whitespace-pre-wrap text-13 leading-relaxed text-primary">
+                <p className="mt-2 text-13 leading-relaxed whitespace-pre-wrap text-primary">
                   {detail.error_message || "—"}
                 </p>
               </div>
 
               <dl className="grid gap-3 sm:grid-cols-2">
                 <div className="rounded-lg border border-subtle bg-layer-1 p-3">
-                  <dt className="text-10 uppercase tracking-wide text-tertiary">
+                  <dt className="text-10 tracking-wide text-tertiary uppercase">
                     {t("boards.settings.automation.ops.dead_letters.retries")}
                   </dt>
                   <dd className="mt-1 text-14 font-semibold text-primary">{detail.retry_count}</dd>
                 </div>
                 <div className="rounded-lg border border-subtle bg-layer-1 p-3">
-                  <dt className="text-10 uppercase tracking-wide text-tertiary">
+                  <dt className="text-10 tracking-wide text-tertiary uppercase">
                     {t("boards.settings.automation.ops.dead_letters.when")}
                   </dt>
-                  <dd className="mt-1 text-14 font-semibold text-primary">
-                    {renderFormattedDate(detail.created_at)}
-                  </dd>
+                  <dd className="mt-1 text-14 font-semibold text-primary">{renderFormattedDate(detail.created_at)}</dd>
                 </div>
               </dl>
 
@@ -92,7 +90,7 @@ export function AutomationDeadLetterPanel(props: Props) {
                       {t("copy_link")}
                     </Button>
                   </div>
-                  <p className="mt-1 break-all font-mono text-12 text-secondary">{detail.celery_task_id}</p>
+                  <p className="font-mono mt-1 text-12 break-all text-secondary">{detail.celery_task_id}</p>
                 </div>
               )}
             </div>
@@ -137,7 +135,7 @@ export function AutomationDeadLetterPanel(props: Props) {
             <span className="grid size-14 place-items-center rounded-2xl border border-subtle bg-success-subtle text-success-primary">
               <Skull className="size-6" strokeWidth={1.5} />
             </span>
-            <h3 className="mt-4 text-15 font-semibold text-primary">
+            <h3 className="text-15 mt-4 font-semibold text-primary">
               {t("boards.settings.automation.ops.dead_letters.empty_title")}
             </h3>
             <p className="mt-2 max-w-md text-13 leading-relaxed text-tertiary">
@@ -148,7 +146,7 @@ export function AutomationDeadLetterPanel(props: Props) {
           <ul className="flex flex-col gap-3">
             {entries.map((entry) => (
               <li key={entry.id}>
-                <article className="automation-ops-dlq-card p-4 transition-colors hover:border-danger-primary/35">
+                <article className="automation-ops-dlq-card hover:border-danger-primary/35 p-4 transition-colors">
                   <div className="flex flex-wrap items-start gap-3">
                     <span className="grid size-10 shrink-0 place-items-center rounded-xl border border-danger-subtle bg-danger-subtle text-danger-primary">
                       <AlertOctagon className="size-4" strokeWidth={1.75} />

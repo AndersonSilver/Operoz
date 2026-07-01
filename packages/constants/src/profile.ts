@@ -1,5 +1,5 @@
 // plane imports
-import { EStartOfTheWeek } from "@operis/types";
+import { EStartOfTheWeek } from "@operoz/types";
 
 export const PROFILE_VIEWER_TAB = [
   {

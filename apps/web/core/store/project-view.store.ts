@@ -2,10 +2,10 @@ import { set } from "lodash-es";
 import { observable, action, makeObservable, runInAction, computed } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { IProjectView, TViewFilters } from "@operis/types";
+import type { IProjectView, TViewFilters } from "@operoz/types";
 // constants
 // helpers
-import { getValidatedViewFilters, getViewName, orderViews, shouldFilterView } from "@operis/utils";
+import { getValidatedViewFilters, getViewName, orderViews, shouldFilterView } from "@operoz/utils";
 // services
 import { ViewService } from "@/services/view.service";
 // store

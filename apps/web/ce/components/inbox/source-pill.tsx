@@ -1,6 +1,6 @@
-import type { EInboxIssueSource } from "@operis/types";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import type { EInboxIssueSource } from "@operoz/types";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { getInboxSourceLabelKey, type TInboxSourcePill } from "@/utils/support-ticket";
 
 export type { TInboxSourcePill };

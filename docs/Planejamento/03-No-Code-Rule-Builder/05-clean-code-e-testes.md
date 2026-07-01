@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/automation/
+apps/api/operoz/automation/
 ├── catalog/
 │   ├── registry.py      # CatalogBlock + TRIGGERS/CONDITIONS/ACTIONS
 │   ├── triggers.py      # to_node por trigger
@@ -33,23 +33,23 @@ app/views/board/automation_templates.py  # JÁ EXISTE — from-template
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| `to_node` de cada trigger/condition/action | nó válido para o compiler |
-| `from-template` com params | grafo parametrizado correto |
-| smart value escaping (HTML/JSON/URL) | escapado por contexto |
-| smart value tenta `{{secret:x}}` | não expande |
-| profundidade de cadeia > limite | execução cortada (anti-loop) |
+| Caso                                       | Esperado                     |
+| ------------------------------------------ | ---------------------------- |
+| `to_node` de cada trigger/condition/action | nó válido para o compiler    |
+| `from-template` com params                 | grafo parametrizado correto  |
+| smart value escaping (HTML/JSON/URL)       | escapado por contexto        |
+| smart value tenta `{{secret:x}}`           | não expande                  |
+| profundidade de cadeia > limite            | execução cortada (anti-loop) |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| `GET catalog` | blocos + schemas; respeita i18n |
-| criar regra no-code → dry-run | timeline sem efeitos colaterais |
-| publish sem dry-run (policy on) | `400` exige dry-run |
-| webhook action fora da allowlist | bloqueado |
-| from-template por MEMBER sem `automation.manage` | `403` |
+| Caso                                             | Esperado                        |
+| ------------------------------------------------ | ------------------------------- |
+| `GET catalog`                                    | blocos + schemas; respeita i18n |
+| criar regra no-code → dry-run                    | timeline sem efeitos colaterais |
+| publish sem dry-run (policy on)                  | `400` exige dry-run             |
+| webhook action fora da allowlist                 | bloqueado                       |
+| from-template por MEMBER sem `automation.manage` | `403`                           |
 
 ### e2e
 

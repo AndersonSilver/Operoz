@@ -1,12 +1,12 @@
 import { useCallback } from "react";
 // plane editor
-import type { TMentionSection, TMentionSuggestion } from "@operis/editor";
+import type { TMentionSection, TMentionSuggestion } from "@operoz/editor";
 // plane types
-import type { TSearchEntities, TSearchEntityRequestPayload, TSearchResponse, TUserSearchResponse } from "@operis/types";
+import type { TSearchEntities, TSearchEntityRequestPayload, TSearchResponse, TUserSearchResponse } from "@operoz/types";
 // plane ui
-import { Avatar } from "@operis/ui";
+import { Avatar } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // plane web hooks
 import { useAdditionalEditorMention } from "@/plane-web/hooks/use-additional-editor-mention";
 

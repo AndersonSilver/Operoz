@@ -2,8 +2,8 @@ import type { Hocuspocus } from "@hocuspocus/server";
 import type { Request } from "express";
 import type WebSocket from "ws";
 // plane imports
-import { Controller, WebSocket as WSDecorator } from "@operis/decorators";
-import { logger } from "@operis/logger";
+import { Controller, WebSocket as WSDecorator } from "@operoz/decorators";
+import { logger } from "@operoz/logger";
 
 @Controller("/collaboration")
 export class CollaborationController {

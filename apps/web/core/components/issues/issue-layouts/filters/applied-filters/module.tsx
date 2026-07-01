@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // hooks
-import { CloseIcon, ModuleIcon } from "@operis/propel/icons";
+import { CloseIcon, ModuleIcon } from "@operoz/propel/icons";
 import { useModule } from "@/hooks/store/use-module";
 // ui
 

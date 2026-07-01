@@ -1,6 +1,6 @@
 import { ThemeProvider } from "next-themes";
 // components
-import { TranslationProvider } from "@operis/i18n";
+import { TranslationProvider } from "@operoz/i18n";
 import { AppProgressBar } from "@/lib/b-progress";
 import { InstanceProvider } from "@/lib/instance-provider";
 import { StoreProvider } from "@/lib/store-provider";

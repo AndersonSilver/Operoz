@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 // plane imports
-import { PriorityIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Row, Avatar } from "@operis/ui";
-import { cn, renderFormattedDate, getFileURL } from "@operis/utils";
+import { PriorityIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Row, Avatar } from "@operoz/ui";
+import { cn, renderFormattedDate, getFileURL } from "@operoz/utils";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { shouldShowSlaBadge } from "@/utils/support-ticket";
 // components

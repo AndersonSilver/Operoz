@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { LucideIcon } from "lucide-react";
 import { Menu } from "@headlessui/react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   href?: string;

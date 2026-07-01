@@ -1,5 +1,5 @@
-import type { EFileAssetType } from "@operis/types";
-import { getFileURL } from "@operis/utils";
+import type { EFileAssetType } from "@operoz/types";
+import { getFileURL } from "@operoz/utils";
 
 import CoverImage1 from "@/app/assets/cover-images/image_1.jpg?url";
 import CoverImage10 from "@/app/assets/cover-images/image_10.jpg?url";

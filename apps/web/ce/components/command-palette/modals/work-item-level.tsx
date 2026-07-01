@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import type { TIssue } from "@operis/types";
-import { EIssueServiceType, EIssuesStoreType } from "@operis/types";
+import type { TIssue } from "@operoz/types";
+import { EIssueServiceType, EIssuesStoreType } from "@operoz/types";
 // components
 import { BulkDeleteIssuesModal } from "@/components/core/modals/bulk-delete-issues-modal";
 import { DeleteIssueModal } from "@/components/issues/delete-issue-modal";

@@ -1,6 +1,6 @@
 // plane imports
-import type { TFilterProperty } from "@operis/types";
-import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operis/types";
+import type { TFilterProperty } from "@operoz/types";
+import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operoz/types";
 // local imports
 import type { TCreateFilterConfig, TCreateUserFilterParams } from "../../../rich-filters";
 import { createFilterConfig, createOperatorConfigEntry, getMemberMultiSelectConfig } from "../../../rich-filters";

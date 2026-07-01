@@ -1,0 +1,60 @@
+---
+description: Checklist de segurança sênior — sempre ativa em qualquer código que lida com input, auth ou dados
+alwaysApply: true
+---
+
+# Segurança — Sempre Verificar
+
+Aplique isso automaticamente sempre que o código tocar em: input do usuário,
+autenticação/autorização, dados sensíveis, upload de arquivo, URLs externas, ou
+templates/HTML dinâmico. Não espere o usuário pedir "revisão de segurança".
+
+## Input e injeção
+
+- Nunca concatene input do usuário em query SQL — sempre query parametrizada/ORM.
+- Nunca insira input do usuário em HTML sem escape (evite `dangerouslySetInnerHTML`,
+  `innerHTML`, `v-html` com dado não sanitizado — isso é XSS).
+- Nunca passe input do usuário para `eval`, `exec`, construção dinâmica de comando de
+  shell, ou `new Function()`.
+- Valide e sanitize uploads: tipo real do arquivo (não confie na extensão nem no
+  Content-Type enviado pelo client), tamanho máximo, nome de arquivo sanitizado.
+
+## Autenticação e autorização
+
+- Toda rota que retorna ou modifica dado de um usuário específico precisa verificar
+  que quem está pedindo tem permissão sobre *aquele* recurso (não só "está logado") —
+  esse é o bug mais comum de autorização (IDOR).
+- Senhas sempre com hash forte (bcrypt/argon2), nunca em texto plano nem com hash
+  reversível.
+- Tokens de sessão/JWT com expiração razoável; refresh tokens revogáveis.
+- Cookies de sessão: `HttpOnly`, `Secure`, `SameSite=Strict` ou `Lax`.
+
+## Dados sensíveis
+
+- Nunca logue senha, token, número de cartão, CPF completo ou outro dado sensível —
+  nem em log de erro/debug.
+- Segredos (API keys, credenciais de banco) só via env var / secret manager, nunca
+  commitados no repositório.
+- HTTPS obrigatório para qualquer tráfego com dado sensível.
+
+## Outras superfícies comuns
+
+- SSRF: se o backend faz requisição para uma URL fornecida pelo usuário, valide/
+  restrinja destino (bloqueie IPs internos/metadata endpoints como 169.254.169.254).
+- CSRF: mutações via cookie de sessão precisam de proteção CSRF (token ou
+  `SameSite` adequado), a menos que a API use apenas Bearer token.
+- Rate limiting em endpoints sensíveis (login, reset de senha, envio de email) para
+  mitigar brute-force e abuso.
+- Dependências: não adicione um pacote novo sem checar se é mantido/confiável;
+  desconfie de pacotes com poucas estrelas/downloads para funcionalidade crítica.
+
+## Ao revisar código de outra pessoa (ou seu próprio)
+
+Pergunte explicitamente:
+1. Esse endpoint confia em algo que veio do client e não devia?
+2. Um usuário autenticado consegue acessar/alterar dado de outro usuário trocando um
+   ID na URL?
+3. Esse dado sensível pode acabar em log, erro exposto ao client, ou resposta de API
+   que não devia incluí-lo?
+
+Se a resposta for "talvez" para qualquer uma, pare e resolva antes de seguir.

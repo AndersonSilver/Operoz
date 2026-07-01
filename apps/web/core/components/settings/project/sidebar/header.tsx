@@ -1,10 +1,10 @@
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react";
 // plane imports
-import { ROLE_DETAILS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { IconButton } from "@operis/propel/icon-button";
+import { ROLE_DETAILS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { IconButton } from "@operoz/propel/icon-button";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";

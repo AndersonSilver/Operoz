@@ -1,9 +1,9 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TConfigOptions } from "@operis/constants";
-import { DEFAULT_FILTER_CONFIG_OPTIONS } from "@operis/constants";
-import type { TExternalFilter, TFilterConfig, TFilterProperty } from "@operis/types";
+import type { TConfigOptions } from "@operoz/constants";
+import { DEFAULT_FILTER_CONFIG_OPTIONS } from "@operoz/constants";
+import type { TExternalFilter, TFilterConfig, TFilterProperty } from "@operoz/types";
 // local imports
 import type { IFilterConfig } from "./config";
 import { FilterConfig } from "./config";

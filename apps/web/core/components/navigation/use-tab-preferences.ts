@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import { useMember } from "@/hooks/store/use-member";
 import { useUser } from "@/hooks/store/user";
 import { DEFAULT_TAB_KEY } from "./tab-navigation-utils";

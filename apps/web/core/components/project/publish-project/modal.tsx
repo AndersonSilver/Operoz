@@ -4,15 +4,15 @@ import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 
 // types
-import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { GlobeIcon, NewTabIcon, CheckIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TProjectPublishLayouts, TProjectPublishSettings } from "@operis/types";
+import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { GlobeIcon, NewTabIcon, CheckIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TProjectPublishLayouts, TProjectPublishSettings } from "@operoz/types";
 // ui
-import { Loader, ToggleSwitch, CustomSelect, ModalCore, EModalWidth } from "@operis/ui";
+import { Loader, ToggleSwitch, CustomSelect, ModalCore, EModalWidth } from "@operoz/ui";
 // helpers
-import { copyTextToClipboard } from "@operis/utils";
+import { copyTextToClipboard } from "@operoz/utils";
 // hooks
 import { useProjectPublish } from "@/hooks/store/use-project-publish";
 

@@ -2,14 +2,14 @@ import { useMemo } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
 // plane imports
-import { EIssueCommentAccessSpecifier } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { LinkIcon, GlobeIcon, LockIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
-import type { TIssueComment, TCommentsOperations } from "@operis/types";
-import type { TContextMenuItem } from "@operis/ui";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { EIssueCommentAccessSpecifier } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { LinkIcon, GlobeIcon, LockIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
+import type { TIssueComment, TCommentsOperations } from "@operoz/types";
+import type { TContextMenuItem } from "@operoz/ui";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useUser } from "@/hooks/store/user";
 import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";

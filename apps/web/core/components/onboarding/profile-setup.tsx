@@ -2,16 +2,16 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
-import { E_PASSWORD_STRENGTH } from "@operis/constants";
+import { E_PASSWORD_STRENGTH } from "@operoz/constants";
 // types
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUser, TUserProfile, TOnboardingSteps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUser, TUserProfile, TOnboardingSteps } from "@operoz/types";
 // ui
-import { Input, PasswordStrengthIndicator, Spinner } from "@operis/ui";
+import { Input, PasswordStrengthIndicator, Spinner } from "@operoz/ui";
 // components
-import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@operis/utils";
+import { cn, getFileURL, getPasswordStrength, validatePersonName } from "@operoz/utils";
 import { UserImageUploadModal } from "@/components/core/modals/user-image-upload-modal";
 // hooks
 import { useUser, useUserProfile } from "@/hooks/store/user";

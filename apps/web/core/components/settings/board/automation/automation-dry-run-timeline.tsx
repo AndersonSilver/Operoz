@@ -1,8 +1,8 @@
 import { Code2, Filter, GitBranch, Loader2, Mail, Play, Shield, Terminal, Zap } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TAutomationGraph } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TAutomationGraph } from "@operoz/types";
+import { cn } from "@operoz/ui";
 
 const CATALOG_LABEL_FALLBACK: Record<string, string> = {
   "action.run_script": "Executar script",

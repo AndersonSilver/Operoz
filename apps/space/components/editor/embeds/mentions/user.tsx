@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser } from "@/hooks/store/use-user";

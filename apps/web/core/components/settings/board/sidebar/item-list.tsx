@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { BOARD_SETTINGS_NAV } from "@/constants/board-settings";
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";
 import { BOARD_SETTINGS_ICONS } from "./item-icon";
@@ -60,9 +60,7 @@ export const BoardSettingsSidebarItemList = observer(function BoardSettingsSideb
           );
         }
 
-        const isGroupActive = item.children!.some((child) =>
-          isBoardSettingsPathActive(pathname, basePath, child.href)
-        );
+        const isGroupActive = item.children!.some((child) => isBoardSettingsPathActive(pathname, basePath, child.href));
         const isOpen = expanded[item.key] ?? isGroupActive;
 
         return (

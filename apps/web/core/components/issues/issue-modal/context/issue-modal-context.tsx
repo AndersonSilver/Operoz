@@ -2,8 +2,8 @@ import { createContext } from "react";
 // ce imports
 import type { UseFormReset, UseFormWatch } from "react-hook-form";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import type { ISearchIssueResponse, TIssue } from "@operis/types";
+import type { EditorRefApi } from "@operoz/editor";
+import type { ISearchIssueResponse, TIssue } from "@operoz/types";
 // plane web imports
 import type { TIssuePropertyValues, TIssuePropertyValueErrors } from "@/plane-web/types/issue-types";
 import type { TIssueFields } from "@/plane-web/components/issues/issue-modal";

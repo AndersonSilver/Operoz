@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue, TPaginationData } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue, TPaginationData } from "@operoz/types";
 // components
-import { cn, renderFormattedPayloadDate } from "@operis/utils";
+import { cn, renderFormattedPayloadDate } from "@operoz/utils";
 // helpers
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
 import type { TRenderQuickActions } from "../list/list-view-types";

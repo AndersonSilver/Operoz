@@ -1,4 +1,4 @@
-import type { TIssue, TIssuesResponse } from "@operis/types";
+import type { TIssue, TIssuesResponse } from "@operoz/types";
 
 export function extractIssuesFromResponse(response: TIssuesResponse | undefined, limit = 8): TIssue[] {
   if (!response?.results) return [];

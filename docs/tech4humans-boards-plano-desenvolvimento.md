@@ -46,28 +46,28 @@ Documento interno de engenharia e produto. Descreve o que existe hoje no fork, o
 Workspace → Board (time) → Projeto (épico) → Card → Subtarefa → Subtarefa …
 ```
 
-| Vocabulário equipa | No Plane | Exemplo |
-|--------------------|----------|---------|
-| Workspace | `Workspace` | Tech4Humans |
-| Board / time | `Board` | Squad as a Service |
-| Projeto / épico | `Project` | `[Allianz] Ouvidoria` |
-| Card | `Issue` | OPS-17 |
-| Subtarefa | `Issue` (filho) | aninhável |
+| Vocabulário equipa | No Plane        | Exemplo               |
+| ------------------ | --------------- | --------------------- |
+| Workspace          | `Workspace`     | Tech4Humans           |
+| Board / time       | `Board`         | Squad as a Service    |
+| Projeto / épico    | `Project`       | `[Allianz] Ouvidoria` |
+| Card               | `Issue`         | OPS-17                |
+| Subtarefa          | `Issue` (filho) | aninhável             |
 
-- **«Épico» = Projeto** no modelo de dados. Não confundir com **Módulo** (agrupamento opcional *dentro* do projeto).
+- **«Épico» = Projeto** no modelo de dados. Não confundir com **Módulo** (agrupamento opcional _dentro_ do projeto).
 - **Board** não contém cards diretamente; contém **projetos**. Cards vivem no projeto (como hoje).
 - **MVP estrutural:** sidebar e rotas até Board + Projeto; cards/subtarefas na UI atual do projeto.
 
 ### 1.1 O que se quer (estilo Jira)
 
-| Nível | Papel | Exemplo Tech4Humans |
-|-------|--------|---------------------|
-| Workspace | Empresa / instância lógica | Tech4Humans |
-| **Board** | Time, círculo, área (container + **visões cross-project** no MVP-2) | `Squad as a Service`, Implantação Esteira, Webapp |
-| **Projeto (épico)** | Cliente / iniciativa / entrega grande | `[Allianz] Ouvidoria`, `[MAPFRE] Agiliza Corretor` |
-| Módulo | Marco ou tema *opcional dentro do projeto* | Sprint theme, fase — **não** é o épico do board |
-| Card | Item de trabalho | Issue no quadro/lista |
-| Subtarefa | Filho do card | Sub-issue (vários níveis) |
+| Nível               | Papel                                                               | Exemplo Tech4Humans                                |
+| ------------------- | ------------------------------------------------------------------- | -------------------------------------------------- |
+| Workspace           | Empresa / instância lógica                                          | Tech4Humans                                        |
+| **Board**           | Time, círculo, área (container + **visões cross-project** no MVP-2) | `Squad as a Service`, Implantação Esteira, Webapp  |
+| **Projeto (épico)** | Cliente / iniciativa / entrega grande                               | `[Allianz] Ouvidoria`, `[MAPFRE] Agiliza Corretor` |
+| Módulo              | Marco ou tema _opcional dentro do projeto_                          | Sprint theme, fase — **não** é o épico do board    |
+| Card                | Item de trabalho                                                    | Issue no quadro/lista                              |
+| Subtarefa           | Filho do card                                                       | Sub-issue (vários níveis)                          |
 
 ### 1.2 O que **não** é este board
 
@@ -100,12 +100,12 @@ Workspace (db.Workspace)
             └── Module, Cycle, Issue, Page, View, State, ...
 ```
 
-- **Projeto:** `apps/api/operis/db/models/project.py` — `workspace = ForeignKey(WorkSpace)`.
+- **Projeto:** `apps/api/operoz/db/models/project.py` — `workspace = ForeignKey(WorkSpace)`.
 - **Entidades de projeto:** herdam `ProjectBaseModel` / `WorkspaceBaseModel` com `workspace` + `project`.
 
 ### 2.2 Modelo `Team` (legado parcial)
 
-- **Existe:** `Team` em `apps/api/operis/db/models/workspace.py` (`name`, `description`, `workspace`, `logo_props`).
+- **Existe:** `Team` em `apps/api/operoz/db/models/workspace.py` (`name`, `description`, `workspace`, `logo_props`).
 - **Removido:** `TeamMember`, `TeamPage` (migração `0086_*`).
 - **Sem** FK `board`/`team` em `Project`.
 - **Frontend CE:** `teamspace-list.tsx` exporta componente que **retorna `null`**; stores `ce/store/issue/team*` existem para rotas `teamspaceId` que **não** estão no `core.ts` de rotas ativas.
@@ -128,7 +128,7 @@ GET /api/workspaces/{slug}/projects/
 GET /api/workspaces/{slug}/projects/details/
 ```
 
-Implementação: `apps/api/operis/app/views/project/base.py` (`ProjectViewSet`) — filtra por `workspace__slug`, membership (`ProjectMember`, rede pública/privada), `sort_order` via `ProjectUserProperty`.
+Implementação: `apps/api/operoz/app/views/project/base.py` (`ProjectViewSet`) — filtra por `workspace__slug`, membership (`ProjectMember`, rede pública/privada), `sort_order` via `ProjectUserProperty`.
 
 ### 2.4 Permissões hoje
 
@@ -138,33 +138,33 @@ Implementação: `apps/api/operis/app/views/project/base.py` (`ProjectViewSet`) 
 
 Arquivos-chave:
 
-- `apps/api/operis/app/permissions/base.py`
-- `apps/api/operis/app/permissions/project.py`
+- `apps/api/operoz/app/permissions/base.py`
+- `apps/api/operoz/app/permissions/project.py`
 
 ### 2.5 Frontend Web — navegação
 
-| Área | Arquivo / nota |
-|------|----------------|
-| Rotas workspace | `apps/web/app/routes/core.ts` — `/:workspaceSlug`, `/:workspaceSlug/projects/:projectId/...` |
-| Sidebar projetos (lista plana) | `core/components/workspace/sidebar/projects-list.tsx` |
-| Itens fixos workspace | `core/components/workspace/sidebar/sidebar-menu-items.tsx` |
-| Constantes sidebar | `packages/constants/src/workspace.ts` (`WORKSPACE_SIDEBAR_*`) |
-| Store projetos | `core/store/project/project.store.ts` — `fetchProjects`, `joinedProjectIds`, favoritos |
-| Serviços HTTP | `packages/services` — paths com `workspaces/.../projects/...` |
-| Tipos | `packages/types/src/project/projects.ts` — `IProject` sem `board_id` |
-| Settings workspace | `packages/constants/src/settings/workspace.ts` — sem tab «boards» |
-| Home / recentes | widgets no workspace home — referenciam projetos, não boards |
-| Power K / busca | `top-nav-power-k.tsx` — comandos por workspace/projeto |
-| Onboarding | convite de equipa (texto), não estrutura board |
+| Área                           | Arquivo / nota                                                                               |
+| ------------------------------ | -------------------------------------------------------------------------------------------- |
+| Rotas workspace                | `apps/web/app/routes/core.ts` — `/:workspaceSlug`, `/:workspaceSlug/projects/:projectId/...` |
+| Sidebar projetos (lista plana) | `core/components/workspace/sidebar/projects-list.tsx`                                        |
+| Itens fixos workspace          | `core/components/workspace/sidebar/sidebar-menu-items.tsx`                                   |
+| Constantes sidebar             | `packages/constants/src/workspace.ts` (`WORKSPACE_SIDEBAR_*`)                                |
+| Store projetos                 | `core/store/project/project.store.ts` — `fetchProjects`, `joinedProjectIds`, favoritos       |
+| Serviços HTTP                  | `packages/services` — paths com `workspaces/.../projects/...`                                |
+| Tipos                          | `packages/types/src/project/projects.ts` — `IProject` sem `board_id`                         |
+| Settings workspace             | `packages/constants/src/settings/workspace.ts` — sem tab «boards»                            |
+| Home / recentes                | widgets no workspace home — referenciam projetos, não boards                                 |
+| Power K / busca                | `top-nav-power-k.tsx` — comandos por workspace/projeto                                       |
+| Onboarding                     | convite de equipa (texto), não estrutura board                                               |
 
 ### 2.6 Outros apps
 
-| App | Impacto boards |
-|-----|----------------|
-| **web** | Principal — sidebar, rotas, stores, modais |
+| App       | Impacto boards                                                   |
+| --------- | ---------------------------------------------------------------- |
+| **web**   | Principal — sidebar, rotas, stores, modais                       |
 | **space** | Publicação por projeto; sem hierarquia board na URL pública hoje |
 | **admin** | Instance/workspace admin; listagem workspace + contagem projetos |
-| **api** | Fonte de verdade |
+| **api**   | Fonte de verdade                                                 |
 
 ### 2.7 O que a doc de organização já diz
 
@@ -185,19 +185,19 @@ Este plano assume **implementação real** (modelo + API + UI), salvo decisão e
 
 ### 3.1 Tabela de decisões (registro oficial)
 
-| # | Pergunta | **Decisão Tech4Humans** | Implicação técnica |
-|---|----------|-------------------------|-------------------|
-| **D1** | Nome na UI (PT) | **Board / Boards** na interface (sidebar: «Boards»). Código e BD: entidade `Board`. | i18n: chaves `boards.*`; evitar «Quadro» para não confundir com layout Kanban de itens. |
-| **D2** | Projeto sem board? | **Obrigatório para projetos novos** — criação exige escolher um board. | Validação API `POST /projects/` (`board_id` required). UI: select obrigatório no modal. |
-| **D3** | Quem vê um board? | **Todos os membros ativos do workspace** veem todos os boards (não arquivados). Acesso ao **conteúdo** do projeto mantém regras atuais (`ProjectMember`, rede pública/privada, guest). | **MVP sem `BoardMember`.** Permissão de board = membership workspace; não é necessário nível `BOARD` no decorator para listar. |
-| **D4** | Quem cria board? | **Só administradores do workspace.** | `@allow_permission(..., level="WORKSPACE", roles=[ADMIN])` em `POST /boards/`. |
-| **D5** | Mover projeto entre boards? | **Sim** — após criado, via edição do projeto ou ação «Mover para board…». | `PATCH /projects/{id}/` com `board_id`; validar mesmo `workspace_id`. |
-| **D6** | Board arquivado? | **Sim** — `archived_at`; board some da sidebar principal; **projetos continuam acessíveis** por URL direta e busca. | Filtro default `archived_at IS NULL` nas listagens; secção opcional «Boards arquivados» em settings. |
-| **D7** | URL canônica | **Slug legível** — `/{workspaceSlug}/boards/{boardSlug}` (único por workspace). UUID interno só na API/BD. | Campo `slug` em `Board` + validador (como workspace); redirect se slug antigo mudar (fase 2). |
-| **D8** | Analytics workspace | **Incluir no MVP** — filtros/agregação por board nas telas de analytics do workspace. | Endpoints analytics aceitam `?board_id=` ou agregam por board; UI seletor de board. |
-| **D9** | Modelo na BD | **Novo modelo `Board`** (não reutilizar tabela `teams` legada). | Tabela `boards`; ignorar `Team` órfão ou deprecar em migração futura. |
-| **D10** | Migração projetos existentes | **Não criar board «Geral» automático** — projetos atuais ficam com `board_id = null` até classificação manual. | Secção sidebar **«Sem board»** (só projetos legados); admins organizam ao longo do tempo. **Novos** projetos não podem ficar null (D2). |
-| **D2b** | Voltar a «Sem board»? | **Não** — depois que um projeto recebe `board_id`, `PATCH` não aceita `null`. | Serializer/validação em `PATCH /projects/{id}/`; UI sem opção «Remover do board». |
+| #       | Pergunta                     | **Decisão Tech4Humans**                                                                                                                                                                | Implicação técnica                                                                                                                      |
+| ------- | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| **D1**  | Nome na UI (PT)              | **Board / Boards** na interface (sidebar: «Boards»). Código e BD: entidade `Board`.                                                                                                    | i18n: chaves `boards.*`; evitar «Quadro» para não confundir com layout Kanban de itens.                                                 |
+| **D2**  | Projeto sem board?           | **Obrigatório para projetos novos** — criação exige escolher um board.                                                                                                                 | Validação API `POST /projects/` (`board_id` required). UI: select obrigatório no modal.                                                 |
+| **D3**  | Quem vê um board?            | **Todos os membros ativos do workspace** veem todos os boards (não arquivados). Acesso ao **conteúdo** do projeto mantém regras atuais (`ProjectMember`, rede pública/privada, guest). | **MVP sem `BoardMember`.** Permissão de board = membership workspace; não é necessário nível `BOARD` no decorator para listar.          |
+| **D4**  | Quem cria board?             | **Só administradores do workspace.**                                                                                                                                                   | `@allow_permission(..., level="WORKSPACE", roles=[ADMIN])` em `POST /boards/`.                                                          |
+| **D5**  | Mover projeto entre boards?  | **Sim** — após criado, via edição do projeto ou ação «Mover para board…».                                                                                                              | `PATCH /projects/{id}/` com `board_id`; validar mesmo `workspace_id`.                                                                   |
+| **D6**  | Board arquivado?             | **Sim** — `archived_at`; board some da sidebar principal; **projetos continuam acessíveis** por URL direta e busca.                                                                    | Filtro default `archived_at IS NULL` nas listagens; secção opcional «Boards arquivados» em settings.                                    |
+| **D7**  | URL canônica                 | **Slug legível** — `/{workspaceSlug}/boards/{boardSlug}` (único por workspace). UUID interno só na API/BD.                                                                             | Campo `slug` em `Board` + validador (como workspace); redirect se slug antigo mudar (fase 2).                                           |
+| **D8**  | Analytics workspace          | **Incluir no MVP** — filtros/agregação por board nas telas de analytics do workspace.                                                                                                  | Endpoints analytics aceitam `?board_id=` ou agregam por board; UI seletor de board.                                                     |
+| **D9**  | Modelo na BD                 | **Novo modelo `Board`** (não reutilizar tabela `teams` legada).                                                                                                                        | Tabela `boards`; ignorar `Team` órfão ou deprecar em migração futura.                                                                   |
+| **D10** | Migração projetos existentes | **Não criar board «Geral» automático** — projetos atuais ficam com `board_id = null` até classificação manual.                                                                         | Secção sidebar **«Sem board»** (só projetos legados); admins organizam ao longo do tempo. **Novos** projetos não podem ficar null (D2). |
+| **D2b** | Voltar a «Sem board»?        | **Não** — depois que um projeto recebe `board_id`, `PATCH` não aceita `null`.                                                                                                          | Serializer/validação em `PATCH /projects/{id}/`; UI sem opção «Remover do board».                                                       |
 
 ### 3.2 Regras derivadas (combinar D2 + D10 + D2b)
 
@@ -211,21 +211,21 @@ Estas duas decisões parecem contraditórias mas combinam assim:
 
 ### 3.3 O que fica fora do MVP (explícito)
 
-| Item | Motivo |
-|------|--------|
-| `BoardMember` e permissão por board | D3: visibilidade = workspace inteiro |
-| Rotas públicas Space com board | Space permanece por projeto |
+| Item                                | Motivo                                                     |
+| ----------------------------------- | ---------------------------------------------------------- |
+| `BoardMember` e permissão por board | D3: visibilidade = workspace inteiro                       |
+| Rotas públicas Space com board      | Space permanece por projeto                                |
 | Slug de board na URL de **projeto** | Projeto mantém `/{workspaceSlug}/projects/{projectId}/...` |
-| Renomear/reaproveitar modelo `Team` | D9 |
+| Renomear/reaproveitar modelo `Team` | D9                                                         |
 
 ### 3.4 Campos obrigatórios no modelo `Board` (pós-decisões)
 
 Além dos campos do §4.2, incluir desde o MVP:
 
-| Campo | Motivo |
-|-------|--------|
-| `slug` | D7 — URLs legíveis, único por workspace |
-| `archived_at` | D6 |
+| Campo         | Motivo                                  |
+| ------------- | --------------------------------------- |
+| `slug`        | D7 — URLs legíveis, único por workspace |
+| `archived_at` | D6                                      |
 
 ### 3.5 Checklist pós-workshop
 
@@ -250,29 +250,29 @@ Workspace
 
 ### 4.2 Campos sugeridos — `Board`
 
-| Campo | Tipo | Notas |
-|-------|------|--------|
-| `id` | UUID | PK (padrão `BaseModel`) |
-| `workspace_id` | FK | CASCADE |
-| `name` | string 255 | único por workspace (soft-delete aware) |
-| `slug` | slug 48 | único por workspace (D7); usado na URL |
-| `description` | text | opcional |
-| `archived_at` | datetime | null = ativo (D6) |
-| `logo_props` | JSON | alinhado a projeto/workspace |
-| `sort_order` | float | ordenação na sidebar |
-| `archived_at` | datetime | null = ativo |
-| `created_by` / timestamps | | padrão BaseModel |
+| Campo                     | Tipo       | Notas                                   |
+| ------------------------- | ---------- | --------------------------------------- |
+| `id`                      | UUID       | PK (padrão `BaseModel`)                 |
+| `workspace_id`            | FK         | CASCADE                                 |
+| `name`                    | string 255 | único por workspace (soft-delete aware) |
+| `slug`                    | slug 48    | único por workspace (D7); usado na URL  |
+| `description`             | text       | opcional                                |
+| `archived_at`             | datetime   | null = ativo (D6)                       |
+| `logo_props`              | JSON       | alinhado a projeto/workspace            |
+| `sort_order`              | float      | ordenação na sidebar                    |
+| `archived_at`             | datetime   | null = ativo                            |
+| `created_by` / timestamps |            | padrão BaseModel                        |
 
 Índices: `(workspace_id, name)` unique com `deleted_at IS NULL`.
 
 ### 4.3 Campos sugeridos — `BoardMember` (se D3 = membros explícitos)
 
-| Campo | Tipo |
-|-------|------|
-| `board_id` | FK |
-| `member_id` | FK User |
-| `role` | smallint (Admin/Member/Guest do board) |
-| `is_active` | bool |
+| Campo       | Tipo                                   |
+| ----------- | -------------------------------------- |
+| `board_id`  | FK                                     |
+| `member_id` | FK User                                |
+| `role`      | smallint (Admin/Member/Guest do board) |
+| `is_active` | bool                                   |
 
 ### 4.4 Alteração em `Project`
 
@@ -320,17 +320,17 @@ board = models.ForeignKey(
 
 ### 6.1 Tarefas Django
 
-| # | Tarefa | Arquivo / ação |
-|---|--------|----------------|
-| 1.1 | Criar modelo `Board` | `apps/api/operis/db/models/board.py` (ou `workspace.py`) |
-| 1.2 | Criar modelo `BoardMember` (se aplicável) | idem |
-| 1.3 | Registrar em `db/models/__init__.py` | export |
-| 1.4 | Adicionar `Project.board` | `db/models/project.py` |
-| 1.5 | `save()` / constraint | validar workspace coerente |
-| 1.6 | Migration `CreateModel Board` | `db/migrations/XXXX_*.py` |
-| 1.7 | Migration `AddField project.board` | nullable |
-| 1.8 | Data migration | **nenhuma** atribuição automática — projetos existentes permanecem `board_id = null` (D10) |
-| 1.9 | Índices | `board_id`, `(workspace_id, sort_order)` |
+| #   | Tarefa                                    | Arquivo / ação                                                                             |
+| --- | ----------------------------------------- | ------------------------------------------------------------------------------------------ |
+| 1.1 | Criar modelo `Board`                      | `apps/api/operoz/db/models/board.py` (ou `workspace.py`)                                   |
+| 1.2 | Criar modelo `BoardMember` (se aplicável) | idem                                                                                       |
+| 1.3 | Registrar em `db/models/__init__.py`      | export                                                                                     |
+| 1.4 | Adicionar `Project.board`                 | `db/models/project.py`                                                                     |
+| 1.5 | `save()` / constraint                     | validar workspace coerente                                                                 |
+| 1.6 | Migration `CreateModel Board`             | `db/migrations/XXXX_*.py`                                                                  |
+| 1.7 | Migration `AddField project.board`        | nullable                                                                                   |
+| 1.8 | Data migration                            | **nenhuma** atribuição automática — projetos existentes permanecem `board_id = null` (D10) |
+| 1.9 | Índices                                   | `board_id`, `(workspace_id, sort_order)`                                                   |
 
 ### 6.2 Migração de dados (detalhe)
 
@@ -360,62 +360,62 @@ board = models.ForeignKey(
 
 Prefixo: `/api/workspaces/{slug}/boards/`
 
-| Método | Path | Descrição | Permissão |
-|--------|------|-----------|-----------|
-| GET | `/boards/` | Listar boards do workspace | WORKSPACE member+ |
-| POST | `/boards/` | Criar board | WORKSPACE admin |
-| GET | `/boards/{board_id}/` | Detalhe | board access |
-| PATCH | `/boards/{board_id}/` | Atualizar nome, logo, sort | board admin |
-| DELETE | `/boards/{board_id}/` | Soft delete | WORKSPACE admin |
-| POST | `/boards/{board_id}/archive/` | Arquivar | WORKSPACE admin |
-| GET | `/boards/{board_id}/projects/` | Projetos do board | composto board + project rules |
-| PATCH | `/boards/{board_id}/projects/reorder/` | Reordenar `sort_order` projetos | PROJECT admin no board |
+| Método | Path                                   | Descrição                       | Permissão                      |
+| ------ | -------------------------------------- | ------------------------------- | ------------------------------ |
+| GET    | `/boards/`                             | Listar boards do workspace      | WORKSPACE member+              |
+| POST   | `/boards/`                             | Criar board                     | WORKSPACE admin                |
+| GET    | `/boards/{board_id}/`                  | Detalhe                         | board access                   |
+| PATCH  | `/boards/{board_id}/`                  | Atualizar nome, logo, sort      | board admin                    |
+| DELETE | `/boards/{board_id}/`                  | Soft delete                     | WORKSPACE admin                |
+| POST   | `/boards/{board_id}/archive/`          | Arquivar                        | WORKSPACE admin                |
+| GET    | `/boards/{board_id}/projects/`         | Projetos do board               | composto board + project rules |
+| PATCH  | `/boards/{board_id}/projects/reorder/` | Reordenar `sort_order` projetos | PROJECT admin no board         |
 
 Membros do board (se `BoardMember`):
 
-| Método | Path |
-|--------|------|
-| GET/POST | `/boards/{board_id}/members/` |
+| Método       | Path                               |
+| ------------ | ---------------------------------- |
+| GET/POST     | `/boards/{board_id}/members/`      |
 | PATCH/DELETE | `/boards/{board_id}/members/{id}/` |
 
 ### 7.2 Alterações em endpoints existentes
 
-| Endpoint | Alteração |
-|----------|-----------|
-| `GET /projects/`, `GET /projects/details/` | Incluir `board_id`, `board` lite (id, name, logo_props); filtro `?board_id=` |
-| `POST /projects/` | **`board_id` obrigatório**; validar workspace e existência do board |
-| `PATCH /projects/{id}/` | Permitir mover `board_id` entre boards; **rejeitar `board_id: null`** se o projeto já tiver board |
-| Serializers | `ProjectListSerializer`, `ProjectSerializer`, `ProjectDetailSerializer` — `apps/api/operis/app/serializers/project.py` |
+| Endpoint                                   | Alteração                                                                                                              |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `GET /projects/`, `GET /projects/details/` | Incluir `board_id`, `board` lite (id, name, logo_props); filtro `?board_id=`                                           |
+| `POST /projects/`                          | **`board_id` obrigatório**; validar workspace e existência do board                                                    |
+| `PATCH /projects/{id}/`                    | Permitir mover `board_id` entre boards; **rejeitar `board_id: null`** se o projeto já tiver board                      |
+| Serializers                                | `ProjectListSerializer`, `ProjectSerializer`, `ProjectDetailSerializer` — `apps/api/operoz/app/serializers/project.py` |
 
 ### 7.3 Arquivos a criar
 
 ```
-apps/api/operis/app/views/board/
+apps/api/operoz/app/views/board/
   __init__.py
   base.py          # BoardViewSet
   member.py        # opcional
-apps/api/operis/app/serializers/board.py
-apps/api/operis/app/urls/board.py
+apps/api/operoz/app/serializers/board.py
+apps/api/operoz/app/urls/board.py
 ```
 
-Registrar em `apps/api/operis/app/urls/__init__.py`.
+Registrar em `apps/api/operoz/app/urls/__init__.py`.
 
 ### 7.4 Webhooks e atividade
 
-| Evento | Ação |
-|--------|------|
+| Evento                            | Ação                                                   |
+| --------------------------------- | ------------------------------------------------------ |
 | `board.created` / `board.updated` | `webhook_activity` / `model_activity` (padrão projeto) |
-| Payload projeto | incluir `board_id` |
+| Payload projeto                   | incluir `board_id`                                     |
 
 Arquivos: `plane/bgtasks/webhook_task.py`, registros de eventos.
 
 ### 7.5 OpenAPI / API pública
 
-- Atualizar `apps/api/operis/settings/openapi.py` e rotas `plane/api/` se expuser boards a integrações.
+- Atualizar `apps/api/operoz/settings/openapi.py` e rotas `plane/api/` se expuser boards a integrações.
 
 ### 7.6 Busca workspace
 
-- `apps/api/operis/app/views/search.py` (e equivalentes): facet opcional `board_id`; resultados de projeto com board.
+- `apps/api/operoz/app/views/search.py` (e equivalentes): facet opcional `board_id`; resultados de projeto com board.
 
 ---
 
@@ -432,17 +432,17 @@ Estender `allow_permission`:
 # kwargs: slug, board_id
 ```
 
-Implementação em `apps/api/operis/app/permissions/base.py` + `board.py`.
+Implementação em `apps/api/operoz/app/permissions/base.py` + `board.py`.
 
 ### 8.2 Regras MVP sugeridas
 
-| Ação | Quem |
-|------|------|
-| Ver lista de boards | Workspace member ativo |
-| Criar/editar/arquivar board | Workspace admin |
+| Ação                         | Quem                                                                                       |
+| ---------------------------- | ------------------------------------------------------------------------------------------ |
+| Ver lista de boards          | Workspace member ativo                                                                     |
+| Criar/editar/arquivar board  | Workspace admin                                                                            |
 | Ver projetos dentro do board | União: (membro board OU workspace admin) E regras atuais de `ProjectMember` / rede pública |
-| Criar projeto no board | Quem pode criar projeto no workspace + `board_id` válido |
-| Mover projeto | Project admin + workspace admin |
+| Criar projeto no board       | Quem pode criar projeto no workspace + `board_id` válido                                   |
+| Mover projeto                | Project admin + workspace admin                                                            |
 
 ### 8.3 Queries seguras
 
@@ -506,11 +506,11 @@ Atualizar serviço de projeto para query `board_id`.
 
 ### 10.1 Store MobX
 
-| Store | Responsabilidade |
-|-------|------------------|
-| `BoardStore` (novo) | `boardMap`, `fetchBoards`, CRUD, `boardsByWorkspace` |
-| `ProjectStore` | passar a agrupar `joinedProjectIds` por `board_id`; `fetchProjects` hidrata boards |
-| `RootStore` | registrar `boardStore` em `core/store/root.store.ts` |
+| Store               | Responsabilidade                                                                   |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| `BoardStore` (novo) | `boardMap`, `fetchBoards`, CRUD, `boardsByWorkspace`                               |
+| `ProjectStore`      | passar a agrupar `joinedProjectIds` por `board_id`; `fetchProjects` hidrata boards |
+| `RootStore`         | registrar `boardStore` em `core/store/root.store.ts`                               |
 
 Padrão: espelhar `project.store.ts`.
 
@@ -542,25 +542,25 @@ Manter rotas de projeto **sem** exigir board na URL.
 
 Tarefas:
 
-| # | Componente | Ação |
-|---|------------|------|
-| 10.3.1 | `boards-list.tsx` (novo) | Disclosure por board |
-| 10.3.2 | `board-projects-list.tsx` | Reutilizar `SidebarProjectsListItem` |
-| 10.3.3 | Drag-and-drop | Reordenar boards; reordenar projetos **dentro** do board (persistir `Board.sort_order` e `ProjectUserProperty.sort_order`) |
-| 10.3.4 | `CreateBoardModal` | Novo |
-| 10.3.5 | `CreateProjectModal` | Select «Board» |
-| 10.3.6 | `use-navigation-preferences` | Preferência «expandir boards» / limite de projetos por board |
-| 10.3.7 | Extended sidebar | Avaliar se «Projetos» vira entrada por board |
+| #      | Componente                   | Ação                                                                                                                       |
+| ------ | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| 10.3.1 | `boards-list.tsx` (novo)     | Disclosure por board                                                                                                       |
+| 10.3.2 | `board-projects-list.tsx`    | Reutilizar `SidebarProjectsListItem`                                                                                       |
+| 10.3.3 | Drag-and-drop                | Reordenar boards; reordenar projetos **dentro** do board (persistir `Board.sort_order` e `ProjectUserProperty.sort_order`) |
+| 10.3.4 | `CreateBoardModal`           | Novo                                                                                                                       |
+| 10.3.5 | `CreateProjectModal`         | Select «Board»                                                                                                             |
+| 10.3.6 | `use-navigation-preferences` | Preferência «expandir boards» / limite de projetos por board                                                               |
+| 10.3.7 | Extended sidebar             | Avaliar se «Projetos» vira entrada por board                                                                               |
 
 ### 10.4 Páginas e layouts
 
-| Página | Alteração |
-|--------|-----------|
-| Workspace home | Widget «Recentes» agrupado ou badge de board |
-| Workspace settings | Secção gerir boards (lista, arquivar) |
-| Project settings | Mostrar board atual; link «Mover para outro board» |
-| Command palette / Power K | Comandos: «Ir para board X», «Criar projeto em board Y» |
-| Breadcrumbs | `Workspace > Board > Projeto > …` em `ce/components/breadcrumbs` |
+| Página                    | Alteração                                                        |
+| ------------------------- | ---------------------------------------------------------------- |
+| Workspace home            | Widget «Recentes» agrupado ou badge de board                     |
+| Workspace settings        | Secção gerir boards (lista, arquivar)                            |
+| Project settings          | Mostrar board atual; link «Mover para outro board»               |
+| Command palette / Power K | Comandos: «Ir para board X», «Criar projeto em board Y»          |
+| Breadcrumbs               | `Workspace > Board > Projeto > …` em `ce/components/breadcrumbs` |
 
 ### 10.5 Hooks
 
@@ -570,12 +570,12 @@ Tarefas:
 
 ### 10.6 Limpeza CE legado (recomendado no mesmo epic)
 
-| Item | Ação |
-|------|------|
-| `ce/store/issue/team*` | Remover ou redirecionar para board se morto |
-| `teamspaceId` em `issue/root.store.ts` | Deprecar após confirmar rotas inexistentes |
-| `ProjectTeamspaceList` | Remover ou implementar de verdade |
-| i18n `team` / `teams` | Alinhar com «Board»/«Time» |
+| Item                                   | Ação                                        |
+| -------------------------------------- | ------------------------------------------- |
+| `ce/store/issue/team*`                 | Remover ou redirecionar para board se morto |
+| `teamspaceId` em `issue/root.store.ts` | Deprecar após confirmar rotas inexistentes  |
+| `ProjectTeamspaceList`                 | Remover ou implementar de verdade           |
+| i18n `team` / `teams`                  | Alinhar com «Board»/«Time»                  |
 
 ### 10.7 CE / plane-web
 
@@ -590,20 +590,20 @@ Tarefas:
 
 ### 11.1 Funcionalidades a revisar
 
-| Área | O que fazer |
-|------|-------------|
-| **Favoritos** | `UserFavorite` entity_type project — manter; UI agrupa por board |
-| **Recentes** | `recent_visited_task` — incluir `board_id` no payload se útil |
-| **Notificações** | Templates email — sem mudança obrigatória MVP |
-| **Analytics workspace** | `apps/api/.../analytic/` — filtros por `board_id` **no MVP** (D8) |
-| **Workspace views (globais)** | Filtro opcional por projetos de um board |
-| **Imports (Jira/GitHub)** | Mapear Jira «board» → `Board`; projeto → `Project` |
-| **Webhooks** | Documentar novos eventos |
-| **API keys / automações** | Expor `board_id` em payloads projeto |
-| **Mobile** | Fora de escopo MVP web-only |
-| **Space (`apps/space`)** | Sem board na URL pública MVP |
-| **Admin (`apps/admin`)** | Contagem boards por workspace (opcional) |
-| **Docker / deploy** | Apenas migration na subida |
+| Área                          | O que fazer                                                       |
+| ----------------------------- | ----------------------------------------------------------------- |
+| **Favoritos**                 | `UserFavorite` entity_type project — manter; UI agrupa por board  |
+| **Recentes**                  | `recent_visited_task` — incluir `board_id` no payload se útil     |
+| **Notificações**              | Templates email — sem mudança obrigatória MVP                     |
+| **Analytics workspace**       | `apps/api/.../analytic/` — filtros por `board_id` **no MVP** (D8) |
+| **Workspace views (globais)** | Filtro opcional por projetos de um board                          |
+| **Imports (Jira/GitHub)**     | Mapear Jira «board» → `Board`; projeto → `Project`                |
+| **Webhooks**                  | Documentar novos eventos                                          |
+| **API keys / automações**     | Expor `board_id` em payloads projeto                              |
+| **Mobile**                    | Fora de escopo MVP web-only                                       |
+| **Space (`apps/space`)**      | Sem board na URL pública MVP                                      |
+| **Admin (`apps/admin`)**      | Contagem boards por workspace (opcional)                          |
+| **Docker / deploy**           | Apenas migration na subida                                        |
 
 ### 11.2 Performance
 
@@ -620,10 +620,10 @@ Tarefas:
 
 ### 12.1 Ambientes
 
-| Ambiente | Passos |
-|----------|--------|
-| Dev local | `docker-compose` + `python manage.py migrate` |
-| Staging | backup PG + migrate + smoke |
+| Ambiente             | Passos                                                        |
+| -------------------- | ------------------------------------------------------------- |
+| Dev local            | `docker-compose` + `python manage.py migrate`                 |
+| Staging              | backup PG + migrate + smoke                                   |
 | Produção Tech4Humans | janela + backup + migrate + verificar contagem projetos/board |
 
 ### 12.2 Comunicação
@@ -668,11 +668,11 @@ Tarefas:
 
 Se prazo impedir modelo real (doc §5):
 
-| Prós | Contras |
-|------|---------|
-| 1–2 semanas | Não é «board com projetos» de verdade |
-| Sem migration | Permissões por time impossíveis |
-| Agrupar por prefixo no nome (`[Time] Proj`) | Imports/API não entendem board |
+| Prós                                        | Contras                               |
+| ------------------------------------------- | ------------------------------------- |
+| 1–2 semanas                                 | Não é «board com projetos» de verdade |
+| Sem migration                               | Permissões por time impossíveis       |
+| Agrupar por prefixo no nome (`[Time] Proj`) | Imports/API não entendem board        |
 
 Implementação: `groupProjectsByNamePrefix` na sidebar + filtros salvos — **não recomendado** para Tech4Humans se o objetivo é paridade Jira.
 
@@ -684,46 +684,48 @@ Implementação: `groupProjectsByNamePrefix` na sidebar + filtros salvos — **n
 
 Ver detalhe em [§18](#18-roadmap-de-entregas-mvp-vs-pós-mvp). Resumo:
 
-| Onda | Escopo | Semanas |
-|------|--------|---------|
-| **MVP-1** | Estrutura (sidebar, CRUD, slug, analytics filtro) | 8–10 |
-| **MVP-2** | Hub Jira (issues agregados, Cronograma, Backlog, Quadro, filtros) | 6–10 |
-| **Total** | Paridade com board da captura Jira | **14–20** |
+| Onda      | Escopo                                                            | Semanas   |
+| --------- | ----------------------------------------------------------------- | --------- |
+| **MVP-1** | Estrutura (sidebar, CRUD, slug, analytics filtro)                 | 8–10      |
+| **MVP-2** | Hub Jira (issues agregados, Cronograma, Backlog, Quadro, filtros) | 6–10      |
+| **Total** | Paridade com board da captura Jira                                | **14–20** |
 
 Desdobramento MVP-1 por fase:
 
-| Fase | Semanas |
-|------|---------|
-| 0 — Spec | 0,5–1 |
-| 1 — DB | 1 |
-| 2 — API | 1,5–2 |
-| 3 — Permissões | 1 |
-| 4 — Packages | 0,5 |
-| 5 — Web UI (sidebar + página board mínima) | 2–3 |
-| 6 — Transversal | 1–2 |
-| 7 — Migração prod | 0,5 |
-| 8 — QA | 1 |
+| Fase                                       | Semanas |
+| ------------------------------------------ | ------- |
+| 0 — Spec                                   | 0,5–1   |
+| 1 — DB                                     | 1       |
+| 2 — API                                    | 1,5–2   |
+| 3 — Permissões                             | 1       |
+| 4 — Packages                               | 0,5     |
+| 5 — Web UI (sidebar + página board mínima) | 2–3     |
+| 6 — Transversal                            | 1–2     |
+| 7 — Migração prod                          | 0,5     |
+| 8 — QA                                     | 1       |
 
 ### 15.2 Riscos
 
-| Risco | Mitigação |
-|-------|-----------|
+| Risco                             | Mitigação                                             |
+| --------------------------------- | ----------------------------------------------------- |
 | Regressão permissões guest/member | Matriz de testes §13; code review em `ProjectViewSet` |
-| Sidebar performance | Endpoint composto; virtualização lista |
-| Confusão Board vs Kanban | Nomenclatura UI «Time» / «Área» |
-| Débito teamspace CE | Limpeza na Fase 10.6 |
-| Scope creep (analytics, space) | MVP estrito §1.3 |
+| Sidebar performance               | Endpoint composto; virtualização lista                |
+| Confusão Board vs Kanban          | Nomenclatura UI «Time» / «Área»                       |
+| Débito teamspace CE               | Limpeza na Fase 10.6                                  |
+| Scope creep (analytics, space)    | MVP estrito §1.3                                      |
 
 ---
 
 ## 16. Checklist mestre
 
 ### Produto
+
 - [ ] D1–D10 decididos
 - [ ] Wireframes aprovados
 - [ ] Comunicação migração redigida
 
 ### Backend
+
 - [ ] Modelo `Board` (com `slug`, `archived_at`) — **sem** `BoardMember` no MVP
 - [ ] `Project.board_id` + validação (obrigatório em POST)
 - [ ] Migrations schema only (sem preencher boards em massa — D10)
@@ -733,6 +735,7 @@ Desdobramento MVP-1 por fase:
 - [ ] Webhooks / busca (mínimo)
 
 ### Frontend
+
 - [ ] Types + services + i18n
 - [ ] BoardStore + ProjectStore agrupado
 - [ ] Sidebar hierárquica
@@ -742,6 +745,7 @@ Desdobramento MVP-1 por fase:
 - [ ] Limpeza teamspace CE
 
 ### Operação
+
 - [ ] Feature flag
 - [ ] Backup + migrate staging/prod
 - [ ] Atualizar doc organização
@@ -752,13 +756,13 @@ Desdobramento MVP-1 por fase:
 ## Apêndice A — Mapa de arquivos principais (referência rápida)
 
 ```
-apps/api/operis/db/models/
+apps/api/operoz/db/models/
   workspace.py          # Workspace, Team (legado), WorkspaceMember
   project.py            # Project (+ board FK futuro)
   board.py              # NOVO
 
-apps/api/operis/app/views/project/base.py
-apps/api/operis/app/views/board/             # NOVO
+apps/api/operoz/app/views/project/base.py
+apps/api/operoz/app/views/board/             # NOVO
 
 apps/web/core/components/workspace/sidebar/
   projects-list.tsx                         # EVOLUIR
@@ -780,15 +784,15 @@ packages/i18n/src/locales/pt-BR/translations.ts
 
 ## Apêndice B — Comparação Jira × Plane (alvo)
 
-| Jira / negócio | Plane hoje | Plane alvo Tech4Humans |
-|--------------|------------|-------------------------|
-| Site / Organization | Instance | Instance |
-| Espaços | Workspace | Workspace |
-| Board / time | — | **Board** |
-| **Epic (épico de negócio)** | Project (sem board pai) | **Project** (filho de Board) |
-| Story / card | Issue | Issue |
-| Sub-task | Sub-issue | Sub-issue (aninhável) |
-| Epic técnico *dentro* do projeto (opcional) | Module | Module (inalterado, abaixo do projeto) |
+| Jira / negócio                              | Plane hoje              | Plane alvo Tech4Humans                 |
+| ------------------------------------------- | ----------------------- | -------------------------------------- |
+| Site / Organization                         | Instance                | Instance                               |
+| Espaços                                     | Workspace               | Workspace                              |
+| Board / time                                | —                       | **Board**                              |
+| **Epic (épico de negócio)**                 | Project (sem board pai) | **Project** (filho de Board)           |
+| Story / card                                | Issue                   | Issue                                  |
+| Sub-task                                    | Sub-issue               | Sub-issue (aninhável)                  |
+| Epic técnico _dentro_ do projeto (opcional) | Module                  | Module (inalterado, abaixo do projeto) |
 
 ---
 
@@ -800,17 +804,17 @@ Esta imagem define o **produto alvo** além da sidebar: o board é um **espaço 
 
 ### 17.1 Mapeamento de navegação (Jira → Plane)
 
-| Elemento na imagem Jira | Significado | Equivalente Plane (alvo) |
-|-------------------------|-------------|---------------------------|
-| **Espaços** (breadcrumb) | Workspace / organização | `Tech4Humans` — `Workspace` |
-| **`[NOVO] Squad as a Service`** | Board do time | `Board` (slug ex. `squad-as-a-service`) |
-| Abas: Resumo, Cronograma, Backlog, Quadro, Lista, Calendário | Modos de visualização **no board** | Rotas sob `/boards/{boardSlug}/…` (MVP-2) |
-| Abas extras (Deployments, Code, …) | Integrações Jira | Fora de escopo inicial; avaliar depois |
-| Lista `OPS-17`, `OPS-21`… | Issues de **vários** projetos no mesmo ecrã | Query agregada `issues WHERE project.board_id = X` |
-| Prefixos `[Allianz]`, `[MAPFRE]` no título | Cliente / iniciativa (já costuma ser o **nome do projeto** no Plane) | Manter em `Project.name`; filtro **Projeto** no board |
-| Barra roxa no cronograma | Épico / item de longa duração | `Issue` / `Module` com `start_date` + `target_date` |
-| Linha azul vertical «hoje» | Marcador de data atual | Componente timeline (reutilizar lógica de calendário/Gantt se existir) |
-| Escala: Hoje / Semanas / Meses / Trimestres | Zoom da timeline | Preferência de vista guardada no board ou no utilizador |
+| Elemento na imagem Jira                                      | Significado                                                          | Equivalente Plane (alvo)                                               |
+| ------------------------------------------------------------ | -------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| **Espaços** (breadcrumb)                                     | Workspace / organização                                              | `Tech4Humans` — `Workspace`                                            |
+| **`[NOVO] Squad as a Service`**                              | Board do time                                                        | `Board` (slug ex. `squad-as-a-service`)                                |
+| Abas: Resumo, Cronograma, Backlog, Quadro, Lista, Calendário | Modos de visualização **no board**                                   | Rotas sob `/boards/{boardSlug}/…` (MVP-2)                              |
+| Abas extras (Deployments, Code, …)                           | Integrações Jira                                                     | Fora de escopo inicial; avaliar depois                                 |
+| Lista `OPS-17`, `OPS-21`…                                    | Issues de **vários** projetos no mesmo ecrã                          | Query agregada `issues WHERE project.board_id = X`                     |
+| Prefixos `[Allianz]`, `[MAPFRE]` no título                   | Cliente / iniciativa (já costuma ser o **nome do projeto** no Plane) | Manter em `Project.name`; filtro **Projeto** no board                  |
+| Barra roxa no cronograma                                     | Épico / item de longa duração                                        | `Issue` / `Module` com `start_date` + `target_date`                    |
+| Linha azul vertical «hoje»                                   | Marcador de data atual                                               | Componente timeline (reutilizar lógica de calendário/Gantt se existir) |
+| Escala: Hoje / Semanas / Meses / Trimestres                  | Zoom da timeline                                                     | Preferência de vista guardada no board ou no utilizador                |
 
 ### 17.2 O que o Jira revela sobre o papel do Board
 
@@ -826,36 +830,36 @@ Esta imagem define o **produto alvo** além da sidebar: o board é um **espaço 
 
 ### 17.3 Lacunas do plano original vs esta referência
 
-| Já previsto no plano | **Não** previsto (adicionar) |
-|----------------------|------------------------------|
-| Sidebar Board → Projetos | Página do board com **tabs de vista** |
-| `GET /boards/` CRUD | `GET /boards/{slug}/issues/` (lista agregada) |
-| Analytics workspace + filtro board (D8) | Vista **Cronograma** ao nível do board |
-| Mover projeto entre boards | **Backlog** e **Quadro** Kanban **multi-projeto** no board |
-| Slug na URL do board (D7) | Conteúdo real nessa URL (hoje só «overview» vazio) |
+| Já previsto no plano                    | **Não** previsto (adicionar)                               |
+| --------------------------------------- | ---------------------------------------------------------- |
+| Sidebar Board → Projetos                | Página do board com **tabs de vista**                      |
+| `GET /boards/` CRUD                     | `GET /boards/{slug}/issues/` (lista agregada)              |
+| Analytics workspace + filtro board (D8) | Vista **Cronograma** ao nível do board                     |
+| Mover projeto entre boards              | **Backlog** e **Quadro** Kanban **multi-projeto** no board |
+| Slug na URL do board (D7)               | Conteúdo real nessa URL (hoje só «overview» vazio)         |
 
 ### 17.4 Requisitos derivados (para backlog)
 
 #### API (MVP-2)
 
-| Endpoint | Descrição |
-|----------|-----------|
-| `GET /workspaces/{slug}/boards/{board_slug}/issues/` | Issues de todos os projetos do board; paginação; mesmos filtros que issue list |
-| `GET /workspaces/{slug}/boards/{board_slug}/modules/` | Módulos agregados (épicos) para timeline |
-| `GET /workspaces/{slug}/boards/{board_slug}/meta/` | Contagem por estado, projetos incluídos, membros envolvidos |
-| Query params | `project_id`, `assignee`, `state`, `priority`, datas — espelhar filtros da imagem |
+| Endpoint                                              | Descrição                                                                         |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------- |
+| `GET /workspaces/{slug}/boards/{board_slug}/issues/`  | Issues de todos os projetos do board; paginação; mesmos filtros que issue list    |
+| `GET /workspaces/{slug}/boards/{board_slug}/modules/` | Módulos agregados (épicos) para timeline                                          |
+| `GET /workspaces/{slug}/boards/{board_slug}/meta/`    | Contagem por estado, projetos incluídos, membros envolvidos                       |
+| Query params                                          | `project_id`, `assignee`, `state`, `priority`, datas — espelhar filtros da imagem |
 
 Permissões: para cada issue devolvida, aplicar regra **ProjectMember** (guest não vê projeto privado mesmo que veja o board).
 
 #### Frontend (MVP-2)
 
-| Rota | Vista | Notas |
-|------|-------|-------|
-| `/boards/{boardSlug}` | **Resumo** | KPIs do board, projetos, alertas (parcial no MVP-1) |
-| `/boards/{boardSlug}/timeline` | **Cronograma** | Gantt multi-projeto; escala semanas/meses |
-| `/boards/{boardSlug}/backlog` | **Backlog** | Lista priorizável cross-project |
-| `/boards/{boardSlug}/views` | **Quadro / Lista** | Reutilizar `IssueLayoutStore` com `EIssuesStoreType.BOARD` (novo) |
-| `/boards/{boardSlug}/calendar` | **Calendário** | Issues com `target_date` agregados |
+| Rota                           | Vista              | Notas                                                             |
+| ------------------------------ | ------------------ | ----------------------------------------------------------------- |
+| `/boards/{boardSlug}`          | **Resumo**         | KPIs do board, projetos, alertas (parcial no MVP-1)               |
+| `/boards/{boardSlug}/timeline` | **Cronograma**     | Gantt multi-projeto; escala semanas/meses                         |
+| `/boards/{boardSlug}/backlog`  | **Backlog**        | Lista priorizável cross-project                                   |
+| `/boards/{boardSlug}/views`    | **Quadro / Lista** | Reutilizar `IssueLayoutStore` com `EIssuesStoreType.BOARD` (novo) |
+| `/boards/{boardSlug}/calendar` | **Calendário**     | Issues com `target_date` agregados                                |
 
 Barra de filtros fixa (sticky), como no Jira:
 
@@ -870,12 +874,12 @@ Barra de filtros fixa (sticky), como no Jira:
 
 ### 17.5 Exemplo concreto Tech4Humans
 
-| Jira (imagem) | Proposta Plane |
-|---------------|----------------|
-| Board `[NOVO] Squad as a Service` | Board `squad-as-a-service` (nome: «Squad as a Service») |
+| Jira (imagem)                            | Proposta Plane                                                         |
+| ---------------------------------------- | ---------------------------------------------------------------------- |
+| Board `[NOVO] Squad as a Service`        | Board `squad-as-a-service` (nome: «Squad as a Service»)                |
 | Projetos implícitos (Allianz, MAPFRE, …) | Projetos filhos: `[Allianz] Ouvidoria`, `[MAPFRE] Agiliza Corretor`, … |
-| Tickets `OPS-*` | Identificador do **projeto** (`OPS`) + sequence — inalterado |
-| Cronograma com vários clientes | Timeline do board filtra por projeto ou mostra todos |
+| Tickets `OPS-*`                          | Identificador do **projeto** (`OPS`) + sequence — inalterado           |
+| Cronograma com vários clientes           | Timeline do board filtra por projeto ou mostra todos                   |
 
 ### 17.6 O que **não** copiar do Jira neste epic
 
@@ -895,28 +899,28 @@ Reorganização do plano em duas ondas, para não subestimar o esforço após a 
 
 Inclui: §6–§8, §9–§10 (sidebar, CRUD, migração D10, D2, D2b, D7 slug, D8 analytics **por board**), sem vistas agregadas de issues.
 
-| Entregável | Critério de pronto |
-|------------|-------------------|
-| Modelo `Board` + `Project.board_id` | Migrations aplicadas |
-| API boards + projeto obrigatório | Postman / testes API |
-| Sidebar Board → Projetos + Sem board | UX igual convenção atual, hierárquica |
-| Página `/boards/{slug}` mínima | Nome, descrição, lista de projetos, link para cada projeto |
-| Analytics filtro board | D8 |
+| Entregável                           | Critério de pronto                                         |
+| ------------------------------------ | ---------------------------------------------------------- |
+| Modelo `Board` + `Project.board_id`  | Migrations aplicadas                                       |
+| API boards + projeto obrigatório     | Postman / testes API                                       |
+| Sidebar Board → Projetos + Sem board | UX igual convenção atual, hierárquica                      |
+| Página `/boards/{slug}` mínima       | Nome, descrição, lista de projetos, link para cada projeto |
+| Analytics filtro board               | D8                                                         |
 
 ### MVP-2 — Board como hub Jira (6–10 semanas adicionais)
 
 **Objetivo:** paridade com a captura Jira (Cronograma + filtros cross-project).
 
-| Entregável | Prioridade | Referência Jira |
-|------------|------------|-----------------|
-| `GET …/boards/{slug}/issues/` agregado | P0 | Lista + filtros |
-| Tab **Backlog** no board | P0 | Aba Backlog |
-| Tab **Lista** / **Quadro** no board | P0 | Lista / Quadro |
-| Filtro **Projeto** (multi-select) | P0 | Dropdown Projeto |
-| Tab **Cronograma** (timeline) | P1 | Cronograma |
-| Tab **Calendário** | P2 | Calendário |
-| Tab **Resumo** rica (widgets) | P2 | Resumo |
-| Escala Hoje/Semanas/Meses/Trimestres | P1 | Cantos da timeline |
+| Entregável                             | Prioridade | Referência Jira    |
+| -------------------------------------- | ---------- | ------------------ |
+| `GET …/boards/{slug}/issues/` agregado | P0         | Lista + filtros    |
+| Tab **Backlog** no board               | P0         | Aba Backlog        |
+| Tab **Lista** / **Quadro** no board    | P0         | Lista / Quadro     |
+| Filtro **Projeto** (multi-select)      | P0         | Dropdown Projeto   |
+| Tab **Cronograma** (timeline)          | P1         | Cronograma         |
+| Tab **Calendário**                     | P2         | Calendário         |
+| Tab **Resumo** rica (widgets)          | P2         | Resumo             |
+| Escala Hoje/Semanas/Meses/Trimestres   | P1         | Cantos da timeline |
 
 ### Pós-MVP
 
@@ -927,12 +931,12 @@ Inclui: §6–§8, §9–§10 (sidebar, CRUD, migração D10, D2, D2b, D7 slug, 
 
 ### Impacto na estimativa total
 
-| Onda | Semanas (1–2 devs) |
-|------|---------------------|
-| MVP-1 | 8–10 |
-| MVP-2 | 6–10 |
-| **Total até paridade Jira (visão board)** | **14–20 semanas** |
+| Onda                                      | Semanas (1–2 devs) |
+| ----------------------------------------- | ------------------ |
+| MVP-1                                     | 8–10               |
+| MVP-2                                     | 6–10               |
+| **Total até paridade Jira (visão board)** | **14–20 semanas**  |
 
 ---
 
-*Documento vivo — atualizar decisões D1–D10, §17–§18 e checklists conforme o epic avança.*
+_Documento vivo — atualizar decisões D1–D10, §17–§18 e checklists conforme o epic avança._

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 import { SettingsHeading } from "@/components/settings/heading";
 // hooks
-import { EmptyStateCompact } from "@operis/propel/empty-state";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useProject } from "@/hooks/store/use-project";
 // plane web components

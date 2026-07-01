@@ -1,4 +1,4 @@
-import type { TInstanceAuthenticationModes } from "@operis/types";
+import type { TInstanceAuthenticationModes } from "@operoz/types";
 import { getCoreAuthenticationModesMap } from "./core";
 import type { TGetAuthenticationModeProps } from "./types";
 

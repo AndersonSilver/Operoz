@@ -625,7 +625,7 @@ export const operozManualEn = {
       },
       tips: {
         0: "Ideal for assisted development and backlog automation.",
-        1: "operis_list_operations discovers available domains.",
+        1: "operoz_list_operations discovers available domains.",
         2: "Combine MCP for devs with web Assistant for end users.",
       },
     },

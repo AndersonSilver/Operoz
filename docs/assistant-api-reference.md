@@ -205,4 +205,4 @@ Não são endpoints HTTP — invocadas pelo modelo via tool-calling:
 | `propose_issue_comment`           | Proposta de comentário          |
 | `propose_issue_state_change`      | Proposta de mudança de estado   |
 
-Cross-link MCP externo: [operis-mcp.md](./operis-mcp.md#assistente-operoz-vs-mcp-externo)
+Cross-link MCP externo: [operoz-mcp.md](./operoz-mcp.md#assistente-operoz-vs-mcp-externo)

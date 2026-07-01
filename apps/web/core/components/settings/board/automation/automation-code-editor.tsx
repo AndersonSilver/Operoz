@@ -5,7 +5,7 @@ import { javascript } from "@codemirror/lang-javascript";
 import { vscodeDark, vscodeLight } from "@uiw/codemirror-theme-vscode";
 import { EditorView } from "@codemirror/view";
 import { useTheme } from "next-themes";
-import { cn } from "@operis/ui";
+import { cn } from "@operoz/ui";
 import "./automation-code-editor.css";
 
 export type AutomationCodeLanguage = "html" | "javascript";

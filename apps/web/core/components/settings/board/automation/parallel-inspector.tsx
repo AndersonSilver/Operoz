@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import type { TAutomationGraph } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TAutomationGraph } from "@operoz/types";
 import { v4 as uuidv4 } from "uuid";
 import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
 import { type ParallelBranch, getParallelBranches, removeBranchEdges } from "./automation-utils";

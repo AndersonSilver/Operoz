@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 // Reusable Label Component
 interface LabelProps {

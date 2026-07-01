@@ -4,10 +4,10 @@ import { Activity, Bell, CircleUser, KeyRound, LockIcon, Settings2 } from "lucid
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 // plane imports
-import { GROUPED_PROFILE_SETTINGS, PROFILE_SETTINGS_CATEGORIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { ISvgIcons } from "@operis/propel/icons";
-import type { TProfileSettingsTabs } from "@operis/types";
+import { GROUPED_PROFILE_SETTINGS, PROFILE_SETTINGS_CATEGORIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import type { TProfileSettingsTabs } from "@operoz/types";
 // local imports
 import { SettingsSidebarItem } from "../../sidebar/item";
 import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";

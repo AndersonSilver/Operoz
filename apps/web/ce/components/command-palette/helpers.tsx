@@ -1,14 +1,14 @@
 import { LayoutGrid } from "lucide-react";
 // plane imports
-import { CycleIcon, ModuleIcon, PageIcon, ProjectIcon, ViewsIcon } from "@operis/propel/icons";
+import { CycleIcon, ModuleIcon, PageIcon, ProjectIcon, ViewsIcon } from "@operoz/propel/icons";
 import type {
   IWorkspaceDefaultSearchResult,
   IWorkspaceIssueSearchResult,
   IWorkspacePageSearchResult,
   IWorkspaceProjectSearchResult,
   IWorkspaceSearchResult,
-} from "@operis/types";
-import { generateWorkItemLink } from "@operis/utils";
+} from "@operoz/types";
+import { generateWorkItemLink } from "@operoz/utils";
 // plane web components
 import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
 

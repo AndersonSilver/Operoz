@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
 // plane imports
-import { DEFAULT_GLOBAL_VIEWS_LIST, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { PlusIcon } from "@operis/propel/icons";
-import type { TStaticViewTypes } from "@operis/types";
-import { Header, EHeaderVariant } from "@operis/ui";
+import { DEFAULT_GLOBAL_VIEWS_LIST, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { PlusIcon } from "@operoz/propel/icons";
+import type { TStaticViewTypes } from "@operoz/types";
+import { Header, EHeaderVariant } from "@operoz/ui";
 // hooks
 import { useGlobalView } from "@/hooks/store/use-global-view";
 import { useUserPermissions } from "@/hooks/store/user";

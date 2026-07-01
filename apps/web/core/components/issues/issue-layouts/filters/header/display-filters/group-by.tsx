@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IIssueDisplayFilterOptions, TIssueGroupByOptions } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IIssueDisplayFilterOptions, TIssueGroupByOptions } from "@operoz/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useGroupByOptions } from "@/plane-web/components/issues/issue-layouts/utils";

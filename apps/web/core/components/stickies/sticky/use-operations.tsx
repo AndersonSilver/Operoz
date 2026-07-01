@@ -1,10 +1,10 @@
 import { useMemo } from "react";
 // plane types
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { InstructionType, TSticky } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { InstructionType, TSticky } from "@operoz/types";
 // plane utils
-import { isCommentEmpty } from "@operis/utils";
+import { isCommentEmpty } from "@operoz/utils";
 // components
 import { STICKY_COLORS_LIST } from "@/components/editor/sticky-editor/color-palette";
 // hooks

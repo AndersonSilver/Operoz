@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // hooks
-import { CloseIcon } from "@operis/propel/icons";
-import { Tag } from "@operis/ui";
+import { CloseIcon } from "@operoz/propel/icons";
+import { Tag } from "@operoz/ui";
 import { useLabel } from "@/hooks/store/use-label";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 

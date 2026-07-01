@@ -1,0 +1,63 @@
+---
+description: Padrões sênior para Docker, CI/CD e infraestrutura como código
+globs: ["**/Dockerfile*","**/docker-compose*","**/.github/workflows/**","**/*.tf","**/k8s/**","**/helm/**"]
+alwaysApply: false
+---
+
+# Infra & DevOps — Padrões Sênior
+
+## Docker
+
+- Multi-stage build: estágio de build separado do estágio final (imagem final não
+  carrega toolchain de compilação, apenas o artefato).
+- Imagem base mínima necessária (`-slim`/`-alpine` quando compatível) e com versão
+  fixada (nunca `latest` em produção).
+- Rodar como usuário não-root dentro do container.
+- `.dockerignore` cobrindo `node_modules`, `.git`, arquivos de ambiente local — evita
+  imagem inchada e vazamento de segredo local para dentro da imagem.
+- Cache de camadas: copie `package.json`/lockfile e instale dependências antes de
+  copiar o resto do código, para reaproveitar cache em builds subsequentes.
+
+## CI/CD
+
+- Pipeline com estágios claros: lint → test → build → (security scan) → deploy.
+  Falha em qualquer estágio bloqueia o próximo.
+- Testes rodam em ambiente isolado e reprodutível, não dependem de estado deixado
+  por outra execução.
+- Deploy de produção nunca é manual/ad-hoc quando existe pipeline — toda mudança
+  passa pelo mesmo caminho, sem atalho "só dessa vez".
+- Segredos de CI via secret manager do provedor (GitHub Actions secrets, etc.), nunca
+  hardcoded no workflow.
+
+## Infraestrutura como código
+
+- Toda infraestrutura de produção é declarada em código versionado (Terraform/
+  CloudFormation/Pulumi) — mudança manual no console é exceção documentada, não
+  norma.
+- Módulos reutilizáveis para padrões repetidos (ex.: "serviço web padrão"), em vez
+  de copiar/colar configuração inteira por serviço.
+- Plano (`terraform plan`) sempre revisado antes de apply em produção — nunca apply
+  às cegas.
+
+## Deploy e rollback
+
+- Todo deploy precisa de um caminho de rollback claro e testado (versão anterior
+  disponível, migration reversível, feature flag para desligar rápido).
+- Health checks reais (verificam dependências críticas), não só "processo está de
+  pé" — evita rotear tráfego para instância que não consegue falar com o banco.
+- Rollout gradual (canary/blue-green) para mudanças de risco médio/alto em vez de
+  substituir 100% do tráfego de uma vez.
+
+## Observabilidade
+
+- Toda aplicação em produção expõe métricas básicas (latência, taxa de erro,
+  throughput) e tem alerta configurado para os thresholds críticos — não espere o
+  usuário reportar o incidente.
+- Logs estruturados e correlacionáveis (request id/trace id) entre serviços.
+
+## Antes de finalizar
+
+- [ ] Imagem não roda como root
+- [ ] Nenhuma versão "latest"/flutuante em dependência crítica de produção
+- [ ] Segredos fora do código e fora da imagem
+- [ ] Existe plano de rollback para essa mudança

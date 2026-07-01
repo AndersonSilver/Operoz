@@ -231,6 +231,6 @@
     "article_key": "integrations_mcp",
     "title": "MCP Server",
     "category": "integrations",
-    "content": "# MCP Server\n\nAgentes externos (Cursor, Claude) conectados ao Operoz.\n\nO servidor MCP expõe centenas de ferramentas para agentes de IA consultarem e modificarem dados do Operoz.\n\nConfigure em .cursor/mcp.json apontando para sua instância. Autentique com token de usuário.\n\nMCP respeita permissões do usuário — agentes não bypassam segurança.\n\n\nDicas:\n\n- Ideal para desenvolvimento assistido e automação de backlog.\n\n- operis_list_operations descobre domínios disponíveis.\n\n- Combine MCP com Assistente web para usuários finais e devs."
+    "content": "# MCP Server\n\nAgentes externos (Cursor, Claude) conectados ao Operoz.\n\nO servidor MCP expõe centenas de ferramentas para agentes de IA consultarem e modificarem dados do Operoz.\n\nConfigure em .cursor/mcp.json apontando para sua instância. Autentique com token de usuário.\n\nMCP respeita permissões do usuário — agentes não bypassam segurança.\n\n\nDicas:\n\n- Ideal para desenvolvimento assistido e automação de backlog.\n\n- operoz_list_operations descobre domínios disponíveis.\n\n- Combine MCP com Assistente web para usuários finais e devs."
   }
 ]

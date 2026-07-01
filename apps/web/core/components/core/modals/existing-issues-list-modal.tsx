@@ -2,16 +2,16 @@ import { useEffect, useState, useRef } from "react";
 import { Rocket } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import { Button } from "@operis/propel/button";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { ISearchIssueResponse, TProjectIssuesSearchParams } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { ISearchIssueResponse, TProjectIssuesSearchParams } from "@operoz/types";
 // ui
-import { Loader, ToggleSwitch, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { generateWorkItemLink, getTabIndex } from "@operis/utils";
+import { Loader, ToggleSwitch, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { generateWorkItemLink, getTabIndex } from "@operoz/utils";
 // helpers
 // hooks
 import useDebounce from "@/hooks/use-debounce";

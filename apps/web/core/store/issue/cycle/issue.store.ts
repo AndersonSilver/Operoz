@@ -2,7 +2,7 @@ import { get, set, concat, uniq, update } from "lodash-es";
 import { action, observable, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import { ALL_ISSUES } from "@operis/constants";
+import { ALL_ISSUES } from "@operoz/constants";
 import type {
   TIssue,
   TLoader,
@@ -10,9 +10,9 @@ import type {
   TIssuesResponse,
   ViewFlags,
   TBulkOperationsPayload,
-} from "@operis/types";
+} from "@operoz/types";
 // helpers
-import { getDistributionPathsPostUpdate } from "@operis/utils";
+import { getDistributionPathsPostUpdate } from "@operoz/utils";
 //local
 import { storage } from "@/lib/local-storage";
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";

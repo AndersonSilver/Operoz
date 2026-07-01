@@ -1,16 +1,16 @@
 import { isNil } from "lodash-es";
 // types
-import { EIconSize, ISSUE_PRIORITIES } from "@operis/constants";
-import { CycleGroupIcon, CycleIcon, ModuleIcon, PriorityIcon, StateGroupIcon } from "@operis/propel/icons";
+import { EIconSize, ISSUE_PRIORITIES } from "@operoz/constants";
+import { CycleGroupIcon, CycleIcon, ModuleIcon, PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type {
   GroupByColumnTypes,
   IGroupByColumn,
   TCycleGroups,
   IIssueDisplayProperties,
   TGroupedIssues,
-} from "@operis/types";
+} from "@operoz/types";
 // ui
-import { Avatar } from "@operis/ui";
+import { Avatar } from "@operoz/ui";
 // components
 // constants
 // stores

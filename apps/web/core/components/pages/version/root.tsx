@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
 // plane imports
-import type { TPageVersion } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { TPageVersion } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useQueryParams } from "@/hooks/use-query-params";
 // plane web imports

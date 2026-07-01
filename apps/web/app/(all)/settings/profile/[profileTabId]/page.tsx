@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { PROFILE_SETTINGS_TABS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TProfileSettingsTabs } from "@operis/types";
+import { PROFILE_SETTINGS_TABS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TProfileSettingsTabs } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { PageHead } from "@/components/core/page-title";

@@ -1,6 +1,7 @@
-import { autorun, makeObservable, observable, runInAction } from "mobx";
+import { autorun, makeObservable, observable, reaction, runInAction } from "mobx";
+import { isEqual, set } from "lodash-es";
 import { computedFn } from "mobx-utils";
-import type { IBoardModule, TIssue } from "@operis/types";
+import type { IBoardModule, TIssue, TIssueRelationMap } from "@operoz/types";
 import type { RootStore } from "@/plane-web/store/root.store";
 import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
 import { BaseTimeLineStore } from "@/plane-web/store/timeline/base-timeline.store";
@@ -13,6 +14,11 @@ import {
   resolveBoardProjectGanttRow,
 } from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
 import { trackGanttIssueFields } from "./track-gantt-issue-fields";
+import {
+  resolveBlockingAndBlockedByIds,
+  issuePayloadIncludesRelations,
+  parseIssueRelationsFromPayload,
+} from "./parse-issue-relations";
 
 export interface IBoardGroupedTimelineStore extends IBaseTimelineStore {
   collapsedProjectIds: Set<string>;
@@ -24,6 +30,7 @@ export interface IBoardGroupedTimelineStore extends IBaseTimelineStore {
   toggleModuleCollapsed: (moduleId: string) => void;
   isModuleCollapsed: (moduleId: string) => boolean;
   setBoardModules: (modules: IBoardModule[]) => void;
+  getModuleIdForIssue: (issueId: string) => string | null;
   beginCollapseScope: (scopeKey: string) => void;
   registerCollapsedDefaults: (projectIds: string[], moduleIds: string[]) => void;
 }
@@ -35,6 +42,8 @@ export class BoardGroupedTimelineStore extends BaseTimeLineStore implements IBoa
   private collapseScopeKey = "";
   private seenCollapsedProjectIds = new Set<string>();
   private seenCollapsedModuleIds = new Set<string>();
+  private blocksRefreshPending = false;
+  private dependencySyncPending = false;
 
   constructor(_rootStore: RootStore) {
     super(_rootStore);
@@ -47,13 +56,14 @@ export class BoardGroupedTimelineStore extends BaseTimeLineStore implements IBoa
       expandAllProjects: false,
       toggleModuleCollapsed: false,
       setBoardModules: false,
+      getModuleIdForIssue: false,
       beginCollapseScope: false,
       registerCollapsedDefaults: false,
     });
 
     autorun(() => {
       const { issuesMap, getIssueById } = this.rootStore.issue.issues;
-      const { projectMap, getPartialProjectById, getProjectIdentifierById } = this.rootStore.projectRoot.project;
+      const { projectMap } = this.rootStore.projectRoot.project;
 
       void Object.keys(issuesMap).length;
       void Object.keys(projectMap).length;
@@ -66,35 +76,123 @@ export class BoardGroupedTimelineStore extends BaseTimeLineStore implements IBoa
 
       if (!this.blockIds?.length) return;
 
-      queueMicrotask(() => {
-        this.updateBlocks((blockId) => {
-          if (isBoardProjectBlockId(blockId)) {
-            const projectId = getProjectIdFromBoardBlock(blockId);
-            const childIssueIds =
-              this.blockIds?.filter((id) => {
-                if (isBoardProjectBlockId(id) || isBoardModuleBlockId(id)) return false;
-                return getIssueById(id)?.project_id === projectId;
-              }) ?? [];
+      this.scheduleBlocksRefresh();
+    });
 
-            return resolveBoardProjectGanttRow(
-              projectId,
-              childIssueIds,
-              getIssueById,
-              getPartialProjectById,
-              getProjectIdentifierById
-            );
-          }
+    reaction(
+      () => this.buildDependencySyncKey(),
+      () => this.scheduleDependencySync(),
+      { fireImmediately: true }
+    );
+  }
 
-          if (isBoardModuleBlockId(blockId)) {
-            const moduleId = getModuleIdFromBoardBlock(blockId);
-            const boardModule = this.boardModulesById[moduleId];
-            if (!boardModule) return undefined;
-            return resolveBoardModuleGanttRow(boardModule);
-          }
+  private scheduleBlocksRefresh() {
+    if (this.blocksRefreshPending) return;
+    this.blocksRefreshPending = true;
+    queueMicrotask(() => {
+      this.blocksRefreshPending = false;
+      if (!this.blockIds?.length) return;
 
-          return getIssueById(blockId) as TIssue | undefined;
-        });
+      const { getIssueById } = this.rootStore.issue.issues;
+      const { getPartialProjectById, getProjectIdentifierById } = this.rootStore.projectRoot.project;
+
+      this.updateBlocks((blockId) => {
+        if (isBoardProjectBlockId(blockId)) {
+          const projectId = getProjectIdFromBoardBlock(blockId);
+          const childIssueIds =
+            this.blockIds?.filter((id) => {
+              if (isBoardProjectBlockId(id) || isBoardModuleBlockId(id)) return false;
+              return getIssueById(id)?.project_id === projectId;
+            }) ?? [];
+
+          return resolveBoardProjectGanttRow(
+            projectId,
+            childIssueIds,
+            getIssueById,
+            getPartialProjectById,
+            getProjectIdentifierById
+          );
+        }
+
+        if (isBoardModuleBlockId(blockId)) {
+          const moduleId = getModuleIdFromBoardBlock(blockId);
+          const boardModule = this.boardModulesById[moduleId];
+          if (!boardModule) return undefined;
+          return resolveBoardModuleGanttRow(boardModule);
+        }
+
+        return getIssueById(blockId) as TIssue | undefined;
       });
+
+      const { relationMap } = this.rootStore.issue.issueDetail.relation;
+      this.syncDependencyIds(relationMap, getIssueById);
+    });
+  }
+
+  private buildDependencySyncKey(): string {
+    if (!this.blockIds?.length) return "";
+
+    const { relationMap } = this.rootStore.issue.issueDetail.relation;
+    const { getIssueById } = this.rootStore.issue.issues;
+
+    const issueIds = this.blockIds.filter((id) => !isBoardProjectBlockId(id) && !isBoardModuleBlockId(id));
+
+    const relationsKey = issueIds
+      .map((id) => {
+        const relations = relationMap[id];
+        const fromMap = `${relations?.blocking?.join(",") ?? ""}:${relations?.blocked_by?.join(",") ?? ""}`;
+        const issue = getIssueById(id);
+        if (!issue || !issuePayloadIncludesRelations(issue)) return `${id}:${fromMap}`;
+        const parsed = parseIssueRelationsFromPayload(issue);
+        return `${id}:${fromMap}|${parsed.blocking?.join(",") ?? ""}|${parsed.blocked_by?.join(",") ?? ""}`;
+      })
+      .join(";");
+
+    const blocksReady = issueIds.filter((id) => Boolean(this.blocksMap[id])).length;
+
+    return `${relationsKey}|blocks:${blocksReady}`;
+  }
+
+  private scheduleDependencySync() {
+    if (this.dependencySyncPending) return;
+    this.dependencySyncPending = true;
+    queueMicrotask(() => {
+      this.dependencySyncPending = false;
+      if (!this.blockIds?.length) return;
+
+      const { relationMap } = this.rootStore.issue.issueDetail.relation;
+      const { getIssueById } = this.rootStore.issue.issues;
+      this.syncDependencyIds(relationMap, getIssueById);
+    });
+  }
+
+  /**
+   * Reads blocking/blocked_by relations from the issue relation store and writes
+   * them into the corresponding IGanttBlock entries so TimelineDependencyPaths
+   * can draw the arrows. Skips board-project and board-module group rows.
+   */
+  private syncDependencyIds(relationMap: TIssueRelationMap, getIssueById: (id: string) => TIssue | undefined) {
+    if (!this.blockIds?.length) return;
+
+    runInAction(() => {
+      for (const blockId of this.blockIds!) {
+        if (!this.blocksMap[blockId]) continue;
+        if (isBoardProjectBlockId(blockId) || isBoardModuleBlockId(blockId)) continue;
+
+        const { blockingIds, blockedByIds } = resolveBlockingAndBlockedByIds(
+          relationMap,
+          blockId,
+          getIssueById(blockId)
+        );
+
+        const block = this.blocksMap[blockId];
+        if (isEqual(block.blocking_ids, blockingIds) && isEqual(block.blocked_by_ids, blockedByIds)) {
+          continue;
+        }
+
+        set(this.blocksMap, [blockId, "blocking_ids"], blockingIds);
+        set(this.blocksMap, [blockId, "blocked_by_ids"], blockedByIds);
+      }
     });
   }
 
@@ -103,6 +201,30 @@ export class BoardGroupedTimelineStore extends BaseTimeLineStore implements IBoa
       this.boardModulesById = Object.fromEntries(modules.map((boardModule) => [boardModule.id, boardModule]));
     });
   };
+
+  getModuleIdForIssue = computedFn((issueId: string): string | null => {
+    if (!this.blockIds?.length) return null;
+
+    let currentModuleId: string | null = null;
+
+    for (const blockId of this.blockIds) {
+      if (isBoardModuleBlockId(blockId)) {
+        currentModuleId = getModuleIdFromBoardBlock(blockId);
+        continue;
+      }
+
+      if (isBoardProjectBlockId(blockId)) {
+        currentModuleId = null;
+        continue;
+      }
+
+      if (blockId === issueId) {
+        return currentModuleId;
+      }
+    }
+
+    return null;
+  });
 
   /** Reinicia o estado de colapso ao trocar de board/cronograma. */
   beginCollapseScope = (scopeKey: string) => {

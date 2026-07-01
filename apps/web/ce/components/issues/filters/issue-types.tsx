@@ -3,9 +3,9 @@ import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Loader } from "@operoz/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 
@@ -34,13 +34,8 @@ export const FilterIssueTypes = observer(function FilterIssueTypes(props: Props)
   const appliedFiltersCount = appliedFilters?.length ?? 0;
 
   const sortedOptions = useMemo(() => {
-    const filtered = issueTypes.filter((type) =>
-      type.name.toLowerCase().includes(searchQuery.toLowerCase())
-    );
-    return sortBy(filtered, [
-      (type) => !(appliedFilters ?? []).includes(type.id),
-      (type) => type.name.toLowerCase(),
-    ]);
+    const filtered = issueTypes.filter((type) => type.name.toLowerCase().includes(searchQuery.toLowerCase()));
+    return sortBy(filtered, [(type) => !(appliedFilters ?? []).includes(type.id), (type) => type.name.toLowerCase()]);
   }, [issueTypes, searchQuery, appliedFilters]);
 
   if (!projectId) return null;
@@ -77,9 +72,7 @@ export const FilterIssueTypes = observer(function FilterIssueTypes(props: Props)
                 <button
                   type="button"
                   className="ml-8 text-11 font-medium text-accent-primary"
-                  onClick={() =>
-                    setItemsToRender(itemsToRender === sortedOptions.length ? 5 : sortedOptions.length)
-                  }
+                  onClick={() => setItemsToRender(itemsToRender === sortedOptions.length ? 5 : sortedOptions.length)}
                 >
                   {itemsToRender === sortedOptions.length ? t("show_less") : "View all"}
                 </button>

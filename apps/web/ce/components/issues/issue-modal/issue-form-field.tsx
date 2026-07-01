@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 /** Largura do controlo (nem todos os campos ocupam a linha inteira). */
 export type IssueFormControlWidth = "full" | "medium" | "compact" | "custom";
@@ -25,7 +25,7 @@ export const issueFormControlFocusWithinClass =
 
 /** Estilo visual do input/select (largura vem do wrapper). */
 export const issueFormControlBaseClass = cn(
-  "h-9 min-h-9 min-w-0 rounded-[3px] bg-layer-2 px-2.5 text-13 text-primary shadow-sm outline-none transition-[border-color,box-shadow]",
+  "shadow-sm h-9 min-h-9 min-w-0 rounded-[3px] bg-layer-2 px-2.5 text-13 text-primary transition-[border-color,box-shadow] outline-none",
   issueFormControlBorderClass,
   "focus:shadow-[0_0_0_1px_var(--border-color-accent-strong)]"
 );
@@ -52,7 +52,7 @@ export function IssueFormField(props: IssueFormFieldProps) {
       <div className="mb-1 flex items-center justify-between gap-2">
         <label className="text-12 font-medium text-secondary">
           {label}
-          {required ? <span className="ml-0.5 font-normal text-danger-primary">*</span> : null}
+          {required ? <span className="font-normal ml-0.5 text-danger-primary">*</span> : null}
         </label>
         {labelAction}
       </div>
@@ -82,7 +82,11 @@ export function IssueFormNativeSelect(props: IssueFormNativeSelectProps) {
       <select
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={cn(getIssueFormControlClass(width), "cursor-pointer appearance-none pr-9", !value && "text-tertiary")}
+        className={cn(
+          getIssueFormControlClass(width),
+          "cursor-pointer appearance-none pr-9",
+          !value && "text-tertiary"
+        )}
       >
         <option value="">{placeholder}</option>
         {options.map((opt) => (

@@ -1,4 +1,4 @@
-import type { IInstanceConfig } from "@operis/types";
+import type { IInstanceConfig } from "@operoz/types";
 
 /** Build-time override; instance config takes precedence when loaded. */
 const envFlag = import.meta.env.VITE_ENABLE_OPEROZ_ASSISTANT;

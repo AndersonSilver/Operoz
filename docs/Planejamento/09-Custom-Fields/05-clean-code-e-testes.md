@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/custom_field.py          # JÁ EXISTE — estender tipos
 ├── db/models/issue_custom_value.py
 ├── custom_fields/
@@ -31,24 +31,24 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| validar NUMBER respeitando min/max | aceita/rejeita |
-| SELECT fora de options | erro |
-| CASCADING parent/child incoerente | erro |
-| URL inválida | erro |
-| USER de outro workspace | erro |
-| coluna correta por tipo | valor na coluna tipada certa |
+| Caso                               | Esperado                     |
+| ---------------------------------- | ---------------------------- |
+| validar NUMBER respeitando min/max | aceita/rejeita               |
+| SELECT fora de options             | erro                         |
+| CASCADING parent/child incoerente  | erro                         |
+| URL inválida                       | erro                         |
+| USER de outro workspace            | erro                         |
+| coluna correta por tipo            | valor na coluna tipada certa |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| set valor em campo readonly | `403` |
-| required vazio no contexto | `422` |
-| cf[] em OQL filtra por valor | resultados certos |
-| apagar campo (soft) | valores recuperáveis |
-| editar valor sem `issue.edit` | `403` |
+| Caso                          | Esperado             |
+| ----------------------------- | -------------------- |
+| set valor em campo readonly   | `403`                |
+| required vazio no contexto    | `422`                |
+| cf[] em OQL filtra por valor  | resultados certos    |
+| apagar campo (soft)           | valores recuperáveis |
+| editar valor sem `issue.edit` | `403`                |
 
 ### e2e
 

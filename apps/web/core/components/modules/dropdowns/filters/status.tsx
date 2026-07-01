@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import type { TModuleStatus } from "@operis/types";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import type { TModuleStatus } from "@operoz/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 

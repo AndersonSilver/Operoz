@@ -1,13 +1,15 @@
 import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
+import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, SearchIcon, ModuleIcon } from "@operis/propel/icons";
-import type { IModule } from "@operis/types";
-import { cn, sortBySelectedFirst } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, SearchIcon, ModuleIcon } from "@operoz/propel/icons";
+import type { IModule } from "@operoz/types";
+import { cn, sortBySelectedFirst } from "@operoz/utils";
+import { getIssueDropdownPopperOptions, ISSUE_DROPDOWN_PORTAL_Z_CLASS } from "@/components/dropdowns/popper-config";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 
@@ -53,17 +55,7 @@ export const ModuleOptions = observer(function ModuleOptions(props: Props) {
   }, [isOpen, isMobile]);
 
   // popper-js init
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ?? "bottom-start",
-    modifiers: [
-      {
-        name: "preventOverflow",
-        options: {
-          padding: 12,
-        },
-      },
-    ],
-  });
+  const { styles, attributes } = usePopper(referenceElement, popperElement, getIssueDropdownPopperOptions(placement));
 
   const onOpen = () => {
     onDropdownOpen?.();
@@ -106,8 +98,8 @@ export const ModuleOptions = observer(function ModuleOptions(props: Props) {
     value
   );
 
-  return (
-    <Combobox.Options className="fixed z-50" static>
+  return createPortal(
+    <Combobox.Options className={`fixed ${ISSUE_DROPDOWN_PORTAL_Z_CLASS}`} static>
       <div
         className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
         ref={setPopperElement}
@@ -161,6 +153,7 @@ export const ModuleOptions = observer(function ModuleOptions(props: Props) {
           )}
         </div>
       </div>
-    </Combobox.Options>
+    </Combobox.Options>,
+    document.body
   );
 });

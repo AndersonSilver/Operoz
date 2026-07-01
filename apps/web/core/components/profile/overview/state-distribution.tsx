@@ -1,11 +1,11 @@
 // plane imports
-import { STATE_GROUPS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PieChart } from "@operis/propel/charts/pie-chart";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { IUserProfileData, IUserStateDistribution } from "@operis/types";
-import { Card } from "@operis/ui";
-import { capitalizeFirstLetter } from "@operis/utils";
+import { STATE_GROUPS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PieChart } from "@operoz/propel/charts/pie-chart";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { IUserProfileData, IUserStateDistribution } from "@operoz/types";
+import { Card } from "@operoz/ui";
+import { capitalizeFirstLetter } from "@operoz/utils";
 
 type Props = {
   stateDistribution: IUserStateDistribution[];

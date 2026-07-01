@@ -1,9 +1,9 @@
 // plane imports
-import type { I_THEME_OPTION } from "@operis/constants";
-import { THEME_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import type { I_THEME_OPTION } from "@operoz/constants";
+import { THEME_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // constants
-import { CustomSelect } from "@operis/ui";
+import { CustomSelect } from "@operoz/ui";
 // ui
 
 type Props = {

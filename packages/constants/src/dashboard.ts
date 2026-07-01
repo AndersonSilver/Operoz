@@ -1,5 +1,5 @@
 // types
-import type { TIssuesListTypes } from "@operis/types";
+import type { TIssuesListTypes } from "@operoz/types";
 
 export enum EDurationFilters {
   NONE = "none",

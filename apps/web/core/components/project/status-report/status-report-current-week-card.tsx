@@ -12,14 +12,14 @@ import {
   ScrollText,
   Search,
 } from "lucide-react";
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import type { TModuleStatus } from "@operis/types";
-import { Checkbox, CustomSelect } from "@operis/ui";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import type { TModuleStatus } from "@operoz/types";
+import { Checkbox, CustomSelect } from "@operoz/ui";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { BOARD_HUB_STATUS_REPORT_WEEK_PANEL } from "@/components/board/board-hub-background";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import {

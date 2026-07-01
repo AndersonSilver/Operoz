@@ -1,7 +1,7 @@
 // next
 import React from "react";
 import Link from "next/link";
-import { ChevronRightIcon } from "@operis/propel/icons";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 
 type EmptySpaceProps = {
   title: string;

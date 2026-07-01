@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Bot, FileSearch, Sparkles, Wrench } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { assistantToolLabelKey } from "@/lib/assistant-tool-label";
 
 const STEP_MS = 2200;

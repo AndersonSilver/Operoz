@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { Activity, ArrowRightLeft, Gauge, RefreshCw, Server } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TAutomationMetricsResponse } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TAutomationMetricsResponse } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { AutomationListHero } from "./automation-list-hero";
 import { AutomationMetricsCharts } from "./automation-metrics-charts";
 import { AutomationOpsSignals } from "./automation-ops-signals";

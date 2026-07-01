@@ -1,4 +1,4 @@
-import { renderFormattedDate, renderFormattedTime } from "@operis/utils";
+import { renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 
 export function formatAutomationCardTimestamp(iso: string | undefined | null): string | undefined {
   if (!iso) return undefined;

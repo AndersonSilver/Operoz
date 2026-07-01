@@ -3,10 +3,10 @@ import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import type { EditorRefApi, TExtensions } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import type { EFileAssetType, TNameDescriptionLoader } from "@operis/types";
-import { getDescriptionPlaceholderI18n } from "@operis/utils";
+import type { EditorRefApi, TExtensions } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import type { EFileAssetType, TNameDescriptionLoader } from "@operoz/types";
+import { getDescriptionPlaceholderI18n } from "@operoz/utils";
 // components
 import { RichTextEditor } from "@/components/editor/rich-text";
 // hooks

@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { CornerDownRight, RefreshCcw, Sparkles, TriangleAlert } from "lucide-react";
 // plane editor
-import type { EditorRefApi } from "@operis/editor";
-import { ChevronRightIcon } from "@operis/propel/icons";
+import type { EditorRefApi } from "@operoz/editor";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 // plane ui
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 // plane web constants
 import { AI_EDITOR_TASKS, LOADING_TEXTS } from "@/constants/ai";

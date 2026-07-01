@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TContextMenuItem } from "@operis/ui";
-import { CustomMenu } from "@operis/ui";
-import { copyUrlToClipboard, cn } from "@operis/utils";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TContextMenuItem } from "@operoz/ui";
+import { CustomMenu } from "@operoz/ui";
+import { copyUrlToClipboard, cn } from "@operoz/utils";
 import { useLayoutMenuItems } from "@/components/common/quick-actions-helper";
 import { Ellipsis } from "lucide-react";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 type Props = {
   workspaceSlug: string;

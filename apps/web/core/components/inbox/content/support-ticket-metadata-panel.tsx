@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { Clock, ExternalLink, Mail, UserRound } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TInboxDuplicateIssueDetails } from "@operis/types";
-import { cn, renderFormattedDate, generateWorkItemLink } from "@operis/utils";
-import { ControlLink } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TInboxDuplicateIssueDetails } from "@operoz/types";
+import { cn, renderFormattedDate, generateWorkItemLink } from "@operoz/utils";
+import { ControlLink } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
 import type { IInboxIssueStore } from "@/store/inbox/inbox-issue.store";

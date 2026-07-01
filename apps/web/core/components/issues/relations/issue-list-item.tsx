@@ -1,13 +1,13 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, EditIcon, TrashIcon, CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, EditIcon, TrashIcon, CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { ControlLink, CustomMenu } from "@operis/ui";
-import { generateWorkItemLink } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { ControlLink, CustomMenu } from "@operoz/ui";
+import { generateWorkItemLink } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";

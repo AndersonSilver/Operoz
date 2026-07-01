@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { BookOpen, HelpCircle } from "lucide-react";
 import { useParams } from "next/navigation";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import Link from "next/link";
 // ui
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 // hooks

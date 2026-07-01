@@ -2,21 +2,21 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
+import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 // plane i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // icons
-import { ChevronDownIcon } from "@operis/propel/icons";
+import { ChevronDownIcon } from "@operoz/propel/icons";
 // types
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
   TIssueLayouts,
   EIssueLayoutTypes,
-} from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+} from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // ui
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { IssueLayoutIcon } from "@/components/issues/issue-layouts/layout-icon";

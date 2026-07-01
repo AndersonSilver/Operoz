@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
 import type { TQuickAddIssueButton } from "../root";
 
 export const SpreadsheetAddIssueButton = observer(function SpreadsheetAddIssueButton(props: TQuickAddIssueButton) {

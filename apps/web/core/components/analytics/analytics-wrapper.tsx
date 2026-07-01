@@ -1,7 +1,7 @@
 import React from "react";
 // plane package imports
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 
 type Props = {
   i18nTitle: string;

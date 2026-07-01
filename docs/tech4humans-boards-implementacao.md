@@ -30,11 +30,11 @@ Documento técnico para **construir e validar** a feature Boards no fork Plane. 
 
 ## 1. Mapa de documentos
 
-| Documento | Papel |
-|-----------|--------|
-| [tech4humans-plane-organizacao.md](./tech4humans-plane-organizacao.md) | Porquê Boards; limitações do Plane stock |
+| Documento                                                                                    | Papel                                               |
+| -------------------------------------------------------------------------------------------- | --------------------------------------------------- |
+| [tech4humans-plane-organizacao.md](./tech4humans-plane-organizacao.md)                       | Porquê Boards; limitações do Plane stock            |
 | [tech4humans-boards-plano-desenvolvimento.md](./tech4humans-boards-plano-desenvolvimento.md) | Produto, Jira ref, roadmap MVP-1/2, decisões D1–D10 |
-| **Este ficheiro** | Como construir, arquitetura, segurança, validação |
+| **Este ficheiro**                                                                            | Como construir, arquitetura, segurança, validação   |
 
 ---
 
@@ -42,18 +42,18 @@ Documento técnico para **construir e validar** a feature Boards no fork Plane. 
 
 Registo completo em [§3 do plano](./tech4humans-boards-plano-desenvolvimento.md). Impacto direto na implementação:
 
-| ID | Decisão | Implementação |
-|----|---------|----------------|
-| D1 | UI «Boards» | `boards.*` em i18n; entidade `Board` |
-| D2 | Projeto novo exige board | `POST /projects/` valida `board_id` |
-| D2b | Sem voltar a null | `PATCH` rejeita `board_id: null` se já definido |
-| D3 | Todos os membros WS veem boards | Sem `BoardMember`; list = `WorkspaceMember` ativo |
-| D4 | Só admin cria board | `POST /boards/` ADMIN workspace |
-| D5–D6 | Mover projeto; arquivar board | `PATCH` projeto; `Board.archived_at` |
-| D7 | URL `/boards/{slug}` | Campo `Board.slug` único por workspace |
-| D8 | Analytics por board no MVP-1 | `board_id` → resolve `project_ids` |
-| D9 | Tabela `boards` nova | Não usar `teams` |
-| D10 | Legado sem board automático | `board_id` null só legado; sidebar «Sem board» |
+| ID    | Decisão                         | Implementação                                     |
+| ----- | ------------------------------- | ------------------------------------------------- |
+| D1    | UI «Boards»                     | `boards.*` em i18n; entidade `Board`              |
+| D2    | Projeto novo exige board        | `POST /projects/` valida `board_id`               |
+| D2b   | Sem voltar a null               | `PATCH` rejeita `board_id: null` se já definido   |
+| D3    | Todos os membros WS veem boards | Sem `BoardMember`; list = `WorkspaceMember` ativo |
+| D4    | Só admin cria board             | `POST /boards/` ADMIN workspace                   |
+| D5–D6 | Mover projeto; arquivar board   | `PATCH` projeto; `Board.archived_at`              |
+| D7    | URL `/boards/{slug}`            | Campo `Board.slug` único por workspace            |
+| D8    | Analytics por board no MVP-1    | `board_id` → resolve `project_ids`                |
+| D9    | Tabela `boards` nova            | Não usar `teams`                                  |
+| D10   | Legado sem board automático     | `board_id` null só legado; sidebar «Sem board»    |
 
 ---
 
@@ -89,10 +89,10 @@ flowchart TB
   end
 
   subgraph packages [Monorepo packages]
-    TYPES["@operis/types"]
-    CONST["@operis/constants"]
-    SVC["@operis/services - parcial"]
-    I18N["@operis/i18n"]
+    TYPES["@operoz/types"]
+    CONST["@operoz/constants"]
+    SVC["@operoz/services - parcial"]
+    I18N["@operoz/i18n"]
   end
 
   subgraph api [apps/api]
@@ -127,7 +127,7 @@ flowchart TB
 
 4. **Agregação cross-project** — Para MVP-2, copiar padrão de `WorkspaceViewIssuesViewSet` (`GET /workspaces/{slug}/issues/`) com filtro extra `project__board_id`.
 
-5. **Serviços web** — CRUD de board em `apps/web/core/services/board/` (padrão `project.service.ts`), não em `@operis/services` (projetos também estão só no web).
+5. **Serviços web** — CRUD de board em `apps/web/core/services/board/` (padrão `project.service.ts`), não em `@operoz/services` (projetos também estão só no web).
 
 6. **Não estender stubs CE `team*`** — `ce/store/issue/team*` declara «will never be used»; criar `EIssuesStoreType.BOARD` + stores em `core/store/issue/board/`.
 
@@ -137,19 +137,19 @@ flowchart TB
 
 ### 4.1 Tabela `boards`
 
-**Ficheiro novo:** `apps/api/operis/db/models/board.py`
+**Ficheiro novo:** `apps/api/operoz/db/models/board.py`
 
-| Coluna | Tipo | Notas |
-|--------|------|--------|
-| `id` | UUID PK | Herda `BaseModel` |
-| `workspace_id` | FK → `workspaces` | CASCADE |
-| `name` | VARCHAR(255) | Unique com workspace (soft delete) |
-| `slug` | SlugField(48) | Unique com workspace; validador como workspace |
-| `description` | TEXT | blank |
-| `logo_props` | JSONField | default `{}` |
-| `sort_order` | FLOAT | default 65535 |
-| `archived_at` | DateTime | null |
-| `created_by_id`, timestamps, `deleted_at` | | padrão `BaseModel` |
+| Coluna                                    | Tipo              | Notas                                          |
+| ----------------------------------------- | ----------------- | ---------------------------------------------- |
+| `id`                                      | UUID PK           | Herda `BaseModel`                              |
+| `workspace_id`                            | FK → `workspaces` | CASCADE                                        |
+| `name`                                    | VARCHAR(255)      | Unique com workspace (soft delete)             |
+| `slug`                                    | SlugField(48)     | Unique com workspace; validador como workspace |
+| `description`                             | TEXT              | blank                                          |
+| `logo_props`                              | JSONField         | default `{}`                                   |
+| `sort_order`                              | FLOAT             | default 65535                                  |
+| `archived_at`                             | DateTime          | null                                           |
+| `created_by_id`, timestamps, `deleted_at` |                   | padrão `BaseModel`                             |
 
 **Constraint (validado — padrão `Team` / `Workspace`):**
 
@@ -161,11 +161,11 @@ models.UniqueConstraint(
 )
 ```
 
-**Slug:** reutilizar `slug_validator` de `apps/api/operis/db/models/workspace.py` (linha 114).
+**Slug:** reutilizar `slug_validator` de `apps/api/operoz/db/models/workspace.py` (linha 114).
 
 ### 4.2 Alteração `projects`
 
-**Ficheiro:** `apps/api/operis/db/models/project.py`
+**Ficheiro:** `apps/api/operoz/db/models/project.py`
 
 ```python
 board = models.ForeignKey(
@@ -183,20 +183,20 @@ board = models.ForeignKey(
 
 ### 4.3 Migração
 
-| Passo | Ficheiro | Conteúdo |
-|-------|----------|----------|
-| 1 | `0123_board_and_project_board_id.py` | `CreateModel(Board)` + `AddField(project.board)` |
-| 2 | — | **Sem** `RunPython` em massa (D10) |
+| Passo | Ficheiro                             | Conteúdo                                         |
+| ----- | ------------------------------------ | ------------------------------------------------ |
+| 1     | `0123_board_and_project_board_id.py` | `CreateModel(Board)` + `AddField(project.board)` |
+| 2     | —                                    | **Sem** `RunPython` em massa (D10)               |
 
-**Export:** `apps/api/operis/db/models/__init__.py` — adicionar `Board`.
+**Export:** `apps/api/operoz/db/models/__init__.py` — adicionar `Board`.
 
 ### 4.4 O que NÃO criar no MVP
 
-| Entidade | Motivo |
-|----------|--------|
-| `BoardMember` | D3 |
-| `BoardUserProperty` | Ordenação de boards: `sort_order` no board; projetos mantêm `ProjectUserProperty` |
-| Reuso tabela `teams` | D9; modelo órfão sem API (`grep` sem views/serializers) |
+| Entidade             | Motivo                                                                            |
+| -------------------- | --------------------------------------------------------------------------------- |
+| `BoardMember`        | D3                                                                                |
+| `BoardUserProperty`  | Ordenação de boards: `sort_order` no board; projetos mantêm `ProjectUserProperty` |
+| Reuso tabela `teams` | D9; modelo órfão sem API (`grep` sem views/serializers)                           |
 
 ---
 
@@ -204,56 +204,56 @@ board = models.ForeignKey(
 
 ### 5.1 Rotas novas
 
-**Ficheiro novo:** `apps/api/operis/app/urls/board.py`
+**Ficheiro novo:** `apps/api/operoz/app/urls/board.py`
 
-Registrar em `apps/api/operis/app/urls/__init__.py`.
+Registrar em `apps/api/operoz/app/urls/__init__.py`.
 
-| Método | Path | View | Permissão |
-|--------|------|------|-----------|
-| GET | `workspaces/<slug>/boards/` | `BoardViewSet.list` | WS: ADMIN, MEMBER, GUEST |
-| POST | `workspaces/<slug>/boards/` | `BoardViewSet.create` | WS: **ADMIN** |
-| GET | `workspaces/<slug>/boards/<board_slug>/` | `retrieve` por slug | WS member |
-| PATCH | `workspaces/<slug>/boards/<board_slug>/` | `partial_update` | WS: ADMIN |
-| DELETE | `workspaces/<slug>/boards/<board_slug>/` | soft delete | WS: ADMIN |
-| POST | `workspaces/<slug>/boards/<board_slug>/archive/` | `archived_at=now` | WS: ADMIN |
+| Método | Path                                             | View                  | Permissão                |
+| ------ | ------------------------------------------------ | --------------------- | ------------------------ |
+| GET    | `workspaces/<slug>/boards/`                      | `BoardViewSet.list`   | WS: ADMIN, MEMBER, GUEST |
+| POST   | `workspaces/<slug>/boards/`                      | `BoardViewSet.create` | WS: **ADMIN**            |
+| GET    | `workspaces/<slug>/boards/<board_slug>/`         | `retrieve` por slug   | WS member                |
+| PATCH  | `workspaces/<slug>/boards/<board_slug>/`         | `partial_update`      | WS: ADMIN                |
+| DELETE | `workspaces/<slug>/boards/<board_slug>/`         | soft delete           | WS: ADMIN                |
+| POST   | `workspaces/<slug>/boards/<board_slug>/archive/` | `archived_at=now`     | WS: ADMIN                |
 
 **Lookup:** `get_object()` por `slug` + `workspace__slug` (não expor só UUID na URL pública — D7).
 
 ### 5.2 Alterações em projetos (validado — `ProjectViewSet`)
 
-**Ficheiro:** `apps/api/operis/app/views/project/base.py`
+**Ficheiro:** `apps/api/operoz/app/views/project/base.py`
 
-| Método | Alteração |
-|--------|-----------|
-| `get_queryset` / `list` | `select_related("board")`; filtro opcional `?board_id=` |
-| `create` | Exigir `board_id`; validar board no workspace |
-| `partial_update` | Aceitar `board_id`; bloquear `null` se já tinha board (D2b) |
+| Método                  | Alteração                                                   |
+| ----------------------- | ----------------------------------------------------------- |
+| `get_queryset` / `list` | `select_related("board")`; filtro opcional `?board_id=`     |
+| `create`                | Exigir `board_id`; validar board no workspace               |
+| `partial_update`        | Aceitar `board_id`; bloquear `null` se já tinha board (D2b) |
 
-**Serializers:** `apps/api/operis/app/serializers/project.py`
+**Serializers:** `apps/api/operoz/app/serializers/project.py`
 
 - `BoardLiteSerializer` (id, name, slug, logo_props)
 - Incluir `board_id` + `board` nested em `ProjectListSerializer` / `ProjectSerializer`
 
 ### 5.3 Board issues agregados (MVP-2)
 
-**Padrão validado:** `WorkspaceViewIssuesViewSet` em `apps/api/operis/app/views/view/base.py` (linha 138+)
+**Padrão validado:** `WorkspaceViewIssuesViewSet` em `apps/api/operoz/app/views/view/base.py` (linha 138+)
 
-| Aspecto | Workspace global | Board (novo) |
-|---------|------------------|--------------|
-| Path | `GET .../workspaces/{slug}/issues/` | `GET .../workspaces/{slug}/boards/{board_slug}/issues/` |
-| Queryset base | `Issue.issue_objects.filter(workspace__slug=slug)` | + `project__board_id=board.id` |
-| Permissões guest | `_get_project_permission_filters()` | **Reutilizar igual** |
-| Filtros | `IssueFilterSet`, `issue_filters` | **Reutilizar igual** |
-| Serializer | `ViewIssueListSerializer` | **Reutilizar igual** |
+| Aspecto          | Workspace global                                   | Board (novo)                                            |
+| ---------------- | -------------------------------------------------- | ------------------------------------------------------- |
+| Path             | `GET .../workspaces/{slug}/issues/`                | `GET .../workspaces/{slug}/boards/{board_slug}/issues/` |
+| Queryset base    | `Issue.issue_objects.filter(workspace__slug=slug)` | + `project__board_id=board.id`                          |
+| Permissões guest | `_get_project_permission_filters()`                | **Reutilizar igual**                                    |
+| Filtros          | `IssueFilterSet`, `issue_filters`                  | **Reutilizar igual**                                    |
+| Serializer       | `ViewIssueListSerializer`                          | **Reutilizar igual**                                    |
 
-**Ficheiro novo:** `apps/api/operis/app/views/board/issues.py` — classe `BoardIssuesEndpoint(BaseAPIView)` ou método no `BoardViewSet`.
+**Ficheiro novo:** `apps/api/operoz/app/views/board/issues.py` — classe `BoardIssuesEndpoint(BaseAPIView)` ou método no `BoardViewSet`.
 
 ### 5.4 Analytics (D8 — MVP-1)
 
 **Validado:**
 
-- Filtros: `apps/api/operis/utils/date_utils.py` → `get_analytics_filters(..., project_ids=...)`
-- Views: `apps/api/operis/app/views/analytic/advance.py`
+- Filtros: `apps/api/operoz/utils/date_utils.py` → `get_analytics_filters(..., project_ids=...)`
+- Views: `apps/api/operoz/app/views/analytic/advance.py`
 - Front: `apps/web/core/services/analytics.service.ts` + `TAnalyticsFilterParams` em `packages/types/src/analytics.ts` (hoje só `project_ids`, `cycle_id`, `module_id`)
 
 **Alteração:**
@@ -265,7 +265,7 @@ Registrar em `apps/api/operis/app/urls/__init__.py`.
 
 ### 5.5 Webhooks (opcional MVP-1, recomendado)
 
-**Ficheiro:** `apps/api/operis/bgtasks/webhook_task.py`
+**Ficheiro:** `apps/api/operoz/bgtasks/webhook_task.py`
 
 - Adicionar `"board": BoardSerializer` em `SERIALIZER_MAPPER` / `MODEL_MAPPER`
 - Flag `board` em `db/models/webhook.py` + migração
@@ -275,13 +275,13 @@ Referência de create: `ProjectViewSet.create` linha ~290 e `ModuleViewSet.creat
 
 ### 5.6 ViewSet template (copiar de)
 
-| Caso | Template validado | Caminho |
-|------|-------------------|---------|
-| CRUD workspace-scoped | `WorkspaceStickyViewSet` | `app/views/workspace/sticky.py` |
-| Lista com permissões projeto | `ProjectViewSet.list` | `app/views/project/base.py` |
-| Issues cross-project | `WorkspaceViewIssuesViewSet` | `app/views/view/base.py` |
+| Caso                         | Template validado            | Caminho                         |
+| ---------------------------- | ---------------------------- | ------------------------------- |
+| CRUD workspace-scoped        | `WorkspaceStickyViewSet`     | `app/views/workspace/sticky.py` |
+| Lista com permissões projeto | `ProjectViewSet.list`        | `app/views/project/base.py`     |
+| Issues cross-project         | `WorkspaceViewIssuesViewSet` | `app/views/view/base.py`        |
 
-**Export views:** `apps/api/operis/app/views/__init__.py`
+**Export views:** `apps/api/operoz/app/views/__init__.py`
 
 ---
 
@@ -289,34 +289,34 @@ Referência de create: `ProjectViewSet.create` linha ~290 e `ModuleViewSet.creat
 
 ### 6.1 Modelo de ameaças
 
-| Ameaça | Mitigação |
-|--------|-----------|
-| IDOR: aceder board de outro workspace | Toda query filtra `workspace__slug=kwargs["slug"]` |
-| IDOR: associar projeto a board de outro WS | Serializer valida `board.workspace_id == project.workspace_id` |
-| IDOR: `board_id` em analytics de outro WS | Resolver board só dentro do slug da request |
-| Escalada: member cria board | D4: só `ROLE.ADMIN` em POST |
-| Guest vê issues de projeto privado via board agregado | Reutilizar `_get_project_permission_filters()` sem relaxar |
-| Membro vê projeto sem ser `ProjectMember` | Inalterado: board não contorna `ProjectMember` / `network` |
-| Projeto legado null exposto indevidamente | Listagem «Sem board» usa mesmo filtro que `ProjectViewSet.list` |
+| Ameaça                                                | Mitigação                                                       |
+| ----------------------------------------------------- | --------------------------------------------------------------- |
+| IDOR: aceder board de outro workspace                 | Toda query filtra `workspace__slug=kwargs["slug"]`              |
+| IDOR: associar projeto a board de outro WS            | Serializer valida `board.workspace_id == project.workspace_id`  |
+| IDOR: `board_id` em analytics de outro WS             | Resolver board só dentro do slug da request                     |
+| Escalada: member cria board                           | D4: só `ROLE.ADMIN` em POST                                     |
+| Guest vê issues de projeto privado via board agregado | Reutilizar `_get_project_permission_filters()` sem relaxar      |
+| Membro vê projeto sem ser `ProjectMember`             | Inalterado: board não contorna `ProjectMember` / `network`      |
+| Projeto legado null exposto indevidamente             | Listagem «Sem board» usa mesmo filtro que `ProjectViewSet.list` |
 
 ### 6.2 Matriz de permissões (MVP)
 
-| Ação | Guest WS | Member WS | Admin WS |
-|------|----------|-----------|----------|
-| Listar boards | Sim | Sim | Sim |
-| Ver página board / projetos listados | Sim* | Sim* | Sim |
-| Criar board | Não | Não | Sim |
-| Editar/arquivar board | Não | Não | Sim |
-| Criar projeto (exige board) | Não** | Sim*** | Sim |
+| Ação                                 | Guest WS       | Member WS      | Admin WS       |
+| ------------------------------------ | -------------- | -------------- | -------------- |
+| Listar boards                        | Sim            | Sim            | Sim            |
+| Ver página board / projetos listados | Sim\*          | Sim\*          | Sim            |
+| Criar board                          | Não            | Não            | Sim            |
+| Editar/arquivar board                | Não            | Não            | Sim            |
+| Criar projeto (exige board)          | Não\*\*        | Sim\*\*\*      | Sim            |
 | Ver issues no board agregado (MVP-2) | Regras projeto | Regras projeto | Regras projeto |
 
 \* Ver board; projetos dentro respeitam membership.  
-\** Guest workspace normalmente não cria projeto.  
-\*** Member + projetos públicos conforme `ProjectViewSet.list` (linhas 115–127).
+\*\* Guest workspace normalmente não cria projeto.  
+\*\*\* Member + projetos públicos conforme `ProjectViewSet.list` (linhas 115–127).
 
 ### 6.3 Implementação de permissões (sem novo nível `BOARD`)
 
-**Validado:** `allow_permission` em `apps/api/operis/app/permissions/base.py` só tem `WORKSPACE` e `PROJECT` (default).
+**Validado:** `allow_permission` em `apps/api/operoz/app/permissions/base.py` só tem `WORKSPACE` e `PROJECT` (default).
 
 Para Boards no MVP:
 
@@ -333,13 +333,13 @@ def create(self, request, slug):
 
 ### 6.4 Regras de validação (serializers)
 
-| Regra | Onde |
-|-------|------|
-| `board_id` required on POST project | `ProjectSerializer.validate` ou `create` |
-| `board_id` not null on PATCH if already set | `ProjectSerializer.validate` |
-| `board.workspace == project.workspace` | `validate_board_id` |
-| `slug` único no workspace | `BoardSerializer` |
-| Não arquivar board com validação extra | Opcional: warning se único board e D2 |
+| Regra                                       | Onde                                     |
+| ------------------------------------------- | ---------------------------------------- |
+| `board_id` required on POST project         | `ProjectSerializer.validate` ou `create` |
+| `board_id` not null on PATCH if already set | `ProjectSerializer.validate`             |
+| `board.workspace == project.workspace`      | `validate_board_id`                      |
+| `slug` único no workspace                   | `BoardSerializer`                        |
+| Não arquivar board com validação extra      | Opcional: warning se único board e D2    |
 
 ### 6.5 Auditoria
 
@@ -374,12 +374,12 @@ packages/i18n/.../boards.*
 
 **Copiar de:** `apps/web/core/store/project/project.store.ts`
 
-| Estado | Uso |
-|--------|-----|
-| `boardMap: Record<string, IBoard>` | id → board |
-| `boardIdsByWorkspace` | ordenação sidebar |
-| `fetchBoards(slug)` | GET `/boards/` |
-| `createBoard`, `updateBoard`, `archiveBoard` | |
+| Estado                                       | Uso               |
+| -------------------------------------------- | ----------------- |
+| `boardMap: Record<string, IBoard>`           | id → board        |
+| `boardIdsByWorkspace`                        | ordenação sidebar |
+| `fetchBoards(slug)`                          | GET `/boards/`    |
+| `createBoard`, `updateBoard`, `archiveBoard` |                   |
 
 **Root:** `apps/web/core/store/root.store.ts` — `boardStore: BoardStore`.
 
@@ -429,15 +429,15 @@ Inserir no bloco `layout("./(all)/[workspaceSlug]/(projects)/layout.tsx")` **ant
 
 ### 7.6 Issues cross-board (MVP-2 — padrão validado)
 
-| Peça | Referência existente |
-|------|----------------------|
-| Enum | Adicionar `BOARD = "BOARD"` em `packages/types/src/issues/issue.ts` |
-| Store issues | `core/store/issue/workspace/issue.store.ts` |
-| Store filter | `core/store/issue/workspace/filter.store.ts` |
-| Service | `WorkspaceViewService.getViewIssues` → `GET .../issues/` |
-| Novo service | `board.service.ts` → `GET .../boards/{slug}/issues/` |
-| Hook layout | `use-issue-layout-store.ts` — `boardSlug` param |
-| Wiring | `issue/root.store.ts`, `use-issues.ts`, `use-issues-actions.tsx` |
+| Peça         | Referência existente                                                |
+| ------------ | ------------------------------------------------------------------- |
+| Enum         | Adicionar `BOARD = "BOARD"` em `packages/types/src/issues/issue.ts` |
+| Store issues | `core/store/issue/workspace/issue.store.ts`                         |
+| Store filter | `core/store/issue/workspace/filter.store.ts`                        |
+| Service      | `WorkspaceViewService.getViewIssues` → `GET .../issues/`            |
+| Novo service | `board.service.ts` → `GET .../boards/{slug}/issues/`                |
+| Hook layout  | `use-issue-layout-store.ts` — `boardSlug` param                     |
+| Wiring       | `issue/root.store.ts`, `use-issues.ts`, `use-issues-actions.tsx`    |
 
 ### 7.7 Analytics UI (D8)
 
@@ -461,28 +461,28 @@ Componente: seletor de board no header de analytics → passa `board_id` nos par
 
 ### MVP-1 — Estrutura (validado contra código atual)
 
-| # | Funcionalidade | Backend | Frontend |
-|---|----------------|---------|----------|
-| F1 | CRUD board (admin) | `BoardViewSet` | Modal + settings WS |
-| F2 | Projeto com `board_id` | `ProjectViewSet` | Create project modal |
-| F3 | Listar projetos por board | `?board_id=` + nested serializer | Sidebar hierárquica |
-| F4 | Secção «Sem board» | Sem filtro especial — `board_id__isnull` | Sidebar |
-| F5 | Mover projeto | PATCH | Project settings |
-| F6 | Arquivar board | `archived_at` | Hide sidebar + settings |
-| F7 | Página `/boards/{slug}` | GET detail + projects | Overview |
-| F8 | Analytics por board | `board_id` → `project_ids` | Filtro UI |
-| F9 | i18n PT/EN | — | `boards.*` |
-| F10 | Breadcrumbs | — | `Workspace > Board > Project` |
+| #   | Funcionalidade            | Backend                                  | Frontend                      |
+| --- | ------------------------- | ---------------------------------------- | ----------------------------- |
+| F1  | CRUD board (admin)        | `BoardViewSet`                           | Modal + settings WS           |
+| F2  | Projeto com `board_id`    | `ProjectViewSet`                         | Create project modal          |
+| F3  | Listar projetos por board | `?board_id=` + nested serializer         | Sidebar hierárquica           |
+| F4  | Secção «Sem board»        | Sem filtro especial — `board_id__isnull` | Sidebar                       |
+| F5  | Mover projeto             | PATCH                                    | Project settings              |
+| F6  | Arquivar board            | `archived_at`                            | Hide sidebar + settings       |
+| F7  | Página `/boards/{slug}`   | GET detail + projects                    | Overview                      |
+| F8  | Analytics por board       | `board_id` → `project_ids`               | Filtro UI                     |
+| F9  | i18n PT/EN                | —                                        | `boards.*`                    |
+| F10 | Breadcrumbs               | —                                        | `Workspace > Board > Project` |
 
 ### MVP-2 — Hub Jira (referência §17 do plano)
 
-| # | Funcionalidade | Backend | Frontend |
-|---|----------------|---------|----------|
-| F11 | Issues agregados | `BoardIssuesEndpoint` | Tab Lista/Backlog |
-| F12 | Filtro Projeto | `project_id` query param | Dropdown |
-| F13 | Layout Kanban board | — | `EIssuesStoreType.BOARD` |
-| F14 | Timeline | issues+modules com datas | Tab Cronograma |
-| F15 | Calendário | — | Tab Calendário |
+| #   | Funcionalidade      | Backend                  | Frontend                 |
+| --- | ------------------- | ------------------------ | ------------------------ |
+| F11 | Issues agregados    | `BoardIssuesEndpoint`    | Tab Lista/Backlog        |
+| F12 | Filtro Projeto      | `project_id` query param | Dropdown                 |
+| F13 | Layout Kanban board | —                        | `EIssuesStoreType.BOARD` |
+| F14 | Timeline            | issues+modules com datas | Tab Cronograma           |
+| F15 | Calendário          | —                        | Tab Calendário           |
 
 ---
 
@@ -571,7 +571,7 @@ python manage.py shell
 ```
 
 ```python
-from operis.db.models import Board, Project, Workspace
+from operoz.db.models import Board, Project, Workspace
 w = Workspace.objects.get(slug="tech4humans")  # ajustar slug
 b = Board.objects.create(workspace=w, name="Test Board", slug="test-board", created_by_id=...)
 p = Project.objects.filter(workspace=w).first()
@@ -637,16 +637,16 @@ pnpm dev
 
 ### 11.1 Backend (Django)
 
-**Local sugerido:** `apps/api/operis/tests/contract/app/test_boards.py` (seguir padrão existente em `tests/`).
+**Local sugerido:** `apps/api/operoz/tests/contract/app/test_boards.py` (seguir padrão existente em `tests/`).
 
-| Caso | Assert |
-|------|--------|
-| `test_create_board_admin` | 201 |
-| `test_create_board_member_forbidden` | 403 |
-| `test_project_create_requires_board` | 400 |
-| `test_project_patch_cannot_null_board` | 400 |
+| Caso                                   | Assert                |
+| -------------------------------------- | --------------------- |
+| `test_create_board_admin`              | 201                   |
+| `test_create_board_member_forbidden`   | 403                   |
+| `test_project_create_requires_board`   | 400                   |
+| `test_project_patch_cannot_null_board` | 400                   |
 | `test_board_slug_unique_per_workspace` | IntegrityError ou 400 |
-| `test_project_board_wrong_workspace` | 400 |
+| `test_project_board_wrong_workspace`   | 400                   |
 
 ### 11.2 Frontend
 
@@ -694,16 +694,16 @@ Variável ambiente `ENABLE_WORKSPACE_BOARDS=true` — guard em URLs/views se rol
 
 ## 13. Armadilhas validadas no código
 
-| Armadilha | Evidência no repo | O que fazer |
-|-----------|-------------------|-------------|
-| Confundir com Kanban layout | `display_filters.layout: "board"` em projeto | Nome UI «Boards» = container; layout continua «board» |
-| Usar `DeployBoard` | `deploy_boards`, `ProjectDeployBoard` | Não misturar; é publicação Space |
-| Reativar `Team` / teamspace CE | `Team` sem API; `teamspace-list.tsx` return null | Novo modelo `Board` |
-| `EIssuesStoreType.TEAM` | Stubs em `ce/store/issue/team` | Criar `BOARD`, não TEAM |
-| Board como `ProjectBaseModel` | Module usa `project` FK obrigatório | Board só `workspace` FK |
-| Serviço só em `@operis/services` | `ProjectService` está em `apps/web/core/services` | Board service no web |
-| Esquecer guest em issues agregados | `WorkspaceViewIssuesViewSet._get_project_permission_filters` | Copiar método integralmente |
-| Analytics sem `project_ids` | `get_analytics_filters` linha 172-174 | Resolver board → project_ids |
+| Armadilha                          | Evidência no repo                                            | O que fazer                                           |
+| ---------------------------------- | ------------------------------------------------------------ | ----------------------------------------------------- |
+| Confundir com Kanban layout        | `display_filters.layout: "board"` em projeto                 | Nome UI «Boards» = container; layout continua «board» |
+| Usar `DeployBoard`                 | `deploy_boards`, `ProjectDeployBoard`                        | Não misturar; é publicação Space                      |
+| Reativar `Team` / teamspace CE     | `Team` sem API; `teamspace-list.tsx` return null             | Novo modelo `Board`                                   |
+| `EIssuesStoreType.TEAM`            | Stubs em `ce/store/issue/team`                               | Criar `BOARD`, não TEAM                               |
+| Board como `ProjectBaseModel`      | Module usa `project` FK obrigatório                          | Board só `workspace` FK                               |
+| Serviço só em `@operoz/services`   | `ProjectService` está em `apps/web/core/services`            | Board service no web                                  |
+| Esquecer guest em issues agregados | `WorkspaceViewIssuesViewSet._get_project_permission_filters` | Copiar método integralmente                           |
+| Analytics sem `project_ids`        | `get_analytics_filters` linha 172-174                        | Resolver board → project_ids                          |
 
 ---
 
@@ -711,45 +711,45 @@ Variável ambiente `ENABLE_WORKSPACE_BOARDS=true` — guard em URLs/views se rol
 
 ### Backend
 
-| Tópico | Caminho |
-|--------|---------|
-| Project CRUD | `apps/api/operis/app/views/project/base.py` |
-| Project serializers | `apps/api/operis/app/serializers/project.py` |
-| Project model | `apps/api/operis/db/models/project.py` |
-| Workspace model + slug | `apps/api/operis/db/models/workspace.py` |
-| Permissões | `apps/api/operis/app/permissions/base.py` |
-| Issues cross-workspace | `apps/api/operis/app/views/view/base.py` (`WorkspaceViewIssuesViewSet`) |
-| Workspace issues URL | `apps/api/operis/app/urls/views.py` (linha 52) |
-| Analytics filters | `apps/api/operis/app/utils/date_utils.py` |
-| Webhooks | `apps/api/operis/bgtasks/webhook_task.py` |
-| Sticky ViewSet template | `apps/api/operis/app/views/workspace/sticky.py` |
-| Team legado (não usar) | `apps/api/operis/db/models/workspace.py` (`Team` linha 279) |
-| Migrações | `apps/api/operis/db/migrations/0122_*.py` |
+| Tópico                  | Caminho                                                                 |
+| ----------------------- | ----------------------------------------------------------------------- |
+| Project CRUD            | `apps/api/operoz/app/views/project/base.py`                             |
+| Project serializers     | `apps/api/operoz/app/serializers/project.py`                            |
+| Project model           | `apps/api/operoz/db/models/project.py`                                  |
+| Workspace model + slug  | `apps/api/operoz/db/models/workspace.py`                                |
+| Permissões              | `apps/api/operoz/app/permissions/base.py`                               |
+| Issues cross-workspace  | `apps/api/operoz/app/views/view/base.py` (`WorkspaceViewIssuesViewSet`) |
+| Workspace issues URL    | `apps/api/operoz/app/urls/views.py` (linha 52)                          |
+| Analytics filters       | `apps/api/operoz/app/utils/date_utils.py`                               |
+| Webhooks                | `apps/api/operoz/bgtasks/webhook_task.py`                               |
+| Sticky ViewSet template | `apps/api/operoz/app/views/workspace/sticky.py`                         |
+| Team legado (não usar)  | `apps/api/operoz/db/models/workspace.py` (`Team` linha 279)             |
+| Migrações               | `apps/api/operoz/db/migrations/0122_*.py`                               |
 
 ### Frontend
 
-| Tópico | Caminho |
-|--------|---------|
-| Rotas | `apps/web/app/routes/core.ts` |
-| Project store | `apps/web/core/store/project/project.store.ts` |
-| Project service | `apps/web/core/services/project/project.service.ts` |
-| Sidebar projetos | `apps/web/core/components/workspace/sidebar/projects-list.tsx` |
-| Workspace issues store | `apps/web/core/store/issue/workspace/issue.store.ts` |
-| Workspace view service | `packages/services/src/workspace/view.service.ts` |
-| Issue store types | `packages/types/src/issues/issue.ts` |
-| Analytics service | `apps/web/core/services/analytics.service.ts` |
-| Router / teamspace legado | `apps/web/core/store/router.store.ts` (`teamspaceId`) |
-| CE team stub | `apps/web/ce/store/issue/team/issue.store.ts` |
+| Tópico                    | Caminho                                                        |
+| ------------------------- | -------------------------------------------------------------- |
+| Rotas                     | `apps/web/app/routes/core.ts`                                  |
+| Project store             | `apps/web/core/store/project/project.store.ts`                 |
+| Project service           | `apps/web/core/services/project/project.service.ts`            |
+| Sidebar projetos          | `apps/web/core/components/workspace/sidebar/projects-list.tsx` |
+| Workspace issues store    | `apps/web/core/store/issue/workspace/issue.store.ts`           |
+| Workspace view service    | `packages/services/src/workspace/view.service.ts`              |
+| Issue store types         | `packages/types/src/issues/issue.ts`                           |
+| Analytics service         | `apps/web/core/services/analytics.service.ts`                  |
+| Router / teamspace legado | `apps/web/core/store/router.store.ts` (`teamspaceId`)          |
+| CE team stub              | `apps/web/ce/store/issue/team/issue.store.ts`                  |
 
 ### Packages
 
-| Tópico | Caminho |
-|--------|---------|
-| Types export | `packages/types/src/index.ts` |
-| Project types | `packages/types/src/project/projects.ts` |
-| Analytics params | `packages/types/src/analytics.ts` |
-| Workspace constants | `packages/constants/src/workspace.ts` |
+| Tópico              | Caminho                                  |
+| ------------------- | ---------------------------------------- |
+| Types export        | `packages/types/src/index.ts`            |
+| Project types       | `packages/types/src/project/projects.ts` |
+| Analytics params    | `packages/types/src/analytics.ts`        |
+| Workspace constants | `packages/constants/src/workspace.ts`    |
 
 ---
 
-*Ao implementar, marcar checkboxes em [tech4humans-boards-plano-desenvolvimento.md](./tech4humans-boards-plano-desenvolvimento.md) §16 e neste doc §10.*
+_Ao implementar, marcar checkboxes em [tech4humans-boards-plano-desenvolvimento.md](./tech4humans-boards-plano-desenvolvimento.md) §16 e neste doc §10._

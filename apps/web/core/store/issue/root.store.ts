@@ -1,8 +1,8 @@
 import { isEmpty } from "lodash-es";
 import { autorun, makeObservable, observable, runInAction } from "mobx";
 // types
-import type { ICycle, IIssueLabel, IModule, IProject, IState, IUserLite, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { ICycle, IIssueLabel, IModule, IProject, IState, IUserLite, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // plane web store
 import type { IProjectEpics, IProjectEpicsFilter } from "@/plane-web/store/issue/epic";
 import { ProjectEpics, ProjectEpicsFilter } from "@/plane-web/store/issue/epic";

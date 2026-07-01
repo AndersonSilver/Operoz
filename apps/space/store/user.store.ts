@@ -2,8 +2,8 @@ import { AxiosError } from "axios";
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import { UserService } from "@operis/services";
-import type { ActorDetail, IUser } from "@operis/types";
+import { UserService } from "@operoz/services";
+import type { ActorDetail, IUser } from "@operoz/types";
 // store types
 import type { IProfileStore } from "@/store/profile.store";
 import { ProfileStore } from "@/store/profile.store";

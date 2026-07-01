@@ -3,8 +3,8 @@ import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 // assets
 import darkActivityAsset from "@/app/assets/empty-state/profile/activity-dark.webp?url";
 import lightActivityAsset from "@/app/assets/empty-state/profile/activity-light.webp?url";

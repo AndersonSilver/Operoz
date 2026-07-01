@@ -1,10 +1,10 @@
 import { endOfMonth, endOfWeek, endOfYear, startOfMonth, startOfWeek, startOfYear } from "date-fns";
 // helpers
 // types
-import { DURATION_FILTER_OPTIONS, EDurationFilters } from "@operis/constants";
-import type { TIssuesListTypes } from "@operis/types";
+import { DURATION_FILTER_OPTIONS, EDurationFilters } from "@operoz/constants";
+import type { TIssuesListTypes } from "@operoz/types";
 // constants
-import { renderFormattedDate, renderFormattedPayloadDate } from "@operis/utils";
+import { renderFormattedDate, renderFormattedPayloadDate } from "@operoz/utils";
 
 // -------------------- DEPRECATED --------------------
 

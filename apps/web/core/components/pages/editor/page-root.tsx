@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { CollaborationState, EditorRefApi } from "@operis/editor";
-import type { TDocumentPayload, TPage, TPageVersion, TWebhookConnectionQueryParams } from "@operis/types";
+import type { CollaborationState, EditorRefApi } from "@operoz/editor";
+import type { TDocumentPayload, TPage, TPageVersion, TWebhookConnectionQueryParams } from "@operoz/types";
 // hooks
 import { usePageFallback } from "@/hooks/use-page-fallback";
 // plane web import

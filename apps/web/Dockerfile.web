@@ -65,7 +65,7 @@ ENV VITE_SPACE_BASE_PATH=$VITE_SPACE_BASE_PATH
 ARG VITE_WEB_BASE_URL=""
 ENV VITE_WEB_BASE_URL=$VITE_WEB_BASE_URL
 
-# Operis/Tech4Humans: boards sidebar + workspace settings (vite.config bakes VITE_* at build time)
+# Operoz/Tech4Humans: boards sidebar + workspace settings (vite.config bakes VITE_* at build time)
 ARG VITE_ENABLE_BOARDS="true"
 ENV VITE_ENABLE_BOARDS=$VITE_ENABLE_BOARDS
 

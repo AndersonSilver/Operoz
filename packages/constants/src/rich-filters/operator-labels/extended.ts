@@ -1,4 +1,4 @@
-import type { TExtendedSupportedOperators } from "@operis/types";
+import type { TExtendedSupportedOperators } from "@operoz/types";
 
 /**
  * Extended operator labels

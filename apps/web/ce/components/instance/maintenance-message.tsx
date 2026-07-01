@@ -1,6 +1,6 @@
-import { SUPPORT_EMAIL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { SUPPORT_EMAIL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 import { RefreshCw } from "lucide-react";
 
 export function MaintenanceMessage() {

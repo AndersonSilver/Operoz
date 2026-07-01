@@ -1,4 +1,4 @@
-import type { TIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
 
 export const useWorkItemProperties = (
   projectId: string | null | undefined,

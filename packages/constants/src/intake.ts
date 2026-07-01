@@ -1,5 +1,5 @@
-import type { TInboxIssueStatus } from "@operis/types";
-import { EInboxIssueStatus } from "@operis/types";
+import type { TInboxIssueStatus } from "@operoz/types";
+import { EInboxIssueStatus } from "@operoz/types";
 
 export const INBOX_STATUS: {
   key: string;

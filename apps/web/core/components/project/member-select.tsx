@@ -2,11 +2,11 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Ban } from "lucide-react";
-import { EUserProjectRoles } from "@operis/types";
+import { EUserProjectRoles } from "@operoz/types";
 // plane ui
-import { Avatar, CustomSearchSelect } from "@operis/ui";
+import { Avatar, CustomSearchSelect } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 

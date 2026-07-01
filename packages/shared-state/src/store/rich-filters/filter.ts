@@ -9,8 +9,8 @@ import type {
   TFilterOptions,
   TSaveViewOptions,
   TUpdateViewOptions,
-} from "@operis/constants";
-import { DEFAULT_FILTER_VISIBILITY_OPTIONS } from "@operis/constants";
+} from "@operoz/constants";
+import { DEFAULT_FILTER_VISIBILITY_OPTIONS } from "@operoz/constants";
 import type {
   IFilterAdapter,
   SingleOrArray,
@@ -24,8 +24,8 @@ import type {
   TFilterValue,
   TLogicalOperator,
   TSupportedOperators,
-} from "@operis/types";
-import { FILTER_NODE_TYPE } from "@operis/types";
+} from "@operoz/types";
+import { FILTER_NODE_TYPE } from "@operoz/types";
 // local imports
 import {
   deepCompareFilterExpressions,
@@ -38,7 +38,7 @@ import {
   sanitizeAndStabilizeExpression,
   shouldNotifyChangeForExpression,
   updateNodeInExpression,
-} from "@operis/utils";
+} from "@operoz/utils";
 import type { IFilterConfigManager } from "./config-manager";
 import { FilterConfigManager } from "./config-manager";
 import type { IFilterInstanceHelper } from "./filter-helpers";

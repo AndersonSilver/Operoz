@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@operis/constants";
+import { ETabIndices } from "@operoz/constants";
 // types
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { ICycle } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { ICycle } from "@operoz/types";
 // ui
-import { Input, TextArea } from "@operis/ui";
-import { getDate, renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
+import { Input, TextArea } from "@operoz/ui";
+import { getDate, renderFormattedPayloadDate, getTabIndex } from "@operoz/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";

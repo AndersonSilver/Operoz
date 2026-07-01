@@ -3,13 +3,13 @@ import { add } from "date-fns";
 import { Controller, useForm } from "react-hook-form";
 import { Calendar } from "lucide-react";
 // types
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IApiToken } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IApiToken } from "@operoz/types";
 // ui
-import { CustomSelect, Input, TextArea, ToggleSwitch } from "@operis/ui";
-import { cn, renderFormattedDate, renderFormattedTime } from "@operis/utils";
+import { CustomSelect, Input, TextArea, ToggleSwitch } from "@operoz/ui";
+import { cn, renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 // components
 import { DateDropdown } from "@/components/dropdowns/date";
 // helpers

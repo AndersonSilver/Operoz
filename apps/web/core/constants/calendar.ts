@@ -1,5 +1,5 @@
-import type { TCalendarLayouts } from "@operis/types";
-import { EStartOfTheWeek } from "@operis/types";
+import type { TCalendarLayouts } from "@operoz/types";
+import { EStartOfTheWeek } from "@operoz/types";
 
 export const MONTHS_LIST: {
   [monthNumber: number]: {

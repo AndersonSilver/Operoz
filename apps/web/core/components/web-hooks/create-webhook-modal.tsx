@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { useParams } from "next/navigation";
 // types
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWebhook, IWorkspace, TWebhookEventTypes } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWebhook, IWorkspace, TWebhookEventTypes } from "@operoz/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // helpers
-import { csvDownload } from "@operis/utils";
+import { csvDownload } from "@operoz/utils";
 // hooks
 import useKeypress from "@/hooks/use-keypress";
 // components

@@ -5,7 +5,7 @@ import type {
   TFilterValue,
   TWorkItemFilterExpression,
   TWorkItemFilterProperty,
-} from "@operis/types";
+} from "@operoz/types";
 // local imports
 import { workItemFiltersAdapter } from "../store/work-item-filters/adapter";
 import { buildTempFilterExpressionFromConditions } from "./rich-filter.helper";

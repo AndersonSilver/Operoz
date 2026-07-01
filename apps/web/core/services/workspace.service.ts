@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IWorkspace,
   IWorkspaceMemberMe,
@@ -23,7 +23,7 @@ import type {
   TClient360HealthHistoryResponse,
   TClient360ListResponse,
   TClient360MatrixResponse,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
 
@@ -534,7 +534,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     params: { period_start: string; period_end: string }
-  ): Promise<import("@operis/types").TClient360Narrative> {
+  ): Promise<import("@operoz/types").TClient360Narrative> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/narrative/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -547,7 +547,7 @@ export class WorkspaceService extends APIService {
     projectId: string,
     data: { wins_md?: string; risks_md?: string; next_steps_md?: string },
     params: { period_start: string; period_end: string }
-  ): Promise<import("@operis/types").TClient360Narrative> {
+  ): Promise<import("@operoz/types").TClient360Narrative> {
     return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/narrative/`, data, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -633,7 +633,7 @@ export class WorkspaceService extends APIService {
       });
   }
 
-  async getClient360SharedViews(workspaceSlug: string): Promise<import("@operis/types").TClient360SharedView[]> {
+  async getClient360SharedViews(workspaceSlug: string): Promise<import("@operoz/types").TClient360SharedView[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/shared-views/`)
       .then((response) => response?.data ?? [])
       .catch((error) => {
@@ -644,7 +644,7 @@ export class WorkspaceService extends APIService {
   async createClient360SharedView(
     workspaceSlug: string,
     data: { name: string; payload: Record<string, unknown>; is_shared?: boolean }
-  ): Promise<import("@operis/types").TClient360SharedView> {
+  ): Promise<import("@operoz/types").TClient360SharedView> {
     return this.post(`/api/workspaces/${workspaceSlug}/client-360/shared-views/`, data)
       .then((response) => response?.data)
       .catch((error) => {
@@ -661,7 +661,7 @@ export class WorkspaceService extends APIService {
   async getClient360FinopsHeatmap(
     workspaceSlug: string,
     params?: { board_ids?: string }
-  ): Promise<import("@operis/types").TClient360ConsultantHeatmap> {
+  ): Promise<import("@operoz/types").TClient360ConsultantHeatmap> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/finops/consultant-heatmap/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -687,8 +687,8 @@ export class WorkspaceService extends APIService {
   async updateClient360FinopsProfile(
     workspaceSlug: string,
     projectId: string,
-    data: import("@operis/types").TClient360FinopsProfileWrite
-  ): Promise<import("@operis/types").TClient360FinopsProfile> {
+    data: import("@operoz/types").TClient360FinopsProfileWrite
+  ): Promise<import("@operoz/types").TClient360FinopsProfile> {
     return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/finops/`, data)
       .then((response) => response?.data)
       .catch((error) => {
@@ -699,7 +699,7 @@ export class WorkspaceService extends APIService {
   async getClient360WeeklyBriefing(
     workspaceSlug: string,
     params: { period_start: string; period_end: string }
-  ): Promise<import("@operis/types").TClient360WeeklyBriefing> {
+  ): Promise<import("@operoz/types").TClient360WeeklyBriefing> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/intelligence/weekly-briefing/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -710,7 +710,7 @@ export class WorkspaceService extends APIService {
   async generateClient360WeeklyBriefing(
     workspaceSlug: string,
     params: { period_start: string; period_end: string; force?: boolean }
-  ): Promise<import("@operis/types").TClient360WeeklyBriefing> {
+  ): Promise<import("@operoz/types").TClient360WeeklyBriefing> {
     return this.post(`/api/workspaces/${workspaceSlug}/client-360/intelligence/weekly-briefing/`, {}, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -722,7 +722,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     params: { period_start: string; period_end: string }
-  ): Promise<import("@operis/types").TClient360HealthExplainer> {
+  ): Promise<import("@operoz/types").TClient360HealthExplainer> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/health-explainer/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -734,7 +734,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     params: { period_start: string; period_end: string }
-  ): Promise<import("@operis/types").TClient360SuggestedActionsResponse> {
+  ): Promise<import("@operoz/types").TClient360SuggestedActionsResponse> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/suggested-actions/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -754,7 +754,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     params: { period_start: string; period_end: string; quarter?: string }
-  ): Promise<import("@operis/types").TClient360QbrDraft> {
+  ): Promise<import("@operoz/types").TClient360QbrDraft> {
     return this.get(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -766,7 +766,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     params: { period_start: string; period_end: string; quarter?: string }
-  ): Promise<import("@operis/types").TClient360QbrDraft> {
+  ): Promise<import("@operoz/types").TClient360QbrDraft> {
     return this.post(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, {}, { params })
       .then((response) => response?.data)
       .catch((error) => {
@@ -778,7 +778,7 @@ export class WorkspaceService extends APIService {
     workspaceSlug: string,
     projectId: string,
     payload: { human_edited_md: string; quarter?: string }
-  ): Promise<import("@operis/types").TClient360QbrDraft> {
+  ): Promise<import("@operoz/types").TClient360QbrDraft> {
     return this.patch(`/api/workspaces/${workspaceSlug}/client-360/${projectId}/qbr-draft/`, payload, {
       params: payload.quarter ? { quarter: payload.quarter } : undefined,
     })

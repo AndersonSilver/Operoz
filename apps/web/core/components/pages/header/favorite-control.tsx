@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Star } from "lucide-react";
 // ui
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 // hooks
 import { usePageOperations } from "@/hooks/use-page-operations";
 // store

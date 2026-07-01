@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane types
-import type { IWorkspace } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { IWorkspace } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 // components
 import { PowerKWorkspacesMenu } from "@/components/power-k/menus/workspaces";
 // hooks

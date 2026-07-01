@@ -1,12 +1,12 @@
 import { useState } from "react";
 // plane imports
-import { ROLE } from "@operis/constants";
+import { ROLE } from "@operoz/constants";
 // types
-import { Button } from "@operis/propel/button";
-import type { IWorkspaceMemberInvitation } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { IWorkspaceMemberInvitation } from "@operoz/types";
 // ui
-import { Checkbox, Spinner } from "@operis/ui";
-import { truncateText } from "@operis/utils";
+import { Checkbox, Spinner } from "@operoz/ui";
+import { truncateText } from "@operoz/utils";
 // constants
 // helpers
 import { WorkspaceLogo } from "@/components/workspace/logo";

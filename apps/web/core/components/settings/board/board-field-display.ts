@@ -1,4 +1,4 @@
-import type { IBoardCustomField } from "@operis/types";
+import type { IBoardCustomField } from "@operoz/types";
 
 type TranslateFn = (key: string, options?: Record<string, unknown>) => string;
 

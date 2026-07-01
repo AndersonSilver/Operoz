@@ -9,7 +9,7 @@ import type {
   TWidgetStatsResponse,
   TWidgetKeys,
   TWidgetStatsRequestParams,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { DashboardService } from "@/services/dashboard.service";
 // plane web store

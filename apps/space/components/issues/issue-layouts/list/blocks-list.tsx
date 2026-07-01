@@ -1,6 +1,6 @@
 import type { MutableRefObject } from "react";
 // types
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 import { IssueBlock } from "./block";
 
 interface Props {

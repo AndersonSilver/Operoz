@@ -1,6 +1,6 @@
 import { LayoutDashboard } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Client, TClient360Summary, TClient360SummaryDelta } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Client, TClient360Summary, TClient360SummaryDelta } from "@operoz/types";
 import { Client360AttentionPanel } from "@/components/board/client-360/client-360-attention-panel";
 import type { Client360FilterKey } from "@/components/board/client-360/client-360-client-filters";
 import { Client360PortfolioInsights } from "@/components/board/client-360/client-360-portfolio-insights";

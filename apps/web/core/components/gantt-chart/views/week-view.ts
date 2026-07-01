@@ -1,7 +1,7 @@
 //
 import { uniqBy } from "lodash-es";
-import type { ChartDataType } from "@operis/types";
-import { EStartOfTheWeek } from "@operis/types";
+import type { ChartDataType } from "@operoz/types";
+import { EStartOfTheWeek } from "@operoz/types";
 import { months, generateWeeks } from "../data";
 import { getNumberOfDaysBetweenTwoDates, getWeekNumberByDate } from "./helpers";
 export interface IDayBlock {

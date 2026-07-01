@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 
 // icons
-import { CloseIcon, PriorityIcon } from "@operis/propel/icons";
-import type { TIssuePriorities } from "@operis/types";
+import { CloseIcon, PriorityIcon } from "@operoz/propel/icons";
+import type { TIssuePriorities } from "@operoz/types";
 // types
 
 type Props = {

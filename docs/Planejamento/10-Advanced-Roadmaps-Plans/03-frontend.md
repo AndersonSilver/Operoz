@@ -40,12 +40,16 @@ core/store/plans/plan.store.ts → PlanStore
 `timeline`, `capacity`, `scenarios`, `commitScenario`, `dependencies`,
 `versions`, `releaseReport`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TPlanBar = {
-  issue: string; start?: string; target?: string; level: number;
-  board?: string; project: string;
+  issue: string;
+  start?: string;
+  target?: string;
+  level: number;
+  board?: string;
+  project: string;
 };
 export type TPlanTimeline = {
   bars: TPlanBar[];

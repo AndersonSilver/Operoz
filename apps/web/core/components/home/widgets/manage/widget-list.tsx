@@ -4,8 +4,8 @@ import type {
   ElementDragPayload,
 } from "@atlaskit/pragmatic-drag-and-drop/dist/types/internal-types";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { useHome } from "@/hooks/store/use-home";
 import { WidgetItem } from "./widget-item";
 import type { TargetData } from "./widget.helpers";

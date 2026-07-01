@@ -1,6 +1,6 @@
 // plane types
-import { useTranslation } from "@operis/i18n";
-import type { IUser } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IUser } from "@operoz/types";
 // hooks
 import { useCurrentTime } from "@/hooks/use-current-time";
 

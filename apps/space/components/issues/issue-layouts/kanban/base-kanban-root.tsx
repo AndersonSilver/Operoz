@@ -2,7 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 // types
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 // components
 import { IssueLayoutHOC } from "@/components/issues/issue-layouts/issue-layout-HOC";
 // hooks

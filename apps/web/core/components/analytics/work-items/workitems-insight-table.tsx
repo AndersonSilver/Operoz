@@ -4,14 +4,14 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { UserRound } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ProjectIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ProjectIcon } from "@operoz/propel/icons";
 // plane package imports
-import type { AnalyticsTableDataMap, WorkItemInsightColumns } from "@operis/types";
+import type { AnalyticsTableDataMap, WorkItemInsightColumns } from "@operoz/types";
 // plane web components
-import { Avatar } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { Avatar } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";

@@ -2,13 +2,13 @@ import React from "react";
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { ETabIndices } from "@operis/constants";
-import { CloseIcon } from "@operis/propel/icons";
+import { ETabIndices } from "@operoz/constants";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane imports
 // types
-import type { ISearchIssueResponse, TIssue } from "@operis/types";
+import type { ISearchIssueResponse, TIssue } from "@operoz/types";
 // helpers
-import { getTabIndex } from "@operis/utils";
+import { getTabIndex } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web components

@@ -41,13 +41,17 @@ core/store/devops/devops.store.ts → DevOpsStore
 `devops.service.ts`: `devLinks`, `builds`, `deployments`, `createBranch`,
 `integrationConfig`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TDevLink = {
-  id: string; provider: "github" | "gitlab";
+  id: string;
+  provider: "github" | "gitlab";
   link_type: "branch" | "pull_request" | "commit";
-  title: string; url: string; state: string; review_state?: string;
+  title: string;
+  url: string;
+  state: string;
+  review_state?: string;
 };
 ```
 

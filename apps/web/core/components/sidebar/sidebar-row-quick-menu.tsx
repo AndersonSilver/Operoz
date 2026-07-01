@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { Menu, Transition } from "@headlessui/react";
 import { usePopper } from "react-popper";
 import { MoreHorizontal } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 
 export type TSidebarQuickMenuItem = {
@@ -79,7 +79,7 @@ function SidebarQuickMenuPanel(props: SidebarQuickMenuPanelProps) {
         data-prevent-outside-click="true"
         className="fixed z-[300] focus:outline-none"
       >
-        <div className="flex w-max min-w-[10rem] max-w-[16rem] flex-col rounded-md border-[0.5px] border-subtle-1 bg-surface-1 p-1 text-11 shadow-raised-200">
+        <div className="flex w-max max-w-[16rem] min-w-[10rem] flex-col rounded-md border-[0.5px] border-subtle-1 bg-surface-1 p-1 text-11 shadow-raised-200">
           {items.map((item) => (
             <Menu.Item key={item.key} disabled={item.disabled}>
               {({ active, disabled }) => (
@@ -111,13 +111,7 @@ function SidebarQuickMenuPanel(props: SidebarQuickMenuPanelProps) {
   );
 }
 
-function SidebarQuickMenuOpenSync({
-  open,
-  onOpenChange,
-}: {
-  open: boolean;
-  onOpenChange?: (open: boolean) => void;
-}) {
+function SidebarQuickMenuOpenSync({ open, onOpenChange }: { open: boolean; onOpenChange?: (open: boolean) => void }) {
   useEffect(() => {
     onOpenChange?.(open);
   }, [open, onOpenChange]);
@@ -150,12 +144,7 @@ export function SidebarRowQuickMenu(props: SidebarRowQuickMenuProps) {
             >
               {trigger ?? <MoreHorizontal className="size-3.5 shrink-0" aria-hidden />}
             </Menu.Button>
-            <SidebarQuickMenuPanel
-              open={open}
-              close={close}
-              items={visibleItems}
-              referenceElement={referenceElement}
-            />
+            <SidebarQuickMenuPanel open={open} close={close} items={visibleItems} referenceElement={referenceElement} />
           </>
         </SidebarQuickMenuDropdownSync>
       )}

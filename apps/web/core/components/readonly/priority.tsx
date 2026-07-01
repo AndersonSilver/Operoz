@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // plane imports
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PriorityIcon } from "@operis/propel/icons";
-import type { TIssuePriorities } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PriorityIcon } from "@operoz/propel/icons";
+import type { TIssuePriorities } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 export type TReadonlyPriorityProps = {
   className?: string;

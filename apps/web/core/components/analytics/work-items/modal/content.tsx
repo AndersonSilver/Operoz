@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
 // plane package imports
-import type { ICycle, IModule, IProject } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { ICycle, IModule, IProject } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 // hooks
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // plane web components

@@ -2,10 +2,10 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { AlertCircle } from "lucide-react";
-import { SearchIcon, CycleIcon, TransferIcon, CloseIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EIssuesStoreType } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { SearchIcon, CycleIcon, TransferIcon, CloseIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EIssuesStoreType } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useIssues } from "@/hooks/store/use-issues";
 

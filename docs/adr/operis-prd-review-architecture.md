@@ -39,7 +39,7 @@ No Operoz, a documentação vive em **Pages** com embed `html-document-embed` (i
 
 ### 4. SDK desacoplado do HTML monolítico
 
-- **Decisão:** Módulo `@operis/prd-review` (assets em `Operis/templates/prd/prd-review/`) com `initPrdReview(config)`.
+- **Decisão:** Módulo `@operoz/prd-review` (assets em `Operoz/templates/prd/prd-review/`) com `initPrdReview(config)`.
 - **Modos:** `preview` (localStorage, equipa interna) e `guest` (API persistida).
 - **Manifesto:** `<script type="application/json" id="operoz-prd-config">` validado no upload MCP.
 - **Alternativa rejeitada:** Duplicar 900 linhas de JS em cada PRD de cliente.
@@ -57,7 +57,7 @@ No Operoz, a documentação vive em **Pages** com embed `html-document-embed` (i
 
 ### 7. MCP e criação padronizada
 
-- **Decisão:** Tools dedicadas (`operis_create_prd_review_session`, `operis_add_prd_review_invites`, …) + skill Harness checklist.
+- **Decisão:** Tools dedicadas (`operoz_create_prd_review_session`, `operoz_add_prd_review_invites`, …) + skill Harness checklist.
 - **Ordem:** create page → upload HTML → embed → manifesto → sessão → convites.
 
 ## API (esboço)
@@ -84,8 +84,8 @@ POST   /api/guest/prd-review/{token}/submit/   # { action: "approve" | "feedback
 ## Referências
 
 - Protótipo: `PRD/PRD-MAGALU.html`
-- SDK Fase 0: `Operis/templates/prd/`
-- Catálogo: `operis/db/management/commands/operoz_prd_review_catalog.py`
-- Guest QBR: `Client360QbrGuestLink`, `operis/app/views/guest/client_360_qbr.py`
+- SDK Fase 0: `Operoz/templates/prd/`
+- Catálogo: `operoz/db/management/commands/operoz_prd_review_catalog.py`
+- Guest QBR: `Client360QbrGuestLink`, `operoz/app/views/guest/client_360_qbr.py`
 - HTML embed: `packages/editor/src/core/extensions/html-document/`
-- Roadmap: [operis-prd-review-roadmap.md](../operis-prd-review-roadmap.md)
+- Roadmap: [operoz-prd-review-roadmap.md](../operoz-prd-review-roadmap.md)

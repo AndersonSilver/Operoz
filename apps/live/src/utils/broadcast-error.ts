@@ -1,6 +1,6 @@
 import type { Hocuspocus } from "@hocuspocus/server";
-import { createRealtimeEvent } from "@operis/editor";
-import { logger } from "@operis/logger";
+import { createRealtimeEvent } from "@operoz/editor";
+import { logger } from "@operoz/logger";
 import type { HocusPocusServerContext } from "@/types";
 import { broadcastMessageToPage } from "./broadcast-message";
 

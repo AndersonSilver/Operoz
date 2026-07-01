@@ -7,7 +7,8 @@ import type {
   TIssuesResponse,
   TLoader,
   ViewFlags,
-} from "@operis/types";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 // services
 import { BoardService } from "@/services/board/board.service";
 // types
@@ -104,6 +105,12 @@ export class BoardIssues extends BaseIssuesStore implements IBoardIssues {
 
       // get params from pagination options
       const params = this.issueFilterStore?.getFilterParams(options, viewId, undefined, undefined, undefined);
+      if (
+        params &&
+        this.issueFilterStore?.getIssueFilters(viewId)?.displayFilters?.layout === EIssueLayoutTypes.GANTT
+      ) {
+        params.expand = "issue_relation,issue_related";
+      }
       const response = await this.boardService.getBoardIssues(workspaceSlug, viewId, params, {
         signal: this.controller.signal,
       });
@@ -144,6 +151,12 @@ export class BoardIssues extends BaseIssuesStore implements IBoardIssues {
         groupId,
         subGroupId
       );
+      if (
+        params &&
+        this.issueFilterStore?.getIssueFilters(viewId)?.displayFilters?.layout === EIssueLayoutTypes.GANTT
+      ) {
+        params.expand = "issue_relation,issue_related";
+      }
       // call the fetch issues API with the params for next page in issues
       const response = await this.boardService.getBoardIssues(workspaceSlug, viewId, params);
 

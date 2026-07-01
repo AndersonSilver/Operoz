@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 type TEstimateNumberInputProps = {
   value?: number;
   handleEstimateInputValue: (value: string) => void;

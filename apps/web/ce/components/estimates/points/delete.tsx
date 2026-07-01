@@ -1,4 +1,4 @@
-import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operis/types";
+import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operoz/types";
 
 export type TEstimatePointDelete = {
   workspaceSlug: string;

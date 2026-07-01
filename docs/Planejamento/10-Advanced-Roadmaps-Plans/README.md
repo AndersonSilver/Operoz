@@ -6,9 +6,9 @@
 
 O recurso premium mais cobiçado do Jira são os **Advanced Roadmaps / Plans**:
 planeamento cross-project, capacity planning, dependências entre equipas e
-cenários "what-if" (roadmap §10.2). O Operis tem Gantt por projeto e módulos,
+cenários "what-if" (roadmap §10.2). O Operoz tem Gantt por projeto e módulos,
 mas não um plano agregado. Esta feature aproveita a entidade **Board** (squad)
-do Operis como unidade natural de equipa para o planeamento.
+do Operoz como unidade natural de equipa para o planeamento.
 
 ## Mapeamento ao roadmap
 
@@ -18,13 +18,13 @@ tracking, teams view.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | `Plan` agrega fontes (projetos/boards) via relação N:M | Plano preso a um projeto |
-| 2 | Capacity por board (squad) × ciclo | Capacity por utilizador global |
-| 3 | Scenario = fork leve do plano (overlay de mudanças) | Copiar todas as issues |
-| 4 | Dependências reusam `IssueRelation` (blocks) existente | Modelo de dependência novo |
-| 5 | Versions/Releases como entidade dedicada com release tracking | Labels |
+| #   | Decisão                                                       | Alternativa rejeitada          |
+| --- | ------------------------------------------------------------- | ------------------------------ |
+| 1   | `Plan` agrega fontes (projetos/boards) via relação N:M        | Plano preso a um projeto       |
+| 2   | Capacity por board (squad) × ciclo                            | Capacity por utilizador global |
+| 3   | Scenario = fork leve do plano (overlay de mudanças)           | Copiar todas as issues         |
+| 4   | Dependências reusam `IssueRelation` (blocks) existente        | Modelo de dependência novo     |
+| 5   | Versions/Releases como entidade dedicada com release tracking | Labels                         |
 
 ## Escopo
 

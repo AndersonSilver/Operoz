@@ -1,6 +1,6 @@
 import React from "react";
 // components
-import type { IBlockUpdateData, IGanttBlock } from "@operis/types";
+import type { IBlockUpdateData, IGanttBlock } from "@operoz/types";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 // hooks
 import { BlockRow } from "@/components/gantt-chart/blocks/block-row";

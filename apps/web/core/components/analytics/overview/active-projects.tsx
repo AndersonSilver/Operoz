@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane package imports
-import { useTranslation } from "@operis/i18n";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Loader } from "@operoz/ui";
 // plane web hooks
 import { useAnalytics } from "@/hooks/store/use-analytics";
 import { useProject } from "@/hooks/store/use-project";

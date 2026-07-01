@@ -1,9 +1,9 @@
 import { FileText, FolderPlus, Layers, SquarePlus } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { ContrastIcon, DiceIcon, LayersIcon } from "@operis/propel/icons";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { ContrastIcon, DiceIcon, LayersIcon } from "@operoz/propel/icons";
 // components
-import { EUserProjectRoles } from "@operis/types";
+import { EUserProjectRoles } from "@operoz/types";
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";

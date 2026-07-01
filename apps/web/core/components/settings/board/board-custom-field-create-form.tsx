@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import type { IWorkspaceCustomField, TWorkspaceCustomFieldFormData } from "@operis/types";
-import { Input, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import type { IWorkspaceCustomField, TWorkspaceCustomFieldFormData } from "@operoz/types";
+import { Input, TextArea } from "@operoz/ui";
 import { fieldTypeNeedsOptions } from "@/constants/board-custom-field-types";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldTypePicker } from "./board-custom-field-type-picker";
-import {
-  BoardCustomFieldOptionsEditor,
-  getTrimmedFieldOptions,
-} from "./board-custom-field-options-editor";
+import { BoardCustomFieldOptionsEditor, getTrimmedFieldOptions } from "./board-custom-field-options-editor";
 
 type Props = {
   workspaceSlug: string;
@@ -149,9 +146,7 @@ export function BoardCustomFieldCreateForm(props: Props) {
             </div>
           )}
         />
-        {fieldTypeNeedsOptions(fieldType) && (
-          <BoardCustomFieldOptionsEditor options={options} onChange={setOptions} />
-        )}
+        {fieldTypeNeedsOptions(fieldType) && <BoardCustomFieldOptionsEditor options={options} onChange={setOptions} />}
       </div>
       <div className="flex shrink-0 justify-end gap-2 border-t border-subtle px-5 py-4">
         <Button variant="secondary" type="button" onClick={onCancel}>

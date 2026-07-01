@@ -2,10 +2,10 @@
 
 import { Bot, FileText, HeartPulse, Sparkles, X } from "lucide-react";
 import type { ReactNode } from "react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360Health, TClient360ReportCoverage } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360Health, TClient360ReportCoverage } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 

@@ -3,9 +3,9 @@ import { makeObservable, observable, action, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 import { v4 as uuidv4 } from "uuid";
 // plane imports
-import { SitesFileService, SitesIssueService } from "@operis/services";
-import type { TFileSignedURLResponse, TIssuePublicComment } from "@operis/types";
-import { EFileAssetType } from "@operis/types";
+import { SitesFileService, SitesIssueService } from "@operoz/services";
+import type { TFileSignedURLResponse, TIssuePublicComment } from "@operoz/types";
+import { EFileAssetType } from "@operoz/types";
 // store
 import type { RootStore } from "@/store/root.store";
 // types

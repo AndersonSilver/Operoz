@@ -1,5 +1,5 @@
 {
-  "extends": "@operis/typescript-config/react-router.json",
+  "extends": "@operoz/typescript-config/react-router.json",
   "compilerOptions": {
     "noImplicitOverride": false,
     "exactOptionalPropertyTypes": false,

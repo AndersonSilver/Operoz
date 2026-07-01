@@ -2,11 +2,11 @@ import React from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 
-import { useTranslation } from "@operis/i18n";
-import { EditIcon, CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { EditIcon, CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";

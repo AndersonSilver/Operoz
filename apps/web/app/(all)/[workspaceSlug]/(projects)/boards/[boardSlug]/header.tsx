@@ -2,14 +2,14 @@ import { observer } from "mobx-react";
 import { useLocation } from "react-router";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { BoardHubTabNav } from "@/components/board/board-hub-tabs";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { useBoardHubHasBackground, BOARD_HUB_IMMERSIVE_TEXT_SHADOW } from "@/components/board/board-hub-background";
 import { BoardOverviewHeaderMenu } from "@/components/board/board-overview-header-menu";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoard } from "@operis/types";
-import { Header } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoard } from "@operoz/types";
+import { Header } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   board?: IBoard;
@@ -45,10 +45,8 @@ export const BoardOverviewHeader = observer(function BoardOverviewHeader(props: 
               {board ? (
                 <span
                   className={cn(
-                    "grid size-8 shrink-0 place-items-center rounded-md border shadow-sm",
-                    hasBackground
-                      ? "border-white/25 bg-white/12 backdrop-blur-sm"
-                      : "border-subtle bg-layer-2"
+                    "shadow-sm grid size-8 shrink-0 place-items-center rounded-md border",
+                    hasBackground ? "border-white/25 bg-white/12 backdrop-blur-sm" : "border-subtle bg-layer-2"
                   )}
                 >
                   <Logo logo={board.logo_props} size={20} />
@@ -56,7 +54,7 @@ export const BoardOverviewHeader = observer(function BoardOverviewHeader(props: 
               ) : null}
               <h1
                 className={cn(
-                  "truncate text-15 font-semibold tracking-tight",
+                  "text-15 truncate font-semibold tracking-tight",
                   hasBackground ? cn("text-white", BOARD_HUB_IMMERSIVE_TEXT_SHADOW) : "text-primary"
                 )}
               >

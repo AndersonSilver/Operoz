@@ -1,4 +1,4 @@
-import type { TClient360Client, TClient360Health, TClient360ReportCoverage } from "@operis/types";
+import type { TClient360Client, TClient360Health, TClient360ReportCoverage } from "@operoz/types";
 
 export type Client360SortColumn =
   | "name"

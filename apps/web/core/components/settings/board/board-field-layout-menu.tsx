@@ -1,6 +1,6 @@
-import { useTranslation } from "@operis/i18n";
-import type { IBoardCustomField, TBoardFieldFormSpan } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardCustomField, TBoardFieldFormSpan } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 
 type Props = {
   field: IBoardCustomField;

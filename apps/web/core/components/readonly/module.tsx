@@ -2,8 +2,8 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Layers } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 // hooks
 import { useModule } from "@/hooks/store/use-module";
 

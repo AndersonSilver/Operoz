@@ -1,4 +1,4 @@
-import type { TClient360DetailResponse } from "@operis/types";
+import type { TClient360DetailResponse } from "@operoz/types";
 
 function moduleStatusLabel(status: string): string {
   if (status === "published") return "publicado";

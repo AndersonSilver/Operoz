@@ -1,5 +1,5 @@
 // plane imports
-import type { TFilterGroupNode, TFilterProperty } from "@operis/types";
+import type { TFilterGroupNode, TFilterProperty } from "@operoz/types";
 // local imports
 import { getGroupChildren } from "../types/shared";
 

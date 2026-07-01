@@ -1,13 +1,13 @@
 import { observer } from "mobx-react";
 
-import { useTranslation } from "@operis/i18n";
-import { TrashIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TrashIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // ui
-import { CustomMenu } from "@operis/ui";
-import { convertBytesToSize, getFileExtension, getFileName, getFileURL, renderFormattedDate } from "@operis/utils";
+import { CustomMenu } from "@operoz/ui";
+import { convertBytesToSize, getFileExtension, getFileName, getFileURL, renderFormattedDate } from "@operoz/utils";
 // components
 //
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";

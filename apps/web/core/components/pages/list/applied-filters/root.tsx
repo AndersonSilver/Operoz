@@ -1,9 +1,9 @@
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TPageFilterProps } from "@operis/types";
-import { Tag } from "@operis/ui";
-import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
+import type { TPageFilterProps } from "@operoz/types";
+import { Tag } from "@operoz/ui";
+import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";
 // components
 import { AppliedDateFilters } from "@/components/common/applied-filters/date";
 import { AppliedMembersFilters } from "@/components/common/applied-filters/members";

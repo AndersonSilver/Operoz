@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 
-import type { ENotificationFilterType } from "@operis/constants";
-import { CheckIcon } from "@operis/propel/icons";
+import type { ENotificationFilterType } from "@operoz/constants";
+import { CheckIcon } from "@operoz/propel/icons";
 // plane imports
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useWorkspaceNotifications } from "@/hooks/store/notifications";
 

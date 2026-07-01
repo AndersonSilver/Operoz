@@ -2,7 +2,7 @@ import { set } from "lodash-es";
 import { action, computed, observable, makeObservable, runInAction, reaction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { TCycleDisplayFilters, TCycleFilters, TCycleFiltersByState } from "@operis/types";
+import type { TCycleDisplayFilters, TCycleFilters, TCycleFiltersByState } from "@operoz/types";
 // store
 import type { CoreRootStore } from "./root.store";
 

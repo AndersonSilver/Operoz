@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { Navigate } from "react-router";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useUserPermissions } from "@/hooks/store/user";

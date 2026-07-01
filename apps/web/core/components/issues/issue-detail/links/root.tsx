@@ -1,10 +1,10 @@
 import { useCallback, useMemo, useState } from "react";
 
-import { PlusIcon } from "@operis/propel/icons";
+import { PlusIcon } from "@operoz/propel/icons";
 // plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssueLink } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssueLink } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // local imports

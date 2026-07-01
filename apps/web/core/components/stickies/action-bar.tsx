@@ -4,12 +4,12 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { StickyNote as StickyIcon } from "lucide-react";
 // plane hooks
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // plane ui
-import { RecentStickyIcon, StickyNoteIcon, PlusIcon, CloseIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { RecentStickyIcon, StickyNoteIcon, PlusIcon, CloseIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useSticky } from "@/hooks/use-stickies";

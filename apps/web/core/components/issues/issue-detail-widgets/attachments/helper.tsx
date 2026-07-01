@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { setPromiseToast, TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { setPromiseToast, TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // types

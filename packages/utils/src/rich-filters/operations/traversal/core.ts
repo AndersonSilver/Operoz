@@ -7,7 +7,7 @@ import type {
   TFilterGroupNode,
   TFilterProperty,
   TFilterValue,
-} from "@operis/types";
+} from "@operoz/types";
 // local imports
 import { isConditionNode, isGroupNode } from "../../types/core";
 import { getGroupChildren } from "../../types/shared";

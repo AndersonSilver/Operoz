@@ -3,7 +3,7 @@
 import type { LucideIcon } from "lucide-react";
 import { ChevronDown } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 import { useClient360DetailSection } from "@/components/board/client-360/client-360-detail-section-context";
 import { useClient360SectionOpen } from "@/components/board/client-360/use-client-360-section-open";

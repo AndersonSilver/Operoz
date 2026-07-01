@@ -1,12 +1,12 @@
 import { useCallback, useMemo, useState } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardCustomField, TIntakeForm, TIntakeFormField } from "@operis/types";
-import { Input, ModalCore, TextArea, ToggleSwitch, EModalWidth } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardCustomField, TIntakeForm, TIntakeFormField } from "@operoz/types";
+import { Input, ModalCore, TextArea, ToggleSwitch, EModalWidth } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { ModuleDropdown } from "@/components/dropdowns/module/dropdown";
 import { intakeFormService } from "@/services/intake/intake-form.service";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
@@ -110,7 +110,7 @@ export function IntakeFormEditorModal(props: Props) {
   );
 
   const editingField = useMemo(
-    () => (drawer?.mode === "edit" ? fields.find((field) => field.id === drawer.fieldId) ?? null : null),
+    () => (drawer?.mode === "edit" ? (fields.find((field) => field.id === drawer.fieldId) ?? null) : null),
     [drawer, fields]
   );
 

@@ -1,6 +1,6 @@
 import { sortBy } from "lodash-es";
 // plane imports
-import type { IModule, TModuleDisplayFilters, TModuleFilters, TModuleOrderByOptions } from "@operis/types";
+import type { IModule, TModuleDisplayFilters, TModuleFilters, TModuleOrderByOptions } from "@operoz/types";
 // local imports
 import { getDate } from "./datetime";
 import { satisfiesDateFilter } from "./filter";

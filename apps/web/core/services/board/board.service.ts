@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IBoard,
   IBoardAutomationDeadLetter,
@@ -32,8 +32,9 @@ import type {
   TClient360ListResponse,
   TClient360MatrixResponse,
   TIssuesResponse,
-} from "@operis/types";
+} from "@operoz/types";
 import { APIService } from "@/services/api.service";
+import { logGanttDependencyRequest, logGanttDependencyResponse } from "@/lib/gantt-deps-debug";
 
 type TBoardListResponse = {
   results: IBoard[];
@@ -112,8 +113,14 @@ export class BoardService extends APIService {
     params: Record<string, unknown>,
     config: Record<string, unknown> = {}
   ): Promise<TIssuesResponse> {
-    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issues/`, { params }, config)
-      .then((response) => response?.data)
+    const url = `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issues/`;
+    logGanttDependencyRequest("board", "GET", url, params);
+
+    return this.get(url, { params }, config)
+      .then((response) => {
+        logGanttDependencyResponse("board", url, response?.data);
+        return response?.data;
+      })
       .catch((error) => {
         throw error?.response?.data;
       });
@@ -264,7 +271,7 @@ export class BoardService extends APIService {
   async getClient360ReminderLogs(
     workspaceSlug: string,
     boardSlug: string
-  ): Promise<import("@operis/types").TClient360ReminderLog[]> {
+  ): Promise<import("@operoz/types").TClient360ReminderLog[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/reminder-logs/`)
       .then((response) => response?.data ?? [])
       .catch((error) => {
@@ -628,7 +635,7 @@ export class BoardService extends APIService {
   async getClient360IntakeTypes(
     workspaceSlug: string,
     boardSlug: string
-  ): Promise<import("@operis/types").TClient360IntakeType[]> {
+  ): Promise<import("@operoz/types").TClient360IntakeType[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/intake-types/`)
       .then((response) => response?.data ?? [])
       .catch((error) => {
@@ -640,7 +647,7 @@ export class BoardService extends APIService {
     workspaceSlug: string,
     boardSlug: string,
     data: { name: string; slug?: string; type_name_pattern?: string; sort_order?: number }
-  ): Promise<import("@operis/types").TClient360IntakeType> {
+  ): Promise<import("@operoz/types").TClient360IntakeType> {
     return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/client-360/intake-types/`, data)
       .then((response) => response?.data)
       .catch((error) => {

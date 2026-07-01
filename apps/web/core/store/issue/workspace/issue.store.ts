@@ -7,7 +7,7 @@ import type {
   TIssuesResponse,
   TLoader,
   ViewFlags,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 // types

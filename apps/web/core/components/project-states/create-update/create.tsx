@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { STATE_GROUPS } from "@operis/constants";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operoz/types";
 // components
 import { StateForm } from "@/components/project-states";
 

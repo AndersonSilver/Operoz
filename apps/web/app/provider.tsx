@@ -2,11 +2,11 @@ import { lazy, Suspense } from "react";
 import { useTheme } from "next-themes";
 import { SWRConfig } from "swr";
 // Plane Imports
-import { WEB_SWR_CONFIG } from "@operis/constants";
-import { TranslationProvider } from "@operis/i18n";
-import { Toast } from "@operis/propel/toast";
+import { WEB_SWR_CONFIG } from "@operoz/constants";
+import { TranslationProvider } from "@operoz/i18n";
+import { Toast } from "@operoz/propel/toast";
 // helpers
-import { resolveGeneralTheme } from "@operis/utils";
+import { resolveGeneralTheme } from "@operoz/utils";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 // mobx store provider
 import { StoreProvider } from "@/lib/store-context";

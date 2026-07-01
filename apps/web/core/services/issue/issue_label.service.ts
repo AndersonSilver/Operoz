@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IIssueLabel } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IIssueLabel } from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
 // types

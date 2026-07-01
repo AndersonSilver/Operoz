@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 // hooks
 import { useMultipleSelectStore } from "@/hooks/store/use-multiple-select-store";
 //
@@ -363,18 +363,26 @@ export const useMultipleSelect = (props: Props) => {
   //   };
   // }, [clearSelection, router.events]);
 
-  // when entities list change, remove entityIds from the selected entities array, which are not present in the new list
+  const previousRegisteredEntityIdsRef = useRef<Set<string>>(new Set());
+
+  // When the flat entity registry changes, drop selections for items that left the list.
+  // Nested sub-issues are selectable but never registered in entitiesList — do not prune those.
   useEffect(() => {
     if (disabled) return;
-    selectedEntityIds.map((entityID) => {
-      const isEntityPresent = entitiesList.find((en) => en?.entityID === entityID);
-      if (!isEntityPresent) {
+
+    const currentRegisteredEntityIds = new Set(entitiesList.map((entity) => entity.entityID));
+    const previousRegisteredEntityIds = previousRegisteredEntityIdsRef.current;
+
+    selectedEntityIds.forEach((entityID) => {
+      if (previousRegisteredEntityIds.has(entityID) && !currentRegisteredEntityIds.has(entityID)) {
         const entityDetails = getEntityDetailsFromEntityID(entityID);
         if (entityDetails) {
           handleEntitySelection(entityDetails);
         }
       }
     });
+
+    previousRegisteredEntityIdsRef.current = currentRegisteredEntityIds;
   }, [disabled, entitiesList, getEntityDetailsFromEntityID, handleEntitySelection, selectedEntityIds]);
 
   /**

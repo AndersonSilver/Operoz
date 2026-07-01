@@ -1,8 +1,8 @@
 import { useRef, useEffect } from "react";
 import useSWR from "swr";
 // plane imports
-import { UserService } from "@operis/services";
-import type { IUser } from "@operis/types";
+import { UserService } from "@operoz/services";
+import type { IUser } from "@operoz/types";
 
 export const useMention = () => {
   const userService = new UserService();

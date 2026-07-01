@@ -1,5 +1,6 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
+import { AlertsSettingsSection } from "@/components/notifications/alerts-settings-section";
 import { NotificationChannelConfig } from "@/components/notifications/preferences/notification-channel-config";
 import type { Route } from "./+types/page";
 
@@ -8,10 +9,9 @@ function AlertPreferencesSettingsPage({ params }: Route.ComponentProps) {
   const { t } = useTranslation();
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-14 font-medium text-primary">{t("alert.prefs.title")}</h2>
+    <AlertsSettingsSection title={t("alert.prefs.title")} description={t("alert.prefs.lead")}>
       <NotificationChannelConfig workspaceSlug={workspaceSlug} />
-    </div>
+    </AlertsSettingsSection>
   );
 }
 

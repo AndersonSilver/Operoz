@@ -1,8 +1,8 @@
 import type { FC } from "react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { ISvgIcons } from "@operis/propel/icons";
-import type { TLogoProps } from "@operis/types";
-import { getFileURL, truncateText } from "@operis/utils";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import type { TLogoProps } from "@operoz/types";
+import { getFileURL, truncateText } from "@operoz/utils";
 
 type TSwitcherIconProps = {
   logo_props?: TLogoProps;

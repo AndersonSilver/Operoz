@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { FormProvider, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import useKeypress from "@/hooks/use-keypress";
 import { useProject } from "@/hooks/store/use-project";
 import { BoardSelectField } from "./board-select-field";
@@ -85,9 +85,7 @@ export const MoveProjectBoardModal = observer(function MoveProjectBoardModal(pro
             <h3 className="text-15 font-semibold text-primary">
               {isUnassigned ? t("boards.assign_to_board") : t("boards.move_to_board")}
             </h3>
-            <p className="mt-1 text-13 text-tertiary">
-              {t("boards.move_board_modal_hint", { name: projectName })}
-            </p>
+            <p className="mt-1 text-13 text-tertiary">{t("boards.move_board_modal_hint", { name: projectName })}</p>
           </div>
           <BoardSelectField tabIndex={1} required />
           <div className="flex justify-end gap-2">

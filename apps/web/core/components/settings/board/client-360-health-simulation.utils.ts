@@ -4,7 +4,7 @@ import type {
   TClient360Client,
   TClient360Health,
   TClient360ReportCoverage,
-} from "@operis/types";
+} from "@operoz/types";
 
 export type Client360HealthSimulationRow = {
   projectId: string;

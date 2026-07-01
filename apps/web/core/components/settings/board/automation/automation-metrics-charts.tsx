@@ -8,15 +8,15 @@ import {
   PieChart as PieChartIcon,
   TrendingUp,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { AreaChart } from "@operis/propel/charts/area-chart";
-import { BarChart } from "@operis/propel/charts/bar-chart";
-import { LineChart } from "@operis/propel/charts/line-chart";
-import { PieChart } from "@operis/propel/charts/pie-chart";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { TAutomationAnalytics } from "@operis/types";
-import { cn } from "@operis/ui";
-import { calculateTimeAgo } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { AreaChart } from "@operoz/propel/charts/area-chart";
+import { BarChart } from "@operoz/propel/charts/bar-chart";
+import { LineChart } from "@operoz/propel/charts/line-chart";
+import { PieChart } from "@operoz/propel/charts/pie-chart";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { TAutomationAnalytics } from "@operoz/types";
+import { cn } from "@operoz/ui";
+import { calculateTimeAgo } from "@operoz/utils";
 
 const STATUS_COLORS: Record<string, string> = {
   success: "var(--bg-success-primary)",

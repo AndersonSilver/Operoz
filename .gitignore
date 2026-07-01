@@ -58,7 +58,7 @@ mediafiles
 .env
 .DS_Store
 /logs/
-apps/api/operis/logs/
+apps/api/operoz/logs/
 htmlcov/
 .coverage
 
@@ -121,4 +121,4 @@ scripts/
 !apps/space/scripts/**
 
 # MCP na VPS (segredos locais)
-deployments/mcp/operis-mcp.env
+deployments/mcp/operoz-mcp.env

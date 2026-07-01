@@ -1,6 +1,6 @@
 import React from "react";
 // plane imports
-import type { TIssueServiceType, TWorkItemWidgets } from "@operis/types";
+import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 // local imports
 import { IssueDetailWidgetActionButtons } from "./action-buttons";
 import { IssueDetailWidgetCollapsibles } from "./issue-detail-widget-collapsibles";

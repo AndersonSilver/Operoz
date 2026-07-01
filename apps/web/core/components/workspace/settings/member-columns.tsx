@@ -4,16 +4,16 @@ import { Controller, useForm } from "react-hook-form";
 
 import { Disclosure } from "@headlessui/react";
 // plane imports
-import { ROLE, EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TrashIcon, SuspendedUserIcon } from "@operis/propel/icons";
-import { Pill, EPillVariant, EPillSize } from "@operis/propel/pill";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUser, IWorkspaceMember } from "@operis/types";
+import { ROLE, EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TrashIcon, SuspendedUserIcon } from "@operoz/propel/icons";
+import { Pill, EPillVariant, EPillSize } from "@operoz/propel/pill";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUser, IWorkspaceMember } from "@operoz/types";
 // plane ui
-import { CustomSelect, PopoverMenu } from "@operis/ui";
+import { CustomSelect, PopoverMenu } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser, useUserPermissions } from "@/hooks/store/user";

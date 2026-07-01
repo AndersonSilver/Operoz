@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { StateGroupIcon } from "@operis/propel/icons";
-import { Loader } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { StateGroupIcon } from "@operoz/propel/icons";
+import { Loader } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useProjectState } from "@/hooks/store/use-project-state";
 

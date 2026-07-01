@@ -1,9 +1,9 @@
 import { Download, Minus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
-import { NewTabIcon, PlusIcon, CloseIcon } from "@operis/propel/icons";
+import { NewTabIcon, PlusIcon, CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 const MIN_ZOOM = 0.5;
 const MAX_ZOOM = 2;

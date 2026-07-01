@@ -2,10 +2,10 @@ import React, { useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { SPREADSHEET_SELECT_GROUP, SPREADSHEET_PROPERTY_LIST } from "@operis/constants";
+import { SPREADSHEET_SELECT_GROUP, SPREADSHEET_PROPERTY_LIST } from "@operoz/constants";
 // types
-import type { TIssue, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import type { TIssue, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 // hooks

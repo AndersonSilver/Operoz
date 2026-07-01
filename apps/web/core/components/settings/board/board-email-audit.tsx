@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IEmailNotificationLog } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IEmailNotificationLog } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 import { BoardService } from "@/services/board/board.service";
 
 const boardService = new BoardService();
 
-export const BoardEmailAudit = observer(function BoardEmailAudit(props: {
-  workspaceSlug: string;
-  boardSlug: string;
-}) {
+export const BoardEmailAudit = observer(function BoardEmailAudit(props: { workspaceSlug: string; boardSlug: string }) {
   const { workspaceSlug, boardSlug } = props;
   const { t } = useTranslation();
   const [logs, setLogs] = useState<IEmailNotificationLog[]>([]);
@@ -67,9 +64,7 @@ export const BoardEmailAudit = observer(function BoardEmailAudit(props: {
                 <div>{log.receiver_name || log.receiver_email}</div>
                 <div className="text-11 text-tertiary">{log.receiver_email}</div>
               </td>
-              <td className="px-3 py-2 text-secondary">
-                {log.triggered_by_name || log.triggered_by_email || "—"}
-              </td>
+              <td className="px-3 py-2 text-secondary">{log.triggered_by_name || log.triggered_by_email || "—"}</td>
               <td className="px-3 py-2 text-secondary">
                 {log.old_value || log.new_value ? (
                   <>

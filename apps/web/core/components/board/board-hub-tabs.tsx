@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Calendar, GanttChart, Kanban, LayoutDashboard, LayoutList, ListTodo } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { BoardHubNavLink } from "@/components/board/board-hub-nav-link";
 import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW } from "@/components/board/board-hub-background";
 

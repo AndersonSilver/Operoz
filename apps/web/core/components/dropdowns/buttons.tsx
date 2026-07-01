@@ -1,8 +1,8 @@
 import React from "react";
 // helpers
-import { Button } from "@operis/propel/button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // types
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { BACKGROUND_BUTTON_VARIANTS, BORDER_BUTTON_VARIANTS } from "./constants";

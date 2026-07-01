@@ -4,10 +4,10 @@ import { Controller, useForm } from "react-hook-form";
 import { MessageSquare, MoreVertical } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import { CheckIcon, CloseIcon } from "@operis/propel/icons";
-import type { TIssuePublicComment } from "@operis/types";
-import { getFileURL } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
+import type { TIssuePublicComment } from "@operoz/types";
+import { getFileURL } from "@operoz/utils";
 // components
 import { LiteTextEditor } from "@/components/editor/lite-text-editor";
 import { CommentReactions } from "@/components/issues/peek-overview/comment/comment-reactions";

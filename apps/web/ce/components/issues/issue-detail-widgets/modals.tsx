@@ -1,5 +1,5 @@
 // plane types
-import type { TIssueServiceType, TWorkItemWidgets } from "@operis/types";
+import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 
 export type TWorkItemAdditionalWidgetModalsProps = {
   hideWidgets: TWorkItemWidgets[];

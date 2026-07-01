@@ -1,0 +1,543 @@
+from django.urls import path
+
+
+from operoz.app.views.workspace.client_360_qbr_guest_link import (
+    WorkspaceClient360QbrGuestLinkViewSet,
+)
+from operoz.app.views.workspace.prd_review import (
+    WorkspacePrdReviewInboxEndpoint,
+    WorkspacePrdReviewMetricsEndpoint,
+)
+
+from operoz.app.views.workspace.client_360_narrative import (
+    BoardClient360ReminderLogsEndpoint,
+    WorkspaceClient360NarrativeEndpoint,
+)
+from operoz.app.views.workspace.client_360_operational import (
+    WorkspaceClient360SharedViewDetailEndpoint,
+    WorkspaceClient360SharedViewsEndpoint,
+)
+from operoz.app.views.workspace.client_360_finops import (
+    WorkspaceClient360FinopsConsultantHeatmapEndpoint,
+    WorkspaceClient360FinopsExportEndpoint,
+    WorkspaceClient360FinopsHarnessSyncEndpoint,
+    WorkspaceClient360FinopsSettingsEndpoint,
+    WorkspaceClient360ProjectFinopsProfileEndpoint,
+)
+from operoz.app.views.workspace.client_360_intelligence import (
+    WorkspaceClient360IntelligenceRagReindexEndpoint,
+    WorkspaceClient360ProjectHealthExplainerEndpoint,
+    WorkspaceClient360ProjectQbrDraftEndpoint,
+    WorkspaceClient360ProjectSuggestedActionsEndpoint,
+    WorkspaceClient360ScenarioPlaybookDetailEndpoint,
+    WorkspaceClient360ScenarioPlaybooksEndpoint,
+    WorkspaceClient360SuggestedActionFeedbackEndpoint,
+    WorkspaceClient360WeeklyBriefingEndpoint,
+)
+from operoz.app.views.workspace.client_360_enterprise import (
+    InstanceClient360RollupEndpoint,
+    WorkspaceClient360AuditExportEndpoint,
+    WorkspaceClient360AuditLogEndpoint,
+    WorkspaceClient360BiExportEndpoint,
+    WorkspaceClient360CrmSyncEndpoint,
+    WorkspaceClient360CustomerDetailEndpoint,
+    WorkspaceClient360CustomersEndpoint,
+    WorkspaceClient360EnterpriseSettingsEndpoint,
+    WorkspaceClient360ProjectCustomerAssignEndpoint,
+    WorkspaceClient360RetentionPurgeEndpoint,
+    WorkspaceClient360WebhookTestEndpoint,
+    WorkspaceClient360WebhooksEndpoint,
+)
+
+from operoz.app.views import (
+    UserWorkspaceInvitationsViewSet,
+    WorkSpaceViewSet,
+    WorkspaceJoinEndpoint,
+    WorkSpaceMemberViewSet,
+    WorkspaceInvitationsViewset,
+    WorkspaceMemberUserEndpoint,
+    WorkspaceMemberUserViewsEndpoint,
+    WorkSpaceAvailabilityCheckEndpoint,
+    UserLastProjectWithWorkspaceEndpoint,
+    WorkspaceThemeViewSet,
+    WorkspaceUserProfileStatsEndpoint,
+    WorkspaceUserActivityEndpoint,
+    WorkspaceUserProfileEndpoint,
+    WorkspaceUserProfileIssuesEndpoint,
+    WorkspaceLabelsEndpoint,
+    WorkspaceProjectMemberEndpoint,
+    WorkspaceUserPropertiesEndpoint,
+    WorkspaceStatesEndpoint,
+    WorkspaceEstimatesEndpoint,
+    ExportWorkspaceUserActivityEndpoint,
+    WorkspaceModulesEndpoint,
+    WorkspaceCyclesEndpoint,
+    WorkspaceFavoriteEndpoint,
+    WorkspaceFavoriteGroupEndpoint,
+    WorkspaceDraftIssueViewSet,
+    QuickLinkViewSet,
+    UserRecentVisitViewSet,
+    WorkspaceHomePreferenceViewSet,
+    WorkspaceStickyViewSet,
+    WorkspaceUserPreferenceViewSet,
+    WorkspaceClient360ViewSet,
+    WorkspaceClient360DisplaySettingsEndpoint,
+    WorkspaceJiraOpsSyncEndpoint,
+    WorkspaceJiraOpsSyncPreviewEndpoint,
+    WorkspaceJiraOpsOAuthStartEndpoint,
+    WorkspaceJiraOpsOAuthSitesEndpoint,
+    WorkspaceJiraOpsOAuthCompleteEndpoint,
+    WorkspaceJiraOpsJiraProjectsEndpoint,
+    WorkspaceTransferOwnershipEndpoint,
+)
+
+
+urlpatterns = [
+    path(
+        "workspace-slug-check/",
+        WorkSpaceAvailabilityCheckEndpoint.as_view(),
+        name="workspace-availability",
+    ),
+    path(
+        "workspaces/",
+        WorkSpaceViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace",
+    ),
+    path(
+        "workspaces/<str:slug>/",
+        WorkSpaceViewSet.as_view(
+            {
+                "get": "retrieve",
+                "put": "update",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="workspace",
+    ),
+    path(
+        "workspaces/<str:slug>/transfer-ownership/",
+        WorkspaceTransferOwnershipEndpoint.as_view(),
+        name="workspace-transfer-ownership",
+    ),
+    path(
+        "workspaces/<str:slug>/invitations/",
+        WorkspaceInvitationsViewset.as_view({"get": "list", "post": "create"}),
+        name="workspace-invitations",
+    ),
+    path(
+        "workspaces/<str:slug>/invitations/<uuid:pk>/",
+        WorkspaceInvitationsViewset.as_view({"delete": "destroy", "get": "retrieve", "patch": "partial_update"}),
+        name="workspace-invitations",
+    ),
+    # user workspace invitations
+    path(
+        "users/me/workspaces/invitations/",
+        UserWorkspaceInvitationsViewSet.as_view({"get": "list", "post": "create"}),
+        name="user-workspace-invitations",
+    ),
+    path(
+        "workspaces/<str:slug>/invitations/<uuid:pk>/join/",
+        WorkspaceJoinEndpoint.as_view(),
+        name="workspace-join",
+    ),
+    # user join workspace
+    path(
+        "workspaces/<str:slug>/members/",
+        WorkSpaceMemberViewSet.as_view({"get": "list"}),
+        name="workspace-member",
+    ),
+    path(
+        "workspaces/<str:slug>/project-members/",
+        WorkspaceProjectMemberEndpoint.as_view(),
+        name="workspace-member-roles",
+    ),
+    path(
+        "workspaces/<str:slug>/members/<uuid:pk>/",
+        WorkSpaceMemberViewSet.as_view({"patch": "partial_update", "delete": "destroy", "get": "retrieve"}),
+        name="workspace-member",
+    ),
+    path(
+        "workspaces/<str:slug>/members/leave/",
+        WorkSpaceMemberViewSet.as_view({"post": "leave"}),
+        name="leave-workspace-members",
+    ),
+    path(
+        "users/last-visited-workspace/",
+        UserLastProjectWithWorkspaceEndpoint.as_view(),
+        name="workspace-project-details",
+    ),
+    path(
+        "workspaces/<str:slug>/workspace-members/me/",
+        WorkspaceMemberUserEndpoint.as_view(),
+        name="workspace-member-details",
+    ),
+    path(
+        "workspaces/<str:slug>/workspace-views/",
+        WorkspaceMemberUserViewsEndpoint.as_view(),
+        name="workspace-member-views-details",
+    ),
+    path(
+        "workspaces/<str:slug>/workspace-themes/",
+        WorkspaceThemeViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-themes",
+    ),
+    path(
+        "workspaces/<str:slug>/workspace-themes/<uuid:pk>/",
+        WorkspaceThemeViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-themes",
+    ),
+    path(
+        "workspaces/<str:slug>/user-stats/<uuid:user_id>/",
+        WorkspaceUserProfileStatsEndpoint.as_view(),
+        name="workspace-user-stats",
+    ),
+    path(
+        "workspaces/<str:slug>/user-activity/<uuid:user_id>/",
+        WorkspaceUserActivityEndpoint.as_view(),
+        name="workspace-user-activity",
+    ),
+    path(
+        "workspaces/<str:slug>/user-activity/<uuid:user_id>/export/",
+        ExportWorkspaceUserActivityEndpoint.as_view(),
+        name="export-workspace-user-activity",
+    ),
+    path(
+        "workspaces/<str:slug>/user-profile/<uuid:user_id>/",
+        WorkspaceUserProfileEndpoint.as_view(),
+        name="workspace-user-profile-page",
+    ),
+    path(
+        "workspaces/<str:slug>/user-issues/<uuid:user_id>/",
+        WorkspaceUserProfileIssuesEndpoint.as_view(),
+        name="workspace-user-profile-issues",
+    ),
+    path(
+        "workspaces/<str:slug>/labels/",
+        WorkspaceLabelsEndpoint.as_view(),
+        name="workspace-labels",
+    ),
+    path(
+        "workspaces/<str:slug>/user-properties/",
+        WorkspaceUserPropertiesEndpoint.as_view(),
+        name="workspace-user-filters",
+    ),
+    path(
+        "workspaces/<str:slug>/states/",
+        WorkspaceStatesEndpoint.as_view(),
+        name="workspace-state",
+    ),
+    path(
+        "workspaces/<str:slug>/estimates/",
+        WorkspaceEstimatesEndpoint.as_view(),
+        name="workspace-estimate",
+    ),
+    path(
+        "workspaces/<str:slug>/modules/",
+        WorkspaceModulesEndpoint.as_view(),
+        name="workspace-modules",
+    ),
+    path(
+        "workspaces/<str:slug>/cycles/",
+        WorkspaceCyclesEndpoint.as_view(),
+        name="workspace-cycles",
+    ),
+    path(
+        "workspaces/<str:slug>/user-favorites/",
+        WorkspaceFavoriteEndpoint.as_view(),
+        name="workspace-user-favorites",
+    ),
+    path(
+        "workspaces/<str:slug>/user-favorites/<uuid:favorite_id>/",
+        WorkspaceFavoriteEndpoint.as_view(),
+        name="workspace-user-favorites",
+    ),
+    path(
+        "workspaces/<str:slug>/user-favorites/<uuid:favorite_id>/group/",
+        WorkspaceFavoriteGroupEndpoint.as_view(),
+        name="workspace-user-favorites-groups",
+    ),
+    path(
+        "workspaces/<str:slug>/draft-issues/",
+        WorkspaceDraftIssueViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-draft-issues",
+    ),
+    path(
+        "workspaces/<str:slug>/draft-issues/<uuid:pk>/",
+        WorkspaceDraftIssueViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-drafts-issues",
+    ),
+    path(
+        "workspaces/<str:slug>/draft-to-issue/<uuid:draft_id>/",
+        WorkspaceDraftIssueViewSet.as_view({"post": "create_draft_to_issue"}),
+        name="workspace-drafts-issues",
+    ),
+    # quick link
+    path(
+        "workspaces/<str:slug>/quick-links/",
+        QuickLinkViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-quick-links",
+    ),
+    path(
+        "workspaces/<str:slug>/quick-links/<uuid:pk>/",
+        QuickLinkViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-quick-links",
+    ),
+    # Widgets
+    path(
+        "workspaces/<str:slug>/home-preferences/",
+        WorkspaceHomePreferenceViewSet.as_view(),
+        name="workspace-home-preference",
+    ),
+    path(
+        "workspaces/<str:slug>/home-preferences/<str:key>/",
+        WorkspaceHomePreferenceViewSet.as_view(),
+        name="workspace-home-preference",
+    ),
+    path(
+        "workspaces/<str:slug>/recent-visits/",
+        UserRecentVisitViewSet.as_view({"get": "list"}),
+        name="workspace-recent-visits",
+    ),
+    path(
+        "workspaces/<str:slug>/stickies/",
+        WorkspaceStickyViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-sticky",
+    ),
+    path(
+        "workspaces/<str:slug>/stickies/<uuid:pk>/",
+        WorkspaceStickyViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
+        name="workspace-sticky",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/",
+        WorkspaceClient360ViewSet.as_view({"get": "list"}),
+        name="workspace-client-360",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/matrix/",
+        WorkspaceClient360ViewSet.as_view({"get": "matrix"}),
+        name="workspace-client-360-matrix",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/qbr/",
+        WorkspaceClient360ViewSet.as_view({"get": "qbr_portfolio"}),
+        name="workspace-client-360-qbr",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/qbr-guest-links/",
+        WorkspaceClient360QbrGuestLinkViewSet.as_view({"get": "list", "post": "create"}),
+        name="workspace-client-360-qbr-guest-links",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/qbr-guest-links/<uuid:pk>/",
+        WorkspaceClient360QbrGuestLinkViewSet.as_view({"delete": "destroy"}),
+        name="workspace-client-360-qbr-guest-link-revoke",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/qbr/",
+        WorkspaceClient360ViewSet.as_view({"get": "qbr_client"}),
+        name="workspace-client-360-client-qbr",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/narrative/",
+        WorkspaceClient360NarrativeEndpoint.as_view(),
+        name="workspace-client-360-narrative",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/shared-views/",
+        WorkspaceClient360SharedViewsEndpoint.as_view(),
+        name="workspace-client-360-shared-views",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/shared-views/<uuid:view_id>/",
+        WorkspaceClient360SharedViewDetailEndpoint.as_view(),
+        name="workspace-client-360-shared-view-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/finops/settings/",
+        WorkspaceClient360FinopsSettingsEndpoint.as_view(),
+        name="workspace-client-360-finops-settings",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/finops/consultant-heatmap/",
+        WorkspaceClient360FinopsConsultantHeatmapEndpoint.as_view(),
+        name="workspace-client-360-finops-heatmap",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/finops/export/",
+        WorkspaceClient360FinopsExportEndpoint.as_view(),
+        name="workspace-client-360-finops-export",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/finops/harness-sync/",
+        WorkspaceClient360FinopsHarnessSyncEndpoint.as_view(),
+        name="workspace-client-360-finops-harness-sync",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/finops/",
+        WorkspaceClient360ProjectFinopsProfileEndpoint.as_view(),
+        name="workspace-client-360-project-finops",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/intelligence/weekly-briefing/",
+        WorkspaceClient360WeeklyBriefingEndpoint.as_view(),
+        name="workspace-client-360-weekly-briefing",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/intelligence/scenario-playbooks/",
+        WorkspaceClient360ScenarioPlaybooksEndpoint.as_view(),
+        name="workspace-client-360-scenario-playbooks",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/intelligence/scenario-playbooks/<uuid:playbook_id>/",
+        WorkspaceClient360ScenarioPlaybookDetailEndpoint.as_view(),
+        name="workspace-client-360-scenario-playbook-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/intelligence/rag-reindex/",
+        WorkspaceClient360IntelligenceRagReindexEndpoint.as_view(),
+        name="workspace-client-360-rag-reindex",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/qbr-draft/",
+        WorkspaceClient360ProjectQbrDraftEndpoint.as_view(),
+        name="workspace-client-360-qbr-draft",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/health-explainer/",
+        WorkspaceClient360ProjectHealthExplainerEndpoint.as_view(),
+        name="workspace-client-360-health-explainer",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/suggested-actions/",
+        WorkspaceClient360ProjectSuggestedActionsEndpoint.as_view(),
+        name="workspace-client-360-suggested-actions",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/suggested-actions/feedback/",
+        WorkspaceClient360SuggestedActionFeedbackEndpoint.as_view(),
+        name="workspace-client-360-suggested-actions-feedback",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/",
+        WorkspaceClient360ViewSet.as_view({"get": "retrieve"}),
+        name="workspace-client-360-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/health-history/",
+        WorkspaceClient360ViewSet.as_view({"get": "health_history"}),
+        name="workspace-client-360-health-history",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/display-settings/",
+        WorkspaceClient360DisplaySettingsEndpoint.as_view(),
+        name="workspace-client-360-display-settings",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/settings/",
+        WorkspaceClient360EnterpriseSettingsEndpoint.as_view(),
+        name="workspace-client-360-enterprise-settings",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/customers/",
+        WorkspaceClient360CustomersEndpoint.as_view(),
+        name="workspace-client-360-customers",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/customers/<uuid:customer_id>/",
+        WorkspaceClient360CustomerDetailEndpoint.as_view(),
+        name="workspace-client-360-customer-detail",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/<uuid:project_id>/customer/",
+        WorkspaceClient360ProjectCustomerAssignEndpoint.as_view(),
+        name="workspace-client-360-project-customer",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/webhooks/",
+        WorkspaceClient360WebhooksEndpoint.as_view(),
+        name="workspace-client-360-webhooks",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/webhooks/<uuid:subscription_id>/test/",
+        WorkspaceClient360WebhookTestEndpoint.as_view(),
+        name="workspace-client-360-webhook-test",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/audit/",
+        WorkspaceClient360AuditLogEndpoint.as_view(),
+        name="workspace-client-360-audit",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/audit/export/",
+        WorkspaceClient360AuditExportEndpoint.as_view(),
+        name="workspace-client-360-audit-export",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/bi-export/",
+        WorkspaceClient360BiExportEndpoint.as_view(),
+        name="workspace-client-360-bi-export",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/crm-sync/",
+        WorkspaceClient360CrmSyncEndpoint.as_view(),
+        name="workspace-client-360-crm-sync",
+    ),
+    path(
+        "workspaces/<str:slug>/client-360/enterprise/retention/purge/",
+        WorkspaceClient360RetentionPurgeEndpoint.as_view(),
+        name="workspace-client-360-retention-purge",
+    ),
+    path(
+        "instances/client-360-rollup/",
+        InstanceClient360RollupEndpoint.as_view(),
+        name="instance-client-360-rollup",
+    ),
+    # User Preference
+    path(
+        "workspaces/<str:slug>/sidebar-preferences/",
+        WorkspaceUserPreferenceViewSet.as_view(),
+        name="workspace-user-preference",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/",
+        WorkspaceJiraOpsSyncEndpoint.as_view(),
+        name="workspace-jira-ops-sync",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/start/",
+        WorkspaceJiraOpsOAuthStartEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-start",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/sites/",
+        WorkspaceJiraOpsOAuthSitesEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-sites",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/oauth/complete/",
+        WorkspaceJiraOpsOAuthCompleteEndpoint.as_view(),
+        name="workspace-jira-ops-oauth-complete",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/jira-projects/",
+        WorkspaceJiraOpsJiraProjectsEndpoint.as_view(),
+        name="workspace-jira-ops-jira-projects",
+    ),
+    path(
+        "workspaces/<str:slug>/jira-ops-sync/preview/",
+        WorkspaceJiraOpsSyncPreviewEndpoint.as_view(),
+        name="workspace-jira-ops-sync-preview",
+    ),
+    path(
+        "workspaces/<str:slug>/prd-review-inbox/",
+        WorkspacePrdReviewInboxEndpoint.as_view(),
+        name="workspace-prd-review-inbox",
+    ),
+    path(
+        "workspaces/<str:slug>/prd-review-metrics/",
+        WorkspacePrdReviewMetricsEndpoint.as_view(),
+        name="workspace-prd-review-metrics",
+    ),
+]

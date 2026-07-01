@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { ArrowRight, BarChart3, Check, Clock, Layers } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CloseIcon, OperozLockup } from "@operis/propel/icons";
-import { cn, getFileURL } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CloseIcon, OperozLockup } from "@operoz/propel/icons";
+import { cn, getFileURL } from "@operoz/utils";
 import { useUser } from "@/hooks/store/user";
 import { TourSidebar } from "./sidebar";
 import { getTourStepTips, TOUR_STEPS, type TTourSteps } from "./tour-steps";

@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useBoardPermissions } from "@/hooks/store/use-board-permissions";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";

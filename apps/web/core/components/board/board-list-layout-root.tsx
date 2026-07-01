@@ -2,8 +2,8 @@ import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
 import useSWR from "swr";
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 import { ListLayoutLoader } from "@/components/ui/loader/layouts/list-layout-loader";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import { WorkspaceActiveLayout } from "@/components/views/helper";
@@ -76,9 +76,7 @@ export const BoardListLayoutRoot = observer(function BoardListLayoutRoot(props: 
   const issueLoader = getIssueLoader();
   const isInitLoader = issueLoader === "init-loader";
   const showLoader =
-    !filtersReady ||
-    (isLoading && issuesLoading && isInitLoader) ||
-    (!groupedIssueIds && isInitLoader);
+    !filtersReady || (isLoading && issuesLoading && isInitLoader) || (!groupedIssueIds && isInitLoader);
   if (!workspaceSlug || !boardSlug) return null;
 
   if (showLoader) {

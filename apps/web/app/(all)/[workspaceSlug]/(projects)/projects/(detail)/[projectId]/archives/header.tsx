@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { ArchiveIcon, CycleIcon, ModuleIcon, WorkItemsIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { EIssuesStoreType } from "@operis/types";
+import { ArchiveIcon, CycleIcon, ModuleIcon, WorkItemsIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { EIssuesStoreType } from "@operoz/types";
 // ui
-import { Breadcrumbs, Header } from "@operis/ui";
+import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 // hooks

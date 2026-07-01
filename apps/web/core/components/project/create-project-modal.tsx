@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { getAssetIdFromUrl, checkURLValidity } from "@operis/utils";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { getAssetIdFromUrl, checkURLValidity } from "@operoz/utils";
 // plane ui
 // helpers
 // hooks

@@ -1,7 +1,7 @@
 import { Combobox } from "@headlessui/react";
 
 import React from "react";
-import { CheckIcon } from "@operis/propel/icons";
+import { CheckIcon } from "@operoz/propel/icons";
 // helpers
 import { cn } from "../../utils";
 // types

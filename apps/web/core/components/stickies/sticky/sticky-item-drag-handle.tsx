@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // ui
-import { DragHandle } from "@operis/ui";
+import { DragHandle } from "@operoz/ui";
 // helper
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   isDragging: boolean;

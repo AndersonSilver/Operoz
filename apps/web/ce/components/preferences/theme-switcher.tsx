@@ -2,11 +2,11 @@ import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 // plane imports
-import type { I_THEME_OPTION } from "@operis/constants";
-import { THEME_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { setPromiseToast } from "@operis/propel/toast";
-import { applyCustomTheme } from "@operis/utils";
+import type { I_THEME_OPTION } from "@operoz/constants";
+import { THEME_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { setPromiseToast } from "@operoz/propel/toast";
+import { applyCustomTheme } from "@operoz/utils";
 // components
 import { CustomThemeSelector } from "@/components/core/theme/custom-theme-selector";
 import { ThemeSwitch } from "@/components/core/theme/theme-switch";

@@ -10,8 +10,8 @@ import {
   YAxis,
 } from "recharts";
 // plane imports
-import { AXIS_LABEL_CLASSNAME } from "@operis/constants";
-import type { TLineChartProps } from "@operis/types";
+import { AXIS_LABEL_CLASSNAME } from "@operoz/constants";
+import type { TLineChartProps } from "@operoz/types";
 // local components
 import { getLegendProps } from "../components/legend";
 import { CustomXAxisTick, CustomYAxisTick } from "../components/tick";

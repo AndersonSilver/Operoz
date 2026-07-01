@@ -8,14 +8,14 @@ Documento de **referência arquitetural**: como conceitos do ecossistema [Claude
 
 | Claude Code                         | Operoz                                       | Fase     | Código / doc                                                           |
 | ----------------------------------- | -------------------------------------------- | -------- | ---------------------------------------------------------------------- |
-| Plugin manifest (`.claude-plugin/`) | **Automation Pack** (`pack.json`)            | 4        | [packs-authoring.md](./packs-authoring.md), `operis/automation/packs/` |
+| Plugin manifest (`.claude-plugin/`) | **Automation Pack** (`pack.json`)            | 4        | [packs-authoring.md](./packs-authoring.md), `operoz/automation/packs/` |
 | Commands (slash workflows)          | **Templates one-click** (galeria)            | 3.4      | `board-automation-templates-gallery.tsx`, API templates                |
-| Agents (subagentes)                 | **Subagentes + `parallel.fan_out`**          | 5.5, 3.7 | `operis/automation/subagents.py`, `executor_advanced.py`               |
-| Skills (`SKILL.md`)                 | **Board Playbooks**                          | 3.3      | `operis/playbooks/`, `BoardPlaybook` model                             |
+| Agents (subagentes)                 | **Subagentes + `parallel.fan_out`**          | 5.5, 3.7 | `operoz/automation/subagents.py`, `executor_advanced.py`               |
+| Skills (`SKILL.md`)                 | **Board Playbooks**                          | 3.3      | `operoz/playbooks/`, `BoardPlaybook` model                             |
 | Hooks Pre/Post/Stop                 | **Lifecycle hooks**                          | 3.1      | `hooks_registry.py`, `BoardAutomationHook`                             |
-| MCP servers                         | **`action.mcp_call` + `action.operis_tool`** | 5.3      | `catalog/actions.py`, [operis-mcp.md](./operis-mcp.md)                 |
+| MCP servers                         | **`action.mcp_call` + `action.operoz_tool`** | 5.3      | `catalog/actions.py`, [operoz-mcp.md](./operoz-mcp.md)                 |
 | Ralph loop (iterar até completar)   | **`action.retry_until`**                     | 3.7      | `catalog/actions.py`, `executor.py`                                    |
-| security-guidance (PreToolUse)      | **Policy engine (PreAction)**                | 3.2      | `operis/automation/policy.py`, `BoardAutomationPolicy`                 |
+| security-guidance (PreToolUse)      | **Policy engine (PreAction)**                | 3.2      | `operoz/automation/policy.py`, `BoardAutomationPolicy`                 |
 | Confidence scoring (code-review)    | **`decision.llm`** + threshold               | 5.1      | `catalog/decisions.py`, `llm_decision.py`                              |
 
 ---
@@ -27,7 +27,7 @@ Documento de **referência arquitetural**: como conceitos do ecossistema [Claude
 **Operoz:** `packs/automation-packs/<nome>/pack.json` instalável por board.
 
 ```text
-operis-pack-exemplo/
+operoz-pack-exemplo/
 ├── pack.json          # name, version, permissions, hooks, rules
 ├── hooks/hooks.json
 └── playbooks/         # opcional
@@ -64,7 +64,7 @@ operis-pack-exemplo/
 | Peça                               | Função                                                                   |
 | ---------------------------------- | ------------------------------------------------------------------------ |
 | `parallel.fan_out`                 | Ramifica execução com `join_policy` all/any                              |
-| `operis/automation/subagents.py`   | `parallel_triage_classifiers` — classificadores LLM em paralelo          |
+| `operoz/automation/subagents.py`   | `parallel_triage_classifiers` — classificadores LLM em paralelo          |
 | Assistente `agent_orchestrator.py` | Scaffold decomposição de queries (flag `ASSISTANT_ORCHESTRATOR_ENABLED`) |
 
 **Ver:** `executor_advanced.py`, testes `test_llm_decision.py`
@@ -78,10 +78,10 @@ operis-pack-exemplo/
 **Operoz:** **Board Playbooks** — conhecimento procedural por board injetado em automação e chat.
 
 - Modelo: `BoardPlaybook` (intents, snippet markdown)
-- Resolver: `operis/playbooks/resolver.py`
+- Resolver: `operoz/playbooks/resolver.py`
 - Lifecycle: `playbooks/lifecycle.py` — injeção em `build_execution_context` e `build_system_prompt`
 
-**Ver:** testes `operis/tests/unit/playbooks/`
+**Ver:** testes `operoz/tests/unit/playbooks/`
 
 ---
 
@@ -98,13 +98,13 @@ operis-pack-exemplo/
 | PostAction             | Depois de cada action                  |
 | OnFailure / OnComplete | Fim de run                             |
 
-- Registry: `operis/automation/hooks_registry.py`
+- Registry: `operoz/automation/hooks_registry.py`
 - Persistência: `BoardAutomationHook`
 - UI: settings automação do board → aba Hooks
 
 ---
 
-## REF — MCP → action.mcp_call + operis_tool
+## REF — MCP → action.mcp_call + operoz_tool
 
 **Claude Code:** servidores MCP expõem tools externas ao agente.
 
@@ -114,10 +114,10 @@ operis-pack-exemplo/
 | ------------------------------------------ | ----------------------------------------------- |
 | **MCP externo** (`mcp-server/`, 379 tools) | Cursor, agentes fora do produto                 |
 | **`action.mcp_call`**                      | Grafo de automação chama operação MCP           |
-| **`action.operis_tool`**                   | Grafo chama subset curado do assistente         |
+| **`action.operoz_tool`**                   | Grafo chama subset curado do assistente         |
 | **Assistente in-app**                      | ~17 tools com permission gate (não espelha 379) |
 
-**Ver:** [operis-mcp.md](./operis-mcp.md), [assistant-adrs.md](./assistant-adrs.md) (ADR-003)
+**Ver:** [operoz-mcp.md](./operoz-mcp.md), [assistant-adrs.md](./assistant-adrs.md) (ADR-003)
 
 ---
 
@@ -145,7 +145,7 @@ operis-pack-exemplo/
 - `evaluate_pre_action_policy()` em `policy.py`
 - Executor: `_run_policy_pre_action()` → step `blocked_by_policy` no histórico
 
-**Ver:** `operis/automation/policy.py`, migration `0153_board_automation_policy`
+**Ver:** `operoz/automation/policy.py`, migration `0153_board_automation_policy`
 
 ---
 
@@ -189,9 +189,9 @@ operis-pack-exemplo/
 
 ## Documentação relacionada
 
-- [Roadmap completo](./operis-plataforma-violenta-roadmap.md) — secção 3
+- [Roadmap completo](./operoz-plataforma-violenta-roadmap.md) — secção 3
 - [Índice assistente](./assistant-index.md)
-- [ADR-001 Governança](./operis-assistant-adr-001-governanca.md)
+- [ADR-001 Governança](./operoz-assistant-adr-001-governanca.md)
 
 ## Manutenção
 

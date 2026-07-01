@@ -3,9 +3,9 @@ import type { ReactNode } from "react";
 import React from "react";
 import { Calendar } from "lucide-react";
 // plane package imports
-import { ANALYTICS_DURATION_FILTER_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CustomSearchSelect } from "@operis/ui";
+import { ANALYTICS_DURATION_FILTER_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CustomSearchSelect } from "@operoz/ui";
 // types
 import type { TDropdownProps } from "@/components/dropdowns/types";
 

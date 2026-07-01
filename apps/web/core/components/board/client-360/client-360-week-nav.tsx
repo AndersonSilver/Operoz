@@ -1,7 +1,7 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { defaultWeekPeriod, shiftWeekPeriod } from "@/components/board/client-360/client-360-utils";
 import { Client360PeriodCompareToggle } from "@/components/board/client-360/client-360-period-compare-toggle";
 

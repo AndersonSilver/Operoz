@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TransferIcon } from "@operis/propel/icons";
-import type { IWorkspaceBulkInviteFormData } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TransferIcon } from "@operoz/propel/icons";
+import type { IWorkspaceBulkInviteFormData } from "@operoz/types";
 import { useUserPermissions } from "@/hooks/store/user";
 import { MembersCsvImportModal } from "./members-csv-import-modal";
 

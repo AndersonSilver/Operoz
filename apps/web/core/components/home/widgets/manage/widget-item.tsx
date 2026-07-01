@@ -13,12 +13,12 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
 // plane types
-import { useTranslation } from "@operis/i18n";
-import type { InstructionType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { InstructionType } from "@operoz/types";
 // plane ui
-import { DropIndicator, ToggleSwitch } from "@operis/ui";
+import { DropIndicator, ToggleSwitch } from "@operoz/ui";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useHome } from "@/hooks/store/use-home";
 import { HOME_WIDGETS_LIST } from "../../home-dashboard-widgets";

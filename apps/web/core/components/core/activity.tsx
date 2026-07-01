@@ -26,10 +26,10 @@ import {
   ModuleIcon,
   RelatedIcon,
   WorkItemsIcon,
-} from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueActivity } from "@operis/types";
-import { renderFormattedDate, generateWorkItemLink, capitalizeFirstLetter } from "@operis/utils";
+} from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueActivity } from "@operoz/types";
+import { renderFormattedDate, generateWorkItemLink, capitalizeFirstLetter } from "@operoz/utils";
 // helpers
 import { useLabel } from "@/hooks/store/use-label";
 import { usePlatformOS } from "@/hooks/use-platform-os";

@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // constants
-import { SPREADSHEET_SELECT_GROUP } from "@operis/constants";
+import { SPREADSHEET_SELECT_GROUP } from "@operoz/constants";
 // ui
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IProjectCustomFieldLite } from "@operis/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IProjectCustomFieldLite } from "@operoz/types";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { MultipleSelectGroupAction } from "@/components/core/multiple-select";
 // hooks
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";

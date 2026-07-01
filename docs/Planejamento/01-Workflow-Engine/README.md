@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis tem **estados** (`State`) por projeto com grupos (backlog, started,
+O Operoz tem **estados** (`State`) por projeto com grupos (backlog, started,
 done…), mas não tem **transições** com nome, **condições**, **validadores**,
 **post-functions** nem um **designer visual**. Esta feature traz o motor de
 workflow ao nível do Jira, reutilizando o canvas React Flow já usado na
@@ -28,13 +28,13 @@ gerado).
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Reusar o canvas React Flow da automação, parametrizando node types | Editor de grafo novo — duplicação |
-| 2 | Workflow guardado como grafo (estados=nós, transições=arestas) + versão publicada, como `BoardAutomationRule` | Tabelas rígidas sem versionamento |
-| 3 | Transição valida via pipeline: condições → validadores → muda estado → post-functions | Lógica espalhada na view |
-| 4 | `WorkflowScheme` mapeia (issue_type → workflow) por projeto | Um workflow fixo por projeto |
-| 5 | Draft vs published: editar sem afetar issues até publicar | Edição direta no workflow ativo |
+| #   | Decisão                                                                                                       | Alternativa rejeitada             |
+| --- | ------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| 1   | Reusar o canvas React Flow da automação, parametrizando node types                                            | Editor de grafo novo — duplicação |
+| 2   | Workflow guardado como grafo (estados=nós, transições=arestas) + versão publicada, como `BoardAutomationRule` | Tabelas rígidas sem versionamento |
+| 3   | Transição valida via pipeline: condições → validadores → muda estado → post-functions                         | Lógica espalhada na view          |
+| 4   | `WorkflowScheme` mapeia (issue_type → workflow) por projeto                                                   | Um workflow fixo por projeto      |
+| 5   | Draft vs published: editar sem afetar issues até publicar                                                     | Edição direta no workflow ativo   |
 
 ## Fases de entrega
 
@@ -52,6 +52,19 @@ gerado).
 - [03-frontend.md](./03-frontend.md)
 - [04-seguranca.md](./04-seguranca.md)
 - [05-clean-code-e-testes.md](./05-clean-code-e-testes.md)
+- [06-status-auditoria.md](./06-status-auditoria.md) — **status real pós-DEVIN**
+- [IMPLEMENTACAO-RESUMO.md](./IMPLEMENTACAO-RESUMO.md) — resumo executivo (atualizado)
+
+## Progresso (2026-06-27)
+
+| Fase                               | Status                                    |
+| ---------------------------------- | ----------------------------------------- |
+| F1 Núcleo (modelos + designer)     | 🟡 ~70% — canvas mock, sem lista          |
+| F2 Regras (engine + execute)       | 🟡 ~50% — registries OK, runtime quebrado |
+| F3 Esquemas (scheme + publish)     | 🟡 ~40% — API OK, sem migration/UI        |
+| Integração (issue + testes + i18n) | 🔴 ~5%                                    |
+
+Ver checklist e bugs em [06-status-auditoria.md](./06-status-auditoria.md).
 
 ## Reuso direto
 

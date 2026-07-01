@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
 import useSWR, { mutate } from "swr";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspaceIntegration } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspaceIntegration } from "@operoz/types";
 // assets
 import GithubLogo from "@/app/assets/logos/github-square.png?url";
 import SlackLogo from "@/app/assets/services/slack.png?url";

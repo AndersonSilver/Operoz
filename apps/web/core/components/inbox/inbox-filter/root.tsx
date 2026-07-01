@@ -1,9 +1,9 @@
 import { ListFilter } from "lucide-react";
-import { getButtonStyling } from "@operis/propel/button";
-import { useTranslation } from "@operis/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 // hooks

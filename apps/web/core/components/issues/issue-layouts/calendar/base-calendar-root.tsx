@@ -3,10 +3,10 @@ import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TGroupedIssues } from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
-import { renderFormattedPayloadDate } from "@operis/utils";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TGroupedIssues } from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 // hooks
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import { useIssues } from "@/hooks/store/use-issues";
@@ -16,11 +16,7 @@ import { useIssuesActions } from "@/hooks/use-issues-actions";
 // types
 import type { IQuickActionProps } from "../list/list-view-types";
 import { CalendarChart } from "./calendar";
-import {
-  buildCalendarDateUpdatePayload,
-  getCalendarPaginationOptions,
-  resolveLayoutDisplayFilters,
-} from "./utils";
+import { buildCalendarDateUpdatePayload, getCalendarPaginationOptions, resolveLayoutDisplayFilters } from "./utils";
 
 export type CalendarStoreType =
   | EIssuesStoreType.PROJECT
@@ -75,9 +71,7 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
 
   const { enableInlineEditing } = issues?.viewFlags || {};
 
-  const filterEntityId =
-    viewId ??
-    (storeType === EIssuesStoreType.PROJECT ? routerProjectId?.toString() : undefined);
+  const filterEntityId = viewId ?? (storeType === EIssuesStoreType.PROJECT ? routerProjectId?.toString() : undefined);
   const displayFilters = resolveLayoutDisplayFilters(issuesFilter, filterEntityId);
 
   const groupedIssueIds = (issues.groupedIssueIds ?? {}) as TGroupedIssues;
@@ -102,10 +96,7 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
 
   useEffect(() => {
     // Módulo e projeto fazem fetch no layout-root (moduleId/projectId da URL).
-    if (
-      storeType === EIssuesStoreType.MODULE ||
-      storeType === EIssuesStoreType.PROJECT
-    ) {
+    if (storeType === EIssuesStoreType.MODULE || storeType === EIssuesStoreType.PROJECT) {
       return;
     }
 
@@ -141,8 +132,7 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
     const issueDetails = issues.rootIssueStore.issues.getIssueById(issueId);
     const resolvedProjectId = issueProjectId ?? issueDetails?.project_id;
     const resolvedSourceDate =
-      sourceDate ??
-      (issueDetails?.target_date ? renderFormattedPayloadDate(issueDetails.target_date) : undefined);
+      sourceDate ?? (issueDetails?.target_date ? renderFormattedPayloadDate(issueDetails.target_date) : undefined);
 
     if (!resolvedProjectId || !resolvedSourceDate) return;
 

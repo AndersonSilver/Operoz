@@ -1,4 +1,4 @@
-import { sanitizeHTML } from "@operis/utils";
+import { sanitizeHTML } from "@operoz/utils";
 
 /**
  * Utility function to extract text from HTML content

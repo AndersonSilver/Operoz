@@ -1,6 +1,6 @@
 import { Crown } from "lucide-react";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type TProIcon = {
   className?: string;

@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import type { EditorRefApi } from "@operis/editor";
-import type { useTranslation } from "@operis/i18n";
-import { EFileAssetType } from "@operis/types";
-import { cn, isEditorEmpty } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import type { useTranslation } from "@operoz/i18n";
+import { EFileAssetType } from "@operoz/types";
+import { cn, isEditorEmpty } from "@operoz/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/components/issue-modal-editor-toolbar";
 import { StatusReportObservationAiAssistant } from "@/components/project/status-report/status-report-observation-ai-assistant";
@@ -72,7 +72,7 @@ export function StatusReportObservationComposer(props: Props) {
         editable
         id={`status-report-observation-${reportId}-${composerKey}`}
         initialValue={initialHtml}
-        value={descriptionHtml}
+        value={null}
         bubbleMenuEnabled={false}
         disabledExtensions={["editorSideMenu", "calloutComponent"]}
         workspaceSlug={workspaceSlug}

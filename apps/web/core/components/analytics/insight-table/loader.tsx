@@ -1,7 +1,7 @@
 import * as React from "react";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operis/propel/table";
-import { Loader } from "@operis/ui";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operoz/propel/table";
+import { Loader } from "@operoz/ui";
 
 interface TableSkeletonProps {
   columns: ColumnDef<any>[];

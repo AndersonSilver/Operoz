@@ -1,5 +1,5 @@
-import type { useTranslation } from "@operis/i18n";
-import type { TClient360Client, TClient360Health } from "@operis/types";
+import type { useTranslation } from "@operoz/i18n";
+import type { TClient360Client, TClient360Health } from "@operoz/types";
 import {
   CLIENT_360_TABLE_COLUMN_META,
   defaultClient360TableColumns,

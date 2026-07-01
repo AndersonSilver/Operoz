@@ -4,7 +4,7 @@ import type {
   TCoreInstanceAuthenticationModeKeys,
   TGetBaseAuthenticationModeProps,
   TInstanceAuthenticationModes,
-} from "@operis/types";
+} from "@operoz/types";
 // assets
 import giteaLogo from "@/app/assets/logos/gitea-logo.svg?url";
 import githubLightModeImage from "@/app/assets/logos/github-black.png?url";

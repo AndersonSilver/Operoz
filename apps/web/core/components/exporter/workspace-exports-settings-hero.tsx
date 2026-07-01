@@ -1,6 +1,6 @@
 import { Clock, Download, FileSpreadsheet, FolderKanban } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/ui";
 import "./workspace-exports-settings.css";
 
 export function WorkspaceExportsSettingsHero() {
@@ -38,11 +38,11 @@ export function WorkspaceExportsSettingsHero() {
       />
 
       <div className="relative flex items-start gap-4 p-5 lg:p-6">
-        <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary shadow-sm">
+        <span className="shadow-sm grid size-12 shrink-0 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary">
           <Download className="size-5" strokeWidth={1.75} />
         </span>
         <div className="min-w-0">
-          <p className="text-11 font-semibold uppercase tracking-widest text-tertiary">Operoz</p>
+          <p className="tracking-widest text-11 font-semibold text-tertiary uppercase">Operoz</p>
           <h1 className="mt-0.5 text-18 font-semibold tracking-tight text-primary">
             {t("workspace_settings.settings.exports.heading")}
           </h1>

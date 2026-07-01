@@ -1,10 +1,10 @@
 import { Controller, useFormContext } from "react-hook-form";
 // plane imports
-import { NETWORK_CHOICES, ETabIndices } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IProject } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { getTabIndex } from "@operis/utils";
+import { NETWORK_CHOICES, ETabIndices } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IProject } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { getTabIndex } from "@operoz/utils";
 // components
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";

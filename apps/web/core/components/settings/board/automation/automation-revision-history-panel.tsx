@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { Clock3, GitBranchPlus, RotateCcw, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Loader } from "@operis/ui";
-import type { IBoardAutomationRuleRevision } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Loader } from "@operoz/ui";
+import type { IBoardAutomationRuleRevision } from "@operoz/types";
 import { BoardService } from "@/services/board/board.service";
 import { summarizeAutomationGraph } from "./automation-utils";
 import "./automation-inspector.css";
@@ -71,7 +71,7 @@ export function AutomationRevisionHistoryPanel(props: Props) {
               <Clock3 className="size-4 text-accent-primary" strokeWidth={1.75} />
             </div>
             <div className="min-w-0">
-              <h2 className="text-14 font-semibold leading-tight text-primary">
+              <h2 className="text-14 leading-tight font-semibold text-primary">
                 {t("boards.settings.automation.editor.revision_history")}
               </h2>
               <p className="mt-0.5 text-11 leading-relaxed text-tertiary">
@@ -114,8 +114,8 @@ export function AutomationRevisionHistoryPanel(props: Props) {
                       <span
                         className={
                           isPublished
-                            ? "inline-flex rounded-full bg-success-subtle px-2 py-0.5 text-10 font-semibold uppercase tracking-wide text-success-primary"
-                            : "inline-flex rounded-full bg-layer-2 px-2 py-0.5 text-10 font-semibold uppercase tracking-wide text-secondary"
+                            ? "inline-flex rounded-full bg-success-subtle px-2 py-0.5 text-10 font-semibold tracking-wide text-success-primary uppercase"
+                            : "inline-flex rounded-full bg-layer-2 px-2 py-0.5 text-10 font-semibold tracking-wide text-secondary uppercase"
                         }
                       >
                         {isPublished

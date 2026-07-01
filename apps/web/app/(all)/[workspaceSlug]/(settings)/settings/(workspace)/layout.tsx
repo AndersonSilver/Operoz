@@ -6,8 +6,8 @@ import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view
 import { getWorkspaceActivePath, isBoardDetailSettingsPath, pathnameToAccessKey } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
 // plane imports
-import { WORKSPACE_SETTINGS_ACCESS } from "@operis/constants";
-import type { EUserWorkspaceRoles } from "@operis/types";
+import { WORKSPACE_SETTINGS_ACCESS } from "@operoz/constants";
+import type { EUserWorkspaceRoles } from "@operoz/types";
 // components
 import { AuxiliaryCollapsibleSidebar } from "@/components/sidebar/auxiliary-collapsible-sidebar";
 import { WorkspaceSettingsSidebarRoot } from "@/components/settings/workspace/sidebar";
@@ -50,7 +50,10 @@ const WorkspaceSettingLayout = observer(function WorkspaceSettingLayout({ params
           <>
             {!hideWorkspaceSidebar && (
               <div className="hidden h-full shrink-0 md:block">
-                <AuxiliaryCollapsibleSidebar storageKey="workspace_settings_sidebar_pinned" width={SETTINGS_SIDEBAR_WIDTH}>
+                <AuxiliaryCollapsibleSidebar
+                  storageKey="workspace_settings_sidebar_pinned"
+                  width={SETTINGS_SIDEBAR_WIDTH}
+                >
                   <WorkspaceSettingsSidebarRoot className="h-full border-r-0" />
                 </AuxiliaryCollapsibleSidebar>
               </div>

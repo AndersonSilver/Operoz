@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { Controller, type Control, type UseFormSetValue, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import { useParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { TBulkIssueProperties, TIssue } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { TBulkIssueProperties, TIssue } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { issueFormControlBaseClass, issueFormControlWidthClass, type IssueFormControlWidth } from "./issue-form-field";
 
@@ -19,7 +19,7 @@ export type TIssueTypeSelectProps<T extends Partial<TIssueFields>> = {
   control: Control<T>;
   setValue?: UseFormSetValue<T>;
   projectId: string | null;
-  editorRef?: React.MutableRefObject<import("@operis/editor").EditorRefApi | null>;
+  editorRef?: React.MutableRefObject<import("@operoz/editor").EditorRefApi | null>;
   disabled?: boolean;
   variant?: TIssueTypeDropdownVariant;
   placeholder?: string;

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { mutate } from "swr";
 // types
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { APITokenService } from "@operis/services";
-import type { IApiToken } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { APITokenService } from "@operoz/services";
+import type { IApiToken } from "@operoz/types";
 // ui
-import { AlertModalCore } from "@operis/ui";
+import { AlertModalCore } from "@operoz/ui";
 // fetch-keys
 import { API_TOKENS_LIST } from "@/constants/fetch-keys";
 

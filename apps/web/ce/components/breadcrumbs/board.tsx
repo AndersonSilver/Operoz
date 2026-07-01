@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Breadcrumbs } from "@operis/ui";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Breadcrumbs } from "@operoz/ui";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";

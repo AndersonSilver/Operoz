@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
-import type { TClient360SuggestedAction, TClient360ScenarioPlaybook } from "@operis/types";
+import type { TClient360SuggestedAction, TClient360ScenarioPlaybook } from "@operoz/types";
 import { Client360DetailPulseOverview } from "@/components/board/client-360/client-360-detail-pulse-overview";
 import { Client360ScenarioPlaybookDrawer } from "@/components/board/client-360/client-360-scenario-playbook-drawer";
 import { hasClient360HealthScoreData } from "@/components/board/client-360/client-360-health-score.utils";
@@ -24,8 +24,8 @@ import {
   Client360QbrDraftGenerateButton,
 } from "@/components/board/client-360/client-360-qbr-draft-section";
 import { useClient360DetailAssistantActions } from "@/components/board/client-360/client-360-detail-assistant";
-import type { TClient360DetailResponse } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 import { WorkspaceService } from "@/services/workspace.service";
 
 const workspaceService = new WorkspaceService();

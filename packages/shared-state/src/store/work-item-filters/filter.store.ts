@@ -1,10 +1,10 @@
 import { action, makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TExpressionOptions } from "@operis/constants";
-import type { EIssuesStoreType, TWorkItemFilterExpression, TWorkItemFilterProperty } from "@operis/types";
-import { LOGICAL_OPERATOR } from "@operis/types";
-import { getOperatorForPayload } from "@operis/utils";
+import type { TExpressionOptions } from "@operoz/constants";
+import type { EIssuesStoreType, TWorkItemFilterExpression, TWorkItemFilterProperty } from "@operoz/types";
+import { LOGICAL_OPERATOR } from "@operoz/types";
+import { getOperatorForPayload } from "@operoz/utils";
 // local imports
 import type { TWorkItemFilterCondition } from "../../utils";
 import { buildWorkItemFilterExpressionFromConditions } from "../../utils";

@@ -1,6 +1,6 @@
 // types
-import { logger } from "@operis/logger";
-import type { IUser } from "@operis/types";
+import { logger } from "@operoz/logger";
+import type { IUser } from "@operoz/types";
 // services
 import { AppError } from "@/lib/errors";
 import { APIService } from "@/services/api.service";

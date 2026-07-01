@@ -1,8 +1,8 @@
 import { enableStaticRendering } from "mobx-react";
 // plane imports
-import { DEFAULT_LOCALE, LANGUAGE_STORAGE_KEY } from "@operis/i18n";
-import type { IWorkItemFilterStore } from "@operis/shared-state";
-import { WorkItemFilterStore } from "@operis/shared-state";
+import { DEFAULT_LOCALE, LANGUAGE_STORAGE_KEY } from "@operoz/i18n";
+import type { IWorkItemFilterStore } from "@operoz/shared-state";
+import { WorkItemFilterStore } from "@operoz/shared-state";
 // plane web store
 import type { IAnalyticsStore } from "@/plane-web/store/analytics.store";
 import { AnalyticsStore } from "@/plane-web/store/analytics.store";
@@ -82,6 +82,8 @@ import {
   BoardStore,
 } from "./board";
 import type { IWorkspaceRootStore } from "./workspace";
+import type { IWorkflowStore } from "./workflow.store";
+import { WorkflowStore } from "./workflow.store";
 
 enableStaticRendering(typeof window === "undefined");
 
@@ -123,6 +125,7 @@ export class CoreRootStore {
   boardCustomFieldStore: IBoardCustomFieldStore;
   boardAccessStore: IBoardAccessStore;
   boardPermissionsStore: IBoardPermissionsStore;
+  workflow: IWorkflowStore;
 
   constructor() {
     this.router = new RouterStore();
@@ -162,6 +165,7 @@ export class CoreRootStore {
     this.boardCustomFieldStore = new BoardCustomFieldStore();
     this.boardAccessStore = new BoardAccessStore();
     this.boardPermissionsStore = new BoardPermissionsStore();
+    this.workflow = new WorkflowStore(this as unknown as RootStore);
   }
 
   resetOnSignOut() {
@@ -203,5 +207,6 @@ export class CoreRootStore {
     this.boardCustomFieldStore = new BoardCustomFieldStore();
     this.boardAccessStore = new BoardAccessStore();
     this.boardPermissionsStore = new BoardPermissionsStore();
+    this.workflow = new WorkflowStore(this as unknown as RootStore);
   }
 }

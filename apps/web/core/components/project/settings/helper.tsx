@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { PROJECT_TRACKER_ELEMENTS } from "@operis/constants";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import { EPillVariant, Pill, EPillSize } from "@operis/propel/pill";
-import { ToggleSwitch } from "@operis/ui";
-import { joinUrlPath } from "@operis/utils";
+import { PROJECT_TRACKER_ELEMENTS } from "@operoz/constants";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import { EPillVariant, Pill, EPillSize } from "@operoz/propel/pill";
+import { ToggleSwitch } from "@operoz/ui";
+import { joinUrlPath } from "@operoz/utils";
 
 type Props = {
   workspaceSlug: string;

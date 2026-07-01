@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ProjectIcon } from "@operis/propel/icons";
-import type { ICustomSearchSelectOption } from "@operis/types";
-import { CustomSearchSelect } from "@operis/ui";
+import { ProjectIcon } from "@operoz/propel/icons";
+import type { ICustomSearchSelectOption } from "@operoz/types";
+import { CustomSearchSelect } from "@operoz/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";

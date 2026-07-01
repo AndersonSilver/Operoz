@@ -1,7 +1,11 @@
 import { Layers3, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { INTAKE_FORM_FIELD_CATALOG, mapCustomFieldTypeToFormType, type TIntakeSelectableCustomField } from "./intake-form-field-catalog";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import {
+  INTAKE_FORM_FIELD_CATALOG,
+  mapCustomFieldTypeToFormType,
+  type TIntakeSelectableCustomField,
+} from "./intake-form-field-catalog";
 
 type Props = {
   customFields: TIntakeSelectableCustomField[];
@@ -14,9 +18,7 @@ export function IntakeFormBuilderSidebar(props: Props) {
   const { customFields, usedCustomFieldIds, onAddCustomField, onCreateField } = props;
   const { t } = useTranslation();
 
-  const availableCustomFields = customFields.filter(
-    (field) => !usedCustomFieldIds.has(field.custom_field_id)
-  );
+  const availableCustomFields = customFields.filter((field) => !usedCustomFieldIds.has(field.custom_field_id));
 
   return (
     <div className="flex h-full flex-col">

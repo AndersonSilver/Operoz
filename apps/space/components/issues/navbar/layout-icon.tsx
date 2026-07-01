@@ -1,6 +1,6 @@
-import type { TIssueLayout } from "@operis/constants";
-import { ListLayoutIcon, BoardLayoutIcon } from "@operis/propel/icons";
-import type { ISvgIcons } from "@operis/propel/icons";
+import type { TIssueLayout } from "@operoz/constants";
+import { ListLayoutIcon, BoardLayoutIcon } from "@operoz/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
 
 export function IssueLayoutIcon({
   layout,

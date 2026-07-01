@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 // types
 import type { TFilters } from "@/types/issue";
 // components

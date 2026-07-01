@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { ChevronDown, ChevronUp, MoreHorizontal, Plus, Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardCustomField, TBoardFieldFormSpan } from "@operis/types";
-import { CustomMenu, Input, Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardCustomField, TBoardFieldFormSpan } from "@operoz/types";
+import { CustomMenu, Input, Loader } from "@operoz/ui";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldAddModal } from "./board-custom-field-add-modal";
@@ -55,11 +55,7 @@ export const BoardCustomFieldsSettings = observer(function BoardCustomFieldsSett
     return fields.filter((item) => {
       const displayName = getBoardFieldDisplayName(item, t).toLowerCase();
       const typeLabel = t(`boards.settings.fields.types.${item.field_type}`).toLowerCase();
-      return (
-        displayName.includes(q) ||
-        (item.description ?? "").toLowerCase().includes(q) ||
-        typeLabel.includes(q)
-      );
+      return displayName.includes(q) || (item.description ?? "").toLowerCase().includes(q) || typeLabel.includes(q);
     });
   }, [fields, search, t]);
 
@@ -152,7 +148,7 @@ export const BoardCustomFieldsSettings = observer(function BoardCustomFieldsSett
 
       {fields.length > 0 && (
         <div className="relative mt-6 w-full max-w-sm">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-placeholder" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-placeholder" />
           <Input
             className="pl-9"
             value={search}
@@ -280,10 +276,7 @@ export const BoardCustomFieldsSettings = observer(function BoardCustomFieldsSett
                             {t("boards.settings.fields.remove_from_board")}
                           </CustomMenu.MenuItem>
                           {!item.is_system && (
-                            <CustomMenu.MenuItem
-                              onClick={() => setDeleteField(item)}
-                              className="text-danger"
-                            >
+                            <CustomMenu.MenuItem onClick={() => setDeleteField(item)} className="text-danger">
                               {t("boards.settings.fields.delete_workspace")}
                             </CustomMenu.MenuItem>
                           )}

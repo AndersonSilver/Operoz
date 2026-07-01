@@ -1,11 +1,11 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IAnalyticsResponse,
   TAnalyticsTabsBase,
   TAnalyticsGraphsBase,
   TAnalyticsFilterParams,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { APIService } from "./api.service";
 

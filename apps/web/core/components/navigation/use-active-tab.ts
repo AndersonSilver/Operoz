@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
 
 type UseActiveTabProps = {

@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { ListFilterPlus } from "lucide-react";
 import { Transition } from "@headlessui/react";
 // plane imports
-import { Button } from "@operis/propel/button";
-import type { IFilterInstance } from "@operis/shared-state";
-import type { TExternalFilter, TFilterProperty } from "@operis/types";
-import { cn, EHeaderVariant, Header, Loader } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import type { IFilterInstance } from "@operoz/shared-state";
+import type { TExternalFilter, TFilterProperty } from "@operoz/types";
+import { cn, EHeaderVariant, Header, Loader } from "@operoz/ui";
 // local imports
 import type { TAddFilterButtonProps } from "./add-filters/button";
 import { AddFilterButton } from "./add-filters/button";
@@ -119,12 +119,7 @@ export const FiltersRow = observer(function FiltersRow<K extends TFilterProperty
   );
 
   const mainContent = (
-    <div
-      className={cn(
-        "flex w-full items-center gap-2",
-        "items-center px-1 py-1.5"
-      )}
-    >
+    <div className={cn("flex w-full items-center gap-2", "items-center px-1 py-1.5")}>
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">{leftContent}</div>
       <div
         className={cn("flex items-center gap-2 border-l border-subtle pl-4", {

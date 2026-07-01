@@ -2,9 +2,9 @@ import { set, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // helpers
-import { getCurrentDateTimeInISO } from "@operis/utils";
+import { getCurrentDateTimeInISO } from "@operoz/utils";
 import { rootStore } from "@/lib/store-context";
 // services
 import { IssueService } from "@/services/issue";

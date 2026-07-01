@@ -1,6 +1,6 @@
 import { observable, action, makeObservable, runInAction } from "mobx";
 // types
-import type { IInstance, IInstanceConfig } from "@operis/types";
+import type { IInstance, IInstanceConfig } from "@operoz/types";
 // services
 import { InstanceService } from "@/services/instance.service";
 

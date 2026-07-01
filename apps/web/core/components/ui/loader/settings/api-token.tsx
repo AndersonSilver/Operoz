@@ -1,5 +1,5 @@
 import { range } from "lodash-es";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 export function APITokenSettingsLoader() {
   const { t } = useTranslation();
   return (

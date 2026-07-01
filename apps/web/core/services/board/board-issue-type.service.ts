@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IBoardIssueType, IProjectIssueTypeLite, TBoardIssueTypeFormData } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IBoardIssueType, IProjectIssueTypeLite, TBoardIssueTypeFormData } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardIssueTypeService extends APIService {
@@ -33,21 +33,14 @@ export class BoardIssueTypeService extends APIService {
     boardIssueTypeId: string,
     data: Partial<TBoardIssueTypeFormData> & { is_enabled?: boolean; sort_order?: number }
   ): Promise<IBoardIssueType> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issue-types/${boardIssueTypeId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issue-types/${boardIssueTypeId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async disableBoardIssueType(
-    workspaceSlug: string,
-    boardSlug: string,
-    boardIssueTypeId: string
-  ): Promise<void> {
+  async disableBoardIssueType(workspaceSlug: string, boardSlug: string, boardIssueTypeId: string): Promise<void> {
     return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issue-types/${boardIssueTypeId}/`)
       .then(() => undefined)
       .catch((error) => {

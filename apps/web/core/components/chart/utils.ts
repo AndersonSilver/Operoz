@@ -1,13 +1,13 @@
 import { getWeekOfMonth, isValid } from "date-fns";
-import { CHART_X_AXIS_DATE_PROPERTIES, ChartXAxisDateGrouping, TO_CAPITALIZE_PROPERTIES } from "@operis/constants";
-import type { ChartXAxisProperty, TChart, TChartDatum } from "@operis/types";
+import { CHART_X_AXIS_DATE_PROPERTIES, ChartXAxisDateGrouping, TO_CAPITALIZE_PROPERTIES } from "@operoz/constants";
+import type { ChartXAxisProperty, TChart, TChartDatum } from "@operoz/types";
 import {
   capitalizeFirstLetter,
   hexToHsl,
   hslToHex,
   renderFormattedDate,
   renderFormattedDateWithoutYear,
-} from "@operis/utils";
+} from "@operoz/utils";
 //
 
 const getDateGroupingName = (date: string, dateGrouping: ChartXAxisDateGrouping): string => {

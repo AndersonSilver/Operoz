@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/devops.py          # DevLink, BuildStatus, Deployment, SmartCommitLog
 ├── devops/
 │   ├── normalize.py    # payload provider → DevEvent agnóstico (puro)
@@ -33,26 +33,26 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| `normalize(github PR)` | DevEvent correto |
-| `normalize(gitlab MR)` | mesmo formato |
-| `match_issue_keys("OPS-1 e OPS-2")` | [OPS-1, OPS-2] |
-| `parse_commands("#close #time 3h")` | [close, time(3h)] |
-| smart commit de committer não mapeado | nenhuma ação aplicada |
-| `#transition` que viola workflow | não aplicada + erro registado |
+| Caso                                  | Esperado                      |
+| ------------------------------------- | ----------------------------- |
+| `normalize(github PR)`                | DevEvent correto              |
+| `normalize(gitlab MR)`                | mesmo formato                 |
+| `match_issue_keys("OPS-1 e OPS-2")`   | [OPS-1, OPS-2]                |
+| `parse_commands("#close #time 3h")`   | [close, time(3h)]             |
+| smart commit de committer não mapeado | nenhuma ação aplicada         |
+| `#transition` que viola workflow      | não aplicada + erro registado |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| webhook sem assinatura | `401` |
-| webhook assinado | `200`, DevLink criado |
-| replay do mesmo evento | idempotente (sem duplicado) |
-| smart commit "#close" por user sem permissão | não fecha; log com erro |
-| smart commit "#time 2h" | cria worklog (feature 05) |
-| create-branch repo fora da integração | `400` |
-| CI webhook assinado | build status atualizado |
+| Caso                                         | Esperado                    |
+| -------------------------------------------- | --------------------------- |
+| webhook sem assinatura                       | `401`                       |
+| webhook assinado                             | `200`, DevLink criado       |
+| replay do mesmo evento                       | idempotente (sem duplicado) |
+| smart commit "#close" por user sem permissão | não fecha; log com erro     |
+| smart commit "#time 2h"                      | cria worklog (feature 05)   |
+| create-branch repo fora da integração        | `400`                       |
+| CI webhook assinado                          | build status atualizado     |
 
 ### e2e
 

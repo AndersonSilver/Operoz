@@ -1,16 +1,7 @@
-import {
-  ArrowRight,
-  ExternalLink,
-  GitBranch,
-  Inbox,
-  Link2,
-  Shield,
-  Sparkles,
-  Zap,
-} from "lucide-react";
+import { ArrowRight, ExternalLink, GitBranch, Inbox, Link2, Shield, Sparkles, Zap } from "lucide-react";
 import { Link } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { IntakeSetupPanel } from "./intake-setup-panel";
 import "./intake-settings.css";
 
@@ -25,15 +16,7 @@ type Props = {
 };
 
 export function IntakeSettingsAside(props: Props) {
-  const {
-    workspaceSlug,
-    projectId,
-    intakeEnabled,
-    formCount,
-    publishedCount,
-    showSetupSteps,
-    onToggle,
-  } = props;
+  const { workspaceSlug, projectId, intakeEnabled, formCount, publishedCount, showSetupSteps, onToggle } = props;
   const { t } = useTranslation();
   const intakePath = `/${workspaceSlug}/projects/${projectId}/intake`;
 

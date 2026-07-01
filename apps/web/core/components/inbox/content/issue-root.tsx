@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue } from "@operis/types";
-import { EInboxIssueStatus, EHubMode } from "@operis/types";
-import type { THubMode } from "@operis/types";
-import { getTextContent } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue } from "@operoz/types";
+import { EInboxIssueStatus, EHubMode } from "@operoz/types";
+import type { THubMode } from "@operoz/types";
+import { getTextContent } from "@operoz/utils";
 import { IssueAttachmentRoot } from "@/components/issues/attachment";
 import type { TIssueOperations } from "@/components/issues/issue-detail";
 import { IssueActivity } from "@/components/issues/issue-detail/issue-activity";

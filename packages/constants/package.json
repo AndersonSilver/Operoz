@@ -1,5 +1,5 @@
 {
-  "name": "@operis/constants",
+  "name": "@operoz/constants",
   "version": "1.3.1",
   "private": true,
   "license": "AGPL-3.0",
@@ -22,10 +22,10 @@
     "clean": "rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@operis/types": "workspace:*"
+    "@operoz/types": "workspace:*"
   },
   "devDependencies": {
-    "@operis/typescript-config": "workspace:*",
+    "@operoz/typescript-config": "workspace:*",
     "@types/node": "catalog:",
     "@types/react": "catalog:",
     "tsdown": "catalog:",

@@ -1,5 +1,5 @@
-import { OperozMark } from "@operis/propel/icons";
-import { useTranslation } from "@operis/i18n";
+import { OperozMark } from "@operoz/propel/icons";
+import { useTranslation } from "@operoz/i18n";
 import { ServerOff } from "lucide-react";
 
 export function MaintenanceStatusIllustration() {

@@ -1,9 +1,9 @@
 import { useRef, useState } from "react";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { IconButton } from "@operis/propel/icon-button";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { IconButton } from "@operoz/propel/icon-button";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 
 type Props = {
   searchQuery: string;

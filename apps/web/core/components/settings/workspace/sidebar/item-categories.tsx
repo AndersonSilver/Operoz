@@ -2,10 +2,10 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
 // plane imports
-import { EUserPermissionsLevel, GROUPED_WORKSPACE_SETTINGS, WORKSPACE_SETTINGS_CATEGORIES } from "@operis/constants";
+import { EUserPermissionsLevel, GROUPED_WORKSPACE_SETTINGS, WORKSPACE_SETTINGS_CATEGORIES } from "@operoz/constants";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
-import { useTranslation } from "@operis/i18n";
-import { joinUrlPath } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { joinUrlPath } from "@operoz/utils";
 // components
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";
 import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // components
 import { EstimateDropdown } from "@/components/dropdowns/estimate";
 

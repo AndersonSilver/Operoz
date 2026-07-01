@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { Earth, Info, Minus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { LockIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Avatar, FavoriteStar } from "@operis/ui";
-import { renderFormattedDate, getFileURL } from "@operis/utils";
+import { LockIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Avatar, FavoriteStar } from "@operoz/ui";
+import { renderFormattedDate, getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { usePageOperations } from "@/hooks/use-page-operations";

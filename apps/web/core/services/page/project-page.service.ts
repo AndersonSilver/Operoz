@@ -1,6 +1,6 @@
 // types
-import { API_BASE_URL } from "@operis/constants";
-import type { TDocumentPayload, TPage } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TDocumentPayload, TPage } from "@operoz/types";
 import type { TPrdReviewInvite, TPrdReviewSession } from "@/services/guest-prd-review.service";
 // helpers
 // services

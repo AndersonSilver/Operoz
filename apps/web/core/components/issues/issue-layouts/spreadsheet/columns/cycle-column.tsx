@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // types
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 // hooks

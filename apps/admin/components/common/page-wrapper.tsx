@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
 import { Settings } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { AdminListHero, type AdminHighlight } from "@/components/settings/admin-list-hero";
 
 type TPageWrapperProps = {

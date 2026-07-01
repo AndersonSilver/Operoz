@@ -4,12 +4,12 @@ import { observer } from "mobx-react";
 // icons
 import { CircleAlert, XCircle } from "lucide-react";
 // types
-import { Button } from "@operis/propel/button";
-import type { IEmailCheckData } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { IEmailCheckData } from "@operoz/types";
 // ui
-import { Input, Spinner } from "@operis/ui";
+import { Input, Spinner } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { checkEmailValidity } from "@/helpers/string.helper";
 
 type TAuthEmailForm = {

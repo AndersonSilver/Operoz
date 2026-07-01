@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TFileSignedURLResponse } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TFileSignedURLResponse } from "@operoz/types";
 import { FileUploadService } from "./file-upload.service";
 import { FileService } from "./file.service";
 import { generateFileUploadPayload, getFileMetaDataForUpload } from "./helper";

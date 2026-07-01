@@ -6,11 +6,11 @@ import { useParams } from "next/navigation";
 // icons
 import { Paperclip } from "lucide-react";
 // i18n
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, StartDatePropertyIcon, ViewsIcon, DueDatePropertyIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssue, IIssueDisplayProperties, TIssuePriorities, TCustomFieldValue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, StartDatePropertyIcon, ViewsIcon, DueDatePropertyIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssue, IIssueDisplayProperties, TIssuePriorities, TCustomFieldValue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // ui
 import {
   cn,
@@ -18,7 +18,7 @@ import {
   renderFormattedPayloadDate,
   generateWorkItemLink,
   shouldHighlightIssueDueDate,
-} from "@operis/utils";
+} from "@operoz/utils";
 import { store } from "@/lib/store-context";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";

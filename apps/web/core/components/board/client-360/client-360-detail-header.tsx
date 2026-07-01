@@ -2,9 +2,9 @@
 
 import type { ReactNode } from "react";
 import { ExternalLink, FileText } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360DetailResponse } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360DetailResponse } from "@operoz/types";
 import { Client360GuestShareButton } from "@/components/board/client-360/client-360-guest-share-button";
 import { Client360HealthScoreBadge } from "@/components/board/client-360/client-360-health-score-badge";
 import { Client360HealthDimensionChips } from "@/components/board/client-360/client-360-health-dimension-chips";

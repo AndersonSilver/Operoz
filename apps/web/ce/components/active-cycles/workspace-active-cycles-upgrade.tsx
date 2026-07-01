@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import { AlertOctagon, BarChart4, CircleDashed, Folder, Microscope } from "lucide-react";
 // plane imports
-import { MARKETING_PRICING_PAGE_LINK } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { SearchIcon } from "@operis/propel/icons";
-import { ContentWrapper } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { MARKETING_PRICING_PAGE_LINK } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { SearchIcon } from "@operoz/propel/icons";
+import { ContentWrapper } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // assets
 import ctaL1Dark from "@/app/assets/workspace-active-cycles/cta-l-1-dark.webp?url";
 import ctaL1Light from "@/app/assets/workspace-active-cycles/cta-l-1-light.webp?url";

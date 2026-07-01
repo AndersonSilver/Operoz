@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationPolicy, IBoardAutomationPublishAudit } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { Loader, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationPolicy, IBoardAutomationPublishAudit } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { Loader, TextArea } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 
 const boardService = new BoardService();

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { ChevronDown, Server, ShieldAlert } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/ui";
 import { formatMetricValue, getOperationalSignals, type ParsedAutomationMetric } from "./automation-ops-utils";
 
 type Props = {

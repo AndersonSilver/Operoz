@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { THomeWidgetProps, TNotification } from "@operis/types";
-import { calculateTimeAgo } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { THomeWidgetProps, TNotification } from "@operoz/types";
+import { calculateTimeAgo } from "@operoz/utils";
 import { WorkspaceNotificationService } from "@/services/workspace-notification.service";
 import { WidgetSection } from "../shared/widget-section";
 

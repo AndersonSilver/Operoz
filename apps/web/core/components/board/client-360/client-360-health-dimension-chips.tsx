@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Health, TClient360HealthDimension, TClient360HealthDimensionItem } from "@operis/types";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Health, TClient360HealthDimension, TClient360HealthDimensionItem } from "@operoz/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import {
   client360HealthDimensionLabelKey,

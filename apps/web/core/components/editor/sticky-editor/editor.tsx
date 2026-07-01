@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 // plane constants
-import type { EIssueCommentAccessSpecifier } from "@operis/constants";
+import type { EIssueCommentAccessSpecifier } from "@operoz/constants";
 // plane editor
-import { LiteTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operis/editor";
+import { LiteTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operoz/editor";
 // components
-import type { TSticky } from "@operis/types";
+import type { TSticky } from "@operoz/types";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useEditorConfig } from "@/hooks/editor";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";

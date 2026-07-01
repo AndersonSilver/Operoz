@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ISSUE_PRIORITY_FILTERS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PriorityIcon } from "@operis/propel/icons";
+import { ISSUE_PRIORITY_FILTERS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PriorityIcon } from "@operoz/propel/icons";
 // local imports
 import { FilterHeader } from "./helpers/filter-header";
 import { FilterOption } from "./helpers/filter-option";

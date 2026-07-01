@@ -4,10 +4,10 @@ import { observer } from "mobx-react";
 import type { UseFormRegister, UseFormSetFocus } from "react-hook-form";
 // plane constants
 // plane helpers
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // types
-import type { TIssue } from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+import type { TIssue } from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 // components
 import type { TQuickAddIssueForm } from "@/components/issues/issue-layouts/quick-add";
 import {

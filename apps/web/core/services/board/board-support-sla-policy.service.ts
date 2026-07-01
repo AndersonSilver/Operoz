@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TBoardSupportSlaPolicy, TBoardSupportSlaPolicyWritePayload } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TBoardSupportSlaPolicy, TBoardSupportSlaPolicyWritePayload } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardSupportSlaPolicyService extends APIService {

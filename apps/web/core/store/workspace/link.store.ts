@@ -1,7 +1,7 @@
 import { set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 // types
-import type { TLink, TLinkIdMap, TLinkMap } from "@operis/types";
+import type { TLink, TLinkIdMap, TLinkMap } from "@operoz/types";
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 

@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis já tem integração GitHub básica (`integration/github.py`, sync de
+O Operoz já tem integração GitHub básica (`integration/github.py`, sync de
 issues/comentários). Faltam o **painel de desenvolvimento** na issue (branches/
 PRs/commits/builds), os **smart commits** (mensagens de commit que transicionam
 issues e registam tempo) e o **deployment tracking** (roadmap §18). Esta feature
@@ -17,13 +17,13 @@ auto-creation, build status, deployment tracking, code review status, GitLab.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Normalizar eventos Git num modelo `DevLink` agnóstico do provider | Acoplar a GitHub |
-| 2 | Smart commits parseados no webhook handler, ações via motor existente | Lógica espalhada |
-| 3 | Smart commit corre no contexto do committer (se mapeável a membro) | Ações sem dono |
-| 4 | Deployment tracking reusa `DeployBoard` (modelo já existe) | Modelo novo |
-| 5 | Build/CI status via webhook receiver genérico | Integração por ferramenta |
+| #   | Decisão                                                               | Alternativa rejeitada     |
+| --- | --------------------------------------------------------------------- | ------------------------- |
+| 1   | Normalizar eventos Git num modelo `DevLink` agnóstico do provider     | Acoplar a GitHub          |
+| 2   | Smart commits parseados no webhook handler, ações via motor existente | Lógica espalhada          |
+| 3   | Smart commit corre no contexto do committer (se mapeável a membro)    | Ações sem dono            |
+| 4   | Deployment tracking reusa `DeployBoard` (modelo já existe)            | Modelo novo               |
+| 5   | Build/CI status via webhook receiver genérico                         | Integração por ferramenta |
 
 ## Escopo
 

@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { addDays } from "date-fns";
 import { observer } from "mobx-react";
-import { PlusIcon } from "@operis/propel/icons";
+import { PlusIcon } from "@operoz/propel/icons";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IBlockUpdateData, IGanttBlock } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IBlockUpdateData, IGanttBlock } from "@operoz/types";
 // helpers
-import { renderFormattedDate, renderFormattedPayloadDate } from "@operis/utils";
+import { renderFormattedDate, renderFormattedPayloadDate } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";

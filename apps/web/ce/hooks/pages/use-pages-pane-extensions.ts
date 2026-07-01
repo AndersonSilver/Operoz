@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from "react";
 import type { RefObject } from "react";
 import { useSearchParams } from "next/navigation";
-import type { EditorRefApi } from "@operis/editor";
+import type { EditorRefApi } from "@operoz/editor";
 import {
   PAGE_NAVIGATION_PANE_TAB_KEYS,
   PAGE_NAVIGATION_PANE_TABS_QUERY_PARAM,

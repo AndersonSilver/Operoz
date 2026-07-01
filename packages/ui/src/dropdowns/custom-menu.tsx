@@ -3,7 +3,7 @@ import { MoreHorizontal } from "lucide-react";
 import * as React from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
-import { ChevronDownIcon, ChevronRightIcon } from "@operis/propel/icons";
+import { ChevronDownIcon, ChevronRightIcon } from "@operoz/propel/icons";
 // plane helpers
 // helpers
 import { cn } from "../utils";
@@ -151,10 +151,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
     <button
       ref={setReferenceElement}
       type="button"
-      className={cn(
-        "inline-flex cursor-pointer border-0 bg-transparent p-0 text-inherit",
-        customButtonClassName
-      )}
+      className={cn("inline-flex cursor-pointer border-0 bg-transparent p-0 text-inherit", customButtonClassName)}
       tabIndex={customButtonTabIndex}
       disabled={disabled}
       aria-label={ariaLabel}
@@ -188,8 +185,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
     });
   };
 
-  const portalTarget =
-    portalElement ?? (typeof document !== "undefined" ? document.body : null);
+  const portalTarget = portalElement ?? (typeof document !== "undefined" ? document.body : null);
 
   const handleClose = React.useCallback(() => {
     closeAllSubmenus();
@@ -197,12 +193,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
   }, [closeAllSubmenus, onMenuClose]);
 
   return (
-    <Popover
-      as="div"
-      tabIndex={tabIndex}
-      className={cn("relative w-min text-left", className)}
-      data-main-menu="true"
-    >
+    <Popover as="div" tabIndex={tabIndex} className={cn("relative w-min text-left", className)} data-main-menu="true">
       {({ open, close }) => {
         const closeMenu = () => {
           handleClose();
@@ -243,9 +234,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
                 )}
               >
                 <CloseMenuContext.Provider value={closeMenu}>
-                  <MenuContext.Provider value={{ closeAllSubmenus, registerSubmenu }}>
-                    {children}
-                  </MenuContext.Provider>
+                  <MenuContext.Provider value={{ closeAllSubmenus, registerSubmenu }}>{children}</MenuContext.Provider>
                 </CloseMenuContext.Provider>
               </div>
             </Popover.Panel>

@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { AnalyticsIcon, CycleIcon, ProjectIcon, ViewsIcon } from "@operis/propel/icons";
-import { EUserWorkspaceRoles } from "@operis/types";
+import { AnalyticsIcon, CycleIcon, ProjectIcon, ViewsIcon } from "@operoz/propel/icons";
+import { EUserWorkspaceRoles } from "@operoz/types";
 // hooks
 import useLocalStorage from "@/hooks/use-local-storage";
 // local imports

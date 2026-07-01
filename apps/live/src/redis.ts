@@ -1,5 +1,5 @@
 import Redis from "ioredis";
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 import { env } from "./env";
 
 export class RedisManager {

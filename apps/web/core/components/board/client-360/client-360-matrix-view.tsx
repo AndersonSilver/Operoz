@@ -1,11 +1,11 @@
 import { useMemo } from "react";
 import Link from "next/link";
 import { ChevronLeft, ChevronRight, Download } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360MatrixCell, TClient360MatrixClient, TClient360ReportCoverage } from "@operis/types";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360MatrixCell, TClient360MatrixClient, TClient360ReportCoverage } from "@operoz/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 import { reportCoverageHeatmapClass, reportCoverageLabelKey } from "@/components/board/client-360/client-360-utils";
 
 const MATRIX_WEEKS = 8;

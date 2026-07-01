@@ -2,12 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Banknote, ChevronDown, Clock, DollarSign, Pencil, Tag, TrendingUp } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TClient360FinopsPayload, TClient360FinopsProfileWrite } from "@operis/types";
-import { cn } from "@operis/utils";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TClient360FinopsPayload, TClient360FinopsProfileWrite } from "@operoz/types";
+import { cn } from "@operoz/utils";
+import { Input } from "@operoz/ui";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360MetaChip } from "@/components/board/client-360/client-360-ui";
 import { formatClient360Currency } from "@/components/board/client-360/client-360-utils";

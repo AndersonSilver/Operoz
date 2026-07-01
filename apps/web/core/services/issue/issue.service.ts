@@ -1,7 +1,7 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
-import { isAxiosCancelError } from "@operis/utils";
-import { EIssueServiceType } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import { isAxiosCancelError } from "@operoz/utils";
+import { EIssueServiceType } from "@operoz/types";
 import type {
   TIssueParams,
   IIssueDisplayProperties,
@@ -12,9 +12,10 @@ import type {
   TIssueServiceType,
   TIssuesResponse,
   TIssueSubIssues,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
+import { logGanttDependencyRequest, logGanttDependencyResponse } from "@/lib/gantt-deps-debug";
 
 export class IssueService extends APIService {
   private serviceType: TIssueServiceType;
@@ -42,6 +43,8 @@ export class IssueService extends APIService {
       (queries.expand as string)?.includes("issue_relation") && !queries.group_by
         ? `/api/workspaces/${workspaceSlug}/projects/${projectId}/${this.serviceType}-detail/`
         : `/api/workspaces/${workspaceSlug}/projects/${projectId}/${this.serviceType}/`;
+    logGanttDependencyRequest("project", "GET", path, queries ?? {});
+
     return this.get(
       path,
       {
@@ -49,7 +52,10 @@ export class IssueService extends APIService {
       },
       config
     )
-      .then((response) => response?.data)
+      .then((response) => {
+        logGanttDependencyResponse("project", path, response?.data);
+        return response?.data;
+      })
       .catch((error) => {
         throw error?.response?.data;
       });

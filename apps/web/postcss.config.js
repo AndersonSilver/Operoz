@@ -1,3 +1,3 @@
-import postcssConfig from "@operis/tailwind-config/postcss.config.js";
+import postcssConfig from "@operoz/tailwind-config/postcss.config.js";
 
 export default postcssConfig;

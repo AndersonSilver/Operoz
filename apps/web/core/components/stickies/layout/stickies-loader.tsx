@@ -1,5 +1,5 @@
 // plane ui
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 
 export function StickiesLoader() {
   return (

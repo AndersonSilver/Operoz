@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import useSWR from "swr";
 import { EyeIcon, TriangleAlert } from "lucide-react";
 // plane imports
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TPageVersion } from "@operis/types";
-import { renderFormattedDate, renderFormattedTime } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TPageVersion } from "@operoz/types";
+import { renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 // helpers
 import type { EPageStoreType } from "@/plane-web/hooks/store";
 // local imports

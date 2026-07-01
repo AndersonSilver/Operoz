@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ChevronDown, FileText, Link2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import type { TAssistantCitation } from "@/services/assistant.service";
 import { AssistantCitationLink } from "@/components/assistant/assistant-citation-link";
 

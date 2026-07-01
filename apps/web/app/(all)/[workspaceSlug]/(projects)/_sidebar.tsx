@@ -2,8 +2,8 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { useParams, usePathname } from "next/navigation";
-import { SIDEBAR_WIDTH } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
+import { SIDEBAR_WIDTH } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
 // components
 import { ResizableSidebar } from "@/components/sidebar/resizable-sidebar";
 // hooks

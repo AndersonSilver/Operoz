@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IBoard, IBoardAutomationRule, TAutomationDryRunResult, TAutomationGraph } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IBoard, IBoardAutomationRule, TAutomationDryRunResult, TAutomationGraph } from "@operoz/types";
 import { AuthService } from "@/services/auth.service";
 import { saveAutomationDryRunSession } from "./automation-dry-run-storage";
 import { sampleDryRunEvent } from "./automation-utils";

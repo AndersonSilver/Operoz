@@ -11,16 +11,16 @@ import scrollIntoView from "smooth-scroll-into-view-if-needed";
 import { Settings, Share2, LogOut, Star } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { LinkIcon, ArchiveIcon, ChevronRightIcon } from "@operis/propel/icons";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { DropIndicator, DragHandle, ControlLink } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { LinkIcon, ArchiveIcon, ChevronRightIcon } from "@operoz/propel/icons";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { DropIndicator, DragHandle, ControlLink } from "@operoz/ui";
 import { SidebarRowQuickMenu } from "@/components/sidebar/sidebar-row-quick-menu";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SidebarTreeGuide } from "@/components/sidebar/sidebar-tree-guide";
 import {
   SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS,
@@ -560,7 +560,9 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
                     icon={ChevronRightIcon}
                     onClick={() => setIsProjectListOpen(!isProjectListOpen)}
                     className={cn(
-                      nestedUnderBoard ? cn("text-secondary", SIDEBAR_TREE_CHEVRON_CLASS) : "hidden text-placeholder group-hover/project-item:inline-flex",
+                      nestedUnderBoard
+                        ? cn("text-secondary", SIDEBAR_TREE_CHEVRON_CLASS)
+                        : "hidden text-placeholder group-hover/project-item:inline-flex",
                       {
                         "inline-flex opacity-100": isMenuActive || isProjectListOpen || !nestedUnderBoard,
                       }
@@ -591,10 +593,7 @@ export const SidebarProjectsListItem = observer(function SidebarProjectsListItem
               {isProjectListOpen && (
                 <Disclosure.Panel
                   as="div"
-                  className={cn(
-                    "relative mt-1 mb-1.5 flex flex-col gap-0.5",
-                    SIDEBAR_TREE_CHILD_INDENT_CLASS
-                  )}
+                  className={cn("relative mt-1 mb-1.5 flex flex-col gap-0.5", SIDEBAR_TREE_CHILD_INDENT_CLASS)}
                 >
                   <SidebarTreeGuide />
                   <ProjectNavigationRoot workspaceSlug={workspaceSlug.toString()} projectId={projectId.toString()} />

@@ -1,12 +1,12 @@
 import { useParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 // plane imports
-import { allTimeIn30MinutesInterval12HoursFormat } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { CloseIcon } from "@operis/propel/icons";
-import { CustomSelect, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { allTimeIn30MinutesInterval12HoursFormat } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { CloseIcon } from "@operoz/propel/icons";
+import { CustomSelect, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // components
-import { getDate, cn } from "@operis/utils";
+import { getDate, cn } from "@operoz/utils";
 import { DateDropdown } from "@/components/dropdowns/date";
 
 type TNotificationSnoozeModal = {

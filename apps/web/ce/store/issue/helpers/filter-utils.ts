@@ -1,3 +1,3 @@
-import type { IIssueDisplayFilterOptions } from "@operis/types";
+import type { IIssueDisplayFilterOptions } from "@operoz/types";
 
 export const getEnabledDisplayFilters = (displayFilters: IIssueDisplayFilterOptions) => displayFilters;

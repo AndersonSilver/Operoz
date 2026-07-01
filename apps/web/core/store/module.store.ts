@@ -2,9 +2,9 @@ import { update, concat, set, sortBy } from "lodash-es";
 import { action, computed, observable, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { IModule, ILinkDetails, TModulePlotType } from "@operis/types";
-import type { DistributionUpdates } from "@operis/utils";
-import { updateDistribution, orderModules, shouldFilterModule } from "@operis/utils";
+import type { IModule, ILinkDetails, TModulePlotType } from "@operoz/types";
+import type { DistributionUpdates } from "@operoz/utils";
+import { updateDistribution, orderModules, shouldFilterModule } from "@operoz/utils";
 // helpers
 // services
 import { ModuleService } from "@/services/module.service";

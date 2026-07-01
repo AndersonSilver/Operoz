@@ -1,13 +1,13 @@
 import { observer } from "mobx-react";
 import { useRouter } from "next/navigation";
 import { MinusCircle } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
 // component
 // ui
-import { ControlLink, CustomMenu } from "@operis/ui";
+import { ControlLink, CustomMenu } from "@operoz/ui";
 // helpers
-import { generateWorkItemLink } from "@operis/utils";
+import { generateWorkItemLink } from "@operoz/utils";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";

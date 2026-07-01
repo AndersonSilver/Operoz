@@ -1,11 +1,11 @@
 import Link from "next/link";
-import { GOD_MODE_URL } from "@operis/constants";
+import { GOD_MODE_URL } from "@operoz/constants";
 // assets
 import GradientLogo from "@/app/assets/auth/gradient-logo.webp?url";
 import GradientBgLogo from "@/app/assets/auth/gradient-bg-logo.webp?url";
 import DefaultLayout from "@/layouts/default-layout";
-import { PlaneLockup } from "@operis/propel/icons";
-import { Button } from "@operis/propel/button";
+import { PlaneLockup } from "@operoz/propel/icons";
+import { Button } from "@operoz/propel/button";
 
 export function InstanceNotReady() {
   return (

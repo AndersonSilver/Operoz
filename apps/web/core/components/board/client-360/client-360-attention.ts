@@ -1,4 +1,4 @@
-import type { TClient360Client } from "@operis/types";
+import type { TClient360Client } from "@operoz/types";
 
 import type { Client360FilterKey } from "@/components/board/client-360/client-360-client-filters";
 import type { Client360Tone } from "@/components/board/client-360/client-360-tokens";

@@ -2,11 +2,11 @@ import { useState, useRef } from "react";
 import { observer } from "mobx-react";
 
 // plane imports
-import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon, StateGroupIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operis/types";
-import { cn } from "@operis/utils";
+import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon, StateGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { StateList, StateCreate } from "@/components/project-states";
 import { getLocalizedStateGroupLabel } from "./state-display.utils";

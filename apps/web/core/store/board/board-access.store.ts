@@ -6,7 +6,7 @@ import type {
   TBoardMemberAssignData,
   TBoardRoleFormData,
   TBoardRolePermissionsMap,
-} from "@operis/types";
+} from "@operoz/types";
 import { BoardAccessService } from "@/services/board/board-access.service";
 
 export interface IBoardAccessStore {
@@ -25,11 +25,7 @@ export interface IBoardAccessStore {
   deleteBoardRole: (workspaceSlug: string, boardSlug: string, roleId: string) => Promise<void>;
   duplicateBoardRole: (workspaceSlug: string, boardSlug: string, roleId: string) => Promise<IBoardRole>;
   fetchBoardMembers: (workspaceSlug: string, boardSlug: string) => Promise<IBoardMember[]>;
-  assignBoardMember: (
-    workspaceSlug: string,
-    boardSlug: string,
-    data: TBoardMemberAssignData
-  ) => Promise<IBoardMember>;
+  assignBoardMember: (workspaceSlug: string, boardSlug: string, data: TBoardMemberAssignData) => Promise<IBoardMember>;
   updateBoardMemberRoles: (
     workspaceSlug: string,
     boardSlug: string,
@@ -105,9 +101,7 @@ export class BoardAccessStore implements IBoardAccessStore {
     const created = await this.service.createBoardRole(workspaceSlug, boardSlug, data);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
-      this.rolesByKey[key] = [...(this.rolesByKey[key] ?? []), created].sort(
-        (a, b) => a.sort_order - b.sort_order
-      );
+      this.rolesByKey[key] = [...(this.rolesByKey[key] ?? []), created].sort((a, b) => a.sort_order - b.sort_order);
     });
     return created;
   };
@@ -140,9 +134,7 @@ export class BoardAccessStore implements IBoardAccessStore {
     const created = await this.service.duplicateBoardRole(workspaceSlug, boardSlug, roleId);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
-      this.rolesByKey[key] = [...(this.rolesByKey[key] ?? []), created].sort(
-        (a, b) => a.sort_order - b.sort_order
-      );
+      this.rolesByKey[key] = [...(this.rolesByKey[key] ?? []), created].sort((a, b) => a.sort_order - b.sort_order);
     });
     return created;
   };
@@ -163,12 +155,7 @@ export class BoardAccessStore implements IBoardAccessStore {
     return member;
   };
 
-  updateBoardMemberRoles = async (
-    workspaceSlug: string,
-    boardSlug: string,
-    userId: string,
-    roleIds: string[]
-  ) => {
+  updateBoardMemberRoles = async (workspaceSlug: string, boardSlug: string, userId: string, roleIds: string[]) => {
     const member = await this.service.updateBoardMemberRoles(workspaceSlug, boardSlug, userId, roleIds);
     runInAction(() => {
       this.upsertMember(boardKey(workspaceSlug, boardSlug), member);

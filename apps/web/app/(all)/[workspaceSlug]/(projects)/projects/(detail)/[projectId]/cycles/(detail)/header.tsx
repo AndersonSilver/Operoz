@@ -10,17 +10,17 @@ import {
   EUserPermissionsLevel,
   ISSUE_DISPLAY_FILTERS_BY_PAGE,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@operis/constants";
-import { usePlatformOS } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { CycleIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
-import { Breadcrumbs, BreadcrumbNavigationSearchDropdown, Header } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { usePlatformOS } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { CycleIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { Breadcrumbs, BreadcrumbNavigationSearchDropdown, Header } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";

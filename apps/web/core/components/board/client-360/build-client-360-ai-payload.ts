@@ -1,4 +1,4 @@
-import type { TClient360DetailResponse } from "@operis/types";
+import type { TClient360DetailResponse } from "@operoz/types";
 
 function moduleStatusLabel(status: string): string {
   if (status === "published") return "publicado";
@@ -54,7 +54,7 @@ export function buildClient360DetailAiPayload(
     `Período: ${periodLabel}`,
     `Cliente: ${data.name} (${data.identifier})`,
     data.responsible_stakeholder ? `Stakeholder (cliente): ${data.responsible_stakeholder}` : null,
-    data.project_lead?.display_name ? `Responsável (Operis): ${data.project_lead.display_name}` : null,
+    data.project_lead?.display_name ? `Responsável (Operoz): ${data.project_lead.display_name}` : null,
     `Saúde geral: ${data.health}`,
     "",
     "Indicadores:",

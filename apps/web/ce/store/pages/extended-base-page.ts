@@ -1,4 +1,4 @@
-import type { TPage, TPageExtended } from "@operis/types";
+import type { TPage, TPageExtended } from "@operoz/types";
 import type { RootStore } from "@/plane-web/store/root.store";
 import type { TBasePageServices } from "@/store/pages/base-page";
 

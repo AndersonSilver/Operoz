@@ -1,8 +1,8 @@
 import { BookOpen, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360ScenarioPlaybook } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360ScenarioPlaybook } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 type Props = {
   playbook: TClient360ScenarioPlaybook | null;

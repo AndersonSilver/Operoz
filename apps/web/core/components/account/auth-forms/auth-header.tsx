@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { IWorkspaceMemberInvitation } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IWorkspaceMemberInvitation } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { WorkspaceLogo } from "@/components/workspace/logo";

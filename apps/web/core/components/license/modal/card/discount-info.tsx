@@ -1,8 +1,8 @@
 import { useTheme } from "next-themes";
 // plane imports
-import type { TBillingFrequency } from "@operis/types";
-import { EProductSubscriptionEnum } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { TBillingFrequency } from "@operoz/types";
+import { EProductSubscriptionEnum } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 import ScribbleBlack from "@/app/assets/scribble/scribble-black.svg?url";
 import ScribbleWhite from "@/app/assets/scribble/scribble-white.svg?url";

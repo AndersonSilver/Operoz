@@ -1,0 +1,57 @@
+from .analytic import urlpatterns as analytic_urls
+from .assistant import urlpatterns as assistant_urls
+from .board import urlpatterns as board_urls
+from .api import urlpatterns as api_urls
+from .asset import urlpatterns as asset_urls
+from .discord import urlpatterns as discord_urls
+from .cycle import urlpatterns as cycle_urls
+from .estimate import urlpatterns as estimate_urls
+from .external import urlpatterns as external_urls
+from .intake import urlpatterns as intake_urls
+from .issue import urlpatterns as issue_urls
+from .module import urlpatterns as module_urls
+from .notification import urlpatterns as notification_urls
+from .page import urlpatterns as page_urls
+from .project import urlpatterns as project_urls
+from .search import urlpatterns as search_urls
+from .state import urlpatterns as state_urls
+from .user import urlpatterns as user_urls
+from .views import urlpatterns as view_urls
+from .webhook import urlpatterns as webhook_urls
+from .alert import urlpatterns as alert_urls
+from .workspace import urlpatterns as workspace_urls
+from .timezone import urlpatterns as timezone_urls
+from .exporter import urlpatterns as exporter_urls
+from .guest import urlpatterns as guest_urls
+from .jira_ops import urlpatterns as jira_ops_urls
+from .workflow import urlpatterns as workflow_urls
+
+urlpatterns = [
+    *analytic_urls,
+    *assistant_urls,
+    *board_urls,
+    *asset_urls,
+    *cycle_urls,
+    *discord_urls,
+    *estimate_urls,
+    *external_urls,
+    *intake_urls,
+    *issue_urls,
+    *module_urls,
+    *notification_urls,
+    *page_urls,
+    *project_urls,
+    *search_urls,
+    *state_urls,
+    *user_urls,
+    *view_urls,
+    *workspace_urls,
+    *api_urls,
+    *webhook_urls,
+    *alert_urls,
+    *timezone_urls,
+    *exporter_urls,
+    *guest_urls,
+    *jira_ops_urls,
+    *workflow_urls,
+]

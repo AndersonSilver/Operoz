@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { TLogoProps } from "@operis/types";
-import { cn } from "@operis/utils";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { TLogoProps } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 type Props = {
   logo?: TLogoProps | null;
@@ -27,10 +27,7 @@ export function BoardGanttRowIcon(props: Props) {
   if (hasConfiguredLogo(logo)) {
     return (
       <span
-        className={cn(
-          "grid shrink-0 place-items-center rounded border border-subtle/60 bg-layer-2",
-          className
-        )}
+        className={cn("grid shrink-0 place-items-center rounded border border-subtle/60 bg-layer-2", className)}
         style={{ width: size + 8, height: size + 8 }}
       >
         <Logo logo={logo!} size={size} />

@@ -1,7 +1,7 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
-import { EIssueServiceType } from "@operis/types";
-import type { TDescriptionVersionsListResponse, TDescriptionVersionDetails, TIssueServiceType } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import { EIssueServiceType } from "@operoz/types";
+import type { TDescriptionVersionsListResponse, TDescriptionVersionDetails, TIssueServiceType } from "@operoz/types";
 // helpers
 // services
 import { APIService } from "@/services/api.service";

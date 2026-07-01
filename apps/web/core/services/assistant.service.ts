@@ -1,11 +1,11 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   TAssistantChatResponse,
   TAssistantCitation,
   TAssistantMessage,
   TAssistantSession,
   TAssistantSessionContext,
-} from "@operis/services";
+} from "@operoz/services";
 import { APIService } from "@/services/api.service";
 import { AuthService } from "@/services/auth.service";
 
@@ -108,7 +108,7 @@ export class AssistantService extends APIService {
   async confirmAction(
     workspaceSlug: string,
     sessionId: string,
-    proposal: import("@operis/types").TAssistantActionProposal
+    proposal: import("@operoz/types").TAssistantActionProposal
   ): Promise<{ ok: boolean; result: Record<string, unknown> }> {
     return this.post(`/api/workspaces/${workspaceSlug}/assistant/sessions/${sessionId}/confirm-action/`, {
       proposal,

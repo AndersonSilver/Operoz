@@ -1,6 +1,6 @@
-@import "@operis/tailwind-config/index.css";
-@import "@operis/editor/styles";
-@import "@operis/propel/styles/react-day-picker.css";
+@import "@operoz/tailwind-config/index.css";
+@import "@operoz/editor/styles";
+@import "@operoz/propel/styles/react-day-picker.css";
 @plugin "@tailwindcss/typography";
 
 /* stickies and editor colors */

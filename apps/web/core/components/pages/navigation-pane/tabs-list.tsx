@@ -1,6 +1,6 @@
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Tabs } from "@operis/propel/tabs";
+import { useTranslation } from "@operoz/i18n";
+import { Tabs } from "@operoz/propel/tabs";
 // plane web components
 import { ORDERED_PAGE_NAVIGATION_TABS_LIST } from "@/plane-web/components/pages/navigation-pane";
 

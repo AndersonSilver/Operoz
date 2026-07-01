@@ -1,10 +1,25 @@
 import { observer } from "mobx-react";
-import { useEffect } from "react";
-import { useTranslation } from "@operis/i18n";
-import type { TAlertChannel, TAlertType, TEmailFrequency } from "@operis/types";
-import { Input } from "@operis/ui";
+import {
+  AlertTriangle,
+  Bell,
+  Calendar,
+  CheckCircle,
+  Clock,
+  Mail,
+  Moon,
+  PlusCircle,
+  ShieldAlert,
+  Ticket,
+  Timer,
+  type LucideIcon,
+} from "lucide-react";
+import { useEffect, type ReactNode } from "react";
+import { useTranslation } from "@operoz/i18n";
+import type { TAlertChannel, TAlertType, TEmailFrequency } from "@operoz/types";
+import { Input, cn } from "@operoz/ui";
 import { useAlertStore } from "@/hooks/store/notifications/use-alert";
 import { ChannelToggle } from "../alert-settings/alert-rules-list";
+import "../alerts-settings.css";
 
 const DEFAULT_TYPES: TAlertType[] = [
   "issue_created",
@@ -20,6 +35,54 @@ const EMAIL_FREQUENCIES: TEmailFrequency[] = ["immediate", "digest_daily", "dige
 
 const FREQUENCY_CHANNELS: TAlertChannel[] = ["email"];
 
+const ALERT_TYPE_ICONS: Record<TAlertType, LucideIcon> = {
+  issue_created: PlusCircle,
+  due_date_approaching: Clock,
+  due_date_overdue: AlertTriangle,
+  missing_due_date: Calendar,
+  state_change: Bell,
+  assignee_change: Bell,
+  support_ticket_created: Ticket,
+  support_ticket_accepted: CheckCircle,
+  support_sla_approaching: Timer,
+  support_sla_breached: ShieldAlert,
+  support_ticket_closed: CheckCircle,
+};
+
+const SELECT_CLASS =
+  "h-9 w-full rounded-md border border-subtle bg-surface-1 px-3 text-13 text-primary focus:border-strong focus:outline-none focus:ring-1 focus:ring-accent-primary md:max-w-xs";
+
+function SettingsPanelCard({
+  icon: Icon,
+  title,
+  description,
+  children,
+  className,
+}: {
+  icon: LucideIcon;
+  title: string;
+  description?: string;
+  children: ReactNode;
+  className?: string;
+}) {
+  return (
+    <article className={cn("overflow-hidden rounded-xl border border-subtle bg-layer-1", className)}>
+      <div className="border-b border-subtle px-5 py-4">
+        <div className="flex items-start gap-3">
+          <span className="grid size-10 shrink-0 place-items-center rounded-lg border border-subtle bg-surface-1 text-accent-primary">
+            <Icon className="size-4" strokeWidth={1.75} />
+          </span>
+          <div className="min-w-0">
+            <h3 className="text-14 font-semibold text-primary">{title}</h3>
+            {description ? <p className="mt-1 text-12 leading-relaxed text-secondary">{description}</p> : null}
+          </div>
+        </div>
+      </div>
+      <div className="p-5">{children}</div>
+    </article>
+  );
+}
+
 export const QuietHoursConfig = observer(function QuietHoursConfig({ workspaceSlug }: { workspaceSlug: string }) {
   const { t } = useTranslation();
   const alertStore = useAlertStore();
@@ -30,27 +93,34 @@ export const QuietHoursConfig = observer(function QuietHoursConfig({ workspaceSl
   };
 
   return (
-    <div className="rounded-md border border-subtle bg-layer-1 p-4">
-      <h3 className="text-13 font-medium text-primary">{t("alert.prefs.quiet_hours")}</h3>
-      <p className="mt-1 text-11 text-tertiary">{t("alert.prefs.quiet_hours_desc")}</p>
-      <div className="mt-3 grid grid-cols-1 gap-3 md:grid-cols-3">
-        <Input
-          type="time"
-          value={prefs?.quiet_hours_start?.slice(0, 5) ?? ""}
-          onChange={(e) => patchQuiet("quiet_hours_start", e.target.value)}
-        />
-        <Input
-          type="time"
-          value={prefs?.quiet_hours_end?.slice(0, 5) ?? ""}
-          onChange={(e) => patchQuiet("quiet_hours_end", e.target.value)}
-        />
-        <Input
-          value={prefs?.quiet_hours_timezone ?? ""}
-          onChange={(e) => patchQuiet("quiet_hours_timezone", e.target.value)}
-          placeholder={t("alert.prefs.timezone")}
-        />
+    <SettingsPanelCard icon={Moon} title={t("alert.prefs.quiet_hours")} description={t("alert.prefs.quiet_hours_desc")}>
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-3">
+        <label className="flex flex-col gap-1.5">
+          <span className="text-11 font-medium text-tertiary">{t("alert.prefs.quiet_start")}</span>
+          <Input
+            type="time"
+            value={prefs?.quiet_hours_start?.slice(0, 5) ?? ""}
+            onChange={(e) => patchQuiet("quiet_hours_start", e.target.value)}
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-11 font-medium text-tertiary">{t("alert.prefs.quiet_end")}</span>
+          <Input
+            type="time"
+            value={prefs?.quiet_hours_end?.slice(0, 5) ?? ""}
+            onChange={(e) => patchQuiet("quiet_hours_end", e.target.value)}
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className="text-11 font-medium text-tertiary">{t("alert.prefs.timezone")}</span>
+          <Input
+            value={prefs?.quiet_hours_timezone ?? ""}
+            onChange={(e) => patchQuiet("quiet_hours_timezone", e.target.value)}
+            placeholder={t("alert.prefs.timezone_placeholder")}
+          />
+        </label>
       </div>
-    </div>
+    </SettingsPanelCard>
   );
 });
 
@@ -82,17 +152,15 @@ export const ChannelDeliveryConfig = observer(function ChannelDeliveryConfig({
   };
 
   return (
-    <div className="rounded-md border border-subtle bg-layer-1 p-4">
-      <h3 className="text-13 font-medium text-primary">{t("alert.prefs.delivery")}</h3>
-      <p className="mt-1 text-11 text-tertiary">{t("alert.prefs.delivery_desc")}</p>
-      <div className="mt-3 flex flex-col gap-3">
+    <SettingsPanelCard icon={Mail} title={t("alert.prefs.delivery")} description={t("alert.prefs.delivery_desc")}>
+      <div className="flex flex-col gap-3">
         {FREQUENCY_CHANNELS.map((channel) => (
-          <label key={channel} className="block space-y-1">
+          <label key={channel} className="flex flex-col gap-1.5">
             <span className="text-11 font-medium text-secondary">
               {t(`alert.channel.${channel}` as "alert.channel.email")} — {t("alert.prefs.frequency")}
             </span>
             <select
-              className="w-full rounded-md border border-subtle bg-surface-1 px-2 py-1.5 text-13 text-primary md:max-w-xs"
+              className={SELECT_CLASS}
               value={getFrequency(channel)}
               onChange={(e) => setFrequency(channel, e.target.value as TEmailFrequency)}
             >
@@ -105,7 +173,7 @@ export const ChannelDeliveryConfig = observer(function ChannelDeliveryConfig({
           </label>
         ))}
       </div>
-    </div>
+    </SettingsPanelCard>
   );
 });
 
@@ -138,25 +206,38 @@ export const NotificationChannelConfig = observer(function NotificationChannelCo
 
   return (
     <div className="flex flex-col gap-4">
-      <ChannelDeliveryConfig workspaceSlug={workspaceSlug} />
-      {DEFAULT_TYPES.map((alertType) => (
-        <div key={alertType} className="rounded-md border border-subtle bg-layer-1 p-4">
-          <h3 className="mb-3 text-13 font-medium text-primary">
-            {t(`alert.type.${alertType}` as "alert.type.issue_created")}
-          </h3>
-          <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-            {DEFAULT_CHANNELS.map((channel) => (
-              <ChannelToggle
-                key={`${alertType}-${channel}`}
-                channel={channel}
-                enabled={isEnabled(alertType, channel)}
-                onChange={(value) => toggle(alertType, channel, value)}
-              />
-            ))}
-          </div>
-        </div>
-      ))}
-      <QuietHoursConfig workspaceSlug={workspaceSlug} />
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+        <ChannelDeliveryConfig workspaceSlug={workspaceSlug} />
+        <QuietHoursConfig workspaceSlug={workspaceSlug} />
+      </div>
+
+      <div className="alerts-settings-prefs-grid">
+        {DEFAULT_TYPES.map((alertType) => {
+          const TypeIcon = ALERT_TYPE_ICONS[alertType];
+          return (
+            <article key={alertType} className="overflow-hidden rounded-xl border border-subtle bg-layer-1">
+              <div className="flex items-center gap-2.5 border-b border-subtle px-4 py-3">
+                <span className="grid size-8 place-items-center rounded-md border border-subtle bg-surface-1 text-accent-primary">
+                  <TypeIcon className="size-3.5" strokeWidth={1.75} />
+                </span>
+                <h3 className="text-13 font-semibold text-primary">
+                  {t(`alert.type.${alertType}` as "alert.type.issue_created")}
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 gap-2 p-4">
+                {DEFAULT_CHANNELS.map((channel) => (
+                  <ChannelToggle
+                    key={`${alertType}-${channel}`}
+                    channel={channel}
+                    enabled={isEnabled(alertType, channel)}
+                    onChange={(value) => toggle(alertType, channel, value)}
+                  />
+                ))}
+              </div>
+            </article>
+          );
+        })}
+      </div>
     </div>
   );
 });

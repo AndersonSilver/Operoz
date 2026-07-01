@@ -26,7 +26,7 @@ específico.
 - Evitar parâmetros booleanos de controlo de fluxo — preferir funções
   separadas ou enums.
 
-## 3. SOLID aplicado ao Operis
+## 3. SOLID aplicado ao Operoz
 
 - **S**ingle responsibility: store de domínio, service de domínio, viewset de
   recurso.
@@ -41,9 +41,9 @@ específico.
 ## 4. DRY e reuso
 
 - Antes de escrever, procurar o que já existe: `BaseModel`, `APIService`,
-  canvas React Flow, paginação, `@operis/ui`.
+  canvas React Flow, paginação, `@operoz/ui`.
 - Não copiar-colar lógica entre features; extrair helper partilhado
-  (`utils/`, `@operis/utils`).
+  (`utils/`, `@operoz/utils`).
 - Documentação também é DRY: features referenciam `00-VISAO-GERAL`, não repetem.
 
 ## 5. Comentários

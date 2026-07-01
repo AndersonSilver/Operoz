@@ -1,4 +1,4 @@
-import type { EUserPermissions, IJiraMetadata } from "@operis/types";
+import type { EUserPermissions, IJiraMetadata } from "@operoz/types";
 
 const paramsToKey = (params: any) => {
   const {

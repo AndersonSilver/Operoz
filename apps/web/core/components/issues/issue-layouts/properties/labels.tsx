@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
 // plane helpers
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // i18n
-import { useTranslation } from "@operis/i18n";
-import { LabelPropertyIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { LabelPropertyIcon } from "@operoz/propel/icons";
 // types
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueLabel } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueLabel } from "@operoz/types";
 // ui
 // hooks
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useLabel } from "@/hooks/store/use-label";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { LabelDropdown } from "./label-dropdown";

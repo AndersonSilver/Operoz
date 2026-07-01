@@ -1,5 +1,5 @@
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import type { TFilterConditionNodeForDisplay, TFilterValue, TWorkItemFilterProperty } from "@operis/types";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import type { TFilterConditionNodeForDisplay, TFilterValue, TWorkItemFilterProperty } from "@operoz/types";
 
 export const PROGRESS_STATS = [
   {

@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import type { useTranslation } from "@operis/i18n";
-import type { TClient360Client } from "@operis/types";
+import type { useTranslation } from "@operoz/i18n";
+import type { TClient360Client } from "@operoz/types";
 import type { Client360SortState } from "@/components/board/client-360/client-360-client-sort";
 import {
   Client360ClientsTableHeader,

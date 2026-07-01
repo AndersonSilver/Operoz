@@ -1,4 +1,4 @@
-import type { TDeDupeIssue } from "@operis/types";
+import type { TDeDupeIssue } from "@operoz/types";
 
 export const useDebouncedDuplicateIssues = (
   _workspaceSlug: string | undefined,

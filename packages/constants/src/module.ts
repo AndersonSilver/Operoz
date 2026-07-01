@@ -1,5 +1,5 @@
 // types
-import type { TModuleLayoutOptions, TModuleOrderByOptions, TModuleStatus } from "@operis/types";
+import type { TModuleLayoutOptions, TModuleOrderByOptions, TModuleStatus } from "@operoz/types";
 
 export const MODULE_STATUS_COLORS: {
   [key in TModuleStatus]: string;

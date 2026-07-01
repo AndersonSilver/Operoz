@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useNavigate, useSearchParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, TAutomationDryRunResult } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, TAutomationDryRunResult } from "@operoz/types";
 import {
   loadAutomationDryRunSession,
   saveAutomationDryRunSession,

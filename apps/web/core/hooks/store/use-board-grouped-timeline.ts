@@ -1,4 +1,4 @@
-import { GANTT_TIMELINE_TYPE } from "@operis/types";
+import { GANTT_TIMELINE_TYPE } from "@operoz/types";
 import type { IBoardGroupedTimelineStore } from "@/store/timeline/board-grouped-timeline.store";
 import { useTimeLineChart } from "@/hooks/use-timeline-chart";
 

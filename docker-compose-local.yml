@@ -1,5 +1,9 @@
+# Nome fixo do project Compose (não depende da pasta "Operis").
+# Evita drift operis/operoz e permite `down --remove-orphans` limpar serviços renomeados.
+name: operoz
+
 services:
-  operis-redis:
+  operoz-redis:
     image: valkey/valkey:7.2.11-alpine
     restart: unless-stopped
     networks:
@@ -10,7 +14,7 @@ services:
       # Use 16379 on host if another process already binds 6379 (containers still use 6379 internally).
       - "16379:6379"
 
-  operis-mq:
+  operoz-mq:
     image: rabbitmq:3.13.6-management-alpine
     restart: unless-stopped
     networks:
@@ -24,7 +28,7 @@ services:
       RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
       RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
 
-  operis-minio:
+  operoz-minio:
     image: minio/minio
     restart: unless-stopped
     networks:
@@ -49,7 +53,7 @@ services:
       - "9000:9000"
       - "9090:9090"
 
-  operis-db:
+  operoz-db:
     # Imagem com pgvector para RAG do assistente (extensão vector).
     image: pgvector/pgvector:pg15
     restart: unless-stopped
@@ -86,13 +90,13 @@ services:
     env_file:
       - ./apps/api/.env
     depends_on:
-      - operis-db
-      - operis-redis
-      - operis-mq
-      - operis-minio
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
+      - operoz-minio
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
       USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
@@ -118,34 +122,34 @@ services:
     env_file:
       - ./apps/api/.env
     depends_on:
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operis.settings.local
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
       PORT: "8001"
       GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-4}
       USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
     ports:
       - "8001:8001"
     mem_limit: 2g
 
-  operis-pgbouncer:
+  operoz-pgbouncer:
     image: edoburu/pgbouncer:1.22.1-p0
     restart: unless-stopped
     networks:
       - dev_env
     environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-operis}:${POSTGRES_PASSWORD:-operis}@operis-db:5432/${POSTGRES_DB:-operis}
+      DATABASE_URL: postgres://${POSTGRES_USER:-operoz}:${POSTGRES_PASSWORD:-operoz}@operoz-db:5432/${POSTGRES_DB:-operoz}
       POOL_MODE: transaction
       MAX_CLIENT_CONN: 500
       DEFAULT_POOL_SIZE: 25
       AUTH_TYPE: scram-sha-256
     depends_on:
-      - operis-db
+      - operoz-db
     ports:
       - "6432:5432"
 
@@ -168,12 +172,12 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -196,11 +200,11 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - operis-db
-      - operis-redis
+      - operoz-db
+      - operoz-redis
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -223,12 +227,12 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -251,12 +255,12 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -279,12 +283,12 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 
@@ -308,14 +312,14 @@ services:
     depends_on:
       - api
       - api-chat
-      - operis-db
-      - operis-redis
-      - operis-mq
+      - operoz-db
+      - operoz-redis
+      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
       ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
       ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
 
   migrator:
@@ -332,16 +336,16 @@ services:
       - dev_env
     volumes:
       - ./apps/api:/code
-    command: ./bin/docker-entrypoint-migrator.sh --settings=operis.settings.local
+    command: ./bin/docker-entrypoint-migrator.sh --settings=operoz.settings.local
     env_file:
       - ./apps/api/.env
     depends_on:
-      - operis-db
-      - operis-redis
-      - operis-minio
+      - operoz-db
+      - operoz-redis
+      - operoz-minio
     environment:
       SKIP_ENV_VAR: "1"
-      AWS_S3_ENDPOINT_URL: http://operis-minio:9000
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
 

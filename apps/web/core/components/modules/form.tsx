@@ -1,18 +1,23 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IModule } from "@operis/types";
+import { ETabIndices } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IModule } from "@operoz/types";
 // ui
-import { Input, TextArea } from "@operis/ui";
-import { getDate, renderFormattedPayloadDate, getTabIndex } from "@operis/utils";
+import { Input, TextArea } from "@operoz/ui";
+import { getDate, renderFormattedPayloadDate, getTabIndex } from "@operoz/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";
 import { ModuleStatusSelect } from "@/components/modules";
+import { ModuleGanttBarColorFields } from "@/components/modules/module-gantt-bar-color-fields";
+import {
+  DEFAULT_MODULE_GANTT_BAR_COLOR_MODE,
+  DEFAULT_MODULE_GANTT_BAR_CUSTOM_COLOR,
+} from "@/components/gantt-chart/helpers/gantt-bar-color";
 // hooks
 import { useUser } from "@/hooks/store/user/user-user";
 
@@ -32,6 +37,8 @@ const defaultValues: Partial<IModule> = {
   status: "backlog",
   lead_id: null,
   member_ids: [],
+  gantt_bar_color_mode: DEFAULT_MODULE_GANTT_BAR_COLOR_MODE,
+  gantt_bar_custom_color: DEFAULT_MODULE_GANTT_BAR_CUSTOM_COLOR,
 };
 
 export function ModuleForm(props: Props) {
@@ -52,6 +59,8 @@ export function ModuleForm(props: Props) {
       status: data?.status || "backlog",
       lead_id: data?.lead_id || null,
       member_ids: data?.member_ids || [],
+      gantt_bar_color_mode: data?.gantt_bar_color_mode ?? DEFAULT_MODULE_GANTT_BAR_COLOR_MODE,
+      gantt_bar_custom_color: data?.gantt_bar_custom_color ?? DEFAULT_MODULE_GANTT_BAR_CUSTOM_COLOR,
     },
   });
 
@@ -69,6 +78,8 @@ export function ModuleForm(props: Props) {
     member_ids: module?.member_ids ?? [],
     start_date: module?.start_date ?? null,
     target_date: module?.target_date ?? null,
+    gantt_bar_color_mode: module?.gantt_bar_color_mode ?? DEFAULT_MODULE_GANTT_BAR_COLOR_MODE,
+    gantt_bar_custom_color: module?.gantt_bar_custom_color ?? DEFAULT_MODULE_GANTT_BAR_CUSTOM_COLOR,
   });
 
   const handleCreateUpdateModule = async (formData: Partial<IModule>) => {
@@ -237,6 +248,7 @@ export function ModuleForm(props: Props) {
               )}
             />
           </div>
+          <ModuleGanttBarColorFields control={control} tabIndex={getIndex("gantt_bar_color")} />
         </div>
       </div>
       <div className="flex items-center justify-end gap-2 border-t-[0.5px] border-subtle px-5 py-4">

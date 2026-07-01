@@ -2,14 +2,14 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Info } from "lucide-react";
-import { EEstimateSystem, MAX_ESTIMATE_POINT_INPUT_LENGTH } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, CloseIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operis/types";
-import { Spinner } from "@operis/ui";
-import { cn, isEstimatePointValuesRepeated } from "@operis/utils";
+import { EEstimateSystem, MAX_ESTIMATE_POINT_INPUT_LENGTH } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
+import { cn, isEstimatePointValuesRepeated } from "@operoz/utils";
 import { EstimateInputRoot } from "@/components/estimates/inputs/root";
 // helpers
 // hooks

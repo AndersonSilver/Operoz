@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   BOARD_HUB_PROJECT_WORK_SURFACE_INNER,
   useBoardHubHasBackground,
@@ -72,9 +72,7 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
   );
 
   useSWR(
-    workspaceSlug && projectId && moduleId
-      ? `MODULE_FILTERS_${workspaceSlug}_${projectId}_${moduleId}`
-      : null,
+    workspaceSlug && projectId && moduleId ? `MODULE_FILTERS_${workspaceSlug}_${projectId}_${moduleId}` : null,
     async () => {
       if (workspaceSlug && projectId && moduleId) {
         await issuesFilter?.fetchFilters(workspaceSlug.toString(), projectId.toString(), moduleId.toString());
@@ -130,16 +128,9 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
         return;
       }
 
-      const perPageCount =
-        layout === EIssueLayoutTypes.KANBAN ? (subGroupBy ? 10 : 30) : groupBy ? 50 : 100;
+      const perPageCount = layout === EIssueLayoutTypes.KANBAN ? (subGroupBy ? 10 : 30) : groupBy ? 50 : 100;
 
-      await issues.fetchIssues(
-        workspaceSlug,
-        projectId,
-        "init-loader",
-        { canGroup: true, perPageCount },
-        moduleId
-      );
+      await issues.fetchIssues(workspaceSlug, projectId, "init-loader", { canGroup: true, perPageCount }, moduleId);
     },
     { revalidateIfStale: false, revalidateOnFocus: false }
   );
@@ -174,7 +165,9 @@ export const ModuleLayoutRoot = observer(function ModuleLayoutRoot() {
                 />
               </div>
             ) : null}
-            <div className={cn("relative min-h-0 min-w-0 flex-1 overflow-hidden", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}>
+            <div
+              className={cn("relative min-h-0 min-w-0 flex-1 overflow-hidden", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}
+            >
               <ModuleIssueLayout activeLayout={activeLayout} moduleId={moduleId} />
             </div>
             {/* peek overview */}

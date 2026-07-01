@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { Collapsible } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { Collapsible } from "@operoz/ui";
 // components
 import { CreateUpdateIssueModal } from "@/components/issues/issue-modal/modal";
 // hooks

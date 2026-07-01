@@ -1,12 +1,7 @@
 import { observer } from "mobx-react";
-import {
-  CYCLE_TRACKER_ELEMENTS,
-  EProjectFeatureKey,
-  EUserPermissions,
-  EUserPermissionsLevel,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Header } from "@operis/ui";
+import { CYCLE_TRACKER_ELEMENTS, EProjectFeatureKey, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Header } from "@operoz/ui";
 import { CyclesViewHeader } from "@/components/cycles/cycles-view-header";
 import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
 import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";

@@ -1,10 +1,10 @@
 import useSWR from "swr";
 import Link from "next/link";
 import { AlertTriangle, Building2, ChevronRight, Banknote, Download, Percent, TrendingDown, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360FinopsSummary } from "@operis/types";
-import { cn } from "@operis/utils";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360FinopsSummary } from "@operoz/types";
+import { cn } from "@operoz/utils";
+import { Button } from "@operoz/propel/button";
 import {
   Client360BentoGrid,
   Client360BentoMetric,

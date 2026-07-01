@@ -3,23 +3,23 @@
 import { useCallback, useMemo, useState } from "react";
 import { FileText, Link2, ShieldCheck } from "lucide-react";
 import useSWR from "swr";
-import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, TBoardIntakeForm, TIntakeFormField } from "@operis/types";
-import { BOARD_INTAKE_FORM_THEMES } from "@operis/types";
+import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, TBoardIntakeForm, TIntakeFormField } from "@operoz/types";
+import { BOARD_INTAKE_FORM_THEMES } from "@operoz/types";
 
 type BoardIntakeFormTheme = (typeof BOARD_INTAKE_FORM_THEMES)[number]["value"];
-import { Input, ModalCore, TextArea, ToggleSwitch, EModalWidth } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Input, ModalCore, TextArea, ToggleSwitch, EModalWidth } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { boardIntakeFormService, DEFAULT_BOARD_INTAKE_FIELDS } from "@/services/board/board-intake-form.service";
 import { IntakeFormBuilderCanvas } from "@/components/intake/forms/intake-form-builder-canvas";
 import { IntakeFormBuilderSidebar } from "@/components/intake/forms/intake-form-builder-sidebar";
 import { IntakeFormFieldDrawer } from "@/components/intake/forms/intake-form-field-drawer";
 import { IntakeFormGrid } from "@/components/intake/forms/intake-form-grid";
-import { copyTextToClipboard } from "@operis/utils";
-import { Loader } from "@operis/ui";
+import { copyTextToClipboard } from "@operoz/utils";
+import { Loader } from "@operoz/ui";
 import { SupportSettingsHero } from "@/components/settings/board/support/support-settings-hero";
 import "@/components/intake/forms/intake-settings.css";
 

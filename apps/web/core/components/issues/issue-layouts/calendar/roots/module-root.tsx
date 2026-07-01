@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssuesStoreType } from "@operis/types";
+import { EIssuesStoreType } from "@operoz/types";
 import { useIssues } from "@/hooks/store/use-issues";
 import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
 import { BaseCalendarRoot } from "../base-calendar-root";

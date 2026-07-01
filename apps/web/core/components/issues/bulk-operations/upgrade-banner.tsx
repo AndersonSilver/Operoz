@@ -1,6 +1,6 @@
-import { MARKETING_PLANE_ONE_PAGE_LINK } from "@operis/constants";
-import { getButtonStyling } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { MARKETING_PLANE_ONE_PAGE_LINK } from "@operoz/constants";
+import { getButtonStyling } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 
 type Props = {
   className?: string;

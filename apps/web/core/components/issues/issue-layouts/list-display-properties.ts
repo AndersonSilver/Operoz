@@ -1,5 +1,5 @@
-import type { IIssueDisplayProperties } from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 import {
   resolveBoardListDisplayProperties,
   resolveSpreadsheetDisplayProperties,
@@ -19,8 +19,7 @@ export function useBoardAlignedDisplayProperties(
   const filters = "filters" in issuesFilter ? issuesFilter.filters : undefined;
 
   const layoutFromFilters =
-    (viewId && filters?.[viewId]?.displayFilters?.layout) ||
-    issuesFilter?.issueFilters?.displayFilters?.layout;
+    (viewId && filters?.[viewId]?.displayFilters?.layout) || issuesFilter?.issueFilters?.displayFilters?.layout;
   const layout = options?.layout ?? layoutFromFilters;
 
   const rawDisplayProperties =

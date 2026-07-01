@@ -1,4 +1,4 @@
-import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
+import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";
 import type { TNotificationContentMap } from "@/components/workspace-notifications/sidebar/notification-card/content";
 
 // Additional notification content map for CE (empty - EE extends this)

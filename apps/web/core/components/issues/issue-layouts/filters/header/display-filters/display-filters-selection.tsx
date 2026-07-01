@@ -6,7 +6,7 @@ import type {
   IIssueDisplayProperties,
   ILayoutDisplayFiltersOptions,
   TIssueGroupByOptions,
-} from "@operis/types";
+} from "@operoz/types";
 // components
 import {
   FilterDisplayProperties,
@@ -53,11 +53,7 @@ export const DisplayFiltersSelection = observer(function DisplayFiltersSelection
   }
 
   if (!layoutDisplayFiltersOptions) {
-    return (
-      <div className="px-3 py-4 text-caption-sm-regular text-tertiary">
-        A carregar opções de exibição…
-      </div>
-    );
+    return <div className="px-3 py-4 text-caption-sm-regular text-tertiary">A carregar opções de exibição…</div>;
   }
 
   return (

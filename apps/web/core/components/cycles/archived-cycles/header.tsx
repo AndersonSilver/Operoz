@@ -3,12 +3,12 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
 import { ListFilter } from "lucide-react";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // plane helpers
 // types
-import type { TCycleFilters } from "@operis/types";
-import { cn, calculateTotalFilters } from "@operis/utils";
+import type { TCycleFilters } from "@operoz/types";
+import { cn, calculateTotalFilters } from "@operoz/utils";
 // components
 import { ArchiveTabsList } from "@/components/archives";
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";

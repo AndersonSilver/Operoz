@@ -1,8 +1,8 @@
 import { AlertTriangle, Archive, CheckCircle2, Clock, XCircle } from "lucide-react";
-import { CopyIcon } from "@operis/propel/icons";
-import type { TInboxIssueStatus } from "@operis/types";
-import { EInboxIssueStatus } from "@operis/types";
-import { cn } from "@operis/utils";
+import { CopyIcon } from "@operoz/propel/icons";
+import type { TInboxIssueStatus } from "@operoz/types";
+import { EInboxIssueStatus } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 export const ICON_PROPERTIES = {
   [EInboxIssueStatus.PENDING]: {

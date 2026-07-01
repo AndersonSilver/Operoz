@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { ChevronDown, FolderKanban, LayoutGrid } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useAssistant } from "@/hooks/use-assistant";
 import { useAssistantContextDefaults, useAssistantContextScope } from "@/hooks/use-assistant-context-scope";
 

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageHead } from "@/components/core/page-title";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { WorkspaceClient360Detail } from "@/components/workspace/client-360/workspace-client-360-detail";

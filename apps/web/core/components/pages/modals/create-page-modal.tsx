@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 // constants
-import type { EPageAccess } from "@operis/constants";
-import type { TPage } from "@operis/types";
+import type { EPageAccess } from "@operoz/constants";
+import type { TPage } from "@operoz/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
 // plane web hooks

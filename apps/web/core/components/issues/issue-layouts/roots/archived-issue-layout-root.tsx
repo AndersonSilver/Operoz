@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EIssuesStoreType } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EIssuesStoreType } from "@operoz/types";
 // components
 import { ProjectLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/project-level";
 // hooks

@@ -3,16 +3,16 @@ import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import { AlertCircle } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-import { EEstimateSystem } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronUpIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { TModulePlotType } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { CustomSelect, Spinner } from "@operis/ui";
+import { EEstimateSystem } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronUpIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { TModulePlotType } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { CustomSelect, Spinner } from "@operoz/ui";
 // components
 // constants
 // helpers
-import { getDate } from "@operis/utils";
+import { getDate } from "@operoz/utils";
 import ProgressChart from "@/components/core/sidebar/progress-chart";
 import { ModuleProgressStats } from "@/components/modules";
 // hooks

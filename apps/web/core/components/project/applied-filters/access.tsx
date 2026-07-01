@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // constants
-import { NETWORK_CHOICES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { NETWORK_CHOICES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 
 type Props = {
   handleRemove: (val: string) => void;

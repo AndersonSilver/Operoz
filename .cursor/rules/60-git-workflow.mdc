@@ -1,0 +1,44 @@
+---
+description: Padrões sênior para commits, branches e pull requests
+alwaysApply: true
+---
+
+# Git & Pull Requests — Padrões Sênior
+
+## Commits
+
+- Mensagens no formato Conventional Commits: `tipo(escopo): descrição curta no
+  imperativo`. Tipos comuns: `feat`, `fix`, `refactor`, `test`, `docs`, `chore`,
+  `perf`, `ci`.
+  - Exemplo: `fix(auth): corrige expiração de token de refresh`
+- Corpo do commit explica o *porquê*, não repete o *o quê* (o diff já mostra o quê).
+- Commits atômicos: cada commit é uma mudança logicamente completa e revertível
+  isoladamente. Não misture refactor + feature no mesmo commit.
+- Nunca commitar: segredos, arquivos de build gerados, `node_modules`, arquivos de
+  configuração pessoal do editor.
+
+## Branches
+
+- Nome descreve a mudança: `feat/checkout-pix`, `fix/race-condition-cache`.
+- Branch de vida curta — sincronize com a branch principal com frequência para
+  evitar merge conflicts gigantes e drift de contexto.
+
+## Pull Requests
+
+- Descrição do PR responde: o que mudou, por quê, como foi testado, e qualquer
+  risco/trade-off relevante (ex. "isso muda o formato de resposta da API, avisar
+  consumidores").
+- PR pequeno e focado em uma coisa. PR gigante misturando refactor não relacionado +
+  feature é mais difícil de revisar e mais arriscado de reverter.
+- Self-review antes de pedir revisão: releia seu próprio diff primeiro, geralmente
+  pega 20-30% dos problemas antes que outra pessoa precise apontar.
+- Se a mudança tem risco de produção, descreva o plano de rollback no PR.
+
+## Ao revisar PR de outra pessoa (ver skill `code-review` para checklist completo)
+
+- Foque em correção, segurança e manutenibilidade — não em preferência de estilo que
+  já é coberta por linter/formatter automático.
+- Separe comentário bloqueante ("isso precisa mudar antes de mergear") de sugestão
+  opcional ("nit:" ou "consideração para depois").
+- Aponte o problema com o código, nunca faça suposição sobre a competência de quem
+  escreveu.

@@ -20,14 +20,14 @@ import {
   ShieldCheck,
   Upload,
 } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Badge } from "@operis/propel/badge";
-import { Button } from "@operis/propel/button";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { CustomSelect, Input } from "@operis/ui";
-import { calculateTimeAgo, cn } from "@operis/utils";
-import type { IBoard } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Badge } from "@operoz/propel/badge";
+import { Button } from "@operoz/propel/button";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { CustomSelect, Input } from "@operoz/ui";
+import { calculateTimeAgo, cn } from "@operoz/utils";
+import type { IBoard } from "@operoz/types";
 import type {
   TJiraOpsImportPreview,
   TJiraOpsSyncPhase,

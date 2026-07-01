@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // Plane
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";
 import { ModuleGanttSidebarBlock } from "@/components/modules";
 // helpers

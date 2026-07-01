@@ -1,9 +1,9 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { useParams } from "next/navigation";
-import { EditIcon, CloseIcon } from "@operis/propel/icons";
+import { EditIcon, CloseIcon } from "@operoz/propel/icons";
 // types
-import type { IIssueLabel } from "@operis/types";
+import type { IIssueLabel } from "@operoz/types";
 // hooks
 import { useLabel } from "@/hooks/store/use-label";
 // components

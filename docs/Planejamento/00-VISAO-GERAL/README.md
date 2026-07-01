@@ -6,13 +6,13 @@ feature referenciam estes documentos em vez de repetir convenções (DRY aplicad
 
 ## Documentos
 
-| Ficheiro | Conteúdo |
-| --- | --- |
-| [01-padroes-backend.md](./01-padroes-backend.md) | Modelos, views, serializers, URLs, paginação, migrações |
-| [02-padroes-frontend.md](./02-padroes-frontend.md) | Split CE/core/app, MobX, services, React Flow, i18n |
+| Ficheiro                                                     | Conteúdo                                                |
+| ------------------------------------------------------------ | ------------------------------------------------------- |
+| [01-padroes-backend.md](./01-padroes-backend.md)             | Modelos, views, serializers, URLs, paginação, migrações |
+| [02-padroes-frontend.md](./02-padroes-frontend.md)           | Split CE/core/app, MobX, services, React Flow, i18n     |
 | [03-seguranca-transversal.md](./03-seguranca-transversal.md) | RBAC, secrets, validação, isolamento, threat-model base |
-| [04-clean-code-global.md](./04-clean-code-global.md) | Nomenclatura, SOLID, limites, lint, code review |
-| [05-estrategia-de-testes.md](./05-estrategia-de-testes.md) | Pirâmide de testes pytest + Playwright |
+| [04-clean-code-global.md](./04-clean-code-global.md)         | Nomenclatura, SOLID, limites, lint, code review         |
+| [05-estrategia-de-testes.md](./05-estrategia-de-testes.md)   | Pirâmide de testes pytest + Playwright                  |
 
 ## Princípios de arquitetura do programa
 
@@ -59,13 +59,13 @@ feature referenciam estes documentos em vez de repetir convenções (DRY aplicad
 
 ### 3. Decisões macro
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Estender o motor de automação existente (graph JSON) para Workflow e Rule Builder | Construir motor novo — duplicação e risco |
-| 2 | OQL compila para Django `Q` objects (não SQL cru) | SQL string interpolada — risco de injeção |
-| 3 | Gadgets/dashboards guardam layout como JSON versionado | Tabela rígida por tipo de gadget — pouco flexível |
-| 4 | PermissionScheme reutiliza `BoardRolePermission` como base de chaves | Sistema de permissões paralelo — fragmentação |
-| 5 | Worklog é entidade `ProjectBaseModel` independente do Issue | Campos no Issue — perde histórico e auditoria |
+| #   | Decisão                                                                           | Alternativa rejeitada                             |
+| --- | --------------------------------------------------------------------------------- | ------------------------------------------------- |
+| 1   | Estender o motor de automação existente (graph JSON) para Workflow e Rule Builder | Construir motor novo — duplicação e risco         |
+| 2   | OQL compila para Django `Q` objects (não SQL cru)                                 | SQL string interpolada — risco de injeção         |
+| 3   | Gadgets/dashboards guardam layout como JSON versionado                            | Tabela rígida por tipo de gadget — pouco flexível |
+| 4   | PermissionScheme reutiliza `BoardRolePermission` como base de chaves              | Sistema de permissões paralelo — fragmentação     |
+| 5   | Worklog é entidade `ProjectBaseModel` independente do Issue                       | Campos no Issue — perde histórico e auditoria     |
 
 ### 4. Faseamento global
 
@@ -76,10 +76,10 @@ suas próprias fases internas.
 
 ## Referências de código (baseline)
 
-- `apps/api/operis/db/models/base.py` — `BaseModel`, `ProjectBaseModel`
-- `apps/api/operis/app/views/base.py` — `BaseViewSet`
-- `apps/api/operis/app/permissions/base.py` — `ROLE`, `@allow_permission`
-- `apps/api/operis/app/serializers/base.py` — `DynamicBaseSerializer`
-- `apps/api/operis/automation/` — `compiler.py`, `dispatcher.py`, `executor.py`
+- `apps/api/operoz/db/models/base.py` — `BaseModel`, `ProjectBaseModel`
+- `apps/api/operoz/app/views/base.py` — `BaseViewSet`
+- `apps/api/operoz/app/permissions/base.py` — `ROLE`, `@allow_permission`
+- `apps/api/operoz/app/serializers/base.py` — `DynamicBaseSerializer`
+- `apps/api/operoz/automation/` — `compiler.py`, `dispatcher.py`, `executor.py`
 - `apps/web/core/components/settings/board/automation/board-automation-canvas.tsx`
 - `packages/services/src/api.service.ts` — `APIService`

@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ListFilter } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import type { TProjectFilters } from "@operis/types";
-import { calculateTotalFilters } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import type { TProjectFilters } from "@operoz/types";
+import { calculateTotalFilters } from "@operoz/utils";
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { ProjectFiltersSelection } from "@/components/project/dropdowns/filters";

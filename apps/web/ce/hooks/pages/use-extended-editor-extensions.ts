@@ -1,5 +1,5 @@
-import type { IEditorPropsExtended } from "@operis/editor";
-import type { TSearchEntityRequestPayload, TSearchResponse } from "@operis/types";
+import type { IEditorPropsExtended } from "@operoz/editor";
+import type { TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
 import type { TPageInstance } from "@/store/pages/base-page";
 import type { EPageStoreType } from "../store";
 

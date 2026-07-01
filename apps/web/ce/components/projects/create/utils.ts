@@ -1,5 +1,5 @@
-import { RANDOM_EMOJI_CODES } from "@operis/constants";
-import type { IProject } from "@operis/types";
+import { RANDOM_EMOJI_CODES } from "@operoz/constants";
+import type { IProject } from "@operoz/types";
 import { getRandomCoverImage } from "@/helpers/cover-image.helper";
 
 export const getProjectFormValues = (): Partial<IProject> => ({

@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SidebarHamburgerToggle } from "@/components/core/sidebar/sidebar-menu-hamburger-toggle";
 
 type Props = {

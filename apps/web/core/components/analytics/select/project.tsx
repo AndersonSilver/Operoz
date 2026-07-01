@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // plane package imports
-import { getButtonStyling } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ChevronDownIcon, ProjectIcon } from "@operis/propel/icons";
-import { CustomSearchSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { getButtonStyling } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ChevronDownIcon, ProjectIcon } from "@operoz/propel/icons";
+import { CustomSearchSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 

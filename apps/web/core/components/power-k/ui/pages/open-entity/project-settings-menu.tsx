@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { EUserPermissionsLevel, PROJECT_SETTINGS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissionsLevel, PROJECT_SETTINGS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";
 import { PowerKSettingsMenu } from "@/components/power-k/menus/settings";

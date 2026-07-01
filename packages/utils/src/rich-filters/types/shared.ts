@@ -1,5 +1,5 @@
 // plane imports
-import type { TFilterAndGroupNode, TFilterExpression, TFilterGroupNode, TFilterProperty } from "@operis/types";
+import type { TFilterAndGroupNode, TFilterExpression, TFilterGroupNode, TFilterProperty } from "@operoz/types";
 // local imports
 import { getAndGroupChildren, isAndGroupNode } from "./core";
 

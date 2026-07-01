@@ -1,5 +1,5 @@
 import { range } from "lodash-es";
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 
 export function PageLoader() {
   return (

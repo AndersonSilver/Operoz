@@ -1,5 +1,5 @@
 import { extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree-item";
-import type { IFavorite, InstructionType, IPragmaticPayloadLocation, TDropTarget } from "@operis/types";
+import type { IFavorite, InstructionType, IPragmaticPayloadLocation, TDropTarget } from "@operoz/types";
 
 export type TargetData = {
   id: string;

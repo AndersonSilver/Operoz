@@ -1,7 +1,7 @@
 // plane imports
 import type { IncomingHttpHeaders } from "http";
-import type { TUserDetails } from "@operis/editor";
-import { logger } from "@operis/logger";
+import type { TUserDetails } from "@operoz/editor";
+import { logger } from "@operoz/logger";
 import { AppError } from "@/lib/errors";
 // services
 import { UserService } from "@/services/user.service";

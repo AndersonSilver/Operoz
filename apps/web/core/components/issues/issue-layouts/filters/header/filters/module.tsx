@@ -3,8 +3,8 @@ import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // components
-import { ModuleIcon } from "@operis/propel/icons";
-import { Loader } from "@operis/ui";
+import { ModuleIcon } from "@operoz/propel/icons";
+import { Loader } from "@operoz/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useModule } from "@/hooks/store/use-module";
 // ui

@@ -1,10 +1,10 @@
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TProjectAppliedDisplayFilterKeys, TProjectFilters } from "@operis/types";
-import { EHeaderVariant, Header, Tag } from "@operis/ui";
-import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TProjectAppliedDisplayFilterKeys, TProjectFilters } from "@operoz/types";
+import { EHeaderVariant, Header, Tag } from "@operoz/ui";
+import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";
 // local imports
 import { AppliedAccessFilters } from "./access";
 import { AppliedDateFilters } from "./date";

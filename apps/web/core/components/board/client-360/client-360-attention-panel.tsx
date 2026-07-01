@@ -2,9 +2,9 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { CheckCircle2, ChevronLeft, ChevronRight } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Client } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Client } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   buildClient360AttentionItems,
   client360AttentionFilterKeys,

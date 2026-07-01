@@ -1,4 +1,4 @@
-import type { ActorDetail, TIssue, TIssuePriorities, TStateGroups, TIssuePublicComment } from "@operis/types";
+import type { ActorDetail, TIssue, TIssuePriorities, TStateGroups, TIssuePublicComment } from "@operoz/types";
 
 export type TIssueLayout = "list" | "kanban" | "calendar" | "spreadsheet" | "gantt";
 export type TIssueLayoutOptions = {

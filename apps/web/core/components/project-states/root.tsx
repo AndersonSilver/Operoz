@@ -2,9 +2,9 @@ import { useMemo } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // components
-import { EUserPermissionsLevel } from "@operis/constants";
-import type { IState, TStateOperationsCallbacks } from "@operis/types";
-import { EUserProjectRoles } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import type { IState, TStateOperationsCallbacks } from "@operoz/types";
+import { EUserProjectRoles } from "@operoz/types";
 import { ProjectStateLoader, GroupList } from "@/components/project-states";
 // hooks
 import { useProjectState } from "@/hooks/store/use-project-state";

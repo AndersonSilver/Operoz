@@ -1,4 +1,4 @@
-import type { SingleOrArray, TFilterValue } from "@operis/types";
+import type { SingleOrArray, TFilterValue } from "@operoz/types";
 
 /**
  * Converts any value to a non-null array for UI components that expect arrays

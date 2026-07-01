@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { TModuleFilters } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import type { TModuleFilters } from "@operoz/types";
 // components
-import { calculateTotalFilters } from "@operis/utils";
+import { calculateTotalFilters } from "@operoz/utils";
 import { ArchivedModulesView, ModuleAppliedFiltersList } from "@/components/modules";
 import { CycleModuleListLayoutLoader } from "@/components/ui/loader/cycle-module-list-loader";
 // helpers

@@ -4,7 +4,7 @@ import type {
   TFilterProperty,
   TFilterValue,
   TSupportedFilterFieldConfigs,
-} from "@operis/types";
+} from "@operoz/types";
 
 export const COMMON_FILTER_ITEM_BORDER_CLASSNAME = "border-r border-subtle-1";
 

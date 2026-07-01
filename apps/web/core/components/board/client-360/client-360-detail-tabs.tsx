@@ -2,8 +2,8 @@
 
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { Tabs } from "@operis/propel/tabs";
-import { cn } from "@operis/utils";
+import { Tabs } from "@operoz/propel/tabs";
+import { cn } from "@operoz/utils";
 
 export function Client360DetailTabs({
   defaultValue,

@@ -1,4 +1,4 @@
-import type { IGroupHeaderProps } from "@operis/types";
+import type { IGroupHeaderProps } from "@operoz/types";
 
 export function GroupHeader({ group, itemCount, onToggleGroup }: IGroupHeaderProps) {
   return (

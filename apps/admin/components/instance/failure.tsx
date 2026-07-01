@@ -1,14 +1,26 @@
 import { observer } from "mobx-react";
-import { useTheme } from "next-themes";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { RefreshCw, Unplug } from "lucide-react";
 import { AuthCard } from "@/app/(all)/(home)/auth-card";
-import InstanceFailureDarkImage from "@/app/assets/instance/instance-failure-dark.svg?url";
-import InstanceFailureImage from "@/app/assets/instance/instance-failure.svg?url";
+
+function InstanceFailureIllustration() {
+  const { t } = useTranslation();
+
+  return (
+    <div className="flex flex-col items-center gap-4" aria-hidden>
+      <div className="flex h-24 w-24 items-center justify-center rounded-full border border-subtle bg-accent-primary/5">
+        <Unplug className="h-10 w-10 text-accent-primary" strokeWidth={1.5} />
+      </div>
+      <span className="text-11 font-medium tracking-wide text-tertiary uppercase">
+        {t("instance_failure.status_badge")}
+      </span>
+    </div>
+  );
+}
 
 export const InstanceFailureView = observer(function InstanceFailureView() {
-  const { resolvedTheme } = useTheme();
-
-  const instanceImage = resolvedTheme === "dark" ? InstanceFailureDarkImage : InstanceFailureImage;
+  const { t } = useTranslation();
 
   const handleRetry = () => {
     window.location.reload();
@@ -16,17 +28,19 @@ export const InstanceFailureView = observer(function InstanceFailureView() {
 
   return (
     <AuthCard>
-      <div className="relative flex flex-col items-center justify-center space-y-4">
-        <img src={instanceImage} alt="Instance failure illustration" />
-        <h3 className="text-center text-20 font-medium text-on-color">Unable to fetch instance details.</h3>
-        <p className="text-center text-14 font-medium">
-          We were unable to fetch the details of the instance. Fret not, it might just be a connectivity issue.
-        </p>
-      </div>
-      <div className="flex justify-center">
-        <Button size="lg" onClick={handleRetry}>
-          Retry
-        </Button>
+      <InstanceFailureIllustration />
+
+      <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-2 text-center">
+          <h1 className="text-18 font-semibold text-primary">{t("instance_failure.title")}</h1>
+          <p className="text-13 text-secondary">{t("instance_failure.description")}</p>
+        </div>
+
+        <div className="flex justify-center">
+          <Button variant="primary" size="lg" prependIcon={<RefreshCw className="h-4 w-4" />} onClick={handleRetry}>
+            {t("instance_failure.retry")}
+          </Button>
+        </div>
       </div>
     </AuthCard>
   );

@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { copyUrlToClipboard } from "@operis/utils";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { copyUrlToClipboard } from "@operoz/utils";
 import type { TNavigationItem } from "@/components/navigation/tab-navigation-root";
 
 type UseProjectActionsProps = {

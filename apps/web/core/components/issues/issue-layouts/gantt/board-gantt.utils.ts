@@ -1,4 +1,4 @@
-import type { IBoardModule, TIssue, TPartialProject } from "@operis/types";
+import type { IBoardModule, TIssue, TPartialProject } from "@operoz/types";
 
 export const BOARD_PROJECT_BLOCK_PREFIX = "board-project:";
 export const BOARD_MODULE_BLOCK_PREFIX = "board-module:";
@@ -20,6 +20,7 @@ export const getModuleIdFromBoardBlock = (blockId: string) => blockId.slice(BOAR
 export type TBoardProjectGanttRow = {
   id: string;
   name: string;
+  sort_order: number | null;
   start_date?: string;
   target_date?: string;
   project_id: string;
@@ -29,6 +30,7 @@ export type TBoardProjectGanttRow = {
 export type TBoardModuleGanttRow = {
   id: string;
   name: string;
+  sort_order: number | null;
   start_date?: string;
   target_date?: string;
   project_id: string;
@@ -158,6 +160,7 @@ export const resolveBoardProjectGanttRow = (
   return {
     id: projectId,
     name: project?.name ?? fallbackName,
+    sort_order: null,
     start_date: range.start_date ?? project?.start_date ?? undefined,
     target_date: range.target_date ?? project?.target_date ?? undefined,
     project_id: projectId,
@@ -168,6 +171,7 @@ export const resolveBoardProjectGanttRow = (
 export const resolveBoardModuleGanttRow = (module: IBoardModule): TBoardModuleGanttRow => ({
   id: module.id,
   name: module.name,
+  sort_order: null,
   start_date: module.start_date ?? undefined,
   target_date: module.target_date ?? undefined,
   project_id: module.project_id,

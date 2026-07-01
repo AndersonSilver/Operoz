@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { ENotificationLoader, ENotificationQueryParamType } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { ENotificationLoader, ENotificationQueryParamType } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // components
 import { NotificationItem } from "@/components/workspace-notifications/sidebar/notification-card/item";
 // hooks

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { ArchiveIcon } from "@operis/propel/icons";
-import { renderFormattedDate } from "@operis/utils";
+import { ArchiveIcon } from "@operoz/propel/icons";
+import { renderFormattedDate } from "@operoz/utils";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

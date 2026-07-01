@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_CONTENT_PANEL_IMMERSIVE, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 
 type Props = {

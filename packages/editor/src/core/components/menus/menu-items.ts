@@ -24,7 +24,7 @@ import {
   AlignCenter,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { LinkIcon } from "@operis/propel/icons";
+import { LinkIcon } from "@operoz/propel/icons";
 // constants
 import { CORE_EXTENSIONS } from "@/constants/extension";
 // helpers
@@ -52,7 +52,7 @@ import {
 } from "@/helpers/editor-commands";
 // types
 import type { TCommandWithProps, TEditorCommands } from "@/types";
-import type { ISvgIcons } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
 type isActiveFunction<T extends TEditorCommands> = (params?: TCommandWithProps<T>) => boolean;
 type commandFunction<T extends TEditorCommands> = (params?: TCommandWithProps<T>) => void;
 

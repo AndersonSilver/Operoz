@@ -1,8 +1,8 @@
 import { CheckCircle2, CircleX, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardAutomationRun, TAutomationGraph } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { EModalPosition, EModalWidth, ModalCore, cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardAutomationRun, TAutomationGraph } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { EModalPosition, EModalWidth, ModalCore, cn } from "@operoz/ui";
 import { AutomationDryRunTimeline, summarizeSteps } from "./automation-dry-run-timeline";
 import { formatRunDateTime, formatRunDurationLabel, getRunDurationMs } from "./automation-history-utils";
 

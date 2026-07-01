@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR, { mutate } from "swr";
 import { MoveLeft, MoveRight, RefreshCw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { IExportData } from "@operis/types";
-import { Table } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { IExportData } from "@operoz/types";
+import { Table } from "@operoz/ui";
 import { ImportExportSettingsLoader } from "@/components/ui/loader/settings/import-and-export";
 import { EXPORT_SERVICES_LIST } from "@/constants/fetch-keys";
 import { IntegrationService } from "@/services/integrations";
@@ -66,12 +66,7 @@ export const PrevExports = observer(function PrevExports(props: Props) {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            className="workspace-exports-refresh-btn"
-            onClick={handleRefresh}
-            disabled={refreshing}
-          >
+          <button type="button" className="workspace-exports-refresh-btn" onClick={handleRefresh} disabled={refreshing}>
             <RefreshCw className={`size-3 ${refreshing ? "animate-spin" : ""}`} strokeWidth={1.75} />
             {refreshing ? t("refreshing") : t("refresh_status")}
           </button>

@@ -2,8 +2,8 @@
 
 import type { LucideIcon } from "lucide-react";
 import { Activity, DollarSign } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360DetailResponse } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360DetailResponse } from "@operoz/types";
 import { Client360DetailKpiStrip } from "@/components/board/client-360/client-360-detail-kpi-strip";
 import { Client360DetailPulse } from "@/components/board/client-360/client-360-detail-pulse";
 import {

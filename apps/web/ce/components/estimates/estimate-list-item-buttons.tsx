@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { PROJECT_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
-import { TrashIcon } from "@operis/propel/icons";
+import { PROJECT_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
+import { TrashIcon } from "@operoz/propel/icons";
 
 type TEstimateListItem = {
   estimateId: string;

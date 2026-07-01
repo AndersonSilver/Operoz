@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { OctagonAlert } from "lucide-react";
 // plane imports
-import type { IWorkspaceMemberInvitation, TOnboardingSteps } from "@operis/types";
+import type { IWorkspaceMemberInvitation, TOnboardingSteps } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 // hooks

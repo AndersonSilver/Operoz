@@ -4,6 +4,7 @@ import {
   Bell,
   Bot,
   Building,
+  GitBranch,
   LayoutGrid,
   MessagesSquare,
   RefreshCw,
@@ -11,8 +12,8 @@ import {
   Webhook,
 } from "lucide-react";
 // plane imports
-import type { ISvgIcons } from "@operis/propel/icons";
-import type { TWorkspaceSettingsTabs } from "@operis/types";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import type { TWorkspaceSettingsTabs } from "@operoz/types";
 
 export const WORKSPACE_SETTINGS_ICONS: Record<TWorkspaceSettingsTabs, LucideIcon | React.FC<ISvgIcons>> = {
   general: Building,
@@ -24,4 +25,5 @@ export const WORKSPACE_SETTINGS_ICONS: Record<TWorkspaceSettingsTabs, LucideIcon
   discord: MessagesSquare,
   jira: RefreshCw,
   webhooks: Webhook,
+  workflow: GitBranch,
 };

@@ -1,7 +1,7 @@
 import { uniq, update, isEmpty, omit, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-import type { EPastDurationFilters } from "@operis/constants";
+import type { EPastDurationFilters } from "@operoz/constants";
 // types
 import type {
   TInboxIssue,
@@ -12,9 +12,9 @@ import type {
   TInboxIssuePaginationInfo,
   TInboxIssueSortingOrderByQueryParam,
   THubMode,
-} from "@operis/types";
-import { EInboxIssueCurrentTab, EInboxIssueStatus, EHubMode } from "@operis/types";
-import { getCustomDates } from "@operis/utils";
+} from "@operoz/types";
+import { EInboxIssueCurrentTab, EInboxIssueStatus, EHubMode } from "@operoz/types";
+import { getCustomDates } from "@operoz/utils";
 import { getInboxScopeKey, getPendingCountKey } from "@/utils/inbox-hub";
 // helpers
 // services

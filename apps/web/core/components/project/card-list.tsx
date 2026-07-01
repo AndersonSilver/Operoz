@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 // plane imports
-import { EUserPermissionsLevel, EUserPermissions } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import { ContentWrapper } from "@operis/ui";
+import { EUserPermissionsLevel, EUserPermissions } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import { ContentWrapper } from "@operoz/ui";
 // components
-import { calculateTotalFilters } from "@operis/utils";
+import { calculateTotalFilters } from "@operoz/utils";
 import { ProjectsLoader } from "@/components/ui/loader/projects-loader";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";

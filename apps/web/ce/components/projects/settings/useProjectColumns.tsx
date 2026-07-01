@@ -1,8 +1,8 @@
 import { useState } from "react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import type { IWorkspaceMember, TProjectMembership } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import type { IWorkspaceMember, TProjectMembership } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 // components
 import { MemberHeaderColumn } from "@/components/project/member-header-column";
 import { AccountTypeColumn, NameColumn } from "@/components/project/settings/member-columns";

@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EEstimateSystem } from "@operis/constants";
-import { ProjectIcon } from "@operis/propel/icons";
-import type { ChartYAxisMetric } from "@operis/types";
+import { EEstimateSystem } from "@operoz/constants";
+import { ProjectIcon } from "@operoz/propel/icons";
+import type { ChartYAxisMetric } from "@operoz/types";
 // plane package imports
-import { CustomSelect } from "@operis/ui";
+import { CustomSelect } from "@operoz/ui";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 // plane web constants

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardOverview } from "@/components/board/board-overview";
 import { PageHead } from "@/components/core/page-title";

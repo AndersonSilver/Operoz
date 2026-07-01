@@ -10,10 +10,10 @@ import { useTheme } from "next-themes";
 import Masonry from "react-masonry-component";
 
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
-import { EUserWorkspaceRoles } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
+import { EUserWorkspaceRoles } from "@operoz/types";
 // assets
 import darkStickiesAsset from "@/app/assets/empty-state/stickies/stickies-dark.webp?url";
 import lightStickiesAsset from "@/app/assets/empty-state/stickies/stickies-light.webp?url";

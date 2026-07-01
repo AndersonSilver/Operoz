@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 // plane imports
-import type { TExtendedFileHandler } from "@operis/editor";
+import type { TExtendedFileHandler } from "@operoz/editor";
 
 export type TExtendedEditorFileHandlersArgs = {
   projectId?: string;

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
 // ui
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TContextMenuItem } from "@operis/ui";
-import { ContextMenu, CustomMenu } from "@operis/ui";
-import { copyUrlToClipboard, cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TContextMenuItem } from "@operoz/ui";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
+import { copyUrlToClipboard, cn } from "@operoz/utils";
 // hooks
 import { useCycleMenuItems } from "@/components/common/quick-actions-helper";
 import { useCycle } from "@/hooks/store/use-cycle";

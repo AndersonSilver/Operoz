@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import clsx from "clsx";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { AUTOMATION_KIND_DEFAULT_ICON, AutomationCatalogIcon } from "./automation-catalog-icon";
 import { branchHandleTopPercent } from "./automation-kind-theme";
 import type { AutomationNodeData } from "./automation-utils";

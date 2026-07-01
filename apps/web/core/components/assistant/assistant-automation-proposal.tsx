@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TAssistantAutomationProposal, TAutomationGraph } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TAssistantAutomationProposal, TAutomationGraph } from "@operoz/types";
 import { BoardService } from "@/services/board/board.service";
 
 const boardService = new BoardService();

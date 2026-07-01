@@ -2,7 +2,7 @@ import { useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // components
-import type { IBlockUpdateData, IBlockUpdateDependencyData } from "@operis/types";
+import type { IBlockUpdateData, IBlockUpdateDependencyData } from "@operoz/types";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 import { ChartViewRoot } from "./chart/root";
@@ -89,29 +89,29 @@ export const GanttChartRoot = observer(function GanttChartRoot(props: GanttChart
   return (
     <GanttSidebarWidthProvider workspaceSlug={workspaceSlug} scope={ganttViewScope}>
       <ChartViewRoot
-      border={border}
-      title={title}
-      blockIds={blockIds}
-      loadMoreBlocks={loadMoreBlocks}
-      canLoadMoreBlocks={canLoadMoreBlocks}
-      loaderTitle={loaderTitle}
-      blockUpdateHandler={blockUpdateHandler}
-      sidebarToRender={sidebarToRender}
-      blockToRender={blockToRender}
-      enableBlockLeftResize={enableBlockLeftResize}
-      enableBlockRightResize={enableBlockRightResize}
-      enableBlockMove={enableBlockMove}
-      enableReorder={enableReorder}
-      enableAddBlock={enableAddBlock}
-      enableSelection={enableSelection}
-      enableDependency={enableDependency}
-      bottomSpacing={bottomSpacing}
-      showAllBlocks={showAllBlocks}
-      quickAdd={quickAdd}
-      showToday={showToday}
-      updateBlockDates={updateBlockDates}
-      isEpic={isEpic}
-    />
+        border={border}
+        title={title}
+        blockIds={blockIds}
+        loadMoreBlocks={loadMoreBlocks}
+        canLoadMoreBlocks={canLoadMoreBlocks}
+        loaderTitle={loaderTitle}
+        blockUpdateHandler={blockUpdateHandler}
+        sidebarToRender={sidebarToRender}
+        blockToRender={blockToRender}
+        enableBlockLeftResize={enableBlockLeftResize}
+        enableBlockRightResize={enableBlockRightResize}
+        enableBlockMove={enableBlockMove}
+        enableReorder={enableReorder}
+        enableAddBlock={enableAddBlock}
+        enableSelection={enableSelection}
+        enableDependency={enableDependency}
+        bottomSpacing={bottomSpacing}
+        showAllBlocks={showAllBlocks}
+        quickAdd={quickAdd}
+        showToday={showToday}
+        updateBlockDates={updateBlockDates}
+        isEpic={isEpic}
+      />
     </GanttSidebarWidthProvider>
   );
 });

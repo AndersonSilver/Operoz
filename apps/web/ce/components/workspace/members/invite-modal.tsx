@@ -2,9 +2,9 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { IWorkspaceBulkInviteFormData } from "@operis/types";
-import { EModalWidth, EModalPosition, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IWorkspaceBulkInviteFormData } from "@operoz/types";
+import { EModalWidth, EModalPosition, ModalCore } from "@operoz/ui";
 // components
 import { InvitationModalActions } from "@/components/workspace/invite-modal/actions";
 import { InvitationFields } from "@/components/workspace/invite-modal/fields";

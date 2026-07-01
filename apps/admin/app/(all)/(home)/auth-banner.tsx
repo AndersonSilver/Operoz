@@ -1,7 +1,7 @@
 import { Info } from "lucide-react";
-import type { TAdminAuthErrorInfo } from "@operis/constants";
+import type { TAdminAuthErrorInfo } from "@operoz/constants";
 // icons
-import { CloseIcon } from "@operis/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 
 type TAuthBanner = {
   bannerData: TAdminAuthErrorInfo | undefined;

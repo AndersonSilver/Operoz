@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useBoardPermissions } from "@/hooks/store/use-board-permissions";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -19,19 +19,19 @@ export function useStatusReportCapabilities(projectId: string | undefined) {
 
   const isProjectMember = Boolean(
     projectId &&
-      workspaceSlugStr &&
-      allowPermissions(
-        [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
-        EUserPermissionsLevel.PROJECT,
-        workspaceSlugStr,
-        projectId
-      )
+    workspaceSlugStr &&
+    allowPermissions(
+      [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+      EUserPermissionsLevel.PROJECT,
+      workspaceSlugStr,
+      projectId
+    )
   );
 
   const isProjectAdmin = Boolean(
     projectId &&
-      workspaceSlugStr &&
-      allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlugStr, projectId)
+    workspaceSlugStr &&
+    allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.PROJECT, workspaceSlugStr, projectId)
   );
 
   useSWR(

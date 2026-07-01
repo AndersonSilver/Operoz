@@ -1,4 +1,4 @@
-import type { TClient360HealthHistoryItem } from "@operis/types";
+import type { TClient360HealthHistoryItem } from "@operoz/types";
 
 export type Client360SparklineTrend = "up" | "down" | "flat";
 

@@ -56,3 +56,4 @@ export * from "./workspace-views";
 export * from "./board";
 export * from "./base-layouts";
 export * from "./pagination";
+export * from "./workflow";

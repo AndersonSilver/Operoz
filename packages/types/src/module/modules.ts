@@ -5,6 +5,8 @@ import type { IIssueFilterOptions } from "../view-props";
 
 export type TModuleStatus = "backlog" | "planned" | "in-progress" | "paused" | "completed" | "cancelled";
 
+export type TModuleGanttBarColorMode = "state" | "custom";
+
 export type TModuleCompletionChartDistribution = {
   [key: string]: number | null;
 };
@@ -85,6 +87,8 @@ export interface IModule {
   archived_at: string | null;
   start_date: string | null;
   target_date: string | null;
+  gantt_bar_color_mode?: TModuleGanttBarColorMode;
+  gantt_bar_custom_color?: string;
   created_at: string;
   updated_at: string;
   created_by?: string;

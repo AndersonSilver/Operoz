@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Cursor MCP — carrega Operis/mcp-server/.env e inicia o servidor stdio.
+# Cursor MCP — carrega Operoz/mcp-server/.env e inicia o servidor stdio.
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 if [[ -f "$ROOT/.env" ]]; then

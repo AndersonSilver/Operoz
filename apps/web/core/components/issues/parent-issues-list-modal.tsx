@@ -5,13 +5,13 @@ import { Rocket } from "lucide-react";
 // headless ui
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon } from "@operoz/propel/icons";
 // types
-import type { ISearchIssueResponse } from "@operis/types";
+import type { ISearchIssueResponse } from "@operoz/types";
 // ui
-import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { generateWorkItemLink, getTabIndex } from "@operis/utils";
+import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { generateWorkItemLink, getTabIndex } from "@operoz/utils";
 // components
 import { IssueSearchModalEmptyState } from "@/components/core/modals/issue-search-modal-empty-state";
 // helpers

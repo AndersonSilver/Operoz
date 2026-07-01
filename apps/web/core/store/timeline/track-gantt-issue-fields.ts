@@ -4,6 +4,7 @@ type TGanttIssueFields = {
   start_date?: string | null;
   target_date?: string | null;
   type_id?: string | null;
+  state_id?: string | null;
 };
 
 /** MobX dependencies so gantt blocks refresh when issue schedule/type changes (not only when ids load). */
@@ -20,5 +21,6 @@ export function trackGanttIssueFields(
     void issue?.start_date;
     void issue?.target_date;
     void issue?.type_id;
+    void issue?.state_id;
   }
 }

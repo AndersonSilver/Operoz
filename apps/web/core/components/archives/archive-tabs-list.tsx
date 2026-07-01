@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 // types
-import type { IProject } from "@operis/types";
+import type { IProject } from "@operoz/types";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 

@@ -4,17 +4,17 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArchiveRestoreIcon, Settings, UserPlus } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
-import { Button } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { LinkIcon, LockIcon, NewTabIcon, TrashIcon, CheckIcon } from "@operis/propel/icons";
-import { setPromiseToast, setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IProject } from "@operis/types";
-import type { TContextMenuItem } from "@operis/ui";
-import { Avatar, AvatarGroup, ContextMenu, FavoriteStar } from "@operis/ui";
-import { copyUrlToClipboard, cn, getFileURL, renderFormattedDate } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
+import { Button } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { LinkIcon, LockIcon, NewTabIcon, TrashIcon, CheckIcon } from "@operoz/propel/icons";
+import { setPromiseToast, setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IProject } from "@operoz/types";
+import type { TContextMenuItem } from "@operoz/ui";
+import { Avatar, AvatarGroup, ContextMenu, FavoriteStar } from "@operoz/ui";
+import { copyUrlToClipboard, cn, getFileURL, renderFormattedDate } from "@operoz/utils";
 // components
 // hooks
 import { useMember } from "@/hooks/store/use-member";

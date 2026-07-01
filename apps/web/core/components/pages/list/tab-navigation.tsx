@@ -1,9 +1,9 @@
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import type { TPageNavigationTabs } from "@operis/types";
+import type { TPageNavigationTabs } from "@operoz/types";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type TPageTabNavigation = {
   workspaceSlug: string;

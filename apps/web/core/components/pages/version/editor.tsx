@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import type { TDisplayConfig } from "@operis/editor";
-import type { JSONContent, TPageVersion } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { isJSONContentEmpty } from "@operis/utils";
+import type { TDisplayConfig } from "@operoz/editor";
+import type { JSONContent, TPageVersion } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { isJSONContentEmpty } from "@operoz/utils";
 // components
 import { DocumentEditor } from "@/components/editor/document/editor";
 // hooks

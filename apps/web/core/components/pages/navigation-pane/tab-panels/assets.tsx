@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Download } from "lucide-react";
 // plane imports
-import { CORE_EXTENSIONS } from "@operis/editor";
-import type { TEditorAsset } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@operis/utils";
+import { CORE_EXTENSIONS } from "@operoz/editor";
+import type { TEditorAsset } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@operoz/utils";
 // plane web imports
 import { AdditionalPageNavigationPaneAssetItem } from "@/plane-web/components/pages/navigation-pane/tab-panels/assets";
 import { PageNavigationPaneAssetsTabEmptyState } from "@/plane-web/components/pages/navigation-pane/tab-panels/empty-states/assets";

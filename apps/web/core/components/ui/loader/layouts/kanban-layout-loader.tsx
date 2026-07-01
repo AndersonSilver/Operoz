@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 import { range } from "lodash-es";
 // plane ui
-import { ContentWrapper } from "@operis/ui";
+import { ContentWrapper } from "@operoz/ui";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 export const KanbanIssueBlockLoader = forwardRef(function KanbanIssueBlockLoader(
   { cardHeight = 100, shouldAnimate = true }: { cardHeight?: number; shouldAnimate?: boolean },

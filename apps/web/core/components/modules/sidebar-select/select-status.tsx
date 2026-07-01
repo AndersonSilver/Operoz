@@ -3,12 +3,12 @@ import React from "react";
 // react-hook-form
 import type { Control, UseFormWatch } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { StatePropertyIcon } from "@operis/propel/icons";
-import type { IModule } from "@operis/types";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { StatePropertyIcon } from "@operoz/propel/icons";
+import type { IModule } from "@operoz/types";
 // ui
-import { CustomSelect } from "@operis/ui";
+import { CustomSelect } from "@operoz/ui";
 // types
 // common
 // constants

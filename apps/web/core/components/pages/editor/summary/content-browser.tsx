@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 // plane imports
-import type { EditorRefApi, IMarking } from "@operis/editor";
-import { cn } from "@operis/utils";
+import type { EditorRefApi, IMarking } from "@operoz/editor";
+import { cn } from "@operoz/utils";
 // components
 import type { THeadingComponentProps } from "./heading-components";
 import { OutlineHeading1, OutlineHeading2, OutlineHeading3 } from "./heading-components";

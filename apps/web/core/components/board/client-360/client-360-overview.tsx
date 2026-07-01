@@ -1,4 +1,4 @@
-import type { TClient360Client, TClient360Summary } from "@operis/types";
+import type { TClient360Client, TClient360Summary } from "@operoz/types";
 
 import { Client360PortfolioInsights } from "@/components/board/client-360/client-360-portfolio-insights";
 

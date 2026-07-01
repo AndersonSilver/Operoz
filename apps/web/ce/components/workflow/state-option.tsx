@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Combobox } from "@headlessui/react";
-import { CheckIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { CheckIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 
 export type TStateOptionProps = {
   projectId: string | null | undefined;

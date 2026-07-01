@@ -1,4 +1,4 @@
-import type { TCallbackMentionComponentProps } from "@operis/editor";
+import type { TCallbackMentionComponentProps } from "@operoz/editor";
 // local components
 import { EditorUserMention } from "./user";
 

@@ -1,13 +1,15 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { CircleDashed } from "lucide-react";
-import { ALL_ISSUES } from "@operis/constants";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import type { IGroupByColumn, TIssue, TIssueServiceType, TSubIssueOperations } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { Collapsible } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ALL_ISSUES } from "@operoz/constants";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import type { IGroupByColumn, TIssue, TIssueServiceType, TSubIssueOperations } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { Collapsible } from "@operoz/ui";
+import { cn } from "@operoz/utils";
+import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { SubIssuesListItem } from "./list-item";
+import { SubIssuesTableHeader } from "./sub-issues-table-header";
 
 interface TSubIssuesListGroupProps {
   workItemIds: string[];
@@ -46,6 +48,13 @@ export const SubIssuesListGroup = observer(function SubIssuesListGroup(props: TS
 
   const isAllIssues = group.id === ALL_ISSUES;
 
+  const {
+    subIssues: {
+      filters: { getSubIssueFilters },
+    },
+  } = useIssueDetail(serviceType);
+  const displayProperties = getSubIssueFilters(rootIssueId)?.displayProperties ?? {};
+
   // states
   const [isCollapsibleOpen, setIsCollapsibleOpen] = useState(true);
 
@@ -75,22 +84,25 @@ export const SubIssuesListGroup = observer(function SubIssuesListGroup(props: TS
         }
         buttonClassName={cn("hidden", !isAllIssues && "block")}
       >
-        {workItemIds?.map((workItemId) => (
-          <SubIssuesListItem
-            key={workItemId}
-            workspaceSlug={workspaceSlug}
-            projectId={projectId}
-            parentIssueId={parentIssueId}
-            rootIssueId={rootIssueId}
-            issueId={workItemId}
-            canEdit={canEdit}
-            handleIssueCrudState={handleIssueCrudState}
-            subIssueOperations={subIssueOperations}
-            issueServiceType={serviceType}
-            spacingLeft={spacingLeft}
-            storeType={storeType}
-          />
-        ))}
+        <div className="overflow-hidden rounded-md border border-subtle bg-layer-1">
+          {isAllIssues && <SubIssuesTableHeader displayProperties={displayProperties} spacingLeft={spacingLeft} />}
+          {workItemIds?.map((workItemId) => (
+            <SubIssuesListItem
+              key={workItemId}
+              workspaceSlug={workspaceSlug}
+              projectId={projectId}
+              parentIssueId={parentIssueId}
+              rootIssueId={rootIssueId}
+              issueId={workItemId}
+              canEdit={canEdit}
+              handleIssueCrudState={handleIssueCrudState}
+              subIssueOperations={subIssueOperations}
+              issueServiceType={serviceType}
+              spacingLeft={spacingLeft}
+              storeType={storeType}
+            />
+          ))}
+        </div>
       </Collapsible>
     </>
   );

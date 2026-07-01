@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
 // ui
-import { SITES_ISSUE_LAYOUTS } from "@operis/constants";
+import { SITES_ISSUE_LAYOUTS } from "@operoz/constants";
 // plane i18n
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
 // helpers
 import { queryParamGenerator } from "@/helpers/query-param-generator";
 // hooks

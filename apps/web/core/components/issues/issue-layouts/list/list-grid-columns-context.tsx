@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
-import { useLocalStorage } from "@operis/hooks";
-import type { IIssueDisplayProperties, IProjectCustomFieldLite } from "@operis/types";
+import { useLocalStorage } from "@operoz/hooks";
+import type { IIssueDisplayProperties, IProjectCustomFieldLite } from "@operoz/types";
 import { useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
 import {
   buildListLayoutGridTemplateColumns,
@@ -18,7 +18,9 @@ import {
 export const LIST_GRID_ROW_GAP = "0.75rem";
 
 /** Alinhado a GANTT_CHECKBOX_GUTTER_PX — reserva espaço para checkbox de seleção em massa. */
+export const LIST_BULK_SELECT_GUTTER_PX = 32;
 export const LIST_BULK_SELECT_GUTTER_CLASS = "pl-8";
+export const LIST_BULK_SELECT_CHECKBOX_CELL_CLASS = "flex w-8 shrink-0 items-center justify-center self-stretch";
 
 export const LIST_GRID_CUSTOM_FIELD_WIDTH_PX = 144;
 

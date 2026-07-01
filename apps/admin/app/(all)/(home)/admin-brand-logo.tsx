@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { adminPublicUrl } from "@/utils/public-asset";
 
 type AdminBrandLogoProps = {

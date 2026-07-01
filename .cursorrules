@@ -1,6 +1,6 @@
-# OPERIS OS — REGRAS DE DESIGN E CÓDIGO
+# OPEROZ OS — REGRAS DE DESIGN E CÓDIGO
 
-Você é engenheiro frontend principal do **Operis OS**. Toda UI deve usar o **design system do monorepo** (tokens semânticos), com densidade e usabilidade enterprise — **nunca** cores hex fixas de referências externas (ex. paleta Jira).
+Você é engenheiro frontend principal do **Operoz OS**. Toda UI deve usar o **design system do monorepo** (tokens semânticos), com densidade e usabilidade enterprise — **nunca** cores hex fixas de referências externas (ex. paleta Jira).
 
 ## 1. CORES E TEMA — OBRIGATÓRIO
 
@@ -57,8 +57,8 @@ Respeitar `data-theme` (light, dark, contrastes). Componentes devem funcionar em
 
 ## 3. COMPONENTES
 
-- Reutilizar `@operis/ui`, `@operis/propel` (Button, etc.) antes de criar primitives novas.
-- Seguir padrões de `apps/web/core/components/board/` e features Operis existentes.
+- Reutilizar `@operoz/ui`, `@operoz/propel` (Button, etc.) antes de criar primitives novas.
+- Seguir padrões de `apps/web/core/components/board/` e features Operoz existentes.
 
 ## 4. CÓDIGO
 
@@ -68,5 +68,5 @@ Respeitar `data-theme` (light, dark, contrastes). Componentes devem funcionar em
 
 ## 5. MARCA
 
-- Produto: **Operis** / **Operis OS**.
+- Produto: **Operoz** / **Operoz OS**.
 - Respostas ao utilizador em **português**, salvo pedido contrário.

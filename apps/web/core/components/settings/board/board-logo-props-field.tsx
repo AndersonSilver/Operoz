@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import type { TLogoProps } from "@operis/types";
-import { cn } from "@operis/utils";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import type { TLogoProps } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { hasConfiguredLogo } from "@/components/board/gantt/board-gantt-row-icon";
 
 type Props = {
@@ -39,9 +39,7 @@ export function BoardLogoPropsField(props: Props) {
       <div className="min-w-0 flex-1">
         <p className="text-body-sm-medium text-primary">{label}</p>
         {description ? <p className="mt-0.5 text-12 text-tertiary">{description}</p> : null}
-        {!hasConfiguredLogo(logo) ? (
-          <p className="mt-1 text-11 text-tertiary">Clique no ícone para escolher.</p>
-        ) : null}
+        {!hasConfiguredLogo(logo) ? <p className="mt-1 text-11 text-tertiary">Clique no ícone para escolher.</p> : null}
       </div>
     </div>
   );

@@ -1,27 +1,25 @@
 import { useMemo } from "react";
-import uniq from "lodash-es/uniq";
 import { observer } from "mobx-react";
 // plane package imports
-import type { TActivityFilters } from "@operis/constants";
-import { E_SORT_ORDER, defaultActivityFilters, EUserPermissions } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
+import { E_SORT_ORDER, EUserPermissions } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 //types
-import type { TFileSignedURLResponse, TIssueComment } from "@operis/types";
-// components
-import { CommentCreate } from "@/components/comments/comment-create";
+import type { TFileSignedURLResponse, TIssueComment } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
 // plane web components
-import { ActivityFilterRoot } from "@/plane-web/components/issues/worklog/activity/filter-root";
 import { IssueActivityWorklogCreateButton } from "@/plane-web/components/issues/worklog/activity/worklog-create-button";
+import { ActivityCommentCompose } from "./activity-comment-compose";
 import { IssueActivityCommentRoot } from "./activity-comment-root";
 import { useWorkItemCommentOperations } from "./helper";
 import { ActivitySortRoot } from "./sort-root";
+import { ActivityViewTabs } from "./activity-view-tabs";
+import { DEFAULT_ACTIVITY_VIEW_TAB, EActivityViewTab } from "./activity-view-tabs.config";
 
 type TIssueActivity = {
   workspaceSlug: string;
@@ -40,15 +38,12 @@ export type TActivityOperations = {
 
 export const IssueActivity = observer(function IssueActivity(props: TIssueActivity) {
   const { workspaceSlug, projectId, issueId, disabled = false, isIntakeIssue = false } = props;
-  // i18n
   const { t } = useTranslation();
-  // hooks
-  const { setValue: setFilterValue, storedValue: selectedFilters } = useLocalStorage(
-    "issue_activity_filters",
-    defaultActivityFilters
+  const { setValue: setActiveTab, storedValue: activeTab } = useLocalStorage(
+    "issue_activity_view_tab",
+    DEFAULT_ACTIVITY_VIEW_TAB
   );
   const { setValue: setSortOrder, storedValue: sortOrder } = useLocalStorage("activity_sort_order", E_SORT_ORDER.ASC);
-  // store hooks
   const {
     issue: { getIssueById },
   } = useIssueDetail();
@@ -56,57 +51,38 @@ export const IssueActivity = observer(function IssueActivity(props: TIssueActivi
   const { getProjectRoleByWorkspaceSlugAndProjectId } = useUserPermissions();
   const { getProjectById } = useProject();
   const { data: currentUser } = useUser();
-  // derived values
   const issue = issueId ? getIssueById(issueId) : undefined;
   const currentUserProjectRole = getProjectRoleByWorkspaceSlugAndProjectId(workspaceSlug, projectId);
   const isAdmin = currentUserProjectRole === EUserPermissions.ADMIN;
   const isGuest = currentUserProjectRole === EUserPermissions.GUEST;
   const isAssigned = issue?.assignee_ids && currentUser?.id ? issue?.assignee_ids.includes(currentUser?.id) : false;
   const isWorklogButtonEnabled = !isIntakeIssue && !isGuest && (isAdmin || isAssigned);
-  // toggle filter
-  const toggleFilter = (filter: TActivityFilters) => {
-    if (!selectedFilters) return;
-    let _filters = [];
-    if (selectedFilters.includes(filter)) {
-      if (selectedFilters.length === 1) return selectedFilters; // Ensure at least one filter is applied
-      _filters = selectedFilters.filter((f) => f !== filter);
-    } else {
-      _filters = [...selectedFilters, filter];
-    }
 
-    setFilterValue(uniq(_filters));
-  };
+  const resolvedTab = (activeTab as EActivityViewTab) || DEFAULT_ACTIVITY_VIEW_TAB;
 
   const toggleSortOrder = () => {
     setSortOrder(sortOrder === E_SORT_ORDER.ASC ? E_SORT_ORDER.DESC : E_SORT_ORDER.ASC);
   };
 
-  // helper hooks
   const activityOperations = useWorkItemCommentOperations(workspaceSlug, projectId, issueId);
 
   const project = getProjectById(projectId);
   const { canCommentAdd } = useBoardIssueCapabilities(projectId, { readOnly: disabled });
-  const renderCommentCreationBox = useMemo(
-    () =>
-      canCommentAdd ? (
-        <CommentCreate
-          workspaceSlug={workspaceSlug}
-          entityId={issueId}
-          activityOperations={activityOperations}
-          showToolbarInitially
-          projectId={projectId}
-        />
-      ) : null,
-    [canCommentAdd, workspaceSlug, issueId, activityOperations, projectId]
+
+  const showCommentCompose = useMemo(
+    () => !disabled && canCommentAdd && resolvedTab === EActivityViewTab.COMMENTS,
+    [canCommentAdd, disabled, resolvedTab]
   );
+
   if (!project) return <></>;
 
   return (
-    <div className="space-y-3">
-      {/* header */}
-      <div className="flex items-center justify-between gap-2 border-b border-subtle pb-3">
-        <div className="tracking-wider text-12 font-semibold text-tertiary uppercase">{t("common.activity")}</div>
-        <div className="flex items-center gap-2">
+    <section className="space-y-4">
+      <h3 className="text-14 font-semibold text-primary">{t("common.activity")}</h3>
+
+      <div className="flex items-center justify-between gap-3">
+        <ActivityViewTabs activeTab={resolvedTab} onTabChange={setActiveTab} />
+        <div className="flex flex-shrink-0 items-center gap-1">
           {isWorklogButtonEnabled && (
             <IssueActivityWorklogCreateButton
               workspaceSlug={workspaceSlug}
@@ -116,35 +92,31 @@ export const IssueActivity = observer(function IssueActivity(props: TIssueActivi
             />
           )}
           <ActivitySortRoot sortOrder={sortOrder || E_SORT_ORDER.ASC} toggleSort={toggleSortOrder} />
-          <ActivityFilterRoot
-            selectedFilters={selectedFilters || defaultActivityFilters}
-            toggleFilter={toggleFilter}
-            isIntakeIssue={isIntakeIssue}
-            projectId={projectId}
-          />
         </div>
       </div>
 
-      {/* rendering activity */}
-      <div className="space-y-3">
-        <div className="min-h-[200px]">
-          <div className="space-y-3">
-            {!disabled && sortOrder === E_SORT_ORDER.DESC && renderCommentCreationBox}
-            <IssueActivityCommentRoot
-              projectId={projectId}
-              workspaceSlug={workspaceSlug}
-              isIntakeIssue={isIntakeIssue}
-              issueId={issueId}
-              selectedFilters={selectedFilters || defaultActivityFilters}
-              activityOperations={activityOperations}
-              showAccessSpecifier={!!project.anchor}
-              disabled={disabled}
-              sortOrder={sortOrder || E_SORT_ORDER.ASC}
-            />
-            {!disabled && sortOrder === E_SORT_ORDER.ASC && renderCommentCreationBox}
-          </div>
-        </div>
+      {showCommentCompose && (
+        <ActivityCommentCompose
+          workspaceSlug={workspaceSlug}
+          entityId={issueId}
+          projectId={projectId}
+          activityOperations={activityOperations}
+        />
+      )}
+
+      <div className="pt-1">
+        <IssueActivityCommentRoot
+          projectId={projectId}
+          workspaceSlug={workspaceSlug}
+          isIntakeIssue={isIntakeIssue}
+          issueId={issueId}
+          viewTab={resolvedTab}
+          activityOperations={activityOperations}
+          showAccessSpecifier={!!project.anchor}
+          disabled={disabled}
+          sortOrder={sortOrder || E_SORT_ORDER.ASC}
+        />
       </div>
-    </div>
+    </section>
   );
 });

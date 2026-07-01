@@ -1,6 +1,6 @@
 import { Combobox } from "@headlessui/react";
 import React, { useEffect, useRef } from "react";
-import { SearchIcon } from "@operis/propel/icons";
+import { SearchIcon } from "@operoz/propel/icons";
 // helpers
 import { cn } from "../../utils";
 

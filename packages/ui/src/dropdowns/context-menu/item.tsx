@@ -1,6 +1,6 @@
 import React, { useState, useRef, useContext } from "react";
 import { usePopper } from "react-popper";
-import { ChevronRightIcon } from "@operis/propel/icons";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 // helpers
 import { cn } from "../../utils";
 // types

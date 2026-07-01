@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import type { TNameDescriptionLoader } from "@operis/types";
-import { EFileAssetType, EIssueServiceType } from "@operis/types";
-import { getTextContent } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import type { TNameDescriptionLoader } from "@operoz/types";
+import { EFileAssetType, EIssueServiceType } from "@operoz/types";
+import { getTextContent } from "@operoz/utils";
 // components
 import { DescriptionVersionsRoot } from "@/components/core/description-versions";
 import { DescriptionInput } from "@/components/editor/rich-text/description-input";
@@ -203,15 +203,13 @@ export const IssueMainContent = observer(function IssueMainContent(props: Props)
       </section>
 
       {windowSize[0] < 768 && (
-        <section className="shadow-sm rounded-xl border border-subtle bg-layer-1 p-5">
-          <PeekOverviewProperties
-            workspaceSlug={workspaceSlug}
-            projectId={projectId}
-            issueId={issueId}
-            issueOperations={issueOperations}
-            disabled={!isEditable || isArchived}
-          />
-        </section>
+        <PeekOverviewProperties
+          workspaceSlug={workspaceSlug}
+          projectId={projectId}
+          issueId={issueId}
+          issueOperations={issueOperations}
+          disabled={!isEditable || isArchived}
+        />
       )}
 
       <section className="shadow-sm rounded-xl border border-subtle bg-layer-1 p-5">

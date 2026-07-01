@@ -1,9 +1,9 @@
 import { useEffect, useRef } from "react";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/propel/utils";
-import type { SingleOrArray, TFilterValue } from "@operis/types";
-import { hasValidValue } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/propel/utils";
+import type { SingleOrArray, TFilterValue } from "@operoz/types";
+import { hasValidValue } from "@operoz/utils";
 
 interface FilterItemContainerProps {
   children: React.ReactNode;

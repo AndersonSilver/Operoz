@@ -10,9 +10,9 @@ import type {
   TWorkItemFilterExpression,
   TWorkItemFilterExpressionData,
   TWorkItemFilterProperty,
-} from "@operis/types";
-import { LOGICAL_OPERATOR, MULTI_VALUE_OPERATORS, WORK_ITEM_FILTER_PROPERTY_KEYS } from "@operis/types";
-import { createConditionNode, createAndGroupNode, isAndGroupNode, isConditionNode } from "@operis/utils";
+} from "@operoz/types";
+import { LOGICAL_OPERATOR, MULTI_VALUE_OPERATORS, WORK_ITEM_FILTER_PROPERTY_KEYS } from "@operoz/types";
+import { createConditionNode, createAndGroupNode, isAndGroupNode, isConditionNode } from "@operoz/utils";
 // local imports
 import { FilterAdapter } from "../rich-filters/adapter";
 

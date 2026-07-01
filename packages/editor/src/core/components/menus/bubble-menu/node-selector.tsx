@@ -1,8 +1,8 @@
 import type { Editor } from "@tiptap/react";
 
-import { CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // components
 import type { EditorMenuItem } from "@/components/menus";
 import {

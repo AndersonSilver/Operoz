@@ -8,12 +8,12 @@ import {
   ListChecks,
   ScrollText,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IBoardStatusReport } from "@operis/types";
-import { Avatar } from "@operis/ui";
-import { cn, getFileURL, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IBoardStatusReport } from "@operoz/types";
+import { Avatar } from "@operoz/ui";
+import { cn, getFileURL, renderFormattedDate } from "@operoz/utils";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
 import {
   getReportProgressPct,

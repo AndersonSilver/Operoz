@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 // plane types
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { ILinkDetails, ModuleLink } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { ILinkDetails, ModuleLink } from "@operoz/types";
 // plane ui
-import { Input, ModalCore } from "@operis/ui";
+import { Input, ModalCore } from "@operoz/ui";
 
 type Props = {
   createLink: (formData: ModuleLink) => Promise<void>;

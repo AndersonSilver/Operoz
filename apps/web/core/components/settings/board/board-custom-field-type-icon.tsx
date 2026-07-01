@@ -1,5 +1,5 @@
-import type { TCustomFieldType } from "@operis/types";
-import { cn } from "@operis/ui";
+import type { TCustomFieldType } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 
 type Props = {

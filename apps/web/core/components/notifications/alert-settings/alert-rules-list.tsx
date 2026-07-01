@@ -1,33 +1,39 @@
 import { observer } from "mobx-react";
-import { Pencil, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TAlertChannel, TAlertRule, TAlertType } from "@operis/types";
-import { AlertModalCore, Badge, ToggleSwitch } from "@operis/ui";
-import { Button } from "@operis/propel/button";
-import { useProject } from "@/hooks/store/use-project";
+import { Plus } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TAlertChannel, TAlertRule } from "@operoz/types";
+import { AlertModalCore, ToggleSwitch, cn } from "@operoz/ui";
+import { Button } from "@operoz/propel/button";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { Loader } from "@operoz/ui";
 import { useAlertStore } from "@/hooks/store/notifications/use-alert";
+import { AlertRuleCard } from "./alert-rule-card";
 import { AlertRuleFormModal } from "./alert-rule-form";
-
-function alertTypeBadgeVariant(alertType: TAlertType): "neutral" | "warning" | "destructive" | "success" {
-  if (alertType.includes("overdue") || alertType.includes("breached")) return "destructive";
-  if (alertType.includes("approaching") || alertType.includes("sla")) return "warning";
-  if (alertType.includes("created") || alertType.includes("accepted")) return "success";
-  return "neutral";
-}
+import { DEFAULT_ALERT_RULES_FILTERS, filterAlertRules, hasActiveAlertRulesFilters } from "./alert-rules-filter";
+import { AlertRulesToolbar } from "./alert-rules-toolbar";
+import "../alerts-settings.css";
 
 export const AlertRulesList = observer(function AlertRulesList({ workspaceSlug }: { workspaceSlug: string }) {
   const { t } = useTranslation();
   const alertStore = useAlertStore();
-  const { getPartialProjectById } = useProject();
   const [editingRule, setEditingRule] = useState<TAlertRule | null>(null);
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [deletingRule, setDeletingRule] = useState<TAlertRule | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [filters, setFilters] = useState(DEFAULT_ALERT_RULES_FILTERS);
 
   useEffect(() => {
     void alertStore.fetchAlertRules(workspaceSlug);
   }, [alertStore, workspaceSlug]);
+
+  const labelForType = (type: string) => t(`alert.type.${type}` as "alert.type.issue_created");
+
+  const filteredRules = useMemo(
+    () => filterAlertRules(alertStore.rulesArray, filters, labelForType),
+    [alertStore.rulesArray, filters, t]
+  );
 
   const handleDelete = () => {
     if (!deletingRule) return;
@@ -55,62 +61,74 @@ export const AlertRulesList = observer(function AlertRulesList({ workspaceSlug }
   };
 
   if (alertStore.isLoadingRules) {
-    return <p className="text-13 text-tertiary">{t("common.loading")}</p>;
+    return (
+      <Loader className="alerts-settings-card-grid w-full">
+        <Loader.Item height="200px" />
+        <Loader.Item height="200px" />
+        <Loader.Item height="200px" />
+      </Loader>
+    );
   }
 
   if (alertStore.rulesArray.length === 0) {
     return (
-      <div className="rounded-md border border-subtle bg-layer-1 p-4">
-        <p className="text-13 text-secondary">{t("alert.rules.empty")}</p>
-      </div>
+      <>
+        <EmptyStateCompact
+          assetKey="settings"
+          title={t("alert.rules.empty")}
+          description={t("alert.rules.empty_hint")}
+          actions={[
+            {
+              label: t("alert.rules.create"),
+              onClick: () => setIsCreateOpen(true),
+            },
+          ]}
+        />
+        <AlertRuleFormModal
+          isOpen={isCreateOpen}
+          mode="create"
+          rule={null}
+          workspaceSlug={workspaceSlug}
+          onClose={() => setIsCreateOpen(false)}
+        />
+      </>
     );
   }
 
   return (
     <>
-      <div className="flex flex-col divide-y divide-subtle rounded-md border border-subtle bg-layer-1">
-        {alertStore.rulesArray.map((rule) => {
-          const project = rule.project ? getPartialProjectById(rule.project) : null;
-          return (
-            <div key={rule.id} className="flex items-center justify-between gap-3 p-4">
-              <button
-                type="button"
-                className="-m-1 min-w-0 flex-1 rounded-sm p-1 text-left hover:bg-layer-transparent-hover"
-                onClick={() => setEditingRule(rule)}
-              >
-                <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-13 font-medium text-primary">
-                    {rule.name || t(`alert.type.${rule.alert_type}` as "alert.type.issue_created")}
-                  </p>
-                  <Badge variant={alertTypeBadgeVariant(rule.alert_type)} size="sm" disabled>
-                    {t(`alert.type.${rule.alert_type}` as "alert.type.issue_created")}
-                  </Badge>
-                  {project && (
-                    <Badge variant="neutral" size="sm" disabled>
-                      {project.name}
-                    </Badge>
-                  )}
-                </div>
-                <p className="mt-0.5 text-11 text-tertiary">
-                  {(rule.channels ?? []).map((ch) => t(`alert.channel.${ch}` as "alert.channel.email")).join(" · ")}
-                </p>
-              </button>
-              <div className="flex shrink-0 items-center gap-2">
-                <Button variant="secondary" size="sm" onClick={() => setEditingRule(rule)}>
-                  <Pencil size={14} strokeWidth={1.75} />
-                </Button>
-                <Button variant="secondary" size="sm" onClick={() => setDeletingRule(rule)}>
-                  <Trash2 size={14} strokeWidth={1.75} />
-                </Button>
-                <ToggleSwitch
-                  value={rule.enabled}
-                  onChange={(enabled) => void alertStore.toggleAlertRule(workspaceSlug, rule.id, enabled)}
-                />
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <AlertRulesToolbar filters={filters} resultCount={filteredRules.length} onChange={setFilters} />
+
+      {filteredRules.length === 0 ? (
+        <EmptyStateCompact
+          assetKey="search"
+          title={t("alert.rules.filters.empty_search")}
+          description={t("alert.rules.filters.empty_search_hint")}
+          actions={
+            hasActiveAlertRulesFilters(filters)
+              ? [
+                  {
+                    label: t("alert.rules.filters.clear"),
+                    onClick: () => setFilters(DEFAULT_ALERT_RULES_FILTERS),
+                  },
+                ]
+              : undefined
+          }
+        />
+      ) : (
+        <div className="alerts-settings-card-grid">
+          <AlertRuleCreateCard onClick={() => setIsCreateOpen(true)} />
+          {filteredRules.map((rule) => (
+            <AlertRuleCard
+              key={rule.id}
+              rule={rule}
+              onEdit={() => setEditingRule(rule)}
+              onDelete={() => setDeletingRule(rule)}
+              onToggle={(enabled) => void alertStore.toggleAlertRule(workspaceSlug, rule.id, enabled)}
+            />
+          ))}
+        </div>
+      )}
 
       <AlertRuleFormModal
         isOpen={Boolean(editingRule)}
@@ -118,6 +136,14 @@ export const AlertRulesList = observer(function AlertRulesList({ workspaceSlug }
         rule={editingRule}
         workspaceSlug={workspaceSlug}
         onClose={() => setEditingRule(null)}
+      />
+
+      <AlertRuleFormModal
+        isOpen={isCreateOpen}
+        mode="create"
+        rule={null}
+        workspaceSlug={workspaceSlug}
+        onClose={() => setIsCreateOpen(false)}
       />
 
       <AlertModalCore
@@ -142,6 +168,29 @@ export const AlertRulesList = observer(function AlertRulesList({ workspaceSlug }
   );
 });
 
+function AlertRuleCreateCard({ onClick }: { onClick: () => void }) {
+  const { t } = useTranslation();
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group flex h-full min-h-[200px] w-full flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-subtle",
+        "bg-transparent px-5 py-8 text-center transition-all duration-150",
+        "hover:border-accent-subtle hover:bg-accent-subtle/10",
+        "focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
+      )}
+    >
+      <span className="grid size-11 place-items-center rounded-xl border border-subtle bg-layer-1 text-accent-primary transition-colors group-hover:border-accent-subtle group-hover:bg-accent-subtle/30">
+        <Plus className="size-5" strokeWidth={1.75} />
+      </span>
+      <span className="text-13 font-semibold text-primary">{t("alert.rules.create")}</span>
+      <span className="max-w-[12rem] text-11 leading-relaxed text-tertiary">{t("alert.rules.create_hint")}</span>
+    </button>
+  );
+}
+
 export const AlertRuleFormTrigger = observer(function AlertRuleFormTrigger({
   workspaceSlug,
 }: {
@@ -152,7 +201,7 @@ export const AlertRuleFormTrigger = observer(function AlertRuleFormTrigger({
 
   return (
     <>
-      <Button variant="primary" size="sm" onClick={() => setIsOpen(true)}>
+      <Button variant="primary" size="base" onClick={() => setIsOpen(true)}>
         {t("alert.rules.create")}
       </Button>
       <AlertRuleFormModal
@@ -176,8 +225,9 @@ export const ChannelToggle = observer(function ChannelToggle({
   onChange: (value: boolean) => void;
 }) {
   const { t } = useTranslation();
+
   return (
-    <label className="flex items-center justify-between gap-3 rounded-sm border border-subtle bg-surface-1 px-3 py-2">
+    <label className="flex items-center justify-between gap-3 rounded-lg border border-subtle bg-surface-1 px-3 py-2.5 transition-colors hover:bg-layer-1-hover">
       <span className="text-13 text-primary">{t(`alert.channel.${channel}` as "alert.channel.email")}</span>
       <ToggleSwitch value={enabled} onChange={onChange} />
     </label>

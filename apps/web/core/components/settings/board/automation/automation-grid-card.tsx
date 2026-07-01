@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Switch } from "@operis/propel/switch";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Switch } from "@operoz/propel/switch";
+import { cn } from "@operoz/ui";
 import "./automation-list.css";
 
 type Props = {
@@ -49,13 +49,7 @@ export function AutomationGridCard(props: Props) {
         className
       )}
     >
-      <span
-        className={cn(
-          "absolute inset-x-0 top-0 h-0.5",
-          isActive ? accentBarClass : "bg-subtle"
-        )}
-        aria-hidden
-      />
+      <span className={cn("absolute inset-x-0 top-0 h-0.5", isActive ? accentBarClass : "bg-subtle")} aria-hidden />
 
       <button
         type="button"
@@ -67,7 +61,7 @@ export function AutomationGridCard(props: Props) {
           {!badges && (
             <span
               className={cn(
-                "shrink-0 rounded-full px-2 py-0.5 text-10 font-semibold uppercase tracking-wide",
+                "shrink-0 rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
                 isActive ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
               )}
             >
@@ -78,11 +72,9 @@ export function AutomationGridCard(props: Props) {
           )}
         </div>
 
-        <h3 className="mt-3 line-clamp-2 text-14 font-semibold leading-snug text-primary">{title}</h3>
+        <h3 className="mt-3 line-clamp-2 text-14 leading-snug font-semibold text-primary">{title}</h3>
 
-        {description && (
-          <div className="mt-1 line-clamp-2 text-13 leading-relaxed text-tertiary">{description}</div>
-        )}
+        {description && <div className="mt-1 line-clamp-2 text-13 leading-relaxed text-tertiary">{description}</div>}
 
         {visual}
 

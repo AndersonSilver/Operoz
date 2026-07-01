@@ -1,8 +1,8 @@
 import { useMemo, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Input, Loader, cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Input, Loader, cn } from "@operoz/ui";
 import { ASSET_THEME, type AutomationAssetTheme } from "./automation-asset-theme";
 import { AutomationCardMeta } from "./automation-card-meta";
 import { AutomationCreateCard } from "./automation-create-card";
@@ -126,7 +126,7 @@ export function BoardAutomationAssetsList(props: Props) {
               <span className="rounded-full bg-layer-2 px-2 py-0.5 text-11 text-tertiary">{items.length}</span>
             </div>
             <div className="relative w-full sm:max-w-sm">
-              <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-placeholder" />
+              <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-placeholder" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -151,10 +151,8 @@ export function BoardAutomationAssetsList(props: Props) {
                   icon={
                     <span
                       className={cn(
-                        "grid size-10 place-items-center rounded-lg border border-subtle shadow-sm",
-                        item.is_active
-                          ? cn(colors.iconWrap, colors.iconColor)
-                          : "bg-layer-2 text-tertiary"
+                        "shadow-sm grid size-10 place-items-center rounded-lg border border-subtle",
+                        item.is_active ? cn(colors.iconWrap, colors.iconColor) : "bg-layer-2 text-tertiary"
                       )}
                     >
                       <Icon className="size-4" strokeWidth={1.75} />
@@ -165,12 +163,11 @@ export function BoardAutomationAssetsList(props: Props) {
                       <>
                         <span className="block truncate font-medium text-secondary">{item.subtitle}</span>
                         {item.description && (
-                          <span className="mt-0.5 block line-clamp-1 font-normal">{item.description}</span>
+                          <span className="font-normal mt-0.5 line-clamp-1 block">{item.description}</span>
                         )}
                       </>
                     ) : (
-                      item.description ||
-                      t("boards.settings.automation.assets_list.no_description")
+                      item.description || t("boards.settings.automation.assets_list.no_description")
                     )
                   }
                   badges={

@@ -1,4 +1,4 @@
-import type { TCustomFieldType } from "@operis/types";
+import type { TCustomFieldType } from "@operoz/types";
 
 /** Ordem e tipos do picker de criar campo no workspace. */
 export const JIRA_CUSTOM_FIELD_TYPES: TCustomFieldType[] = [

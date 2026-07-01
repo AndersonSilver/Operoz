@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 // plane constants
-import type { EIssueCommentAccessSpecifier } from "@operis/constants";
+import type { EIssueCommentAccessSpecifier } from "@operoz/constants";
 // plane imports
-import { LiteTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import type { MakeOptional } from "@operis/types";
-import { cn, isCommentEmpty } from "@operis/utils";
+import { LiteTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import type { MakeOptional } from "@operoz/types";
+import { cn, isCommentEmpty } from "@operoz/utils";
 // components
 import { EditorMentionsRoot } from "@/components/editor/embeds/mentions";
 import { IssueCommentToolbar } from "@/components/editor/lite-text/toolbar";

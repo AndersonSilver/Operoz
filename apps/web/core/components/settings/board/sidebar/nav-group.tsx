@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { ChevronDown } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SidebarTreeGuide } from "@/components/sidebar/sidebar-tree-guide";
 import {
   SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS,

@@ -1,4 +1,4 @@
-import { cn } from "@operis/ui";
+import { cn } from "@operoz/ui";
 
 type Props = {
   className?: string;

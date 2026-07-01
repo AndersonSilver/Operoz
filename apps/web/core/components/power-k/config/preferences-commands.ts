@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { useTheme } from "next-themes";
 import { Calendar, Earth, Languages, Palette } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import type { EStartOfTheWeek, TUserProfile } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import type { EStartOfTheWeek, TUserProfile } from "@operoz/types";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 // helpers
-import { SUPPORT_EMAIL } from "@operis/constants";
+import { SUPPORT_EMAIL } from "@operoz/constants";
 
 export enum EPageTypes {
   INIT = "INIT",

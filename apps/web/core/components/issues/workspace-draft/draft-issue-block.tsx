@@ -2,14 +2,14 @@ import React, { useRef, useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareStackIcon } from "lucide-react";
-import { CopyIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
+import { CopyIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
 // plane utils
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TWorkspaceDraftIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import type { TContextMenuItem } from "@operis/ui";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TWorkspaceDraftIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import type { TContextMenuItem } from "@operoz/ui";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useProject } from "@/hooks/store/use-project";

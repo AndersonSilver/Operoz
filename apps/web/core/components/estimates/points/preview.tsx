@@ -2,11 +2,11 @@ import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { GripVertical } from "lucide-react";
 // plane imports
-import { EEstimateSystem, estimateCount } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EditIcon, TrashIcon } from "@operis/propel/icons";
-import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operis/types";
-import { convertMinutesToHoursMinutesString } from "@operis/utils";
+import { EEstimateSystem, estimateCount } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EditIcon, TrashIcon } from "@operoz/propel/icons";
+import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operoz/types";
+import { convertMinutesToHoursMinutesString } from "@operoz/utils";
 // plane web imports
 import { EstimatePointDelete } from "@/plane-web/components/estimates";
 // local imports

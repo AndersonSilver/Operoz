@@ -1,7 +1,7 @@
-import { EInboxIssueStatus } from "@operis/types";
-import type { TSupportTicketSubmissionField } from "@operis/types";
-import type { TIssueActivity } from "@operis/types";
-import { renderFormattedDateTime } from "@operis/utils";
+import { EInboxIssueStatus } from "@operoz/types";
+import type { TSupportTicketSubmissionField } from "@operoz/types";
+import type { TIssueActivity } from "@operoz/types";
+import { renderFormattedDateTime } from "@operoz/utils";
 
 export type SupportTrackingEventKind =
   | "opened"

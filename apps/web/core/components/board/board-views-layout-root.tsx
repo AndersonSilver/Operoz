@@ -2,8 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useBoardLayout } from "@/components/board/board-layout-context";
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 import { KanbanLayoutLoader } from "@/components/ui/loader/layouts/kanban-layout-loader";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import { WorkspaceKanbanRoot } from "@/components/issues/issue-layouts/kanban/roots/workspace-root";
@@ -74,10 +74,7 @@ export const BoardViewsLayoutRoot = observer(function BoardViewsLayoutRoot() {
   const statesPending = groupByWorkspaceState && workspaceStates === undefined;
   const issueLoader = getIssueLoader();
   const isInitLoader = issueLoader === "init-loader";
-  const showLoader =
-    isBootstrapping ||
-    !filtersReady ||
-    (isInitLoader && (!groupedIssueIds || statesPending));
+  const showLoader = isBootstrapping || !filtersReady || (isInitLoader && (!groupedIssueIds || statesPending));
   if (!workspaceSlug || !boardSlug) return null;
 
   if (showLoader) {

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane types
-import type { IModule } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { IModule } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";
 import { PowerKModulesMenu } from "@/components/power-k/menus/modules";

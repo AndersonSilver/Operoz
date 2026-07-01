@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { AutomationCreateCard } from "@/components/settings/board/automation/automation-create-card";
 import type { IntakeFormTableRow } from "./intake-form-table";
 import { IntakeFormGridCard } from "./intake-form-grid-card";

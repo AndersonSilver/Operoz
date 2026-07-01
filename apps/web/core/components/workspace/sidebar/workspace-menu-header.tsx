@@ -4,13 +4,13 @@ import { useParams, useRouter } from "next/navigation";
 import { MoreHorizontal, ArchiveIcon, Settings } from "lucide-react";
 import { Disclosure } from "@headlessui/react";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import { EUserWorkspaceRoles } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import { EUserWorkspaceRoles } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // store hooks
 import { useUserPermissions } from "@/hooks/store/user";
 

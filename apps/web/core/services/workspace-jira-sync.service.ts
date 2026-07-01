@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import { APIService } from "@/services/api.service";
 
 export type TJiraOpsSyncStatus = "idle" | "running" | "completed" | "failed";

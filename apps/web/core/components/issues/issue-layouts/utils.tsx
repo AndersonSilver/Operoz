@@ -3,10 +3,10 @@ import { extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tre
 import { clone, isNil, pull, uniq, concat } from "lodash-es";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
 // plane types
-import { EIconSize, ISSUE_PRIORITIES, STATE_GROUPS } from "@operis/constants";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { ISvgIcons } from "@operis/propel/icons";
-import { CycleGroupIcon, CycleIcon, ModuleIcon, PriorityIcon, StateGroupIcon } from "@operis/propel/icons";
+import { EIconSize, ISSUE_PRIORITIES, STATE_GROUPS } from "@operoz/constants";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { CycleGroupIcon, CycleIcon, ModuleIcon, PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type {
   GroupByColumnTypes,
   IGroupByColumn,
@@ -20,11 +20,11 @@ import type {
   TGroupedIssues,
   IIssueDisplayFilterOptions,
   TGetColumns,
-} from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+} from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // plane ui
-import { Avatar } from "@operis/ui";
-import { renderFormattedDate, getFileURL } from "@operis/utils";
+import { Avatar } from "@operoz/ui";
+import { renderFormattedDate, getFileURL } from "@operoz/utils";
 // helpers
 // store
 import { store } from "@/lib/store-context";
@@ -679,37 +679,42 @@ export function getApproximateCardHeight(displayProperties: IIssueDisplayPropert
  * @returns
  */
 // Gantt bar styling uses workflow state color with a readable tinted fill.
-const GANTT_BAR_FALLBACK_COLOR = "#6366F1";
+import { GANTT_BAR_FALLBACK_COLOR } from "@/components/gantt-chart/helpers/gantt-bar-color";
+
+export { GANTT_BAR_FALLBACK_COLOR };
 
 export const getBlockViewDetails = (
   block: { start_date: string | undefined | null; target_date: string | undefined | null } | undefined | null,
-  backgroundColor: string
+  backgroundColor: string,
+  t?: (key: string, params?: Record<string, unknown>) => string
 ) => {
   const isBlockVisibleOnChart = block?.start_date || block?.target_date;
   const isBlockComplete = block?.start_date && block?.target_date;
 
   const barColor = backgroundColor || GANTT_BAR_FALLBACK_COLOR;
 
+  const formatBarDate = (date: string) => renderFormattedDate(date, "dd MMM yyyy");
+
   let message;
   const blockStyle: CSSProperties = {
     backgroundColor: `${barColor}1F`,
     borderTop: `1px solid ${barColor}55`,
-    borderRight: `1px solid ${barColor}55`,
     borderBottom: `1px solid ${barColor}55`,
     borderLeft: `3px solid ${barColor}`,
+    borderRight: `3px solid ${barColor}`,
     boxShadow: `inset 0 1px 0 ${barColor}22`,
   };
 
   if (isBlockVisibleOnChart && !isBlockComplete) {
     if (block?.start_date) {
-      message = `From ${renderFormattedDate(block.start_date)}`;
-      blockStyle.maskImage = `linear-gradient(to right, black 55%, transparent 98%)`;
+      const date = formatBarDate(block.start_date) ?? "";
+      message = t ? t("issue.gantt.bar_from", { date }) : `From ${date}`;
     } else if (block?.target_date) {
-      message = `Till ${renderFormattedDate(block.target_date)}`;
-      blockStyle.maskImage = `linear-gradient(to left, black 55%, transparent 98%)`;
+      const date = formatBarDate(block.target_date) ?? "";
+      message = t ? t("issue.gantt.bar_until", { date }) : `Until ${date}`;
     }
   } else if (isBlockComplete) {
-    message = `${renderFormattedDate(block?.start_date)} – ${renderFormattedDate(block?.target_date)}`;
+    message = `${formatBarDate(block?.start_date)} – ${formatBarDate(block?.target_date)}`;
   }
 
   return {

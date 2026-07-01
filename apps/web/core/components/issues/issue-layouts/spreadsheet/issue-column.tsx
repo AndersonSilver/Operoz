@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { observer } from "mobx-react";
 // types
-import type { IIssueDisplayProperties, TIssue } from "@operis/types";
+import type { IIssueDisplayProperties, TIssue } from "@operoz/types";
 // components
 import { SPREADSHEET_COLUMNS } from "@/plane-web/components/issues/issue-layouts/utils";
 import { shouldRenderColumn } from "@/helpers/issue-filter.helper";

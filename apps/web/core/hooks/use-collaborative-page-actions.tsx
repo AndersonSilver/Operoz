@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback, useMemo } from "react";
-import type { TDocumentEventsServer } from "@operis/editor";
-import type { TDocumentEventsClient } from "@operis/editor/lib";
-import { DocumentCollaborativeEvents, getServerEventName } from "@operis/editor/lib";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import type { TDocumentEventsServer } from "@operoz/editor";
+import type { TDocumentEventsClient } from "@operoz/editor/lib";
+import { DocumentCollaborativeEvents, getServerEventName } from "@operoz/editor/lib";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

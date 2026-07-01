@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Building2, LifeBuoy, Users } from "lucide-react";
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EUserWorkspaceRoles } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EUserWorkspaceRoles } from "@operoz/types";
 import { Client360EmptyState } from "@/components/board/client-360/client-360-empty-state";
 import { resolveClient360EmptyScenario } from "@/components/board/client-360/client-360-empty-state.utils";
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 import {
   filterClient360Clients,
   searchClient360Clients,

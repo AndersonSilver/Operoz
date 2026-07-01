@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TBoardSupportQueue } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TBoardSupportQueue } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class ProjectSupportQueueService extends APIService {

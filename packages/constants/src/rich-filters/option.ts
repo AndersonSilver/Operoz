@@ -1,4 +1,4 @@
-import type { TExternalFilter } from "@operis/types";
+import type { TExternalFilter } from "@operoz/types";
 
 /**
  * Filter config options.

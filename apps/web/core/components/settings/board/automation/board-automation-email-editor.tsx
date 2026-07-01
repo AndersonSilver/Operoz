@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Mail, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Switch } from "@operis/propel/switch";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationEmailTemplate } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Switch } from "@operoz/propel/switch";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationEmailTemplate } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import { AutomationEmailPreview } from "./automation-email-preview";
 import { AutomationCodeField } from "./automation-code-field";

@@ -1,11 +1,10 @@
 import { useMemo } from "react";
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 
 export function useBoardGanttIssueTypeLogoMap(workspaceSlug?: string, boardSlug?: string) {
   const { getBoardIssueTypes } = useBoardIssueType();
-  const boardIssueTypes =
-    workspaceSlug && boardSlug ? getBoardIssueTypes(workspaceSlug, boardSlug) : [];
+  const boardIssueTypes = workspaceSlug && boardSlug ? getBoardIssueTypes(workspaceSlug, boardSlug) : [];
 
   return useMemo(() => {
     const map = new Map<string, TLogoProps>();

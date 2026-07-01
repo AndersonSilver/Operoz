@@ -2,11 +2,11 @@ import React from "react";
 import { Link } from "react-router";
 import { MoreHorizontal, Pin } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { SetAsDefaultIcon } from "@operis/propel/icons";
-import { Menu } from "@operis/propel/menu";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { SetAsDefaultIcon } from "@operoz/propel/icons";
+import { Menu } from "@operoz/propel/menu";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // local imports
 import type { TNavigationItem } from "./tab-navigation-root";
 import type { TTabPreferences } from "./tab-navigation-utils";

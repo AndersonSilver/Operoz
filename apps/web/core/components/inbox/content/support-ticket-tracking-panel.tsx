@@ -3,9 +3,9 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Check, ChevronDown, Circle, Clock, MessageSquare, Minus, UserRound } from "lucide-react";
-import { E_SORT_ORDER } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { E_SORT_ORDER } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { CommentCreate } from "@/components/comments/comment-create";
 import { useWorkItemCommentOperations } from "@/components/issues/issue-detail/issue-activity/helper";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

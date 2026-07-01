@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Operis — setup de desenvolvimento local
+# Operoz — setup de desenvolvimento local
 # Copia .env.example → .env, gera SECRET_KEY e instala dependências (pnpm).
 
 # Set colors for output messages
@@ -13,7 +13,7 @@ NC='\033[0m' # No Color
 
 # Print header
 echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
-echo -e "${BOLD}${BLUE}                         Operis — ambiente local                        ${NC}"
+echo -e "${BOLD}${BLUE}                         Operoz — ambiente local                        ${NC}"
 echo -e "${BOLD}${BLUE}━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━${NC}"
 echo -e "${BOLD}Setting up your development environment...${NC}\n"
 

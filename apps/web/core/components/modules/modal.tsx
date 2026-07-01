@@ -2,9 +2,9 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // Plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IModule } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IModule } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // components
 import { ModuleForm } from "@/components/modules";
 // hooks

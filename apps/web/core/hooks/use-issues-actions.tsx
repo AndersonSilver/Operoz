@@ -2,8 +2,8 @@
 import { useCallback, useMemo } from "react";
 // types
 import { useParams } from "next/navigation";
-import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
-import { EDraftIssuePaginationType } from "@operis/constants";
+import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
+import { EDraftIssuePaginationType } from "@operoz/constants";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
@@ -13,8 +13,8 @@ import type {
   TLoader,
   TProfileViews,
   TSupportedFilterForUpdate,
-} from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+} from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 import { useIssues } from "./store/use-issues";
 
 export interface IssueActions {

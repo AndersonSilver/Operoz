@@ -2,20 +2,18 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { PanelLeft } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { getAuxiliarySidebarStorageKey } from "@/components/settings/helper";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useAppSidebarPeek } from "@/hooks/use-app-sidebar-peek";
 import { useCollapsibleSidebarPeek } from "@/hooks/use-collapsible-sidebar-peek";
 import { isSidebarToggleVisible } from "@/plane-web/components/desktop";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export const AppSidebarToggleButton = observer(function AppSidebarToggleButton() {
   const pathname = usePathname();
   const { workspaceSlug } = useParams();
-  const auxiliaryStorageKey = pathname
-    ? getAuxiliarySidebarStorageKey(pathname, workspaceSlug?.toString())
-    : null;
+  const auxiliaryStorageKey = pathname ? getAuxiliarySidebarStorageKey(pathname, workspaceSlug?.toString()) : null;
 
   const {
     toggleSidebar,

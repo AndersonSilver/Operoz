@@ -1,6 +1,6 @@
 // plane imports
-import type { TWorkspaceSettingsItem, TWorkspaceSettingsTabs } from "@operis/types";
-import { EUserWorkspaceRoles } from "@operis/types";
+import type { TWorkspaceSettingsItem, TWorkspaceSettingsTabs } from "@operoz/types";
+import { EUserWorkspaceRoles } from "@operoz/types";
 
 export enum WORKSPACE_SETTINGS_CATEGORY {
   ADMINISTRATION = "administration",
@@ -78,6 +78,13 @@ export const WORKSPACE_SETTINGS: Record<TWorkspaceSettingsTabs, TWorkspaceSettin
     access: [EUserWorkspaceRoles.ADMIN],
     highlight: (pathname: string, baseUrl: string) => pathname === `${baseUrl}/settings/webhooks/`,
   },
+  workflow: {
+    key: "workflow",
+    i18n_label: "workspace_settings.settings.workflow.title",
+    href: `/settings/workflow`,
+    access: [EUserWorkspaceRoles.ADMIN],
+    highlight: (pathname: string, baseUrl: string) => new RegExp(`^${baseUrl}/settings/workflow/`).test(pathname),
+  },
 };
 
 export const WORKSPACE_SETTINGS_ACCESS = Object.fromEntries(
@@ -96,6 +103,7 @@ export const GROUPED_WORKSPACE_SETTINGS: Record<WORKSPACE_SETTINGS_CATEGORY, TWo
     WORKSPACE_SETTINGS["notifications"],
     WORKSPACE_SETTINGS["discord"],
     WORKSPACE_SETTINGS["jira"],
+    WORKSPACE_SETTINGS["workflow"],
   ],
   [WORKSPACE_SETTINGS_CATEGORY.DEVELOPER]: [WORKSPACE_SETTINGS["webhooks"]],
 };

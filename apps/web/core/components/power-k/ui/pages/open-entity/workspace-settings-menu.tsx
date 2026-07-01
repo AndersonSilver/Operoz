@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane types
-import { EUserPermissionsLevel, WORKSPACE_SETTINGS } from "@operis/constants";
+import { EUserPermissionsLevel, WORKSPACE_SETTINGS } from "@operoz/constants";
 // components
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import type { TPowerKContext } from "@/components/power-k/core/types";
 import { PowerKSettingsMenu } from "@/components/power-k/menus/settings";
 import { WORKSPACE_SETTINGS_ICONS } from "@/components/settings/workspace/sidebar/item-icon";

@@ -1,9 +1,9 @@
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "@operis/propel/button";
-import { Calendar } from "@operis/propel/calendar";
-import { CloseIcon } from "@operis/propel/icons";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { renderFormattedPayloadDate, renderFormattedDate, getDate } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { Calendar } from "@operoz/propel/calendar";
+import { CloseIcon } from "@operoz/propel/icons";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { renderFormattedPayloadDate, renderFormattedDate, getDate } from "@operoz/utils";
 import { DateFilterSelect } from "./date-filter-select";
 type Props = {
   title: string;

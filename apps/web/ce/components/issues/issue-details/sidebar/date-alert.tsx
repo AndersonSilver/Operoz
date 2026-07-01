@@ -1,7 +1,7 @@
 import { differenceInCalendarDays, parseISO } from "date-fns";
-import { useTranslation } from "@operis/i18n";
-import { Badge } from "@operis/ui";
-import type { TIssue } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Badge } from "@operoz/ui";
+import type { TIssue } from "@operoz/types";
 
 export type TDateAlertProps = {
   date: string;

@@ -1,6 +1,6 @@
 // plane imports
-import type { ICalendarDate, ICalendarPayload } from "@operis/types";
-import { EStartOfTheWeek } from "@operis/types";
+import type { ICalendarDate, ICalendarPayload } from "@operoz/types";
+import { EStartOfTheWeek } from "@operoz/types";
 // local imports
 import { getWeekNumberOfDate, renderFormattedPayloadDate } from "./datetime";
 

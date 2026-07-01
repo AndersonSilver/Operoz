@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { ConfigField, ConfigSelect, ConfigTextInput } from "./automation-config-primitives";
 import {
   SCHEDULE_TIMEZONE_OPTIONS,

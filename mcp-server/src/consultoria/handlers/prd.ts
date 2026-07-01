@@ -1,4 +1,4 @@
-import type { ConsultoriaApi } from "../operis-api.js";
+import type { ConsultoriaApi } from "../operoz-api.js";
 import { isPhaseCard, resolveIssuePhase } from "../api-utils.js";
 import { bulkCreateTasks } from "./tasks.js";
 import type { Phase } from "../phases.js";

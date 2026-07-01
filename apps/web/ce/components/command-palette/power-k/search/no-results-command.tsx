@@ -1,6 +1,6 @@
 import { Command } from "cmdk";
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon } from "@operoz/propel/icons";
 // plane imports
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";

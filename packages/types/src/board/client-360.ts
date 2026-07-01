@@ -51,7 +51,7 @@ export type TClient360Client = {
   logo_props: TLogoProps;
   /** Stakeholder do cliente (contacto no lado do cliente). */
   responsible_stakeholder: string;
-  /** Responsável Operis (líder do projeto). */
+  /** Responsável Operoz (líder do projeto). */
   project_lead: TClient360ProjectLead | null;
   issues: {
     total: number;

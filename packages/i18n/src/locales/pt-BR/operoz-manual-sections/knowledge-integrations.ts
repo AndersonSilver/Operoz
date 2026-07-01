@@ -435,7 +435,7 @@ export const operozManualKnowledgeIntegrations = {
       2: "No Cursor, abra Configurações → MCP e adicione servidor Operoz com URL e credenciais.",
       3: "Exemplo de configuração em .cursor/mcp.json: nome do servidor, URL base da instância, header Authorization.",
       4: "Reinicie o cliente de IA para carregar ferramentas MCP recém-configuradas.",
-      5: "Liste operações disponíveis com ferramenta de descoberta (ex.: operis_list_operations) no agente.",
+      5: "Liste operações disponíveis com ferramenta de descoberta (ex.: operoz_list_operations) no agente.",
       6: "Teste leitura segura: «Liste projetos do workspace», «Busque card OPZ-10» — valide permissões.",
       7: "Teste escrita com cuidado em ambiente de staging: criar card de teste, comentar, atualizar status.",
       8: "Configure regras no time: agentes não devem deletar dados nem alterar produção sem revisão humana.",
@@ -446,7 +446,7 @@ export const operozManualKnowledgeIntegrations = {
     tips: {
       0: "MCP herda RBAC do usuário — agente não vê mais do que você vê.",
       1: "Ideal para desenvolvimento assistido, triagem de backlog e scripts exploratórios — não para batch não supervisionado em produção.",
-      2: "operis_list_operations descobre domínios disponíveis sem adivinhar nomes de tools.",
+      2: "operoz_list_operations descobre domínios disponíveis sem adivinhar nomes de tools.",
       3: "Prefira leitura + proposta humana para writes destrutivos ou em massa.",
       4: "Documente setup MCP interno para o time de engenharia numa Page de developer experience.",
     },

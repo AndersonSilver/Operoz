@@ -1,6 +1,6 @@
 // plane imports
-import type { IProject, TOperatorConfigMap, TSupportedOperators } from "@operis/types";
-import { COMPARISON_OPERATOR, EQUALITY_OPERATOR } from "@operis/types";
+import type { IProject, TOperatorConfigMap, TSupportedOperators } from "@operoz/types";
+import { COMPARISON_OPERATOR, EQUALITY_OPERATOR } from "@operoz/types";
 // local imports
 import type { IFilterIconConfig, TCreateDateFilterParams, TCreateFilterConfigParams } from "../../../rich-filters";
 import {

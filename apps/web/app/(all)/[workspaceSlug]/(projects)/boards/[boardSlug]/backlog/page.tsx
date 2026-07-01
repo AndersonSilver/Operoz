@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardBacklogLayoutRoot } from "@/components/board/board-backlog-layout-root";
 import { PageHead } from "@/components/core/page-title";

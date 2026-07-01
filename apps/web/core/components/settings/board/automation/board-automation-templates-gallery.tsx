@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { LayoutTemplate, Mail, Clock, Inbox, AlertTriangle, UserX } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationRule, TAutomationTemplate } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { Loader, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationRule, TAutomationTemplate } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { Loader, TextArea } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import { AutomationDryRunTimeline } from "./automation-dry-run-timeline";
 

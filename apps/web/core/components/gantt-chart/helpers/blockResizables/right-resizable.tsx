@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane utils
-import { cn, renderFormattedDate } from "@operis/utils";
+import { cn, renderFormattedDate } from "@operoz/utils";
 //helpers
 //
 //hooks

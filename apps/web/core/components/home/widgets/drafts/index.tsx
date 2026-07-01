@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { THomeWidgetProps } from "@operoz/types";
 import { WorkspaceDraftService } from "@/services/issue/workspace_draft.service";
 import { WidgetSection } from "../shared/widget-section";
 

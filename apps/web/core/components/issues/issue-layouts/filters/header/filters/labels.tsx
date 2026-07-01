@@ -1,9 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
-import type { IIssueLabel } from "@operis/types";
+import type { IIssueLabel } from "@operoz/types";
 // components
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 
 // ui

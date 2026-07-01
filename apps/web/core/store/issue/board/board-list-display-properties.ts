@@ -1,6 +1,6 @@
-import { ISSUE_DISPLAY_PROPERTIES_KEYS, SPREADSHEET_PROPERTY_LIST } from "@operis/constants";
-import type { IIssueDisplayProperties } from "@operis/types";
-import { getComputedDisplayProperties } from "@operis/utils";
+import { ISSUE_DISPLAY_PROPERTIES_KEYS, SPREADSHEET_PROPERTY_LIST } from "@operoz/constants";
+import type { IIssueDisplayProperties } from "@operoz/types";
+import { getComputedDisplayProperties } from "@operoz/utils";
 
 /** Colunas visíveis por omissão na lista do board / módulo / projeto. */
 const BOARD_LIST_DEFAULT_VISIBLE: Partial<IIssueDisplayProperties> = {

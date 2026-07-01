@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { Settings } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
-import type { THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
+import type { THomeWidgetProps } from "@operoz/types";
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useHome } from "@/hooks/store/use-home";
 import { usePowerK } from "@/hooks/store/use-power-k";

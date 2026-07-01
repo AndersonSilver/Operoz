@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operis/types";
+import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operoz/types";
 // components
 import { StateItem } from "@/components/project-states";
 

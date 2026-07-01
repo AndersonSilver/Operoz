@@ -2,8 +2,8 @@ import { orderBy, isEmpty, update, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TNotificationTab } from "@operis/constants";
-import { ENotificationTab, ENotificationLoader, ENotificationQueryParamType } from "@operis/constants";
+import type { TNotificationTab } from "@operoz/constants";
+import { ENotificationTab, ENotificationLoader, ENotificationQueryParamType } from "@operoz/constants";
 import type {
   TNotification,
   TNotificationFilter,
@@ -11,9 +11,9 @@ import type {
   TNotificationPaginatedInfo,
   TNotificationPaginatedInfoQueryParams,
   TUnreadNotificationsCount,
-} from "@operis/types";
+} from "@operoz/types";
 // helpers
-import { convertToEpoch } from "@operis/utils";
+import { convertToEpoch } from "@operoz/utils";
 // services
 import workspaceNotificationService from "@/services/workspace-notification.service";
 // store

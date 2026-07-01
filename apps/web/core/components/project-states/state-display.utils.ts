@@ -1,5 +1,5 @@
-import { STATE_GROUPS } from "@operis/constants";
-import type { IState, TStateGroups } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { IState, TStateGroups } from "@operoz/types";
 
 type TranslateFn = (key: string) => string;
 
@@ -16,4 +16,25 @@ export function getLocalizedStateName(state: Pick<IState, "name" | "group">, t: 
   }
 
   return state.name;
+}
+
+/** Localizes workflow transition labels that embed default state names (e.g. "→ Done"). */
+export function getLocalizedTransitionName(
+  transitionName: string,
+  toStateName: string,
+  toStateGroup: TStateGroups,
+  t: TranslateFn
+): string {
+  const arrowMatch = transitionName.match(/^→\s*(.+)$/);
+  if (arrowMatch) {
+    const embeddedName = arrowMatch[1];
+    const localizedEmbedded = getLocalizedStateName({ name: embeddedName, group: toStateGroup }, t);
+    return `→ ${localizedEmbedded}`;
+  }
+
+  if (transitionName === toStateName) {
+    return getLocalizedStateName({ name: toStateName, group: toStateGroup }, t);
+  }
+
+  return getLocalizedStateName({ name: transitionName, group: toStateGroup }, t);
 }

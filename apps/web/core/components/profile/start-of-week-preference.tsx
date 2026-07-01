@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // plane imports
-import { START_OF_THE_WEEK_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EStartOfTheWeek } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
+import { START_OF_THE_WEEK_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EStartOfTheWeek } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
 // components
 import { SettingsControlItem } from "@/components/settings/control-item";
 // hooks

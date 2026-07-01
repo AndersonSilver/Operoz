@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 
 type Props = {

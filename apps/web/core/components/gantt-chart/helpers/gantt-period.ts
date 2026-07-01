@@ -1,4 +1,4 @@
-import type { ChartDataType, TGanttViews } from "@operis/types";
+import type { ChartDataType, TGanttViews } from "@operoz/types";
 
 export const shiftGanttFocusDate = (date: Date, view: TGanttViews, direction: -1 | 1): Date => {
   const next = new Date(date);

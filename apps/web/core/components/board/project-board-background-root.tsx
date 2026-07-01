@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import {
   BoardHubBackgroundContent,
   BoardHubBackgroundLayer,
@@ -17,9 +17,7 @@ import { useProject } from "@/hooks/store/use-project";
 
 /** Rotas de conteúdo do projeto que herdam o wallpaper do board. */
 export function isProjectBoardBackgroundPath(pathname: string) {
-  return /\/projects\/[^/]+\/(issues|modules|cycles|intake|views|pages|status-report|archives)(\/|$)/.test(
-    pathname
-  );
+  return /\/projects\/[^/]+\/(issues|modules|cycles|intake|views|pages|status-report|archives)(\/|$)/.test(pathname);
 }
 
 export function usesImmersiveWorkspaceChrome(pathname: string) {

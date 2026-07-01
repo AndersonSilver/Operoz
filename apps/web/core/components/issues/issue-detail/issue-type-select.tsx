@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TIssueOperations } from "./root";

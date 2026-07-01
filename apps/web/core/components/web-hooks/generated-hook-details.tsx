@@ -1,8 +1,8 @@
 // components
 // ui
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IWebhook } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IWebhook } from "@operoz/types";
 // types
 import { WebhookSecretKey } from "./form";
 

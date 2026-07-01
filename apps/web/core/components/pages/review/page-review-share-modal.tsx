@@ -1,23 +1,23 @@
 "use client";
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { Check, CheckCircle2, Link2, Loader2, Mail, MailPlus, RefreshCw, RotateCw, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Badge } from "@operis/propel/badge";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Input } from "@operis/propel/input";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Badge } from "@operoz/propel/badge";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Input } from "@operoz/propel/input";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import {
   calculateTimeAgo,
   copyTextToClipboard,
   generateRandomColor,
   hslToHex,
   renderFormattedDate,
-} from "@operis/utils";
+} from "@operoz/utils";
 import type { TPrdReviewInvite } from "@/services/guest-prd-review.service";
 import { ProjectPageService } from "@/services/page/project-page.service";
 

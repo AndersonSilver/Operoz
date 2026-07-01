@@ -1,7 +1,7 @@
 import { useCallback } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TClient360Client } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TClient360Client } from "@operoz/types";
 import { downloadClient360Csv, type Client360CsvExportMode } from "@/components/board/client-360/client-360-csv-export";
 import type { Client360TableColumnConfig } from "@/components/board/client-360/client-360-table-columns";
 

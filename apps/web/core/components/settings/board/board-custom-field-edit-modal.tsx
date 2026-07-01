@@ -1,17 +1,14 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import type { IBoardCustomField, TWorkspaceCustomFieldUpdateData } from "@operis/types";
-import { EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import type { IBoardCustomField, TWorkspaceCustomFieldUpdateData } from "@operoz/types";
+import { EModalPosition, EModalWidth, Input, ModalCore, TextArea } from "@operoz/ui";
 import { fieldTypeNeedsOptions } from "@/constants/board-custom-field-types";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
-import {
-  BoardCustomFieldOptionsEditor,
-  getTrimmedFieldOptions,
-} from "./board-custom-field-options-editor";
+import { BoardCustomFieldOptionsEditor, getTrimmedFieldOptions } from "./board-custom-field-options-editor";
 
 type Props = {
   workspaceSlug: string;

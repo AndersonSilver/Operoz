@@ -1,5 +1,5 @@
 {
-  "name": "@operis/i18n",
+  "name": "@operoz/i18n",
   "version": "1.3.1",
   "private": true,
   "description": "I18n shared across multiple apps internally",
@@ -23,7 +23,7 @@
     "clean": "rm -rf .turbo && rm -rf .next && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
-    "@operis/utils": "workspace:*",
+    "@operoz/utils": "workspace:*",
     "intl-messageformat": "^10.7.11",
     "lodash-es": "catalog:",
     "mobx": "catalog:",
@@ -31,7 +31,7 @@
     "react": "catalog:"
   },
   "devDependencies": {
-    "@operis/typescript-config": "workspace:*",
+    "@operoz/typescript-config": "workspace:*",
     "@types/lodash-es": "catalog:",
     "@types/node": "catalog:",
     "@types/react": "catalog:",

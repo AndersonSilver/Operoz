@@ -2,23 +2,24 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Search, ChevronDown, Check, X, ListFilterPlus } from "lucide-react";
-import type { IWorkItemFilterInstance } from "@operis/shared-state";
-import { cn } from "@operis/utils";
+import type { IWorkItemFilterInstance } from "@operoz/shared-state";
+import { cn } from "@operoz/utils";
 import useSWR from "swr";
-import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBlockUpdateData, IIssueDisplayFilterOptions, TIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
-import { renderFormattedPayloadDate } from "@operis/utils";
+import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBlockUpdateData, IIssueDisplayFilterOptions, TIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operoz/types";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardModuleGanttBlock } from "@/components/board/gantt/board-module-gantt-block";
 import { BoardProjectGanttBlock } from "@/components/board/gantt/board-project-gantt-block";
-import { TimeLineTypeContext } from "@/components/gantt-chart/contexts";
+import { GanttDependencyContext, TimeLineTypeContext } from "@/components/gantt-chart/contexts";
 import { GanttChartRoot } from "@/components/gantt-chart/root";
 import { BoardGroupedGanttSidebar } from "@/components/gantt-chart/sidebar/board-grouped/sidebar";
 import { useIssues } from "@/hooks/store/use-issues";
+import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useCanEditIssueOnProject, usePrefetchBoardProjectPermissions } from "@/hooks/use-board-issue-capabilities";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -70,6 +71,8 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const projectSearchInputRef = useRef<HTMLInputElement>(null);
   const { initGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.GROUPED);
+  const ganttStore = useTimeLineChart(GANTT_TIMELINE_TYPE.GROUPED);
+  const { createRelation, removeRelation } = useIssueDetail();
   const { collapsedProjectIds, collapsedModuleIds, setBoardModules, beginCollapseScope, registerCollapsedDefaults } =
     useBoardGroupedTimelineStore();
   const { allowPermissions } = useUserPermissions();
@@ -337,6 +340,71 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
     });
   };
 
+  const resolveIssueProjectId = useCallback(
+    (issueId: string) => {
+      const block = ganttStore.getBlockById(issueId);
+      return block?.meta?.project_id ?? getIssueById(issueId)?.project_id;
+    },
+    [ganttStore, getIssueById]
+  );
+
+  /**
+   * Finish-to-Start: predecessor must finish before successor can start.
+   */
+  const handleCreateDependency = useCallback(
+    async (predecessorBlockId: string, successorBlockId: string) => {
+      if (!workspaceSlug) return;
+
+      const issueProjectId = resolveIssueProjectId(successorBlockId);
+      if (!issueProjectId) return;
+
+      ganttStore.addDependency(successorBlockId, predecessorBlockId);
+
+      try {
+        await createRelation(workspaceSlug.toString(), issueProjectId, successorBlockId, "blocked_by", [
+          predecessorBlockId,
+        ]);
+      } catch {
+        ganttStore.removeDependency(successorBlockId, predecessorBlockId);
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: "Erro ao criar dependência. Tente novamente.",
+        });
+      }
+    },
+    [createRelation, ganttStore, resolveIssueProjectId, t, workspaceSlug]
+  );
+
+  const handleDeleteDependency = useCallback(
+    async (successorBlockId: string, predecessorBlockId: string) => {
+      if (!workspaceSlug) return;
+
+      const issueProjectId = resolveIssueProjectId(successorBlockId);
+      if (!issueProjectId) return;
+
+      ganttStore.removeDependency(successorBlockId, predecessorBlockId);
+
+      try {
+        await removeRelation(
+          workspaceSlug.toString(),
+          issueProjectId,
+          successorBlockId,
+          "blocked_by",
+          predecessorBlockId
+        );
+      } catch {
+        ganttStore.addDependency(successorBlockId, predecessorBlockId);
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: "Erro ao remover dependência. Tente novamente.",
+        });
+      }
+    },
+    [ganttStore, removeRelation, resolveIssueProjectId, t, workspaceSlug]
+  );
+
   if (!board || appliedDisplayFilters?.layout !== EIssueLayoutTypes.GANTT) return null;
 
   return (
@@ -467,28 +535,35 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
           </div>
 
           <div className="min-h-0 flex-1">
-            <GanttChartRoot
-              border={false}
-              title={t("issue.label", { count: 2 })}
-              loaderTitle={t("issue.label", { count: 2 })}
-              blockIds={blockIds}
-              blockUpdateHandler={updateIssueBlockStructure}
-              blockToRender={blockToRender}
-              sidebarToRender={(sidebarProps) => <BoardGroupedGanttSidebar {...sidebarProps} showAllBlocks />}
-              enableBlockLeftResize={canEditIssue}
-              enableBlockRightResize={canEditIssue}
-              enableBlockMove={canEditIssue}
-              enableReorder={(blockId) => canEditIssue(blockId) && appliedDisplayFilters?.order_by === "sort_order"}
-              enableAddBlock={(blockId) => canEditIssue(blockId)}
-              enableSelection={(blockId) => isBulkOperationsEnabled && canEditIssue(blockId)}
-              quickAdd={quickAdd}
-              loadMoreBlocks={loadMoreIssues}
-              canLoadMoreBlocks={nextPageResults}
-              updateBlockDates={updateBlockDates}
-              showAllBlocks
-              showToday
-              enableDependency={(blockId) => canEditIssue(blockId)}
-            />
+            <GanttDependencyContext.Provider
+              value={{
+                onCreateDependency: handleCreateDependency,
+                onDeleteDependency: handleDeleteDependency,
+              }}
+            >
+              <GanttChartRoot
+                border={false}
+                title={t("issue.label", { count: 2 })}
+                loaderTitle={t("issue.label", { count: 2 })}
+                blockIds={blockIds}
+                blockUpdateHandler={updateIssueBlockStructure}
+                blockToRender={blockToRender}
+                sidebarToRender={(sidebarProps) => <BoardGroupedGanttSidebar {...sidebarProps} showAllBlocks />}
+                enableBlockLeftResize={canEditIssue}
+                enableBlockRightResize={canEditIssue}
+                enableBlockMove={canEditIssue}
+                enableReorder={(blockId) => canEditIssue(blockId) && appliedDisplayFilters?.order_by === "sort_order"}
+                enableAddBlock={(blockId) => canEditIssue(blockId)}
+                enableSelection={(blockId) => isBulkOperationsEnabled && canEditIssue(blockId)}
+                quickAdd={quickAdd}
+                loadMoreBlocks={loadMoreIssues}
+                canLoadMoreBlocks={nextPageResults}
+                updateBlockDates={updateBlockDates}
+                showAllBlocks
+                showToday
+                enableDependency={(blockId) => canEditIssue(blockId)}
+              />
+            </GanttDependencyContext.Provider>
           </div>
         </div>
       </TimeLineTypeContext.Provider>

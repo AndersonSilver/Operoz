@@ -1,8 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import {
-  formatAutomationCardTimestamp,
-  shouldShowAutomationUpdatedMeta,
-} from "./automation-meta-utils";
+import { useTranslation } from "@operoz/i18n";
+import { formatAutomationCardTimestamp, shouldShowAutomationUpdatedMeta } from "./automation-meta-utils";
 
 type Props = {
   createdAt?: string;
@@ -42,9 +39,7 @@ export function AutomationCardMeta(props: Props) {
 
   const createdLine = buildLine(t, "created", createdById, createdAt, resolveUser);
   const showUpdated = shouldShowAutomationUpdatedMeta(createdAt, updatedAt, createdById, updatedById);
-  const updatedLine = showUpdated
-    ? buildLine(t, "updated", updatedById, updatedAt, resolveUser)
-    : null;
+  const updatedLine = showUpdated ? buildLine(t, "updated", updatedById, updatedAt, resolveUser) : null;
 
   if (!createdLine && !updatedLine) return null;
 

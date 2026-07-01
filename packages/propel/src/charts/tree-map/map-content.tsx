@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 // plane imports
-import type { TBottomSectionConfig, TContentVisibility, TTopSectionConfig } from "@operis/types";
+import type { TBottomSectionConfig, TContentVisibility, TTopSectionConfig } from "@operoz/types";
 import { cn } from "../../utils/classname";
 
 const LAYOUT = {

@@ -1,4 +1,4 @@
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 import { getBoardIdentifier } from "./board-spaces-utils";
 
 export type BoardsSettingsStatusFilter = "all" | "active" | "archived";
@@ -16,10 +16,7 @@ export const DEFAULT_BOARDS_SETTINGS_FILTERS: BoardsSettingsFilters = {
   sort: "name",
 };
 
-export function filterBoardsSettings(
-  boards: IBoard[],
-  filters: BoardsSettingsFilters
-): IBoard[] {
+export function filterBoardsSettings(boards: IBoard[], filters: BoardsSettingsFilters): IBoard[] {
   let items = [...boards];
   const q = filters.query.trim().toLowerCase();
 
@@ -55,9 +52,5 @@ export function filterBoardsSettings(
 }
 
 export function hasActiveBoardsSettingsFilters(filters: BoardsSettingsFilters): boolean {
-  return (
-    filters.query.trim().length > 0 ||
-    filters.status !== "active" ||
-    filters.sort !== "name"
-  );
+  return filters.query.trim().length > 0 || filters.status !== "active" || filters.sort !== "name";
 }

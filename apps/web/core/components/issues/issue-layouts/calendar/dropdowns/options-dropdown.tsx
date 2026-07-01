@@ -7,12 +7,12 @@ import { Popover, Transition } from "@headlessui/react";
 // hooks
 // ui
 // icons
-import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
-import { EIssueFilterType } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CheckIcon, ChevronUpIcon } from "@operis/propel/icons";
-import type { TCalendarLayouts, TSupportedFilterForUpdate } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
+import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
+import { EIssueFilterType } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CheckIcon, ChevronUpIcon } from "@operoz/propel/icons";
+import type { TCalendarLayouts, TSupportedFilterForUpdate } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
 // types
 // constants
 import { CALENDAR_LAYOUTS } from "@/constants/calendar";

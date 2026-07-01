@@ -1,11 +1,11 @@
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 // plane imports
-import { VIEW_SORT_BY_OPTIONS, VIEW_SORTING_KEY_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { CheckIcon } from "@operis/propel/icons";
-import type { TViewFiltersSortBy, TViewFiltersSortKey } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { VIEW_SORT_BY_OPTIONS, VIEW_SORTING_KEY_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { CheckIcon } from "@operoz/propel/icons";
+import type { TViewFiltersSortBy, TViewFiltersSortKey } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 
 type Props = {
   onChange: (value: { key?: TViewFiltersSortKey; order?: TViewFiltersSortBy }) => void;

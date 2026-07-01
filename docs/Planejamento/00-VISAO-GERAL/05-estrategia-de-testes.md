@@ -22,7 +22,8 @@ Pirâmide de testes do programa. Cada feature lista os seus casos concretos no
 
 ## 2. Backend — pytest
 
-Setup já existente (`apps/api/operis/tests/conftest.py`):
+Setup já existente (`apps/api/operoz/tests/conftest.py`):
+
 - `api_client` (DRF `APIClient`), fixtures de `User`/`Workspace`/`Board`.
 - pgvector patched; embeddings OpenAI stubbed por defeito.
 
@@ -48,6 +49,7 @@ def test_worklog_tenant_isolation(api_client, member_user, other_workspace_issue
 ```
 
 Cobertura mínima por feature:
+
 - Caminho feliz (create/list/update/delete).
 - Permissão negada (guest / não-membro).
 - **Isolamento de tenant** (obrigatório para toda entidade nova).
@@ -81,15 +83,15 @@ test("regista horas numa issue", async ({ page }) => {
 
 ## 5. Testes específicos por tipo de feature
 
-| Feature | Foco de teste especial |
-| --- | --- |
-| OQL | Fuzz do parser; rejeição de campos não-whitelisted; sem SQL injection |
-| Workflow Engine | Transições inválidas bloqueadas; validadores; post-functions disparam |
-| Rule Builder | `flowToGraph`↔`graphToFlow` idempotente; compilação de grafo |
-| Time Tracking | Soma de worklogs; permissões edit_own vs edit_all |
-| Permission Scheme | Matriz de papéis × permissões; elevação negada |
-| SLA | Cálculo com business hours; pausa/retoma; escalonamento |
-| Dashboards | Render de cada gadget; partilha respeita RBAC |
+| Feature           | Foco de teste especial                                                |
+| ----------------- | --------------------------------------------------------------------- |
+| OQL               | Fuzz do parser; rejeição de campos não-whitelisted; sem SQL injection |
+| Workflow Engine   | Transições inválidas bloqueadas; validadores; post-functions disparam |
+| Rule Builder      | `flowToGraph`↔`graphToFlow` idempotente; compilação de grafo          |
+| Time Tracking     | Soma de worklogs; permissões edit_own vs edit_all                     |
+| Permission Scheme | Matriz de papéis × permissões; elevação negada                        |
+| SLA               | Cálculo com business hours; pausa/retoma; escalonamento               |
+| Dashboards        | Render de cada gadget; partilha respeita RBAC                         |
 
 ## 6. Gates de CI
 

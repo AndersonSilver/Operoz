@@ -13,7 +13,8 @@ export type TWorkspaceSettingsTabs =
   | "discord"
   | "jira"
   | "notifications"
-  | "webhooks";
+  | "webhooks"
+  | "workflow";
 export type TWorkspaceSettingsItem = {
   key: TWorkspaceSettingsTabs;
   i18n_label: string;

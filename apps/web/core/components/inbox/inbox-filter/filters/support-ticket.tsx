@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { EInboxIssueSource } from "@operis/types";
-import { useTranslation } from "@operis/i18n";
+import { EInboxIssueSource } from "@operoz/types";
+import { useTranslation } from "@operoz/i18n";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { getInboxSourceLabelKey } from "@/utils/support-ticket";

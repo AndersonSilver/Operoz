@@ -1,0 +1,59 @@
+---
+description: Padrões sênior para escrever e revisar testes
+globs: ["**/*.test.*","**/*.spec.*","**/__tests__/**","**/tests/**","**/e2e/**"]
+alwaysApply: false
+---
+
+# Testes — Padrões Sênior
+
+## Pirâmide de testes
+
+- Muitos testes unitários (rápidos, isolados) → alguns testes de integração
+  (componentes reais interagindo, ex. service + banco de teste) → poucos testes
+  end-to-end (fluxo completo pelo browser/API).
+- Não escreva E2E para o que um teste unitário já cobre com mais velocidade e clareza.
+
+## O que testar de verdade
+
+- Teste comportamento observável (input → output, efeito colateral esperado), não
+  detalhe de implementação interna. Se refatorar o código sem mudar o comportamento
+  quebra o teste, o teste está errado.
+- Priorize: regras de negócio, edge cases (vazio, nulo, limite, erro), caminhos de
+  erro — não só o caminho feliz.
+- Para frontend: teste o que o usuário vê e faz (`screen.getByRole`, eventos de
+  clique/digitação), não estado interno de componente ou detalhes de CSS.
+
+## Estrutura de um teste
+
+- Padrão AAA (Arrange, Act, Assert) ou Given/When/Then — um bloco lógico por parte,
+  sem misturar.
+- Um `it`/`test` testa uma coisa. Nome descreve o comportamento esperado, não a
+  implementação: `"retorna 404 quando usuário não existe"`, não `"testa getUser"`.
+- Sem lógica condicional (`if`/loop complexo) dentro do teste — se precisar, é sinal
+  de que deveriam ser vários testes parametrizados.
+
+## Isolamento e confiabilidade
+
+- Testes não devem depender de ordem de execução nem de estado deixado por outro
+  teste. Setup/teardown limpo em cada teste (ou por suíte, quando explícito).
+- Mock apenas fronteiras externas reais (rede, tempo, banco em teste unitário) — não
+  faça mock excessivo que testa o mock em vez do código.
+- Sem `sleep`/espera fixa para testes assíncronos — use espera baseada em condição
+  (`waitFor`, polling com timeout).
+- Testes determinísticos: sem dependência de data/hora real (congele o clock), sem
+  dependência de ordem de Set/Map não garantida, sem `Math.random()` sem seed.
+
+## Cobertura
+
+- Cobertura de código é um indicador, não uma meta. 100% de cobertura com asserts
+  fracos vale menos que 70% com asserts que realmente pegam regressão.
+- Todo bug corrigido ganha um teste de regressão que falha antes do fix e passa
+  depois.
+
+## Antes de finalizar
+
+- [ ] Teste falha se a lógica estiver errada (rode mentalmente o "mutation test": se
+      eu inverter um `if`, o teste pega?)
+- [ ] Casos de erro/edge cobertos, não só o happy path
+- [ ] Sem `sleep`, sem dependência de ordem, sem flakiness óbvia
+- [ ] Nome do teste explica o comportamento em uma frase

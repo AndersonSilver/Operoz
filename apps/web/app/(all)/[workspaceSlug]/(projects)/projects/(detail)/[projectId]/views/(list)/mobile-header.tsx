@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // icons
 import { ListFilter } from "lucide-react";
-import { ChevronDownIcon } from "@operis/propel/icons";
+import { ChevronDownIcon } from "@operoz/propel/icons";
 // components
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { ViewFiltersSelection } from "@/components/views/filters/filter-selection";
 import { ViewOrderByDropdown } from "@/components/views/filters/order-by";

@@ -1,6 +1,6 @@
 import Link from "next/link";
 // ui
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 // images
 import Image404 from "@/app/assets/404.svg?url";
 // types

@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 // plane imports
-import type { TAuthErrorInfo } from "@operis/constants";
-import { E_PASSWORD_STRENGTH, EErrorAlertType, EAuthErrorCodes } from "@operis/constants";
+import type { TAuthErrorInfo } from "@operoz/constants";
+import { E_PASSWORD_STRENGTH, EErrorAlertType, EAuthErrorCodes } from "@operoz/constants";
 
 /**
  * @description Password strength levels

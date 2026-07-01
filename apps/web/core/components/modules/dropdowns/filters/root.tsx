@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { TModuleStatus } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import type { TModuleStatus } from "@operoz/propel/icons";
 // plane imports
-import { CloseIcon, SearchIcon } from "@operis/propel/icons";
-import type { TModuleDisplayFilters, TModuleFilters } from "@operis/types";
+import { CloseIcon, SearchIcon } from "@operoz/propel/icons";
+import type { TModuleDisplayFilters, TModuleFilters } from "@operoz/types";
 // components
 import { FilterOption } from "@/components/issues/issue-layouts/filters";
 import { FilterLead, FilterMembers, FilterStartDate, FilterStatus, FilterTargetDate } from "@/components/modules";

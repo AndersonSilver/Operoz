@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // plane imports
-import { Header, EHeaderVariant } from "@operis/ui";
+import { Header, EHeaderVariant } from "@operoz/ui";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 // local imports
