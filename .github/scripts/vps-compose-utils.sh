@@ -70,6 +70,11 @@ operoz_compose_image_hub() {
   fi
 }
 
+operoz_legacy_operis_overlay() {
+  local repo_path="${1:?repo_path required}"
+  echo "${repo_path}/deployments/cli/community/docker-compose.legacy-operis.yml"
+}
+
 # Duplica tags myoperoz/* → myoperis/* quando o plane-app ainda referencia myoperis.
 operoz_tag_legacy_image_aliases() {
   local app_path="${1:?app_path required}"
@@ -87,18 +92,38 @@ operoz_tag_legacy_image_aliases() {
   done
 }
 
+# MINIO_HOST no operis.env — usado pelo proxy CE após rebuild com Caddyfile parametrizado.
+operoz_sync_legacy_minio_host_env() {
+  local app_path="${1:?app_path required}"
+  local env_file
+
+  operoz_compose_uses_legacy_operis_names "${app_path}" || return 0
+
+  env_file="$(operoz_app_env_file "${app_path}")"
+  if grep -qE '^MINIO_HOST=' "${env_file}"; then
+    sed -i 's|^MINIO_HOST=.*|MINIO_HOST=operis-minio|' "${env_file}"
+  else
+    echo "MINIO_HOST=operis-minio" >> "${env_file}"
+  fi
+  echo "==> MINIO_HOST=operis-minio (${env_file})"
+}
+
 # Executa docker compose com base + overlay assistente (se existir).
 operoz_dc() {
   local app_path="${1:?app_path required}"
   local repo_path="${2:?repo_path required}"
   shift 2
 
-  local base overlay env_file
+  local base overlay legacy env_file
   base="$(operoz_compose_base "${app_path}")"
   overlay="$(operoz_assistant_overlay "${repo_path}")"
+  legacy="$(operoz_legacy_operis_overlay "${repo_path}")"
   env_file="$(operoz_app_env_file "${app_path}")"
 
   local -a args=(-f "${base}")
+  if operoz_compose_uses_legacy_operis_names "${app_path}" && [[ -f "${legacy}" ]]; then
+    args+=(-f "${legacy}")
+  fi
   if operoz_should_use_assistant_overlay "${app_path}" "${repo_path}"; then
     args+=(-f "${overlay}")
   fi

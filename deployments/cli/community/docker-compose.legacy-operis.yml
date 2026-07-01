@@ -1,0 +1,29 @@
+# Overlay para plane-app instalado antes do rebrand (serviços operis-*).
+# Adiciona aliases DNS operoz-* para o proxy CE e overlays que referenciam operoz-minio etc.
+#
+# Uso automático: scripts .github/scripts/vps-compose-utils.sh (operoz_dc)
+
+services:
+  operis-db:
+    networks:
+      default:
+        aliases:
+          - operoz-db
+
+  operis-redis:
+    networks:
+      default:
+        aliases:
+          - operoz-redis
+
+  operis-mq:
+    networks:
+      default:
+        aliases:
+          - operoz-mq
+
+  operis-minio:
+    networks:
+      default:
+        aliases:
+          - operoz-minio
