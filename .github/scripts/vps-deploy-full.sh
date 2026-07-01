@@ -56,6 +56,8 @@ fi
 
 operoz_sync_web_url_env "${ENV_FILE}"
 
+operoz_sync_legacy_minio_host_env "${OPEROZ_APP_PATH}"
+
 echo "==> Migrações Django (nova imagem plane-backend)"
 cd "${OPEROZ_APP_PATH}"
 if operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then

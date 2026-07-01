@@ -39,11 +39,11 @@
 	}
 
 	handle /{$BUCKET_NAME}/* {
-		reverse_proxy operoz-minio:9000
+		reverse_proxy {$MINIO_HOST:operoz-minio}:9000
 	}
 
 	handle /{$BUCKET_NAME} {
-		reverse_proxy operoz-minio:9000
+		reverse_proxy {$MINIO_HOST:operoz-minio}:9000
 	}
 
 	handle {
