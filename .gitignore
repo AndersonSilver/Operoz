@@ -122,3 +122,6 @@ scripts/
 
 # MCP na VPS (segredos locais)
 deployments/mcp/operoz-mcp.env
+
+# Documentação interna (apenas local)
+docs/
