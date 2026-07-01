@@ -1,0 +1,417 @@
+/**
+ * Copyright (c) 2023-present Plane Software, Inc. and contributors
+ * SPDX-License-Identifier: AGPL-3.0-only
+ * See the LICENSE file for details.
+ */
+
+import React, { useCallback, useEffect, useRef, useState } from "react";
+import { observer } from "mobx-react";
+import type { Control } from "react-hook-form";
+import { Controller } from "react-hook-form";
+import { Sparkle } from "lucide-react";
+// plane imports
+import { ETabIndices } from "@plane/constants";
+import type { EditorRefApi } from "@plane/editor";
+import { useTranslation } from "@plane/i18n";
+import { TOAST_TYPE, setToast } from "@plane/propel/toast";
+import type { TIssue } from "@plane/types";
+import { EFileAssetType } from "@plane/types";
+import { Loader } from "@plane/ui";
+import { cn, getDescriptionPlaceholderI18n, getTabIndex, isEditorEmpty } from "@plane/utils";
+// components
+import { GptAssistantPanel, GptAssistantPopover } from "@/components/core/modals/gpt-assistant-popover";
+import { RichTextEditor } from "@/components/editor/rich-text";
+import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/components/issue-modal-editor-toolbar";
+import {
+  issueFormControlBorderClass,
+  issueFormControlFocusWithinClass,
+} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+// helpers
+// hooks
+import { useEditorAsset } from "@/hooks/store/use-editor-asset";
+import { useInstance } from "@/hooks/store/use-instance";
+import { useWorkspace } from "@/hooks/store/use-workspace";
+import useKeypress from "@/hooks/use-keypress";
+import { usePlatformOS } from "@/hooks/use-platform-os";
+// plane web services
+import { WorkspaceService } from "@/services/workspace.service";
+// services
+import { AIService } from "@/services/ai.service";
+const workspaceService = new WorkspaceService();
+const aiService = new AIService();
+
+type TIssueDescriptionEditorProps = {
+  control: Control<TIssue>;
+  isDraft: boolean;
+  issueName: string;
+  issueId: string | undefined;
+  descriptionHtmlData: string | undefined;
+  editorRef: React.MutableRefObject<EditorRefApi | null>;
+  submitBtnRef: React.MutableRefObject<HTMLButtonElement | null>;
+  gptAssistantModal: boolean;
+  workspaceSlug: string;
+  projectId: string | null;
+  handleFormChange: () => void;
+  handleDescriptionHTMLDataChange: (descriptionHtmlData: string) => void;
+  setGptAssistantModal: React.Dispatch<React.SetStateAction<boolean>>;
+  handleGptAssistantClose: () => void;
+  onAssetUpload: (assetId: string) => void;
+  onClose: () => void;
+  /** Barra superior estilo criar item (comandos, @, IA). */
+  variant?: "default" | "create-modal";
+};
+
+export const IssueDescriptionEditor = observer(function IssueDescriptionEditor(props: TIssueDescriptionEditorProps) {
+  const {
+    control,
+    isDraft,
+    issueName,
+    issueId,
+    descriptionHtmlData,
+    editorRef,
+    submitBtnRef,
+    gptAssistantModal,
+    workspaceSlug,
+    projectId,
+    handleFormChange,
+    handleDescriptionHTMLDataChange,
+    setGptAssistantModal,
+    handleGptAssistantClose,
+    onAssetUpload,
+    onClose,
+    variant = "default",
+  } = props;
+  // i18n
+  const { t } = useTranslation();
+  // states
+  const [iAmFeelingLucky, setIAmFeelingLucky] = useState(false);
+  const [isEditorReady, setIsEditorReady] = useState(false);
+  const [isAiPanelOpen, setIsAiPanelOpen] = useState(false);
+  const syncedDescriptionRef = useRef<string | undefined>(undefined);
+  // store hooks
+  const { getWorkspaceBySlug } = useWorkspace();
+  const workspaceId = getWorkspaceBySlug(workspaceSlug?.toString())?.id ?? "";
+  const { config } = useInstance();
+  const { uploadEditorAsset, duplicateEditorAsset } = useEditorAsset();
+  // platform
+  const { isMobile } = usePlatformOS();
+
+  const { getIndex } = getTabIndex(ETabIndices.ISSUE_FORM, isMobile);
+
+  useEffect(() => {
+    if (descriptionHtmlData === undefined) {
+      syncedDescriptionRef.current = undefined;
+      return;
+    }
+    if (syncedDescriptionRef.current === descriptionHtmlData) return;
+    syncedDescriptionRef.current = descriptionHtmlData;
+    handleDescriptionHTMLDataChange(descriptionHtmlData);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [descriptionHtmlData]);
+
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent) => {
+      if (editorRef.current?.isEditorReadyToDiscard()) {
+        onClose();
+      } else {
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: "Error!",
+          message: "Editor is still processing changes. Please wait before proceeding.",
+        });
+        event.preventDefault();
+      }
+    },
+    [editorRef, onClose]
+  );
+
+  useKeypress("Escape", handleKeyDown);
+
+  // handlers
+  const handleAiAssistance = async (response: string) => {
+    if (!workspaceSlug || !projectId) return;
+
+    editorRef.current?.setEditorValueAtCursorPosition(response);
+  };
+
+  const handleAutoGenerateDescription = async () => {
+    if (!workspaceSlug || !projectId) return;
+
+    setIAmFeelingLucky(true);
+
+    aiService
+      .createGptTask(workspaceSlug.toString(), {
+        prompt: issueName,
+        task: "Generate a proper description for this work item.",
+      })
+      .then((res) => {
+        if (res.response === "")
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: "Error!",
+            message:
+              "Work item title isn't informative enough to generate the description. Please try with a different title.",
+          });
+        else handleAiAssistance(res.response_html);
+      })
+      .catch((err) => {
+        const error = err?.data?.error;
+
+        if (err.status === 429)
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: "Error!",
+            message: error || "You have reached the maximum number of requests of 50 requests per month per user.",
+          });
+        else
+          setToast({
+            type: TOAST_TYPE.ERROR,
+            title: "Error!",
+            message: error || "Some error occurred. Please try again.",
+          });
+      })
+      .finally(() => setIAmFeelingLucky(false));
+  };
+
+  const isCreateModal = variant === "create-modal";
+
+  const handleToolbarEditorReady = useCallback(
+    (ready: boolean) => {
+      if (!ready) {
+        setIsEditorReady(false);
+        return;
+      }
+      // Aguarda o ref do editor estar disponível (onCreate dispara antes do imperative handle).
+      requestAnimationFrame(() => {
+        if (editorRef.current) setIsEditorReady(true);
+      });
+    },
+    [editorRef]
+  );
+
+  useEffect(() => {
+    if (!gptAssistantModal) setIsAiPanelOpen(false);
+  }, [gptAssistantModal]);
+
+  const handleToggleAiPanel = useCallback(
+    (e: React.MouseEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const next = !isAiPanelOpen;
+      setIsAiPanelOpen(next);
+      setGptAssistantModal(next);
+    },
+    [isAiPanelOpen, setGptAssistantModal]
+  );
+
+  const handleCloseAiPanel = useCallback(() => {
+    setIsAiPanelOpen(false);
+    setGptAssistantModal(false);
+    handleGptAssistantClose();
+  }, [handleGptAssistantClose, setGptAssistantModal]);
+
+  const aiActions = (
+    <>
+      {issueName && issueName.trim() !== "" && config?.has_llm_configured && (
+        <button
+          type="button"
+          className={`flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 text-secondary hover:bg-layer-1 ${
+            iAmFeelingLucky ? "cursor-wait" : ""
+          }`}
+          onClick={handleAutoGenerateDescription}
+          disabled={iAmFeelingLucky}
+          tabIndex={getIndex("feeling_lucky")}
+        >
+          {iAmFeelingLucky ? (
+            "…"
+          ) : (
+            <>
+              <Sparkle className="size-3.5" />
+              {t("issue_modal_ai_lucky")}
+            </>
+          )}
+        </button>
+      )}
+      {config?.has_llm_configured && projectId &&
+        (isCreateModal ? (
+          <button
+            type="button"
+            className={cn(
+              "flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 hover:bg-layer-1",
+              isAiPanelOpen ? "bg-layer-1 text-primary" : "text-secondary"
+            )}
+            onMouseDown={(e) => e.stopPropagation()}
+            onClick={handleToggleAiPanel}
+            tabIndex={-1}
+            aria-expanded={isAiPanelOpen}
+          >
+            <Sparkle className="size-3.5" />
+            {t("issue_modal_ai_assistant")}
+          </button>
+        ) : (
+          <GptAssistantPopover
+            isOpen={gptAssistantModal}
+            handleClose={() => {
+              setGptAssistantModal((prevData) => !prevData);
+              handleGptAssistantClose();
+            }}
+            onResponse={(response) => {
+              handleAiAssistance(response);
+            }}
+            placement="top-end"
+            button={
+              <button
+                type="button"
+                className="flex items-center gap-1 rounded-[3px] px-2 py-1 text-11 text-secondary hover:bg-layer-1"
+                onClick={() => setGptAssistantModal((prevData) => !prevData)}
+                tabIndex={-1}
+              >
+                <Sparkle className="size-3.5" />
+                {t("issue_modal_ai_assistant")}
+              </button>
+            }
+            workspaceId={workspaceId}
+            workspaceSlug={workspaceSlug}
+            projectId={projectId}
+          />
+        ))}
+    </>
+  );
+
+  return (
+    <div
+      className={cn(
+        cn(
+          "relative rounded-[3px] bg-layer-2 shadow-sm transition-[border-color,box-shadow]",
+          issueFormControlBorderClass,
+          issueFormControlFocusWithinClass
+        ),
+        isCreateModal && "min-h-[140px] overflow-visible",
+        !isCreateModal && "overflow-hidden"
+      )}
+    >
+      {isCreateModal && (
+        <div
+          className="relative z-0 overflow-visible border-b border-subtle bg-layer-1"
+          data-prevent-outside-click
+        >
+          <IssueModalEditorToolbar editorRef={editorRef} editorReady={isEditorReady} endSlot={aiActions} />
+          {isAiPanelOpen && projectId && (
+            <GptAssistantPanel
+              isOpen
+              variant="inline"
+              onClose={handleCloseAiPanel}
+              onResponse={handleAiAssistance}
+              workspaceId={workspaceId}
+              workspaceSlug={workspaceSlug}
+              projectId={projectId}
+            />
+          )}
+        </div>
+      )}
+      {descriptionHtmlData === undefined || !projectId ? (
+        <Loader className="max-h-64 min-h-[120px] space-y-2 overflow-hidden rounded-md border border-subtle p-3 py-2 pt-3">
+          <Loader.Item width="100%" height="26px" />
+          <div className="flex items-center gap-2">
+            <Loader.Item width="26px" height="26px" />
+            <Loader.Item width="400px" height="26px" />
+          </div>
+          <div className="flex items-center gap-2">
+            <Loader.Item width="26px" height="26px" />
+            <Loader.Item width="400px" height="26px" />
+          </div>
+          <Loader.Item width="80%" height="26px" />
+          <div className="flex items-center gap-2">
+            <Loader.Item width="50%" height="26px" />
+          </div>
+          <div className="border-0.5 absolute right-3.5 bottom-2 z-10 flex items-center gap-2">
+            <Loader.Item width="100px" height="26px" />
+            <Loader.Item width="50px" height="26px" />
+          </div>
+        </Loader>
+      ) : (
+        <div className={cn(isCreateModal && "overflow-hidden")}>
+          <Controller
+            name="description_html"
+            control={control}
+            render={({ field: { value, onChange } }) => (
+              <RichTextEditor
+                editable
+                id="issue-modal-editor"
+                initialValue={value ?? ""}
+                value={descriptionHtmlData}
+                bubbleMenuEnabled={!isCreateModal}
+                disabledExtensions={isCreateModal ? ["editorSideMenu"] : []}
+                workspaceSlug={workspaceSlug?.toString()}
+                workspaceId={workspaceId}
+                projectId={projectId}
+                onChange={(_description: object, description_html: string) => {
+                  onChange(description_html);
+                  handleFormChange();
+                }}
+                onEnterKeyPress={() => submitBtnRef?.current?.click()}
+                ref={editorRef}
+                tabIndex={getIndex("description_html")}
+                placeholder={(isFocused, description) =>
+                  isCreateModal
+                    ? isFocused || !isEditorEmpty(description)
+                      ? t("issue_modal_description_placeholder_active")
+                      : t("issue_modal_description_placeholder")
+                    : t(getDescriptionPlaceholderI18n(isFocused, description))
+                }
+                dragDropEnabled={!isCreateModal}
+                handleEditorReady={handleToolbarEditorReady}
+                searchMentionCallback={async (payload) =>
+                  await workspaceService.searchEntity(workspaceSlug?.toString() ?? "", {
+                    ...payload,
+                    project_id: projectId?.toString() ?? "",
+                  })
+                }
+                containerClassName={cn("min-h-[100px] pl-3 pt-2", isCreateModal && "pb-2")}
+                uploadFile={async (blockId, file) => {
+                  try {
+                    const { asset_id } = await uploadEditorAsset({
+                      blockId,
+                      data: {
+                        entity_identifier: issueId ?? "",
+                        entity_type: isDraft
+                          ? EFileAssetType.DRAFT_ISSUE_DESCRIPTION
+                          : EFileAssetType.ISSUE_DESCRIPTION,
+                      },
+                      file,
+                      projectId,
+                      workspaceSlug,
+                    });
+                    onAssetUpload(asset_id);
+                    return asset_id;
+                  } catch (error) {
+                    console.log("Error in uploading issue asset:", error);
+                    throw new Error("Asset upload failed. Please try again later.");
+                  }
+                }}
+                duplicateFile={async (assetId: string) => {
+                  try {
+                    const { asset_id } = await duplicateEditorAsset({
+                      assetId,
+                      entityId: issueId,
+                      entityType: isDraft ? EFileAssetType.DRAFT_ISSUE_DESCRIPTION : EFileAssetType.ISSUE_DESCRIPTION,
+                      projectId,
+                      workspaceSlug,
+                    });
+                    onAssetUpload(asset_id);
+                    return asset_id;
+                  } catch {
+                    throw new Error("Asset duplication failed. Please try again later.");
+                  }
+                }}
+              />
+            )}
+          />
+          {!isCreateModal && (
+            <div className="z-10 flex items-center justify-end gap-2 border-t border-subtle p-2">{aiActions}</div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+});

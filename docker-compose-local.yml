@@ -1,0 +1,190 @@
+services:
+  plane-redis:
+    image: valkey/valkey:7.2.11-alpine
+    restart: unless-stopped
+    networks:
+      - dev_env
+    volumes:
+      - redisdata:/data
+    ports:
+      # Use 16379 on host if another process already binds 6379 (containers still use 6379 internally).
+      - "16379:6379"
+
+  plane-mq:
+    image: rabbitmq:3.13.6-management-alpine
+    restart: unless-stopped
+    networks:
+      - dev_env
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    env_file:
+      - .env
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
+
+  plane-minio:
+    image: minio/minio
+    restart: unless-stopped
+    networks:
+      - dev_env
+    entrypoint: >
+      /bin/sh -c "
+      mkdir -p /export/${AWS_S3_BUCKET_NAME} &&
+      minio server /export --console-address ':9090' &
+      sleep 5 &&
+      mc alias set myminio http://localhost:9000 ${AWS_ACCESS_KEY_ID} ${AWS_SECRET_ACCESS_KEY} &&
+      mc mb myminio/${AWS_S3_BUCKET_NAME} -p || true
+      && tail -f /dev/null
+      "
+    volumes:
+      - uploads:/export
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    ports:
+      - "9000:9000"
+      - "9090:9090"
+
+  plane-db:
+    image: postgres:15.7-alpine
+    restart: unless-stopped
+    networks:
+      - dev_env
+    command: postgres -c 'max_connections=1000'
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+    environment:
+      PGDATA: /var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  api:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.dev
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: unless-stopped
+    # Evita "[Errno -2] Name does not resolve" ao contactar SMTP (ex.: Resend) no Docker Desktop Windows.
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - dev_env
+    volumes:
+      - ./apps/api:/code
+    command: ./bin/docker-entrypoint-api-local.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - plane-db
+      - plane-redis
+      - plane-mq
+      - plane-minio
+    environment:
+      # Prefer instance_configurations (God mode) over host env; Windows SKIP_ENV_VAR=0 breaks OAuth flags.
+      SKIP_ENV_VAR: "1"
+      # Inside Docker, localhost is not MinIO; boto3 must use the compose service name.
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      # Host browser uploads go directly to MinIO (no /uploads proxy on :8000 in local compose).
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
+    ports:
+      - "8000:8000"
+
+  worker:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.dev
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - dev_env
+    volumes:
+      - ./apps/api:/code
+    command: ./bin/docker-entrypoint-worker.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - api
+      - plane-db
+      - plane-redis
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
+
+  beat-worker:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.dev
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: unless-stopped
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - dev_env
+    volumes:
+      - ./apps/api:/code
+    command: ./bin/docker-entrypoint-beat.sh
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - api
+      - plane-db
+      - plane-redis
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
+
+  migrator:
+    build:
+      context: ./apps/api
+      dockerfile: Dockerfile.dev
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: "no"
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    networks:
+      - dev_env
+    volumes:
+      - ./apps/api:/code
+    command: ./bin/docker-entrypoint-migrator.sh --settings=plane.settings.local
+    env_file:
+      - ./apps/api/.env
+    depends_on:
+      - plane-db
+      - plane-redis
+      - plane-minio
+    environment:
+      SKIP_ENV_VAR: "1"
+      AWS_S3_ENDPOINT_URL: http://plane-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
+
+volumes:
+  redisdata:
+  uploads:
+  pgdata:
+  rabbitmq_data:
+
+networks:
+  dev_env:
+    driver: bridge
