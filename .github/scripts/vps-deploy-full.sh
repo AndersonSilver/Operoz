@@ -34,13 +34,20 @@ git reset --hard "origin/${GIT_BRANCH}"
 for entry in "${SERVICES[@]}"; do
   ghcr_name="${entry%%:*}"
   local_name="${entry##*:}"
+  image_name="${local_name#myoperoz/}"
   remote="${IMAGE_PREFIX}/${ghcr_name}:preview"
   echo "==> Pull ${remote}"
   docker pull "${remote}"
   docker tag "${remote}" "${local_name}:preview"
   docker tag "${remote}" "${local_name}:stable"
   docker tag "${remote}" "${local_name}:local"
+  operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "${image_name}"
 done
+
+legacy_hub="$(operoz_compose_image_hub "${OPEROZ_APP_PATH}")"
+if [[ "${legacy_hub}" == "myoperis" ]]; then
+  echo "==> Compose legado usa ${legacy_hub}/plane-* (aliases criados)"
+fi
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"
@@ -60,13 +67,12 @@ fi
 echo "==> Recriar stack completa (todas as imagens novas, inclui space/proxy/api)"
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never --force-recreate
 
-OVERLAY="$(operoz_assistant_overlay "${OPEROZ_REPO_PATH}")"
-if [[ -f "${OVERLAY}" ]]; then
+if operoz_should_use_assistant_overlay "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
   echo "==> Subir workers do assistente (overlay)"
   operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never \
     assistant-worker api-chat assistant-chat-worker
 else
-  echo "WARN: overlay assistente não encontrado em ${OVERLAY}"
+  echo "==> Workers assistente no compose base (sem overlay operoz-*)"
 fi
 
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps

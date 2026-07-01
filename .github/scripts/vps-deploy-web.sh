@@ -33,6 +33,7 @@ echo "==> Tags locais (compose plane-app)"
 docker tag "${WEB_IMAGE}" myoperoz/plane-frontend:preview
 docker tag "${WEB_IMAGE}" myoperoz/plane-frontend:stable
 docker tag "${WEB_IMAGE}" myoperoz/plane-frontend:local
+operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "plane-frontend"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"

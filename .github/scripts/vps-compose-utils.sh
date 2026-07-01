@@ -26,9 +26,65 @@ operoz_compose_base() {
   fi
 }
 
+# VPS instalada antes do rebrand: serviços operis-db, imagens myoperis/plane-*.
+operoz_compose_uses_legacy_operis_names() {
+  local app_path="${1:?app_path required}"
+  local base
+  base="$(operoz_compose_base "${app_path}")"
+  grep -qE '^  operis-db:' "${base}" 2>/dev/null
+}
+
+operoz_compose_has_assistant_in_base() {
+  local app_path="${1:?app_path required}"
+  local base
+  base="$(operoz_compose_base "${app_path}")"
+  grep -qE '^  assistant-worker:' "${base}" 2>/dev/null
+}
+
+# Overlay referencia operoz-db/mq — incompatível com compose legado operis-*.
+operoz_should_use_assistant_overlay() {
+  local app_path="${1:?app_path required}"
+  local repo_path="${2:?repo_path required}"
+  local overlay="${repo_path}/deployments/cli/community/docker-compose.assistant.yml"
+
+  [[ -f "${overlay}" ]] || return 1
+  operoz_compose_uses_legacy_operis_names "${app_path}" && return 1
+  operoz_compose_has_assistant_in_base "${app_path}" && return 1
+  return 0
+}
+
 operoz_assistant_overlay() {
   local repo_path="${1:?repo_path required}"
   echo "${repo_path}/deployments/cli/community/docker-compose.assistant.yml"
+}
+
+# Hub de imagem no docker-compose base (myoperis legado vs myoperoz).
+operoz_compose_image_hub() {
+  local app_path="${1:?app_path required}"
+  local base
+  base="$(operoz_compose_base "${app_path}")"
+  if grep -q 'myoperis/plane-' "${base}" 2>/dev/null; then
+    echo "myoperis"
+  else
+    echo "myoperoz"
+  fi
+}
+
+# Duplica tags myoperoz/* → myoperis/* quando o plane-app ainda referencia myoperis.
+operoz_tag_legacy_image_aliases() {
+  local app_path="${1:?app_path required}"
+  local image_name="${2:?image_name required}" # ex. plane-frontend
+
+  local legacy_hub
+  legacy_hub="$(operoz_compose_image_hub "${app_path}")"
+  if [[ "${legacy_hub}" == "myoperoz" ]]; then
+    return 0
+  fi
+
+  local tag
+  for tag in preview stable local; do
+    docker tag "myoperoz/${image_name}:${tag}" "${legacy_hub}/${image_name}:${tag}"
+  done
 }
 
 # Executa docker compose com base + overlay assistente (se existir).
@@ -43,7 +99,7 @@ operoz_dc() {
   env_file="$(operoz_app_env_file "${app_path}")"
 
   local -a args=(-f "${base}")
-  if [[ -f "${overlay}" ]]; then
+  if operoz_should_use_assistant_overlay "${app_path}" "${repo_path}"; then
     args+=(-f "${overlay}")
   fi
   args+=(--env-file "${env_file}")
