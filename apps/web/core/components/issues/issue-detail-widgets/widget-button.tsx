@@ -1,6 +1,6 @@
 import React from "react";
 // helpers
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 
 type Props = {
   icon: React.ReactNode;

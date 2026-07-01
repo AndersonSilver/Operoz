@@ -2,7 +2,7 @@
 
 import { useMemo } from "react";
 import { observer } from "mobx-react";
-import { findTotalDaysInRange } from "@operis/utils";
+import { findTotalDaysInRange } from "@operoz/utils";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 
 /** Linha vertical do dia atual (estilo Jira). */

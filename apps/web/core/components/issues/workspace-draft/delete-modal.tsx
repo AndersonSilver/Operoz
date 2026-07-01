@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 // types
-import { PROJECT_ERROR_MESSAGES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TWorkspaceDraftIssue } from "@operis/types";
+import { PROJECT_ERROR_MESSAGES, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TWorkspaceDraftIssue } from "@operoz/types";
 // ui
-import { AlertModalCore } from "@operis/ui";
+import { AlertModalCore } from "@operoz/ui";
 // constants
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";

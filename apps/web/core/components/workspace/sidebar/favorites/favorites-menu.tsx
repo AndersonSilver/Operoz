@@ -15,15 +15,15 @@ import {
   IS_FAVORITE_MENU_OPEN,
   IS_FAVORITES_LIST_EXPANDED,
   SIDEBAR_FAVORITES_COLLAPSED_COUNT,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronRightIcon } from "@operis/propel/icons";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 // ui
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IFavorite } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IFavorite } from "@operoz/types";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // hooks
@@ -35,7 +35,7 @@ import { FavoriteRoot } from "./favorite-items";
 import type { TargetData } from "./favorites.helpers";
 import { getInstructionFromPayload } from "./favorites.helpers";
 import { NewFavoriteFolder } from "./new-fav-folder";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export const SidebarFavoritesMenu = observer(function SidebarFavoritesMenu() {
   // states

@@ -1,10 +1,10 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 // plane imports
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import type { TModuleStatus } from "@operis/types";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import type { TModuleStatus } from "@operoz/types";
 // local imports
 import { PowerKModalCommandItem } from "../../../modal/command-item";
 

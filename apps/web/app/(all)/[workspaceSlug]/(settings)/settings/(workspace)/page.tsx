@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // components
 import { PageHead } from "@/components/core/page-title";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";

@@ -2,12 +2,12 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { ISearchIssueResponse } from "@operis/types";
-import { EIssuesStoreType, EUserProjectRoles } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { ISearchIssueResponse } from "@operoz/types";
+import { EIssuesStoreType, EUserProjectRoles } from "@operoz/types";
 // components
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 // hooks

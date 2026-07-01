@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // icons
-import { DATE_AFTER_FILTER_OPTIONS } from "@operis/constants";
-import { CloseIcon } from "@operis/propel/icons";
+import { DATE_AFTER_FILTER_OPTIONS } from "@operoz/constants";
+import { CloseIcon } from "@operoz/propel/icons";
 // helpers
-import { renderFormattedDate, capitalizeFirstLetter } from "@operis/utils";
+import { renderFormattedDate, capitalizeFirstLetter } from "@operoz/utils";
 // constants
 
 type Props = {

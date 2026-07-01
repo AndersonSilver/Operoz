@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { RefreshCw } from "lucide-react";
 // types
-import type { TNameDescriptionLoader } from "@operis/types";
+import type { TNameDescriptionLoader } from "@operoz/types";
 
 type Props = {
   isSubmitting: TNameDescriptionLoader;

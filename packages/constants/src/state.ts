@@ -1,4 +1,4 @@
-import type { TStateGroups } from "@operis/types";
+import type { TStateGroups } from "@operoz/types";
 
 export type TDraggableData = {
   groupKey: TStateGroups;

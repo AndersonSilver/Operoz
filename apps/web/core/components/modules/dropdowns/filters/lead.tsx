@@ -1,11 +1,11 @@
 import { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane ui
-import { Avatar, Loader } from "@operis/ui";
+import { Avatar, Loader } from "@operoz/ui";
 // components
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // helpers
 // hooks

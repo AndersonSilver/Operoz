@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { ExternalLink, FolderKanban, MoreHorizontal, Settings } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Avatar } from "@operis/propel/avatar";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { IconButton } from "@operis/propel/icon-button";
-import type { IBoard, IUserLite } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { calculateTimeAgo, cn, getFileURL } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Avatar } from "@operoz/propel/avatar";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { IconButton } from "@operoz/propel/icon-button";
+import type { IBoard, IUserLite } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { calculateTimeAgo, cn, getFileURL } from "@operoz/utils";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { getBoardIdentifier } from "./board-spaces-utils";
@@ -31,9 +31,7 @@ function getSpaceTypeLabel(t: (key: string) => string, spaceType?: string): stri
   return t("boards.spaces_type_team_managed");
 }
 
-export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoardsSettingsBoardCard(
-  props: Props
-) {
+export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoardsSettingsBoardCard(props: Props) {
   const { workspaceSlug, board } = props;
   const { t } = useTranslation();
   const router = useAppRouter();
@@ -57,9 +55,24 @@ export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoard
 
   return (
     <>
-      <EditBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
-      <ArchiveBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isArchiveOpen} onClose={() => setIsArchiveOpen(false)} />
-      <UnarchiveBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isUnarchiveOpen} onClose={() => setIsUnarchiveOpen(false)} />
+      <EditBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
+      <ArchiveBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isArchiveOpen}
+        onClose={() => setIsArchiveOpen(false)}
+      />
+      <UnarchiveBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isUnarchiveOpen}
+        onClose={() => setIsUnarchiveOpen(false)}
+      />
 
       <article
         className={cn(
@@ -74,7 +87,7 @@ export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoard
           aria-hidden
         />
 
-        <div className="absolute right-2 top-2 z-10" onClick={(e) => e.stopPropagation()}>
+        <div className="absolute top-2 right-2 z-10" onClick={(e) => e.stopPropagation()}>
           <CustomMenu
             menuItemsClassName="z-30"
             closeOnSelect
@@ -89,7 +102,9 @@ export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoard
             }
           >
             {isArchived ? (
-              <CustomMenu.MenuItem onClick={() => setIsUnarchiveOpen(true)}>{t("boards.unarchive")}</CustomMenu.MenuItem>
+              <CustomMenu.MenuItem onClick={() => setIsUnarchiveOpen(true)}>
+                {t("boards.unarchive")}
+              </CustomMenu.MenuItem>
             ) : (
               <>
                 <CustomMenu.MenuItem onClick={() => router.push(settingsPath)}>
@@ -114,28 +129,28 @@ export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoard
           onClick={openSettings}
         >
           <div className="flex items-start gap-3 pr-8">
-            <span className="grid size-12 shrink-0 place-items-center rounded-lg border border-subtle bg-surface-1 shadow-sm">
+            <span className="shadow-sm grid size-12 shrink-0 place-items-center rounded-lg border border-subtle bg-surface-1">
               <Logo logo={board.logo_props} size={26} />
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="line-clamp-2 text-15 font-semibold leading-snug tracking-tight text-primary">
+                <h3 className="text-15 line-clamp-2 leading-snug font-semibold tracking-tight text-primary">
                   {board.name}
                 </h3>
                 {isArchived && (
-                  <span className="shrink-0 rounded-full bg-layer-2 px-2 py-0.5 text-10 font-semibold uppercase tracking-wide text-tertiary">
+                  <span className="shrink-0 rounded-full bg-layer-2 px-2 py-0.5 text-10 font-semibold tracking-wide text-tertiary uppercase">
                     {t("boards.archived_badge")}
                   </span>
                 )}
               </div>
-              <p className="mt-1 font-mono text-11 text-secondary">{boardKey}</p>
+              <p className="font-mono mt-1 text-11 text-secondary">{boardKey}</p>
             </div>
           </div>
 
           {description ? (
             <p className="mt-3 line-clamp-2 text-12 leading-relaxed text-secondary">{description}</p>
           ) : (
-            <p className="mt-3 truncate font-mono text-11 text-placeholder">/boards/{board.slug}</p>
+            <p className="font-mono mt-3 truncate text-11 text-placeholder">/boards/{board.slug}</p>
           )}
 
           <div className="mt-3 flex flex-wrap items-center gap-x-2.5 gap-y-1 text-11 text-tertiary">
@@ -150,9 +165,7 @@ export const WorkspaceBoardsSettingsBoardCard = observer(function WorkspaceBoard
                 <span className="text-subtle" aria-hidden>
                   ·
                 </span>
-                <span>
-                  {t("workspace_settings.settings.boards.card.updated", { time: updatedLabel })}
-                </span>
+                <span>{t("workspace_settings.settings.boards.card.updated", { time: updatedLabel })}</span>
               </>
             ) : null}
           </div>

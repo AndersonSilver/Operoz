@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { mutate } from "swr";
 // plane imports
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { APITokenService } from "@operis/services";
-import type { IApiToken } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { renderFormattedDate, csvDownload } from "@operis/utils";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { APITokenService } from "@operoz/services";
+import type { IApiToken } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { renderFormattedDate, csvDownload } from "@operoz/utils";
 // constants
 import { API_TOKENS_LIST } from "@/constants/fetch-keys";
 // local imports

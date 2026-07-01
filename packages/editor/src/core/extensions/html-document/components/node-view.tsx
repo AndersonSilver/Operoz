@@ -15,7 +15,7 @@ import { ExternalLink, FileCode2, SlidersHorizontal } from "lucide-react";
 import type { ChangeEvent, CSSProperties, MouseEvent, PointerEvent } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // constants
 import { ACCEPTED_HTML_DOCUMENT_MIME_TYPES } from "@/constants/config";
 import { CORE_EXTENSIONS } from "@/constants/extension";
@@ -90,7 +90,7 @@ function HtmlDocumentEmbedLayoutPopover(props: HtmlDocumentEmbedLayoutPopoverPro
             ref={refs.setFloating}
             style={floatingStyles}
             className={cn(
-              "z-[10001] w-[min(100vw-2rem,18rem)] rounded-md border border-subtle-1 bg-layer-1 p-3 text-left shadow-custom-shadow-rg"
+              "shadow-custom-shadow-rg z-[10001] w-[min(100vw-2rem,18rem)] rounded-md border border-subtle-1 bg-layer-1 p-3 text-left"
             )}
             {...getFloatingProps({
               onMouseDown: stopPropagation,
@@ -102,11 +102,7 @@ function HtmlDocumentEmbedLayoutPopover(props: HtmlDocumentEmbedLayoutPopoverPro
                 <span id={layoutFieldId} className="text-11 text-secondary">
                   Área
                 </span>
-                <div
-                  className="flex flex-col gap-1"
-                  role="radiogroup"
-                  aria-labelledby={layoutFieldId}
-                >
+                <div className="flex flex-col gap-1" role="radiogroup" aria-labelledby={layoutFieldId}>
                   {HTML_DOCUMENT_FRAME_LAYOUT_OPTIONS.map((opt) => {
                     const selected = frameLayout === opt.value;
                     return (
@@ -257,7 +253,12 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
       const pos = getPos();
       const sel = editor.state.selection;
       const currentNode = editor.state.doc.nodeAt(sel.from);
-      if (currentNode && currentNode.type.name === node.type.name && currentNode.attrs.src === url && pos !== undefined) {
+      if (
+        currentNode &&
+        currentNode.type.name === node.type.name &&
+        currentNode.attrs.src === url &&
+        pos !== undefined
+      ) {
         const nextNode = editor.state.doc.nodeAt(pos + 1);
         if (nextNode && nextNode.type.name === CORE_EXTENSIONS.PARAGRAPH) {
           editor.commands.setTextSelection(pos + 1);
@@ -347,7 +348,7 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
       <div
         className={cn(
           "group/html-embed-card relative mx-0 my-3 w-full rounded-md border border-subtle-1 bg-layer-1",
-          selected && "ring-1 ring-subtle-2"
+          selected && "ring-subtle-2 ring-1"
         )}
       >
         <input
@@ -433,7 +434,7 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
             )}
             <div className="flex flex-col items-center justify-center gap-3 px-4 py-10">
               {showFailure ? (
-                <p className="text-13 text-danger">Não foi possível carregar o HTML.</p>
+                <p className="text-danger text-13">Não foi possível carregar o HTML.</p>
               ) : (
                 <>
                   <FileCode2 className="size-8 text-tertiary" />
@@ -443,7 +444,7 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
                   {!isUploading && editor.isEditable && (
                     <button
                       type="button"
-                      className="rounded-sm bg-primary px-3 py-1.5 text-12 font-medium text-white hover:opacity-90"
+                      className="bg-primary rounded-sm px-3 py-1.5 text-12 font-medium text-white hover:opacity-90"
                       onClick={() => fileInputRef.current?.click()}
                     >
                       Escolher arquivo

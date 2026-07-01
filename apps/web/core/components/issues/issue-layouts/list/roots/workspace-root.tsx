@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import type { GroupByColumnTypes, TGroupedIssues, TIssue, TIssueKanbanFilters } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import { EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import type { GroupByColumnTypes, TGroupedIssues, TIssue, TIssueKanbanFilters } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
 import { AllIssueQuickActions } from "@/components/issues/issue-layouts/quick-action-dropdowns";
 import { ListLayoutLoader } from "@/components/ui/loader/layouts/list-layout-loader";
 import { useIssues } from "@/hooks/store/use-issues";
@@ -49,8 +49,7 @@ export const WorkspaceListRoot = observer(function WorkspaceListRoot(props: Prop
   const orderBy = displayFilters?.order_by || undefined;
   const group_by = (displayFilters?.group_by || null) as GroupByColumnTypes | null;
   const showEmptyGroup = displayFilters?.show_empty_groups ?? false;
-  const collapsedGroups =
-    issueFilters?.kanbanFilters || ({ group_by: [], sub_group_by: [] } as TIssueKanbanFilters);
+  const collapsedGroups = issueFilters?.kanbanFilters || ({ group_by: [], sub_group_by: [] } as TIssueKanbanFilters);
 
   const canEditProperties = useCallback(
     (projectId: string | undefined) => {

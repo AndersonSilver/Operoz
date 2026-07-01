@@ -7,7 +7,7 @@ import type {
   IIssueDisplayProperties,
   IProjectCustomFieldLite,
   TIssue,
-} from "@operis/types";
+} from "@operoz/types";
 // components
 import { SpreadsheetIssueRowLoader } from "@/components/ui/loader/layouts/spreadsheet-layout-loader";
 // hooks

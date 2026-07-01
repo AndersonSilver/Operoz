@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // plane imports
-import { CYCLE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { CYCLE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 
 type Props = {
   handleRemove: (val: string) => void;

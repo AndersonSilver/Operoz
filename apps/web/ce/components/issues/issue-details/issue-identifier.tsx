@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssueIdentifierProps, TIssueTypeIdentifier, TIssueIdentifierSize } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssueIdentifierProps, TIssueTypeIdentifier, TIssueIdentifierSize } from "@operoz/types";
 // hooks
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

@@ -46,7 +46,7 @@ core/components/settings/board/automation/
 `automation.service.ts`: além do CRUD existente — `getCatalog`, `listTemplates`,
 `createFromTemplate`, `dryRun`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 Reusar `TAutomationGraph`/`TAutomationGraphNode`/`TAutomationGraphEdge` (já
 definidos em `board-automation.ts`). Adicionar `TCatalogBlock`,

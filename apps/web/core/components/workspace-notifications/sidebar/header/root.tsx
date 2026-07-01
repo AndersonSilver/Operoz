@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { InboxIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { InboxIcon } from "@operoz/propel/icons";
+import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 // local imports

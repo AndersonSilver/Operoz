@@ -1,6 +1,6 @@
 // plane imports
-import type { ETabIndices } from "@operis/constants";
-import { TAB_INDEX_MAP } from "@operis/constants";
+import type { ETabIndices } from "@operoz/constants";
+import { TAB_INDEX_MAP } from "@operoz/constants";
 
 export const getTabIndex = (type?: ETabIndices, isMobile: boolean = false) => {
   const getIndex = (key: string) =>

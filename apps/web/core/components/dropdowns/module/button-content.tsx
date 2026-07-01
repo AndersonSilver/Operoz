@@ -1,7 +1,7 @@
 // plane imports
-import { CloseIcon, ModuleIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { CloseIcon, ModuleIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // hooks
 import { useModule } from "@/hooks/store/use-module";
 import { usePlatformOS } from "@/hooks/use-platform-os";

@@ -1,4 +1,4 @@
-import type { TIssueActivity } from "@operis/types";
+import type { TIssueActivity } from "@operoz/types";
 
 export const getRelationActivityContent = (activity: TIssueActivity | undefined): string | undefined => {
   if (!activity) return;

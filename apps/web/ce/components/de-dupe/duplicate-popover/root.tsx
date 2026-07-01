@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 // types
-import type { TDeDupeIssue } from "@operis/types";
+import type { TDeDupeIssue } from "@operoz/types";
 import type { TIssueOperations } from "@/components/issues/issue-detail";
 
 type TDeDupeIssuePopoverRootProps = {

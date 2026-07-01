@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { CalendarClock, Sparkles } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TClient360Client, TClient360Summary } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TClient360Client, TClient360Summary } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { Client360PortfolioBriefDocument } from "@/components/board/client-360/client-360-portfolio-brief-document";
 import { WorkspaceService } from "@/services/workspace.service";

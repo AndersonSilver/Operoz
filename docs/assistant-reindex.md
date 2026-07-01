@@ -42,12 +42,13 @@ Além do comando manual, saves em **issues** e **pages** disparam reindexação 
 
 ## Troubleshooting
 
-| Sintoma               | Ação                                                  |
-| --------------------- | ----------------------------------------------------- |
-| `embedding_failed`    | Verificar `LLM_API_KEY` e `ASSISTANT_EMBEDDING_MODEL` |
-| RAG vazio no chat     | Rodar reindex; confirmar `ASSISTANT_RAG_ENABLED=1`    |
-| Chunks desatualizados | Reindexar entidade ou projeto afetado                 |
-| Lentidão              | Usar `--async` e escalar worker `assistant`           |
+| Sintoma                  | Ação                                                                                         |
+| ------------------------ | -------------------------------------------------------------------------------------------- |
+| `embedding_failed`       | Verificar `LLM_API_KEY`, `LLM_PROVIDER` (`openai` ou `gemini`) e `ASSISTANT_EMBEDDING_MODEL` |
+| `embedding_rate_limited` | Quota/429 do provider; worker re-tenta com backoff (`ASSISTANT_INDEX_RATE_LIMIT_*`)          |
+| RAG vazio no chat        | Rodar reindex; confirmar `ASSISTANT_RAG_ENABLED=1`                                           |
+| Chunks desatualizados    | Reindexar entidade ou projeto afetado                                                        |
+| Lentidão                 | Usar `--async` e escalar worker `assistant`                                                  |
 
 ## Variáveis relacionadas
 

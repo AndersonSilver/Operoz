@@ -4,10 +4,10 @@ import { draggable, dropTargetForElements } from "@atlaskit/pragmatic-drag-and-d
 import { attachClosestEdge, extractClosestEdge } from "@atlaskit/pragmatic-drag-and-drop-hitbox/closest-edge";
 import { observer } from "mobx-react";
 // Plane
-import type { TDraggableData } from "@operis/constants";
-import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operis/types";
-import { DropIndicator } from "@operis/ui";
-import { cn, getCurrentStateSequence } from "@operis/utils";
+import type { TDraggableData } from "@operoz/constants";
+import type { IState, TStateGroups, TStateOperationsCallbacks } from "@operoz/types";
+import { DropIndicator } from "@operoz/ui";
+import { cn, getCurrentStateSequence } from "@operoz/utils";
 // components
 import { StateItemTitle, StateUpdate } from "@/components/project-states";
 // helpers

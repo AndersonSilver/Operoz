@@ -1,8 +1,8 @@
 import { cloneDeep } from "lodash-es";
 import { action, makeObservable, observable, toJS } from "mobx";
 // plane imports
-import type { TAutoVisibilityOptions, TExpressionOptions } from "@operis/constants";
-import { DEFAULT_FILTER_EXPRESSION_OPTIONS } from "@operis/constants";
+import type { TAutoVisibilityOptions, TExpressionOptions } from "@operoz/constants";
+import { DEFAULT_FILTER_EXPRESSION_OPTIONS } from "@operoz/constants";
 import type {
   IFilterAdapter,
   TSupportedOperators,
@@ -13,9 +13,9 @@ import type {
   TExternalFilter,
   TLogicalOperator,
   TFilterConditionPayload,
-} from "@operis/types";
-import { LOGICAL_OPERATOR } from "@operis/types";
-import { addAndCondition, createConditionNode, updateNodeInExpression } from "@operis/utils";
+} from "@operoz/types";
+import { LOGICAL_OPERATOR } from "@operoz/types";
+import { addAndCondition, createConditionNode, updateNodeInExpression } from "@operoz/utils";
 // local imports
 import type { IFilterInstance } from "./filter";
 

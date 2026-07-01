@@ -4,9 +4,9 @@ import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { Info, SquareUser } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, EEstimateSystem } from "@operis/constants";
+import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, EEstimateSystem } from "@operoz/constants";
 // plane types
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import {
   PlusIcon,
   MembersPropertyIcon,
@@ -15,14 +15,14 @@ import {
   StartDatePropertyIcon,
   ChevronDownIcon,
   ChevronRightIcon,
-} from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { ILinkDetails, IModule, ModuleLink } from "@operis/types";
+} from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { ILinkDetails, IModule, ModuleLink } from "@operoz/types";
 // plane ui
-import { Loader, CustomSelect, TextArea } from "@operis/ui";
+import { Loader, CustomSelect, TextArea } from "@operoz/ui";
 // components
 // helpers
-import { getDate, renderFormattedPayloadDate } from "@operis/utils";
+import { getDate, renderFormattedPayloadDate } from "@operoz/utils";
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { CreateUpdateModuleLinkModal, ModuleAnalyticsProgress, ModuleLinksList } from "@/components/modules";

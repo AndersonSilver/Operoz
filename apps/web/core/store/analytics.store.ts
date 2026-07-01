@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
-import { ANALYTICS_DURATION_FILTER_OPTIONS } from "@operis/constants";
-import type { TAnalyticsTabsBase } from "@operis/types";
+import { ANALYTICS_DURATION_FILTER_OPTIONS } from "@operoz/constants";
+import type { TAnalyticsTabsBase } from "@operoz/types";
 
 type DurationType = (typeof ANALYTICS_DURATION_FILTER_OPTIONS)[number]["value"];
 

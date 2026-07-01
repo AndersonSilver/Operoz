@@ -1,6 +1,6 @@
 import type { onStatelessPayload } from "@hocuspocus/server";
-import { DocumentCollaborativeEvents } from "@operis/editor/lib";
-import type { TDocumentEventsServer } from "@operis/editor/lib";
+import { DocumentCollaborativeEvents } from "@operoz/editor/lib";
+import type { TDocumentEventsServer } from "@operoz/editor/lib";
 
 /**
  * Broadcast the client event to all the clients so that they can update their state

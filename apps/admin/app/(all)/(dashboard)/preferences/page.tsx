@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Languages, Palette } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { AdminPreferencesForm } from "./form";
 import type { Route } from "./+types/page";

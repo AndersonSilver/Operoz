@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 
 type Props = {
   subject: string;
@@ -12,7 +12,7 @@ export function AutomationEmailPreview(props: Props) {
   return (
     <div className="flex h-full min-h-[320px] flex-col overflow-hidden rounded-md border border-subtle bg-layer-1 shadow-raised-100">
       <div className="border-b border-subtle bg-layer-2 px-4 py-2.5">
-        <p className="text-10 font-medium uppercase tracking-wide text-tertiary">
+        <p className="text-10 font-medium tracking-wide text-tertiary uppercase">
           {t("boards.settings.automation.emails.preview")}
         </p>
         <p className="mt-1 truncate text-13 font-medium text-primary">{subject || "—"}</p>

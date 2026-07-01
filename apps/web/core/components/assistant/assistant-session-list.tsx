@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { MessageSquarePlus, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 import { useAssistant } from "@/hooks/use-assistant";
 
 type Props = {

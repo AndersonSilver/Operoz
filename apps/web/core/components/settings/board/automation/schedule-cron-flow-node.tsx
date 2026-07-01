@@ -2,7 +2,7 @@ import { memo, useMemo } from "react";
 import { Handle, Position, type NodeProps } from "@xyflow/react";
 import clsx from "clsx";
 import { Clock3 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import type { AutomationNodeData } from "./automation-utils";
 import { computeNextRun, describeSchedule, formatNextRun, normalizeScheduleConfig } from "./schedule-cron-utils";
 

@@ -3,15 +3,15 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { IconButton } from "@operis/propel/icon-button";
-import { EditIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IUserProfileProjectSegregation } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { cn, renderFormattedDate, getFileURL } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { IconButton } from "@operoz/propel/icon-button";
+import { EditIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IUserProfileProjectSegregation } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { cn, renderFormattedDate, getFileURL } from "@operoz/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 // hooks

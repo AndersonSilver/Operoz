@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { XCircle } from "lucide-react";
 // plane imports
-import { PROFILE_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IApiToken } from "@operis/types";
-import { renderFormattedDate, calculateTimeAgo, renderFormattedTime } from "@operis/utils";
+import { PROFILE_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IApiToken } from "@operoz/types";
+import { renderFormattedDate, calculateTimeAgo, renderFormattedTime } from "@operoz/utils";
 // components
 import { DeleteApiTokenModal } from "@/components/api-token/delete-token-modal";
 // hooks

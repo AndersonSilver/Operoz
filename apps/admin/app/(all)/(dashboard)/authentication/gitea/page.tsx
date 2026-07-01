@@ -2,8 +2,8 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane internal packages
-import { setPromiseToast } from "@operis/propel/toast";
-import { Loader, ToggleSwitch } from "@operis/ui";
+import { setPromiseToast } from "@operoz/propel/toast";
+import { Loader, ToggleSwitch } from "@operoz/ui";
 // assets
 import giteaLogo from "@/app/assets/logos/gitea-logo.svg?url";
 // components

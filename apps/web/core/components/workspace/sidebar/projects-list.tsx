@@ -6,14 +6,14 @@ import { useParams, usePathname } from "next/navigation";
 import { Ellipsis } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, PROJECT_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon, ChevronRightIcon } from "@operis/propel/icons";
-import { IconButton } from "@operis/propel/icon-button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Loader } from "@operis/ui";
-import { copyUrlToClipboard, cn, orderJoinedProjects } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel, PROJECT_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon, ChevronRightIcon } from "@operoz/propel/icons";
+import { IconButton } from "@operoz/propel/icon-button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Loader } from "@operoz/ui";
+import { copyUrlToClipboard, cn, orderJoinedProjects } from "@operoz/utils";
 // components
 import { CreateProjectModal } from "@/components/project/create-project-modal";
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
@@ -257,7 +257,9 @@ export const SidebarProjectsList = observer(function SidebarProjectsList() {
                           )}
                         >
                           <Ellipsis className="size-4 flex-shrink-0" />
-                          <span>{isExtendedProjectSidebarOpened ? t("sidebar_show_less") : t("sidebar_show_more")}</span>
+                          <span>
+                            {isExtendedProjectSidebarOpened ? t("sidebar_show_less") : t("sidebar_show_more")}
+                          </span>
                         </button>
                       </SidebarNavItem>
                     )}

@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRightCircle } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Tabs } from "@operis/propel/tabs";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useTranslation } from "@operoz/i18n";
+import { Tabs } from "@operoz/propel/tabs";
+import { Tooltip } from "@operoz/propel/tooltip";
 // hooks
 import { useQueryParams } from "@/hooks/use-query-params";
 // plane web components

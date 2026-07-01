@@ -1,9 +1,9 @@
 import React from "react";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import { ControlLink, Row } from "@operis/ui";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { ControlLink, Row } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
 

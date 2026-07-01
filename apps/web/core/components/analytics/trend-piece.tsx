@@ -1,7 +1,7 @@
 // plane package imports
 import React from "react";
 import { TrendingDown, TrendingUp } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // plane web components
 
 type Props = {

@@ -2,11 +2,11 @@ import React, { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-import { EUserPermissionsLevel, EUserPermissions } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissionsLevel, EUserPermissions } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 import { FileText, LifeBuoy } from "lucide-react";
-import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operis/propel/icons";
-import type { EUserProjectRoles } from "@operis/types";
+import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operoz/propel/icons";
+import type { EUserProjectRoles } from "@operoz/types";
 // plane ui
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";

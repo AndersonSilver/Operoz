@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { PlusIcon } from "@operis/propel/icons";
+import { PlusIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 

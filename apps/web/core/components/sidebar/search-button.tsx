@@ -1,5 +1,5 @@
-import { SearchIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { SearchIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 
 type Props = {
   isActive?: boolean;

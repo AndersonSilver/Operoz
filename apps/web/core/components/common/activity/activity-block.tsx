@@ -1,11 +1,11 @@
 import type { FC, ReactNode } from "react";
 import { Network } from "lucide-react";
 // types
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TWorkspaceBaseActivity } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TWorkspaceBaseActivity } from "@operoz/types";
 // ui
 // helpers
-import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operis/utils";
+import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // local components

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { Button } from "@operis/propel/button";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { EUserProjectRoles, EUserWorkspaceRoles } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { EUserProjectRoles, EUserWorkspaceRoles } from "@operoz/types";
 // plane ui
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 

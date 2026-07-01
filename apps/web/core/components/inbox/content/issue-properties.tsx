@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import {
   StatePropertyIcon,
   MembersPropertyIcon,
@@ -7,11 +7,11 @@ import {
   DueDatePropertyIcon,
   LabelPropertyIcon,
   DuplicatePropertyIcon,
-} from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TInboxDuplicateIssueDetails, TIssue } from "@operis/types";
-import { ControlLink } from "@operis/ui";
-import { getDate, renderFormattedPayloadDate, generateWorkItemLink } from "@operis/utils";
+} from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TInboxDuplicateIssueDetails, TIssue } from "@operoz/types";
+import { ControlLink } from "@operoz/ui";
+import { getDate, renderFormattedPayloadDate, generateWorkItemLink } from "@operoz/utils";
 // components
 import { DateDropdown } from "@/components/dropdowns/date";
 import { IntakeStateDropdown } from "@/components/dropdowns/intake-state/dropdown";

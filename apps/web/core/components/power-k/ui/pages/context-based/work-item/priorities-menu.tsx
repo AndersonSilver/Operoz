@@ -1,9 +1,9 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 // plane imports
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import { PriorityIcon } from "@operis/propel/icons";
-import type { TIssue, TIssuePriorities } from "@operis/types";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import { PriorityIcon } from "@operoz/propel/icons";
+import type { TIssue, TIssuePriorities } from "@operoz/types";
 // local imports
 import { PowerKModalCommandItem } from "../../../modal/command-item";
 

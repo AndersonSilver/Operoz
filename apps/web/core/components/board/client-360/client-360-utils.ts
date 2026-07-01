@@ -1,4 +1,4 @@
-import type { TClient360ReportCoverage } from "@operis/types";
+import type { TClient360ReportCoverage } from "@operoz/types";
 
 /** Evita polling de 5s do SWR em erro e revalidações desnecessárias no hub do board. */
 export const CLIENT_360_SWR_CONFIG: SWRConfiguration = {

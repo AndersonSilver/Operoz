@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 // plane imports
-import type { IWorkspaceMemberInvitation } from "@operis/types";
-import { EOnboardingSteps } from "@operis/types";
+import type { IWorkspaceMemberInvitation } from "@operoz/types";
+import { EOnboardingSteps } from "@operoz/types";
 // local components
 import { ProfileSetupStep } from "./profile";
 import { RoleSetupStep } from "./role";

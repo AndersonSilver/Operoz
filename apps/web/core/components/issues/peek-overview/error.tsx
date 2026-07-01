@@ -1,5 +1,5 @@
 import { MoveRight } from "lucide-react";
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 // assets
 import emptyIssue from "@/app/assets/empty-state/issue.svg?url";
 // components

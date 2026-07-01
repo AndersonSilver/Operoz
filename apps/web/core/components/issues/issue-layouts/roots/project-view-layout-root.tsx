@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane constants
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   BOARD_HUB_PROJECT_WORK_SURFACE_INNER,
   useBoardHubHasBackground,

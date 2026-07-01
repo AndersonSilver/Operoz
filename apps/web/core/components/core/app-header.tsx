@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { ExtendedAppHeader } from "@/plane-web/components/common/extended-app-header";
 

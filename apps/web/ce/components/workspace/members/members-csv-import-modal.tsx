@@ -1,18 +1,18 @@
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useDropzone } from "react-dropzone";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspaceBulkInviteFormData } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspaceBulkInviteFormData } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import {
   WORKSPACE_MEMBERS_CSV_TEMPLATE,
   csvDownload,
   parseWorkspaceMembersCsv,
   workspaceMembersCsvToInvitePayload,
   type TWorkspaceMemberCsvParseResult,
-} from "@operis/utils";
+} from "@operoz/utils";
 
 type Props = {
   isOpen: boolean;
@@ -38,22 +38,25 @@ export const MembersCsvImportModal = observer(function MembersCsvImportModal(pro
     onClose();
   };
 
-  const handleFile = useCallback((file: File) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const content = typeof reader.result === "string" ? reader.result : "";
-      setParseResult(parseWorkspaceMembersCsv(content));
-      setFileName(file.name);
-    };
-    reader.onerror = () => {
-      setToast({
-        type: TOAST_TYPE.ERROR,
-        title: t("toast.error"),
-        message: t("workspace_settings.settings.members.csv_import.errors.read_failed"),
-      });
-    };
-    reader.readAsText(file);
-  }, [t]);
+  const handleFile = useCallback(
+    (file: File) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const content = typeof reader.result === "string" ? reader.result : "";
+        setParseResult(parseWorkspaceMembersCsv(content));
+        setFileName(file.name);
+      };
+      reader.onerror = () => {
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: t("workspace_settings.settings.members.csv_import.errors.read_failed"),
+        });
+      };
+      reader.readAsText(file);
+    },
+    [t]
+  );
 
   const onDrop = useCallback(
     (acceptedFiles: File[]) => {

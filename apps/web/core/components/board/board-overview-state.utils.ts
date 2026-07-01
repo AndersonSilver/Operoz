@@ -1,5 +1,5 @@
-import { STATE_GROUPS } from "@operis/constants";
-import type { TBoardMetaStateDistribution, TStateGroups } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { TBoardMetaStateDistribution, TStateGroups } from "@operoz/types";
 
 const STATE_GROUP_ORDER: TStateGroups[] = ["backlog", "unstarted", "started", "completed", "cancelled"];
 

@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { getAnalyticsTabs } from "./tabs";
 
 export const useAnalyticsTabs = (_workspaceSlug: string) => {

@@ -2,10 +2,10 @@ import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { ListFilter } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { GroupByColumnTypes, TIssue, TIssueServiceType, TSubIssueOperations } from "@operis/types";
-import { EIssueServiceType, EIssuesStoreType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { GroupByColumnTypes, TIssue, TIssueServiceType, TSubIssueOperations } from "@operoz/types";
+import { EIssueServiceType, EIssuesStoreType } from "@operoz/types";
 // hooks
 import { SectionEmptyState } from "@/components/empty-state/section-empty-state-root";
 import { getGroupByColumns, isWorkspaceLevel } from "@/components/issues/issue-layouts/utils";

@@ -6,7 +6,7 @@ Meta: enfileirar **300 regras no mesmo minuto** com fila drenada em **&lt; 2 min
 
 ```bash
 docker compose -f docker-compose-local.yml exec api \
-  python -m pytest operis/tests/unit/automation/test_automation_scale.py -k benchmark -q
+  python -m pytest operoz/tests/unit/automation/test_automation_scale.py -k benchmark -q
 ```
 
 Valida P95 do path **outbox → schedule** &lt; 50 ms por regra (mock Celery, sem RabbitMQ).

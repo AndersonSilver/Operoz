@@ -4,11 +4,11 @@ import type { Control, UseFormSetValue } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { SlidersHorizontal } from "lucide-react";
 // plane package imports
-import { ANALYTICS_X_AXIS_VALUES, ANALYTICS_Y_AXIS_VALUES } from "@operis/constants";
-import { CalendarLayoutIcon } from "@operis/propel/icons";
-import type { IAnalyticsParams } from "@operis/types";
-import { ChartYAxisMetric } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ANALYTICS_X_AXIS_VALUES, ANALYTICS_Y_AXIS_VALUES } from "@operoz/constants";
+import { CalendarLayoutIcon } from "@operoz/propel/icons";
+import type { IAnalyticsParams } from "@operoz/types";
+import { ChartYAxisMetric } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // plane web components
 import { SelectXAxis } from "./select-x-axis";
 import { SelectYAxis } from "./select-y-axis";

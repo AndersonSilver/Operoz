@@ -4,11 +4,11 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import useSWR from "swr";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IProject, IUserLite, IWorkspace } from "@operis/types";
-import { Loader, ToggleSwitch } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IProject, IUserLite, IWorkspace } from "@operoz/types";
+import { Loader, ToggleSwitch } from "@operoz/ui";
 // constants
 import { PROJECT_DETAILS } from "@/constants/fetch-keys";
 // hooks

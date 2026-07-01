@@ -1,11 +1,11 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TModuleFilters } from "@operis/types";
-import { EUserProjectRoles } from "@operis/types";
-import { calculateTotalFilters, cn } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TModuleFilters } from "@operoz/types";
+import { EUserProjectRoles } from "@operoz/types";
+import { calculateTotalFilters, cn } from "@operoz/utils";
 import darkModulesAsset from "@/app/assets/empty-state/disabled-feature/modules-dark.webp?url";
 import lightModulesAsset from "@/app/assets/empty-state/disabled-feature/modules-light.webp?url";
 import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";

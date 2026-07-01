@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { AlertModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { AlertModalCore } from "@operoz/ui";
 
 type Props = {
   data: Partial<TIssue>;

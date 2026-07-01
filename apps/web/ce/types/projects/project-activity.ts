@@ -1,4 +1,4 @@
-import type { TProjectBaseActivity } from "@operis/types";
+import type { TProjectBaseActivity } from "@operoz/types";
 
 export type TProjectActivity = TProjectBaseActivity & {
   content: string;

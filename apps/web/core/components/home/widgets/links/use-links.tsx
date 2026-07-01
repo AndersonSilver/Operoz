@@ -1,7 +1,7 @@
 import { useMemo } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TProjectLink } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TProjectLink } from "@operoz/types";
 import { useHome } from "@/hooks/store/use-home";
 
 export type TLinkOperations = {

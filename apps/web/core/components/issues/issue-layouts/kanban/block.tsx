@@ -6,15 +6,15 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane helpers
 import { MoreHorizontal } from "lucide-react";
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // types
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssue, IIssueDisplayProperties, IIssueMap } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssue, IIssueDisplayProperties, IIssueMap } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // ui
-import { ControlLink, DropIndicator } from "@operis/ui";
-import { cn, generateWorkItemLink } from "@operis/utils";
+import { ControlLink, DropIndicator } from "@operoz/ui";
+import { cn, generateWorkItemLink } from "@operoz/utils";
 // components
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 import { HIGHLIGHT_CLASS, getIssueBlockId } from "@/components/issues/issue-layouts/utils";

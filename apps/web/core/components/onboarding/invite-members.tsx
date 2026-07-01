@@ -14,16 +14,16 @@ import { usePopper } from "react-popper";
 import { XCircle } from "lucide-react";
 import { Listbox } from "@headlessui/react";
 // plane imports
-import type { EUserPermissions } from "@operis/constants";
-import { ROLE, ROLE_DETAILS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import type { EUserPermissions } from "@operoz/constants";
+import { ROLE, ROLE_DETAILS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // types
-import { Button } from "@operis/propel/button";
-import { PlusIcon, CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUser, IWorkspace } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import { PlusIcon, CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUser, IWorkspace } from "@operoz/types";
 // ui
-import { Input, Spinner } from "@operis/ui";
+import { Input, Spinner } from "@operoz/ui";
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 // components

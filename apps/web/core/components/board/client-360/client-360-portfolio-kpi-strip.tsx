@@ -1,7 +1,7 @@
 import { AlertTriangle, Clock, FileWarning, Headphones, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Summary } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Summary } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360BentoMetric } from "@/components/board/client-360/client-360-bento";
 import type { Client360FilterKey } from "@/components/board/client-360/client-360-client-filters";
 

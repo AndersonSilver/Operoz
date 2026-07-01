@@ -1,4 +1,4 @@
-import type { TUnreadNotificationsCount } from "@operis/types";
+import type { TUnreadNotificationsCount } from "@operoz/types";
 
 export enum ENotificationTab {
   ALL = "all",

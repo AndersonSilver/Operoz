@@ -9,8 +9,8 @@ import type {
   TInboxIssueDeclineCategory,
   TInboxIssueSupportUpdatePayload,
   TSupportTicketMetadata,
-} from "@operis/types";
-import { EInboxIssueStatus } from "@operis/types";
+} from "@operoz/types";
+import { EInboxIssueStatus } from "@operoz/types";
 import { getPendingCountKey } from "@/utils/inbox-hub";
 // helpers
 // services

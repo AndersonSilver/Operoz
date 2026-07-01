@@ -1,10 +1,10 @@
 import { useCallback } from "react";
 import { PanelLeft } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, SearchIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, SearchIcon } from "@operoz/propel/icons";
 // plane imports
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { copyTextToClipboard } from "@operis/utils";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { copyTextToClipboard } from "@operoz/utils";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
 // hooks

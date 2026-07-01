@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { Controller, Get } from "@operis/decorators";
+import { Controller, Get } from "@operoz/decorators";
 import { env } from "@/env";
 
 @Controller("/health")

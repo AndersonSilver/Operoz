@@ -1,8 +1,8 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 // plane imports
-import { Avatar } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { Avatar } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 // local imports

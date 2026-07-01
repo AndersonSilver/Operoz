@@ -12,7 +12,7 @@ import type {
   TBoardProjectFieldSection,
   TWorkspaceCustomFieldFormData,
   TWorkspaceCustomFieldUpdateData,
-} from "@operis/types";
+} from "@operoz/types";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
 
 export interface IBoardCustomFieldStore {
@@ -47,16 +47,8 @@ export interface IBoardCustomFieldStore {
     customFieldId: string,
     data: TWorkspaceCustomFieldUpdateData
   ) => Promise<IBoardCustomField>;
-  removeBoardCustomField: (
-    workspaceSlug: string,
-    boardSlug: string,
-    boardCustomFieldId: string
-  ) => Promise<void>;
-  deleteWorkspaceCustomField: (
-    workspaceSlug: string,
-    boardSlug: string,
-    customFieldId: string
-  ) => Promise<void>;
+  removeBoardCustomField: (workspaceSlug: string, boardSlug: string, boardCustomFieldId: string) => Promise<void>;
+  deleteWorkspaceCustomField: (workspaceSlug: string, boardSlug: string, customFieldId: string) => Promise<void>;
   fetchProjectCustomFields: (workspaceSlug: string, projectId: string) => Promise<IProjectCustomFieldLite[]>;
   getBoardCustomFields: (workspaceSlug: string, boardSlug: string) => IBoardCustomField[];
   getWorkspaceCustomFields: (workspaceSlug: string) => IWorkspaceCustomField[];
@@ -88,15 +80,8 @@ export interface IBoardCustomFieldStore {
       form_span: TBoardFieldFormSpan;
     }>
   ) => Promise<IBoardProjectFieldLayout>;
-  removeBoardProjectFieldLayout: (
-    workspaceSlug: string,
-    boardSlug: string,
-    layoutId: string
-  ) => Promise<void>;
-  fetchBoardProjectFormLayout: (
-    workspaceSlug: string,
-    boardSlug: string
-  ) => Promise<IProjectFormLayoutResponse>;
+  removeBoardProjectFieldLayout: (workspaceSlug: string, boardSlug: string, layoutId: string) => Promise<void>;
+  fetchBoardProjectFormLayout: (workspaceSlug: string, boardSlug: string) => Promise<IProjectFormLayoutResponse>;
   fetchProjectFormLayout: (workspaceSlug: string, projectId: string) => Promise<IProjectFormLayoutResponse>;
 }
 
@@ -139,8 +124,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
   getBoardCustomFields = (workspaceSlug: string, boardSlug: string) =>
     this.boardCustomFieldsByKey[boardKey(workspaceSlug, boardSlug)] ?? [];
 
-  getWorkspaceCustomFields = (workspaceSlug: string) =>
-    this.workspaceCustomFieldsBySlug[workspaceSlug] ?? [];
+  getWorkspaceCustomFields = (workspaceSlug: string) => this.workspaceCustomFieldsBySlug[workspaceSlug] ?? [];
 
   getProjectCustomFields = (projectId: string) => this.projectCustomFieldsByProjectId[projectId] ?? [];
 
@@ -183,17 +167,11 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
     return created;
   };
 
-  createBoardCustomField = async (
-    workspaceSlug: string,
-    boardSlug: string,
-    data: TBoardCustomFieldFormData
-  ) => {
+  createBoardCustomField = async (workspaceSlug: string, boardSlug: string, data: TBoardCustomFieldFormData) => {
     const created = await this.service.createBoardCustomField(workspaceSlug, boardSlug, data);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
-      const list = [...(this.boardCustomFieldsByKey[key] ?? []), created].sort(
-        (a, b) => a.sort_order - b.sort_order
-      );
+      const list = [...(this.boardCustomFieldsByKey[key] ?? []), created].sort((a, b) => a.sort_order - b.sort_order);
       this.boardCustomFieldsByKey[key] = list;
       const wsFields = this.workspaceCustomFieldsBySlug[workspaceSlug] ?? [];
       if (!wsFields.find((f) => f.id === created.custom_field_id)) {
@@ -214,11 +192,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
     return created;
   };
 
-  bulkAddBoardCustomFields = async (
-    workspaceSlug: string,
-    boardSlug: string,
-    customFieldIds: string[]
-  ) => {
+  bulkAddBoardCustomFields = async (workspaceSlug: string, boardSlug: string, customFieldIds: string[]) => {
     const created = await this.service.bulkAddBoardCustomFields(workspaceSlug, boardSlug, customFieldIds);
     await this.fetchBoardCustomFields(workspaceSlug, boardSlug);
     return created;
@@ -230,12 +204,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
     boardCustomFieldId: string,
     data: Partial<{ is_enabled: boolean; sort_order: number; form_span: "half" | "full" }>
   ) => {
-    const updated = await this.service.updateBoardCustomField(
-      workspaceSlug,
-      boardSlug,
-      boardCustomFieldId,
-      data
-    );
+    const updated = await this.service.updateBoardCustomField(workspaceSlug, boardSlug, boardCustomFieldId, data);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
       this.boardCustomFieldsByKey[key] = (this.boardCustomFieldsByKey[key] ?? []).map((item) =>
@@ -280,11 +249,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
     return updatedBoardField;
   };
 
-  removeBoardCustomField = async (
-    workspaceSlug: string,
-    boardSlug: string,
-    boardCustomFieldId: string
-  ) => {
+  removeBoardCustomField = async (workspaceSlug: string, boardSlug: string, boardCustomFieldId: string) => {
     await this.service.removeBoardCustomField(workspaceSlug, boardSlug, boardCustomFieldId);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
@@ -296,11 +261,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
     });
   };
 
-  deleteWorkspaceCustomField = async (
-    workspaceSlug: string,
-    boardSlug: string,
-    customFieldId: string
-  ) => {
+  deleteWorkspaceCustomField = async (workspaceSlug: string, boardSlug: string, customFieldId: string) => {
     await this.service.deleteWorkspaceCustomField(workspaceSlug, customFieldId);
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);

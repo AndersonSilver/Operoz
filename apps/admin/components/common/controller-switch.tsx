@@ -1,7 +1,7 @@
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // plane internal packages
-import { ToggleSwitch } from "@operis/ui";
+import { ToggleSwitch } from "@operoz/ui";
 
 type Props<T extends FieldValues = FieldValues> = {
   control: Control<T>;

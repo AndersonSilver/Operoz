@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 // plane imports
-import type { TFileHandler } from "@operis/editor";
-import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@operis/utils";
+import type { TFileHandler } from "@operoz/editor";
+import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@operoz/utils";
 // hooks
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
 // plane web hooks

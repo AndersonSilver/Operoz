@@ -14,7 +14,7 @@ import {
 } from "@/components/board/board-hub-background";
 import { AppHeader } from "@/components/core/app-header";
 import { ContentWrapper } from "@/components/core/content-wrapper";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";
 import { useRouterParams } from "@/hooks/store/use-router-params";

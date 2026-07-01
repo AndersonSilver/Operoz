@@ -1,7 +1,7 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // api service
-import type { TDuplicateAssetData, TDuplicateAssetResponse } from "@operis/types";
+import type { TDuplicateAssetData, TDuplicateAssetResponse } from "@operoz/types";
 import { APIService } from "../api.service";
 // helpers
 import { getAssetIdFromUrl } from "./helper";

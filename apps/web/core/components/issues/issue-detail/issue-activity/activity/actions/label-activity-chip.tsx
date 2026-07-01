@@ -1,4 +1,4 @@
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 
 type TIssueLabelPill = { name?: string; color?: string };
 

@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { IconButton } from "@operis/propel/icon-button";
-import type { IBoard } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { IconButton } from "@operoz/propel/icon-button";
+import type { IBoard } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { MoreHorizontal } from "lucide-react";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { ArchiveBoardModal } from "./archive-board-modal";
@@ -29,9 +29,24 @@ export const WorkspaceBoardsSettingsListItem = observer(function WorkspaceBoards
 
   return (
     <>
-      <EditBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
-      <ArchiveBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isArchiveOpen} onClose={() => setIsArchiveOpen(false)} />
-      <UnarchiveBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isUnarchiveOpen} onClose={() => setIsUnarchiveOpen(false)} />
+      <EditBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
+      <ArchiveBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isArchiveOpen}
+        onClose={() => setIsArchiveOpen(false)}
+      />
+      <UnarchiveBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isUnarchiveOpen}
+        onClose={() => setIsUnarchiveOpen(false)}
+      />
       <div className={cn("rounded-lg border border-subtle bg-layer-2 px-4 py-3", isArchived && "opacity-70")}>
         <div className="flex items-center justify-between gap-3">
           <div className="flex min-w-0 items-center gap-3">
@@ -64,7 +79,9 @@ export const WorkspaceBoardsSettingsListItem = observer(function WorkspaceBoards
             }
           >
             {isArchived ? (
-              <CustomMenu.MenuItem onClick={() => setIsUnarchiveOpen(true)}>{t("boards.unarchive")}</CustomMenu.MenuItem>
+              <CustomMenu.MenuItem onClick={() => setIsUnarchiveOpen(true)}>
+                {t("boards.unarchive")}
+              </CustomMenu.MenuItem>
             ) : (
               <>
                 <CustomMenu.MenuItem onClick={() => router.push(`/${workspaceSlug}/settings/boards/${board.slug}/`)}>

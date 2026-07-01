@@ -2,11 +2,11 @@ import type { LucideIcon } from "lucide-react";
 import { Client360PeriodDelta } from "@/components/board/client-360/client-360-period-delta";
 import { Check, ChevronDown, ListFilter, Search } from "lucide-react";
 import type { ReactNode, RefObject } from "react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import {
   CLIENT_360_FILTER_OPTIONS,
   type Client360FilterKey,

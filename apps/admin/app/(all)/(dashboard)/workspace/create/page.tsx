@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { LayoutGrid, Link2, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import type { Route } from "./+types/page";
 import { WorkspaceCreateForm } from "./form";

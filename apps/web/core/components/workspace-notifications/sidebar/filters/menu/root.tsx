@@ -1,16 +1,16 @@
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
 // plane imports
-import type { ENotificationFilterType } from "@operis/constants";
-import { FILTER_TYPE_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import { PopoverMenu } from "@operis/ui";
+import type { ENotificationFilterType } from "@operoz/constants";
+import { FILTER_TYPE_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { PopoverMenu } from "@operoz/ui";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // local imports
 import { NotificationFilterOptionItem } from "./menu-option-item";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export const NotificationFilter = observer(function NotificationFilter() {
   // hooks

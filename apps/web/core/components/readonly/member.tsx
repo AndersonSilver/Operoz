@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 // components
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";
 // hooks

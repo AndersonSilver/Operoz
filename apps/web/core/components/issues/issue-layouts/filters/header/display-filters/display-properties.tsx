@@ -1,11 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane constants
-import { ISSUE_DISPLAY_PROPERTIES } from "@operis/constants";
+import { ISSUE_DISPLAY_PROPERTIES } from "@operoz/constants";
 // plane i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 // components
 import { isCustomFieldVisible, useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
 import { FilterHeader } from "../helpers/filter-header";

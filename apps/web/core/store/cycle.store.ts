@@ -10,9 +10,9 @@ import type {
   TCycleEstimateDistribution,
   TCycleDistribution,
   TCycleEstimateType,
-} from "@operis/types";
-import type { DistributionUpdates } from "@operis/utils";
-import { orderCycles, shouldFilterCycle, getDate, updateDistribution } from "@operis/utils";
+} from "@operoz/types";
+import type { DistributionUpdates } from "@operoz/utils";
+import { orderCycles, shouldFilterCycle, getDate, updateDistribution } from "@operoz/utils";
 // helpers
 // services
 import { CycleService } from "@/services/cycle.service";

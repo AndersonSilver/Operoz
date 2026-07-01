@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
-import { useTranslation } from "@operis/i18n";
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import type { TModuleDistribution, TModuleEstimateDistribution, TModulePlotType } from "@operis/types";
-import { cn, toFilterArray } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import type { TModuleDistribution, TModuleEstimateDistribution, TModulePlotType } from "@operoz/types";
+import { cn, toFilterArray } from "@operoz/utils";
 // components
 import type { TAssigneeData } from "@/components/core/sidebar/progress-stats/assignee";
 import { AssigneeStatComponent } from "@/components/core/sidebar/progress-stats/assignee";

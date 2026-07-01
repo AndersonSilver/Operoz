@@ -1,8 +1,8 @@
 // plane package imports
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ProjectIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ProjectIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // plane web hooks
 import { useProject } from "@/hooks/store/use-project";
 

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // icons
-import { DATE_BEFORE_FILTER_OPTIONS } from "@operis/constants";
-import { CloseIcon } from "@operis/propel/icons";
+import { DATE_BEFORE_FILTER_OPTIONS } from "@operoz/constants";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane constants
-import { renderFormattedDate, capitalizeFirstLetter } from "@operis/utils";
+import { renderFormattedDate, capitalizeFirstLetter } from "@operoz/utils";
 // helpers
 type Props = {
   editable: boolean | undefined;

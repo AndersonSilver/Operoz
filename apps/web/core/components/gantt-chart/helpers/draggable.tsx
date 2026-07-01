@@ -2,11 +2,12 @@ import type { RefObject } from "react";
 import React from "react";
 import { observer } from "mobx-react";
 // hooks
-import type { IGanttBlock } from "@operis/types";
+import type { IGanttBlock } from "@operoz/types";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 //  Plane-web
 import { LeftDependencyDraggable, RightDependencyDraggable } from "@/plane-web/components/gantt-chart";
+import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
 import { LeftResizable } from "./blockResizables/left-resizable";
 import { RightResizable } from "./blockResizables/right-resizable";
@@ -36,6 +37,9 @@ export const ChartDraggable = observer(function ChartDraggable(props: Props) {
     ganttContainerRef,
   } = props;
 
+  const { dependencyDragState } = useTimeLineChartStore();
+  const isDepDragging = !!dependencyDragState;
+
   return (
     <div className="group relative z-[5] inline-flex h-full w-full cursor-pointer items-center font-medium transition-all">
       {/* left resize drag handle */}
@@ -52,7 +56,7 @@ export const ChartDraggable = observer(function ChartDraggable(props: Props) {
         className={cn("relative z-[6] flex h-8 w-full items-center rounded-sm", {
           "pointer-events-none": isMoving,
         })}
-        onMouseDown={(e) => enableBlockMove && handleBlockDrag(e, "move")}
+        onMouseDown={(e) => !isDepDragging && enableBlockMove && handleBlockDrag(e, "move")}
       >
         {blockToRender({ ...block.data, meta: block.meta })}
       </div>

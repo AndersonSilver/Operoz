@@ -1,8 +1,8 @@
 import type { ColumnDef, Row, Table } from "@tanstack/react-table";
 import { Download } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { AnalyticsTableDataMap, TAnalyticsTabsBase } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { AnalyticsTableDataMap, TAnalyticsTabsBase } from "@operoz/types";
 import { DataTable } from "./data-table";
 import { TableLoader } from "./loader";
 interface InsightTableProps<T extends Exclude<TAnalyticsTabsBase, "overview">> {

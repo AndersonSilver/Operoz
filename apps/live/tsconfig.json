@@ -1,5 +1,5 @@
 {
-  "extends": "@operis/typescript-config/base.json",
+  "extends": "@operoz/typescript-config/base.json",
   "compilerOptions": {
     "exactOptionalPropertyTypes": false,
     "noUnusedParameters": false,

@@ -2,21 +2,21 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 // plane imports
-import { ETabIndices, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { ViewsIcon } from "@operis/propel/icons";
+import { ETabIndices, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { ViewsIcon } from "@operoz/propel/icons";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
   IProjectView,
   EIssueLayoutTypes,
   IIssueFilters,
-} from "@operis/types";
-import { EViewAccess, EIssuesStoreType } from "@operis/types";
-import { Input, TextArea } from "@operis/ui";
-import { getComputedDisplayFilters, getComputedDisplayProperties, getTabIndex } from "@operis/utils";
+} from "@operoz/types";
+import { EViewAccess, EIssuesStoreType } from "@operoz/types";
+import { Input, TextArea } from "@operoz/ui";
+import { getComputedDisplayFilters, getComputedDisplayProperties, getTabIndex } from "@operoz/utils";
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";

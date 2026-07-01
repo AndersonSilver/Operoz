@@ -1,8 +1,8 @@
 // plane imports
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
-import { API_BASE_URL } from "@operis/constants";
-import type { TOAuthConfigs, TOAuthOption } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TOAuthConfigs, TOAuthOption } from "@operoz/types";
 // assets
 import giteaLogo from "@/app/assets/logos/gitea-logo.svg?url";
 import githubLightLogo from "@/app/assets/logos/github-black.png?url";

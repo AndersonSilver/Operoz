@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Code2, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Switch } from "@operis/propel/switch";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationScript } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Switch } from "@operoz/propel/switch";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationScript } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import { AutomationCodeField } from "./automation-code-field";
 import { ConfigField, ConfigTextInput } from "./automation-config-primitives";
@@ -76,11 +76,7 @@ export const BoardAutomationScriptEditor = observer(function BoardAutomationScri
   return (
     <div className="flex flex-col gap-5">
       <div className="flex flex-wrap items-center gap-2 border-b border-subtle pb-4">
-        <button
-          type="button"
-          className="text-13 font-medium text-accent-primary hover:underline"
-          onClick={onBack}
-        >
+        <button type="button" className="text-13 font-medium text-accent-primary hover:underline" onClick={onBack}>
           ← {t("boards.settings.automation.back_to_list")}
         </button>
         <div className="ml-auto flex flex-wrap items-center gap-2">
@@ -107,7 +103,7 @@ export const BoardAutomationScriptEditor = observer(function BoardAutomationScri
         </div>
         <span
           className={cn(
-            "rounded-full px-2.5 py-0.5 text-10 font-semibold uppercase tracking-wide",
+            "rounded-full px-2.5 py-0.5 text-10 font-semibold tracking-wide uppercase",
             isActive ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
           )}
         >

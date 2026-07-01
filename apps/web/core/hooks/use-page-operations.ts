@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 // plane imports
-import { IS_FAVORITE_MENU_OPEN } from "@operis/constants";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EPageAccess } from "@operis/types";
-import { copyUrlToClipboard } from "@operis/utils";
+import { IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EPageAccess } from "@operoz/types";
+import { copyUrlToClipboard } from "@operoz/utils";
 // hooks
 import { useCollaborativePageActions } from "@/hooks/use-collaborative-page-actions";
 // store types

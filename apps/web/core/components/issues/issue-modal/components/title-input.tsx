@@ -3,14 +3,14 @@ import { observer } from "mobx-react";
 import type { Control, FormState } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@operis/constants";
+import { ETabIndices } from "@operoz/constants";
 // types
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
 // ui
-import { Input } from "@operis/ui";
+import { Input } from "@operoz/ui";
 // helpers
-import { cn, getTabIndex } from "@operis/utils";
+import { cn, getTabIndex } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { getIssueFormControlClass, IssueFormField } from "@/plane-web/components/issues/issue-modal/issue-form-field";

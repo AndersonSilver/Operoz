@@ -1,6 +1,6 @@
 import { Inbox, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 import "./intake-settings.css";
 
 type Props = {
@@ -21,7 +21,7 @@ export function IntakeSettingsHero(props: Props) {
             <Inbox className="size-5" strokeWidth={1.75} />
           </span>
           <div className="min-w-0">
-            <p className="text-11 font-semibold uppercase tracking-[0.12em] text-tertiary">Operoz</p>
+            <p className="text-11 font-semibold tracking-[0.12em] text-tertiary uppercase">Operoz</p>
             <h1 className="mt-0.5 text-20 font-semibold tracking-tight text-primary">
               {t("project_settings.features.intake.title")}
             </h1>
@@ -34,7 +34,7 @@ export function IntakeSettingsHero(props: Props) {
         <Button
           variant="primary"
           size="sm"
-          className="h-9 shrink-0 shadow-sm"
+          className="shadow-sm h-9 shrink-0"
           disabled={!intakeEnabled}
           loading={creating}
           onClick={onCreate}

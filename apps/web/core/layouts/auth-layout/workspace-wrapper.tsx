@@ -5,12 +5,12 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 // ui
 import { LogOut } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { Button, getButtonStyling } from "@operis/propel/button";
-import { PlaneLogo } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { Button, getButtonStyling } from "@operoz/propel/button";
+import { PlaneLogo } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 // assets
 import WorkSpaceNotAvailable from "@/app/assets/workspace/workspace-not-available.png?url";
 // components
@@ -89,12 +89,8 @@ export const WorkspaceAuthWrapper = observer(function WorkspaceAuthWrapper(props
     { revalidateIfStale: false, revalidateOnFocus: false }
   );
   useSWR(
-    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace
-      ? WORKSPACE_BOARDS(workspaceSlug.toString())
-      : null,
-    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace
-      ? () => fetchBoards(workspaceSlug.toString())
-      : null,
+    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace ? WORKSPACE_BOARDS(workspaceSlug.toString()) : null,
+    ENABLE_WORKSPACE_BOARDS && workspaceSlug && currentWorkspace ? () => fetchBoards(workspaceSlug.toString()) : null,
     { revalidateIfStale: false, revalidateOnFocus: false, shouldRetryOnError: false }
   );
   // fetch workspace members

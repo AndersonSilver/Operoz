@@ -1,6 +1,6 @@
 // plane imports
-import { ScrollArea } from "@operis/propel/scrollarea";
-import { cn } from "@operis/utils";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import { cn } from "@operoz/utils";
 // components
 import { AppHeader } from "@/components/core/app-header";
 

@@ -9,8 +9,8 @@ import {
   createRealtimeEvent,
   extractTextFromHTML,
   generateTitleProsemirrorJson,
-} from "@operis/editor";
-import { logger } from "@operis/logger";
+} from "@operoz/editor";
+import { logger } from "@operoz/logger";
 import { AppError } from "@/lib/errors";
 // helpers
 import { getPageService } from "@/services/page/handler";

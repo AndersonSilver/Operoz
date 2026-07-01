@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
 // plane imports
-import { EUserPermissionsLevel, GROUPED_PROJECT_SETTINGS, PROJECT_SETTINGS_CATEGORIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissionsLevel, GROUPED_PROJECT_SETTINGS, PROJECT_SETTINGS_CATEGORIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // components
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";
 import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";

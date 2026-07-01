@@ -1,18 +1,18 @@
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 // plane imports
-import { PROGRESS_STATE_GROUPS_DETAILS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import type { ICycle } from "@operis/types";
-import { LinearProgressIndicator, Loader } from "@operis/ui";
+import { PROGRESS_STATE_GROUPS_DETAILS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import type { ICycle } from "@operoz/types";
+import { LinearProgressIndicator, Loader } from "@operoz/ui";
 // assets
 import darkProgressAsset from "@/app/assets/empty-state/active-cycle/progress-dark.webp?url";
 import lightProgressAsset from "@/app/assets/empty-state/active-cycle/progress-light.webp?url";
 // components
 import { BOARD_HUB_CYCLE_METRIC_CARD } from "@/components/board/board-hub-background";
 import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 const STATE_GROUP_KEYS = ["completed", "started", "unstarted", "backlog"] as const;
 

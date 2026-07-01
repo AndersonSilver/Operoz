@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { LinkIcon, NewTabIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { LinkIcon, NewTabIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 // ui
-import type { TStaticViewTypes } from "@operis/types";
-import type { TContextMenuItem } from "@operis/ui";
-import { CustomMenu } from "@operis/ui";
-import { copyUrlToClipboard, cn } from "@operis/utils";
+import type { TStaticViewTypes } from "@operoz/types";
+import type { TContextMenuItem } from "@operoz/ui";
+import { CustomMenu } from "@operoz/ui";
+import { copyUrlToClipboard, cn } from "@operoz/utils";
 // helpers
 type Props = {
   workspaceSlug: string;

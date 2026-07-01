@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR, { mutate } from "swr";
 // types
-import type { IWorkspaceIntegration, ISlackIntegration } from "@operis/types";
+import type { IWorkspaceIntegration, ISlackIntegration } from "@operoz/types";
 // ui
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 // fetch-keys
 import { SLACK_CHANNEL_INFO } from "@/constants/fetch-keys";
 // hooks

@@ -3,9 +3,9 @@
 import { useMemo } from "react";
 import { AlertCircle, CalendarRange, CheckCircle2, Circle } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360OperationalPayload } from "@operis/types";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360OperationalPayload } from "@operoz/types";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { Client360MetaChip } from "@/components/board/client-360/client-360-ui";
 
 type Milestone = TClient360OperationalPayload["milestones"][number];

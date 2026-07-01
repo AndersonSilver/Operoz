@@ -1,19 +1,22 @@
 import type { ChangeEvent } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 import { Controller, useFormContext } from "react-hook-form";
-import { InfoIcon } from "@operis/propel/icons";
+import { InfoIcon } from "@operoz/propel/icons";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { ETabIndices } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import { Input, TextArea } from "@operis/ui";
-import { cn, projectIdentifierSanitizer, getTabIndex } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Input, TextArea } from "@operoz/ui";
+import { cn, projectIdentifierSanitizer, getTabIndex } from "@operoz/utils";
 // plane utils
 // helpers
 // plane-web types
 import type { TProject } from "@/plane-web/types/projects";
-import { ProjectFormFieldError, projectFormTextAreaErrorBgClass } from "@/components/project/project-form-validation-ui";
+import {
+  ProjectFormFieldError,
+  projectFormTextAreaErrorBgClass,
+} from "@/components/project/project-form-validation-ui";
 
 type Props = {
   setValue: UseFormSetValue<TProject>;
@@ -72,7 +75,7 @@ function ProjectCommonAttributes(props: Props) {
         {showRequiredLabels && (
           <label className={fieldLabelClass} htmlFor="name">
             {t("project_name")}
-            <span className="ml-0.5 font-normal text-danger-primary">*</span>
+            <span className="font-normal ml-0.5 text-danger-primary">*</span>
           </label>
         )}
         <Controller
@@ -106,7 +109,7 @@ function ProjectCommonAttributes(props: Props) {
         {showRequiredLabels && (
           <label className={fieldLabelClass} htmlFor="identifier">
             {t("project_id")}
-            <span className="ml-0.5 font-normal text-danger-primary">*</span>
+            <span className="font-normal ml-0.5 text-danger-primary">*</span>
           </label>
         )}
         <div className="relative">
@@ -194,10 +197,7 @@ function ProjectCommonAttributes(props: Props) {
                   onChange(e);
                   handleFormOnChange?.();
                 }}
-                className={cn(
-                  "w-full text-13 !h-24",
-                  errors?.description && projectFormTextAreaErrorBgClass
-                )}
+                className={cn("!h-24 w-full text-13", errors?.description && projectFormTextAreaErrorBgClass)}
                 hasError={Boolean(errors?.description)}
                 tabIndex={getIndex("description")}
               />

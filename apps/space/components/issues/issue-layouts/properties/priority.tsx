@@ -1,11 +1,11 @@
 import { SignalHigh } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import { PriorityIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssuePriorities } from "@operis/types";
+import { PriorityIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssuePriorities } from "@operoz/types";
 // constants
-import { cn, getIssuePriorityFilters } from "@operis/utils";
+import { cn, getIssuePriorityFilters } from "@operoz/utils";
 
 export function IssueBlockPriority({
   priority,

@@ -1,6 +1,6 @@
 import { MoveRight } from "lucide-react";
-import { Tooltip } from "@operis/propel/tooltip";
-import { Loader } from "@operis/ui";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { Loader } from "@operoz/ui";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

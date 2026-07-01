@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // ui
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 // helpers
-import { generateWorkItemLink } from "@operis/utils";
+import { generateWorkItemLink } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";

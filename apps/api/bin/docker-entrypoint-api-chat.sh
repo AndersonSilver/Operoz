@@ -23,7 +23,7 @@ TIMEOUT="${GUNICORN_CHAT_TIMEOUT:-120}"
 exec gunicorn \
   -w "$WORKERS" \
   -k uvicorn.workers.UvicornWorker \
-  operis.asgi:application \
+  operoz.asgi:application \
   --bind "0.0.0.0:${PORT:-8000}" \
   --timeout "$TIMEOUT" \
   --graceful-timeout 30 \

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { CloseIcon, CycleGroupIcon } from "@operis/propel/icons";
-import type { TCycleGroups } from "@operis/types";
+import { CloseIcon, CycleGroupIcon } from "@operoz/propel/icons";
+import type { TCycleGroups } from "@operoz/types";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 // ui

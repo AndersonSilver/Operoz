@@ -3,15 +3,15 @@
 import type { LucideIcon } from "lucide-react";
 import { Activity, AlertTriangle, Ban, CalendarRange, Clock, Headphones, LayoutList, Lightbulb, X } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 import type {
   TClient360DetailResponse,
   TClient360OperationalPayload,
   TClient360ScenarioPlaybook,
   TClient360SuggestedAction,
-} from "@operis/types";
-import { cn, renderFormattedDate } from "@operis/utils";
+} from "@operoz/types";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360HealthBreakdownPanel } from "@/components/board/client-360/client-360-health-breakdown";
 import { Client360MilestonesList } from "@/components/board/client-360/client-360-milestones-list";

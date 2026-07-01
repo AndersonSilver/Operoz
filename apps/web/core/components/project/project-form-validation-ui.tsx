@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 /** Mensagem de erro — igual em todo o formulário de projeto (create/edit). */
 export const projectFormErrorMessageClass = "mt-1 block text-11 leading-snug text-danger-primary";

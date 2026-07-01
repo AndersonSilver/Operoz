@@ -1,7 +1,7 @@
 import { Eye, EyeClosed } from "lucide-react";
 import { useState } from "react";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 
 type TPasswordInputProps = {
   id: string;

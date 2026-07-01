@@ -1,5 +1,5 @@
 import { Pencil, X } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { isObservationHtml } from "@/components/project/status-report/observation-content";
 import { ObservationHtmlView } from "@/components/project/status-report/observation-html-view";
 

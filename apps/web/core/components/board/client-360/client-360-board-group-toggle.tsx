@@ -1,9 +1,9 @@
 import { Check, ChevronsDownUp, ChevronsUpDown, Group, List } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   groupByBoard: boolean;

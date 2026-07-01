@@ -3,9 +3,9 @@ import { Database as HocuspocusDatabase } from "@hocuspocus/extension-database";
 import {
   getAllDocumentFormatsFromDocumentEditorBinaryData,
   getBinaryDataFromDocumentEditorHTMLString,
-} from "@operis/editor";
-import type { TDocumentPayload } from "@operis/types";
-import { logger } from "@operis/logger";
+} from "@operoz/editor";
+import type { TDocumentPayload } from "@operoz/types";
+import { logger } from "@operoz/logger";
 // lib
 import { AppError } from "@/lib/errors";
 // services

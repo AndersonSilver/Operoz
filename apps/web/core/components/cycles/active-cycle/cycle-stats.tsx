@@ -6,15 +6,15 @@ import { CalendarCheck } from "lucide-react";
 // headless ui
 import { Tab } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { PriorityIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import type { ICycle } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { PriorityIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import type { ICycle } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // ui
-import { Loader, Avatar } from "@operis/ui";
-import { cn, renderFormattedDate, renderFormattedDateWithoutYear, getFileURL } from "@operis/utils";
+import { Loader, Avatar } from "@operoz/ui";
+import { cn, renderFormattedDate, renderFormattedDateWithoutYear, getFileURL } from "@operoz/utils";
 // assets
 import darkAssigneeAsset from "@/app/assets/empty-state/active-cycle/assignee-dark.webp?url";
 import lightAssigneeAsset from "@/app/assets/empty-state/active-cycle/assignee-light.webp?url";

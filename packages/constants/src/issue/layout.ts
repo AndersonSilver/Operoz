@@ -1,4 +1,4 @@
-import { EIssueLayoutTypes } from "@operis/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 
 export type TIssueLayout = "list" | "kanban" | "calendar" | "spreadsheet" | "gantt";
 

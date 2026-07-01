@@ -1,5 +1,5 @@
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 // helpers
 import { cn } from "../utils";
 import type { TAvatarSize } from "./helper";
@@ -68,9 +68,14 @@ export function Avatar(props: Props) {
   return (
     <Tooltip tooltipContent={fallbackText ?? name ?? "?"} disabled={!showTooltip}>
       <div
-        className={cn("grid place-items-center overflow-hidden", getBorderRadius(shape), {
-          [sizeInfo.avatarSize]: !isAValidNumber(size),
-        })}
+        className={cn(
+          "grid shrink-0 place-items-center overflow-hidden",
+          getBorderRadius(shape),
+          {
+            [sizeInfo.avatarSize]: !isAValidNumber(size),
+          },
+          className
+        )}
         style={
           isAValidNumber(size)
             ? {
@@ -82,15 +87,10 @@ export function Avatar(props: Props) {
         tabIndex={-1}
       >
         {src ? (
-          <img src={src} className={cn("h-full w-full", getBorderRadius(shape), className)} alt={name} />
+          <img src={src} className={cn("h-full w-full object-cover", getBorderRadius(shape))} alt={name} />
         ) : (
           <div
-            className={cn(
-              sizeInfo.fontSize,
-              "grid h-full w-full place-items-center",
-              getBorderRadius(shape),
-              className
-            )}
+            className={cn(sizeInfo.fontSize, "grid h-full w-full place-items-center", getBorderRadius(shape))}
             style={{
               backgroundColor: fallbackBackgroundColor ?? "#028375",
               color: fallbackTextColor ?? "#ffffff",

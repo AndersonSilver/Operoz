@@ -16,12 +16,12 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // plane package imports
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operis/propel/table";
-import { cn } from "@operis/utils";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operoz/propel/table";
+import { cn } from "@operoz/utils";
 // plane web components
 
 interface DataTableProps<TData, TValue> {

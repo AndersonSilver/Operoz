@@ -1,5 +1,5 @@
 import { Layers } from "lucide-react";
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 import { handlePowerKNavigate } from "@/components/power-k/utils/navigation";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";

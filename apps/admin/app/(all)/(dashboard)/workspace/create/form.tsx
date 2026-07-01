@@ -4,14 +4,14 @@ import { useRouter } from "next/navigation";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { LayoutGrid } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { WEB_BASE_URL, ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operis/constants";
-import { Button, getButtonStyling } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { InstanceWorkspaceService } from "@operis/services";
-import type { IWorkspace } from "@operis/types";
-import { validateSlug, validateWorkspaceName } from "@operis/utils";
-import { CustomSelect, Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { WEB_BASE_URL, ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operoz/constants";
+import { Button, getButtonStyling } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { InstanceWorkspaceService } from "@operoz/services";
+import type { IWorkspace } from "@operoz/types";
+import { validateSlug, validateWorkspaceName } from "@operoz/utils";
+import { CustomSelect, Input } from "@operoz/ui";
 import {
   AdminFieldLabel,
   AdminFormActions,

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import { APIService } from "./api.service";
 
 export abstract class LiveService extends APIService {

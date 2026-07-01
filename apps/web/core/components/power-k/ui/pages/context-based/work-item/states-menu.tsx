@@ -2,8 +2,8 @@ import { Command } from "cmdk";
 import { observer } from "mobx-react";
 // plane types
 import { useParams } from "next/navigation";
-import type { TIssue } from "@operis/types";
-import { Spinner } from "@operis/ui";
+import type { TIssue } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
 // hooks
 import { useProjectState } from "@/hooks/store/use-project-state";
 // local imports

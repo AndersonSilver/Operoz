@@ -1,5 +1,5 @@
 // plane imports
-import type { TEditorAsset } from "@operis/editor";
+import type { TEditorAsset } from "@operoz/editor";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

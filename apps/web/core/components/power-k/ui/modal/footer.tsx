@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { ToggleSwitch } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { ToggleSwitch } from "@operoz/ui";
 
 type Props = {
   isWorkspaceLevel: boolean;

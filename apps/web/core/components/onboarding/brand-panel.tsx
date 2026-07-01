@@ -1,8 +1,8 @@
 import { BarChart3, Check, Layers, Zap } from "lucide-react";
-import { OperozLockup } from "@operis/propel/icons";
-import type { TOnboardingStep } from "@operis/types";
-import { EOnboardingSteps } from "@operis/types";
-import { cn } from "@operis/utils";
+import { OperozLockup } from "@operoz/propel/icons";
+import type { TOnboardingStep } from "@operoz/types";
+import { EOnboardingSteps } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 const features = [
   {

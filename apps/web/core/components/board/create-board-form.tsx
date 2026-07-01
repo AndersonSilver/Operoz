@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { RANDOM_EMOJI_CODES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { CloseIcon } from "@operis/propel/icons";
-import type { TBoardFormData, TLogoProps } from "@operis/types";
-import { Input, TextArea } from "@operis/ui";
-import { validateSlug } from "@operis/utils";
+import { RANDOM_EMOJI_CODES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { CloseIcon } from "@operoz/propel/icons";
+import type { TBoardFormData, TLogoProps } from "@operoz/types";
+import { Input, TextArea } from "@operoz/ui";
+import { validateSlug } from "@operoz/utils";
 import { useBoard } from "@/hooks/store/use-board";
 import { boardSlugFromName } from "./board-slug";
 
@@ -88,10 +88,7 @@ export function CreateBoardForm(props: Props) {
                   </span>
                 }
                 onChange={(val) => {
-                  const logoValue =
-                    val.type === EmojiIconPickerTypes.EMOJI
-                      ? { value: val.value }
-                      : val.value;
+                  const logoValue = val.type === EmojiIconPickerTypes.EMOJI ? { value: val.value } : val.value;
                   onChange({
                     in_use: val.type,
                     [val.type]: logoValue,
@@ -106,7 +103,11 @@ export function CreateBoardForm(props: Props) {
             <p className="text-11 text-tertiary">{t("boards.create_subtitle")}</p>
           </div>
         </div>
-        <button type="button" onClick={onClose} className="rounded p-1 text-placeholder hover:bg-layer-transparent-hover">
+        <button
+          type="button"
+          onClick={onClose}
+          className="rounded p-1 text-placeholder hover:bg-layer-transparent-hover"
+        >
           <CloseIcon className="size-4" />
         </button>
       </div>
@@ -128,9 +129,7 @@ export function CreateBoardForm(props: Props) {
                 hasError={Boolean(errors.name)}
                 className="w-full"
               />
-              {errors.name && (
-                <p className="text-11 text-danger-primary">{String(errors.name.message ?? "")}</p>
-              )}
+              {errors.name && <p className="text-11 text-danger-primary">{String(errors.name.message ?? "")}</p>}
             </div>
           )}
         />
@@ -158,12 +157,7 @@ export function CreateBoardForm(props: Props) {
           render={({ field }) => (
             <div className="space-y-1">
               <p className="text-11 font-medium text-secondary">{t("description")}</p>
-              <TextArea
-                {...field}
-                placeholder={t("boards.description_placeholder")}
-                rows={3}
-                className="w-full"
-              />
+              <TextArea {...field} placeholder={t("boards.description_placeholder")} rows={3} className="w-full" />
             </div>
           )}
         />

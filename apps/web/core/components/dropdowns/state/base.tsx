@@ -4,14 +4,17 @@ import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, StateGroupIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { IState } from "@operis/types";
-import { ComboDropDown, Spinner } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, StateGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { IState } from "@operoz/types";
+import { ComboDropDown, Spinner } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
+import { getLocalizedStateName } from "@/components/project-states/state-display.utils";
 import { DropdownButton } from "@/components/dropdowns/buttons";
-import { BUTTON_VARIANTS_WITH_TEXT, DROPDOWN_COMBOBOX_OPTIONS_CLASS } from "@/components/dropdowns/constants";
+import { ComboboxPortalOptions } from "@/components/dropdowns/combobox-portal-options";
+import { BUTTON_VARIANTS_WITH_TEXT } from "@/components/dropdowns/constants";
+import { getIssueDropdownPopperOptions } from "@/components/dropdowns/popper-config";
 import type { TDropdownProps } from "@/components/dropdowns/types";
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
@@ -80,17 +83,7 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
   const defaultState = statesList?.find((state) => state?.default);
   const stateValue = value ? value : showDefaultState ? defaultState?.id : undefined;
   // popper-js init
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ?? "bottom-start",
-    modifiers: [
-      {
-        name: "preventOverflow",
-        options: {
-          padding: 12,
-        },
-      },
-    ],
-  });
+  const { styles, attributes } = usePopper(referenceElement, popperElement, getIssueDropdownPopperOptions(placement));
   // dropdown init
   const { handleClose, handleKeyDown, handleOnClick, searchInputKeyDown } = useDropdown({
     dropdownRef,
@@ -104,26 +97,30 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
   });
 
   // derived values
-  const options = statesList?.map((state) => ({
-    value: state?.id,
-    query: `${state?.name}`,
-    content: (
-      <div className="flex items-center gap-2">
-        <StateGroupIcon
-          stateGroup={state?.group ?? "backlog"}
-          color={state?.color}
-          className={cn("flex-shrink-0", iconSize)}
-          percentage={state?.order}
-        />
-        <span className="flex-grow truncate text-left">{state?.name}</span>
-      </div>
-    ),
-  }));
+  const options = statesList?.map((state) => {
+    const localizedName = state ? getLocalizedStateName(state, t) : "";
+    return {
+      value: state?.id,
+      query: `${state?.name} ${localizedName}`,
+      content: (
+        <div className="flex items-center gap-2">
+          <StateGroupIcon
+            stateGroup={state?.group ?? "backlog"}
+            color={state?.color}
+            className={cn("flex-shrink-0", iconSize)}
+            percentage={state?.order}
+          />
+          <span className="flex-grow truncate text-left">{localizedName}</span>
+        </div>
+      ),
+    };
+  });
 
   const filteredOptions =
     query === "" ? options : options?.filter((o) => o.query.toLowerCase().includes(query.toLowerCase()));
 
   const selectedState = stateValue ? getStateById(stateValue) : undefined;
+  const selectedStateName = selectedState ? getLocalizedStateName(selectedState, t) : t("state");
 
   const dropdownOnChange = (val: string) => {
     onChange(val);
@@ -163,7 +160,7 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
             className={buttonClassName}
             isActive={isOpen}
             tooltipHeading={t("state")}
-            tooltipContent={selectedState?.name ?? t("state")}
+            tooltipContent={selectedStateName}
             showTooltip={showTooltip}
             variant={buttonVariant}
             renderToolTipByDefault={renderByDefault}
@@ -181,7 +178,7 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
                   />
                 )}
                 {BUTTON_VARIANTS_WITH_TEXT.includes(buttonVariant) && (
-                  <span className="flex-grow truncate text-left">{selectedState?.name ?? t("state")}</span>
+                  <span className="flex-grow truncate text-left">{selectedStateName}</span>
                 )}
                 {dropdownArrow && (
                   <ChevronDownIcon
@@ -210,47 +207,44 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
       renderByDefault={renderByDefault}
     >
       {isOpen && (
-        <Combobox.Options className={DROPDOWN_COMBOBOX_OPTIONS_CLASS} static>
-          <div
-            className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
-            ref={setPopperElement}
-            style={styles.popper}
-            {...attributes.popper}
-          >
-            <div className="flex items-center gap-1.5 rounded-sm border border-subtle bg-surface-2 px-2">
-              <SearchIcon className="h-3.5 w-3.5 text-placeholder" strokeWidth={1.5} />
-              <Combobox.Input
-                as="input"
-                ref={inputRef}
-                className="w-full bg-transparent py-1 text-11 text-secondary placeholder:text-placeholder focus:outline-none"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder={t("common.search.label")}
-                displayValue={(assigned: any) => assigned?.name}
-                onKeyDown={searchInputKeyDown}
-              />
-            </div>
-            <div className="mt-2 max-h-48 space-y-1 overflow-y-scroll">
-              {filteredOptions ? (
-                filteredOptions.length > 0 ? (
-                  filteredOptions.map((option) => (
-                    <StateOption
-                      {...props}
-                      key={option.value}
-                      option={option}
-                      selectedValue={value}
-                      className="flex w-full cursor-pointer items-center justify-between gap-2 truncate rounded-sm px-1 py-1.5 select-none"
-                    />
-                  ))
-                ) : (
-                  <p className="px-1.5 py-1 text-placeholder italic">{t("no_matching_results")}</p>
-                )
-              ) : (
-                <p className="px-1.5 py-1 text-placeholder italic">{t("loading")}</p>
-              )}
-            </div>
+        <ComboboxPortalOptions
+          popperElementRef={setPopperElement}
+          popperStyles={styles.popper}
+          popperAttributes={attributes.popper}
+        >
+          <div className="flex items-center gap-1.5 rounded-sm border border-subtle bg-surface-2 px-2">
+            <SearchIcon className="h-3.5 w-3.5 text-placeholder" strokeWidth={1.5} />
+            <Combobox.Input
+              as="input"
+              ref={inputRef}
+              className="w-full bg-transparent py-1 text-11 text-secondary placeholder:text-placeholder focus:outline-none"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder={t("common.search.label")}
+              displayValue={(assigned: any) => assigned?.name}
+              onKeyDown={searchInputKeyDown}
+            />
           </div>
-        </Combobox.Options>
+          <div className="mt-2 max-h-48 space-y-1 overflow-y-scroll">
+            {filteredOptions ? (
+              filteredOptions.length > 0 ? (
+                filteredOptions.map((option) => (
+                  <StateOption
+                    {...props}
+                    key={option.value}
+                    option={option}
+                    selectedValue={value}
+                    className="flex w-full cursor-pointer items-center justify-between gap-2 truncate rounded-sm px-1 py-1.5 select-none"
+                  />
+                ))
+              ) : (
+                <p className="px-1.5 py-1 text-placeholder italic">{t("no_matching_results")}</p>
+              )
+            ) : (
+              <p className="px-1.5 py-1 text-placeholder italic">{t("loading")}</p>
+            )}
+          </div>
+        </ComboboxPortalOptions>
       )}
     </ComboDropDown>
   );

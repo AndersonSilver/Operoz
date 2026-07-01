@@ -8,8 +8,8 @@ import type {
   IBlockUpdateDependencyData,
   IGanttBlock,
   TGanttViews,
-} from "@operis/types";
-import { cn, getDate } from "@operis/utils";
+} from "@operoz/types";
+import { cn, getDate } from "@operoz/utils";
 // components
 import { MultipleSelectGroup } from "@/components/core/multiple-select";
 import { GanttChartSidebar, MonthChartView, QuarterChartView, WeekChartView } from "@/components/gantt-chart";
@@ -228,8 +228,6 @@ export const GanttChartMainContent = observer(function GanttChartMainContent(pro
                         selectionHelpers={helpers}
                         ganttContainerRef={ganttContainerRef}
                       />
-                      <TimelineDependencyPaths isEpic={isEpic} />
-                      <TimelineDraggablePath />
                       <GanttAdditionalLayers itemsContainerWidth={itemsContainerWidth} blockCount={blockIds.length} />
                       <GanttChartBlocksList
                         blockIds={blockIds}
@@ -242,6 +240,8 @@ export const GanttChartMainContent = observer(function GanttChartMainContent(pro
                         showAllBlocks={showAllBlocks}
                         updateBlockDates={updateBlockDates}
                       />
+                      <TimelineDependencyPaths isEpic={isEpic} />
+                      <TimelineDraggablePath />
                     </div>
                   )}
                 </div>

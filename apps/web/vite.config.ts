@@ -7,16 +7,18 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 dotenv.config({ path: path.resolve(__dirname, ".env") });
 
-// Operis: boards ligados por defeito (Dockerfile.web e .env.example); desligar com VITE_ENABLE_BOARDS=false
+// Operoz: boards ligados por defeito (Dockerfile.web e .env.example); desligar com VITE_ENABLE_BOARDS=false
 if (process.env.VITE_ENABLE_BOARDS === undefined) {
   process.env.VITE_ENABLE_BOARDS = "true";
 }
 
-// Monorepo root — required so Vite can resolve workspace packages (e.g. @operis/propel/dist) outside apps/web
+// Monorepo root — required so Vite can resolve workspace packages (e.g. @operoz/propel/dist) outside apps/web
 const workspaceRoot = path.resolve(__dirname, "../..");
 const propelSrcRoot = path.resolve(workspaceRoot, "packages/propel/src");
 const sharedStateSrcEntry = path.resolve(workspaceRoot, "packages/shared-state/src/index.ts");
 const servicesSrcEntry = path.resolve(workspaceRoot, "packages/services/src/index.ts");
+const typesSrcEntry = path.resolve(workspaceRoot, "packages/types/src/index.ts");
+const constantsSrcEntry = path.resolve(workspaceRoot, "packages/constants/src/index.ts");
 
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
 const requireEditor = createRequire(editorPkg);
@@ -51,15 +53,15 @@ export default defineConfig(({ command }) => {
 
   const alias: Array<{ find: string | RegExp; replacement: string }> = [
     {
-      find: "@operis/utils",
+      find: "@operoz/utils",
       replacement: path.resolve(__dirname, "../../packages/utils/src/index.ts"),
     },
     {
-      find: "@operis/i18n",
+      find: "@operoz/i18n",
       replacement: path.resolve(__dirname, "../../packages/i18n/src/index.ts"),
     },
     {
-      find: "@operis/services",
+      find: "@operoz/services",
       replacement: servicesSrcEntry,
     },
     ...Object.entries(prosemirrorAliases).map(([find, replacement]) => ({ find, replacement })),
@@ -72,15 +74,23 @@ export default defineConfig(({ command }) => {
     // Dev: source TS (como utils/i18n/propel) — não exige packages/*/dist pré-buildado.
     alias.unshift(
       {
-        find: "@operis/shared-state",
+        find: "@operoz/types",
+        replacement: typesSrcEntry,
+      },
+      {
+        find: "@operoz/constants",
+        replacement: constantsSrcEntry,
+      },
+      {
+        find: "@operoz/shared-state",
         replacement: sharedStateSrcEntry,
       },
       {
-        find: /^@operis\/propel\/styles\/(.+\.css)$/,
+        find: /^@operoz\/propel\/styles\/(.+\.css)$/,
         replacement: `${propelSrcRoot}/styles/$1`,
       },
       {
-        find: /^@operis\/propel\/(.+)$/,
+        find: /^@operoz\/propel\/(.+)$/,
         replacement: `${propelSrcRoot}/$1/index.ts`,
       }
     );

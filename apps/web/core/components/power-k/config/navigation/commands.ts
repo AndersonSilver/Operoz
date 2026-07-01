@@ -1,9 +1,9 @@
 import { BarChart2, Briefcase, FileText, Home, Inbox, Layers, LifeBuoy, PenSquare, Settings } from "lucide-react";
 // plane imports
-import { EUserPermissionsLevel } from "@operis/constants";
-import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@operis/propel/icons";
-import type { ICycle, IModule, IPartialProject, IProjectView, IWorkspace } from "@operis/types";
-import { EUserProjectRoles, EUserWorkspaceRoles } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@operoz/propel/icons";
+import type { ICycle, IModule, IPartialProject, IProjectView, IWorkspace } from "@operoz/types";
+import { EUserProjectRoles, EUserWorkspaceRoles } from "@operoz/types";
 // components
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 import { handlePowerKNavigate } from "@/components/power-k/utils/navigation";

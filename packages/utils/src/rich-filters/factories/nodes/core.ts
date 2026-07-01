@@ -7,8 +7,8 @@ import type {
   TFilterExpression,
   TFilterProperty,
   TFilterValue,
-} from "@operis/types";
-import { FILTER_NODE_TYPE, LOGICAL_OPERATOR } from "@operis/types";
+} from "@operoz/types";
+import { FILTER_NODE_TYPE, LOGICAL_OPERATOR } from "@operoz/types";
 
 /**
  * Creates a condition node with a unique ID.

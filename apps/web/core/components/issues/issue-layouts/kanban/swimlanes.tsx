@@ -13,8 +13,8 @@ import type {
   TIssueKanbanFilters,
   TIssueGroupByOptions,
   TIssueOrderByOptions,
-} from "@operis/types";
-import { Row } from "@operis/ui";
+} from "@operoz/types";
+import { Row } from "@operoz/ui";
 // hooks
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 // plane web imports

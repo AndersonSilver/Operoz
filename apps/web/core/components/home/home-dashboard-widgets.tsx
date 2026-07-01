@@ -3,8 +3,8 @@ import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { THomeWidgetKeys, THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { THomeWidgetKeys, THomeWidgetProps } from "@operoz/types";
 // assets
 import darkWidgetsAsset from "@/app/assets/empty-state/dashboard/widgets-dark.webp?url";
 import lightWidgetsAsset from "@/app/assets/empty-state/dashboard/widgets-light.webp?url";
@@ -184,7 +184,7 @@ export const DashboardWidgets = observer(function DashboardWidgets() {
           <button
             type="button"
             onClick={() => toggleWidgetSettings(true)}
-            className="rounded-md bg-accent-primary px-4 py-2 text-13 font-medium text-on-color hover:bg-accent-secondary"
+            className="hover:bg-accent-secondary rounded-md bg-accent-primary px-4 py-2 text-13 font-medium text-on-color"
           >
             {t("home.empty.widgets.primary_button.text")}
           </button>

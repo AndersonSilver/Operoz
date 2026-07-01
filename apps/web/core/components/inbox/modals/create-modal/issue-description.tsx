@@ -1,13 +1,13 @@
 import type { RefObject } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import type { EditorRefApi } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { EFileAssetType } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { getDescriptionPlaceholderI18n, getTabIndex } from "@operis/utils";
+import { ETabIndices } from "@operoz/constants";
+import type { EditorRefApi } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { EFileAssetType } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { getDescriptionPlaceholderI18n, getTabIndex } from "@operoz/utils";
 // components
 import { RichTextEditor } from "@/components/editor/rich-text/editor";
 // hooks

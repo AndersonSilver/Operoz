@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUserTheme } from "@operis/types";
-import { applyCustomTheme } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUserTheme } from "@operoz/types";
+import { applyCustomTheme } from "@operoz/utils";
 // components
 import { ProfileSettingsHeading } from "@/components/settings/profile/heading";
 // hooks

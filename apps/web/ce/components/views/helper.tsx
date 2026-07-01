@@ -1,4 +1,4 @@
-import type { EIssueLayoutTypes, IProjectView } from "@operis/types";
+import type { EIssueLayoutTypes, IProjectView } from "@operoz/types";
 import type { TWorkspaceLayoutProps } from "@/components/views/helper";
 
 export type TLayoutSelectionProps = {

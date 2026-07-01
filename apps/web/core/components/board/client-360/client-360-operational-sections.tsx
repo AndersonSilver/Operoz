@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { AlertTriangle, Ban, CalendarRange, Gauge, GitBranch, Inbox, LayoutGrid, ShieldAlert } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360DetailResponse, TClient360OperationalPayload } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360DetailResponse, TClient360OperationalPayload } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { reportCoverageHeatmapClass } from "@/components/board/client-360/client-360-utils";
 

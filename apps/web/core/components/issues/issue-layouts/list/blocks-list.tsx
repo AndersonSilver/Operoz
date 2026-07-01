@@ -1,6 +1,6 @@
 import type { MutableRefObject } from "react";
 // components
-import type { TIssue, IIssueDisplayProperties, TIssueMap, TGroupedIssues } from "@operis/types";
+import type { TIssue, IIssueDisplayProperties, TIssueMap, TGroupedIssues } from "@operoz/types";
 // hooks
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 // types
@@ -38,11 +38,18 @@ export function IssueBlocksList(props: Props) {
     isEpic = false,
   } = props;
 
+  // Remove issues whose parent is already in this group — they render as children
+  // when the parent is expanded, so showing them at root level would duplicate them.
+  const issueIdSet = new Set<string>(issueIds ?? []);
+  const rootIssueIds: string[] = (issueIds ?? []).filter((id: string) => {
+    const parentId = issuesMap[id]?.parent_id;
+    return !parentId || !issueIdSet.has(parentId);
+  });
+
   return (
     <div className="relative h-full w-full">
-      {issueIds &&
-        issueIds.length > 0 &&
-        issueIds.map((issueId: string, index: number) => (
+      {rootIssueIds.length > 0 &&
+        rootIssueIds.map((issueId: string, index: number) => (
           <IssueBlockRoot
             key={issueId}
             issueId={issueId}
@@ -56,7 +63,7 @@ export function IssueBlocksList(props: Props) {
             containerRef={containerRef}
             selectionHelpers={selectionHelpers}
             groupId={groupId}
-            isLastChild={index === issueIds.length - 1}
+            isLastChild={index === rootIssueIds.length - 1}
             isDragAllowed={isDragAllowed}
             canDropOverIssue={canDropOverIssue}
             isEpic={isEpic}

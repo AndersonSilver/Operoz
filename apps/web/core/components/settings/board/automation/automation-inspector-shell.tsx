@@ -1,7 +1,7 @@
 import { ArrowRight, GitBranch, Link2, Trash2 } from "lucide-react";
 import { Link } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 import clsx from "clsx";
 import { AUTOMATION_KIND_DEFAULT_ICON, AutomationCatalogIcon } from "./automation-catalog-icon";
 import { AUTOMATION_KIND_THEME, type AutomationVisualKind } from "./automation-kind-theme";
@@ -43,12 +43,7 @@ export function AutomationInspectorShell(props: Props) {
       <header className="automation-inspector-header">
         <span className={clsx("automation-inspector-header-accent", theme.accentBar)} aria-hidden />
         <div className="flex items-start gap-3 pl-2">
-          <div
-            className={clsx(
-              "flex size-9 shrink-0 items-center justify-center rounded-lg",
-              theme.iconWrap
-            )}
-          >
+          <div className={clsx("flex size-9 shrink-0 items-center justify-center rounded-lg", theme.iconWrap)}>
             {isConnection ? (
               <Link2 className={clsx("size-4", theme.iconColor)} strokeWidth={1.75} />
             ) : kind === "decision" ? (
@@ -60,13 +55,13 @@ export function AutomationInspectorShell(props: Props) {
           <div className="min-w-0 flex-1">
             <span
               className={clsx(
-                "mb-1 inline-flex rounded-full px-2 py-0.5 text-10 font-semibold uppercase tracking-wide",
+                "mb-1 inline-flex rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
                 theme.chip
               )}
             >
               {kindLabel}
             </span>
-            <h2 className="truncate text-14 font-semibold leading-tight text-primary">{title}</h2>
+            <h2 className="truncate text-14 leading-tight font-semibold text-primary">{title}</h2>
             {subtitle && <p className="mt-0.5 text-11 leading-relaxed text-tertiary">{subtitle}</p>}
           </div>
         </div>
@@ -102,9 +97,7 @@ export function ConfigSection(props: { title?: string; children: React.ReactNode
   const { title, children } = props;
   return (
     <section className="automation-inspector-section">
-      {title && (
-        <p className="text-11 font-semibold uppercase tracking-wide text-tertiary">{title}</p>
-      )}
+      {title && <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">{title}</p>}
       <div className="space-y-1">{children}</div>
     </section>
   );

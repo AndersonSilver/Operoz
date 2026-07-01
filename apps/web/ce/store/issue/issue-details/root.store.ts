@@ -1,5 +1,5 @@
 import { makeObservable } from "mobx";
-import type { TIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
 import type { IIssueDetail as IIssueDetailCore } from "@/store/issue/issue-details/root.store";
 import { IssueDetail as IssueDetailCore } from "@/store/issue/issue-details/root.store";
 import type { IIssueRootStore } from "@/store/issue/root.store";

@@ -1,4 +1,4 @@
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 
 /**
  * Computes a new sort_order when reordering boards in the workspace sidebar.

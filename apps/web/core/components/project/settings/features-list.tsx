@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { setPromiseToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IProject } from "@operis/types";
-import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { setPromiseToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IProject } from "@operoz/types";
+import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon } from "@operoz/propel/icons";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 import { SettingsHeading } from "@/components/settings/heading";

@@ -4,9 +4,9 @@ import {
   CalendarLayoutIcon,
   SheetLayoutIcon,
   TimelineLayoutIcon,
-} from "@operis/propel/icons";
-import type { ISvgIcons } from "@operis/propel/icons";
-import { EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { EIssueLayoutTypes } from "@operoz/types";
 
 export function IssueLayoutIcon({
   layout,

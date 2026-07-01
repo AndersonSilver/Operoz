@@ -2,12 +2,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { IconButton } from "@operis/propel/icon-button";
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import type { TCycleFilters } from "@operis/types";
-import { cn, calculateTotalFilters } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { IconButton } from "@operoz/propel/icon-button";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import type { TCycleFilters } from "@operoz/types";
+import { cn, calculateTotalFilters } from "@operoz/utils";
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import {
   ProjectHubToolbar,
@@ -99,10 +99,14 @@ export const CyclesViewHeader = observer(function CyclesViewHeader(props: Props)
               onChange={(e) => updateSearchQuery(e.target.value)}
               onKeyDown={handleInputKeyDown}
             />
-            <button type="button" className="grid place-items-center text-tertiary hover:text-primary" onClick={() => {
-              updateSearchQuery("");
-              setIsSearchOpen(false);
-            }}>
+            <button
+              type="button"
+              className="grid place-items-center text-tertiary hover:text-primary"
+              onClick={() => {
+                updateSearchQuery("");
+                setIsSearchOpen(false);
+              }}
+            >
               <CloseIcon className="size-3" />
             </button>
           </div>

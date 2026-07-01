@@ -1,6 +1,6 @@
 // plane imports
-import { ScrollArea } from "@operis/propel/scrollarea";
-import { cn } from "@operis/utils";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import { cn } from "@operoz/utils";
 // local imports
 import { ProjectSettingsSidebarHeader } from "./header";
 import { ProjectSettingsSidebarItemCategories } from "./item-categories";
@@ -19,7 +19,7 @@ export function ProjectSettingsSidebarRoot(props: Props) {
       orientation="vertical"
       size="sm"
       rootClassName={cn(
-        "shrink-0 animate-fade-in h-full w-[250px] bg-surface-1 border-r border-r-subtle overflow-y-scroll",
+        "h-full w-[250px] shrink-0 animate-fade-in overflow-y-scroll border-r border-r-subtle bg-surface-1",
         className
       )}
       viewportClassName="pb-5"

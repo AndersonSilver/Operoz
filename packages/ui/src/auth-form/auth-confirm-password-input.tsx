@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { AuthInput } from "./auth-input";
 
 export type TAuthConfirmPasswordInputProps = React.InputHTMLAttributes<HTMLInputElement> & {

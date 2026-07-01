@@ -1,14 +1,14 @@
 # Deploy automático com GitHub Actions
 
-Workflow: [`.github/workflows/deploy-operis.yml`](../.github/workflows/deploy-operis.yml)  
+Workflow: [`.github/workflows/deploy-operoz.yml`](../.github/workflows/deploy-operoz.yml)  
 Scripts VPS: [`.github/scripts/`](../.github/scripts/)
 
 ## O que faz
 
 ### Deploy `web` (push na `preview` ou manual)
 
-1. Build `plane-frontend` no GitHub com `VITE_API_BASE_URL` = `OPERIS_WEB_URL`.
-2. SSH no VPS → pull imagem GHCR → sync `operis.env` (WEB_URL, CORS) → recreate `web`.
+1. Build `plane-frontend` no GitHub com `VITE_API_BASE_URL` = `OPEROZ_WEB_URL`.
+2. SSH no VPS → pull imagem GHCR → sync `operoz.env` (WEB_URL, CORS) → recreate `web`.
 
 ### Deploy `full` (manual ou push com variável)
 
@@ -31,24 +31,24 @@ Não é preciso rebuild manual do proxy na VPS nem correr `vps-setup-assistant-w
 
 | Variable                    | Valor recomendado                 |
 | --------------------------- | --------------------------------- |
-| `OPERIS_WEB_URL`            | `https://www.operoz.io`           |
-| `OPERIS_REPO_PATH`          | `/root/operis-selfhost/Operis`    |
-| `OPERIS_APP_PATH`           | `/root/operis-selfhost/plane-app` |
-| `OPERIS_DEPLOY_ON_PUSH`     | `web` ou `full` (opcional)        |
-| `OPERIS_SELF_HOSTED_RUNNER` | `true` se usar runner no VPS      |
+| `OPEROZ_WEB_URL`            | `https://www.operoz.io`           |
+| `OPEROZ_REPO_PATH`          | `/root/operoz-selfhost/Operoz`    |
+| `OPEROZ_APP_PATH`           | `/root/operoz-selfhost/plane-app` |
+| `OPEROZ_DEPLOY_ON_PUSH`     | `web` ou `full` (opcional)        |
+| `OPEROZ_SELF_HOSTED_RUNNER` | `true` se usar runner no VPS      |
 
-**Importante:** `OPERIS_WEB_URL` controla o build do frontend (`VITE_API_BASE_URL`) e sincroniza `WEB_URL` / `CORS_ALLOWED_ORIGINS` no `operis.env` durante o deploy.
+**Importante:** `OPEROZ_WEB_URL` controla o build do frontend (`VITE_API_BASE_URL`) e sincroniza `WEB_URL` / `CORS_ALLOWED_ORIGINS` no `operoz.env` durante o deploy.
 
 ### VPS
 
 - Docker e docker compose instalados.
-- `operis.env` com `DOCKERHUB_USER=myoperis`, `APP_RELEASE=stable`, `PULL_POLICY=never`.
-- Clone do repo em `OPERIS_REPO_PATH` (branch `preview`).
+- `operoz.env` com `DOCKERHUB_USER=myoperoz`, `APP_RELEASE=stable`, `PULL_POLICY=never`.
+- Clone do repo em `OPEROZ_REPO_PATH` (branch `preview`).
 - Nginx Proxy Manager: forward para `172.17.0.1:8080` (fora do Actions — configuração única).
 
 ## Como publicar
 
-**Actions → Deploy Operis → Run workflow**
+**Actions → Deploy Operoz → Run workflow**
 
 | Input        | Uso                                                                |
 | ------------ | ------------------------------------------------------------------ |
@@ -60,12 +60,12 @@ Não é preciso rebuild manual do proxy na VPS nem correr `vps-setup-assistant-w
 ### Push na branch `preview`
 
 - Por defeito: só **web** (build frontend + recreate web).
-- Com `OPERIS_DEPLOY_ON_PUSH=full`: stack completa em cada push.
+- Com `OPEROZ_DEPLOY_ON_PUSH=full`: stack completa em cada push.
 - Ou commit com `[deploy-full]` na mensagem para full pontual.
 
 ## Checklist pós-deploy
 
-1. GitHub Variable `OPERIS_WEB_URL=https://www.operoz.io` definida.
+1. GitHub Variable `OPEROZ_WEB_URL=https://www.operoz.io` definida.
 2. Run workflow → **full** (primeira vez após migração de domínio ou fix do Caddy).
 3. Site abre sem "servidor offline" (frontend buildado com URL certa).
 4. Assistente: indexação e chat (workers sobem via overlay no deploy full).
@@ -76,7 +76,7 @@ Não é preciso rebuild manual do proxy na VPS nem correr `vps-setup-assistant-w
 | ---------------------------------- | ------------------------------------------------------------------------ |
 | `pull access denied` no VPS        | Repo privado: token GHCR no script; permissões Actions read/write        |
 | Proxy em restart loop              | Deploy **full** (imagem `plane-proxy` vem do GHCR com Caddyfile atual)   |
-| "Servidor offline" no browser      | `OPERIS_WEB_URL` errada → corrigir variable → deploy **web** ou **full** |
+| "Servidor offline" no browser      | `OPEROZ_WEB_URL` errada → corrigir variable → deploy **web** ou **full** |
 | Indexação / chat não funcionam     | Deploy **full** (sobe `assistant-worker`, `api-chat`, etc.)              |
 | 502 no NPM                         | Forward `172.17.0.1:8080`, não `127.0.0.1`                               |
-| Health check falhou no log Actions | Ver logs `proxy` no VPS; confirmar `LISTEN_HTTP_PORT=8080` no operis.env |
+| Health check falhou no log Actions | Ver logs `proxy` no VPS; confirmar `LISTEN_HTTP_PORT=8080` no operoz.env |

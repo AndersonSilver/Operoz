@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis tem `WorkspaceCustomField` com `settings` JSON, mas a cobertura de
+O Operoz tem `WorkspaceCustomField` com `settings` JSON, mas a cobertura de
 **tipos** e de **configuração** (obrigatório/visível/contexto, valores default,
 cascata) é limitada face ao Jira (roadmap §4). Esta feature completa o sistema de
 campos personalizados e, de passagem, traz **Components** e **Resolution** (§3.7,
@@ -17,13 +17,13 @@ de campo, field configuration, contextos, valores default, cascading select.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Estender `WorkspaceCustomField` (já existe) com mais tipos via `settings` JSON | Tabela por tipo de campo |
-| 2 | Valor por issue numa tabela `IssueCustomFieldValue` (EAV controlado) | Coluna por campo (impraticável) |
-| 3 | `FieldConfiguration` define required/hidden/readonly por contexto | Flags soltas no campo |
-| 4 | Components e Resolution como entidades dedicadas (não custom field) por serem nativas do fluxo | Tudo como custom field genérico |
-| 5 | OQL `cf[<id>]` (feature 02) consulta valores | Sem query em custom fields |
+| #   | Decisão                                                                                        | Alternativa rejeitada           |
+| --- | ---------------------------------------------------------------------------------------------- | ------------------------------- |
+| 1   | Estender `WorkspaceCustomField` (já existe) com mais tipos via `settings` JSON                 | Tabela por tipo de campo        |
+| 2   | Valor por issue numa tabela `IssueCustomFieldValue` (EAV controlado)                           | Coluna por campo (impraticável) |
+| 3   | `FieldConfiguration` define required/hidden/readonly por contexto                              | Flags soltas no campo           |
+| 4   | Components e Resolution como entidades dedicadas (não custom field) por serem nativas do fluxo | Tudo como custom field genérico |
+| 5   | OQL `cf[<id>]` (feature 02) consulta valores                                                   | Sem query em custom fields      |
 
 ## Escopo
 

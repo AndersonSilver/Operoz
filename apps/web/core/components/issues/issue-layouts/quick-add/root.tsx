@@ -5,11 +5,11 @@ import { useParams } from "next/navigation";
 import type { UseFormRegister } from "react-hook-form";
 import { useForm } from "react-hook-form";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
-import { setPromiseToast } from "@operis/propel/toast";
-import type { IProject, TIssue, EIssueLayoutTypes } from "@operis/types";
-import { cn, createIssuePayload } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
+import { setPromiseToast } from "@operoz/propel/toast";
+import type { IProject, TIssue, EIssueLayoutTypes } from "@operoz/types";
+import { cn, createIssuePayload } from "@operoz/utils";
 // plane web imports
 import { QuickAddIssueFormRoot } from "@/plane-web/components/issues/quick-add";
 // local imports

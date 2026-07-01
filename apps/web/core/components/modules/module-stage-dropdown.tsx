@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardIssueType, IModule } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardIssueType, IModule } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   isDisabled: boolean;

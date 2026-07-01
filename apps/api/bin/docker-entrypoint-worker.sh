@@ -6,4 +6,4 @@ python manage.py wait_for_db
 # Wait for migrations
 python manage.py wait_for_migrations
 # Run the processes
-celery -A operis worker -Q celery -l info -n general@%h
+celery -A operoz worker -Q celery -l info -n general@%h

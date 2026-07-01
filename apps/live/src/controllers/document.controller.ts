@@ -1,10 +1,10 @@
 import type { Request, Response } from "express";
 import { z } from "zod";
 // helpers
-import { Controller, Post } from "@operis/decorators";
-import { convertHTMLDocumentToAllFormats } from "@operis/editor";
+import { Controller, Post } from "@operoz/decorators";
+import { convertHTMLDocumentToAllFormats } from "@operoz/editor";
 // logger
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 import type { TConvertDocumentRequestBody } from "@/types";
 
 // Define the schema with more robust validation

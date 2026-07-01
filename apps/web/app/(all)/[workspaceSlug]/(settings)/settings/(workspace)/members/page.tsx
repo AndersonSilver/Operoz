@@ -2,12 +2,12 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { Search } from "lucide-react";
 // types
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspaceBulkInviteFormData } from "@operis/types";
-import { cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspaceBulkInviteFormData } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";

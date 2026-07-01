@@ -1,5 +1,5 @@
-import type { TSupportedOperators } from "@operis/types";
-import { CORE_OPERATORS } from "@operis/types";
+import type { TSupportedOperators } from "@operoz/types";
+import { CORE_OPERATORS } from "@operoz/types";
 
 export type TFiltersOperatorConfigs = {
   allowedOperators: Set<TSupportedOperators>;

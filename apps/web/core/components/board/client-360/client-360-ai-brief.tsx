@@ -2,10 +2,10 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { Sparkles } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360DetailResponse } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 import { buildClient360ClientBriefMd } from "@/components/board/client-360/build-client-360-client-brief-md";
 import {
   Client360ClientBriefDocument,

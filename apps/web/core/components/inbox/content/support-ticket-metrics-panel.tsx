@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import type { IInboxIssueStore } from "@/store/inbox/inbox-issue.store";
 
 type Props = {

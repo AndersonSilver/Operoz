@@ -40,17 +40,23 @@ core/store/permissions/permission.store.ts → PermissionStore
 groupMembers, securityLevels, auditLog. `auth.service.ts`: ssoSamlConfig,
 ssoOidcConfig, enroll2fa, verify2fa.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TPermissionKey = string;
 export type TPermissionGrant = {
-  id: string; permission_key: TPermissionKey;
-  grant_type: "role" | "group" | "special"; grant_ref: string;
+  id: string;
+  permission_key: TPermissionKey;
+  grant_type: "role" | "group" | "special";
+  grant_ref: string;
 };
 export type TAuditEntry = {
-  actor: string; action: string; target_type: string;
-  before: unknown; after: unknown; created_at: string;
+  actor: string;
+  action: string;
+  target_type: string;
+  before: unknown;
+  after: unknown;
+  created_at: string;
 };
 ```
 

@@ -13,7 +13,7 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { createRoot } from "react-dom/client";
 // plane types
-import type { InstructionType } from "@operis/types";
+import type { InstructionType } from "@operoz/types";
 // components
 import { StickyNote } from "../sticky";
 // helpers

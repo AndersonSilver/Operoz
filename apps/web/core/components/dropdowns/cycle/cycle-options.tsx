@@ -2,17 +2,19 @@ import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
+import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 // components
 import { Combobox } from "@headlessui/react";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // icon
-import { CheckIcon, CycleGroupIcon, CycleIcon, SearchIcon } from "@operis/propel/icons";
-import type { TCycleGroups } from "@operis/types";
+import { CheckIcon, CycleGroupIcon, CycleIcon, SearchIcon } from "@operoz/propel/icons";
+import type { TCycleGroups } from "@operoz/types";
 // ui
 // store hooks
 import { useCycle } from "@/hooks/store/use-cycle";
+import { getIssueDropdownPopperOptions, ISSUE_DROPDOWN_PORTAL_Z_CLASS } from "@/components/dropdowns/popper-config";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // types
 
@@ -56,17 +58,7 @@ export const CycleOptions = observer(function CycleOptions(props: CycleOptionsPr
   }, [isOpen, isMobile]);
 
   // popper-js init
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ?? "bottom-start",
-    modifiers: [
-      {
-        name: "preventOverflow",
-        options: {
-          padding: 12,
-        },
-      },
-    ],
-  });
+  const { styles, attributes } = usePopper(referenceElement, popperElement, getIssueDropdownPopperOptions(placement));
 
   const cycleIds = (getProjectCycleIds(projectId) ?? [])?.filter((cycleId) => {
     const cycleDetails = getCycleById(cycleId);
@@ -117,8 +109,8 @@ export const CycleOptions = observer(function CycleOptions(props: CycleOptionsPr
   const filteredOptions =
     query === "" ? options : options?.filter((o) => o.query.toLowerCase().includes(query.toLowerCase()));
 
-  return (
-    <Combobox.Options className="fixed z-50" static>
+  return createPortal(
+    <Combobox.Options className={`fixed ${ISSUE_DROPDOWN_PORTAL_Z_CLASS}`} static>
       <div
         className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
         ref={setPopperElement}
@@ -167,6 +159,7 @@ export const CycleOptions = observer(function CycleOptions(props: CycleOptionsPr
           )}
         </div>
       </div>
-    </Combobox.Options>
+    </Combobox.Options>,
+    document.body
   );
 });

@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PriorityIcon, CloseIcon } from "@operis/propel/icons";
-import type { TIssuePriorities } from "@operis/types";
-import { Tag } from "@operis/ui";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PriorityIcon, CloseIcon } from "@operoz/propel/icons";
+import type { TIssuePriorities } from "@operoz/types";
+import { Tag } from "@operoz/ui";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 

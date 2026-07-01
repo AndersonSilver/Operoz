@@ -2,12 +2,12 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { ChevronDown, ChevronUp, MoreHorizontal, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardIssueType } from "@operis/types";
-import { CustomMenu, Loader, ToggleSwitch } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardIssueType } from "@operoz/types";
+import { CustomMenu, Loader, ToggleSwitch } from "@operoz/ui";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { BoardIssueTypeCreateModal } from "./board-issue-type-create-modal";
@@ -114,11 +114,7 @@ export const BoardIssueTypesSettings = observer(function BoardIssueTypesSettings
                     <p className="text-11 text-tertiary">{t("boards.settings.issue_types.disabled")}</p>
                   )}
                 </div>
-                <ToggleSwitch
-                  value={item.is_enabled}
-                  onChange={(val) => toggleEnabled(item, val)}
-                  size="sm"
-                />
+                <ToggleSwitch value={item.is_enabled} onChange={(val) => toggleEnabled(item, val)} size="sm" />
                 <div className="flex shrink-0 flex-col">
                   <button
                     type="button"

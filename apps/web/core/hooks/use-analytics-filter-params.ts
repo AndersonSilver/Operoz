@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import type { TAnalyticsFilterParams } from "@operis/types";
+import type { TAnalyticsFilterParams } from "@operoz/types";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 
 export function useAnalyticsFilterParams(extra?: Record<string, unknown>) {

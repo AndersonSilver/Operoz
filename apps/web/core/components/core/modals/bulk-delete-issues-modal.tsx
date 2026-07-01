@@ -6,13 +6,13 @@ import type { SubmitHandler } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { SearchIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { ISearchIssueResponse, IUser } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { SearchIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { ISearchIssueResponse, IUser } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // assets
 import darkIssuesAsset from "@/app/assets/empty-state/search/issues-dark.webp?url";
 import lightIssuesAsset from "@/app/assets/empty-state/search/issues-light.webp?url";

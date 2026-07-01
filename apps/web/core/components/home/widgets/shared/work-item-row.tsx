@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { PriorityIcon, StateGroupIcon } from "@operis/propel/icons";
-import type { TIssue } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { generateWorkItemLink } from "@operis/utils";
+import { PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
+import type { TIssue } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { generateWorkItemLink } from "@operoz/utils";
 import { ListItem } from "@/components/core/list";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
@@ -72,7 +72,7 @@ export const WorkItemRow = observer(function WorkItemRow(props: WorkItemRowProps
       }
       appendTitleElement={
         issue.target_date ? (
-          <span className="whitespace-nowrap text-11 text-tertiary">{issue.target_date}</span>
+          <span className="text-11 whitespace-nowrap text-tertiary">{issue.target_date}</span>
         ) : undefined
       }
       onItemClick={handlePeekOverview}

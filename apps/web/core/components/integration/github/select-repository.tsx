@@ -1,12 +1,12 @@
 import React from "react";
 import { useParams } from "next/navigation";
 import useSWRInfinite from "swr/infinite";
-import type { IWorkspaceIntegration } from "@operis/types";
+import type { IWorkspaceIntegration } from "@operoz/types";
 // services
 // ui
-import { CustomSearchSelect } from "@operis/ui";
+import { CustomSearchSelect } from "@operoz/ui";
 // helpers
-import { truncateText } from "@operis/utils";
+import { truncateText } from "@operoz/utils";
 import { ProjectService } from "@/services/project";
 // types
 

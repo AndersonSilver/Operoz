@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TBoardFormData } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TBoardFormData } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import useKeypress from "@/hooks/use-keypress";
 import { CreateBoardForm } from "./create-board-form";
 
@@ -35,11 +35,7 @@ export function CreateBoardModal(props: Props) {
       width={EModalWidth.LG}
       className="overflow-hidden rounded-lg"
     >
-      <CreateBoardForm
-        workspaceSlug={workspaceSlug}
-        onClose={onClose}
-        onCreated={handleCreated}
-      />
+      <CreateBoardForm workspaceSlug={workspaceSlug} onClose={onClose} onCreated={handleCreated} />
     </ModalCore>
   );
 }

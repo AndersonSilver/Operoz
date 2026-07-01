@@ -1,5 +1,5 @@
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   className?: string;

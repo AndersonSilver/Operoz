@@ -1,8 +1,8 @@
 import { CircleHelp } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { CustomMenu } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { CustomMenu } from "@operoz/ui";
 
 const SHORTCUT_KEYS = ["search", "grid", "list", "table", "export"] as const;
 

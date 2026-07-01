@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // plane imports
-import type { TLoader } from "@operis/types";
+import type { TLoader } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 

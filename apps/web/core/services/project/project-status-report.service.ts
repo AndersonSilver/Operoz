@@ -1,11 +1,11 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IBoardStatusReport,
   TBoardStatusReportUpdateData,
   TProjectStatusReportCreateData,
   TStatusReportExportFormat,
   TStatusReportPreviewData,
-} from "@operis/types";
+} from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class ProjectStatusReportService extends APIService {

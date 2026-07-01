@@ -1,9 +1,9 @@
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane imports
-import type { EViewAccess, TViewFilterProps } from "@operis/types";
-import { EHeaderVariant, Header, Tag } from "@operis/ui";
-import { replaceUnderscoreIfSnakeCase } from "@operis/utils";
+import type { EViewAccess, TViewFilterProps } from "@operoz/types";
+import { EHeaderVariant, Header, Tag } from "@operoz/ui";
+import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";
 // components
 import { AppliedDateFilters } from "@/components/common/applied-filters/date";
 import { AppliedMembersFilters } from "@/components/common/applied-filters/members";
@@ -24,8 +24,13 @@ const DATE_FILTERS = ["created_at"];
 const VIEW_ACCESS_FILTERS = ["view_type"];
 
 export function ViewAppliedFiltersList(props: Props) {
-  const { appliedFilters, handleClearAllFilters, handleRemoveFilter, alwaysAllowEditing, appearance = "default" } =
-    props;
+  const {
+    appliedFilters,
+    handleClearAllFilters,
+    handleRemoveFilter,
+    alwaysAllowEditing,
+    appearance = "default",
+  } = props;
   const { t } = useTranslation();
 
   if (!appliedFilters) return null;

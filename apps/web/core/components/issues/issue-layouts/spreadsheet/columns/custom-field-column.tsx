@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import type { IProjectCustomFieldLite, TCustomFieldValue, TIssue } from "@operis/types";
+import type { IProjectCustomFieldLite, TCustomFieldValue, TIssue } from "@operoz/types";
 import {
   BoardCustomFieldLayoutCell,
   readIssueLayoutCustomValue,

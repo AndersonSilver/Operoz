@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationRule, TAutomationCatalog } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationRule, TAutomationCatalog } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import { BoardService } from "@/services/board/board.service";
 import { BoardAutomationEditor } from "./automation/board-automation-editor";
 import { BoardAutomationRulesList } from "./automation/board-automation-rules-list";
@@ -129,7 +129,7 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
         message:
           payload?.code === "publish_required_before_enable"
             ? t("boards.settings.automation.editor.enable_requires_publish")
-            : payload?.error ?? t("something_went_wrong"),
+            : (payload?.error ?? t("something_went_wrong")),
       });
     }
   };
@@ -147,11 +147,7 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
     return (
       <div className="flex min-h-[240px] flex-col items-center justify-center gap-3 text-center text-13 text-tertiary">
         <p>{t("something_went_wrong")}</p>
-        <button
-          type="button"
-          className="text-accent-primary hover:underline"
-          onClick={() => void load()}
-        >
+        <button type="button" className="text-accent-primary hover:underline" onClick={() => void load()}>
           {t("refresh")}
         </button>
       </div>
@@ -178,16 +174,16 @@ export const BoardAutomationSettings = observer(function BoardAutomationSettings
 
   return (
     <div className="h-full overflow-y-auto">
-    <BoardAutomationRulesList
-      workspaceSlug={workspaceSlug}
-      boardSlug={board.slug}
-      rules={rules}
-      creating={creating}
-      onCreate={handleCreate}
-      onEdit={setEditingRule}
-      onDelete={handleDelete}
-      onToggleEnabled={toggleEnabled}
-    />
+      <BoardAutomationRulesList
+        workspaceSlug={workspaceSlug}
+        boardSlug={board.slug}
+        rules={rules}
+        creating={creating}
+        onCreate={handleCreate}
+        onEdit={setEditingRule}
+        onDelete={handleDelete}
+        onToggleEnabled={toggleEnabled}
+      />
     </div>
   );
 });

@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { FormProvider, useForm } from "react-hook-form";
 import useSWR from "swr";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EFileAssetType } from "@operis/types";
-import type { TCustomFieldValue } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EFileAssetType } from "@operoz/types";
+import type { TCustomFieldValue } from "@operoz/types";
 // components
 import { BoardSelectField } from "@/components/board/board-select-field";
 import { BoardProjectDynamicFields } from "@/components/project/board-project-dynamic-fields";
@@ -272,9 +272,7 @@ export const CreateProjectForm = observer(function CreateProjectForm(props: TCre
               mode="create"
               omitPinnedOnCreate
               customFieldValues={customFieldValues}
-              onCustomFieldChange={(id, val) =>
-                setCustomFieldValues((prev) => ({ ...prev, [id]: val }))
-              }
+              onCustomFieldChange={(id, val) => setCustomFieldValues((prev) => ({ ...prev, [id]: val }))}
               projectCustomFields={boardCustomFieldsLite}
             />
           ) : (

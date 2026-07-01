@@ -1,5 +1,5 @@
 import { Plus } from "lucide-react";
-import { cn } from "@operis/ui";
+import { cn } from "@operoz/ui";
 
 type Props = {
   label: string;
@@ -18,10 +18,10 @@ export function AutomationCreateCard(props: Props) {
       disabled={loading}
       onClick={onClick}
       className={cn(
-        "group flex min-h-[220px] h-full w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-subtle",
+        "group flex h-full min-h-[220px] w-full flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-subtle",
         "bg-transparent px-4 py-8 text-center transition-all duration-150",
         "hover:border-accent-subtle hover:bg-accent-subtle/10",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-1",
+        "focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none",
         loading && "pointer-events-none opacity-60"
       )}
     >

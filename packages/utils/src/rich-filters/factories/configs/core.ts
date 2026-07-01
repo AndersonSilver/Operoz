@@ -1,6 +1,6 @@
 // plane imports
-import type { TFilterValue, TSupportedOperators, TBaseFilterFieldConfig } from "@operis/types";
-import { FILTER_FIELD_TYPE } from "@operis/types";
+import type { TFilterValue, TSupportedOperators, TBaseFilterFieldConfig } from "@operoz/types";
+import { FILTER_FIELD_TYPE } from "@operoz/types";
 // local imports
 import type { IFilterIconConfig } from "./shared";
 import { createFilterFieldConfig } from "./shared";

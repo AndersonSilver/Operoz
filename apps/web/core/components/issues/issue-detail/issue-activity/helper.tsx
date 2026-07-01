@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EFileAssetType } from "@operis/types";
-import type { TCommentsOperations } from "@operis/types";
-import { copyUrlToClipboard, formatTextList, generateWorkItemLink } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EFileAssetType } from "@operoz/types";
+import type { TCommentsOperations } from "@operoz/types";
+import { copyUrlToClipboard, formatTextList, generateWorkItemLink } from "@operoz/utils";
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";

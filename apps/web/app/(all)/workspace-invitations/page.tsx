@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
 import { Boxes, Share2, Star, User2 } from "lucide-react";
-import { CheckIcon, CloseIcon } from "@operis/propel/icons";
+import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { EmptySpace, EmptySpaceItem } from "@/components/ui/empty-space";

@@ -22,6 +22,7 @@ export interface IPartialProject {
   workspace: IWorkspace | string;
   board_id?: string | null;
   board?: IBoardLite | null;
+  workflow_scheme?: string | null;
   cycle_view: boolean;
   issue_views_view: boolean;
   module_view: boolean;

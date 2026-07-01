@@ -3,12 +3,12 @@ import { intersection } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // types
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IUser, IImporterService } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IUser, IImporterService } from "@operoz/types";
 // ui
-import { Checkbox, CustomSearchSelect, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { Checkbox, CustomSearchSelect, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUser } from "@/hooks/store/user";

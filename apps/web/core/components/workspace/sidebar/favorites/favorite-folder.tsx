@@ -16,14 +16,14 @@ import { createRoot } from "react-dom/client";
 import { Star, MoreHorizontal, GripVertical } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { useTranslation } from "@operis/i18n";
-import { DraftIcon, FavoriteFolderIcon, ChevronRightIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IFavorite, InstructionType } from "@operis/types";
-import { CustomMenu, DropIndicator, DragHandle } from "@operis/ui";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { useTranslation } from "@operoz/i18n";
+import { DraftIcon, FavoriteFolderIcon, ChevronRightIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IFavorite, InstructionType } from "@operoz/types";
+import { CustomMenu, DropIndicator, DragHandle } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { usePlatformOS } from "@/hooks/use-platform-os";

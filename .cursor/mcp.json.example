@@ -1,8 +1,0 @@
-{
-  "mcpServers": {
-    "operis": {
-      "command": "/caminho/absoluto/para/operis/Operis/mcp-server/bin/run-mcp-local.sh",
-      "args": []
-    }
-  }
-}

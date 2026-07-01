@@ -1,10 +1,10 @@
 import type { IncomingMessage } from "node:http";
 
-import type { OperisConfig } from "./config.js";
+import type { OperozConfig } from "./config.js";
 import { loadConfig } from "./config.js";
 
 /** Extrai credenciais do pedido HTTP (MCP centralizado — um token por utilizador). */
-export function configFromRequest(req: IncomingMessage, baseDefaults?: OperisConfig): OperisConfig {
+export function configFromRequest(req: IncomingMessage, baseDefaults?: OperozConfig): OperozConfig {
   const defaults = baseDefaults ?? loadConfig();
 
   const auth = req.headers.authorization;
@@ -18,11 +18,9 @@ export function configFromRequest(req: IncomingMessage, baseDefaults?: OperisCon
     apiKey = headerKey.trim();
   }
 
-  const sessionHeader = req.headers["x-operis-session"];
+  const sessionHeader = req.headers["x-operoz-session"];
   const sessionCookie =
-    typeof sessionHeader === "string" && sessionHeader.trim()
-      ? sessionHeader.trim()
-      : defaults.sessionCookie;
+    typeof sessionHeader === "string" && sessionHeader.trim() ? sessionHeader.trim() : defaults.sessionCookie;
 
   return {
     baseUrl: defaults.baseUrl,

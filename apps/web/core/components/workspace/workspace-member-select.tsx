@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { Ban } from "lucide-react";
-import { EUserPermissions } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IUserLite } from "@operis/types";
-import { Avatar, CustomSearchSelect } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { EUserPermissions } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IUserLite } from "@operoz/types";
+import { Avatar, CustomSearchSelect } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 import { useMember } from "@/hooks/store/use-member";
 
 type Props = {

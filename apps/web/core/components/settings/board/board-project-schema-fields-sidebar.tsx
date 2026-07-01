@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import { Plus, Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardCustomField, TBoardProjectFieldSection, TProjectStandardFieldKey } from "@operis/types";
-import { Input } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardCustomField, TBoardProjectFieldSection, TProjectStandardFieldKey } from "@operoz/types";
+import { Input } from "@operoz/ui";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 import { PROJECT_STANDARD_FIELD_KEYS } from "./board-project-schema-constants";
 
@@ -19,15 +19,8 @@ type Props = {
 };
 
 export function BoardProjectSchemaFieldsSidebar(props: Props) {
-  const {
-    workspaceSlug,
-    boardSlug,
-    targetSection,
-    availableCustomFields,
-    hiddenSystemKeys,
-    onAddSystem,
-    onAddCustom,
-  } = props;
+  const { workspaceSlug, boardSlug, targetSection, availableCustomFields, hiddenSystemKeys, onAddSystem, onAddCustom } =
+    props;
   const { t } = useTranslation();
   const [search, setSearch] = useState("");
 
@@ -63,7 +56,7 @@ export function BoardProjectSchemaFieldsSidebar(props: Props) {
       </div>
       <div className="border-b border-subtle p-3">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-placeholder" />
+          <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-placeholder" />
           <Input
             value={search}
             onChange={(e) => setSearch(e.target.value)}
@@ -75,7 +68,7 @@ export function BoardProjectSchemaFieldsSidebar(props: Props) {
       <div className="max-h-[min(520px,60vh)] flex-1 overflow-y-auto p-2">
         {filteredSystem.length > 0 && (
           <div className="mb-4">
-            <p className="px-2 py-1 text-11 font-medium uppercase tracking-wide text-tertiary">
+            <p className="px-2 py-1 text-11 font-medium tracking-wide text-tertiary uppercase">
               {t("boards.settings.project_schema.system_fields")}
             </p>
             <ul className="space-y-0.5">
@@ -98,7 +91,7 @@ export function BoardProjectSchemaFieldsSidebar(props: Props) {
           </div>
         )}
         <div>
-          <p className="px-2 py-1 text-11 font-medium uppercase tracking-wide text-tertiary">
+          <p className="px-2 py-1 text-11 font-medium tracking-wide text-tertiary uppercase">
             {t("boards.settings.project_schema.custom_from_board")}
           </p>
           {filteredCustom.length === 0 ? (

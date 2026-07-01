@@ -1,7 +1,7 @@
 import { CheckCircle2, Circle, Power, Share2, Wand2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 
 type Props = {
@@ -34,10 +34,7 @@ export function IntakeSetupPanel(props: Props) {
               "intake-setup-toggle-sidebar rounded-lg border-0 bg-surface-1 p-3",
               intakeEnabled && "bg-success-subtle/10"
             )
-          : cn(
-              "rounded-xl border-subtle p-4",
-              intakeEnabled && "border-success-subtle/40 bg-success-subtle/5"
-            )
+          : cn("rounded-xl border-subtle p-4", intakeEnabled && "border-success-subtle/40 bg-success-subtle/5")
       )}
       stacked
       title={
@@ -67,9 +64,7 @@ export function IntakeSetupPanel(props: Props) {
     >
       {!isSidebar ? (
         <>
-          <h2 className="text-13 font-semibold text-primary">
-            {t("project_settings.features.intake.setup.title")}
-          </h2>
+          <h2 className="text-13 font-semibold text-primary">{t("project_settings.features.intake.setup.title")}</h2>
           <p className="mt-1 text-12 leading-relaxed text-tertiary">
             {t("project_settings.features.intake.setup.subtitle")}
           </p>

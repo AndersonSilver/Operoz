@@ -1,5 +1,5 @@
 // types
-import type { ILinkDetails, ModuleLink } from "@operis/types";
+import type { ILinkDetails, ModuleLink } from "@operoz/types";
 // services
 import { APIService } from "../api.service";
 

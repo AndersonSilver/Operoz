@@ -1,6 +1,6 @@
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { CompactAssetType } from "@operis/propel/empty-state";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { CompactAssetType } from "@operoz/propel/empty-state";
 
 const getDisplayContent = (type: string): { assetKey: CompactAssetType; text: string } => {
   switch (type) {

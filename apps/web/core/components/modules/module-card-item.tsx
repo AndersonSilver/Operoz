@@ -11,16 +11,16 @@ import {
   EUserPermissions,
   EUserPermissionsLevel,
   IS_FAVORITE_MENU_OPEN,
-} from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
-import { WorkItemsIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setPromiseToast, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IModule } from "@operis/types";
-import { Card, FavoriteStar, LinearProgressIndicator } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
+import { WorkItemsIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setPromiseToast, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IModule } from "@operoz/types";
+import { Card, FavoriteStar, LinearProgressIndicator } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_MODULE_CARD } from "@/components/board/board-hub-background";
-import { getDate, renderFormattedPayloadDate, generateQueryParams } from "@operis/utils";
+import { getDate, renderFormattedPayloadDate, generateQueryParams } from "@operoz/utils";
 // components
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 import { ButtonAvatars } from "@/components/dropdowns/member/avatar";

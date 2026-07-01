@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { TIntakeFormPublic } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TIntakeFormPublic } from "@operoz/types";
 import { IntakePublicForm } from "@/components/intake/intake-public-form";
 import "@/components/intake/intake-public-form.css";
 
@@ -20,9 +20,7 @@ export default function IntakeFormPublicPage() {
     })
       .then(async (response) => {
         const contentType = response.headers.get("content-type") ?? "";
-        const payload = contentType.includes("application/json")
-          ? await response.json()
-          : null;
+        const payload = contentType.includes("application/json") ? await response.json() : null;
         if (!response.ok) {
           const message =
             payload && typeof payload === "object" && "error" in payload
@@ -59,9 +57,7 @@ export default function IntakeFormPublicPage() {
         <div className="intake-public-shell">
           <div className="intake-public-state-card">
             <h1 className="text-18 font-semibold text-primary">{t("intake_public_form.unavailable_title")}</h1>
-            <p className="mt-2 text-13 text-secondary">
-              {error ?? t("intake_public_form.unavailable_fallback")}
-            </p>
+            <p className="mt-2 text-13 text-secondary">{error ?? t("intake_public_form.unavailable_fallback")}</p>
           </div>
         </div>
       ) : (

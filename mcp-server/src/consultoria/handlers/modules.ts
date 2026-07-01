@@ -1,4 +1,4 @@
-import type { ConsultoriaApi } from "../operis-api.js";
+import type { ConsultoriaApi } from "../operoz-api.js";
 import { FIXED_PHASE_TASKS, PHASE_COLORS, PHASES, type Phase } from "../phases.js";
 
 type Args = Record<string, unknown>;
@@ -80,7 +80,7 @@ export async function createModule(api: ConsultoriaApi, args: Args) {
       phase_issues: phaseIssues,
       tasks_created: totalTemplateTasks,
       next_step:
-        "Módulo criado com 8 fases e tarefas-template visíveis no Operis. " +
+        "Módulo criado com 8 fases e tarefas-template visíveis no Operoz. " +
         "Você já tem o PRD pronto? Se sim, use register_prd para registrá-lo. " +
         "As fases DESENVOLVIMENTO, HOMOLOGACAO_INTERNA e HOMOLOGACAO_EXTERNA aguardam o PRD aprovado.",
     };

@@ -4,7 +4,7 @@ import type {
   TFilterExpression,
   TFilterProperty,
   TSupportedOperators,
-} from "@operis/types";
+} from "@operoz/types";
 
 /**
  * Helper function to get the display operator for a condition.

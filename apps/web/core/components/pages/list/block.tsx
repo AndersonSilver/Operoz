@@ -1,9 +1,9 @@
 import { useRef } from "react";
 import { observer } from "mobx-react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { PageIcon } from "@operis/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { PageIcon } from "@operoz/propel/icons";
 // plane imports
-import { getPageName } from "@operis/utils";
+import { getPageName } from "@operoz/utils";
 // components
 import { ListItem } from "@/components/core/list";
 import { BlockItemAction } from "@/components/pages/list/block-item-action";

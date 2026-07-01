@@ -2,19 +2,19 @@ import React, { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // icons
 import { ListFilter } from "lucide-react";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
 // plane helpers
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectView } from "@/hooks/store/use-project-view";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { FiltersDropdown } from "../issues/issue-layouts/filters";
 import { ViewFiltersSelection } from "./filters/filter-selection";
 import { ViewOrderByDropdown } from "./filters/order-by";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export const ViewListHeader = observer(function ViewListHeader() {
   const { t } = useTranslation();
@@ -56,7 +56,7 @@ export const ViewListHeader = observer(function ViewListHeader() {
           <IconButton
             variant="ghost"
             size="sm"
-            className="h-8 w-8 border border-subtle/50 bg-layer-1/50 shadow-sm"
+            className="shadow-sm h-8 w-8 border border-subtle/50 bg-layer-1/50"
             onClick={() => {
               setIsSearchOpen(true);
               inputRef.current?.focus();
@@ -66,7 +66,7 @@ export const ViewListHeader = observer(function ViewListHeader() {
         )}
         <div
           className={cn(
-            "ml-auto flex h-8 w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-layer-1/55 text-placeholder opacity-0 shadow-sm backdrop-blur-sm transition-[width] ease-linear",
+            "shadow-sm ml-auto flex h-8 w-0 items-center justify-start gap-1 overflow-hidden rounded-md border border-transparent bg-layer-1/55 text-placeholder opacity-0 backdrop-blur-sm transition-[width] ease-linear",
             {
               "w-56 border-subtle/50 px-2.5 opacity-100": isSearchOpen,
             }

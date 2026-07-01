@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 import type { Client360EmptyScenario } from "@/components/board/client-360/client-360-empty-state.utils";
 
 type Props = {

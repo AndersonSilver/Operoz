@@ -1,6 +1,6 @@
 import { useState } from "react";
 // plane imports
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import useKeypress from "@/hooks/use-keypress";
 // local imports

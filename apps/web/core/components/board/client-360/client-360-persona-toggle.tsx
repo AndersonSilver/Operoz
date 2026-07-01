@@ -1,7 +1,7 @@
 import { Briefcase, Wrench } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Tooltip } from "@operoz/propel/tooltip";
 import type { Client360Persona } from "@/components/board/client-360/use-client-360-persona";
 
 type Props = {

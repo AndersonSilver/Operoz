@@ -3,11 +3,11 @@ import { isEqual, xor } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // Plane imports
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TBaseIssue, TIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TBaseIssue, TIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useIssueModal } from "@/hooks/context/use-issue-modal";
 import { useCycle } from "@/hooks/store/use-cycle";
@@ -401,7 +401,7 @@ export const CreateUpdateIssueModalBase = observer(function CreateUpdateIssueMod
       isOpen={isOpen}
       position={EModalPosition.TOP}
       width={isDuplicateModalOpen ? EModalWidth.VIXL : EModalWidth.XXXL}
-      className="mx-auto rounded-lg !max-w-[42rem] !bg-transparent shadow-none transition-[width] ease-linear"
+      className="mx-auto !max-w-[42rem] rounded-lg !bg-transparent shadow-none transition-[width] ease-linear"
     >
       {withDraftIssueWrapper ? (
         <DraftIssueLayout {...commonIssueModalProps} changesMade={changesMade} onChange={handleFormChange} />

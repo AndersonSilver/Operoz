@@ -3,7 +3,7 @@
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // types
-import type { IEstimate, IEstimatePoint as IEstimatePointType } from "@operis/types";
+import type { IEstimate, IEstimatePoint as IEstimatePointType } from "@operoz/types";
 // plane web services
 import estimateService from "@/services/estimate.service";
 // store

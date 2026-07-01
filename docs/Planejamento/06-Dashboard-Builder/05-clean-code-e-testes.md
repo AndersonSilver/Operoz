@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/dashboard.py
 ├── app/views/dashboard/base.py      # DashboardViewSet, GadgetViewSet
 ├── app/serializers/dashboard.py
@@ -32,23 +32,23 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
+| Caso                             | Esperado                      |
+| -------------------------------- | ----------------------------- |
 | `resolve_gadget_data` source=oql | usa `run_oql` com o user dado |
-| agregação `group_by=assignee` | série correta |
-| time_series created_vs_resolved | pontos por dia |
-| gadget_type inválido | erro |
+| agregação `group_by=assignee`    | série correta                 |
+| time_series created_vs_resolved  | pontos por dia                |
+| gadget_type inválido             | erro                          |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| viewer vê dashboard partilhado | só dados que pode ver |
-| owner com mais acesso vs viewer | viewer não vê dados restritos |
-| viewer (permission=view) edita gadget | `403` |
-| membro partilha com workspace | `403` se não owner/admin |
-| `gid` de outro dashboard | `404` (IDOR) |
-| auto-refresh abaixo do mínimo | rejeitado/normalizado |
+| Caso                                  | Esperado                      |
+| ------------------------------------- | ----------------------------- |
+| viewer vê dashboard partilhado        | só dados que pode ver         |
+| owner com mais acesso vs viewer       | viewer não vê dados restritos |
+| viewer (permission=view) edita gadget | `403`                         |
+| membro partilha com workspace         | `403` se não owner/admin      |
+| `gid` de outro dashboard              | `404` (IDOR)                  |
+| auto-refresh abaixo do mínimo         | rejeitado/normalizado         |
 
 ### e2e
 

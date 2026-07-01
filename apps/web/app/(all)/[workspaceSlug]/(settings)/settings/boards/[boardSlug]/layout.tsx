@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { Outlet } from "react-router";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { getBoardActivePath } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
@@ -76,11 +76,7 @@ function BoardDetailSettingsLayout({ params }: Route.ComponentProps) {
     );
   };
 
-  return (
-    <BoardSettingsAuthWrapper workspaceSlug={workspaceSlug}>
-      {content()}
-    </BoardSettingsAuthWrapper>
-  );
+  return <BoardSettingsAuthWrapper workspaceSlug={workspaceSlug}>{content()}</BoardSettingsAuthWrapper>;
 }
 
 export default observer(BoardDetailSettingsLayout);

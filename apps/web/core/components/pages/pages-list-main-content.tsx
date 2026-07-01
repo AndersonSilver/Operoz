@@ -2,12 +2,12 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { useParams, useRouter } from "next/navigation";
-import { EUserPermissionsLevel, EPageAccess } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TPage, TPageNavigationTabs } from "@operis/types";
-import { EUserProjectRoles } from "@operis/types";
+import { EUserPermissionsLevel, EPageAccess } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TPage, TPageNavigationTabs } from "@operoz/types";
+import { EUserProjectRoles } from "@operoz/types";
 // components
 import { PageLoader } from "@/components/pages/loaders/page-loader";
 import { useProject } from "@/hooks/store/use-project";

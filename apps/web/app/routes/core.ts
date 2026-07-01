@@ -378,6 +378,24 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/notifications/logs/page.tsx"
             ),
           ]),
+          layout("./(all)/[workspaceSlug]/(settings)/settings/(workspace)/workflow/layout.tsx", [
+            route(
+              ":workspaceSlug/settings/workflow",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/workflow/page.tsx"
+            ),
+            route(
+              ":workspaceSlug/settings/workflow/schemes",
+              "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/workflow/schemes/page.tsx"
+            ),
+          ]),
+          route(
+            ":workspaceSlug/settings/workflow/schemes/:schemeId",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/workflow/schemes/[schemeId]/page.tsx"
+          ),
+          route(
+            ":workspaceSlug/settings/workflow/:workflowId",
+            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/workflow/[workflowId]/page.tsx"
+          ),
           layout("./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/layout.tsx", [
             route(
               ":workspaceSlug/settings/boards/:boardSlug",

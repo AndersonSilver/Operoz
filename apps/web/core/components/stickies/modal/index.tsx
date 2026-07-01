@@ -1,4 +1,4 @@
-import { EModalWidth, ModalCore } from "@operis/ui";
+import { EModalWidth, ModalCore } from "@operoz/ui";
 import { Stickies } from "./stickies";
 
 type TProps = {

@@ -1,11 +1,11 @@
 import { Info } from "lucide-react";
 // plane imports
-import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TEstimateSystemKeys } from "@operis/types";
+import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TEstimateSystemKeys } from "@operoz/types";
 // components
-import { convertMinutesToHoursMinutesString } from "@operis/utils";
+import { convertMinutesToHoursMinutesString } from "@operoz/utils";
 // plane web imports
 import { isEstimateSystemEnabled } from "@/plane-web/components/estimates/helper";
 import { UpgradeBadge } from "@/plane-web/components/workspace/upgrade-badge";

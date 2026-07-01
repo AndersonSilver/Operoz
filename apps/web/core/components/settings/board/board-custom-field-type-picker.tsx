@@ -1,6 +1,6 @@
-import { useTranslation } from "@operis/i18n";
-import type { TCustomFieldType } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TCustomFieldType } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { JIRA_CUSTOM_FIELD_TYPES } from "@/constants/board-custom-field-types";
 import { BoardCustomFieldTypeGlyph } from "./board-custom-field-type-glyph";
 
@@ -25,12 +25,12 @@ export function BoardCustomFieldTypePicker(props: Props) {
               onClick={() => onChange(type)}
               className={cn(
                 "flex min-h-[88px] flex-col items-center justify-center gap-2 bg-layer-2 px-2 py-4 transition-colors",
-                "hover:bg-layer-transparent-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-accent-primary",
-                isActive && "bg-[rgba(38,132,255,0.08)] ring-2 ring-inset ring-accent-primary"
+                "focus-visible:ring-accent-primary hover:bg-layer-transparent-hover focus-visible:ring-2 focus-visible:outline-none focus-visible:ring-inset",
+                isActive && "ring-accent-primary bg-[rgba(38,132,255,0.08)] ring-2 ring-inset"
               )}
             >
               <BoardCustomFieldTypeGlyph fieldType={type} size="lg" />
-              <span className="px-1 text-center text-11 font-medium leading-tight text-primary">
+              <span className="px-1 text-center text-11 leading-tight font-medium text-primary">
                 {t(`boards.settings.fields.types.${type}`)}
               </span>
             </button>

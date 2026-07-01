@@ -6,7 +6,7 @@ import type {
   TPublishEntityType,
   TProjectPublishSettings,
   TProjectPublishViewProps,
-} from "@operis/types";
+} from "@operoz/types";
 // store
 import type { RootStore } from "../root.store";
 

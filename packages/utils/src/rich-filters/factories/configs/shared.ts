@@ -12,7 +12,7 @@ import type {
   TSupportedFilterFieldConfigs,
   TSupportedOperators,
   TOperatorSpecificConfigs,
-} from "@operis/types";
+} from "@operoz/types";
 
 /**
  * Helper to create a type-safe filter config

@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash-es";
-import type { IIssueLabel, IIssueLabelTree } from "@operis/types";
+import type { IIssueLabel, IIssueLabelTree } from "@operoz/types";
 
 /**
  * @description Groups an array of objects by a specified key

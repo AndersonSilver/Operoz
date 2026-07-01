@@ -1,10 +1,10 @@
 // services
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import { APIService } from "@/services/api.service";
 // helper
 // types
 // FIXME:
-// import { TAppConfig } from "@operis/types";
+// import { TAppConfig } from "@operoz/types";
 
 export class AppConfigService extends APIService {
   constructor() {

@@ -4,11 +4,11 @@ import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { ChevronUpIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { ICycle, TCyclePlotType, TProgressSnapshot } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { getDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronUpIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { ICycle, TCyclePlotType, TProgressSnapshot } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { getDate } from "@operoz/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 // plane web components

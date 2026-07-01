@@ -2,10 +2,10 @@ import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { LogOut, MoreHorizontal, Settings, Share2, ArchiveIcon } from "lucide-react";
 // plane imports
-import { MEMBER_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon } from "@operis/propel/icons";
-import { CustomMenu } from "@operis/ui";
+import { MEMBER_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon } from "@operoz/propel/icons";
+import { CustomMenu } from "@operoz/ui";
 
 type Props = {
   workspaceSlug: string;

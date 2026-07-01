@@ -5,18 +5,18 @@ import { attachInstruction, extractInstruction } from "@atlaskit/pragmatic-drag-
 import { observer } from "mobx-react";
 import { Transition } from "@headlessui/react";
 import { MoreHorizontal } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { IconButton } from "@operis/propel/icon-button";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard } from "@operis/types";
-import { Tooltip } from "@operis/propel/tooltip";
-import { DragHandle, DropIndicator } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { IconButton } from "@operoz/propel/icon-button";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard } from "@operoz/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { DragHandle, DropIndicator } from "@operoz/ui";
 import { SidebarRowQuickMenu } from "@/components/sidebar/sidebar-row-quick-menu";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-import { cn, copyUrlToClipboard } from "@operis/utils";
+import { cn, copyUrlToClipboard } from "@operoz/utils";
 import { SIDEBAR_TREE_CHEVRON_CLASS } from "@/components/sidebar/sidebar-styles";
 import { ArchiveBoardModal } from "@/components/board/archive-board-modal";
 import { EditBoardModal } from "@/components/board/edit-board-modal";
@@ -86,24 +86,22 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
       }),
       dropTargetForElements({
         element,
-        canDrop: ({ source }) =>
-          source?.data?.id !== board.id && source?.data?.dragInstanceId === "BOARDS",
+        canDrop: ({ source }) => source?.data?.id !== board.id && source?.data?.dragInstanceId === "BOARDS",
         getData: ({ input, element: el }) =>
-          attachInstruction({ id: board.id }, {
-            input,
-            element: el,
-            currentLevel: 0,
-            indentPerLevel: 0,
-            mode: isLastBoard ? "last-in-group" : "standard",
-          }),
+          attachInstruction(
+            { id: board.id },
+            {
+              input,
+              element: el,
+              currentLevel: 0,
+              indentPerLevel: 0,
+              mode: isLastBoard ? "last-in-group" : "standard",
+            }
+          ),
         onDrag: ({ self }) => {
           const extracted = extractInstruction(self?.data)?.type;
           setBoardInstruction(
-            extracted
-              ? extracted === "reorder-below" && isLastBoard
-                ? "DRAG_BELOW"
-                : "DRAG_OVER"
-              : undefined
+            extracted ? (extracted === "reorder-below" && isLastBoard ? "DRAG_BELOW" : "DRAG_OVER") : undefined
           );
         },
         onDragLeave: () => setBoardInstruction(undefined),
@@ -128,7 +126,12 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
 
   return (
     <>
-      <EditBoardModal workspaceSlug={workspaceSlug} board={board} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
+      <EditBoardModal
+        workspaceSlug={workspaceSlug}
+        board={board}
+        isOpen={isEditOpen}
+        onClose={() => setIsEditOpen(false)}
+      />
       <ArchiveBoardModal
         workspaceSlug={workspaceSlug}
         board={board}

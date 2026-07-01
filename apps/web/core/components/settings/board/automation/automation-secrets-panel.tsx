@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { Copy, KeyRound, Pencil, Plus, Search, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardAutomationSecret } from "@operis/types";
-import { Input } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardAutomationSecret } from "@operoz/types";
+import { Input } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 import { AutomationListHero } from "./automation-list-hero";
 import { AutomationSecretFormModal, type SecretFormValues } from "./automation-secret-form-modal";
 import { secretRefSyntax } from "./automation-ops-utils";
@@ -31,10 +31,7 @@ export function AutomationSecretsPanel(props: Props) {
   const filtered = useMemo(() => {
     const q = search.trim().toLowerCase();
     if (!q) return secrets;
-    return secrets.filter(
-      (item) =>
-        item.key.toLowerCase().includes(q) || item.description?.toLowerCase().includes(q)
-    );
+    return secrets.filter((item) => item.key.toLowerCase().includes(q) || item.description?.toLowerCase().includes(q));
   }, [secrets, search]);
 
   const openCreate = () => {
@@ -111,7 +108,7 @@ export function AutomationSecretsPanel(props: Props) {
               <p className="mt-1 text-12 text-tertiary">{t("boards.settings.automation.ops.secrets.list_lead")}</p>
             </div>
             <div className="relative w-full sm:max-w-xs">
-              <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-placeholder" />
+              <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-placeholder" />
               <Input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
@@ -133,7 +130,7 @@ export function AutomationSecretsPanel(props: Props) {
             <span className="grid size-14 place-items-center rounded-2xl border border-subtle bg-accent-subtle text-accent-primary">
               <KeyRound className="size-6" strokeWidth={1.5} />
             </span>
-            <h3 className="mt-4 text-15 font-semibold text-primary">
+            <h3 className="text-15 mt-4 font-semibold text-primary">
               {search
                 ? t("boards.settings.automation.ops.secrets.no_results")
                 : t("boards.settings.automation.ops.secrets.empty_title")}
@@ -197,7 +194,7 @@ export function AutomationSecretsPanel(props: Props) {
                 {secret.description ? (
                   <p className="mt-2 text-12 leading-relaxed text-secondary">{secret.description}</p>
                 ) : (
-                  <p className="mt-2 text-12 italic text-placeholder">
+                  <p className="mt-2 text-12 text-placeholder italic">
                     {t("boards.settings.automation.ops.secrets.no_description")}
                   </p>
                 )}

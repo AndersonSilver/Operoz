@@ -2,8 +2,8 @@ import type { LucideIcon } from "lucide-react";
 import { AlertTriangle, Info } from "lucide-react";
 import React from "react";
 // components
-import type { TButtonVariant } from "@operis/propel/button";
-import { Button } from "@operis/propel/button";
+import type { TButtonVariant } from "@operoz/propel/button";
+import { Button } from "@operoz/propel/button";
 import { cn } from "../utils";
 import { EModalPosition, EModalWidth } from "./constants";
 import { ModalCore } from "./modal-core";

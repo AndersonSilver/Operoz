@@ -2,11 +2,11 @@ import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
+import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
 // components
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
 import {

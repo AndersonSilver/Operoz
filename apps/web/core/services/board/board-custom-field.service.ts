@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IBoardCustomField,
   IBoardProjectFieldLayout,
@@ -12,7 +12,7 @@ import type {
   TBoardProjectFieldSection,
   TWorkspaceCustomFieldFormData,
   TWorkspaceCustomFieldUpdateData,
-} from "@operis/types";
+} from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardCustomFieldService extends APIService {
@@ -99,34 +99,22 @@ export class BoardCustomFieldService extends APIService {
     boardCustomFieldId: string,
     data: Partial<{ is_enabled: boolean; sort_order: number }>
   ): Promise<IBoardCustomField> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/custom-fields/${boardCustomFieldId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/custom-fields/${boardCustomFieldId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async removeBoardCustomField(
-    workspaceSlug: string,
-    boardSlug: string,
-    boardCustomFieldId: string
-  ): Promise<void> {
-    return this.delete(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/custom-fields/${boardCustomFieldId}/`
-    )
+  async removeBoardCustomField(workspaceSlug: string, boardSlug: string, boardCustomFieldId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/custom-fields/${boardCustomFieldId}/`)
       .then(() => undefined)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async getProjectIssueFormConfig(
-    workspaceSlug: string,
-    projectId: string
-  ): Promise<IProjectIssueFormConfig> {
+  async getProjectIssueFormConfig(workspaceSlug: string, projectId: string): Promise<IProjectIssueFormConfig> {
     return this.get(`/api/workspaces/${workspaceSlug}/projects/${projectId}/custom-fields/`)
       .then((response) => response?.data)
       .catch((error) => {
@@ -134,10 +122,7 @@ export class BoardCustomFieldService extends APIService {
       });
   }
 
-  async getProjectCustomFields(
-    workspaceSlug: string,
-    projectId: string
-  ): Promise<IProjectCustomFieldLite[]> {
+  async getProjectCustomFields(workspaceSlug: string, projectId: string): Promise<IProjectCustomFieldLite[]> {
     const config = await this.getProjectIssueFormConfig(workspaceSlug, projectId);
     return config?.custom_fields ?? [];
   }
@@ -165,10 +150,7 @@ export class BoardCustomFieldService extends APIService {
       });
   }
 
-  async getBoardProjectFieldLayout(
-    workspaceSlug: string,
-    boardSlug: string
-  ): Promise<IBoardProjectFieldLayout[]> {
+  async getBoardProjectFieldLayout(workspaceSlug: string, boardSlug: string): Promise<IBoardProjectFieldLayout[]> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-field-layout/`)
       .then((response) => response?.data ?? [])
       .catch((error) => {
@@ -206,34 +188,22 @@ export class BoardCustomFieldService extends APIService {
       form_span: TBoardFieldFormSpan;
     }>
   ): Promise<IBoardProjectFieldLayout> {
-    return this.patch(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-field-layout/${layoutId}/`,
-      data
-    )
+    return this.patch(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-field-layout/${layoutId}/`, data)
       .then((response) => response?.data)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async removeBoardProjectFieldLayout(
-    workspaceSlug: string,
-    boardSlug: string,
-    layoutId: string
-  ): Promise<void> {
-    return this.delete(
-      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-field-layout/${layoutId}/`
-    )
+  async removeBoardProjectFieldLayout(workspaceSlug: string, boardSlug: string, layoutId: string): Promise<void> {
+    return this.delete(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-field-layout/${layoutId}/`)
       .then(() => undefined)
       .catch((error) => {
         throw error?.response?.data;
       });
   }
 
-  async getBoardProjectFormLayout(
-    workspaceSlug: string,
-    boardSlug: string
-  ): Promise<IProjectFormLayoutResponse> {
+  async getBoardProjectFormLayout(workspaceSlug: string, boardSlug: string): Promise<IProjectFormLayoutResponse> {
     return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/project-form-layout/`)
       .then((response) => response?.data)
       .catch((error) => {
@@ -241,10 +211,7 @@ export class BoardCustomFieldService extends APIService {
       });
   }
 
-  async getProjectFormLayout(
-    workspaceSlug: string,
-    projectId: string
-  ): Promise<IProjectFormLayoutResponse> {
+  async getProjectFormLayout(workspaceSlug: string, projectId: string): Promise<IProjectFormLayoutResponse> {
     return this.get(`/api/workspaces/${workspaceSlug}/projects/${projectId}/form-layout/`)
       .then((response) => response?.data)
       .catch((error) => {

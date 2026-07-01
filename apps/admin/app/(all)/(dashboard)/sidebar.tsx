@@ -1,7 +1,6 @@
-
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
-import { useOutsideClickDetector } from "@operis/hooks";
+import { useOutsideClickDetector } from "@operoz/hooks";
 // hooks
 import { useTheme } from "@/hooks/store";
 // components

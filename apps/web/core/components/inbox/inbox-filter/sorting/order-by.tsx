@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
-import { INBOX_ISSUE_ORDER_BY_OPTIONS, INBOX_ISSUE_SORT_BY_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { TInboxIssueSortingOrderByKeys, TInboxIssueSortingSortByKeys } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { INBOX_ISSUE_ORDER_BY_OPTIONS, INBOX_ISSUE_SORT_BY_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { TInboxIssueSortingOrderByKeys, TInboxIssueSortingSortByKeys } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 // constants
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import useSize from "@/hooks/use-window-size";

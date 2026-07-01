@@ -4,8 +4,8 @@ import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffec
 import { v4 as uuidv4 } from "uuid";
 import { debounce } from "lodash-es";
 // plane utils
-import { useOutsideClickDetector } from "@operis/hooks";
-import { cn } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { cn } from "@operoz/utils";
 // helpers
 import { DROPDOWN_NAVIGATION_KEYS, getNextValidIndex } from "@/helpers/tippy";
 // types

@@ -5,8 +5,8 @@ import { usePopper } from "react-popper";
 // headless ui
 import { Popover, Transition } from "@headlessui/react";
 // ui
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 import { PROJECT_HUB_TOOLBAR_BUTTON_CLASS } from "@/components/project/project-hub-toolbar";
 
 type Props = {
@@ -114,7 +114,7 @@ export function FiltersDropdown(props: Props) {
                   ref={setPopperElement}
                   style={styles.popper}
                   {...attributes.popper}
-                  className="fixed z-[100] my-1 w-[18.75rem] max-h-[min(30rem,70vh)] min-h-[8rem] overflow-hidden rounded-sm border border-subtle bg-surface-1 shadow-raised-100 lg:max-h-[min(37.5rem,70vh)]"
+                  className="fixed z-[100] my-1 max-h-[min(30rem,70vh)] min-h-[8rem] w-[18.75rem] overflow-hidden rounded-sm border border-subtle bg-surface-1 shadow-raised-100 lg:max-h-[min(37.5rem,70vh)]"
                 >
                   <div className="flex max-h-[inherit] min-h-[inherit] w-full flex-col">{children}</div>
                 </Popover.Panel>

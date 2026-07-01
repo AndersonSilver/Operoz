@@ -1,9 +1,9 @@
 import React from "react";
 import { Command } from "cmdk";
 import { X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { SearchIcon } from "@operis/propel/icons";
+import { SearchIcon } from "@operoz/propel/icons";
 // local imports
 import type { TPowerKContext, TPowerKPageType } from "../../core/types";
 import { POWER_K_MODAL_PAGE_DETAILS } from "./constants";

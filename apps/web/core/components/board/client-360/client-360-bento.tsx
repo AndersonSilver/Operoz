@@ -1,6 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 
 export function Client360BentoGrid({ children, className }: { children: ReactNode; className?: string }) {

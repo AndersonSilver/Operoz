@@ -8,10 +8,10 @@ import {
   SUBSCRIPTION_REDIRECTION_URLS,
   SUBSCRIPTION_WEBPAGE_URLS,
   TALK_TO_SALES_URL,
-} from "@operis/constants";
-import { EProductSubscriptionEnum } from "@operis/types";
-import { EModalWidth, ModalCore } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { EProductSubscriptionEnum } from "@operoz/types";
+import { EModalWidth, ModalCore } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { FreePlanCard, PlanUpgradeCard } from "@/components/license";
 import type { TCheckoutParams } from "@/components/license/modal/card/checkout-button";

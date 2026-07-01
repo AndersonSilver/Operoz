@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { CloseIcon } from "@operis/propel/icons";
+import { ETabIndices } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane types
-import type { IProject } from "@operis/types";
+import type { IProject } from "@operoz/types";
 // plane ui
-import { getTabIndex } from "@operis/utils";
+import { getTabIndex } from "@operoz/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";

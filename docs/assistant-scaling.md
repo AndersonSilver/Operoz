@@ -2,7 +2,7 @@
 
 Guia de deploy para suportar alto volume de chat (150+ utilizadores). Complementa [assistant-env.md](./assistant-env.md).
 
-**Governança:** [ADR-004](./operis-assistant-adr-004-chat-scaling.md) · [SLAs e baseline](./assistant-scaling-baseline.md) · [Go-live checklist](./assistant-go-live-checklist.md)
+**Governança:** [ADR-004](./operoz-assistant-adr-004-chat-scaling.md) · [SLAs e baseline](./assistant-scaling-baseline.md) · [Go-live checklist](./assistant-go-live-checklist.md)
 
 ## Topologia (produção)
 
@@ -10,7 +10,7 @@ Guia de deploy para suportar alto volume de chat (150+ utilizadores). Complement
 Browser ──► proxy (Caddy) ──┬──► api:8000        (CRUD, auth, resto da API)
                             └──► api-chat:8000    (POST …/assistant/…/chat/ SSE)
 
-api / api-chat / workers ──► operis-pgbouncer ──► operis-db (Postgres + pgvector)
+api / api-chat / workers ──► operoz-pgbouncer ──► operoz-db (Postgres + pgvector)
 ```
 
 ## Serviços Docker
@@ -19,7 +19,7 @@ api / api-chat / workers ──► operis-pgbouncer ──► operis-db (Postgre
 | ------------------ | ------------------------------ | ------------------------------- |
 | `api`              | API principal                  | 8000                            |
 | `api-chat`         | Chat SSE long-running          | 8001 (local) / 8000 (container) |
-| `operis-pgbouncer` | Pool de conexões Postgres      | 6432 (host)                     |
+| `operoz-pgbouncer` | Pool de conexões Postgres      | 6432 (host)                     |
 | `proxy`            | Roteamento + sticky cookie SSE | 80/443                          |
 
 ## Variáveis
@@ -34,14 +34,14 @@ api / api-chat / workers ──► operis-pgbouncer ──► operis-db (Postgre
 Com `USE_PGBOUNCER=1`, actualize também:
 
 ```env
-POSTGRES_HOST=operis-pgbouncer
+POSTGRES_HOST=operoz-pgbouncer
 POSTGRES_PORT=5432
-DATABASE_URL=postgresql://USER:PASS@operis-pgbouncer:5432/operis
+DATABASE_URL=postgresql://USER:PASS@operoz-pgbouncer:5432/operoz
 ```
 
 ## Desenvolvimento local
 
-1. Subir stack: `docker compose -f docker-compose-local.yml up -d api api-chat operis-pgbouncer`
+1. Subir stack: `docker compose -f docker-compose-local.yml up -d api api-chat operoz-pgbouncer`
 2. No `apps/web/.env`: `VITE_ASSISTANT_CHAT_API_URL=http://localhost:8001`
 3. API CRUD continua em `:8000`; streams do assistente vão para `:8001`
 
@@ -67,14 +67,14 @@ Ajuste conforme carga medida no teste de baseline.
 
 ### Pré-requisitos
 
-- [ ] `operis-pgbouncer` healthy
+- [ ] `operoz-pgbouncer` healthy
 - [ ] `LLM_API_KEY` configurada
 - [ ] Migrations aplicadas (`migrator`)
 
 ### Ordem de deploy
 
-1. **PgBouncer** — subir `operis-pgbouncer`; validar `psql` via pool na porta interna
-2. **Activar pool** — `USE_PGBOUNCER=1` + `POSTGRES_HOST=operis-pgbouncer` em `apps/api/.env`
+1. **PgBouncer** — subir `operoz-pgbouncer`; validar `psql` via pool na porta interna
+2. **Activar pool** — `USE_PGBOUNCER=1` + `POSTGRES_HOST=operoz-pgbouncer` em `apps/api/.env`
 3. **api-chat** — build e start; logs Gunicorn sem erros
 4. **api** — rolling restart (workers CRUD)
 5. **proxy** — reload Caddy; confirmar rota `@assistant_chat`
@@ -100,7 +100,7 @@ Esperado: eventos `data: {"type":"token",...}` antes de `done`.
 
 1. Reverter Caddy para `reverse_proxy /api/* api:8000` único (remover `@assistant_chat`)
 2. Parar `api-chat`; tráfego volta todo para `api`
-3. Se PgBouncer causar problemas: `USE_PGBOUNCER=0` e `POSTGRES_HOST=operis-db`
+3. Se PgBouncer causar problemas: `USE_PGBOUNCER=0` e `POSTGRES_HOST=operoz-db`
 
 ### Troubleshooting
 
@@ -214,5 +214,5 @@ Eventos SSE: `queue_update`, `degraded_mode`.
 ## Referências
 
 - Entrypoints: `apps/api/bin/docker-entrypoint-api-chat.sh`, `docker-entrypoint-api-chat-local.sh`
-- Settings PgBouncer: `operis/settings/common.py` (`USE_PGBOUNCER`)
+- Settings PgBouncer: `operoz/settings/common.py` (`USE_PGBOUNCER`)
 - Backlog: módulo `[ OPEROZ ] - ESCALA DO CHAT — FASE 2` no OPEROZDP

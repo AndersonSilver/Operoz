@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { renderFormattedPayloadDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 import { WorkspaceMemberSelect } from "@/components/workspace/workspace-member-select";
 import { UserService } from "@/services/user.service";
 
@@ -63,15 +63,17 @@ export const MembersActivityModal = observer(function MembersActivityModal(props
     <ModalCore isOpen={isOpen} handleClose={onClose} position={EModalPosition.CENTER} width={EModalWidth.LG}>
       <div className="flex flex-col gap-5 p-6">
         <div>
-          <h3 className="text-16 font-semibold text-primary">{t("workspace_settings.settings.members.activity.title")}</h3>
-          <p className="mt-1 text-13 text-tertiary">
-            {t("workspace_settings.settings.members.activity.description")}
-          </p>
+          <h3 className="text-16 font-semibold text-primary">
+            {t("workspace_settings.settings.members.activity.title")}
+          </h3>
+          <p className="mt-1 text-13 text-tertiary">{t("workspace_settings.settings.members.activity.description")}</p>
         </div>
 
         <div className="space-y-4">
           <div className="space-y-1">
-            <p className="text-11 font-medium text-secondary">{t("workspace_settings.settings.members.activity.member")}</p>
+            <p className="text-11 font-medium text-secondary">
+              {t("workspace_settings.settings.members.activity.member")}
+            </p>
             <WorkspaceMemberSelect
               workspaceSlug={workspaceSlug}
               value={memberId || null}

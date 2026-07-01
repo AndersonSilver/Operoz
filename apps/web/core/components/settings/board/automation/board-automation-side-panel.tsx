@@ -1,4 +1,4 @@
-import type { IBoard, TAutomationCatalog, TAutomationCatalogItem, TAutomationGraph } from "@operis/types";
+import type { IBoard, TAutomationCatalog, TAutomationCatalogItem, TAutomationGraph } from "@operoz/types";
 import { BoardAutomationInspector } from "./board-automation-inspector";
 import { BoardAutomationPalette } from "./board-automation-palette";
 import type { AutomationNodeData } from "./automation-utils";

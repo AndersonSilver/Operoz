@@ -1,8 +1,8 @@
 import { makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // services
 import { IssueArchiveService, WorkspaceDraftService, IssueService } from "@/services/issue";
 // types

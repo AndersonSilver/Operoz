@@ -5,7 +5,7 @@ import type {
   IIssueFilterOptions,
   TIssue,
   EIssuesStoreType,
-} from "@operis/types";
+} from "@operoz/types";
 
 export const ALL_ISSUES = "All Issues";
 

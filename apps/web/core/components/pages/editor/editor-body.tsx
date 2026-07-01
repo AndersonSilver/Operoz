@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { LIVE_BASE_PATH, LIVE_BASE_URL } from "@operis/constants";
-import { CollaborativeDocumentEditorWithRef } from "@operis/editor";
+import { LIVE_BASE_PATH, LIVE_BASE_URL } from "@operoz/constants";
+import { CollaborativeDocumentEditorWithRef } from "@operoz/editor";
 import type {
   CollaborationState,
   EditorRefApi,
@@ -12,11 +12,11 @@ import type {
   TFileHandler,
   TRealtimeConfig,
   TServerHandler,
-} from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import type { TSearchEntityRequestPayload, TSearchResponse, TWebhookConnectionQueryParams } from "@operis/types";
-import { ERowVariant, Row } from "@operis/ui";
-import { cn, generateRandomColor, hslToHex } from "@operis/utils";
+} from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import type { TSearchEntityRequestPayload, TSearchResponse, TWebhookConnectionQueryParams } from "@operoz/types";
+import { ERowVariant, Row } from "@operoz/ui";
+import { cn, generateRandomColor, hslToHex } from "@operoz/utils";
 // components
 import { EditorMentionsRoot } from "@/components/editor/embeds/mentions";
 // hooks

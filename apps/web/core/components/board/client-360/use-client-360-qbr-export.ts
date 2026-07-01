@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import { BoardService } from "@/services/board/board.service";
 import { WorkspaceService } from "@/services/workspace.service";
 import {

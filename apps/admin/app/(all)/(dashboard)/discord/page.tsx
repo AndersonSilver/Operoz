@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { MessagesSquare, Shield, Zap } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageWrapper } from "@/components/common/page-wrapper";
 import { AdminSettingsPanel } from "@/components/settings/admin-settings-panel";
 import type { Route } from "./+types/page";

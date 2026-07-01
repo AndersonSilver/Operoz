@@ -1,4 +1,4 @@
-import { OperozLockup } from "@operis/propel/icons";
+import { OperozLockup } from "@operoz/propel/icons";
 // layouts
 import DefaultLayout from "@/layouts/default-layout";
 // components

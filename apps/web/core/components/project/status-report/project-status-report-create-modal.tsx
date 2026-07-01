@@ -13,12 +13,12 @@ import {
   Send,
   Tag,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import type { IModule, TStatusReportKind } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore, TextArea } from "@operis/ui";
-import { cn, renderFormattedPeriodDatesLong } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import type { IModule, TStatusReportKind } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore, TextArea } from "@operoz/ui";
+import { cn, renderFormattedPeriodDatesLong } from "@operoz/utils";
 import { parseModuleDisplayName } from "@/components/project/status-report/status-report-utils";
 
 type MultiReportKind = Extract<TStatusReportKind, "sprint" | "multi_module">;

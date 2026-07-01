@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import sharp from "sharp";
-import { getAllDocumentFormatsFromDocumentEditorBinaryData } from "@operis/editor/lib";
+import { getAllDocumentFormatsFromDocumentEditorBinaryData } from "@operoz/editor/lib";
 import type { PDFExportMetadata, TipTapDocument } from "@/lib/pdf";
 import { renderPlaneDocToPdfBuffer } from "@/lib/pdf";
 import { getPageService } from "@/services/page/handler";

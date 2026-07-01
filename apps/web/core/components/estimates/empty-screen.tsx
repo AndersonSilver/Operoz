@@ -1,6 +1,6 @@
 import { useTheme } from "next-themes";
 // plane imports
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // components
 import { DetailedEmptyState } from "@/components/empty-state/detailed-empty-state-root";
 

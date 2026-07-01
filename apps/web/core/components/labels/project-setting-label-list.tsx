@@ -2,12 +2,12 @@ import { useState, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { IIssueLabel } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { IIssueLabel } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import type { TLabelOperationsCallbacks } from "@/components/labels";
 import {
   CreateUpdateLabelInline,

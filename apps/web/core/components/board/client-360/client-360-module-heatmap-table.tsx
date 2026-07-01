@@ -3,9 +3,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight, LayoutList } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360DetailResponse } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360StatusLozenge } from "@/components/board/client-360/client-360-ui";
 import {

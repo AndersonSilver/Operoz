@@ -1,14 +1,14 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { ChevronDown, Copy, ExternalLink, MoreHorizontal, Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Avatar } from "@operis/propel/avatar";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoard, IUserLite, TBoardSpaceType } from "@operis/types";
-import { CustomMenu, CustomSelect, Loader } from "@operis/ui";
-import { cn, getFileURL } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Avatar } from "@operoz/propel/avatar";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoard, IUserLite, TBoardSpaceType } from "@operoz/types";
+import { CustomMenu, CustomSelect, Loader } from "@operoz/ui";
+import { cn, getFileURL } from "@operoz/utils";
 import { BoardFavoriteStar } from "@/components/board/board-favorite-star";
 import {
   BOARD_SPACE_TYPES,
@@ -149,8 +149,8 @@ export const WorkspaceBoardsDirectory = observer(function WorkspaceBoardsDirecto
 
       <div className="mx-auto flex w-full max-w-none flex-col gap-4 px-8 py-6 xl:px-12">
         <div className="flex flex-wrap items-center gap-3">
-          <div className="relative min-w-[240px] flex-1 max-w-2xl">
-            <Search className="pointer-events-none absolute left-2.5 top-1/2 size-3.5 -translate-y-1/2 text-tertiary" />
+          <div className="relative max-w-2xl min-w-[240px] flex-1">
+            <Search className="pointer-events-none absolute top-1/2 left-2.5 size-3.5 -translate-y-1/2 text-tertiary" />
             <input
               type="search"
               value={searchQuery}
@@ -201,9 +201,7 @@ export const WorkspaceBoardsDirectory = observer(function WorkspaceBoardsDirecto
           <EmptyStateCompact
             assetKey="project"
             title={searchQuery || typeFilter || categoryFilter ? t("boards.spaces_empty_search") : t("boards.empty")}
-            description={
-              searchQuery || typeFilter || categoryFilter ? undefined : t("boards.spaces_empty_description")
-            }
+            description={searchQuery || typeFilter || categoryFilter ? undefined : t("boards.spaces_empty_description")}
             actions={
               searchQuery || typeFilter || categoryFilter
                 ? undefined
@@ -334,7 +332,7 @@ export const WorkspaceBoardsDirectory = observer(function WorkspaceBoardsDirecto
                           customButton={
                             <button
                               type="button"
-                              className="grid size-6 place-items-center rounded text-tertiary opacity-0 transition-opacity hover:bg-layer-2 hover:text-primary group-hover:opacity-100"
+                              className="grid size-6 place-items-center rounded text-tertiary opacity-0 transition-opacity group-hover:opacity-100 hover:bg-layer-2 hover:text-primary"
                               aria-label={t("boards.spaces_row_menu")}
                             >
                               <MoreHorizontal className="size-4" />
@@ -353,9 +351,7 @@ export const WorkspaceBoardsDirectory = observer(function WorkspaceBoardsDirecto
                             {t("boards.spaces_copy_url")}
                           </CustomMenu.MenuItem>
                           <CustomMenu.MenuItem
-                            onClick={() =>
-                              router.push(`/${workspaceSlug}/settings/boards/${board.slug}`)
-                            }
+                            onClick={() => router.push(`/${workspaceSlug}/settings/boards/${board.slug}`)}
                           >
                             {t("boards.spaces_settings")}
                           </CustomMenu.MenuItem>
@@ -372,4 +368,3 @@ export const WorkspaceBoardsDirectory = observer(function WorkspaceBoardsDirecto
     </div>
   );
 });
-

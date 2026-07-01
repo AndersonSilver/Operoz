@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
-import type { TCycleEstimateType } from "@operis/types";
-import { EEstimateSystem } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
+import type { TCycleEstimateType } from "@operoz/types";
+import { EEstimateSystem } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useCycle } from "@/hooks/store/use-cycle";
 // local imports

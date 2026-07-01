@@ -2,10 +2,10 @@ import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { createPortal } from "react-dom";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import type { TNameDescriptionLoader } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import type { TNameDescriptionLoader } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import useKeypress from "@/hooks/use-keypress";

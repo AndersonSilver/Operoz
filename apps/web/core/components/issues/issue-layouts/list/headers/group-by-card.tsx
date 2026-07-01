@@ -2,14 +2,14 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { CircleDashed } from "lucide-react";
-import { PlusIcon } from "@operis/propel/icons";
+import { PlusIcon } from "@operoz/propel/icons";
 // types
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue, ISearchIssueResponse, TIssueGroupByOptions } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue, ISearchIssueResponse, TIssueGroupByOptions } from "@operoz/types";
 // ui
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 import { MultipleSelectGroupAction } from "@/components/core/multiple-select";
 import { CreateUpdateIssueModal } from "@/components/issues/issue-modal/modal";
@@ -20,7 +20,7 @@ import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { CreateUpdateEpicModal } from "@/plane-web/components/epics/epic-modal";
 // Plane-web
 import { WorkFlowGroupTree } from "@/plane-web/components/workflow";
-import { LIST_BULK_SELECT_GUTTER_CLASS } from "../list-grid-columns-context";
+import { LIST_BULK_SELECT_CHECKBOX_CELL_CLASS } from "../list-grid-columns-context";
 
 interface IHeaderGroupByCard {
   groupID: string;
@@ -61,7 +61,6 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
   // derived values
   const renderExistingIssueModal = moduleId || cycleId;
   const existingIssuesListModalPayload = moduleId ? { module: moduleId.toString() } : { cycle: true };
-  const isGroupSelectionEmpty = selectionHelpers.isGroupSelected(groupID) === "empty";
   // auth
   const canSelectIssues = canEditProperties(projectId?.toString()) && !selectionHelpers.isSelectionDisabled;
 
@@ -89,21 +88,11 @@ export const HeaderGroupByCard = observer(function HeaderGroupByCard(props: IHea
 
   return (
     <>
-      <div
-        className={cn(
-          "group/list-header relative flex w-full flex-shrink-0 items-center gap-2 py-1.5",
-          canSelectIssues && LIST_BULK_SELECT_GUTTER_CLASS
-        )}
-      >
+      <div className="group/list-header relative flex w-full flex-shrink-0 items-center gap-2 py-1.5 pl-3">
         {canSelectIssues && (
-          <div className="absolute left-2 flex w-3.5 flex-shrink-0 items-center">
+          <div className={LIST_BULK_SELECT_CHECKBOX_CELL_CLASS}>
             <MultipleSelectGroupAction
-              className={cn(
-                "pointer-events-none size-3.5 opacity-0 !outline-none group-hover/list-header:pointer-events-auto group-hover/list-header:opacity-100",
-                {
-                  "pointer-events-auto opacity-100": !isGroupSelectionEmpty,
-                }
-              )}
+              className="size-3.5 !outline-none"
               groupID={groupID}
               selectionHelpers={selectionHelpers}
               disabled={count === 0}

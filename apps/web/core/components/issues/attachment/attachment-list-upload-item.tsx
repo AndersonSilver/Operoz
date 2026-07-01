@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
-import { CircularProgressIndicator } from "@operis/ui";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { CircularProgressIndicator } from "@operoz/ui";
 // components
-import { getFileExtension } from "@operis/utils";
+import { getFileExtension } from "@operoz/utils";
 import { getFileIcon } from "@/components/icons";
 // helpers
 // hooks

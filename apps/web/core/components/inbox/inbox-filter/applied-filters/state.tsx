@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { EIconSize } from "@operis/constants";
-import { StateGroupIcon, CloseIcon } from "@operis/propel/icons";
-import { Tag } from "@operis/ui";
+import { EIconSize } from "@operoz/constants";
+import { StateGroupIcon, CloseIcon } from "@operoz/propel/icons";
+import { Tag } from "@operoz/ui";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { useProjectState } from "@/hooks/store/use-project-state";

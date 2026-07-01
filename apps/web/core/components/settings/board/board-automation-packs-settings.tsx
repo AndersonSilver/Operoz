@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import type { IBoard } from "@operis/types";
-import { useTranslation } from "@operis/i18n";
+import type { IBoard } from "@operoz/types";
+import { useTranslation } from "@operoz/i18n";
 import { BoardAutomationPacksGallery } from "./automation/board-automation-packs-gallery";
 
 export const BoardAutomationPacksSettings = observer(function BoardAutomationPacksSettings(props: {

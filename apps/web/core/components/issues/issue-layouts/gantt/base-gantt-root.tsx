@@ -2,19 +2,20 @@ import React, { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBlockUpdateData, IBlockUpdateDependencyData, IIssueDisplayFilterOptions, TIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operis/types";
-import { renderFormattedPayloadDate } from "@operis/utils";
+import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBlockUpdateData, IBlockUpdateDependencyData, IIssueDisplayFilterOptions, TIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operoz/types";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 // components
-import { TimeLineTypeContext } from "@/components/gantt-chart/contexts";
+import { GanttDependencyContext, TimeLineTypeContext } from "@/components/gantt-chart/contexts";
 import { GanttChartRoot } from "@/components/gantt-chart/root";
 import { IssueGanttSidebar } from "@/components/gantt-chart/sidebar/issues/sidebar";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
+import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
@@ -129,6 +130,10 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
   const { issues, issuesFilter } = useIssues(storeType);
   const { fetchIssues, fetchNextIssues, updateIssue, quickAddIssue } = useIssuesActions(storeType);
   const { initGantt } = useTimeLineChart(GANTT_TIMELINE_TYPE.ISSUE);
+  // useTimeLineChart (not useTimeLineChartStore) because BaseGanttRoot is the
+  // TimeLineTypeContext.Provider — the type-based hook must be used instead.
+  const ganttStore = useTimeLineChart(GANTT_TIMELINE_TYPE.ISSUE);
+  const { createRelation, removeRelation } = useIssueDetail();
   // store hooks
   const { allowPermissions } = useUserPermissions();
 
@@ -242,27 +247,97 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
     [issues, projectId, storeType, t, workspaceSlug]
   );
 
+  /**
+   * Creates a Finish-to-Start dependency.
+   * predecessorBlockId must finish before successorBlockId can start.
+   */
+  const handleCreateDependency = useCallback(
+    async (predecessorBlockId: string, successorBlockId: string) => {
+      if (!workspaceSlug) return;
+
+      const successorBlock = ganttStore.getBlockById(successorBlockId);
+      const issueProjectId = successorBlock?.meta?.project_id ?? projectId?.toString();
+      if (!issueProjectId) return;
+
+      ganttStore.addDependency(successorBlockId, predecessorBlockId);
+
+      try {
+        await createRelation(workspaceSlug.toString(), issueProjectId, successorBlockId, "blocked_by", [
+          predecessorBlockId,
+        ]);
+      } catch {
+        ganttStore.removeDependency(successorBlockId, predecessorBlockId);
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: "Erro ao criar dependência. Tente novamente.",
+        });
+      }
+    },
+    [createRelation, ganttStore, projectId, t, workspaceSlug]
+  );
+
+  /**
+   * Removes an existing Finish-to-Start dependency between two blocks.
+   */
+  const handleDeleteDependency = useCallback(
+    async (successorBlockId: string, predecessorBlockId: string) => {
+      if (!workspaceSlug) return;
+
+      const successorBlock = ganttStore.getBlockById(successorBlockId);
+      const issueProjectId = successorBlock?.meta?.project_id ?? projectId?.toString();
+      if (!issueProjectId) return;
+
+      ganttStore.removeDependency(successorBlockId, predecessorBlockId);
+
+      try {
+        await removeRelation(
+          workspaceSlug.toString(),
+          issueProjectId,
+          successorBlockId,
+          "blocked_by",
+          predecessorBlockId
+        );
+      } catch {
+        ganttStore.addDependency(successorBlockId, predecessorBlockId);
+        setToast({
+          type: TOAST_TYPE.ERROR,
+          title: t("toast.error"),
+          message: "Erro ao remover dependência. Tente novamente.",
+        });
+      }
+    },
+    [ganttStore, projectId, removeRelation, t, workspaceSlug]
+  );
+
   return (
     <IssueLayoutHOC layout={EIssueLayoutTypes.GANTT}>
       <TimeLineTypeContext.Provider value={GANTT_TIMELINE_TYPE.ISSUE}>
-        <div className="h-full w-full">
-          <GanttSubIssueExpansionProvider issueIds={issuesIds} isEpic={isEpic}>
-            <GanttChartBody
-              isEpic={isEpic}
-              isAllowed={isAllowed}
-              isCompletedCycle={isCompletedCycle}
-              isBulkOperationsEnabled={isBulkOperationsEnabled}
-              canEditIssue={canEditIssue}
-              appliedDisplayFilters={appliedDisplayFilters}
-              updateIssueBlockStructure={updateIssueBlockStructure}
-              updateBlockDates={updateBlockDates}
-              quickAddIssue={quickAddIssue}
-              loadMoreIssues={loadMoreIssues}
-              nextPageResults={nextPageResults}
-              targetDate={targetDate}
-            />
-          </GanttSubIssueExpansionProvider>
-        </div>
+        <GanttDependencyContext.Provider
+          value={{
+            onCreateDependency: handleCreateDependency,
+            onDeleteDependency: handleDeleteDependency,
+          }}
+        >
+          <div className="h-full w-full">
+            <GanttSubIssueExpansionProvider issueIds={issuesIds} isEpic={isEpic}>
+              <GanttChartBody
+                isEpic={isEpic}
+                isAllowed={isAllowed}
+                isCompletedCycle={isCompletedCycle}
+                isBulkOperationsEnabled={isBulkOperationsEnabled}
+                canEditIssue={canEditIssue}
+                appliedDisplayFilters={appliedDisplayFilters}
+                updateIssueBlockStructure={updateIssueBlockStructure}
+                updateBlockDates={updateBlockDates}
+                quickAddIssue={quickAddIssue}
+                loadMoreIssues={loadMoreIssues}
+                nextPageResults={nextPageResults}
+                targetDate={targetDate}
+              />
+            </GanttSubIssueExpansionProvider>
+          </div>
+        </GanttDependencyContext.Provider>
       </TimeLineTypeContext.Provider>
     </IssueLayoutHOC>
   );

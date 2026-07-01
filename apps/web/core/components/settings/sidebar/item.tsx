@@ -1,8 +1,8 @@
 import React from "react";
 import Link from "next/link";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import type { LucideIcon } from "lucide-react";
-import type { ISvgIcons } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
 import {
   SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS,
   sidebarNavIconClass,

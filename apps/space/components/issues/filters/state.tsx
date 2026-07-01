@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // ui
-import { EIconSize } from "@operis/constants";
-import { StateGroupIcon } from "@operis/propel/icons";
-import { Loader } from "@operis/ui";
+import { EIconSize } from "@operoz/constants";
+import { StateGroupIcon } from "@operoz/propel/icons";
+import { Loader } from "@operoz/ui";
 // hooks
 import { useStates } from "@/hooks/store/use-state";
 // local imports

@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 
 const MODULE_LIST_GRID =
   "lg:grid lg:grid-cols-[minmax(0,1fr)_9rem_9rem_9rem_9rem_6rem_4.5rem] lg:items-center lg:gap-3";

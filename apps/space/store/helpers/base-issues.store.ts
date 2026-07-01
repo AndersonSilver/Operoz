@@ -2,8 +2,8 @@ import { concat, get, set, uniq, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import { ALL_ISSUES } from "@operis/constants";
-import { SitesIssueService } from "@operis/services";
+import { ALL_ISSUES } from "@operoz/constants";
+import { SitesIssueService } from "@operoz/services";
 import type {
   TIssueGroupByOptions,
   TGroupedIssues,
@@ -14,7 +14,7 @@ import type {
   TIssuePaginationData,
   TGroupedIssueCount,
   TPaginationData,
-} from "@operis/types";
+} from "@operoz/types";
 // types
 import type { IIssue, TIssuesResponse } from "@/types/issue";
 import type { RootStore } from "../root.store";

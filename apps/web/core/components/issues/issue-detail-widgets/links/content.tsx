@@ -1,5 +1,5 @@
 import React from "react";
-import type { TIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
 // components
 import { LinkList } from "../../issue-detail/links";
 // helper

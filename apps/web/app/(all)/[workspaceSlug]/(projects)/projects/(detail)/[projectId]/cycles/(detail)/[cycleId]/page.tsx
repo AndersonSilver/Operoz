@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // assets
 import emptyCycle from "@/app/assets/empty-state/cycle.svg?url";
 // components

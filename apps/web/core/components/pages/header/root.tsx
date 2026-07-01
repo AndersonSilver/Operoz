@@ -2,10 +2,10 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TPageFilterProps, TPageNavigationTabs } from "@operis/types";
-import { Header, EHeaderVariant } from "@operis/ui";
-import { cn, calculateTotalFilters } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TPageFilterProps, TPageNavigationTabs } from "@operoz/types";
+import { Header, EHeaderVariant } from "@operoz/ui";
+import { cn, calculateTotalFilters } from "@operoz/utils";
 import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { ProjectFeaturePageActions } from "@/components/project/project-feature-page-header";
 // components

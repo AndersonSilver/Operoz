@@ -54,8 +54,8 @@ Assets reutilizáveis para PRDs com **aprovação**, **feedback** e **comentári
 
 ## Documentação
 
-- ADR: `Operis/docs/adr/operis-prd-review-architecture.md`
-- Roadmap: `Operis/docs/operis-prd-review-roadmap.md`
+- ADR: `Operoz/docs/adr/operoz-prd-review-architecture.md`
+- Roadmap: `Operoz/docs/operoz-prd-review-roadmap.md`
 - Backlog: `operoz_prd_review_catalog.py`
 
 ## Próximo passo

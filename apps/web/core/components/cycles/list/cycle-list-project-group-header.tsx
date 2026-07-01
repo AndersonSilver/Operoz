@@ -1,11 +1,11 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { ChevronRightIcon } from "@operis/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 // icons
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {

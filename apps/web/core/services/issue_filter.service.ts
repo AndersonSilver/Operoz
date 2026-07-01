@@ -1,6 +1,6 @@
 // services
-import { API_BASE_URL } from "@operis/constants";
-import type { IIssueFiltersResponse } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IIssueFiltersResponse } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 // types
 

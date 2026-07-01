@@ -3,8 +3,8 @@ set -euo pipefail
 
 : "${GHCR_TOKEN:?GHCR_TOKEN is required}"
 : "${IMAGE_PREFIX:?IMAGE_PREFIX is required}"
-: "${OPERIS_REPO_PATH:?OPERIS_REPO_PATH is required}"
-: "${OPERIS_APP_PATH:?OPERIS_APP_PATH is required}"
+: "${OPEROZ_REPO_PATH:?OPEROZ_REPO_PATH is required}"
+: "${OPEROZ_APP_PATH:?OPEROZ_APP_PATH is required}"
 : "${GIT_BRANCH:=preview}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
@@ -13,21 +13,21 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
 SERVICES=(
-  "plane-frontend:myoperis/plane-frontend"
-  "plane-backend:myoperis/plane-backend"
-  "plane-space:myoperis/plane-space"
-  "plane-admin:myoperis/plane-admin"
-  "plane-live:myoperis/plane-live"
-  "plane-proxy:myoperis/plane-proxy"
+  "plane-frontend:myoperoz/plane-frontend"
+  "plane-backend:myoperoz/plane-backend"
+  "plane-space:myoperoz/plane-space"
+  "plane-admin:myoperoz/plane-admin"
+  "plane-live:myoperoz/plane-live"
+  "plane-proxy:myoperoz/plane-proxy"
 )
 
-ENV_FILE="${OPERIS_APP_PATH}/operis.env"
+ENV_FILE="${OPEROZ_APP_PATH}/operoz.env"
 
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
 echo "==> Atualizar código"
-cd "${OPERIS_REPO_PATH}"
+cd "${OPEROZ_REPO_PATH}"
 git fetch origin "${GIT_BRANCH}"
 git reset --hard "origin/${GIT_BRANCH}"
 
@@ -43,34 +43,34 @@ for entry in "${SERVICES[@]}"; do
 done
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "ERRO: operis.env não encontrado em ${OPERIS_APP_PATH}"
+  echo "ERRO: operoz.env não encontrado em ${OPEROZ_APP_PATH}"
   exit 1
 fi
 
-operis_sync_web_url_env "${ENV_FILE}"
+operoz_sync_web_url_env "${ENV_FILE}"
 
 echo "==> Migrações Django (nova imagem plane-backend)"
-cd "${OPERIS_APP_PATH}"
-if operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then
-  operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" run --rm --no-deps migrator
+cd "${OPEROZ_APP_PATH}"
+if operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then
+  operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" run --rm --no-deps migrator
 else
   echo "WARN: serviço migrator não encontrado — aplique migrações manualmente se necessário."
 fi
 
 echo "==> Recriar stack completa (todas as imagens novas, inclui space/proxy/api)"
-operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --pull never --force-recreate
+operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never --force-recreate
 
-OVERLAY="$(operis_assistant_overlay "${OPERIS_REPO_PATH}")"
+OVERLAY="$(operoz_assistant_overlay "${OPEROZ_REPO_PATH}")"
 if [[ -f "${OVERLAY}" ]]; then
   echo "==> Subir workers do assistente (overlay)"
-  operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" up -d --pull never \
+  operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never \
     assistant-worker api-chat assistant-chat-worker
 else
   echo "WARN: overlay assistente não encontrado em ${OVERLAY}"
 fi
 
-operis_dc "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" ps
+operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps
 
-operis_health_check "${OPERIS_APP_PATH}" "${OPERIS_REPO_PATH}" || true
+operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" || true
 
 echo "==> Deploy full concluído"

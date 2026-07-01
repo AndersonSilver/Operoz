@@ -1,5 +1,5 @@
-import type { IWorkspaceCustomField } from "@operis/types";
-import { useTranslation } from "@operis/i18n";
+import type { IWorkspaceCustomField } from "@operoz/types";
+import { useTranslation } from "@operoz/i18n";
 import { BoardCustomFieldCreateForm } from "./board-custom-field-create-form";
 import { SettingsSidePanel } from "./settings-side-panel";
 

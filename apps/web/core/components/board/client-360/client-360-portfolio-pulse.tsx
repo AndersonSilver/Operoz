@@ -2,8 +2,8 @@
 
 import { useMemo } from "react";
 import { Activity, AlertTriangle, BarChart3, CheckCircle2, Clock } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Client, TClient360Summary, TClient360SummaryDelta } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Client, TClient360Summary, TClient360SummaryDelta } from "@operoz/types";
 import type { ReactNode } from "react";
 import {
   Client360AttentionPanel,
@@ -13,7 +13,7 @@ import { Client360BentoTile } from "@/components/board/client-360/client-360-ben
 import type { Client360FilterKey } from "@/components/board/client-360/client-360-client-filters";
 import { buildClient360AttentionItems } from "@/components/board/client-360/client-360-attention";
 import { Client360StackedDistribution } from "@/components/board/client-360/client-360-ui";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   summary: TClient360Summary;

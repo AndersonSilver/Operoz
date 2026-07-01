@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IIssueDisplayProperties } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IIssueDisplayProperties } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   getListPropertyColumnMeta,
   getListPropertyColumnTitleKey,
@@ -11,7 +11,7 @@ import {
 import { ListColumnResizeHandle } from "./list-column-resize-handle";
 import {
   LIST_GRID_ROW_GAP,
-  LIST_BULK_SELECT_GUTTER_CLASS,
+  LIST_BULK_SELECT_CHECKBOX_CELL_CLASS,
   useListGridColumnsContext,
 } from "./list-grid-columns-context";
 
@@ -51,20 +51,19 @@ export const ListPropertiesColumnsHeader = observer(function ListPropertiesColum
 
   return (
     <div
-      className={cn(
-        "hidden w-full min-w-0 items-center border-b border-subtle bg-layer-2/80 sm:grid",
-        "py-2 pr-3",
-        showBulkSelectGutter ? LIST_BULK_SELECT_GUTTER_CLASS : "pl-3"
-      )}
+      className="hidden w-full min-w-0 items-center border-b border-subtle bg-layer-2/80 py-2 pr-3 pl-3 sm:grid"
       style={{ gridTemplateColumns: layoutGridTemplateColumns }}
     >
-      <div className="group/column-header relative min-w-0 pr-3">
-        <ListHeaderCell align="start">
-          <span className="w-full truncate text-left text-caption-sm-medium text-tertiary">
-            {t("common.work_item")}
-          </span>
-        </ListHeaderCell>
-        <ListColumnResizeHandle column="title" onResizeByDelta={resizeColumnByDelta} />
+      <div className="flex min-w-0 items-stretch pr-3">
+        {showBulkSelectGutter ? <div className={LIST_BULK_SELECT_CHECKBOX_CELL_CLASS} aria-hidden /> : null}
+        <div className="group/column-header relative min-w-0 flex-1">
+          <ListHeaderCell align="start">
+            <span className="w-full truncate text-left text-caption-sm-medium text-tertiary">
+              {t("common.work_item")}
+            </span>
+          </ListHeaderCell>
+          <ListColumnResizeHandle column="title" onResizeByDelta={resizeColumnByDelta} />
+        </div>
       </div>
 
       <div

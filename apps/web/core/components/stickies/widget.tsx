@@ -2,8 +2,8 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
 // hooks
 import { useSticky } from "@/hooks/use-stickies";
 // local imports

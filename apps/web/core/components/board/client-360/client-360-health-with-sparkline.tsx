@@ -3,7 +3,7 @@ import type {
   TClient360Health,
   TClient360HealthBreakdownItem,
   TClient360HealthDimensionItem,
-} from "@operis/types";
+} from "@operoz/types";
 import { Client360HealthScoreBadge } from "@/components/board/client-360/client-360-health-score-badge";
 import { Client360HealthScoreAlertBadge } from "@/components/board/client-360/client-360-health-score-alert-badge";
 import { Client360HealthDimensionChips } from "@/components/board/client-360/client-360-health-dimension-chips";

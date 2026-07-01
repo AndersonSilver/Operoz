@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 // i18n
-import { EUserPermissions, EUserPermissionsLevel, PROJECT_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EUserPermissions, EUserPermissionsLevel, PROJECT_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { Button } from "@operis/propel/button";
-import { ProjectIcon } from "@operis/propel/icons";
-import { Breadcrumbs, Header } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { ProjectIcon } from "@operoz/propel/icons";
+import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 // hooks

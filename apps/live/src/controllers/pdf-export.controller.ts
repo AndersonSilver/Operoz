@@ -1,7 +1,7 @@
 import type { Request, Response } from "express";
 import { Effect, Schema, Cause } from "effect";
-import { Controller, Post } from "@operis/decorators";
-import { logger } from "@operis/logger";
+import { Controller, Post } from "@operoz/decorators";
+import { logger } from "@operoz/logger";
 import { AppError } from "@/lib/errors";
 import { PdfExportRequestBody, PdfValidationError, PdfAuthenticationError } from "@/schema/pdf-export";
 import { PdfExportService, exportToPdf } from "@/services/pdf-export";

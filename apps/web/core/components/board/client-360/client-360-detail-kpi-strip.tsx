@@ -1,7 +1,7 @@
 import { Clock, FileText, Headphones, Layers, ListTodo } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360DetailResponse } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360BentoMetric } from "@/components/board/client-360/client-360-bento";
 import { reportCoverageLabelKey } from "@/components/board/client-360/client-360-utils";
 

@@ -1,9 +1,9 @@
-import { ISSUE_LAYOUTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import type { EIssueLayoutTypes } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { ISSUE_LAYOUTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import type { EIssueLayoutTypes } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 import { IssueLayoutIcon } from "../../layout-icon";
 
 export function MobileLayoutSelection({

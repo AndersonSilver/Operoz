@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/permission_scheme.py
 ├── app/permissions/
 │   ├── base.py          # JÁ EXISTE — ROLE, @allow_permission
@@ -32,27 +32,27 @@ apps/api/operis/
 
 ### Unit — matriz de permissões
 
-| Caso | Esperado |
-| --- | --- |
-| chave concedida a role do user | `True` |
-| chave não concedida | `False` (default deny) |
-| chave desconhecida | `False` |
-| workspace admin | `True` em tudo |
-| special `assignee` quando é assignee | `True` |
-| `visible_security` sem nível | inclui issue |
-| `visible_security` com nível não pertencente | exclui issue |
+| Caso                                         | Esperado               |
+| -------------------------------------------- | ---------------------- |
+| chave concedida a role do user               | `True`                 |
+| chave não concedida                          | `False` (default deny) |
+| chave desconhecida                           | `False`                |
+| workspace admin                              | `True` em tudo         |
+| special `assignee` quando é assignee         | `True`                 |
+| `visible_security` sem nível                 | inclui issue           |
+| `visible_security` com nível não pertencente | exclui issue           |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| editar scheme por MEMBER | `403` + sem alteração |
-| issue restrita em lista/OQL/board/dashboard | invisível ao não-membro |
-| auto-concessão de permissão | impossível (só admin) + audit |
-| SSO com assinatura inválida | login recusado |
-| replay de SAML assertion | recusado |
-| 2FA tentativas excessivas | rate-limited |
-| audit log: tentar editar entrada | sem endpoint (405/404) |
+| Caso                                        | Esperado                      |
+| ------------------------------------------- | ----------------------------- |
+| editar scheme por MEMBER                    | `403` + sem alteração         |
+| issue restrita em lista/OQL/board/dashboard | invisível ao não-membro       |
+| auto-concessão de permissão                 | impossível (só admin) + audit |
+| SSO com assinatura inválida                 | login recusado                |
+| replay de SAML assertion                    | recusado                      |
+| 2FA tentativas excessivas                   | rate-limited                  |
+| audit log: tentar editar entrada            | sem endpoint (405/404)        |
 
 ### Teste estrutural (anti-regressão)
 

@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, NewTabIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TContextMenuItem } from "@operis/ui";
-import { LinkItemBlock } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, NewTabIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TContextMenuItem } from "@operoz/ui";
+import { LinkItemBlock } from "@operoz/ui";
 // plane utils
-import { copyTextToClipboard } from "@operis/utils";
+import { copyTextToClipboard } from "@operoz/utils";
 // hooks
 import { useHome } from "@/hooks/store/use-home";
 // types

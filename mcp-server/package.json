@@ -1,10 +1,10 @@
 {
-  "name": "@operis/mcp-server",
+  "name": "@operoz/mcp-server",
   "version": "1.0.0",
   "private": true,
-  "description": "MCP server for Operis — workspaces, projects, work items, boards, cycles, modules",
+  "description": "MCP server for Operoz — workspaces, projects, work items, boards, cycles, modules",
   "bin": {
-    "operis-mcp": "./dist/index.js"
+    "operoz-mcp": "./dist/index.js"
   },
   "type": "module",
   "scripts": {

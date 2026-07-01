@@ -1,13 +1,16 @@
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 import { ChevronDown, ChevronRight, FolderKanban } from "lucide-react";
-import type { IGanttBlock } from "@operis/types";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { IGanttBlock } from "@operoz/types";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { useBoardLayout } from "@/components/board/board-layout-context";
 import { BoardGanttRowIcon } from "@/components/board/gantt/board-gantt-row-icon";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";
-import { getProjectIdFromBoardBlock, isBoardProjectBlockId } from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
+import {
+  getProjectIdFromBoardBlock,
+  isBoardProjectBlockId,
+} from "@/components/issues/issue-layouts/gantt/board-gantt.utils";
 import { useProject } from "@/hooks/store/use-project";
 import { useBoardGroupedTimelineStore } from "@/hooks/store/use-board-grouped-timeline";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
@@ -77,9 +80,7 @@ export const BoardProjectSidebarBlock = observer(function BoardProjectSidebarBlo
           className="flex h-full min-w-0 flex-1 cursor-pointer items-center text-left text-13 font-medium text-primary hover:underline"
           onClick={handleToggleCollapse}
         >
-          {project?.identifier ? (
-            <span className="text-secondary">{project.identifier}</span>
-          ) : null}
+          {project?.identifier ? <span className="text-secondary">{project.identifier}</span> : null}
           {project?.identifier ? " · " : ""}
           {block.name}
         </button>

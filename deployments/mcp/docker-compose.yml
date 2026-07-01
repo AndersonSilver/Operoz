@@ -1,20 +1,20 @@
-# Operis MCP — serviço HTTP separado do stack plane-app.
-# Uso: docker compose --env-file operis-mcp.env up -d
+# Operoz MCP — serviço HTTP separado do stack plane-app.
+# Uso: docker compose --env-file operoz-mcp.env up -d
 #
 # Reverse proxy (Nginx Proxy Manager): mcp.seudominio.com → http://<IP-VPS>:3100/mcp
 
 services:
-  operis-mcp:
-    image: ${MCP_IMAGE:-myoperis/operis-mcp:stable}
-    container_name: operis-mcp
+  operoz-mcp:
+    image: ${MCP_IMAGE:-myoperoz/operoz-mcp:stable}
+    container_name: operoz-mcp
     restart: unless-stopped
     ports:
       - "${MCP_PUBLISH:-127.0.0.1:3100}:3100"
     environment:
-      OPERIS_API_BASE_URL: ${OPERIS_API_BASE_URL:?defina OPERIS_API_BASE_URL no operis-mcp.env}
+      OPEROZ_API_BASE_URL: ${OPEROZ_API_BASE_URL:?defina OPEROZ_API_BASE_URL no operoz-mcp.env}
       MCP_HTTP_HOST: "0.0.0.0"
       MCP_HTTP_PORT: "3100"
-      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-mcp.operis.webcycle.com.br,127.0.0.1,localhost}
+      MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-mcp.operoz.webcycle.com.br,127.0.0.1,localhost}
     healthcheck:
       test:
         [

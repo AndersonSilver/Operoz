@@ -7,9 +7,9 @@ import type {
   TFilterProperty,
   TMultiSelectFilterFieldConfig,
   TFilterConditionNodeForDisplay,
-} from "@operis/types";
-import { CustomSearchSelect } from "@operis/ui";
-import { toFilterArray, getFilterValueLength } from "@operis/utils";
+} from "@operoz/types";
+import { CustomSearchSelect } from "@operoz/ui";
+import { toFilterArray, getFilterValueLength } from "@operoz/utils";
 // local imports
 import { SelectedOptionsDisplay } from "./selected-options-display";
 import { getCommonCustomSearchSelectProps, getFormattedOptions, loadOptions } from "./shared";

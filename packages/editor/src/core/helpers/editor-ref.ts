@@ -3,7 +3,7 @@ import type { Editor } from "@tiptap/core";
 import { DOMSerializer } from "@tiptap/pm/model";
 import * as Y from "yjs";
 // plane imports
-import { convertHTMLToMarkdown } from "@operis/utils";
+import { convertHTMLToMarkdown } from "@operoz/utils";
 // components
 import { getEditorMenuItems } from "@/components/menus";
 // constants

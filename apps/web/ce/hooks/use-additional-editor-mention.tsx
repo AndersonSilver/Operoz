@@ -1,8 +1,8 @@
 import { useCallback, useMemo } from "react";
 // plane editor
-import type { TMentionSection } from "@operis/editor";
+import type { TMentionSection } from "@operoz/editor";
 // plane types
-import type { TSearchEntities, TSearchResponse } from "@operis/types";
+import type { TSearchEntities, TSearchResponse } from "@operoz/types";
 
 export type TUseAdditionalEditorMentionArgs = {
   enableAdvancedMentions: boolean;

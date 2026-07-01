@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import type { TCycleDistribution, TCycleEstimateDistribution, TCyclePlotType } from "@operis/types";
-import { cn, toFilterArray } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import type { TCycleDistribution, TCycleEstimateDistribution, TCyclePlotType } from "@operoz/types";
+import { cn, toFilterArray } from "@operoz/utils";
 // components
 import type { TAssigneeData } from "@/components/core/sidebar/progress-stats/assignee";
 import { AssigneeStatComponent } from "@/components/core/sidebar/progress-stats/assignee";

@@ -1,10 +1,10 @@
 import type { RefObject } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // components
-import type { IBlockUpdateData } from "@operis/types";
-import { Row, ERowVariant } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { IBlockUpdateData } from "@operoz/types";
+import { Row, ERowVariant } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_GANTT_SURFACE, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { MultipleSelectGroupAction } from "@/components/core/multiple-select";
 // helpers

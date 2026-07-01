@@ -1,18 +1,18 @@
 import { useEffect, useRef, useState } from "react";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Info } from "lucide-react";
-import { NETWORK_CHOICES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { NETWORK_CHOICES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { LockIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import { EFileAssetType } from "@operis/types";
-import type { IProject, IWorkspace } from "@operis/types";
-import { CustomSelect, Input, TextArea } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { LockIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { EFileAssetType } from "@operoz/types";
+import type { IProject, IWorkspace } from "@operoz/types";
+import { CustomSelect, Input, TextArea } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 import { CoverImage } from "@/components/common/cover-image";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";
 import { TimezoneSelect } from "@/components/global";
@@ -234,295 +234,294 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
 
   return (
     <FormProvider {...methods}>
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="relative h-44 w-full">
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <CoverImage src={coverImage} alt="Project cover image" className="h-44 w-full rounded-md" />
-        <div className="absolute bottom-4 z-5 flex w-full items-end justify-between gap-3 px-4">
-          <div className="flex flex-grow gap-3 truncate">
-            <Controller
-              control={control}
-              name="logo_props"
-              render={({ field: { value, onChange } }) => (
-                <EmojiPicker
-                  iconType="material"
-                  closeOnSelect={false}
-                  isOpen={isOpen}
-                  handleToggle={(val: boolean) => setIsOpen(val)}
-                  className="flex items-center justify-center"
-                  buttonClassName="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-lg bg-white/10"
-                  label={<Logo logo={value} size={28} />}
-                  // TODO: fix types
-                  onChange={(val: any) => {
-                    let logoValue = {};
-
-                    if (val?.type === "emoji")
-                      logoValue = {
-                        value: val.value,
-                      };
-                    else if (val?.type === "icon") logoValue = val.value;
-
-                    onChange({
-                      in_use: val?.type,
-                      [val?.type]: logoValue,
-                    });
-                    setIsOpen(false);
-                  }}
-                  defaultIconColor={value?.in_use && value.in_use === "icon" ? value?.icon?.color : undefined}
-                  defaultOpen={
-                    value.in_use && value.in_use === "emoji" ? EmojiIconPickerTypes.EMOJI : EmojiIconPickerTypes.ICON
-                  }
-                  disabled={!isAdmin}
-                />
-              )}
-            />
-            <div className="flex flex-col gap-1 truncate text-on-color">
-              <span className="truncate text-16 font-semibold">{watch("name")}</span>
-              <span className="flex items-center gap-2 text-13">
-                <span>{watch("identifier")} .</span>
-                <span className="flex items-center gap-1.5">
-                  {project.network === 0 && <LockIcon className="h-2.5 w-2.5 text-on-color" />}
-                  {currentNetwork && t(currentNetwork?.i18n_label)}
-                </span>
-              </span>
-            </div>
-          </div>
-          <div className="flex flex-shrink-0 justify-center">
-            <div>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="relative h-44 w-full">
+          <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
+          <CoverImage src={coverImage} alt="Project cover image" className="h-44 w-full rounded-md" />
+          <div className="absolute bottom-4 z-5 flex w-full items-end justify-between gap-3 px-4">
+            <div className="flex flex-grow gap-3 truncate">
               <Controller
                 control={control}
-                name="cover_image_url"
+                name="logo_props"
                 render={({ field: { value, onChange } }) => (
-                  <ImagePickerPopover
-                    label={t("change_cover")}
-                    control={control}
-                    onChange={onChange}
-                    value={value ?? null}
-                    disabled={!isAdmin}
-                    projectId={project.id}
-                  />
-                )}
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mt-8 flex flex-col gap-8">
-        {!useLayoutForm && (
-        <>
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13">{t("common.project_name")}</h4>
-          <Controller
-            control={control}
-            name="name"
-            rules={{
-              required: t("name_is_required"),
-              maxLength: {
-                value: 255,
-                message: "Project name should be less than 255 characters",
-              },
-            }}
-            render={({ field: { value, onChange, ref } }) => (
-              <Input
-                id="name"
-                name="name"
-                type="text"
-                ref={ref}
-                value={value}
-                onChange={onChange}
-                hasError={Boolean(errors.name)}
-                className="rounded-md !p-3 font-medium"
-                placeholder={t("common.project_name")}
-                disabled={!isAdmin}
-              />
-            )}
-          />
-          <span className="text-11 text-danger-primary">{errors?.name?.message}</span>
-        </div>
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13">{t("project.responsible_stakeholder")}</h4>
-          <Controller
-            control={control}
-            name="responsible_stakeholder"
-            render={({ field: { value, onChange } }) => (
-              <Input
-                id="responsible_stakeholder"
-                name="responsible_stakeholder"
-                type="text"
-                value={value ?? ""}
-                onChange={onChange}
-                className="rounded-md !p-3 font-medium"
-                placeholder={t("project.responsible_stakeholder_placeholder")}
-                disabled={!isAdmin}
-              />
-            )}
-          />
-        </div>
-        </>
-        )}
-        {ENABLE_WORKSPACE_BOARDS && isAdmin && (
-          <BoardSelectField required={Boolean(project.board_id)} />
-        )}
-        {project.board_id && (
-          <ProjectBoardLayoutSection
-            workspaceSlug={workspaceSlug}
-            project={project}
-            isAdmin={isAdmin}
-            onHandlersReady={(handlers) => {
-              layoutHandlersRef.current = handlers;
-              setUseLayoutForm(Boolean(handlers));
-            }}
-          />
-        )}
-        {!useLayoutForm && (
-        <>
-        <div className="flex flex-col gap-1">
-          <h4 className="text-13">{t("description")}</h4>
-          <Controller
-            name="description"
-            control={control}
-            render={({ field: { value, onChange } }) => (
-              <TextArea
-                id="description"
-                name="description"
-                value={value}
-                placeholder={t("project_description_placeholder")}
-                onChange={onChange}
-                className="min-h-[102px] text-13 font-medium"
-                hasError={Boolean(errors?.description)}
-                disabled={!isAdmin}
-              />
-            )}
-          />
-        </div>
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-          <div className="flex flex-col gap-1">
-            <h4 className="text-13">Project ID</h4>
-            <div className="relative">
-              <Controller
-                control={control}
-                name="identifier"
-                rules={{
-                  required: t("project_id_is_required"),
-                  validate: (value) => /^[ÇŞĞIİÖÜA-Z0-9]+$/.test(value.toUpperCase()) || t("project_id_allowed_char"),
-                  minLength: {
-                    value: 1,
-                    message: t("project_id_min_char"),
-                  },
-                  maxLength: {
-                    value: 10,
-                    message: t("project_id_max_char"),
-                  },
-                }}
-                render={({ field: { value, ref } }) => (
-                  <Input
-                    id="identifier"
-                    name="identifier"
-                    type="text"
-                    value={value}
-                    onChange={handleIdentifierChange}
-                    ref={ref}
-                    hasError={Boolean(errors.identifier)}
-                    placeholder={t("project_settings.general.enter_project_id")}
-                    className="w-full font-medium"
-                    disabled={!isAdmin}
-                  />
-                )}
-              />
-              <Tooltip
-                isMobile={isMobile}
-                tooltipContent={t("project_id_tooltip_content")}
-                className="text-13"
-                position="right-start"
-              >
-                <Info className="absolute top-2.5 right-2 h-4 w-4 text-placeholder" />
-              </Tooltip>
-            </div>
-            <span className="text-11 text-danger-primary">
-              <>{errors?.identifier?.message}</>
-            </span>
-          </div>
-          <div className="flex flex-col gap-1">
-            <h4 className="text-13">{t("workspace_projects.network.label")}</h4>
-            <Controller
-              name="network"
-              control={control}
-              render={({ field: { value, onChange } }) => {
-                const selectedNetwork = NETWORK_CHOICES.find((n) => n.key === value);
-                return (
-                  <CustomSelect
-                    value={value}
-                    onChange={onChange}
-                    label={
-                      <div className="flex items-center gap-1">
-                        {selectedNetwork ? (
-                          <>
-                            <ProjectNetworkIcon iconKey={selectedNetwork.iconKey} className="h-3.5 w-3.5" />
-                            {t(selectedNetwork.i18n_label)}
-                          </>
-                        ) : (
-                          <span className="text-placeholder">{t("select_network")}</span>
-                        )}
-                      </div>
+                  <EmojiPicker
+                    iconType="material"
+                    closeOnSelect={false}
+                    isOpen={isOpen}
+                    handleToggle={(val: boolean) => setIsOpen(val)}
+                    className="flex items-center justify-center"
+                    buttonClassName="flex h-[52px] w-[52px] flex-shrink-0 items-center justify-center rounded-lg bg-white/10"
+                    label={<Logo logo={value} size={28} />}
+                    // TODO: fix types
+                    onChange={(val: any) => {
+                      let logoValue = {};
+
+                      if (val?.type === "emoji")
+                        logoValue = {
+                          value: val.value,
+                        };
+                      else if (val?.type === "icon") logoValue = val.value;
+
+                      onChange({
+                        in_use: val?.type,
+                        [val?.type]: logoValue,
+                      });
+                      setIsOpen(false);
+                    }}
+                    defaultIconColor={value?.in_use && value.in_use === "icon" ? value?.icon?.color : undefined}
+                    defaultOpen={
+                      value.in_use && value.in_use === "emoji" ? EmojiIconPickerTypes.EMOJI : EmojiIconPickerTypes.ICON
                     }
-                    buttonClassName="!border-subtle !shadow-none font-medium rounded-md"
-                    input
                     disabled={!isAdmin}
-                    // optionsClassName="w-full"
-                  >
-                    {NETWORK_CHOICES.map((network) => (
-                      <CustomSelect.Option key={network.key} value={network.key}>
-                        <div className="flex items-start gap-2">
-                          <ProjectNetworkIcon iconKey={network.iconKey} className="h-3.5 w-3.5" />
-                          <div className="-mt-1">
-                            <p>{t(network.i18n_label)}</p>
-                            <p className="text-11 text-placeholder">{t(network.description)}</p>
-                          </div>
-                        </div>
-                      </CustomSelect.Option>
-                    ))}
-                  </CustomSelect>
-                );
+                  />
+                )}
+              />
+              <div className="flex flex-col gap-1 truncate text-on-color">
+                <span className="truncate text-16 font-semibold">{watch("name")}</span>
+                <span className="flex items-center gap-2 text-13">
+                  <span>{watch("identifier")} .</span>
+                  <span className="flex items-center gap-1.5">
+                    {project.network === 0 && <LockIcon className="h-2.5 w-2.5 text-on-color" />}
+                    {currentNetwork && t(currentNetwork?.i18n_label)}
+                  </span>
+                </span>
+              </div>
+            </div>
+            <div className="flex flex-shrink-0 justify-center">
+              <div>
+                <Controller
+                  control={control}
+                  name="cover_image_url"
+                  render={({ field: { value, onChange } }) => (
+                    <ImagePickerPopover
+                      label={t("change_cover")}
+                      control={control}
+                      onChange={onChange}
+                      value={value ?? null}
+                      disabled={!isAdmin}
+                      projectId={project.id}
+                    />
+                  )}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="mt-8 flex flex-col gap-8">
+          {!useLayoutForm && (
+            <>
+              <div className="flex flex-col gap-1">
+                <h4 className="text-13">{t("common.project_name")}</h4>
+                <Controller
+                  control={control}
+                  name="name"
+                  rules={{
+                    required: t("name_is_required"),
+                    maxLength: {
+                      value: 255,
+                      message: "Project name should be less than 255 characters",
+                    },
+                  }}
+                  render={({ field: { value, onChange, ref } }) => (
+                    <Input
+                      id="name"
+                      name="name"
+                      type="text"
+                      ref={ref}
+                      value={value}
+                      onChange={onChange}
+                      hasError={Boolean(errors.name)}
+                      className="rounded-md !p-3 font-medium"
+                      placeholder={t("common.project_name")}
+                      disabled={!isAdmin}
+                    />
+                  )}
+                />
+                <span className="text-11 text-danger-primary">{errors?.name?.message}</span>
+              </div>
+              <div className="flex flex-col gap-1">
+                <h4 className="text-13">{t("project.responsible_stakeholder")}</h4>
+                <Controller
+                  control={control}
+                  name="responsible_stakeholder"
+                  render={({ field: { value, onChange } }) => (
+                    <Input
+                      id="responsible_stakeholder"
+                      name="responsible_stakeholder"
+                      type="text"
+                      value={value ?? ""}
+                      onChange={onChange}
+                      className="rounded-md !p-3 font-medium"
+                      placeholder={t("project.responsible_stakeholder_placeholder")}
+                      disabled={!isAdmin}
+                    />
+                  )}
+                />
+              </div>
+            </>
+          )}
+          {ENABLE_WORKSPACE_BOARDS && isAdmin && <BoardSelectField required={Boolean(project.board_id)} />}
+          {project.board_id && (
+            <ProjectBoardLayoutSection
+              workspaceSlug={workspaceSlug}
+              project={project}
+              isAdmin={isAdmin}
+              onHandlersReady={(handlers) => {
+                layoutHandlersRef.current = handlers;
+                setUseLayoutForm(Boolean(handlers));
               }}
             />
-          </div>
-          <div className="col-span-1 flex flex-col gap-1 sm:col-span-2 xl:col-span-1">
-            <h4 className="text-13">{t("common.project_timezone")}</h4>
-            <Controller
-              name="timezone"
-              control={control}
-              rules={{ required: t("project_settings.general.please_select_a_timezone") }}
-              render={({ field: { value, onChange } }) => (
-                <>
-                  <TimezoneSelect
-                    value={value}
-                    onChange={(value: string) => {
-                      onChange(value);
+          )}
+          {!useLayoutForm && (
+            <>
+              <div className="flex flex-col gap-1">
+                <h4 className="text-13">{t("description")}</h4>
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field: { value, onChange } }) => (
+                    <TextArea
+                      id="description"
+                      name="description"
+                      value={value}
+                      placeholder={t("project_description_placeholder")}
+                      onChange={onChange}
+                      className="min-h-[102px] text-13 font-medium"
+                      hasError={Boolean(errors?.description)}
+                      disabled={!isAdmin}
+                    />
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+                <div className="flex flex-col gap-1">
+                  <h4 className="text-13">Project ID</h4>
+                  <div className="relative">
+                    <Controller
+                      control={control}
+                      name="identifier"
+                      rules={{
+                        required: t("project_id_is_required"),
+                        validate: (value) =>
+                          /^[ÇŞĞIİÖÜA-Z0-9]+$/.test(value.toUpperCase()) || t("project_id_allowed_char"),
+                        minLength: {
+                          value: 1,
+                          message: t("project_id_min_char"),
+                        },
+                        maxLength: {
+                          value: 10,
+                          message: t("project_id_max_char"),
+                        },
+                      }}
+                      render={({ field: { value, ref } }) => (
+                        <Input
+                          id="identifier"
+                          name="identifier"
+                          type="text"
+                          value={value}
+                          onChange={handleIdentifierChange}
+                          ref={ref}
+                          hasError={Boolean(errors.identifier)}
+                          placeholder={t("project_settings.general.enter_project_id")}
+                          className="w-full font-medium"
+                          disabled={!isAdmin}
+                        />
+                      )}
+                    />
+                    <Tooltip
+                      isMobile={isMobile}
+                      tooltipContent={t("project_id_tooltip_content")}
+                      className="text-13"
+                      position="right-start"
+                    >
+                      <Info className="absolute top-2.5 right-2 h-4 w-4 text-placeholder" />
+                    </Tooltip>
+                  </div>
+                  <span className="text-11 text-danger-primary">
+                    <>{errors?.identifier?.message}</>
+                  </span>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <h4 className="text-13">{t("workspace_projects.network.label")}</h4>
+                  <Controller
+                    name="network"
+                    control={control}
+                    render={({ field: { value, onChange } }) => {
+                      const selectedNetwork = NETWORK_CHOICES.find((n) => n.key === value);
+                      return (
+                        <CustomSelect
+                          value={value}
+                          onChange={onChange}
+                          label={
+                            <div className="flex items-center gap-1">
+                              {selectedNetwork ? (
+                                <>
+                                  <ProjectNetworkIcon iconKey={selectedNetwork.iconKey} className="h-3.5 w-3.5" />
+                                  {t(selectedNetwork.i18n_label)}
+                                </>
+                              ) : (
+                                <span className="text-placeholder">{t("select_network")}</span>
+                              )}
+                            </div>
+                          }
+                          buttonClassName="!border-subtle !shadow-none font-medium rounded-md"
+                          input
+                          disabled={!isAdmin}
+                          // optionsClassName="w-full"
+                        >
+                          {NETWORK_CHOICES.map((network) => (
+                            <CustomSelect.Option key={network.key} value={network.key}>
+                              <div className="flex items-start gap-2">
+                                <ProjectNetworkIcon iconKey={network.iconKey} className="h-3.5 w-3.5" />
+                                <div className="-mt-1">
+                                  <p>{t(network.i18n_label)}</p>
+                                  <p className="text-11 text-placeholder">{t(network.description)}</p>
+                                </div>
+                              </div>
+                            </CustomSelect.Option>
+                          ))}
+                        </CustomSelect>
+                      );
                     }}
-                    error={Boolean(errors.timezone)}
-                    buttonClassName="!border-subtle !shadow-none font-medium rounded-md"
-                    disabled={!isAdmin}
                   />
-                </>
-              )}
-            />
-            {errors.timezone && <span className="text-11 text-danger-primary">{errors.timezone.message}</span>}
+                </div>
+                <div className="col-span-1 flex flex-col gap-1 sm:col-span-2 xl:col-span-1">
+                  <h4 className="text-13">{t("common.project_timezone")}</h4>
+                  <Controller
+                    name="timezone"
+                    control={control}
+                    rules={{ required: t("project_settings.general.please_select_a_timezone") }}
+                    render={({ field: { value, onChange } }) => (
+                      <>
+                        <TimezoneSelect
+                          value={value}
+                          onChange={(value: string) => {
+                            onChange(value);
+                          }}
+                          error={Boolean(errors.timezone)}
+                          buttonClassName="!border-subtle !shadow-none font-medium rounded-md"
+                          disabled={!isAdmin}
+                        />
+                      </>
+                    )}
+                  />
+                  {errors.timezone && <span className="text-11 text-danger-primary">{errors.timezone.message}</span>}
+                </div>
+              </div>
+            </>
+          )}
+          <div className="flex items-center justify-between py-2">
+            <>
+              <Button variant="primary" size="lg" type="submit" loading={isLoading} disabled={!isAdmin}>
+                {isLoading ? t("updating") : t("common.update_project")}
+              </Button>
+              <span className="text-13 text-placeholder italic">
+                {t("common.created_on")} {renderFormattedDate(project?.created_at)}
+              </span>
+            </>
           </div>
         </div>
-        </>
-        )}
-        <div className="flex items-center justify-between py-2">
-          <>
-            <Button variant="primary" size="lg" type="submit" loading={isLoading} disabled={!isAdmin}>
-              {isLoading ? t("updating") : t("common.update_project")}
-            </Button>
-            <span className="text-13 text-placeholder italic">
-              {t("common.created_on")} {renderFormattedDate(project?.created_at)}
-            </span>
-          </>
-        </div>
-      </div>
-    </form>
+      </form>
     </FormProvider>
   );
 }

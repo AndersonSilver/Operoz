@@ -10,7 +10,7 @@ import type {
   TSubIssuesStateDistribution,
   TIssueServiceType,
   TLoader,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { IssueService } from "@/services/issue";
 // store
@@ -169,6 +169,11 @@ export class IssueSubIssuesStore implements IIssueSubIssuesStore {
         issueList.map((issue) => issue.id)
       );
     });
+
+    const subIssueIds = issueList.map((issue) => issue.id);
+    if (subIssueIds.length > 0) {
+      void this.rootIssueDetailStore.relation.fetchRelationsForIssues(workspaceSlug, projectId, subIssueIds);
+    }
 
     this.loader = undefined;
     return response;

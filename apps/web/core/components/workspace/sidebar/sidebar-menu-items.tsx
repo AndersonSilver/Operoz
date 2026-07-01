@@ -8,10 +8,10 @@ import {
   WORKSPACE_SIDEBAR_STATIC_NAVIGATION_ITEMS,
   WORKSPACE_SIDEBAR_STATIC_NAVIGATION_ITEMS_LINKS,
   WORKSPACE_SIDEBAR_STATIC_PINNED_NAVIGATION_ITEMS_LINKS,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { ChevronRightIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronRightIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 import { SidebarSectionHeader } from "@/components/sidebar/sidebar-section-header";

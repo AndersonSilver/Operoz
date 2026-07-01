@@ -1,9 +1,17 @@
 export { SidebarPropertyListItem as IssueDetailPropertyRow } from "@/components/common/layout/sidebar/property-list-item";
 
 import { useState, type ReactNode } from "react";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { Collapsible } from "@operis/ui";
-import { cn } from "@operis/utils";
+
+/** Shared dropdown styling for inline property values (sidebar + peek). */
+export const issueDetailPropertyDropdownProps = {
+  buttonVariant: "transparent-with-text" as const,
+  className: "group w-full",
+  buttonContainerClassName: "w-full text-left",
+  buttonClassName: "h-auto min-h-0 justify-start px-0 py-0.5 text-13 text-primary",
+};
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { Collapsible } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type IssueDetailSidebarAccordionProps = {
   title: string;

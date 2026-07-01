@@ -4,29 +4,106 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{{ headline }}</title>
-    <style type="text/css">
-      body { font-family: system-ui, sans-serif; background: #f7f9ff; color: #1f2d5c; margin: 0; padding: 24px; }
-      .card { max-width: 560px; margin: 0 auto; background: #fcfcfd; border: 1px solid #e4e7ef; border-radius: 6px; padding: 24px; }
-      h1 { font-size: 18px; margin: 0 0 8px; }
-      p { font-size: 14px; line-height: 1.6; margin: 0 0 12px; }
-      .meta { color: #5c6580; font-size: 13px; }
-      .cta { display: inline-block; margin-top: 16px; padding: 10px 16px; background: #3358d4; color: #fff !important; text-decoration: none; border-radius: 4px; font-size: 14px; }
-      ul { padding-left: 18px; margin: 8px 0 0; }
-    </style>
   </head>
-  <body>
-    <div class="card">
-      <h1>{{ headline }}</h1>
-      <p class="meta">{{ workspace_slug }} / {{ project_name }} / {{ issue_identifier }}</p>
-      <p><strong>{{ issue_name }}</strong></p>
-      {% if detail_lines %}
-      <ul>
-        {% for line in detail_lines %}
-        <li>{{ line }}</li>
-        {% endfor %}
-      </ul>
-      {% endif %}
-      <a class="cta" href="{{ issue_url }}">Abrir no Operoz</a>
-    </div>
+  <body bgcolor="#f7f9ff" style="margin: 0; padding: 24px 16px; background-color: #f7f9ff; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1f2d5c;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto;">
+      <tr>
+        <td style="padding-bottom: 20px;">{% include "emails/partials/logo_on_light.html" %}</td>
+      </tr>
+      <tr>
+        <td style="background-color: #fcfcfd; border: 1px solid #e4e7ef; border-radius: 8px; padding: 28px 24px;">
+          <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5c6580;">Operoz · Alertas</p>
+          <h1 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; line-height: 1.35; color: #121a26;">{{ headline }}</h1>
+          {% if content_intro %}
+          <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #3b4563;">{{ content_intro }}</p>
+          {% endif %}
+
+          <p style="margin: 0 0 18px; font-size: 13px; color: #5c6580;">
+            {{ workspace_slug }} / {{ project_name }} /
+            <a href="{{ issue_url }}" style="color: #3358d4; text-decoration: none; font-weight: 600;">{{ issue_identifier }}</a>
+          </p>
+
+          {% if is_support_alert and support_details %}
+          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 18px; background-color: #f7f9ff; border: 1px solid #c1d0ff; border-radius: 8px;">
+            <tr>
+              <td style="padding: 16px 18px;">
+                <p style="margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #525252;">Detalhes do chamado</p>
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                  {% if support_details.client %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; width: 38%; vertical-align: top;">Cliente</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #1f2d5c;">{{ support_details.client }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.criticality_label %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Criticidade</td>
+                    <td style="padding: 6px 0;">
+                      <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; {% if support_details.criticality == 'p0' or support_details.criticality == 'p1' %}background-color: #feebec; color: #ce2c31;{% elif support_details.criticality == 'p2' %}background-color: #fefbe9; color: #b8860b;{% else %}background-color: #eef1f8; color: #3b4563;{% endif %}">{{ support_details.criticality_label }}</span>
+                    </td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.reporter %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Relator</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.reporter }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.ticket_number %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Nº do chamado</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.ticket_number }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.sla_due_at %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">SLA</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #1f2d5c;">{{ support_details.sla_due_at }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.queue %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Fila</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.queue }}</td>
+                  </tr>
+                  {% endif %}
+                  {% if support_details.assignee %}
+                  <tr>
+                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Responsável</td>
+                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.assignee }}</td>
+                  </tr>
+                  {% endif %}
+                </table>
+              </td>
+            </tr>
+          </table>
+          {% endif %}
+
+          <div style="margin-bottom: 16px; padding: 14px 16px; background-color: #ffffff; border: 1px solid #e4e7ef; border-radius: 6px;">
+            <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #80838d;">Resumo</p>
+            <p style="margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; color: #121a26;">{{ issue_name }}</p>
+          </div>
+
+          {% if detail_lines %}
+          <ul style="margin: 0 0 18px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: #3b4563;">
+            {% for line in detail_lines %}
+            <li style="margin-bottom: 4px;">{{ line }}</li>
+            {% endfor %}
+          </ul>
+          {% elif assignee_label and not is_support_alert %}
+          <p style="margin: 0 0 18px; font-size: 13px; color: #3b4563;"><strong>Responsável:</strong> {{ assignee_label }}</p>
+          {% endif %}
+
+          <a href="{{ issue_url }}" style="display: inline-block; margin-top: 4px; padding: 11px 18px; background-color: #3e63dd; border: 1px solid #2f4ba8; border-radius: 6px; color: #ffffff !important; font-size: 14px; font-weight: 600; text-decoration: none;">Abrir no Operoz</a>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding: 20px 4px 0; font-size: 12px; line-height: 1.6; color: #80838d;">
+          Você recebeu este e-mail porque tem alertas ativos no Operoz.
+          <br />
+          <span style="color: #979797;">Operoz OS</span>
+        </td>
+      </tr>
+    </table>
   </body>
 </html>

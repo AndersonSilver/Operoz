@@ -2,12 +2,12 @@ import { Fragment, useEffect, useRef, useState, type CSSProperties, type ReactNo
 import { observer } from "mobx-react";
 import { ChevronDown, CirclePlus, LogOut, Mails, Settings, UserPlus } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-import { EUserPermissions } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspace } from "@operis/types";
-import { Loader } from "@operis/ui";
-import { orderWorkspacesList, cn } from "@operis/utils";
+import { EUserPermissions } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspace } from "@operoz/types";
+import { Loader } from "@operoz/ui";
+import { orderWorkspacesList, cn } from "@operoz/utils";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserProfile } from "@/hooks/store/user";
@@ -105,8 +105,7 @@ const WorkspaceMenuPanel = observer(function WorkspaceMenuPanel(props: Workspace
   const otherWorkspaces = getOtherWorkspaces(workspacesList, activeWorkspace?.id);
   const showWorkspaceSlug = workspacesList.length > 1 || hasAmbiguousWorkspaceNames(workspacesList);
   const canOpenSettings =
-    activeWorkspace &&
-    [EUserPermissions.ADMIN, EUserPermissions.MEMBER].includes(activeWorkspace.role);
+    activeWorkspace && [EUserPermissions.ADMIN, EUserPermissions.MEMBER].includes(activeWorkspace.role);
   const canInvite = activeWorkspace && [EUserPermissions.ADMIN].includes(activeWorkspace.role);
 
   return (
@@ -158,7 +157,7 @@ const WorkspaceMenuPanel = observer(function WorkspaceMenuPanel(props: Workspace
             )}
           >
             {otherWorkspaces.length > 0 ? (
-              <div className="vertical-scrollbar scrollbar-sm min-h-0 max-h-40 flex-1 overflow-y-auto py-0.5">
+              <div className="vertical-scrollbar scrollbar-sm max-h-40 min-h-0 flex-1 overflow-y-auto py-0.5">
                 <p className="px-2.5 pt-1.5 pb-1 text-11 font-medium text-tertiary">
                   {t("workspace_switcher.switch_to")}
                 </p>
@@ -231,10 +230,7 @@ export const WorkspaceMenuRoot = observer(function WorkspaceMenuRoot(props: Work
   const { variant } = props;
 
   return (
-    <Menu
-      as="div"
-      className={cn("relative", variant === "sidebar" ? "w-full" : "w-fit max-w-48 flex-grow")}
-    >
+    <Menu as="div" className={cn("relative", variant === "sidebar" ? "w-full" : "w-fit max-w-48 flex-grow")}>
       {({ open, close }: { open: boolean; close: () => void }) => (
         <WorkspaceMenuPanel variant={variant} open={open} close={close} />
       )}

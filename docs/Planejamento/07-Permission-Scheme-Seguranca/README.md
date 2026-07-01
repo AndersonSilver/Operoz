@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis tem RBAC funcional (`ROLE` ADMIN/MEMBER/GUEST + `BoardRolePermission`)
+O Operoz tem RBAC funcional (`ROLE` ADMIN/MEMBER/GUEST + `BoardRolePermission`)
 mas **menos granular** que os Permission Schemes do Jira (roadmap §16). Esta
 feature traz permissões finas por projeto, grupos de utilizadores, security
 levels por issue, e SSO/SAML — sem partir o RBAC existente, antes estendendo-o.
@@ -16,13 +16,13 @@ issue-level security, groups, SSO/SAML/OIDC, 2FA, audit log, sessões.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Estender o mecanismo de chaves do `BoardRolePermission` para um `PermissionScheme` reutilizável | Sistema paralelo de permissões |
-| 2 | `UserGroup` workspace-level usado em permissões e OQL `membersOf()` | Grupos ad-hoc |
-| 3 | `SecurityLevel` por issue, opcional e aditivo | Tornar todas as issues restritas |
-| 4 | SSO via biblioteca SAML/OIDC madura, config por instance | Implementar protocolo à mão |
-| 5 | Audit log centralizado consumindo `created_by`/`updated_by` + eventos | Logs dispersos |
+| #   | Decisão                                                                                         | Alternativa rejeitada            |
+| --- | ----------------------------------------------------------------------------------------------- | -------------------------------- |
+| 1   | Estender o mecanismo de chaves do `BoardRolePermission` para um `PermissionScheme` reutilizável | Sistema paralelo de permissões   |
+| 2   | `UserGroup` workspace-level usado em permissões e OQL `membersOf()`                             | Grupos ad-hoc                    |
+| 3   | `SecurityLevel` por issue, opcional e aditivo                                                   | Tornar todas as issues restritas |
+| 4   | SSO via biblioteca SAML/OIDC madura, config por instance                                        | Implementar protocolo à mão      |
+| 5   | Audit log centralizado consumindo `created_by`/`updated_by` + eventos                           | Logs dispersos                   |
 
 ## Escopo
 

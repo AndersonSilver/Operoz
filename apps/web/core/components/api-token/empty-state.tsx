@@ -1,6 +1,6 @@
 import React from "react";
 // ui
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 // assets
 import emptyApiTokens from "@/app/assets/empty-state/api-token.svg?url";
 

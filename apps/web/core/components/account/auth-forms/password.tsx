@@ -4,12 +4,12 @@ import Link from "next/link";
 // icons
 import { Eye, EyeOff, Info, XCircle } from "lucide-react";
 // plane imports
-import { API_BASE_URL, E_PASSWORD_STRENGTH, AUTH_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CloseIcon } from "@operis/propel/icons";
-import { Input, PasswordStrengthIndicator, Spinner } from "@operis/ui";
-import { getPasswordStrength } from "@operis/utils";
+import { API_BASE_URL, E_PASSWORD_STRENGTH, AUTH_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CloseIcon } from "@operoz/propel/icons";
+import { Input, PasswordStrengthIndicator, Spinner } from "@operoz/ui";
+import { getPasswordStrength } from "@operoz/utils";
 // components
 import { ForgotPasswordPopover } from "@/components/account/auth-forms/forgot-password-popover";
 // constants

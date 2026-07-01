@@ -1,5 +1,5 @@
 import { createContext, useContext, type ReactNode } from "react";
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 
 export type TBoardLayoutContext = {
   board: IBoard | undefined;

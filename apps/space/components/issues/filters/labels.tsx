@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 // plane imports
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 // types
 import type { IIssueLabel } from "@/types/issue";
 // local imports

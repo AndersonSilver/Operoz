@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TBaseLayoutType } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TBaseLayoutType } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { BASE_LAYOUTS } from "./constants";
 

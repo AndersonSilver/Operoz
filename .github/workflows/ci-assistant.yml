@@ -7,23 +7,23 @@ on:
   push:
     branches: [preview, main, develop]
     paths:
-      - "apps/api/operis/assistant/**"
-      - "apps/api/operis/bgtasks/assistant_index_task.py"
-      - "apps/api/operis/app/views/assistant/**"
-      - "apps/api/operis/tests/unit/assistant/**"
-      - "apps/api/operis/tests/contract/app/test_assistant_app.py"
-      - "apps/api/operis/devops/**"
-      - "apps/api/operis/db/management/commands/check_celery_queues.py"
+      - "apps/api/operoz/assistant/**"
+      - "apps/api/operoz/bgtasks/assistant_index_task.py"
+      - "apps/api/operoz/app/views/assistant/**"
+      - "apps/api/operoz/tests/unit/assistant/**"
+      - "apps/api/operoz/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operoz/devops/**"
+      - "apps/api/operoz/db/management/commands/check_celery_queues.py"
       - ".github/workflows/ci-assistant.yml"
   pull_request:
     paths:
-      - "apps/api/operis/assistant/**"
-      - "apps/api/operis/bgtasks/assistant_index_task.py"
-      - "apps/api/operis/app/views/assistant/**"
-      - "apps/api/operis/tests/unit/assistant/**"
-      - "apps/api/operis/tests/contract/app/test_assistant_app.py"
-      - "apps/api/operis/devops/**"
-      - "apps/api/operis/db/management/commands/check_celery_queues.py"
+      - "apps/api/operoz/assistant/**"
+      - "apps/api/operoz/bgtasks/assistant_index_task.py"
+      - "apps/api/operoz/app/views/assistant/**"
+      - "apps/api/operoz/tests/unit/assistant/**"
+      - "apps/api/operoz/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operoz/devops/**"
+      - "apps/api/operoz/db/management/commands/check_celery_queues.py"
       - ".github/workflows/ci-assistant.yml"
 
 concurrency:
@@ -39,13 +39,13 @@ jobs:
       postgres:
         image: pgvector/pgvector:pg15
         env:
-          POSTGRES_USER: operis
-          POSTGRES_PASSWORD: operis
-          POSTGRES_DB: operis
+          POSTGRES_USER: operoz
+          POSTGRES_PASSWORD: operoz
+          POSTGRES_DB: operoz
         ports:
           - 5432:5432
         options: >-
-          --health-cmd "pg_isready -U operis -d operis"
+          --health-cmd "pg_isready -U operoz -d operoz"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
@@ -64,7 +64,7 @@ jobs:
         working-directory: apps/api
 
     env:
-      DATABASE_URL: postgres://operis:operis@localhost:5432/operis
+      DATABASE_URL: postgres://operoz:operoz@localhost:5432/operoz
       REDIS_URL: redis://localhost:6379/0
       SECRET_KEY: ci-assistant-secret
       LLM_API_KEY: sk-ci-mock
@@ -88,7 +88,7 @@ jobs:
       - name: Pytest assistant (unit + contract)
         run: |
           python -m pytest \
-            operis/tests/unit/assistant/ \
-            operis/tests/unit/devops/test_celery_queue_monitor.py \
-            operis/tests/contract/app/test_assistant_app.py \
+            operoz/tests/unit/assistant/ \
+            operoz/tests/unit/devops/test_celery_queue_monitor.py \
+            operoz/tests/contract/app/test_assistant_app.py \
             -q --tb=short

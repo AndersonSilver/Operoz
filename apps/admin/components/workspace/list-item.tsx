@@ -1,11 +1,11 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { ExternalLink, Mail, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { WEB_BASE_URL } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { getFileURL, cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { WEB_BASE_URL } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { getFileURL, cn } from "@operoz/utils";
 import { useWorkspace } from "@/hooks/store";
 import { DeleteWorkspaceModal } from "./delete-workspace-modal";
 import { EditWorkspaceModal } from "./edit-workspace-modal";

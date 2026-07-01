@@ -1,9 +1,9 @@
 import useSWR from "swr";
 // plane imports
-import { GROUP_CHOICES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { IUserStateDistribution, TStateGroups } from "@operis/types";
-import { ContentWrapper } from "@operis/ui";
+import { GROUP_CHOICES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { IUserStateDistribution, TStateGroups } from "@operoz/types";
+import { ContentWrapper } from "@operoz/ui";
 // components
 import { PageHead } from "@/components/core/page-title";
 import { ProfileActivity } from "@/components/profile/overview/activity";

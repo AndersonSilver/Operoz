@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 // components
-import type { TIssuePriorities, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssuePriorities, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { PriorityDropdown } from "@/components/dropdowns/priority";
 import { StateDropdown } from "@/components/dropdowns/state/dropdown";

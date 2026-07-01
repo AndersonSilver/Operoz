@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 
-import { useTranslation } from "@operis/i18n";
-import { LinkIcon, CopyIcon, EditIcon, TrashIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { LinkIcon, CopyIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // ui
-import { CustomMenu } from "@operis/ui";
-import { calculateTimeAgo, copyTextToClipboard } from "@operis/utils";
+import { CustomMenu } from "@operoz/ui";
+import { calculateTimeAgo, copyTextToClipboard } from "@operoz/utils";
 // helpers
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

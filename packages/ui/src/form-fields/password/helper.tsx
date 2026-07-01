@@ -1,4 +1,4 @@
-import { E_PASSWORD_STRENGTH } from "@operis/constants";
+import { E_PASSWORD_STRENGTH } from "@operoz/constants";
 
 export interface StrengthInfo {
   message: string;

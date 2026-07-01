@@ -1,4 +1,4 @@
-import type { IPartialProject, IProject } from "@operis/types";
+import type { IPartialProject, IProject } from "@operoz/types";
 
 export type TPartialProject = IPartialProject;
 

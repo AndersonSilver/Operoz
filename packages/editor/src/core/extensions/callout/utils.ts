@@ -1,6 +1,6 @@
 // plane imports
-import type { TLogoProps } from "@operis/types";
-import { sanitizeHTML } from "@operis/utils";
+import type { TLogoProps } from "@operoz/types";
+import { sanitizeHTML } from "@operoz/utils";
 // types
 import type { TCalloutBlockAttributes, TCalloutBlockEmojiAttributes, TCalloutBlockIconAttributes } from "./types";
 import { ECalloutAttributeNames } from "./types";

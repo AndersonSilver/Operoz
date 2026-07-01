@@ -3,10 +3,10 @@ import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane constants
-import { EIssueFilterType } from "@operis/constants";
+import { EIssueFilterType } from "@operoz/constants";
 // types
-import type { GroupByColumnTypes, TGroupedIssues, TIssueKanbanFilters } from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import type { GroupByColumnTypes, TGroupedIssues, TIssueKanbanFilters } from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 // constants
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";

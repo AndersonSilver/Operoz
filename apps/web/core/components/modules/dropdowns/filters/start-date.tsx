@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // constants
-import { DATE_AFTER_FILTER_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { DATE_AFTER_FILTER_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // components
-import { isInDateFormat } from "@operis/utils";
+import { isInDateFormat } from "@operoz/utils";
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 

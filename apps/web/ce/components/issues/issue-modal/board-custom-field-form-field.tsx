@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import type { IProjectCustomFieldLite, TCustomFieldValue } from "@operis/types";
-import { CustomSearchSelect, Input, TextArea, ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IProjectCustomFieldLite, TCustomFieldValue } from "@operoz/types";
+import { CustomSearchSelect, Input, TextArea, ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import {
   getIssueFormControlClass,
@@ -60,7 +60,9 @@ export function BoardCustomFieldFormField(props: Props) {
     case "checkbox":
       return (
         <div className={issueFormControlWidthClass.custom}>
-          <div className={cn("flex items-start gap-3 rounded-[3px] bg-layer-2 px-3 py-2.5", issueFormControlBorderClass)}>
+          <div
+            className={cn("flex items-start gap-3 rounded-[3px] bg-layer-2 px-3 py-2.5", issueFormControlBorderClass)}
+          >
             <ToggleSwitch value={Boolean(value)} onChange={(checked) => onChange(checked)} size="sm" />
             <div className="min-w-0 flex-1">
               <p className="text-12 text-secondary">{field.name}</p>

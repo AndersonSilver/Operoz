@@ -1,11 +1,11 @@
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CopyIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IApiToken } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CopyIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IApiToken } from "@operoz/types";
 // ui
-import { renderFormattedDate, renderFormattedTime, copyTextToClipboard } from "@operis/utils";
+import { renderFormattedDate, renderFormattedTime, copyTextToClipboard } from "@operoz/utils";
 // helpers
 // types
 import { usePlatformOS } from "@/hooks/use-platform-os";

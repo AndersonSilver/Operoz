@@ -1,5 +1,5 @@
 import { range } from "lodash-es";
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 import { getRandomLength } from "../utils";
 
 export function SpreadsheetIssueRowLoader(props: { columnCount: number }) {

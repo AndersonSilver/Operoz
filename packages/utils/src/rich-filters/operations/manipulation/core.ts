@@ -5,7 +5,7 @@ import type {
   TFilterGroupNode,
   TFilterProperty,
   TFilterValue,
-} from "@operis/types";
+} from "@operoz/types";
 // local imports
 import { createAndGroupNode } from "../../factories/nodes/core";
 import { getGroupChildren } from "../../types";

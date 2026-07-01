@@ -1,6 +1,6 @@
 // helpers
-import type { IWebhook, IWorkspace } from "@operis/types";
-import { renderFormattedPayloadDate } from "@operis/utils";
+import type { IWebhook, IWorkspace } from "@operoz/types";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 // types
 
 export const getCurrentHookAsCSV = (

@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { AlertModalCore, TextArea } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { AlertModalCore, TextArea } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {

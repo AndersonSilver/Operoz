@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
-import { MembersPropertyIcon } from "@operis/propel/icons";
+import { MembersPropertyIcon } from "@operoz/propel/icons";
 // plane ui
-import { Avatar, AvatarGroup } from "@operis/ui";
-import { cn, getFileURL } from "@operis/utils";
+import { Avatar, AvatarGroup } from "@operoz/ui";
+import { cn, getFileURL } from "@operoz/utils";
 // plane utils
 // helpers
 // hooks

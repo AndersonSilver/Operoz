@@ -1,5 +1,5 @@
 {
-  "extends": "@operis/typescript-config/node-library.json",
+  "extends": "@operoz/typescript-config/node-library.json",
   "include": ["src/**/*"],
   "exclude": ["node_modules", "dist"]
 }

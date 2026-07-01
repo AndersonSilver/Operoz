@@ -28,6 +28,7 @@ ce/components/issues/issue-details/sidebar/
 ### `alert-rules-list.tsx`
 
 Lista de regras de alerta do workspace. Cada item mostra:
+
 - Nome e tipo do alerta (ícone + texto)
 - Canais ativos (badges: 📧 Email, 💬 Discord, 📅 Calendar)
 - Toggle on/off
@@ -38,6 +39,7 @@ Admin do workspace gerencia as regras; membros só visualizam.
 ### `alert-rule-form.tsx`
 
 Modal para criar/editar uma regra:
+
 - **Tipo de evento**: dropdown (Issue criada, Due date a aproximar, Atrasado, Sem data, etc.)
 - **Escopo**: workspace inteiro ou projeto específico (select)
 - **Canais**: checkboxes (Email, Discord DM, Google Calendar, In-app)
@@ -53,6 +55,7 @@ Componente que aparece na sidebar do issue detail. Atualmente vazio
 (`ce/components/issues/issue-details/sidebar/date-alert.tsx`).
 
 Deve mostrar:
+
 - **Verde** (> 7 dias): "Vence em X dias" (sem destaque)
 - **Amarelo** (3-7 dias): "Vence em X dias" (badge amarelo)
 - **Laranja** (1-3 dias): "Vence em X dias!" (badge laranja)
@@ -95,7 +98,7 @@ const DateAlert = ({ issue }) => {
 
 - Input "Seu Discord User ID"
 - Instruções: "Abra o Discord → Settings → Advanced → ative Developer Mode → clique no seu avatar → Copy ID"
-- Ou: "Use o comando `/link` no bot do Operis no seu servidor Discord"
+- Ou: "Use o comando `/link` no bot do Operoz no seu servidor Discord"
 - Botão "Vincular"
 - Status: "Conectado como Discord#1234"
 
@@ -215,7 +218,7 @@ class AlertService extends APIService {
 }
 ```
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 // packages/types/src/alert.d.ts

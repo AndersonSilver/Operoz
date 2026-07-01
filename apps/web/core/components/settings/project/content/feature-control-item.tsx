@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { setPromiseToast } from "@operis/propel/toast";
-import type { IProject } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
+import { setPromiseToast } from "@operoz/propel/toast";
+import type { IProject } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 // hooks

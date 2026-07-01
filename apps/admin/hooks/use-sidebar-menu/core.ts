@@ -1,5 +1,5 @@
 import { Image, BrainCog, Cog, Mail, MessagesSquare, Palette } from "lucide-react";
-import { LockIcon, WorkspaceIcon } from "@operis/propel/icons";
+import { LockIcon, WorkspaceIcon } from "@operoz/propel/icons";
 import type { TCoreSidebarMenuKey, TSidebarMenuItemConfig } from "./types";
 
 export type { TCoreSidebarMenuKey };

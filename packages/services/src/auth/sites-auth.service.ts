@@ -1,6 +1,6 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // types
-import type { IEmailCheckData, IEmailCheckResponse } from "@operis/types";
+import type { IEmailCheckData, IEmailCheckResponse } from "@operoz/types";
 // services
 import { APIService } from "../api.service";
 

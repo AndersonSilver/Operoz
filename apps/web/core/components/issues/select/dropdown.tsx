@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EUserPermissionsLevel } from "@operis/constants";
-import type { IIssueLabel } from "@operis/types";
-import { EUserPermissions } from "@operis/types";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import type { IIssueLabel } from "@operoz/types";
+import { EUserPermissions } from "@operoz/types";
 // hooks
 import { useLabel } from "@/hooks/store/use-label";
 import { useUserPermissions } from "@/hooks/store/user";

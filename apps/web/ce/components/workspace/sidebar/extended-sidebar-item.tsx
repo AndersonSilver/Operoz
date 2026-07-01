@@ -7,12 +7,12 @@ import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { Pin, PinOff } from "lucide-react";
 // plane imports
-import type { IWorkspaceSidebarNavigationItem } from "@operis/constants";
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import { DragHandle, DropIndicator } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { IWorkspaceSidebarNavigationItem } from "@operoz/constants";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { DragHandle, DropIndicator } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // hooks

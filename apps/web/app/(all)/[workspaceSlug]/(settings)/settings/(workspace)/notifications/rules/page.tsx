@@ -1,7 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
+import { AlertsSettingsSection } from "@/components/notifications/alerts-settings-section";
 import { AlertRuleFormTrigger, AlertRulesList } from "@/components/notifications/alert-settings/alert-rules-list";
 import { useUserPermissions } from "@/hooks/store/user";
 import type { Route } from "./+types/page";
@@ -17,13 +18,13 @@ function AlertRulesSettingsPage({ params }: Route.ComponentProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-center justify-between gap-3">
-        <h2 className="text-14 font-medium text-primary">{t("alert.rules.title")}</h2>
-        <AlertRuleFormTrigger workspaceSlug={workspaceSlug} />
-      </div>
+    <AlertsSettingsSection
+      title={t("alert.rules.title")}
+      description={t("alert.rules.lead")}
+      action={<AlertRuleFormTrigger workspaceSlug={workspaceSlug} />}
+    >
       <AlertRulesList workspaceSlug={workspaceSlug} />
-    </div>
+    </AlertsSettingsSection>
   );
 }
 

@@ -2,9 +2,9 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { HeartPulse, RefreshCw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360DetailResponse } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360DetailResponse } from "@operoz/types";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { Client360HealthExplainerDocument } from "@/components/board/client-360/client-360-health-explainer-document";
 import { hasClient360HealthScoreData } from "@/components/board/client-360/client-360-health-score.utils";

@@ -1,5 +1,5 @@
-import type { IPaymentProduct, TBillingFrequency, TProductBillingFrequency } from "@operis/types";
-import { EProductSubscriptionEnum } from "@operis/types";
+import type { IPaymentProduct, TBillingFrequency, TProductBillingFrequency } from "@operoz/types";
+import { EProductSubscriptionEnum } from "@operoz/types";
 
 /**
  * Default billing frequency for each product subscription type

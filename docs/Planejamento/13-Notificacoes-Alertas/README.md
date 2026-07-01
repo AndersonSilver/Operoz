@@ -5,7 +5,7 @@ Baseline em [`00-VISAO-GERAL/`](../00-VISAO-GERAL/README.md).
 ## Visão
 
 Sistema de notificações e alertas **multi-canal** e **totalmente configurável**:
-qualquer card/tarefa criada no Operis dispara automaticamente email, cria evento
+qualquer card/tarefa criada no Operoz dispara automaticamente email, cria evento
 no Google Calendar e envia DM no Discord. Alertas progressivos avisam conforme a
 data de vencimento se aproxima — e também alertam se o card não tiver data definida.
 
@@ -13,15 +13,15 @@ Tudo é configurável por workspace, projeto e por cada membro individualmente.
 
 ## Escopo
 
-| Incluído | Excluído |
-| --- | --- |
-| Multi-canal: email, Discord DM, Google Calendar, in-app | Slack (feature separada) |
-| Alertas progressivos de due date (7d→3d→1d→overdue) | SMS / push notifications |
-| Alerta de card sem data de vencimento | Webhook genérico (coberto pelo motor de automação) |
-| Configuração granular por user/workspace/projeto | |
-| Quiet hours / timezone-aware | |
-| Digest diário/semanal | |
-| Auditoria completa (AlertLog) | |
+| Incluído                                                | Excluído                                           |
+| ------------------------------------------------------- | -------------------------------------------------- |
+| Multi-canal: email, Discord DM, Google Calendar, in-app | Slack (feature separada)                           |
+| Alertas progressivos de due date (7d→3d→1d→overdue)     | SMS / push notifications                           |
+| Alerta de card sem data de vencimento                   | Webhook genérico (coberto pelo motor de automação) |
+| Configuração granular por user/workspace/projeto        |                                                    |
+| Quiet hours / timezone-aware                            |                                                    |
+| Digest diário/semanal                                   |                                                    |
+| Auditoria completa (AlertLog)                           |                                                    |
 
 ## Mapeamento ao Roadmap
 
@@ -30,17 +30,17 @@ Tudo é configurável por workspace, projeto e por cada membro individualmente.
 
 ## Reuso de infraestrutura existente
 
-| Componente existente | Reuso |
-| --- | --- |
-| `Notification` model (`db/models/notification.py`) | Canal in-app reutiliza diretamente |
-| `UserNotificationPreference` | Estendido com novos campos de canal |
-| `EmailNotificationLog` + `stack_email_notification` | Reutilizado para emails de alerta |
-| `email_renderer.py` | Renderização de templates de email |
-| Discord bot (`discord_integration/`) + `httpx` | Padrão para Discord DM |
-| `SocialLoginConnection` (Google OAuth) | Padrão para OAuth do Google Calendar |
-| `automation/governance.py` (rate-limit) | Throttling de alertas |
-| `client_360_status_report_reminder_task.py` | Padrão para task beat periódica |
-| Celery `DatabaseScheduler` | Scheduling de scan |
+| Componente existente                                | Reuso                                |
+| --------------------------------------------------- | ------------------------------------ |
+| `Notification` model (`db/models/notification.py`)  | Canal in-app reutiliza diretamente   |
+| `UserNotificationPreference`                        | Estendido com novos campos de canal  |
+| `EmailNotificationLog` + `stack_email_notification` | Reutilizado para emails de alerta    |
+| `email_renderer.py`                                 | Renderização de templates de email   |
+| Discord bot (`discord_integration/`) + `httpx`      | Padrão para Discord DM               |
+| `SocialLoginConnection` (Google OAuth)              | Padrão para OAuth do Google Calendar |
+| `automation/governance.py` (rate-limit)             | Throttling de alertas                |
+| `client_360_status_report_reminder_task.py`         | Padrão para task beat periódica      |
+| Celery `DatabaseScheduler`                          | Scheduling de scan                   |
 
 ## Fases de implementação
 
@@ -146,13 +146,13 @@ alertar cada membro.
 
 O sistema de alertas **complementa** (não substitui) o sistema atual:
 
-| Aspecto | Sistema Atual | Sistema Novo (Alertas) |
-| --- | --- | --- |
-| Trigger | Ação do usuário (criar, comentar) | Ação do usuário + scan periódico |
-| Canais | Email + in-app | Email + in-app + Discord DM + Google Calendar |
-| Config | 5 toggles booleanos | Regras granulares + preferências por canal |
-| Dedup | Redis lock por issue | Redis sliding window por user+issue+type+canal |
-| Auditoria | EmailNotificationLog | AlertLog (todos os canais) |
+| Aspecto   | Sistema Atual                     | Sistema Novo (Alertas)                         |
+| --------- | --------------------------------- | ---------------------------------------------- |
+| Trigger   | Ação do usuário (criar, comentar) | Ação do usuário + scan periódico               |
+| Canais    | Email + in-app                    | Email + in-app + Discord DM + Google Calendar  |
+| Config    | 5 toggles booleanos               | Regras granulares + preferências por canal     |
+| Dedup     | Redis lock por issue              | Redis sliding window por user+issue+type+canal |
+| Auditoria | EmailNotificationLog              | AlertLog (todos os canais)                     |
 
 ## Definition of Done (global)
 

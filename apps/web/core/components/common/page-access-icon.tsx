@@ -1,7 +1,7 @@
 import { ArchiveIcon, Earth } from "lucide-react";
-import { EPageAccess } from "@operis/constants";
-import { LockIcon } from "@operis/propel/icons";
-import type { TPage } from "@operis/types";
+import { EPageAccess } from "@operoz/constants";
+import { LockIcon } from "@operoz/propel/icons";
+import type { TPage } from "@operoz/types";
 
 export function PageAccessIcon(page: TPage) {
   return (

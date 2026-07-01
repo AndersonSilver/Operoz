@@ -1,0 +1,66 @@
+---
+description: Padrões sênior para código backend (API, banco de dados, serviços)
+globs: ["**/api/**","**/server/**","**/*.controller.*","**/*.service.*","**/*.repository.*","**/routes/**","**/models/**"]
+alwaysApply: false
+---
+
+# Backend — Padrões Sênior
+
+## Estrutura e camadas
+
+- Separe claramente: rota/controller (entrada HTTP) → service (regra de negócio) →
+  repository/data access (banco). Controller não deve conter lógica de negócio nem
+  query direta.
+- Validação de input acontece na borda (controller/middleware), antes de qualquer
+  lógica de negócio rodar. Nunca confie em dado vindo do client.
+- Erros de negócio são tipados/nomeados (ex.: `NotFoundError`, `ValidationError`), não
+  strings genéricas — isso permite mapear pra status HTTP corretos em um só lugar.
+
+## API design
+
+- Endpoints RESTful consistentes: substantivos no plural para coleções (`/users`),
+  verbos HTTP corretos (não crie `/getUser` — use `GET /users/:id`).
+- Sempre versionar contratos públicos (`/v1/...`) ou ter um plano de migração —
+  nunca quebre um contrato existente silenciosamente.
+- Paginação obrigatória em qualquer listagem que pode crescer sem limite.
+- Respostas de erro em formato consistente (`{ error: { code, message } }`), com
+  status HTTP correto (400 validação, 401 não autenticado, 403 não autorizado,
+  404 não encontrado, 409 conflito, 422 entidade inválida, 500 erro interno).
+- Idempotência em operações de escrita críticas (pagamentos, criação de recursos via
+  retry) usando chave de idempotência quando fizer sentido.
+
+## Banco de dados
+
+- Toda query que roda em produção deve ter índice condizente com o padrão de acesso —
+  pense no `EXPLAIN` antes de escrever, não depois de virar incidente.
+- N+1 é bug, não detalhe de implementação. Use eager loading / batching (dataloader)
+  quando buscar relações.
+- Migrations sempre reversíveis (ou com plano explícito de rollback documentado) e
+  nunca destrutivas em uma única etapa em produção (ex.: renomear coluna = criar nova,
+  migrar dado, remover antiga depois).
+- Transações em qualquer operação que precise de atomicidade entre múltiplas escritas.
+
+## Concorrência e confiabilidade
+
+- Operações externas (chamadas HTTP, filas) têm timeout explícito — nunca deixe uma
+  chamada sem timeout.
+- Retry só com backoff exponencial + jitter, e só em operações idempotentes.
+- Logs estruturados (JSON) com nível correto (`info`/`warn`/`error`) e contexto
+  suficiente para debugar sem precisar reproduzir localmente (request id, user id
+  quando aplicável, nunca dados sensíveis).
+
+## Configuração e segredos
+
+- Nada de segredo hardcoded, nem em teste/exemplo. Sempre via variável de ambiente
+  ou secret manager.
+- Configuração validada no boot da aplicação (falha rápido se faltar env var
+  obrigatória), não em runtime no meio de uma request.
+
+## Antes de finalizar
+
+- [ ] Todo input externo é validado
+- [ ] Erros mapeiam para status HTTP corretos
+- [ ] Sem N+1 introduzido
+- [ ] Migration é reversível ou tem plano de rollback
+- [ ] Nenhum segredo hardcoded
+- [ ] Timeouts definidos em chamadas externas

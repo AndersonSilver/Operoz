@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import type { TViewFilterProps, TViewFilters } from "@operis/types";
-import { EViewAccess } from "@operis/types";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import type { TViewFilterProps, TViewFilters } from "@operoz/types";
+import { EViewAccess } from "@operoz/types";
 // components
 import { FilterCreatedDate } from "@/components/common/filters/created-at";
 import { FilterCreatedBy } from "@/components/common/filters/created-by";

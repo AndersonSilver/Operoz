@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { KeyRound } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardAutomationSecret } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardAutomationSecret } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import { ConfigField, ConfigTextArea, ConfigTextInput } from "./automation-config-primitives";
 import { secretRefSyntax } from "./automation-ops-utils";
 
@@ -42,18 +42,10 @@ export function AutomationSecretFormModal(props: Props) {
     setDescription("");
   }, [isOpen, mode, secret]);
 
-  const canSubmit =
-    mode === "create"
-      ? key.trim().length > 0 && value.trim().length > 0
-      : key.trim().length > 0;
+  const canSubmit = mode === "create" ? key.trim().length > 0 && value.trim().length > 0 : key.trim().length > 0;
 
   return (
-    <ModalCore
-      isOpen={isOpen}
-      handleClose={onClose}
-      position={EModalPosition.CENTER}
-      width={EModalWidth.LG}
-    >
+    <ModalCore isOpen={isOpen} handleClose={onClose} position={EModalPosition.CENTER} width={EModalWidth.LG}>
       <div className="px-5 py-4">
         <div className="flex items-start gap-3">
           <span className="grid size-10 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary">
@@ -65,9 +57,7 @@ export function AutomationSecretFormModal(props: Props) {
                 ? t("boards.settings.automation.ops.secrets.create_title")
                 : t("boards.settings.automation.ops.secrets.edit_title")}
             </h3>
-            <p className="mt-1 text-13 text-tertiary">
-              {t("boards.settings.automation.ops.secrets.form_lead")}
-            </p>
+            <p className="mt-1 text-13 text-tertiary">{t("boards.settings.automation.ops.secrets.form_lead")}</p>
           </div>
         </div>
 
@@ -105,9 +95,7 @@ export function AutomationSecretFormModal(props: Props) {
               value={value}
               onChange={(e) => setValue(e.target.value)}
               placeholder={
-                mode === "edit"
-                  ? t("boards.settings.automation.ops.secrets.value_edit_placeholder")
-                  : undefined
+                mode === "edit" ? t("boards.settings.automation.ops.secrets.value_edit_placeholder") : undefined
               }
             />
           </ConfigField>
@@ -139,9 +127,7 @@ export function AutomationSecretFormModal(props: Props) {
               })
             }
           >
-            {mode === "create"
-              ? t("boards.settings.automation.ops.secrets.create")
-              : t("save_changes")}
+            {mode === "create" ? t("boards.settings.automation.ops.secrets.create") : t("save_changes")}
           </Button>
         </div>
       </div>

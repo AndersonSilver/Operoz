@@ -1,6 +1,6 @@
-import { IS_FAVORITE_MENU_OPEN } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
-import { setPromiseToast } from "@operis/propel/toast";
+import { IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
+import { setPromiseToast } from "@operoz/propel/toast";
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { useProject } from "@/hooks/store/use-project";
 

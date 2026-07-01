@@ -2,8 +2,8 @@ import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
 import useSWR from "swr";
-import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
+import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 import { SpreadsheetLayoutLoader } from "@/components/ui/loader/layouts/spreadsheet-layout-loader";
 import { IssuePeekOverview } from "@/components/issues/peek-overview";
 import { WorkspaceActiveLayout } from "@/components/views/helper";
@@ -32,8 +32,7 @@ export const BoardBacklogLayoutRoot = observer(function BoardBacklogLayoutRoot(p
   } = useIssues(EIssuesStoreType.BOARD);
 
   const workItemFilters = boardSlug ? filters?.[boardSlug] : undefined;
-  const activeLayout: EIssueLayoutTypes =
-    workItemFilters?.displayFilters?.layout ?? EIssueLayoutTypes.SPREADSHEET;
+  const activeLayout: EIssueLayoutTypes = workItemFilters?.displayFilters?.layout ?? EIssueLayoutTypes.SPREADSHEET;
 
   const initialWorkItemFilters = useMemo(() => {
     if (!boardSlug || !workItemFilters?.displayFilters) return undefined;
@@ -77,9 +76,7 @@ export const BoardBacklogLayoutRoot = observer(function BoardBacklogLayoutRoot(p
   const issueLoader = getIssueLoader();
   const isInitLoader = issueLoader === "init-loader";
   const showLoader =
-    !filtersReady ||
-    (isLoading && issuesLoading && isInitLoader) ||
-    (!groupedIssueIds && isInitLoader);
+    !filtersReady || (isLoading && issuesLoading && isInitLoader) || (!groupedIssueIds && isInitLoader);
   if (!workspaceSlug || !boardSlug) return null;
 
   if (showLoader) {

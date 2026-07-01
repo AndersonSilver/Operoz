@@ -1,11 +1,11 @@
 import { get } from "lodash-es";
 // plane imports
-import { DATE_OPERATOR_LABELS_MAP, EMPTY_OPERATOR_LABEL, OPERATOR_LABELS_MAP } from "@operis/constants";
+import { DATE_OPERATOR_LABELS_MAP, EMPTY_OPERATOR_LABEL, OPERATOR_LABELS_MAP } from "@operoz/constants";
 import type {
   TAllAvailableOperatorsForDisplay,
   TFilterValue,
   TAllAvailableDateFilterOperatorsForDisplay,
-} from "@operis/types";
+} from "@operoz/types";
 
 // -------- OPERATOR LABEL UTILITIES --------
 

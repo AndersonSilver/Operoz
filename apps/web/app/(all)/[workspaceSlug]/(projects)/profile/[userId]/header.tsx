@@ -2,18 +2,18 @@
 import { observer } from "mobx-react";
 import { useParams, useRouter } from "next/navigation";
 import { PanelRight } from "lucide-react";
-import { PROFILE_VIEWER_TAB, PROFILE_ADMINS_TAB, EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { YourWorkIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { IUserProfileProjectSegregation } from "@operis/types";
-import { Breadcrumbs, Header, CustomMenu } from "@operis/ui";
+import { PROFILE_VIEWER_TAB, PROFILE_ADMINS_TAB, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { YourWorkIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { IUserProfileProjectSegregation } from "@operoz/types";
+import { Breadcrumbs, Header, CustomMenu } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { ProfileIssuesFilter } from "@/components/profile/profile-issues-filter";
 // hooks
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 
 type TUserProfileHeader = {
   userProjectsData: IUserProfileProjectSegregation | undefined;

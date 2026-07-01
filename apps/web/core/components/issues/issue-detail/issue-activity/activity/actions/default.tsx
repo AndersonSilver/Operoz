@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { WorkItemsIcon } from "@operis/propel/icons";
-import { useTranslation } from "@operis/i18n";
-import { EInboxIssueSource } from "@operis/types";
+import { WorkItemsIcon } from "@operoz/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { EInboxIssueSource } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { getInboxSourceLabelKey } from "@/utils/support-ticket";

@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // icons
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon } from "@operoz/propel/icons";
 // constants
 // helpers
-import type { EViewAccess } from "@operis/types";
+import type { EViewAccess } from "@operoz/types";
 import { VIEW_ACCESS_SPECIFIERS } from "@/helpers/views.helper";
 
 type Props = {

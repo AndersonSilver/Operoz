@@ -3,11 +3,11 @@ import { useParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { ISearchIssueResponse } from "@operis/types";
-import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { ISearchIssueResponse } from "@operoz/types";
+import { Loader, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // assets
 import darkIssuesAsset from "@/app/assets/empty-state/search/issues-dark.webp?url";
 import lightIssuesAsset from "@/app/assets/empty-state/search/issues-light.webp?url";

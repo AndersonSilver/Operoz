@@ -3,14 +3,14 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { MoveDiagonal, MoveRight } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { CenterPanelIcon, CopyLinkIcon, FullScreenPanelIcon, SidePanelIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TNameDescriptionLoader } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { copyUrlToClipboard, generateWorkItemLink } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { CenterPanelIcon, CopyLinkIcon, FullScreenPanelIcon, SidePanelIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TNameDescriptionLoader } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { copyUrlToClipboard, generateWorkItemLink } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
@@ -21,7 +21,7 @@ import { usePlatformOS } from "@/hooks/use-platform-os";
 import { IssueSubscription } from "../issue-detail/subscription";
 import { WorkItemDetailQuickActions } from "../issue-layouts/quick-action-dropdowns";
 import { NameDescriptionUpdateStatus } from "../issue-update-status";
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
 export type TPeekModes = "side-peek" | "modal" | "full-screen";
 

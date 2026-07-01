@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 // plane imports
-import { ETabIndices } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TIssue } from "@operis/types";
-import { Input } from "@operis/ui";
+import { ETabIndices } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssue } from "@operoz/types";
+import { Input } from "@operoz/ui";
 // helpers
-import { getTabIndex } from "@operis/utils";
+import { getTabIndex } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
 

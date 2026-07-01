@@ -1,7 +1,7 @@
 // editor
-import type { TEmbedConfig } from "@operis/editor";
+import type { TEmbedConfig } from "@operoz/editor";
 // plane types
-import type { TSearchEntityRequestPayload, TSearchResponse } from "@operis/types";
+import type { TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
 // plane web components
 import { IssueEmbedUpgradeCard } from "@/plane-web/components/pages";
 

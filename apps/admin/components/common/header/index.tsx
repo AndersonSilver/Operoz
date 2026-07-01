@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { Menu, Settings } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Breadcrumbs } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Breadcrumbs } from "@operoz/ui";
 import { BreadcrumbLink } from "../breadcrumb-link";
 import { useTheme } from "@/hooks/store";
 import { BREADCRUMB_SEGMENT_KEYS } from "./core";

@@ -1,9 +1,9 @@
 import { AlertTriangle, ArrowLeft, CheckCircle2, CircleX, Loader2, RotateCcw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TAutomationDryRunResult, TAutomationGraph } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TAutomationDryRunResult, TAutomationGraph } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 import { AutomationDryRunTimeline, summarizeSteps } from "./automation-dry-run-timeline";
 
 type Props = {

@@ -2,10 +2,10 @@ import { set, groupBy } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import { STATE_GROUPS } from "@operis/constants";
-import type { IIntakeState, IState } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { IIntakeState, IState } from "@operoz/types";
 // helpers
-import { sortStates } from "@operis/utils";
+import { sortStates } from "@operoz/utils";
 // plane web
 import { ProjectStateService } from "@/services/project/project-state.service";
 import type { RootStore } from "@/plane-web/store/root.store";

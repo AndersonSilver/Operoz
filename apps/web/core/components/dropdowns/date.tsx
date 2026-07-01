@@ -5,17 +5,18 @@ import { usePopper } from "react-popper";
 import { CalendarDays } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 // ui
-import type { Matcher } from "@operis/propel/calendar";
-import { Calendar } from "@operis/propel/calendar";
-import { CloseIcon } from "@operis/propel/icons";
-import { ComboDropDown } from "@operis/ui";
-import { cn, renderFormattedDate, getDate } from "@operis/utils";
+import type { Matcher } from "@operoz/propel/calendar";
+import { Calendar } from "@operoz/propel/calendar";
+import { CloseIcon } from "@operoz/propel/icons";
+import { ComboDropDown } from "@operoz/ui";
+import { cn, renderFormattedDate, getDate } from "@operoz/utils";
 // helpers
 // hooks
 import { useUserProfile } from "@/hooks/store/user";
 import { useDropdown } from "@/hooks/use-dropdown";
 // components
 import { DropdownButton } from "./buttons";
+import { getIssueDropdownPopperOptions, ISSUE_DROPDOWN_PORTAL_Z_CLASS } from "@/components/dropdowns/popper-config";
 // constants
 import { BUTTON_VARIANTS_WITH_TEXT } from "./constants";
 // types
@@ -76,17 +77,7 @@ export const DateDropdown = observer(function DateDropdown(props: Props) {
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
   // popper-js init
-  const { styles, attributes } = usePopper(referenceElement, popperElement, {
-    placement: placement ?? "bottom-start",
-    modifiers: [
-      {
-        name: "preventOverflow",
-        options: {
-          padding: 12,
-        },
-      },
-    ],
-  });
+  const { styles, attributes } = usePopper(referenceElement, popperElement, getIssueDropdownPopperOptions(placement));
 
   const isDateSelected = value && value.toString().trim() !== "";
 
@@ -178,7 +169,8 @@ export const DateDropdown = observer(function DateDropdown(props: Props) {
           <Combobox.Options data-prevent-outside-click static>
             <div
               className={cn(
-                "z-30 my-1 overflow-hidden rounded-md border-[0.5px] border-strong bg-surface-1 shadow-raised-200",
+                "my-1 overflow-hidden rounded-md border-[0.5px] border-strong bg-surface-1 shadow-raised-200",
+                ISSUE_DROPDOWN_PORTAL_Z_CLASS,
                 optionsClassName
               )}
               ref={setPopperElement}

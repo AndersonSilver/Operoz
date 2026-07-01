@@ -1,5 +1,5 @@
-import type { TAnalyticsTabsBase } from "@operis/types";
-import { ChartXAxisProperty, ChartYAxisMetric } from "@operis/types";
+import type { TAnalyticsTabsBase } from "@operoz/types";
+import { ChartXAxisProperty, ChartYAxisMetric } from "@operoz/types";
 
 export interface IInsightField {
   key: string;

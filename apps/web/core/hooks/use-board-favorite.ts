@@ -1,4 +1,4 @@
-import { setPromiseToast } from "@operis/propel/toast";
+import { setPromiseToast } from "@operoz/propel/toast";
 import { useBoard } from "@/hooks/store/use-board";
 
 export const useBoardFavorite = (workspaceSlug: string | undefined, boardId: string | undefined) => {

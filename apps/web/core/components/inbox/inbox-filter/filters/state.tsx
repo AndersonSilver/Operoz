@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { EIconSize } from "@operis/constants";
-import { StateGroupIcon } from "@operis/propel/icons";
-import type { IState } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { EIconSize } from "@operoz/constants";
+import { StateGroupIcon } from "@operoz/propel/icons";
+import type { IState } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks

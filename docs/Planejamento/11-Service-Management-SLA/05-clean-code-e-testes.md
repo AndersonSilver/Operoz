@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/service_management.py     # BusinessCalendar, SlaGoal, SlaTimer, RequestType, ApprovalStep
 ├── service_management/
 │   ├── business_time.py    # business_delta(start, end, calendar) (puro)
@@ -32,25 +32,25 @@ apps/api/operis/
 
 ### Unit (business time — crítico)
 
-| Caso | Esperado |
-| --- | --- |
-| delta dentro do horário | só conta horas úteis |
-| atravessa fim de semana | salta sábado/domingo |
-| atravessa feriado | exclui feriado |
-| pausa e retoma | subtrai tempo pausado |
-| timezone diferente | cálculo correto no fuso |
+| Caso                      | Esperado                         |
+| ------------------------- | -------------------------------- |
+| delta dentro do horário   | só conta horas úteis             |
+| atravessa fim de semana   | salta sábado/domingo             |
+| atravessa feriado         | exclui feriado                   |
+| pausa e retoma            | subtrai tempo pausado            |
+| timezone diferente        | cálculo correto no fuso          |
 | breach exatamente no alvo | marca breached no instante certo |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| timer pausa ao entrar em "waiting" | status=paused |
-| `at_risk` dispara automação | regra de escalation corre |
-| decidir aprovação sem ser approver | `403` |
-| transição bloqueada por approval pendente | `422` |
-| portal: cliente vê só os seus pedidos | sem enumeração |
-| portal: spam | throttled |
+| Caso                                      | Esperado                  |
+| ----------------------------------------- | ------------------------- |
+| timer pausa ao entrar em "waiting"        | status=paused             |
+| `at_risk` dispara automação               | regra de escalation corre |
+| decidir aprovação sem ser approver        | `403`                     |
+| transição bloqueada por approval pendente | `422`                     |
+| portal: cliente vê só os seus pedidos     | sem enumeração            |
+| portal: spam                              | throttled                 |
 
 ### e2e
 

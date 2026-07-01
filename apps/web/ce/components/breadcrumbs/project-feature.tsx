@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { EProjectFeatureKey } from "@operis/constants";
-import { Breadcrumbs } from "@operis/ui";
+import type { EProjectFeatureKey } from "@operoz/constants";
+import { Breadcrumbs } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import type { TNavigationItem } from "@/components/workspace/sidebar/project-navigation";

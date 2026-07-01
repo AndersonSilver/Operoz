@@ -1,4 +1,4 @@
-import type { ConsultoriaApi } from "../operis-api.js";
+import type { ConsultoriaApi } from "../operoz-api.js";
 
 type Args = Record<string, unknown>;
 

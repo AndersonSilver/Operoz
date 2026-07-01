@@ -14,7 +14,7 @@ import { isNumber } from "lodash-es";
 
 const USER_LANGUAGE_STORAGE_KEY = "userLanguage";
 
-/** Matches @operis/i18n DEFAULT_LOCALE when nothing is stored yet. */
+/** Matches @operoz/i18n DEFAULT_LOCALE when nothing is stored yet. */
 const DEFAULT_DATE_FNS_LOCALE = ptBR;
 
 function getDateFnsLocale() {

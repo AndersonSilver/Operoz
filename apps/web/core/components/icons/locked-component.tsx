@@ -1,5 +1,5 @@
-import { LockIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { LockIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 
 export function LockedComponent(props: { toolTipContent?: string }) {
   const { toolTipContent } = props;

@@ -1,5 +1,5 @@
-import type { TStaticViewTypes, IWorkspaceSearchResults } from "@operis/types";
-import { EUserWorkspaceRoles } from "@operis/types";
+import type { TStaticViewTypes, IWorkspaceSearchResults } from "@operoz/types";
+import { EUserWorkspaceRoles } from "@operoz/types";
 
 export const ORGANIZATION_SIZE: string[] = ["Just myself", "2-10", "11-50", "51-200", "201-500", "500+"];
 

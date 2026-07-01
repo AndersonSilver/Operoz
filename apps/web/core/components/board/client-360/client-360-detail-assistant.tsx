@@ -3,8 +3,8 @@
 import { observer } from "mobx-react";
 import { Bot, MessageSquare } from "lucide-react";
 import { useEffect } from "react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { useAssistant } from "@/hooks/use-assistant";
 import { isOperozAssistantEnabled } from "@/constants/enable-assistant";

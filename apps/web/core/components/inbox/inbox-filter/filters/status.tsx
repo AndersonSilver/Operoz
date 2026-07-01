@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // types
-import { INBOX_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EHubMode, EInboxIssueStatus } from "@operis/types";
-import type { TInboxIssueStatus } from "@operis/types";
+import { INBOX_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EHubMode, EInboxIssueStatus } from "@operoz/types";
+import type { TInboxIssueStatus } from "@operoz/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // constants

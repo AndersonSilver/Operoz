@@ -1,10 +1,10 @@
 import { Link } from "react-router";
 import { PinOff } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { ContextMenu } from "@operis/propel/context-menu";
-import { SetAsDefaultIcon } from "@operis/propel/icons";
-import { TabNavigationItem } from "@operis/propel/tab-navigation";
+import { useTranslation } from "@operoz/i18n";
+import { ContextMenu } from "@operoz/propel/context-menu";
+import { SetAsDefaultIcon } from "@operoz/propel/icons";
+import { TabNavigationItem } from "@operoz/propel/tab-navigation";
 // local imports
 import type { TNavigationItem } from "./tab-navigation-root";
 import type { TTabPreferences } from "./tab-navigation-utils";

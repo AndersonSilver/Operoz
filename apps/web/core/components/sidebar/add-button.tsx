@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = React.ComponentProps<"button"> & {
   label: React.ReactNode;

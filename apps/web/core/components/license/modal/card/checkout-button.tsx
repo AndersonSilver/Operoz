@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // plane imports
-import { Button } from "@operis/propel/button";
-import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // local imports
 import { DiscountInfo } from "./discount-info";
 

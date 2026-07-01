@@ -1,6 +1,6 @@
 // plane imports
-import { EUserPermissions, EProjectFeatureKey } from "@operis/constants";
-import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operis/propel/icons";
+import { EUserPermissions, EProjectFeatureKey } from "@operoz/constants";
+import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import { LifeBuoy } from "lucide-react";
 // components
 import type { TNavigationItem } from "@/components/workspace/sidebar/project-navigation";

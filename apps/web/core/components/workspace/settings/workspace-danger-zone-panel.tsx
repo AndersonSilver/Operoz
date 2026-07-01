@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { AlertTriangle } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { IWorkspace } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IWorkspace } from "@operoz/types";
 import { useUser } from "@/hooks/store/user";
 import { DeleteWorkspaceSection } from "@/plane-web/components/workspace/delete-workspace-section";
 import { TransferOwnershipSection } from "@/plane-web/components/workspace/transfer-ownership-section";

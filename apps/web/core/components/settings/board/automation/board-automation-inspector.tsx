@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import type { IBoard, TAutomationCatalog, TAutomationGraph } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard, TAutomationCatalog, TAutomationGraph } from "@operoz/types";
 import { AutomationNodeConfigForm } from "./automation-node-config-form";
 import type { AutomationNodeData } from "./automation-utils";
 import { getDecisionBranches } from "./automation-utils";

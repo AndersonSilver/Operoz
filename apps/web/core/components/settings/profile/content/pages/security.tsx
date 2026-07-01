@@ -3,12 +3,12 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Eye, EyeOff } from "lucide-react";
 // plane imports
-import { E_PASSWORD_STRENGTH } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Input, PasswordStrengthIndicator } from "@operis/ui";
-import { getPasswordStrength } from "@operis/utils";
+import { E_PASSWORD_STRENGTH } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Input, PasswordStrengthIndicator } from "@operoz/ui";
+import { getPasswordStrength } from "@operoz/utils";
 // components
 import { ProfileSettingsHeading } from "@/components/settings/profile/heading";
 // helpers

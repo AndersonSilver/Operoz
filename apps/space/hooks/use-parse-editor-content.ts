@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 // helpers
-import type { TCustomComponentsMetaData } from "@operis/utils";
+import type { TCustomComponentsMetaData } from "@operoz/utils";
 // helpers
 import { getEditorAssetSrc } from "@/helpers/editor.helper";
 // hooks

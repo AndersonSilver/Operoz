@@ -34,8 +34,11 @@ export class OqlStore implements IOqlStore {
 
   constructor(private rootStore: CoreRootStore) {
     makeObservable(this, {
-      meta: observable, resultsByQuery: observable,
-      loadMeta: action, runQuery: action, validate: action,
+      meta: observable,
+      resultsByQuery: observable,
+      loadMeta: action,
+      runQuery: action,
+      validate: action,
     });
   }
 }
@@ -49,7 +52,7 @@ export class OqlStore implements IOqlStore {
 `packages/services/src/oql/oql.service.ts`: `run`, `validate`, `meta`,
 `values`, `fromText`, `history`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TOqlMeta = {
@@ -58,8 +61,7 @@ export type TOqlMeta = {
 };
 export type TOqlValidation =
   | { ok: true }
-  | { ok: false; error: string; message: string; position?: number;
-      suggestions?: string[] };
+  | { ok: false; error: string; message: string; position?: number; suggestions?: string[] };
 ```
 
 ## Rotas

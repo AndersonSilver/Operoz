@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Button } from "@operis/propel/button";
+import { Button } from "@operoz/propel/button";
 // assets
 import PlaneTakeOffImage from "@/app/assets/images/plane-takeoff.png?url";
 

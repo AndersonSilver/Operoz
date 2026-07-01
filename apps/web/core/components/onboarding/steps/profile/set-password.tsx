@@ -1,8 +1,8 @@
 import { useState, useCallback, useMemo } from "react";
-import { LockIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { useTranslation } from "@operis/i18n";
-import { PasswordInput, PasswordStrengthIndicator } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { LockIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { PasswordInput, PasswordStrengthIndicator } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 interface PasswordState {
   password: string;

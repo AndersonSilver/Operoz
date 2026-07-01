@@ -1,10 +1,10 @@
 import { useParams } from "next/navigation";
 // react-hook-form
 import { Controller, useForm } from "react-hook-form";
-import { Button } from "@operis/propel/button";
-import type { IProject } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { IProject } from "@operoz/types";
 // ui
-import { Input, EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { Input, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 
 // types
 type Props = {

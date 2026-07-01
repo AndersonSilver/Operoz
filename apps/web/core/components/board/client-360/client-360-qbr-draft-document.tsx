@@ -1,10 +1,10 @@
 "use client";
 
 import { Activity, CircleHelp, FileText, Pencil, Sparkles, TrendingDown, Trophy } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TextArea } from "@operis/ui";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TextArea } from "@operoz/ui";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
@@ -14,7 +14,7 @@ import {
   type ParsedQbrMetric,
 } from "@/components/board/client-360/parse-client-360-qbr-draft";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
-import type { TClient360Health } from "@operis/types";
+import type { TClient360Health } from "@operoz/types";
 
 function mapHealthStatus(raw: string): TClient360Health {
   const normalized = raw.toLowerCase();

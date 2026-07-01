@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useOutletContext } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
 import { PageHead } from "@/components/core/page-title";
 import { BoardAutomationDryRunSettings } from "@/components/settings/board/board-automation-dry-run-settings";
 import { BoardSettingsPageHeader } from "@/components/settings/board/board-settings-page-header";

@@ -1,6 +1,6 @@
 // plane package imports
-import type { ChartXAxisProperty } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
+import type { ChartXAxisProperty } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
 
 type Props = {
   value?: ChartXAxisProperty;

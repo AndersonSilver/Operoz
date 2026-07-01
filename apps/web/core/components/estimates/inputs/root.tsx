@@ -1,6 +1,6 @@
 // plane imports
-import type { TEstimateSystemKeys } from "@operis/types";
-import { EEstimateSystem } from "@operis/types";
+import type { TEstimateSystemKeys } from "@operoz/types";
+import { EEstimateSystem } from "@operoz/types";
 // plane web imports
 import { EstimateTimeInput } from "@/plane-web/components/estimates/inputs";
 // local imports

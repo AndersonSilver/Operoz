@@ -1,15 +1,11 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { ALargeSmall, Ban, ChevronDown, Smile } from "lucide-react";
-import type { EditorRefApi } from "@operis/editor";
-import {
-  COLORS_LIST,
-  FORM_RICH_TEXT_TOOLBAR_GROUPS,
-  type ToolbarMenuItem,
-} from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import { COLORS_LIST, FORM_RICH_TEXT_TOOLBAR_GROUPS, type ToolbarMenuItem } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 
 type Props = {
   editorRef: React.MutableRefObject<EditorRefApi | null>;
@@ -352,7 +348,7 @@ export function IntakePublicEditorToolbar(props: Props) {
                           }
                         }}
                         placeholder="https://"
-                        className="w-full rounded-xs border border-subtle bg-layer-2 px-2 py-1.5 text-13 text-primary outline-none focus:border-accent-primary"
+                        className="focus:border-accent-primary w-full rounded-xs border border-subtle bg-layer-2 px-2 py-1.5 text-13 text-primary outline-none"
                       />
                       <button
                         type="button"

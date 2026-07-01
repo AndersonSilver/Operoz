@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Plus } from "lucide-react";
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 
 /** Barra unificada: um único bloco com segmentos separados por divisores. */
 export const PROJECT_HUB_TOOLBAR_SHELL =
@@ -46,7 +46,7 @@ export function ProjectHubToolbarSegment(props: ProjectHubToolbarSegmentProps) {
 }
 
 export function ProjectHubToolbarDivider() {
-  return <span className="mx-0.5 h-5 w-px shrink-0 bg-subtle/70" aria-hidden />;
+  return <span className="bg-subtle/70 mx-0.5 h-5 w-px shrink-0" aria-hidden />;
 }
 
 type ProjectHubPrimaryActionProps = {
@@ -70,7 +70,7 @@ export function ProjectHubPrimaryAction(props: ProjectHubPrimaryActionProps) {
       disabled={disabled}
       loading={loading}
       className={cn(
-        "h-8 shrink-0 rounded-md px-3 text-13 font-medium shadow-sm ring-1 ring-inset ring-white/10",
+        "shadow-sm h-8 shrink-0 rounded-md px-3 text-13 font-medium ring-1 ring-white/10 ring-inset",
         className
       )}
       data-ph-element={dataPhElement}

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate, ICalendarWeek } from "@operis/types";
-import { cn, getOrderedDays, renderFormattedPayloadDate } from "@operis/utils";
+import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate, ICalendarWeek } from "@operoz/types";
+import { cn, getOrderedDays, renderFormattedPayloadDate } from "@operoz/utils";
 // hooks
 import { useUserProfile } from "@/hooks/store/user";
 // types

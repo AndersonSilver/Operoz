@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // ui
-import { EProjectFeatureKey, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Header } from "@operis/ui";
+import { EProjectFeatureKey, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Header } from "@operoz/ui";
 // components
 import { ViewListHeader } from "@/components/views/view-list-header";
 import {

@@ -1,11 +1,12 @@
 import type { LucideIcon } from "lucide-react";
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
+import Link from "next/link";
 import { observer } from "mobx-react";
 import { Plus } from "lucide-react";
 import { Controller } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { ToggleSwitch, Input } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ToggleSwitch, Input } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import "./admin-list.css";
 
 type AdminSettingsPanelProps = {
@@ -387,9 +388,9 @@ export function AdminCreateCard(props: AdminCreateCardProps) {
 
   if (href) {
     return (
-      <a href={href} className={className} onClick={onClick}>
+      <Link href={href} className={className} onClick={onClick}>
         {content}
-      </a>
+      </Link>
     );
   }
 

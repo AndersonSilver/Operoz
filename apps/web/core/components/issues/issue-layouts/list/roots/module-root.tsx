@@ -1,8 +1,8 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { EIssuesStoreType } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { EIssuesStoreType } from "@operoz/types";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useUserPermissions } from "@/hooks/store/user";
 import { ModuleIssueQuickActions } from "../../quick-action-dropdowns";
@@ -23,12 +23,7 @@ export const ModuleListLayout = observer(function ModuleListLayout() {
   const addIssuesToView = useCallback(
     (issueIds: string[]) => {
       if (!workspaceSlug || !projectId || !moduleId) throw new Error();
-      return issues.addIssuesToModule(
-        workspaceSlug.toString(),
-        projectId.toString(),
-        moduleId.toString(),
-        issueIds
-      );
+      return issues.addIssuesToModule(workspaceSlug.toString(), projectId.toString(), moduleId.toString(), issueIds);
     },
     [issues, workspaceSlug, projectId, moduleId]
   );

@@ -1,10 +1,10 @@
 import { observable, action, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TCreateModalStoreTypes, TCreatePageModal } from "@operis/constants";
-import { DEFAULT_CREATE_PAGE_MODAL_DATA, EPageAccess } from "@operis/constants";
-import type { TProfileSettingsTabs } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+import type { TCreateModalStoreTypes, TCreatePageModal } from "@operoz/constants";
+import { DEFAULT_CREATE_PAGE_MODAL_DATA, EPageAccess } from "@operoz/constants";
+import type { TProfileSettingsTabs } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 // lib
 import { store } from "@/lib/store-context";
 

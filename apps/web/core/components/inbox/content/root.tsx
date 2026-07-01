@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import type { TNameDescriptionLoader } from "@operis/types";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import type { TNameDescriptionLoader } from "@operoz/types";
 // components
-import { ContentWrapper } from "@operis/ui";
+import { ContentWrapper } from "@operoz/ui";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-import type { THubMode } from "@operis/types";
-import { EHubMode } from "@operis/types";
+import type { THubMode } from "@operoz/types";
+import { EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 // local imports
 import { InboxIssueActionsHeader } from "./inbox-issue-header";

@@ -1,9 +1,9 @@
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // constants
-import type { IWebhook } from "@operis/types";
+import type { IWebhook } from "@operoz/types";
 // ui
-import { ToggleSwitch } from "@operis/ui";
+import { ToggleSwitch } from "@operoz/ui";
 
 interface IWebHookToggle {
   control: Control<IWebhook, any>;

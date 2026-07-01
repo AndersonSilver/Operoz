@@ -3,8 +3,8 @@ import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { SlidersHorizontal } from "lucide-react";
 // plane imports
-import type { IIssueDisplayFilterOptions, ILayoutDisplayFiltersOptions, IIssueDisplayProperties } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { IIssueDisplayFilterOptions, ILayoutDisplayFiltersOptions, IIssueDisplayProperties } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import {
   FilterDisplayProperties,

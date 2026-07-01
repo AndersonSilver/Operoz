@@ -1,7 +1,12 @@
 import { observer } from "mobx-react";
-import { EProjectFeatureKey, EUserPermissions, EUserPermissionsLevel, MODULE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Header } from "@operis/ui";
+import {
+  EProjectFeatureKey,
+  EUserPermissions,
+  EUserPermissionsLevel,
+  MODULE_TRACKER_ELEMENTS,
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Header } from "@operoz/ui";
 import { ModuleViewHeader } from "@/components/modules";
 import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
 import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";

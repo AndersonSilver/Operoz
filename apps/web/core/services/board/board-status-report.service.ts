@@ -1,9 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type {
-  IBoardStatusReport,
-  TBoardStatusReportCreateData,
-  TBoardStatusReportUpdateData,
-} from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IBoardStatusReport, TBoardStatusReportCreateData, TBoardStatusReportUpdateData } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardStatusReportService extends APIService {
@@ -61,9 +57,13 @@ export class BoardStatusReportService extends APIService {
   }
 
   async downloadExport(workspaceSlug: string, boardSlug: string, reportId: string): Promise<string> {
-    return this.get(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/status-reports/${reportId}/export/`, {}, {
-      responseType: "text",
-    })
+    return this.get(
+      `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/status-reports/${reportId}/export/`,
+      {},
+      {
+        responseType: "text",
+      }
+    )
       .then((response) => response?.data as string)
       .catch((error) => {
         throw error?.response?.data;

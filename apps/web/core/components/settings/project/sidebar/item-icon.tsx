@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { LifeBuoy, Users, Zap } from "lucide-react";
 // plane imports
-import type { ISvgIcons } from "@operis/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
 import {
   CycleIcon,
   EstimatePropertyIcon,
@@ -11,8 +11,8 @@ import {
   PageIcon,
   StatePropertyIcon,
   ViewsIcon,
-} from "@operis/propel/icons";
-import type { TProjectSettingsTabs } from "@operis/types";
+} from "@operoz/propel/icons";
+import type { TProjectSettingsTabs } from "@operoz/types";
 // components
 import { SettingIcon } from "@/components/icons/attachment";
 

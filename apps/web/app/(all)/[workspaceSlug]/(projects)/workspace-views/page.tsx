@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { DEFAULT_GLOBAL_VIEWS_LIST } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon } from "@operis/propel/icons";
-import { Input } from "@operis/ui";
+import { DEFAULT_GLOBAL_VIEWS_LIST } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon } from "@operoz/propel/icons";
+import { Input } from "@operoz/ui";
 // components
 import { PageHead } from "@/components/core/page-title";
 import { GlobalDefaultViewListItem } from "@/components/workspace/views/default-view-list-item";

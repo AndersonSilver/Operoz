@@ -1,5 +1,5 @@
 // plane imports
-import { joinUrlPath } from "@operis/utils";
+import { joinUrlPath } from "@operoz/utils";
 // local imports
 import type { TPowerKContext } from "../core/types";
 

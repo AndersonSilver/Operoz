@@ -1,4 +1,4 @@
-import type { IBoardAutomationRule, TAutomationPublicationStatus } from "@operis/types";
+import type { IBoardAutomationRule, TAutomationPublicationStatus } from "@operoz/types";
 
 export function automationGraphForDisplay(rule: IBoardAutomationRule) {
   if (rule.is_published && rule.published_graph?.nodes?.length) {

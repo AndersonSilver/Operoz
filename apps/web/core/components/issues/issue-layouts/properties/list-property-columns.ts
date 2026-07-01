@@ -1,5 +1,5 @@
-import { SPREADSHEET_PROPERTY_DETAILS } from "@operis/constants";
-import type { IIssueDisplayProperties } from "@operis/types";
+import { SPREADSHEET_PROPERTY_DETAILS } from "@operoz/constants";
+import type { IIssueDisplayProperties } from "@operoz/types";
 
 export type TListPropertyColumn =
   | "state"
@@ -173,10 +173,7 @@ export function getDefaultListColumnWidthPx(column: TListPropertyColumn): number
 
 export function clampListColumnWidthPx(column: TListGridResizableColumn, widthPx: number): number {
   if (column === "title") {
-    return Math.min(
-      LIST_GRID_TITLE_COLUMN_META.maxWidthPx,
-      Math.max(LIST_GRID_TITLE_COLUMN_META.minWidthPx, widthPx)
-    );
+    return Math.min(LIST_GRID_TITLE_COLUMN_META.maxWidthPx, Math.max(LIST_GRID_TITLE_COLUMN_META.minWidthPx, widthPx));
   }
 
   const meta = LIST_PROPERTY_COLUMN_META[column];
@@ -198,10 +195,7 @@ export function buildListPropertyGridTemplateColumns(
 }
 
 /** Grelha externa: título | painel de propriedades | ações */
-export function buildListLayoutGridTemplateColumns(
-  titleWidthPx: number,
-  propertiesPanelWidthPx: number
-): string {
+export function buildListLayoutGridTemplateColumns(titleWidthPx: number, propertiesPanelWidthPx: number): string {
   const title = `minmax(${titleWidthPx}px, 1fr)`;
   const actions = `${LIST_GRID_ACTIONS_COLUMN_WIDTH_PX}px`;
 

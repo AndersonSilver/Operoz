@@ -2,11 +2,11 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { Copy, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardRole } from "@operis/types";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardRole } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoardAccess } from "@/hooks/store/use-board-access";
 import { BoardRoleFormModal } from "./board-role-form-modal";
@@ -132,7 +132,7 @@ export const BoardRolesSettings = observer(function BoardRolesSettings(props: Pr
                 <p className="text-14 font-semibold text-primary">
                   {role.name}
                   {role.is_system && (
-                    <span className="ml-2 rounded bg-layer-1 px-1.5 py-0.5 text-11 font-normal text-tertiary">
+                    <span className="font-normal ml-2 rounded bg-layer-1 px-1.5 py-0.5 text-11 text-tertiary">
                       {t("boards.settings.roles.system_badge")}
                     </span>
                   )}

@@ -1,7 +1,7 @@
 import type { MutableRefObject } from "react";
 import { observer } from "mobx-react";
 //types
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 // components
 import { KanbanIssueBlock } from "./block";
 

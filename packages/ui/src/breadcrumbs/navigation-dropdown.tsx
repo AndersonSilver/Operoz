@@ -1,7 +1,7 @@
 import { CheckIcon } from "lucide-react";
 import * as React from "react";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 import type { TContextMenuItem } from "../dropdowns";
 import { CustomMenu } from "../dropdowns";
 import { cn } from "../utils";

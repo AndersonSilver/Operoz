@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useOutletContext } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
 import { PageHead } from "@/components/core/page-title";
 import { BoardClient360HealthSettingsPanel } from "@/components/settings/board/board-client-360-health-settings";
 import { BoardSettingsPageHeader } from "@/components/settings/board/board-settings-page-header";

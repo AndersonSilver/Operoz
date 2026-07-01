@@ -1,5 +1,5 @@
 // plane imports
-import { EAuthModes } from "@operis/constants";
+import { EAuthModes } from "@operoz/constants";
 // components
 import { ResetPasswordForm } from "@/components/account/auth-forms/reset-password";
 import { AuthHeader } from "@/components/auth-screens/header";

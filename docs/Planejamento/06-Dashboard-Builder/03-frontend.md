@@ -45,13 +45,15 @@ core/store/dashboards/dashboard.store.ts → DashboardStore
 `addGadget`, `updateGadget`, `removeGadget`, `gadgetData`, `catalog`,
 `shares`, `addShare`, `removeShare`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TGadget = {
-  id: string; gadget_type: string;
+  id: string;
+  gadget_type: string;
   position: { x: number; y: number; w: number; h: number };
-  config: Record<string, unknown>; refresh_interval_seconds: number;
+  config: Record<string, unknown>;
+  refresh_interval_seconds: number;
 };
 export type TGadgetData =
   | { type: "table"; rows: TIssueLite[] }

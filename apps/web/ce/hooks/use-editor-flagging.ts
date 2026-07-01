@@ -1,5 +1,5 @@
 // editor
-import type { TExtensions } from "@operis/editor";
+import type { TExtensions } from "@operoz/editor";
 import type { EPageStoreType } from "@/plane-web/hooks/store";
 
 export type TEditorFlaggingHookReturnType = {

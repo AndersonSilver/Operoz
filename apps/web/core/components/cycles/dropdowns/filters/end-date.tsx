@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { DATE_AFTER_FILTER_OPTIONS } from "@operis/constants";
-import { isInDateFormat } from "@operis/utils";
+import { DATE_AFTER_FILTER_OPTIONS } from "@operoz/constants";
+import { isInDateFormat } from "@operoz/utils";
 // components
 import { DateFilterModal } from "@/components/core/filters/date-filter-modal";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";

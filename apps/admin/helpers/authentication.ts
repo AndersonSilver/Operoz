@@ -2,7 +2,7 @@ import type {
   IFormattedInstanceConfiguration,
   TInstanceAuthenticationModes,
   TInstanceConfigurationKeys,
-} from "@operis/types";
+} from "@operoz/types";
 
 /**
  * Checks if a given authentication method can be disabled.

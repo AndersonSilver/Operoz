@@ -2,10 +2,10 @@ import { useState } from "react";
 import { useParams } from "next/navigation";
 // services
 // ui
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 // helpers
-import { renderFormattedPayloadDate } from "@operis/utils";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 import { UserService } from "@/services/user.service";
 
 const userService = new UserService();

@@ -2,13 +2,13 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import useSWR from "swr";
 import { usePathname, useSearchParams } from "next/navigation";
 import { CheckCircle2, ChevronLeft, ChevronRight, FilePlus2, History, ScrollText } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoardStatusReport, IProject, TStatusReportKind } from "@operis/types";
-import { cn, generateQueryParams } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoardStatusReport, IProject, TStatusReportKind } from "@operoz/types";
+import { cn, generateQueryParams } from "@operoz/utils";
 import {
   BOARD_HUB_HISTORY_PANEL,
   BOARD_HUB_METRICS_STRIP,

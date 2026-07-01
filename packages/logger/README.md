@@ -17,7 +17,7 @@ Add this package as a dependency in package.json
 ```typescript
 dependency: {
     ...
-    @operis/logger":"*",
+    @operoz/logger":"*",
     ...
 }
 ```
@@ -25,7 +25,7 @@ dependency: {
 ### Importing the Logger
 
 ```typescript
-import { logger, requestLogger } from "@operis/logger";
+import { logger, requestLogger } from "@operoz/logger";
 ```
 
 ### Usage

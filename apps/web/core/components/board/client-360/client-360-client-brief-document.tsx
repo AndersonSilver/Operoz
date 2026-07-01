@@ -2,10 +2,10 @@
 
 import { AlertTriangle, CheckCircle2, Clock, FileText, Headphones, Lightbulb, Sparkles } from "lucide-react";
 import type { ReactNode } from "react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360DetailResponse } from "@operis/types";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360DetailResponse } from "@operoz/types";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import {

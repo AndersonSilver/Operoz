@@ -1,6 +1,6 @@
 import { Download } from "lucide-react";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 
 type Props = {
   src: string;

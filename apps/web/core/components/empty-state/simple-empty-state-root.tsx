@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type EmptyStateSize = "sm" | "lg";
 

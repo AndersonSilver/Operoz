@@ -1,6 +1,6 @@
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { substringMatch } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { substringMatch } from "@operoz/utils";
 // components
 import type { TPowerKCommandConfig, TPowerKCommandGroup } from "@/components/power-k/core/types";
 import { KeySequenceBadge, ShortcutBadge } from "@/components/power-k/ui/modal/command-item-shortcut-badge";

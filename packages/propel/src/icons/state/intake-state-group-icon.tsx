@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { EIconSize } from "@operis/constants";
+import { EIconSize } from "@operoz/constants";
 import type { IIntakeStateGroupIcon } from "./helper";
 import { INTAKE_STATE_GROUP_COLORS, STATE_GROUP_SIZES } from "./helper";
 import { TriageGroupIcon } from "./triage-group-icon";

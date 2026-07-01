@@ -5,7 +5,7 @@ import type {
   TAutomationGraph,
   TAutomationGraphEdge,
   TAutomationGraphNode,
-} from "@operis/types";
+} from "@operoz/types";
 import { v4 as uuidv4 } from "uuid";
 
 export const AUTOMATION_NODE_TYPE = "automationNode";

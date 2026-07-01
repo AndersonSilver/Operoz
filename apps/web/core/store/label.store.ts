@@ -2,9 +2,9 @@ import { set, sortBy } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { IIssueLabel, IIssueLabelTree } from "@operis/types";
+import type { IIssueLabel, IIssueLabelTree } from "@operoz/types";
 // helpers
-import { buildTree } from "@operis/utils";
+import { buildTree } from "@operoz/utils";
 // services
 import { IssueLabelService } from "@/services/issue";
 // store

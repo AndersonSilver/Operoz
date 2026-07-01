@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { IBoardMember } from "@operis/types";
+import type { IBoardMember } from "@operoz/types";
 import { useUser } from "@/hooks/store/user";
 import { BoardAccessService } from "@/services/board/board-access.service";
 

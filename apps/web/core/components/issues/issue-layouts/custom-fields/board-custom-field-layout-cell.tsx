@@ -2,9 +2,9 @@
 
 import type { SyntheticEvent } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IProjectCustomFieldLite, TCustomFieldValue, TIssue } from "@operis/types";
-import { cn, renderFormattedPayloadDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IProjectCustomFieldLite, TCustomFieldValue, TIssue } from "@operoz/types";
+import { cn, renderFormattedPayloadDate } from "@operoz/utils";
 import { DateDropdown } from "@/components/dropdowns/date";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
 import { getIssueCustomFieldValue } from "@/hooks/use-board-layout-custom-fields";

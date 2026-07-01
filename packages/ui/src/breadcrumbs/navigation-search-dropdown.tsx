@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useState } from "react";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { ICustomSearchSelectOption } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { ICustomSearchSelectOption } from "@operoz/types";
 import { CustomSearchSelect } from "../dropdowns";
 import { cn } from "../utils";
 import { Breadcrumbs } from "./breadcrumbs";

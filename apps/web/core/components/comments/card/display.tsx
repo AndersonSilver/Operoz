@@ -3,19 +3,19 @@ import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import { useHashScroll } from "@operis/hooks";
-import { GlobeIcon, LockIcon } from "@operis/propel/icons";
-import { EIssueCommentAccessSpecifier } from "@operis/types";
-import type { TCommentsOperations, TIssueComment } from "@operis/types";
-import { calculateTimeAgo, cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import { useHashScroll } from "@operoz/hooks";
+import { GlobeIcon, LockIcon } from "@operoz/propel/icons";
+import { EIssueCommentAccessSpecifier } from "@operoz/types";
+import type { TCommentsOperations, TIssueComment } from "@operoz/types";
+import { calculateTimeAgo, cn, getFileURL, renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 // components
 import { LiteTextEditor } from "@/components/editor/lite-text";
 // local imports
 import { CommentReactions } from "../comment-reaction";
 import { CommentCardEditForm } from "./edit-form";
-import { EmojiReactionButton, EmojiReactionPicker } from "@operis/propel/emoji-reaction";
-import { Avatar, Tooltip } from "@operis/ui";
+import { EmojiReactionButton, EmojiReactionPicker } from "@operoz/propel/emoji-reaction";
+import { Avatar, Tooltip } from "@operoz/ui";
 import { useMember } from "@/hooks/store/use-member";
 
 export type TCommentCardDisplayProps = {

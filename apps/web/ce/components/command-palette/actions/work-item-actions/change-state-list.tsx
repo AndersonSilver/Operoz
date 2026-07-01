@@ -1,9 +1,9 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
-import { EIconSize } from "@operis/constants";
+import { EIconSize } from "@operoz/constants";
 // plane imports
-import { CheckIcon, StateGroupIcon } from "@operis/propel/icons";
-import { Spinner } from "@operis/ui";
+import { CheckIcon, StateGroupIcon } from "@operoz/propel/icons";
+import { Spinner } from "@operoz/ui";
 // store hooks
 import { useProjectState } from "@/hooks/store/use-project-state";
 

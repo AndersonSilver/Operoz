@@ -10,8 +10,8 @@ const REGISTRY_TOOLS: Tool[] = ALL_OPERATIONS.map(operationToMcpTool);
 const profile = loadMcpProfile();
 
 /** Ferramentas expostas ao Cursor / agentes MCP */
-export const OPERIS_TOOLS: Tool[] = profile === "full" ? [...FULL_META_TOOLS, ...REGISTRY_TOOLS] : AGENT_TOOLS;
+export const OPEROZ_TOOLS: Tool[] = profile === "full" ? [...FULL_META_TOOLS, ...REGISTRY_TOOLS] : AGENT_TOOLS;
 
-export const OPERIS_TOOL_COUNT = OPERIS_TOOLS.length;
-export const OPERIS_MCP_PROFILE = profile;
-export const OPERIS_REGISTRY_OPERATION_COUNT = ALL_OPERATIONS.length;
+export const OPEROZ_TOOL_COUNT = OPEROZ_TOOLS.length;
+export const OPEROZ_MCP_PROFILE = profile;
+export const OPEROZ_REGISTRY_OPERATION_COUNT = ALL_OPERATIONS.length;

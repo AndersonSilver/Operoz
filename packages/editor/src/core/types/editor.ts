@@ -4,7 +4,7 @@ import type { Selection } from "@tiptap/pm/state";
 import type { EditorProps, EditorView } from "@tiptap/pm/view";
 import type { NodeViewProps as TNodeViewProps } from "@tiptap/react";
 // plane imports
-import type { TCustomComponentsMetaData } from "@operis/utils";
+import type { TCustomComponentsMetaData } from "@operoz/utils";
 // extension types
 import type { TTextAlign } from "@/extensions";
 // plane editor imports

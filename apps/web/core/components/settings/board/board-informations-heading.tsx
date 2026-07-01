@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { cn } from "@operoz/ui";
 
 type Props = {
   board: IBoard;
@@ -14,11 +14,11 @@ export function BoardInformationsHeading(props: Props) {
 
   return (
     <header className={cn("mb-8 max-w-2xl", className)}>
-      <p className="text-11 font-semibold uppercase tracking-widest text-tertiary">
+      <p className="tracking-widest text-11 font-semibold text-tertiary uppercase">
         {t("boards.settings.informations_eyebrow")}
       </p>
       <div className="mt-3 flex items-start gap-4">
-        <span className="grid size-11 shrink-0 place-items-center rounded-lg border border-subtle bg-layer-2 shadow-sm">
+        <span className="shadow-sm grid size-11 shrink-0 place-items-center rounded-lg border border-subtle bg-layer-2">
           <Logo logo={board.logo_props} size={24} />
         </span>
         <div className="min-w-0 flex-1 pt-0.5">

@@ -1,9 +1,9 @@
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import type { IBoard } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import type { IBoard } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { useAppRouter } from "@/hooks/use-app-router";
 
 type Props = {

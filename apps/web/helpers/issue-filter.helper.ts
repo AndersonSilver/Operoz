@@ -1,5 +1,5 @@
 // types
-import type { IIssueDisplayProperties } from "@operis/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 // lib
 import { store } from "@/lib/store-context";
 

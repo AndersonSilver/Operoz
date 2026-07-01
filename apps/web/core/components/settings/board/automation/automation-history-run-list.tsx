@@ -1,8 +1,8 @@
 import { ArrowRight, CheckCircle2, CircleX, Clock, History, Loader2, SkipForward } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IBoardAutomationRun } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IBoardAutomationRun } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { formatRunDurationLabel, getRunDurationMs, splitRunDateTime } from "./automation-history-utils";
 import "./automation-list.css";
 

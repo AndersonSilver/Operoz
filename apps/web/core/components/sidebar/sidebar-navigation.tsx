@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS, sidebarNavItemClass } from "./sidebar-styles";
 
 type TSidebarNavItem = {

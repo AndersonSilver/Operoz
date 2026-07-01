@@ -4,10 +4,10 @@
 
 | ADR                                               | Título                             | Status   |
 | ------------------------------------------------- | ---------------------------------- | -------- |
-| [001](./operis-assistant-adr-001-governanca.md)   | Governança e decisões iniciais     | Aprovado |
+| [001](./operoz-assistant-adr-001-governanca.md)   | Governança e decisões iniciais     | Aprovado |
 | [002](#adr-002-pgvector-vs-qdrant)                | pgvector vs Qdrant para RAG        | Aprovado |
 | [003](#adr-003-tool-subset-vs-379-tools-mcp)      | Tool subset vs 379 tools MCP       | Aprovado |
-| [004](./operis-assistant-adr-004-chat-scaling.md) | Escala do chat (150+ utilizadores) | Aprovado |
+| [004](./operoz-assistant-adr-004-chat-scaling.md) | Escala do chat (150+ utilizadores) | Aprovado |
 
 ---
 
@@ -59,7 +59,7 @@ O MCP externo (`mcp-server/`) expõe **379 tools** (uma por rota HTTP). O assist
 
 ### Decisão
 
-**Subset curado (~17 tools)** no registry interno `operis/assistant/tools/`, não espelhar 379 tools no chat.
+**Subset curado (~17 tools)** no registry interno `operoz/assistant/tools/`, não espelhar 379 tools no chat.
 
 ### Motivos
 
@@ -78,7 +78,7 @@ O MCP externo (`mcp-server/`) expõe **379 tools** (uma por rota HTTP). O assist
 
 - Novas capacidades entram via ADR + implementação deliberada
 - Nó `action.mcp_call` na automação permite chamar MCP para casos avançados
-- Documentação cruzada: [operis-mcp.md](./operis-mcp.md)
+- Documentação cruzada: [operoz-mcp.md](./operoz-mcp.md)
 
 ### Alternativa rejeitada
 
@@ -88,6 +88,6 @@ O MCP externo (`mcp-server/`) expõe **379 tools** (uma por rota HTTP). O assist
 
 ## Como propor novo ADR
 
-1. Adicionar secção neste ficheiro ou ficheiro `operis-assistant-adr-NNN-*.md`
+1. Adicionar secção neste ficheiro ou ficheiro `operoz-assistant-adr-NNN-*.md`
 2. Card no OPEROZDP se mudança de roadmap
-3. Link no [roadmap](./operis-plataforma-violenta-roadmap.md)
+3. Link no [roadmap](./operoz-plataforma-violenta-roadmap.md)

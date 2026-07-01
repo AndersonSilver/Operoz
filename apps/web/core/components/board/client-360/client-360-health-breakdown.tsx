@@ -1,7 +1,7 @@
 import { Activity, ChevronDown } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360Health, TClient360HealthBreakdownItem, TClient360HealthDimensionItem } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360Health, TClient360HealthBreakdownItem, TClient360HealthDimensionItem } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { Client360HealthDimensionChips } from "@/components/board/client-360/client-360-health-dimension-chips";
 import { useClient360DetailSection } from "@/components/board/client-360/client-360-detail-section-context";

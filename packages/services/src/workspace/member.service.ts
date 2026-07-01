@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IWorkspaceMemberMe, IWorkspaceMember, IUserProjectsRole } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IWorkspaceMemberMe, IWorkspaceMember, IUserProjectsRole } from "@operoz/types";
 import { APIService } from "../api.service";
 
 /**

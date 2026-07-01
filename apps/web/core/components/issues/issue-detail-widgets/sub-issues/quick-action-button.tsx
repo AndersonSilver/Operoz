@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon, WorkItemsIcon } from "@operis/propel/icons";
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon, WorkItemsIcon } from "@operoz/propel/icons";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // editor
-import type { EditorRefApi } from "@operis/editor";
+import type { EditorRefApi } from "@operoz/editor";
 // ui
-import { TextArea } from "@operis/ui";
-import { cn, getPageName } from "@operis/utils";
+import { TextArea } from "@operoz/ui";
+import { cn, getPageName } from "@operoz/utils";
 // helpers
 // hooks
 import { usePageFilters } from "@/hooks/use-page-filters";

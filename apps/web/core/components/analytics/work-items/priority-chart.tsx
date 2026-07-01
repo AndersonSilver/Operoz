@@ -6,13 +6,18 @@ import { useTheme } from "next-themes";
 import useSWR from "swr";
 // plane package imports
 import { Download } from "lucide-react";
-import type { ChartXAxisDateGrouping } from "@operis/constants";
-import { ANALYTICS_X_AXIS_VALUES, ANALYTICS_Y_AXIS_VALUES, CHART_COLOR_PALETTES, EChartModels } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { BarChart } from "@operis/propel/charts/bar-chart";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { TBarItem, TChart, TChartDatum, ChartXAxisProperty, ChartYAxisMetric } from "@operis/types";
+import type { ChartXAxisDateGrouping } from "@operoz/constants";
+import {
+  ANALYTICS_X_AXIS_VALUES,
+  ANALYTICS_Y_AXIS_VALUES,
+  CHART_COLOR_PALETTES,
+  EChartModels,
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { BarChart } from "@operoz/propel/charts/bar-chart";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { TBarItem, TChart, TChartDatum, ChartXAxisProperty, ChartYAxisMetric } from "@operoz/types";
 // plane web components
 import { generateExtendedColors, parseChartData } from "@/components/chart/utils";
 // hooks

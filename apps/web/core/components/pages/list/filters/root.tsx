@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { observer } from "mobx-react";
-import { SearchIcon, CloseIcon } from "@operis/propel/icons";
-import type { TPageFilterProps, TPageFilters } from "@operis/types";
+import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
+import type { TPageFilterProps, TPageFilters } from "@operoz/types";
 // components
 import { FilterCreatedDate } from "@/components/common/filters/created-at";
 import { FilterCreatedBy } from "@/components/common/filters/created-by";

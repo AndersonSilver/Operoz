@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 // plane imports
-import { RichTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operis/editor";
-import type { MakeOptional } from "@operis/types";
+import { RichTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operoz/editor";
+import type { MakeOptional } from "@operoz/types";
 // helpers
 import { getEditorFileHandlers } from "@/helpers/editor.helper";
 // hooks

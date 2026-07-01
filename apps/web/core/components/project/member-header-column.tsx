@@ -2,12 +2,12 @@
 import { observer } from "mobx-react";
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, CheckIcon, ChevronDownIcon, Eraser, MoveRight } from "lucide-react";
 // constants
-import type { IProjectMemberDisplayProperties, TMemberOrderByOptions } from "@operis/constants";
-import { MEMBER_PROPERTY_DETAILS } from "@operis/constants";
+import type { IProjectMemberDisplayProperties, TMemberOrderByOptions } from "@operoz/constants";
+import { MEMBER_PROPERTY_DETAILS } from "@operoz/constants";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 import type { IMemberFilters } from "@/store/member/utils";
 
 interface Props {

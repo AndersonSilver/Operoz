@@ -1,9 +1,9 @@
 import { Fragment, forwardRef } from "react";
 import { range } from "lodash-es";
 // plane ui
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { getRandomInt, getRandomLength } from "../utils";
 
 export const ListLoaderItemRow = forwardRef(function ListLoaderItemRow(

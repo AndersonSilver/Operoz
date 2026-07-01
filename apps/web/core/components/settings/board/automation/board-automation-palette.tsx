@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import type { TAutomationCatalog, TAutomationCatalogItem } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { TAutomationCatalog, TAutomationCatalogItem } from "@operoz/types";
 import clsx from "clsx";
 import { AutomationCatalogIcon } from "./automation-catalog-icon";
 import { AUTOMATION_KIND_THEME, type AutomationVisualKind } from "./automation-kind-theme";

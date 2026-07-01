@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import type { TIssue } from "@operis/types";
+import type { TIssue } from "@operoz/types";
 // components
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

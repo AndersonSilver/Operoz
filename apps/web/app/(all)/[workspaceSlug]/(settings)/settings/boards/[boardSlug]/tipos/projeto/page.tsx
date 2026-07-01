@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useOutletContext } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
 import { PageHead } from "@/components/core/page-title";
 import { BoardProjectSchemaSettings } from "@/components/settings/board/board-project-schema-settings";
 import { BoardSettingsPageHeader } from "@/components/settings/board/board-settings-page-header";
@@ -40,11 +40,7 @@ function BoardProjectSchemaSettingsPage({ params }: Route.ComponentProps) {
       }
     >
       <PageHead title={pageTitle} />
-      <BoardProjectSchemaSettings
-        workspaceSlug={workspaceSlug}
-        boardSlug={boardSlug}
-        boardName={board.name}
-      />
+      <BoardProjectSchemaSettings workspaceSlug={workspaceSlug} boardSlug={boardSlug} boardName={board.name} />
     </SettingsContentWrapper>
   );
 }

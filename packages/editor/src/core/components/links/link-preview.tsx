@@ -1,5 +1,5 @@
 import { Link2Off } from "lucide-react";
-import { CopyIcon, GlobeIcon, EditIcon } from "@operis/propel/icons";
+import { CopyIcon, GlobeIcon, EditIcon } from "@operoz/propel/icons";
 // components
 import type { LinkViewProps, LinkViews } from "@/components/links";
 

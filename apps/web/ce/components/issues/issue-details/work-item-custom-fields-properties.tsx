@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { WorkItemsIcon } from "@operis/propel/icons";
-import type { IProjectCustomFieldLite, TCustomFieldValue } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { WorkItemsIcon } from "@operoz/propel/icons";
+import type { IProjectCustomFieldLite, TCustomFieldValue } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { SidebarPropertyListItem } from "@/components/common/layout/sidebar/property-list-item";
 import { useBoard } from "@/hooks/store/use-board";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";

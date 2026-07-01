@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { CycleIcon, ChevronDownIcon } from "@operis/propel/icons";
-import { ComboDropDown } from "@operis/ui";
+import { CycleIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import { ComboDropDown } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useDropdown } from "@/hooks/use-dropdown";

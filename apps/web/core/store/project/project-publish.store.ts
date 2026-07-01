@@ -1,7 +1,7 @@
 import { unset, set } from "lodash-es";
 import { observable, action, makeObservable, runInAction } from "mobx";
 // types
-import type { TProjectPublishSettings } from "@operis/types";
+import type { TProjectPublishSettings } from "@operoz/types";
 // services
 import { ProjectPublishService } from "@/services/project";
 // store

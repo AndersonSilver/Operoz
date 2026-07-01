@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import type { IBoard } from "@operis/types";
+import type { IBoard } from "@operoz/types";
 import { AuxiliaryCollapsibleSidebar } from "@/components/sidebar/auxiliary-collapsible-sidebar";
 import { SETTINGS_SIDEBAR_WIDTH } from "@/constants/collapsible-sidebar";
 import { BoardSettingsSidebarRoot } from "./root";

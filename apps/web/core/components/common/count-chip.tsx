@@ -1,5 +1,5 @@
 //
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type TCountChip = {
   count: string | number;

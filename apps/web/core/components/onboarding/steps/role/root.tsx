@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { Box, PenTool, Rocket, Monitor, RefreshCw } from "lucide-react";
 // plane imports
-import { Button } from "@operis/propel/button";
-import { CheckIcon, ViewsIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TUserProfile } from "@operis/types";
-import { EOnboardingSteps } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import { CheckIcon, ViewsIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TUserProfile } from "@operoz/types";
+import { EOnboardingSteps } from "@operoz/types";
 // hooks
 import { useUserProfile } from "@/hooks/store/user";
 // local components

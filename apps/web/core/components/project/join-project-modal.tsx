@@ -1,9 +1,9 @@
 import { useState } from "react";
 // types
-import { Button } from "@operis/propel/button";
-import type { IProject } from "@operis/types";
+import { Button } from "@operoz/propel/button";
+import type { IProject } from "@operoz/types";
 // ui
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";

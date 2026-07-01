@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import type { TRecentActivityFilterKeys } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import type { TRecentActivityFilterKeys } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 export type TFiltersDropdown = {
   className?: string;

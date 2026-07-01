@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import { useTranslation } from "@operis/i18n";
-import { MembersPropertyIcon } from "@operis/propel/icons";
-import type { TIssue } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { MembersPropertyIcon } from "@operoz/propel/icons";
+import type { TIssue } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { useUser } from "@/hooks/store/user";
 import { IssueFormField, issueFormControlBaseClass } from "./issue-form-field";

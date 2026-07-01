@@ -2,9 +2,9 @@ import { sortBy, cloneDeep, update, set } from "lodash-es";
 import { observable, action, computed, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TFetchStatus, TLoader, TProjectAnalyticsCount, TProjectAnalyticsCountParams } from "@operis/types";
+import type { TFetchStatus, TLoader, TProjectAnalyticsCount, TProjectAnalyticsCountParams } from "@operoz/types";
 // helpers
-import { orderProjects, shouldFilterProject } from "@operis/utils";
+import { orderProjects, shouldFilterProject } from "@operoz/utils";
 // services
 import type { TProject, TPartialProject } from "@/plane-web/types/projects";
 import { IssueLabelService, IssueService } from "@/services/issue";

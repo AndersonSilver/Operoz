@@ -14,6 +14,8 @@ export type TAlertRuleConfig = {
   thresholds_minutes?: number[];
   notify_assignees?: boolean;
   notify_creator?: boolean;
+  notify_project_lead?: boolean;
+  notify_support_team?: boolean;
 };
 
 export type TAlertType =
@@ -94,6 +96,7 @@ export type TAlertLog = {
   receiver: {
     id: string;
     display_name: string;
+    avatar_url: string | null;
   };
   sent_at: string | null;
   error: string;

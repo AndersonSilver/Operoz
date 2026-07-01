@@ -1,4 +1,4 @@
-import { Header } from "@operis/ui";
+import { Header } from "@operoz/ui";
 
 type Props = {
   leftItem?: React.ReactNode;

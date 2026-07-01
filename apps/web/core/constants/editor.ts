@@ -26,9 +26,9 @@ import {
   Underline,
 } from "lucide-react";
 // plane imports
-import type { TCommandExtraProps, TEditorCommands, TEditorFontStyle } from "@operis/editor";
-import { MonospaceIcon, SansSerifIcon, SerifIcon } from "@operis/propel/icons";
-import { convertRemToPixel } from "@operis/utils";
+import type { TCommandExtraProps, TEditorCommands, TEditorFontStyle } from "@operoz/editor";
+import { MonospaceIcon, SansSerifIcon, SerifIcon } from "@operoz/propel/icons";
+import { convertRemToPixel } from "@operoz/utils";
 
 type TEditorTypes = "lite" | "document" | "sticky";
 
@@ -185,10 +185,7 @@ export const TABLE_ITEM: ToolbarMenuItem<"table"> = {
   editors: ["document"],
 };
 
-const COMPLEX_ITEMS: ToolbarMenuItem<"table" | "image">[] = [
-  TABLE_ITEM,
-  IMAGE_ITEM,
-];
+const COMPLEX_ITEMS: ToolbarMenuItem<"table" | "image">[] = [TABLE_ITEM, IMAGE_ITEM];
 
 /** Cores de texto/fundo do editor (chaves usadas em executeMenuItemCommand). */
 export const ISSUE_MODAL_EDITOR_COLORS: {
@@ -265,12 +262,7 @@ export const ISSUE_MODAL_TOOLBAR_GROUPS: {
   },
   {
     key: "insert",
-    items: [
-      LINK_ITEM,
-      IMAGE_ITEM,
-      TABLE_ITEM,
-      ...USER_ACTION_ITEMS,
-    ],
+    items: [LINK_ITEM, IMAGE_ITEM, TABLE_ITEM, ...USER_ACTION_ITEMS],
   },
 ];
 

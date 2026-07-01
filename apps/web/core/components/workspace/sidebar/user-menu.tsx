@@ -2,8 +2,8 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { DraftIcon, HomeIcon, PiChatLogo, YourWorkIcon, DashboardIcon } from "@operis/propel/icons";
-import { EUserWorkspaceRoles } from "@operis/types";
+import { DraftIcon, HomeIcon, PiChatLogo, YourWorkIcon, DashboardIcon } from "@operoz/propel/icons";
+import { EUserWorkspaceRoles } from "@operoz/types";
 // hooks
 import { useUserPermissions, useUser } from "@/hooks/store/user";
 // local imports

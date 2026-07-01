@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { Header, Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Header, Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { AppHeader } from "@/components/core/app-header";
 import { TabNavigationRoot } from "@/components/navigation";

@@ -3,8 +3,8 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useOutletContext } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import type { IBoard } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoard } from "@operoz/types";
 import { PageHead } from "@/components/core/page-title";
 import { BoardIntakeFormsSettings } from "@/components/settings/board/board-intake-forms-settings";
 import { BoardSupportSlaSettings } from "@/components/settings/board/board-support-sla-settings";

@@ -1,11 +1,11 @@
 import { ArrowDownWideNarrow } from "lucide-react";
 // plane imports
-import { PROJECT_ORDER_BY_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { getButtonStyling } from "@operis/propel/button";
-import { CheckIcon } from "@operis/propel/icons";
-import type { TProjectOrderByOptions } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
+import { PROJECT_ORDER_BY_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { getButtonStyling } from "@operoz/propel/button";
+import { CheckIcon } from "@operoz/propel/icons";
+import type { TProjectOrderByOptions } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
 
 type Props = {
   onChange: (value: TProjectOrderByOptions) => void;

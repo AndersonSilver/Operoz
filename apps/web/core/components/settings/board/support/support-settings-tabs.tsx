@@ -1,6 +1,6 @@
 "use client";
 
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import "../automation/automation-list.css";
 
 export type SupportSettingsTab<T extends string> = {

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import type { IBaseLayoutsListItem, IBaseLayoutsListGroupProps } from "@operis/types";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { IBaseLayoutsListItem, IBaseLayoutsListGroupProps } from "@operoz/types";
+import { cn } from "@operoz/ui";
 import { useGroupDropTarget } from "../hooks/use-group-drop-target";
 import { GroupHeader } from "./group-header";
 import { BaseListItem } from "./item";

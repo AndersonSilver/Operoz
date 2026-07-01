@@ -3,7 +3,7 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 // plane constants
-import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
+import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
 // types
 import type {
   TGroupedIssues,
@@ -12,11 +12,11 @@ import type {
   TPaginationData,
   ICalendarWeek,
   TSupportedFilterForUpdate,
-} from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 // ui
-import { Spinner } from "@operis/ui";
-import { renderFormattedPayloadDate, cn } from "@operis/utils";
+import { Spinner } from "@operoz/ui";
+import { renderFormattedPayloadDate, cn } from "@operoz/utils";
 // constants
 import { MONTHS_LIST } from "@/constants/calendar";
 // helpers
@@ -141,92 +141,92 @@ export const CalendarChart = observer(function CalendarChart(props: Props) {
 
         <IssueLayoutHOC layout={EIssueLayoutTypes.CALENDAR}>
           <CalendarDragProvider>
-          <div
-            className={cn("flex w-full flex-col overflow-y-auto md:h-full", {
-              "vertical-scrollbar scrollbar-lg": windowWidth > 768,
-            })}
-            ref={scrollableContainerRef}
-          >
-            <CalendarWeekHeader isLoading={!issues} showWeekends={showWeekends} />
-            <div className="h-full w-full">
-              {resolvedLayout === "month" && (
-                <div className="grid h-full w-full grid-cols-1 divide-y-[0.5px] divide-subtle-1">
-                  {allWeeksOfActiveMonth &&
-                    Object.values(allWeeksOfActiveMonth).map((week: ICalendarWeek, weekIndex) => (
-                      <CalendarWeekDays
-                        selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
-                        handleDragAndDrop={handleDragAndDrop}
-                        issuesFilterStore={issuesFilterStore}
-                        key={weekIndex}
-                        week={week}
-                        issues={issues}
-                        groupedIssueIds={groupedIssueIds}
-                        loadMoreIssues={loadMoreIssues}
-                        getPaginationData={getPaginationData}
-                        getGroupIssueCount={getGroupIssueCount}
-                        enableQuickIssueCreate={enableQuickAdd}
-                        disableIssueCreation={!enableIssueCreation}
-                        quickActions={quickActions}
-                        quickAddCallback={quickAddCallback}
-                        addIssuesToView={addIssuesToView}
-                        readOnly={readOnly}
-                        canEditProperties={canEditProperties}
-                        isEpic={isEpic}
-                      />
-                    ))}
-                </div>
-              )}
-              {resolvedLayout === "week" && (
-                <CalendarWeekDays
-                  selectedDate={selectedDate}
-                  setSelectedDate={setSelectedDate}
-                  handleDragAndDrop={handleDragAndDrop}
-                  issuesFilterStore={issuesFilterStore}
-                  week={issueCalendarView.allDaysOfActiveWeek}
-                  issues={issues}
-                  groupedIssueIds={groupedIssueIds}
+            <div
+              className={cn("flex w-full flex-col overflow-y-auto md:h-full", {
+                "vertical-scrollbar scrollbar-lg": windowWidth > 768,
+              })}
+              ref={scrollableContainerRef}
+            >
+              <CalendarWeekHeader isLoading={!issues} showWeekends={showWeekends} />
+              <div className="h-full w-full">
+                {resolvedLayout === "month" && (
+                  <div className="grid h-full w-full grid-cols-1 divide-y-[0.5px] divide-subtle-1">
+                    {allWeeksOfActiveMonth &&
+                      Object.values(allWeeksOfActiveMonth).map((week: ICalendarWeek, weekIndex) => (
+                        <CalendarWeekDays
+                          selectedDate={selectedDate}
+                          setSelectedDate={setSelectedDate}
+                          handleDragAndDrop={handleDragAndDrop}
+                          issuesFilterStore={issuesFilterStore}
+                          key={weekIndex}
+                          week={week}
+                          issues={issues}
+                          groupedIssueIds={groupedIssueIds}
+                          loadMoreIssues={loadMoreIssues}
+                          getPaginationData={getPaginationData}
+                          getGroupIssueCount={getGroupIssueCount}
+                          enableQuickIssueCreate={enableQuickAdd}
+                          disableIssueCreation={!enableIssueCreation}
+                          quickActions={quickActions}
+                          quickAddCallback={quickAddCallback}
+                          addIssuesToView={addIssuesToView}
+                          readOnly={readOnly}
+                          canEditProperties={canEditProperties}
+                          isEpic={isEpic}
+                        />
+                      ))}
+                  </div>
+                )}
+                {resolvedLayout === "week" && (
+                  <CalendarWeekDays
+                    selectedDate={selectedDate}
+                    setSelectedDate={setSelectedDate}
+                    handleDragAndDrop={handleDragAndDrop}
+                    issuesFilterStore={issuesFilterStore}
+                    week={issueCalendarView.allDaysOfActiveWeek}
+                    issues={issues}
+                    groupedIssueIds={groupedIssueIds}
+                    loadMoreIssues={loadMoreIssues}
+                    getPaginationData={getPaginationData}
+                    getGroupIssueCount={getGroupIssueCount}
+                    enableQuickIssueCreate={enableQuickAdd}
+                    disableIssueCreation={!enableIssueCreation}
+                    quickActions={quickActions}
+                    quickAddCallback={quickAddCallback}
+                    addIssuesToView={addIssuesToView}
+                    readOnly={readOnly}
+                    canEditProperties={canEditProperties}
+                    isEpic={isEpic}
+                  />
+                )}
+              </div>
+
+              {/* mobile view */}
+              <div className="md:hidden">
+                <p className="p-4 text-18 font-semibold">
+                  {`${selectedDate.getDate()} ${
+                    MONTHS_LIST[selectedDate.getMonth() + 1].title
+                  }, ${selectedDate.getFullYear()}`}
+                </p>
+                <CalendarIssueBlocks
+                  date={selectedDate}
+                  issueIdList={issueIdList}
                   loadMoreIssues={loadMoreIssues}
                   getPaginationData={getPaginationData}
                   getGroupIssueCount={getGroupIssueCount}
+                  quickActions={quickActions}
                   enableQuickIssueCreate={enableQuickAdd}
                   disableIssueCreation={!enableIssueCreation}
-                  quickActions={quickActions}
                   quickAddCallback={quickAddCallback}
                   addIssuesToView={addIssuesToView}
                   readOnly={readOnly}
                   canEditProperties={canEditProperties}
+                  isDragDisabled
+                  isMobileView
                   isEpic={isEpic}
                 />
-              )}
+              </div>
             </div>
-
-            {/* mobile view */}
-            <div className="md:hidden">
-              <p className="p-4 text-18 font-semibold">
-                {`${selectedDate.getDate()} ${
-                  MONTHS_LIST[selectedDate.getMonth() + 1].title
-                }, ${selectedDate.getFullYear()}`}
-              </p>
-              <CalendarIssueBlocks
-                date={selectedDate}
-                issueIdList={issueIdList}
-                loadMoreIssues={loadMoreIssues}
-                getPaginationData={getPaginationData}
-                getGroupIssueCount={getGroupIssueCount}
-                quickActions={quickActions}
-                enableQuickIssueCreate={enableQuickAdd}
-                disableIssueCreation={!enableIssueCreation}
-                quickAddCallback={quickAddCallback}
-                addIssuesToView={addIssuesToView}
-                readOnly={readOnly}
-                canEditProperties={canEditProperties}
-                isDragDisabled
-                isMobileView
-                isEpic={isEpic}
-              />
-            </div>
-          </div>
           </CalendarDragProvider>
         </IssueLayoutHOC>
       </div>

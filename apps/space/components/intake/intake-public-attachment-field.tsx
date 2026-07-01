@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { Loader2, Paperclip, Trash2, Upload } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IntakeFormFileService } from "@operis/services";
+import { useTranslation } from "@operoz/i18n";
+import { IntakeFormFileService } from "@operoz/services";
 
 export type TIntakePublicAttachmentItem = {
   asset_id: string;

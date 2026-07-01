@@ -1,8 +1,8 @@
 import { FileDown, FileText } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import {
   useClient360QbrExport,
   type Client360QbrExportParams,

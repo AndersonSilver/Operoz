@@ -1,14 +1,14 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane-i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // ui
-import { AlertModalCore } from "@operis/ui";
+import { AlertModalCore } from "@operoz/ui";
 // helper
-import { getFileName } from "@operis/utils";
+import { getFileName } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // types

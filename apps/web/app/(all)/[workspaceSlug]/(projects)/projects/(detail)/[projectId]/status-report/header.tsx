@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import { FileText } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Header } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { Header } from "@operoz/ui";
 import { useStatusReportHub } from "@/components/project/status-report/status-report-hub-context";
 import { ProjectFeaturePageHeader, ProjectFeaturePageTitle } from "@/components/project/project-feature-page-header";
 import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
@@ -31,10 +31,7 @@ export const ProjectStatusReportHeader = observer(function ProjectStatusReportHe
       </Header.LeftItem>
       {isListPage && canManage && hub ? (
         <Header.RightItem>
-          <ProjectHubPrimaryAction
-            onClick={hub.openCreateModal}
-            disabled={!currentProjectDetails}
-          >
+          <ProjectHubPrimaryAction onClick={hub.openCreateModal} disabled={!currentProjectDetails}>
             <span className="sm:hidden">{t("add")}</span>
             <span className="hidden sm:inline">{t("project.status_report.create_button")}</span>
           </ProjectHubPrimaryAction>

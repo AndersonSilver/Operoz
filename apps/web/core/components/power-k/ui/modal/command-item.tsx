@@ -1,9 +1,9 @@
 import React from "react";
 import { Command } from "cmdk";
 
-import { CheckIcon } from "@operis/propel/icons";
+import { CheckIcon } from "@operoz/propel/icons";
 // plane imports
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // local imports
 import { KeySequenceBadge, ShortcutBadge } from "./command-item-shortcut-badge";
 

@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Headphones, Layers3, Trash2, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, TBoardSupportQueue } from "@operis/types";
-import { Input, Loader, TextArea, ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, TBoardSupportQueue } from "@operoz/types";
+import { Input, Loader, TextArea, ToggleSwitch } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { boardSupportQueueService } from "@/services/board/board-support-queue.service";
 import { SupportSettingsHero } from "@/components/settings/board/support/support-settings-hero";
 

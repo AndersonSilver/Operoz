@@ -1,8 +1,8 @@
 // external imports
 import { fileTypeFromBuffer } from "file-type";
 // plane imports
-import type { TFileMetaDataLite, TFileSignedURLResponse } from "@operis/types";
-import { DANGEROUS_EXTENSIONS } from "@operis/constants";
+import type { TFileMetaDataLite, TFileSignedURLResponse } from "@operoz/types";
+import { DANGEROUS_EXTENSIONS } from "@operoz/constants";
 
 /**
  * @description Filename validation - checks for double extensions and dangerous patterns

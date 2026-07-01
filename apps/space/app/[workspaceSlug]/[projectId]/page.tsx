@@ -1,7 +1,7 @@
 import { redirect } from "react-router";
 // plane imports
-import { SitesProjectPublishService } from "@operis/services";
-import type { TProjectPublishSettings } from "@operis/types";
+import { SitesProjectPublishService } from "@operoz/services";
+import type { TProjectPublishSettings } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import type { Route } from "./+types/page";

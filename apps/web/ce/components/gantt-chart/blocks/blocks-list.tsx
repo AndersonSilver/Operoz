@@ -1,5 +1,5 @@
 //
-import type { IBlockUpdateDependencyData } from "@operis/types";
+import type { IBlockUpdateDependencyData } from "@operoz/types";
 import { GanttChartBlock } from "@/components/gantt-chart/blocks/block";
 
 export type GanttChartBlocksProps = {

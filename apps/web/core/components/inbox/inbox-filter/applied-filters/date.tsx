@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-import { PAST_DURATION_FILTER_OPTIONS } from "@operis/constants";
-import { CloseIcon } from "@operis/propel/icons";
-import type { TInboxIssueFilterDateKeys } from "@operis/types";
+import { PAST_DURATION_FILTER_OPTIONS } from "@operoz/constants";
+import { CloseIcon } from "@operoz/propel/icons";
+import type { TInboxIssueFilterDateKeys } from "@operoz/types";
 // helpers
-import { Tag } from "@operis/ui";
-import { renderFormattedDate } from "@operis/utils";
+import { Tag } from "@operoz/ui";
+import { renderFormattedDate } from "@operoz/utils";
 // constants
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";

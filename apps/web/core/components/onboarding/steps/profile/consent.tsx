@@ -1,5 +1,5 @@
-import { CheckIcon } from "@operis/propel/icons";
-import { useTranslation } from "@operis/i18n";
+import { CheckIcon } from "@operoz/propel/icons";
+import { useTranslation } from "@operoz/i18n";
 
 type Props = {
   isChecked: boolean;

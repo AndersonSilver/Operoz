@@ -1,5 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 import { env } from "@/env";
 
 /**
@@ -15,7 +15,7 @@ import { env } from "@/env";
  *
  * @example
  * ```typescript
- * import { Middleware } from "@operis/decorators";
+ * import { Middleware } from "@operoz/decorators";
  * import { requireSecretKey } from "@/lib/auth-middleware";
  *
  * @Get("/protected")

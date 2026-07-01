@@ -1,4 +1,4 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SIDEBAR_TREE_GUIDE_LINE_CLASS } from "./sidebar-styles";
 
 type Props = {

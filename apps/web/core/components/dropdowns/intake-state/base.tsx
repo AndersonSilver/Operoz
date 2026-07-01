@@ -4,11 +4,11 @@ import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { SearchIcon, IntakeStateGroupIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { IIntakeState } from "@operis/types";
-import { ComboDropDown, Spinner } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { SearchIcon, IntakeStateGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { IIntakeState } from "@operoz/types";
+import { ComboDropDown, Spinner } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { DropdownButton } from "@/components/dropdowns/buttons";
 import { BUTTON_VARIANTS_WITH_TEXT } from "@/components/dropdowns/constants";

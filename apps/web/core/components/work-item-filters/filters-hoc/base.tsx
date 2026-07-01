@@ -2,9 +2,9 @@ import { useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
 import { v4 as uuidv4 } from "uuid";
 // plane imports
-import type { TSaveViewOptions, TUpdateViewOptions } from "@operis/constants";
-import type { IWorkItemFilterInstance } from "@operis/shared-state";
-import type { IIssueFilters, TWorkItemFilterExpression } from "@operis/types";
+import type { TSaveViewOptions, TUpdateViewOptions } from "@operoz/constants";
+import type { IWorkItemFilterInstance } from "@operoz/shared-state";
+import type { IIssueFilters, TWorkItemFilterExpression } from "@operoz/types";
 // store hooks
 import { useWorkItemFilters } from "@/hooks/store/work-item-filters/use-work-item-filters";
 // plane web imports

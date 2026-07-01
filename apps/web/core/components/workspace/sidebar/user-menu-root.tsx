@@ -6,11 +6,11 @@ import { usePopper } from "react-popper";
 import { LogOut, Settings, Settings2 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
 // plane imports
-import { GOD_MODE_URL } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Avatar } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { GOD_MODE_URL } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Avatar } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";

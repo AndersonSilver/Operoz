@@ -1,9 +1,9 @@
 import { useCallback } from "react";
 // plane types
-import type { TSearchEntities } from "@operis/types";
+import type { TSearchEntities } from "@operoz/types";
 // helpers
-import { getBase64Image, getEditorAssetSrc } from "@operis/utils";
-import type { TCustomComponentsMetaData } from "@operis/utils";
+import { getBase64Image, getEditorAssetSrc } from "@operoz/utils";
+import type { TCustomComponentsMetaData } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 // plane web hooks

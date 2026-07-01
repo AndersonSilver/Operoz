@@ -6,7 +6,7 @@ e [`05-estrategia-de-testes.md`](../00-VISAO-GERAL/05-estrategia-de-testes.md).
 ## Organização de ficheiros
 
 ```text
-apps/api/operis/
+apps/api/operoz/
 ├── db/models/board.py                     # + BoardViewConfig, BoardSavedView
 ├── app/views/board/issues.py              # JÁ EXISTE — agregação
 ├── app/views/board/meta.py                # JÁ EXISTE — KPIs
@@ -31,21 +31,21 @@ apps/api/operis/
 
 ### Unit
 
-| Caso | Esperado |
-| --- | --- |
-| `accessible_board_project_ids` exclui projeto restrito | id ausente |
-| KPIs contam só conjunto acessível | contagem correta |
-| agrupamento por estado (GroupedPaginator) | colunas paginadas |
+| Caso                                                   | Esperado          |
+| ------------------------------------------------------ | ----------------- |
+| `accessible_board_project_ids` exclui projeto restrito | id ausente        |
+| KPIs contam só conjunto acessível                      | contagem correta  |
+| agrupamento por estado (GroupedPaginator)              | colunas paginadas |
 
 ### Integração
 
-| Caso | Esperado |
-| --- | --- |
-| issues do board para membro com acesso parcial | só projetos acessíveis |
-| `?project=<restrito>` | `403/404` |
-| `?q=<oql>` no board | aplica após filtro de projetos |
-| config de vista por MEMBER | `403` |
-| `meta/` cache não vaza entre users | resultados corretos por user |
+| Caso                                           | Esperado                       |
+| ---------------------------------------------- | ------------------------------ |
+| issues do board para membro com acesso parcial | só projetos acessíveis         |
+| `?project=<restrito>`                          | `403/404`                      |
+| `?q=<oql>` no board                            | aplica após filtro de projetos |
+| config de vista por MEMBER                     | `403`                          |
+| `meta/` cache não vaza entre users             | resultados corretos por user   |
 
 ### e2e
 

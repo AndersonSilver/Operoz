@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Navigate, useParams } from "react-router";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { WorkspaceBoardsDirectory } from "@/components/board/workspace-boards-directory";
 import { PageHead } from "@/components/core/page-title";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
@@ -22,11 +22,7 @@ function BoardsDirectoryPage(_props: Route.ComponentProps) {
   useSWR(
     ENABLE_WORKSPACE_BOARDS && workspaceSlug ? `WORKSPACE_BOARDS_DIRECTORY_${workspaceSlug}` : null,
     async () => {
-      await Promise.all([
-        fetchBoards(workspaceSlug),
-        fetchProjects(workspaceSlug),
-        fetchFavorite(workspaceSlug),
-      ]);
+      await Promise.all([fetchBoards(workspaceSlug), fetchProjects(workspaceSlug), fetchFavorite(workspaceSlug)]);
     },
     { revalidateOnFocus: false }
   );

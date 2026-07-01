@@ -1,4 +1,4 @@
-import type { IProjectBoardPermissions } from "@operis/types";
+import type { IProjectBoardPermissions } from "@operoz/types";
 
 export const boardPermissionGranted = (permissions: string[], permissionKey: string): boolean => {
   if (permissions.includes("board.administer")) return true;

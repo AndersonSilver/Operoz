@@ -1,5 +1,5 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 // api services
 import { APIService } from "../api.service";
 

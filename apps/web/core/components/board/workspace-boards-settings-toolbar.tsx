@@ -1,7 +1,11 @@
 import { Search, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn, CustomSelect } from "@operis/ui";
-import type { BoardsSettingsFilters, BoardsSettingsSortKey, BoardsSettingsStatusFilter } from "./workspace-boards-settings-filter";
+import { useTranslation } from "@operoz/i18n";
+import { cn, CustomSelect } from "@operoz/ui";
+import type {
+  BoardsSettingsFilters,
+  BoardsSettingsSortKey,
+  BoardsSettingsStatusFilter,
+} from "./workspace-boards-settings-filter";
 import { hasActiveBoardsSettingsFilters } from "./workspace-boards-settings-filter";
 
 const INPUT_CLASS =
@@ -36,7 +40,7 @@ export function WorkspaceBoardsSettingsToolbar(props: Props) {
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="relative min-w-[200px] flex-1">
-          <Search className="pointer-events-none absolute left-3 top-1/2 size-3.5 -translate-y-1/2 text-tertiary" />
+          <Search className="pointer-events-none absolute top-1/2 left-3 size-3.5 -translate-y-1/2 text-tertiary" />
           <input
             type="search"
             value={filters.query}
@@ -49,9 +53,7 @@ export function WorkspaceBoardsSettingsToolbar(props: Props) {
         <CustomSelect
           input
           value={filters.status}
-          onChange={(val: string) =>
-            onChange({ ...filters, status: val as BoardsSettingsStatusFilter })
-          }
+          onChange={(val: string) => onChange({ ...filters, status: val as BoardsSettingsStatusFilter })}
           label={statusOptions.find((o) => o.value === filters.status)?.label}
           buttonClassName={SELECT_CLASS}
         >
@@ -79,9 +81,7 @@ export function WorkspaceBoardsSettingsToolbar(props: Props) {
         {showClear && (
           <button
             type="button"
-            onClick={() =>
-              onChange({ query: "", status: "active", sort: "name" })
-            }
+            onClick={() => onChange({ query: "", status: "active", sort: "name" })}
             className="inline-flex h-9 items-center gap-1.5 rounded-md border border-subtle px-3 text-12 text-secondary transition-colors hover:bg-layer-1-hover hover:text-primary"
           >
             <X className="size-3.5" />

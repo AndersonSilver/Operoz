@@ -8,7 +8,7 @@ The AIO image contains the following services:
 
 - **Web App** (Port 3001): Main Plane web interface
 - **Space** (Port 3002): Public project spaces
-- **Admin** (Port 3003): Administrative interface  
+- **Admin** (Port 3003): Administrative interface
 - **API Server** (Port 3004): Backend API
 - **Live Server** (Port 3005): Real-time collaboration
 - **Proxy** (Port 80, 443): Caddy reverse proxy
@@ -21,7 +21,7 @@ The AIO image contains the following services:
 The AIO image requires these external services to be running:
 
 - **PostgreSQL Database**: For data storage
-- **Redis**: For caching and session management  
+- **Redis**: For caching and session management
 - **RabbitMQ**: For message queuing
 - **S3-Compatible Storage**: For file uploads (AWS S3 or MinIO)
 
@@ -33,7 +33,7 @@ You must provide these environment variables:
 
 - `DOMAIN_NAME`: Your domain name or IP address
 - `DATABASE_URL`: PostgreSQL connection string
-- `REDIS_URL`: Redis connection string  
+- `REDIS_URL`: Redis connection string
 - `AMQP_URL`: RabbitMQ connection string
 
 #### Storage Configuration
@@ -69,9 +69,9 @@ MYIP=192.168.68.169
 docker run --name myaio --rm -it \
     -p 80:80 \
     -e DOMAIN_NAME=${MYIP} \
-    -e DATABASE_URL=postgresql://operis:operis@${MYIP}:15432/operis \
+    -e DATABASE_URL=postgresql://operoz:operoz@${MYIP}:15432/operoz \
     -e REDIS_URL=redis://${MYIP}:16379 \
-    -e AMQP_URL=amqp://operis:operis@${MYIP}:15673/operis \
+    -e AMQP_URL=amqp://operoz:operoz@${MYIP}:15673/operoz \
     -e AWS_REGION=us-east-1 \
     -e AWS_ACCESS_KEY_ID=5MV45J9NF5TEFZWYCRAX \
     -e AWS_SECRET_ACCESS_KEY=7xMqAiAHsf2UUjMH+EwICXlyJL9TO30m8leEaDsL \
@@ -88,7 +88,6 @@ docker run --name myaio --rm -it \
 #### Network & Protocol
 
 - `SITE_ADDRESS`: Server bind address (default: `:80`)
-
 
 #### Security & Secrets
 
@@ -116,7 +115,7 @@ The following ports are exposed:
 
 ```bash
 -v /path/to/logs:/app/logs \
--v /path/to/data:/app/data 
+-v /path/to/data:/app/data
 ```
 
 ## Building the Image
@@ -153,7 +152,7 @@ docker exec -it <container-name> supervisorctl status
 ### Common Issues
 
 1. **Database Connection Failed**: Ensure PostgreSQL is accessible and credentials are correct
-2. **Redis Connection Failed**: Verify Redis server is running and URL is correct  
+2. **Redis Connection Failed**: Verify Redis server is running and URL is correct
 3. **File Upload Issues**: Check S3 credentials and bucket permissions
 
 ### Environment Validation

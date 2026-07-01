@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { WORKSPACE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IWorkspace } from "@operis/types";
+import { WORKSPACE_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IWorkspace } from "@operoz/types";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
 import { useUser } from "@/hooks/store/user";

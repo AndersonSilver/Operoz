@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
 // Plane imports
-import type { IWebhook } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
+import type { IWebhook } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
 // hooks
 import { useWebhook } from "@/hooks/store/use-webhook";
 

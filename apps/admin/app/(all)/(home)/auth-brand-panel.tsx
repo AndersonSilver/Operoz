@@ -1,5 +1,5 @@
 import { Lock, Server, Settings2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { AdminBrandLogo } from "./admin-brand-logo";
 
 const featureIcons = [Server, Settings2, Lock] as const;

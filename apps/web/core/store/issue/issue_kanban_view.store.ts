@@ -1,8 +1,8 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
-import { DRAG_ALLOWED_GROUPS } from "@operis/constants";
+import { DRAG_ALLOWED_GROUPS } from "@operoz/constants";
 // types
-import type { TIssueGroupByOptions } from "@operis/types";
+import type { TIssueGroupByOptions } from "@operoz/types";
 // constants
 // store
 import type { IssueRootStore } from "./root.store";

@@ -6,10 +6,11 @@ import type {
   ChartDataType,
   IBlockUpdateDependencyData,
   IGanttBlock,
+  TDependencyDragState,
   TGanttViews,
   EGanttBlockType,
-} from "@operis/types";
-import { renderFormattedPayloadDate } from "@operis/utils";
+} from "@operoz/types";
+import { renderFormattedPayloadDate } from "@operoz/utils";
 import { currentViewDataWithView } from "@/components/gantt-chart/data";
 import {
   getDateFromPositionOnGantt,
@@ -38,6 +39,11 @@ export interface IBaseTimelineStore {
   renderView: any;
   isDragging: boolean;
   isDependencyEnabled: boolean;
+  dependencyDragState: TDependencyDragState;
+  /** Ordered list of block IDs currently visible in the chart */
+  blockIds: string[] | undefined;
+  /** Map of blockId → IGanttBlock for O(1) lookups */
+  blocksMap: Record<string, IGanttBlock>;
   //
   setBlockIds: (ids: string[]) => void;
   getBlockById: (blockId: string) => IGanttBlock;
@@ -63,6 +69,15 @@ export interface IBaseTimelineStore {
 
   getDateFromPositionOnGantt: (position: number, offsetDays: number) => Date | undefined;
   getPositionFromDateOnGantt: (date: string | Date, offSetWidth: number) => number | undefined;
+
+  // dependency drag actions
+  startDependencyDrag: (sourceBlockId: string, sourceSide: "left" | "right", x: number, y: number) => void;
+  updateDependencyDrag: (x: number, y: number, targetBlockId: string | null) => void;
+  endDependencyDrag: () => void;
+
+  // optimistic dependency mutations
+  addDependency: (sourceId: string, predecessorId: string) => void;
+  removeDependency: (sourceId: string, predecessorId: string) => void;
 }
 
 export class BaseTimeLineStore implements IBaseTimelineStore {
@@ -74,6 +89,7 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
   currentViewData: ChartDataType | undefined = undefined;
   activeBlockId: string | null = null;
   renderView: any = undefined;
+  dependencyDragState: TDependencyDragState = null;
 
   rootStore: RootStore;
 
@@ -91,6 +107,7 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
       currentViewData: observable,
       activeBlockId: observable.ref,
       renderView: observable,
+      dependencyDragState: observable,
       // actions
       setIsDragging: action,
       setBlockIds: action.bound,
@@ -99,6 +116,11 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
       updateCurrentViewData: action.bound,
       updateActiveBlockId: action.bound,
       updateRenderView: action.bound,
+      startDependencyDrag: action.bound,
+      updateDependencyDrag: action.bound,
+      endDependencyDrag: action.bound,
+      addDependency: action.bound,
+      removeDependency: action.bound,
     });
 
     this.initGantt();
@@ -111,8 +133,15 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
    * @param ids
    */
   setBlockIds = (ids: string[]) => {
+    if (isEqual(this.blockIds, ids)) return;
     this.blockIds = ids;
+    this.afterBlockIdsChanged();
   };
+
+  /** Hook for subclasses to refresh blocks/deps when visible row ids change. */
+  protected afterBlockIdsChanged(): void {
+    // no-op in base
+  }
 
   /**
    * setIsDragging
@@ -357,6 +386,80 @@ export class BaseTimeLineStore implements IBaseTimelineStore {
     });
   });
 
-  // Dummy method to return if the current Block's dependency is being dragged
-  getIsCurrentDependencyDragging = computedFn((_blockId: string) => false);
+  /**
+   * Returns whether this block is the source of the current dependency drag.
+   * Overrides the dummy in the base class.
+   */
+  getIsCurrentDependencyDragging = computedFn((blockId: string) => this.dependencyDragState?.sourceBlockId === blockId);
+
+  /**
+   * Initiates a dependency drag from the given block handle.
+   */
+  startDependencyDrag = (sourceBlockId: string, sourceSide: "left" | "right", x: number, y: number) => {
+    this.dependencyDragState = { sourceBlockId, sourceSide, currentX: x, currentY: y, targetBlockId: null };
+  };
+
+  /**
+   * Updates cursor position and current hover target during a dependency drag.
+   */
+  updateDependencyDrag = (x: number, y: number, targetBlockId: string | null) => {
+    if (!this.dependencyDragState) return;
+    this.dependencyDragState = { ...this.dependencyDragState, currentX: x, currentY: y, targetBlockId };
+  };
+
+  /**
+   * Ends and clears the current dependency drag state.
+   */
+  endDependencyDrag = () => {
+    this.dependencyDragState = null;
+  };
+
+  /**
+   * Optimistically adds a dependency between two blocks without a server round-trip.
+   * sourceId is blocked by predecessorId.
+   */
+  addDependency = (sourceId: string, predecessorId: string) => {
+    runInAction(() => {
+      const sourceBlock = this.blocksMap[sourceId];
+      if (sourceBlock) {
+        const existing = sourceBlock.blocked_by_ids ?? [];
+        if (!existing.includes(predecessorId)) {
+          set(this.blocksMap, [sourceId, "blocked_by_ids"], [...existing, predecessorId]);
+        }
+      }
+
+      const predBlock = this.blocksMap[predecessorId];
+      if (predBlock) {
+        const existing = predBlock.blocking_ids ?? [];
+        if (!existing.includes(sourceId)) {
+          set(this.blocksMap, [predecessorId, "blocking_ids"], [...existing, sourceId]);
+        }
+      }
+    });
+  };
+
+  /**
+   * Optimistically removes a dependency between two blocks without a server round-trip.
+   */
+  removeDependency = (sourceId: string, predecessorId: string) => {
+    runInAction(() => {
+      const sourceBlock = this.blocksMap[sourceId];
+      if (sourceBlock?.blocked_by_ids) {
+        set(
+          this.blocksMap,
+          [sourceId, "blocked_by_ids"],
+          sourceBlock.blocked_by_ids.filter((id) => id !== predecessorId)
+        );
+      }
+
+      const predBlock = this.blocksMap[predecessorId];
+      if (predBlock?.blocking_ids) {
+        set(
+          this.blocksMap,
+          [predecessorId, "blocking_ids"],
+          predBlock.blocking_ids.filter((id) => id !== sourceId)
+        );
+      }
+    });
+  };
 }

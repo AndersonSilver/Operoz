@@ -1,13 +1,12 @@
-import type { TBoardFieldFormSpan, TCustomFieldType } from "../board/custom-fields";
-import type { TIntakeFormDefaults, TIntakeFormField } from "../intake/intake-form";
+import type { TBoardFieldFormSpan } from "../board/custom-fields";
+import type {
+  TIntakeFormDefaults,
+  TIntakeFormField,
+  TBoardIntakeFormTheme,
+  TBoardIntakeFormClientOption,
+} from "../intake/intake-form";
 
-export type TBoardIntakeFormTheme = "default" | "minimal" | "support" | "incident";
-
-export type TBoardIntakeFormClientOption = {
-  id: string;
-  name: string;
-  identifier: string;
-};
+export type { TBoardIntakeFormTheme, TBoardIntakeFormClientOption };
 
 export type TBoardIntakeForm = {
   id: string;

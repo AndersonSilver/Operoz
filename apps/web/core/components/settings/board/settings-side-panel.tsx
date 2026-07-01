@@ -3,8 +3,8 @@ import { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { createPortal } from "react-dom";
 import { X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 
 type Props = {
   isOpen: boolean;
@@ -70,12 +70,8 @@ export function SettingsSidePanel(props: Props) {
                   <div className="flex shrink-0 items-start gap-2 border-b border-subtle px-5 py-4">
                     {headerStart}
                     <div className="min-w-0 flex-1 pr-2">
-                      <Dialog.Title className="text-14 font-semibold leading-snug text-primary">
-                        {title}
-                      </Dialog.Title>
-                      {description ? (
-                        <p className="mt-1 text-12 text-tertiary">{description}</p>
-                      ) : null}
+                      <Dialog.Title className="text-14 leading-snug font-semibold text-primary">{title}</Dialog.Title>
+                      {description ? <p className="mt-1 text-12 text-tertiary">{description}</p> : null}
                     </div>
                     <button
                       type="button"

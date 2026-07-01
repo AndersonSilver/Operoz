@@ -1,4 +1,4 @@
-import type { TClient360Health, TClient360HealthBreakdownItem, TClient360HealthDimension } from "@operis/types";
+import type { TClient360Health, TClient360HealthBreakdownItem, TClient360HealthDimension } from "@operoz/types";
 import type { Client360Tone } from "@/components/board/client-360/client-360-tokens";
 
 export function client360HealthDimensionLabelKey(dimension: TClient360HealthDimension): string {

@@ -1,6 +1,6 @@
 import { createContext, useContext } from "react";
 import { useParams } from "next/navigation";
-import { EIssuesStoreType } from "@operis/types";
+import { EIssuesStoreType } from "@operoz/types";
 import { useIssues } from "./store/use-issues";
 
 export const IssuesStoreContext = createContext<EIssuesStoreType | undefined>(undefined);

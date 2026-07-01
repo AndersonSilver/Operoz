@@ -7,7 +7,7 @@ import type {
   IWorkspace,
   IWorkspaceSidebarNavigation,
   IWorkspaceUserPropertiesResponse,
-} from "@operis/types";
+} from "@operoz/types";
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 // store

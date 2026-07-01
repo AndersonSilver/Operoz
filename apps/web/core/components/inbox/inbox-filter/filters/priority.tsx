@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { ISSUE_PRIORITIES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PriorityIcon } from "@operis/propel/icons";
-import type { TIssuePriorities } from "@operis/types";
+import { ISSUE_PRIORITIES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PriorityIcon } from "@operoz/propel/icons";
+import type { TIssuePriorities } from "@operoz/types";
 // plane constants
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";

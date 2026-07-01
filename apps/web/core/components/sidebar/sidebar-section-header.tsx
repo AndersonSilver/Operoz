@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SIDEBAR_SECTION_LABEL_CLASS } from "./sidebar-styles";
 
 type Props = {

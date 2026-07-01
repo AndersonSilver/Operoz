@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { CalendarDays } from "lucide-react";
 // hooks
-import { renderFormattedDate } from "@operis/utils";
+import { renderFormattedDate } from "@operoz/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // components
 import { IssueActivityBlockComponent, IssueLink } from "./";

@@ -3,12 +3,12 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Calendar, Copy, ExternalLink, RotateCcw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TSupportCriticality, TSupportTicketSubmissionField } from "@operis/types";
-import { cn, copyTextToClipboard, getTextContent } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TSupportCriticality, TSupportTicketSubmissionField } from "@operoz/types";
+import { cn, copyTextToClipboard, getTextContent } from "@operoz/utils";
 import type { IInboxIssueStore } from "@/store/inbox/inbox-issue.store";
 
 type Props = {

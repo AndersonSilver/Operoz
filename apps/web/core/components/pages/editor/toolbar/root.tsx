@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import { PanelRight } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_GLASS_BAR } from "@/components/board/board-hub-background";
 import { PageToolbar } from "@/components/pages/editor/toolbar";
 import { useProjectWorkSurface } from "@/components/project/project-view-shell";

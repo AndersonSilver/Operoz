@@ -1,18 +1,23 @@
+import type { MouseEvent } from "react";
+import { Link2 } from "lucide-react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import type { MouseEvent } from "react";
-import { ChevronRightIcon } from "@operis/propel/icons";
+import { ChevronRightIcon } from "@operoz/propel/icons";
 // plane imports
-import { Popover } from "@operis/propel/popover";
-import { Tooltip } from "@operis/propel/tooltip";
-import { ControlLink } from "@operis/ui";
-import { EIssuesStoreType } from "@operis/types";
-import { findTotalDaysInRange, generateWorkItemLink, cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Popover } from "@operoz/propel/popover";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { ControlLink } from "@operoz/ui";
+import { EIssuesStoreType } from "@operoz/types";
+import { generateWorkItemLink, cn } from "@operoz/utils";
 // components
-import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
+import { resolveGanttBarColor } from "@/components/gantt-chart/helpers/gantt-bar-color";
+import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
+import type { IBoardGroupedTimelineStore } from "@/store/timeline/board-grouped-timeline.store";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
+import { useModule } from "@/hooks/store/use-module";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useBoardLayoutOptional } from "@/components/board/board-layout-context";
@@ -26,8 +31,9 @@ import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-red
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web imports
 import { IssueIdentifier, IssueTypeIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
-import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
 // local imports
+import { getLocalizedStateName } from "@/components/project-states/state-display.utils";
+import { IssueAssigneeIndicator, IssueSubIssuesIndicator } from "../issue-row-indicators";
 import { WorkItemPreviewCard } from "../../preview-card";
 import { getBlockViewDetails } from "../utils";
 import type { GanttStoreType } from "./base-gantt-root";
@@ -48,14 +54,19 @@ type IssueGanttChartBlockProps = {
 export const IssueGanttBlock = observer(function IssueGanttBlock(props: IssueGanttChartBlockProps) {
   const { issueId, isEpic } = props;
   // router
-  const { workspaceSlug: routerWorkspaceSlug } = useParams();
+  const { workspaceSlug: routerWorkspaceSlug, moduleId: routeModuleId } = useParams();
   const workspaceSlug = routerWorkspaceSlug?.toString();
   // store hooks
   const { getProjectStates } = useProjectState();
+  const timelineStore = useTimeLineChartStore();
+  const { getBlockById } = timelineStore;
+  const boardGroupedStore = "boardModulesById" in timelineStore ? (timelineStore as IBoardGroupedTimelineStore) : null;
+  const { getModuleById } = useModule();
   const {
     issue: { getIssueById },
   } = useIssueDetail();
   // hooks
+  const { t } = useTranslation();
   const { isMobile } = usePlatformOS();
   const { handleRedirection } = useIssuePeekOverviewRedirection(isEpic);
 
@@ -64,12 +75,25 @@ export const IssueGanttBlock = observer(function IssueGanttBlock(props: IssueGan
   const stateDetails =
     issueDetails && getProjectStates(issueDetails?.project_id)?.find((state) => state?.id == issueDetails?.state_id);
 
-  const { blockStyle, message } = getBlockViewDetails(issueDetails, stateDetails?.color ?? "");
+  const contextModuleId =
+    routeModuleId?.toString() ??
+    boardGroupedStore?.getModuleIdForIssue(issueId) ??
+    issueDetails?.module_ids?.[0] ??
+    null;
+
+  const moduleConfig = contextModuleId
+    ? (boardGroupedStore?.boardModulesById[contextModuleId] ?? getModuleById(contextModuleId))
+    : undefined;
+
+  const barColor = resolveGanttBarColor(stateDetails?.color ?? "", moduleConfig);
+  const { blockStyle, message } = getBlockViewDetails(issueDetails, barColor, t);
+
+  const ganttBlock = getBlockById(issueId);
+  const hasDependencyLinks =
+    (ganttBlock?.blocked_by_ids?.length ?? 0) > 0 || (ganttBlock?.blocking_ids?.length ?? 0) > 0;
 
   const handleIssuePeekOverview = () => handleRedirection(workspaceSlug, issueDetails, isMobile);
 
-  const duration = findTotalDaysInRange(issueDetails?.start_date, issueDetails?.target_date) || 0;
-  const { sidebarWidth } = useGanttSidebarWidth();
   const tooltipContent = message ?? issueDetails?.name;
 
   return (
@@ -80,23 +104,13 @@ export const IssueGanttBlock = observer(function IssueGanttBlock(props: IssueGan
           <Tooltip tooltipContent={tooltipContent} isMobile={isMobile}>
             <div
               id={`issue-${issueId}`}
-              className="relative flex h-full w-full cursor-pointer items-center rounded-sm transition-colors hover:brightness-[1.03]"
+              className="relative flex h-full w-full cursor-pointer items-center justify-center rounded-sm transition-colors hover:brightness-[1.03]"
               style={blockStyle}
               onClick={handleIssuePeekOverview}
             >
-              <div
-                className="sticky w-auto flex-1 truncate overflow-hidden px-2.5 py-1 text-13 font-medium text-primary"
-                style={{ left: `${sidebarWidth}px` }}
-              >
-                {issueDetails?.name}
-              </div>
-              {isEpic && (
-                <IssueStats
-                  issueId={issueId}
-                  className="sticky mx-2 w-auto flex-shrink-0 justify-end truncate overflow-hidden font-medium text-primary"
-                  showProgressText={duration >= 2}
-                />
-              )}
+              {hasDependencyLinks ? (
+                <Link2 size={16} strokeWidth={2} className="shrink-0 text-secondary" aria-hidden />
+              ) : null}
             </div>
           </Tooltip>
         }
@@ -121,6 +135,7 @@ export const IssueGanttBlock = observer(function IssueGanttBlock(props: IssueGan
 // rendering issues on gantt sidebar
 export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(props: SidebarBlockProps) {
   const { issueId, isEpic = false, isExpanded = false, onToggleExpand, subIssuesCount = 0 } = props;
+  const { t } = useTranslation();
   // router
   const { workspaceSlug: routerWorkspaceSlug } = useParams();
   const workspaceSlug = routerWorkspaceSlug?.toString();
@@ -150,7 +165,6 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
   const projectIdentifier = getProjectIdentifierById(issueDetails?.project_id);
   const stateDetails =
     issueDetails && getProjectStates(issueDetails?.project_id)?.find((state) => state?.id === issueDetails?.state_id);
-  const isCompleted = stateDetails?.group === "completed" || stateDetails?.group === "cancelled";
   const issueTypeLogo = isBoardGantt
     ? resolveBoardGanttIssueTypeLogo(issueDetails?.type_id, issueTypeLogoMap)
     : undefined;
@@ -225,7 +239,13 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
           <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile} nativeButton={false}>
             <span className="flex-grow truncate text-13 font-medium">{issueDetails?.name}</span>
           </Tooltip>
-          {isCompleted && stateDetails && (
+          <IssueSubIssuesIndicator
+            count={subIssuesCount}
+            isEpic={isEpic}
+            isMobile={isMobile}
+            onClick={onToggleExpand ? handleToggleExpand : undefined}
+          />
+          {stateDetails && (
             <span
               className="flex-shrink-0 rounded px-1.5 py-0.5 text-9 font-semibold tracking-wide uppercase"
               style={{
@@ -234,9 +254,10 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
                 border: `1px solid ${stateDetails.color}60`,
               }}
             >
-              {stateDetails.name}
+              {getLocalizedStateName(stateDetails, t)}
             </span>
           )}
+          <IssueAssigneeIndicator assigneeIds={issueDetails?.assignee_ids} />
         </div>
       </ControlLink>
     </div>

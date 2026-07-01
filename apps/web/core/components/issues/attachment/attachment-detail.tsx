@@ -2,9 +2,9 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { AlertCircle } from "lucide-react";
-import { CloseIcon } from "@operis/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 import {
   convertBytesToSize,
   getFileExtension,
@@ -12,7 +12,7 @@ import {
   getFileURL,
   renderFormattedDate,
   truncateText,
-} from "@operis/utils";
+} from "@operoz/utils";
 // icons
 //
 import { getFileIcon } from "@/components/icons";

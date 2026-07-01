@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { ChevronDownIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { ChevronDownIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 // local imports
 import type { TCustomImageAlignment } from "../../types";
 import { IMAGE_ALIGNMENT_OPTIONS } from "../../utils";

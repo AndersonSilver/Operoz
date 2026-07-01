@@ -22,16 +22,17 @@ import {
   Trash2,
   Undo2,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IProject, TStatusReportExportFormat } from "@operis/types";
-import { AlertModalCore, CustomMenu } from "@operis/ui";
-import { cn, renderFormattedPeriodDatesLong } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IProject, TStatusReportExportFormat } from "@operoz/types";
+import { AlertModalCore, CustomMenu, TextArea } from "@operoz/ui";
+import { cn, renderFormattedPeriodDatesLong } from "@operoz/utils";
 import { buildExecutiveSummaryAiPayload } from "@/components/project/status-report/build-executive-summary-ai-payload";
 import { formatReportWeekLabel } from "@/components/project/status-report/format-status-report-week";
+import { observationLineToPlainText } from "@/components/project/status-report/observation-content";
 import { useBoardHubNavigate } from "@/components/board/use-board-hub-navigate";
 import { useStatusReportCapabilities } from "@/hooks/use-status-report-capabilities";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -43,6 +44,7 @@ import {
   getSprintModuleCount,
   isMultiModuleStatusReport,
   isSprintStatusReport,
+  stripHtmlToText,
 } from "@/components/project/status-report/status-report-utils";
 import { ProjectStatusReportService } from "@/services/project/project-status-report.service";
 import { AIService } from "@/services/ai.service";
@@ -209,7 +211,7 @@ export function ProjectStatusReportDetail(props: Props) {
     { revalidateOnFocus: false }
   );
 
-  const [summary, setSummary] = useState<string | null>(null);
+  const [summaryDraft, setSummaryDraft] = useState<string | null>(null);
   const [emExecucao, setEmExecucao] = useState<string | null>(null);
   const [pontosAtencao, setPontosAtencao] = useState<string | null>(null);
   const [proximosPassos, setProximosPassos] = useState<string | null>(null);
@@ -222,7 +224,9 @@ export function ProjectStatusReportDetail(props: Props) {
 
   const linesToText = (items?: string[]) => (items?.length ? items.join("\n") : "");
 
-  const effectiveSummary = summary ?? report?.content?.sections?.executive_summary?.html ?? "";
+  const storedSummaryHtml = report?.content?.sections?.executive_summary?.html ?? "";
+  const effectiveSummaryHtml = summaryDraft !== null ? summaryDraft : storedSummaryHtml;
+  const summaryPlainForEdit = summaryDraft ?? observationLineToPlainText(storedSummaryHtml);
 
   const effectiveEmExecucao = emExecucao ?? linesToText(report?.content?.sections?.observacoes?.em_execucao);
 
@@ -243,7 +247,7 @@ export function ProjectStatusReportDetail(props: Props) {
   const moduleId = report?.module ?? (report?.content?.sections?.module as { id?: string } | undefined)?.id ?? null;
 
   const buildExportDraft = () => ({
-    executive_summary_html: effectiveSummary,
+    executive_summary_html: effectiveSummaryHtml,
     em_execucao: textToLines(effectiveEmExecucao),
     pontos_atencao: textToLines(effectivePontosAtencao),
     proximos_passos: textToLines(effectiveProximosPassos),
@@ -280,11 +284,12 @@ export function ProjectStatusReportDetail(props: Props) {
     const execLines = textToLines(effectiveEmExecucao);
     const attLines = textToLines(effectivePontosAtencao);
     const nextLines = textToLines(effectiveProximosPassos);
-    let summaryToSave = effectiveSummary;
+    let summaryToSave = effectiveSummaryHtml.trim();
     let summaryGeneratedByAi = false;
+    const summaryIsEmpty = !stripHtmlToText(summaryToSave);
 
     try {
-      if (execLines.length || attLines.length || nextLines.length) {
+      if (summaryIsEmpty && (execLines.length || attLines.length || nextLines.length)) {
         setGeneratingSummary(true);
         try {
           const generated = await generateExecutiveSummaryText(execLines, attLines, nextLines);
@@ -317,7 +322,7 @@ export function ProjectStatusReportDetail(props: Props) {
         ...extra,
       });
       await mutate();
-      setSummary(null);
+      setSummaryDraft(null);
       setEmExecucao(null);
       setPontosAtencao(null);
       setProximosPassos(null);
@@ -406,12 +411,12 @@ export function ProjectStatusReportDetail(props: Props) {
 
   const previewDraft = useMemo(
     () => ({
-      executive_summary_html: effectiveSummary,
+      executive_summary_html: effectiveSummaryHtml,
       em_execucao: textToLines(effectiveEmExecucao),
       pontos_atencao: textToLines(effectivePontosAtencao),
       proximos_passos: textToLines(effectiveProximosPassos),
     }),
-    [effectiveEmExecucao, effectivePontosAtencao, effectiveProximosPassos, effectiveSummary]
+    [effectiveEmExecucao, effectivePontosAtencao, effectiveProximosPassos, effectiveSummaryHtml]
   );
 
   if (isLoading || !report) {
@@ -607,7 +612,26 @@ export function ProjectStatusReportDetail(props: Props) {
                   </div>
                 </section>
 
-                {!canManage && effectiveSummary ? (
+                {canManage ? (
+                  <section className="shadow-sm overflow-hidden rounded-lg border border-subtle bg-layer-1">
+                    <PanelSectionHeader
+                      icon={ScrollText}
+                      iconClassName="border-violet-500/20 bg-violet-500/10 text-violet-400"
+                      title={t("project.status_report.detail_step_summary")}
+                    />
+                    <div className="space-y-2 p-4 sm:p-5">
+                      <p className="text-caption-sm-regular leading-relaxed text-tertiary">
+                        {t("project.status_report.executive_summary_edit_hint")}
+                      </p>
+                      <TextArea
+                        value={summaryPlainForEdit}
+                        onChange={(e) => setSummaryDraft(e.target.value)}
+                        placeholder={t("project.status_report.executive_summary_placeholder")}
+                        className="min-h-[120px] w-full resize-y rounded-md border-subtle bg-layer-1 text-body-sm-regular leading-relaxed"
+                      />
+                    </div>
+                  </section>
+                ) : effectiveSummaryHtml ? (
                   <section className="shadow-sm overflow-hidden rounded-xl border border-subtle bg-layer-1">
                     <PanelSectionHeader
                       icon={FileText}
@@ -615,7 +639,7 @@ export function ProjectStatusReportDetail(props: Props) {
                       title={t("project.status_report.executive_summary")}
                     />
                     <div className="p-4 sm:p-5">
-                      <ReadOnlyBlock value={effectiveSummary} />
+                      <ReadOnlyBlock value={observationLineToPlainText(effectiveSummaryHtml)} />
                     </div>
                   </section>
                 ) : null}

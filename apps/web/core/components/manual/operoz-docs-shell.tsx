@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Menu, X } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { OperozDocsSidebar } from "./operoz-docs-sidebar";
 
 type Props = {

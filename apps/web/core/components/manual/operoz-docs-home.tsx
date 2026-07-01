@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ArrowRight, BookOpen } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { OPEROZ_DOCS_CATEGORIES, getDocsArticlePath } from "./operoz-docs-nav";
 
 export const OperozDocsHome = observer(function OperozDocsHome() {

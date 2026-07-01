@@ -1,6 +1,6 @@
 // plane imports
-import { EUserPermissions } from "@operis/constants";
-import type { EUserProjectRoles, EUserWorkspaceRoles } from "@operis/types";
+import { EUserPermissions } from "@operoz/constants";
+import type { EUserProjectRoles, EUserWorkspaceRoles } from "@operoz/types";
 
 export const getUserRole = (role: EUserPermissions | EUserWorkspaceRoles | EUserProjectRoles) => {
   switch (role) {

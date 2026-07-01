@@ -1,11 +1,11 @@
 import type { LucideIcon } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Braces, FileText, Printer, RefreshCw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { LogoSpinner } from "@/components/common/logo-spinner";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { ProjectStatusReportService } from "@/services/project/project-status-report.service";
 
 const service = new ProjectStatusReportService();

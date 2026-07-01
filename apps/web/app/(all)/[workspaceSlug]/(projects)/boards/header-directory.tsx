@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { Header } from "@operis/ui";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { Header } from "@operoz/ui";
 import { CreateBoardModal } from "@/components/board/create-board-modal";
 import { useUserPermissions } from "@/hooks/store/user";
 
@@ -14,7 +14,10 @@ export const BoardsDirectoryHeader = observer(function BoardsDirectoryHeader() {
   const { allowPermissions } = useUserPermissions();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  const canCreate = allowPermissions([EUserPermissions.ADMIN, EUserPermissions.MEMBER], EUserPermissionsLevel.WORKSPACE);
+  const canCreate = allowPermissions(
+    [EUserPermissions.ADMIN, EUserPermissions.MEMBER],
+    EUserPermissionsLevel.WORKSPACE
+  );
 
   return (
     <>

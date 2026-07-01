@@ -1,11 +1,11 @@
 import React from "react";
 // types
-import { CycleGroupIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { TCycleGroups } from "@operis/types";
+import { CycleGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { TCycleGroups } from "@operoz/types";
 // icons
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 type Props = {
   type: TCycleGroups;
@@ -27,7 +27,7 @@ export function CycleListGroupHeader(props: Props) {
         <div className="relative flex min-w-0 flex-row items-center gap-2 overflow-hidden">
           <div className="truncate text-13 font-semibold text-primary">{title}</div>
           {showCount ? (
-            <span className="shrink-0 rounded-md bg-layer-2 px-1.5 py-0.5 text-11 font-medium tabular-nums text-tertiary">
+            <span className="shrink-0 rounded-md bg-layer-2 px-1.5 py-0.5 text-11 font-medium text-tertiary tabular-nums">
               {count ?? 0}
             </span>
           ) : null}

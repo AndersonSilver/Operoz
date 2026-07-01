@@ -1,5 +1,5 @@
 // plane imports
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 
 export function IssueActivityLoader() {
   return (

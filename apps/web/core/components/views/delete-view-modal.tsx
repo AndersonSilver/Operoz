@@ -2,11 +2,11 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams, useRouter } from "next/navigation";
 // types
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IProjectView } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IProjectView } from "@operoz/types";
 // ui
-import { AlertModalCore } from "@operis/ui";
+import { AlertModalCore } from "@operoz/ui";
 // hooks
 import { useProjectView } from "@/hooks/store/use-project-view";
 

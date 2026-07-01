@@ -7,7 +7,7 @@
 | Documento                                                      | Descrição                             |
 | -------------------------------------------------------------- | ------------------------------------- |
 | [assistant-user-guide.md](./assistant-user-guide.md)           | O que perguntar, exemplos, limitações |
-| [operis-assistant-security.md](./operis-assistant-security.md) | Modelo de segurança (transparência)   |
+| [operoz-assistant-security.md](./operoz-assistant-security.md) | Modelo de segurança (transparência)   |
 
 ## Administradores
 
@@ -25,7 +25,7 @@
 | ---------------------------------------------------------- | --------------------------------- |
 | [assistant-api-reference.md](./assistant-api-reference.md) | Endpoints REST                    |
 | [openapi/assistant.yaml](./openapi/assistant.yaml)         | OpenAPI 3.0                       |
-| [operis-mcp.md](./operis-mcp.md)                           | MCP externo vs assistente interno |
+| [operoz-mcp.md](./operoz-mcp.md)                           | MCP externo vs assistente interno |
 | [assistant-adrs.md](./assistant-adrs.md)                   | Architecture Decision Records     |
 | [automation-workers.md](./automation-workers.md)           | Filas Celery                      |
 
@@ -34,8 +34,8 @@
 | Documento                                                                        | Descrição                                    |
 | -------------------------------------------------------------------------------- | -------------------------------------------- |
 | [claude-code-operoz-mapping.md](./claude-code-operoz-mapping.md)                 | Mapeamento Claude Code → Operoz (referência) |
-| [operis-plataforma-violenta-roadmap.md](./operis-plataforma-violenta-roadmap.md) | Roadmap do programa                          |
+| [operoz-plataforma-violenta-roadmap.md](./operoz-plataforma-violenta-roadmap.md) | Roadmap do programa                          |
 
 ## Roadmap
 
-[operis-plataforma-violenta-roadmap.md](./operis-plataforma-violenta-roadmap.md)
+[operoz-plataforma-violenta-roadmap.md](./operoz-plataforma-violenta-roadmap.md)

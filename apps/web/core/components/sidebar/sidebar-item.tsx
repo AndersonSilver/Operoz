@@ -1,6 +1,6 @@
 import { forwardRef } from "react";
 import Link from "next/link";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 // ============================================================================
 // TYPES
@@ -115,13 +115,7 @@ const AppSidebarButtonItem = forwardRef<HTMLButtonElement, AppSidebarButtonItemP
   ref
 ) {
   return (
-    <button
-      ref={ref}
-      className={cn(styles.base, className)}
-      onClick={onClick}
-      disabled={disabled}
-      type="button"
-    >
+    <button ref={ref} className={cn(styles.base, className)} onClick={onClick} disabled={disabled} type="button">
       {children}
     </button>
   );

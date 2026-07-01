@@ -1,6 +1,6 @@
 import { Cloud, KeyRound, Upload } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/ui";
 import "@/components/exporter/workspace-exports-settings.css";
 
 const STEP_ICONS = [KeyRound, Cloud, Upload] as const;

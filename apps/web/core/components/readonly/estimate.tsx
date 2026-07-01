@@ -1,9 +1,9 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { EstimatePropertyIcon } from "@operis/propel/icons";
-import { EEstimateSystem } from "@operis/types";
-import { cn, convertMinutesToHoursMinutesString } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { EstimatePropertyIcon } from "@operoz/propel/icons";
+import { EEstimateSystem } from "@operoz/types";
+import { cn, convertMinutesToHoursMinutesString } from "@operoz/utils";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useEstimate } from "@/hooks/store/estimates/use-estimate";

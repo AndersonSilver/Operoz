@@ -2,8 +2,8 @@ import type { RefObject } from "react";
 import { useRef } from "react";
 import { observer } from "mobx-react";
 // components
-import type { IBlockUpdateDependencyData } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { IBlockUpdateDependencyData } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import RenderIfVisible from "@/components/core/render-if-visible-HOC";
 // helpers
 // hooks
@@ -64,6 +64,7 @@ export const GanttChartBlock = observer(function GanttChartBlock(props: Props) {
         "pointer-events-none": !isBlockVisibleOnChart,
       })}
       id={`gantt-block-${block.id}`}
+      data-gantt-block-id={block.id}
       ref={resizableRef}
       style={{
         height: `${BLOCK_HEIGHT}px`,

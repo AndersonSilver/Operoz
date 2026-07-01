@@ -3,11 +3,11 @@ import { Info } from "lucide-react";
 import React, { useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { CheckIcon, SearchIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { CheckIcon, SearchIcon, ChevronDownIcon } from "@operoz/propel/icons";
 // plane imports
 // local imports
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 import { useDropdownKeyDown } from "../hooks/use-dropdown-key-down";
 import { cn } from "../utils";
 import type { ICustomSearchSelectProps } from "./helper";
@@ -145,7 +145,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                     className={cn(
                       "z-30 my-1.5 overflow-y-auto whitespace-nowrap focus:outline-none",
                       isHubAppearance
-                        ? "min-w-[min(100vw-2rem,20rem)] rounded-lg border border-subtle/50 bg-layer-1/95 py-2 text-13 shadow-lg backdrop-blur-xl"
+                        ? "shadow-lg min-w-[min(100vw-2rem,20rem)] rounded-lg border border-subtle/50 bg-layer-1/95 py-2 text-13 backdrop-blur-xl"
                         : "min-w-48 rounded-md border-[0.5px] border-subtle-1 bg-surface-1 py-2.5 text-11",
                       optionsClassName
                     )}
@@ -162,10 +162,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                       )}
                     >
                       <SearchIcon
-                        className={cn(
-                          "shrink-0 text-placeholder",
-                          isHubAppearance ? "size-4" : "h-3.5 w-3.5"
-                        )}
+                        className={cn("shrink-0 text-placeholder", isHubAppearance ? "size-4" : "h-3.5 w-3.5")}
                         strokeWidth={1.5}
                       />
                       <Combobox.Input
@@ -200,9 +197,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                               className={({ active, selected }) =>
                                 cn(
                                   "flex w-full cursor-pointer items-center justify-between gap-2 truncate select-none",
-                                  isHubAppearance
-                                    ? "rounded-md px-2.5 py-2 text-13"
-                                    : "rounded-sm px-1 py-1.5 text-11",
+                                  isHubAppearance ? "rounded-md px-2.5 py-2 text-13" : "rounded-sm px-1 py-1.5 text-11",
                                   {
                                     "bg-layer-transparent-hover": active && !isHubAppearance,
                                     "bg-layer-1-hover": active && isHubAppearance && !selected,
@@ -223,9 +218,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
                                     <CheckIcon
                                       className={cn(
                                         "shrink-0",
-                                        isHubAppearance
-                                          ? "size-4 text-accent-primary"
-                                          : "h-3.5 w-3.5"
+                                        isHubAppearance ? "size-4 text-accent-primary" : "h-3.5 w-3.5"
                                       )}
                                     />
                                   )}

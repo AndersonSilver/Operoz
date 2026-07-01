@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-import { CloseIcon } from "@operis/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 // helpers
 import type { TAuthErrorInfo } from "@/helpers/authentication.helper";
 

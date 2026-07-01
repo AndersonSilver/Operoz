@@ -1,12 +1,10 @@
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 /** Item de navegação principal da sidebar do app. */
 export function sidebarNavItemClass(isActive?: boolean) {
   return cn(
-    "group/nav relative flex w-full cursor-pointer items-center justify-between gap-1.5 rounded-md py-1.5 pr-2 pl-2.5 outline-none transition-colors duration-150",
-    isActive
-      ? "bg-accent-subtle/35 text-primary"
-      : "text-secondary hover:bg-layer-transparent-hover hover:text-primary"
+    "group/nav relative flex w-full cursor-pointer items-center justify-between gap-1.5 rounded-md py-1.5 pr-2 pl-2.5 transition-colors duration-150 outline-none",
+    isActive ? "bg-accent-subtle/35 text-primary" : "text-secondary hover:bg-layer-transparent-hover hover:text-primary"
   );
 }
 
@@ -15,8 +13,7 @@ export const SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS =
   "pointer-events-none absolute top-1/2 left-1 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-primary";
 
 /** Cabeçalho de secção (Boards, Espaço de trabalho…). */
-export const SIDEBAR_SECTION_LABEL_CLASS =
-  "text-11 font-semibold tracking-[0.04em] text-tertiary uppercase";
+export const SIDEBAR_SECTION_LABEL_CLASS = "text-11 font-semibold tracking-[0.04em] text-tertiary uppercase";
 
 /** Ícone de item de navegação. */
 export function sidebarNavIconClass(isActive?: boolean) {
@@ -43,7 +40,7 @@ export function sidebarNestedNavItemClass(isActive?: boolean) {
     sidebarNavItemClass(isActive),
     "group/project-item relative",
     isActive
-      ? "bg-accent-subtle/50 ring-1 ring-accent-primary/25"
-      : "hover:bg-accent-subtle/25 hover:ring-1 hover:ring-accent-primary/10"
+      ? "ring-accent-primary/25 bg-accent-subtle/50 ring-1"
+      : "hover:ring-accent-primary/10 hover:bg-accent-subtle/25 hover:ring-1"
   );
 }

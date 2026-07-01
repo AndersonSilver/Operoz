@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import type { FormEvent } from "react";
 import { CheckCircle2, FileText, Mail, Send, Shield } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TSupportCriticality, TIntakeFormField, TIntakeFormPublic } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { Input } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TSupportCriticality, TIntakeFormField, TIntakeFormPublic } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { Input } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { IntakePublicAttachmentField, type TIntakePublicAttachmentItem } from "./intake-public-attachment-field";
 import { IntakePublicRichTextField } from "./intake-public-rich-text-field";
 import "./intake-public-form.css";

@@ -5,8 +5,8 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
 import { BookOpen, ChevronDown, Search } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { OPEROZ_DOCS_CATEGORIES, articleTitleKey, flattenDocsArticles, getDocsArticlePath } from "./operoz-docs-nav";
 
 function normalizePath(path: string) {

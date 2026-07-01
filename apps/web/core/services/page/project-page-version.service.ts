@@ -1,6 +1,6 @@
 // plane types
-import { API_BASE_URL } from "@operis/constants";
-import type { TPageVersion } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TPageVersion } from "@operoz/types";
 // helpers
 // services
 import { APIService } from "@/services/api.service";

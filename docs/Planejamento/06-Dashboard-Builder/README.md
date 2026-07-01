@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis tem analytics básico mas não **dashboards com gadgets** configuráveis
+O Operoz tem analytics básico mas não **dashboards com gadgets** configuráveis
 (roadmap §13). O utilizador deve poder montar uma página com gráficos
 (burndown, pizza, created-vs-resolved), partilhá-la e mantê-la atualizada — como
 os dashboards do Jira.
@@ -16,13 +16,13 @@ auto-refresh, gadgets de filtro/gráfico/sprint.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Gadget guarda config como JSON; layout como JSON (grid) | Tabela rígida por tipo de gadget |
-| 2 | Fonte de dados do gadget = OQL (feature 02) ou métricas (feature 08) | Queries próprias por gadget |
-| 3 | `react-grid-layout` para drag-and-drop | Grid manual |
-| 4 | Render de gráficos com Recharts (já dependência) | Lib de charts nova |
-| 5 | Partilha respeita RBAC; dados do gadget recortados por visibilidade | Dashboard ignora permissões |
+| #   | Decisão                                                              | Alternativa rejeitada            |
+| --- | -------------------------------------------------------------------- | -------------------------------- |
+| 1   | Gadget guarda config como JSON; layout como JSON (grid)              | Tabela rígida por tipo de gadget |
+| 2   | Fonte de dados do gadget = OQL (feature 02) ou métricas (feature 08) | Queries próprias por gadget      |
+| 3   | `react-grid-layout` para drag-and-drop                               | Grid manual                      |
+| 4   | Render de gráficos com Recharts (já dependência)                     | Lib de charts nova               |
+| 5   | Partilha respeita RBAC; dados do gadget recortados por visibilidade  | Dashboard ignora permissões      |
 
 ## Escopo
 
@@ -53,4 +53,4 @@ mode (P3).
 
 - OQL (feature 02) como fonte de dados de gadgets de issues.
 - Métricas/relatórios (feature 08) para gadgets agile.
-- Recharts; `react-grid-layout`; `@operis/ui`.
+- Recharts; `react-grid-layout`; `@operoz/ui`.

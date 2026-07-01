@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { CycleIcon } from "@operis/propel/icons";
-import type { ICycle, THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { CycleIcon } from "@operoz/propel/icons";
+import type { ICycle, THomeWidgetProps } from "@operoz/types";
 
 type ICycleWithStats = ICycle & {
   total_issues?: number;

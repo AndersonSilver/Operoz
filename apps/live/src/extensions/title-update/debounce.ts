@@ -1,4 +1,4 @@
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 
 /**
  * DebounceState - Tracks the state of a debounced function

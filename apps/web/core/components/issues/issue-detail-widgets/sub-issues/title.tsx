@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
-import { CircularProgressIndicator, CollapsibleButton } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
+import { CollapsibleButton } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { SubWorkItemTitleActions } from "./title-actions";
@@ -23,31 +23,17 @@ export const SubIssuesCollapsibleTitle = observer(function SubIssuesCollapsibleT
   const { t } = useTranslation();
   // store hooks
   const {
-    subIssues: { subIssuesByIssueId, stateDistributionByIssueId },
+    subIssues: { subIssuesByIssueId },
   } = useIssueDetail(issueServiceType);
   // derived values
-  const subIssuesDistribution = stateDistributionByIssueId(parentIssueId);
   const subIssues = subIssuesByIssueId(parentIssueId);
   // if there are no sub-issues, return null
   if (!subIssues) return null;
-
-  // calculate percentage of completed sub-issues
-  const completedCount = subIssuesDistribution?.completed?.length ?? 0;
-  const totalCount = subIssues.length;
-  const percentage = completedCount && totalCount ? (completedCount / totalCount) * 100 : 0;
 
   return (
     <CollapsibleButton
       isOpen={isOpen}
       title={`${issueServiceType === EIssueServiceType.EPICS ? t("issue.label", { count: 1 }) : t("common.sub_work_items")}`}
-      indicatorElement={
-        <div className="flex items-center gap-1.5 text-13 text-tertiary">
-          <CircularProgressIndicator size={18} percentage={percentage} strokeWidth={3} />
-          <span>
-            {completedCount}/{totalCount} {t("common.done")}
-          </span>
-        </div>
-      }
       actionItemElement={
         <SubWorkItemTitleActions
           projectId={projectId}

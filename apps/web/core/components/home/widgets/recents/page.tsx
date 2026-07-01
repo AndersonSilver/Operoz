@@ -1,10 +1,10 @@
 import { useRouter } from "next/navigation";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { PageIcon } from "@operis/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { PageIcon } from "@operoz/propel/icons";
 // plane import
-import type { TActivityEntityData, TPageEntityData } from "@operis/types";
-import { Avatar } from "@operis/ui";
-import { calculateTimeAgo, getFileURL, getPageName } from "@operis/utils";
+import type { TActivityEntityData, TPageEntityData } from "@operoz/types";
+import { Avatar } from "@operoz/ui";
+import { calculateTimeAgo, getFileURL, getPageName } from "@operoz/utils";
 import { ListItem } from "@/components/core/list";
 // hooks
 import { useMember } from "@/hooks/store/use-member";

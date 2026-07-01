@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { PROJECT_ERROR_MESSAGES } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue } from "@operis/types";
-import { AlertModalCore } from "@operis/ui";
+import { PROJECT_ERROR_MESSAGES } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue } from "@operoz/types";
+import { AlertModalCore } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {

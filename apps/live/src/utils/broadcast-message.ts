@@ -1,6 +1,6 @@
 import type { Hocuspocus } from "@hocuspocus/server";
-import type { BroadcastedEvent } from "@operis/editor";
-import { logger } from "@operis/logger";
+import type { BroadcastedEvent } from "@operoz/editor";
+import { logger } from "@operoz/logger";
 import { Redis } from "@/extensions/redis";
 import { AppError } from "@/lib/errors";
 

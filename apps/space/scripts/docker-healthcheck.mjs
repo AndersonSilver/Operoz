@@ -2,8 +2,8 @@
  * Container health probe for the Space SSR server.
  * Uses Node fetch (no curl/shell) and only checks loopback to avoid SSRF-style misuse.
  */
-const url = process.env.OPERIS_HEALTHCHECK_URL ?? "http://127.0.0.1:3000/spaces/";
-const timeoutMs = Number(process.env.OPERIS_HEALTHCHECK_TIMEOUT_MS ?? 4000);
+const url = process.env.OPEROZ_HEALTHCHECK_URL ?? "http://127.0.0.1:3000/spaces/";
+const timeoutMs = Number(process.env.OPEROZ_HEALTHCHECK_TIMEOUT_MS ?? 4000);
 const controller = new AbortController();
 const timer = setTimeout(() => controller.abort(), timeoutMs);
 

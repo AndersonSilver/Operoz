@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
-import { PlaneLockup, ChevronLeftIcon } from "@operis/propel/icons";
-import { EOnboardingSteps } from "@operis/types";
-import { cn } from "@operis/utils";
+import { PlaneLockup, ChevronLeftIcon } from "@operoz/propel/icons";
+import { EOnboardingSteps } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { useUser } from "@/hooks/store/user";
 import { SwitchAccountDropdown } from "./switch-account-dropdown";
 

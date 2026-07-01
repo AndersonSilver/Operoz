@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { IIssueLabel } from "@operis/types";
+import type { IIssueLabel } from "@operoz/types";
 // local imports
 import { PowerKMenuBuilder } from "./builder";
 

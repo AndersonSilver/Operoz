@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 import { useTheme as useNextTheme } from "next-themes";
 import { Languages, Palette } from "lucide-react";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { useTranslation } from "@operis/i18n";
-import { CustomSelect } from "@operis/ui";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { CustomSelect } from "@operoz/ui";
 import { AdminConfigSection, AdminFieldLabel, AdminSettingsPanel } from "@/components/settings/admin-settings-panel";
 
 const ADMIN_THEME_OPTIONS = [

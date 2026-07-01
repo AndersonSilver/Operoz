@@ -1,6 +1,6 @@
 import React from "react";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 interface OnboardingStepIndicatorProps {
   currentStep: number;

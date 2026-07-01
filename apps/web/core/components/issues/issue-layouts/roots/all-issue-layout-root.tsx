@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import { useParams, useSearchParams } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import { GLOBAL_VIEW_TRACKER_ELEMENTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import type { EIssueLayoutTypes } from "@operis/types";
-import { EIssuesStoreType, STATIC_VIEW_TYPES } from "@operis/types";
+import { GLOBAL_VIEW_TRACKER_ELEMENTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import type { EIssueLayoutTypes } from "@operoz/types";
+import { EIssuesStoreType, STATIC_VIEW_TYPES } from "@operoz/types";
 // assets
 // components
 import { IssuePeekOverview } from "@/components/issues/peek-overview";

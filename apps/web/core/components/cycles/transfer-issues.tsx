@@ -1,8 +1,8 @@
 import React from "react";
 import { AlertCircle } from "lucide-react";
 // ui
-import { Button } from "@operis/propel/button";
-import { TransferIcon } from "@operis/propel/icons";
+import { Button } from "@operoz/propel/button";
+import { TransferIcon } from "@operoz/propel/icons";
 
 type Props = {
   handleClick: () => void;

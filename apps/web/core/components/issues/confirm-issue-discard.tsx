@@ -1,7 +1,7 @@
 import { useState } from "react";
 // ui
-import { Button } from "@operis/propel/button";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 
 type Props = {
   isOpen: boolean;

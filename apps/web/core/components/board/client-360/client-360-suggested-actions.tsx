@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { Lightbulb, X } from "lucide-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { TClient360SuggestedAction, TClient360ScenarioPlaybook } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { TClient360SuggestedAction, TClient360ScenarioPlaybook } from "@operoz/types";
 import { Client360Section } from "@/components/board/client-360/client-360-ui";
 import { Client360ScenarioPlaybookDrawer } from "@/components/board/client-360/client-360-scenario-playbook-drawer";
 import { WorkspaceService } from "@/services/workspace.service";

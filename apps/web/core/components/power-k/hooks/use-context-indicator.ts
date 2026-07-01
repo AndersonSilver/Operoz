@@ -1,6 +1,6 @@
 import { useParams } from "next/navigation";
 // plane imports
-import { getPageName } from "@operis/utils";
+import { getPageName } from "@operoz/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
 import { useModule } from "@/hooks/store/use-module";

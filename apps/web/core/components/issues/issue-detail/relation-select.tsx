@@ -2,12 +2,12 @@ import React from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 
-import { EditIcon, CloseIcon } from "@operis/propel/icons";
+import { EditIcon, CloseIcon } from "@operoz/propel/icons";
 // Plane
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { ISearchIssueResponse } from "@operis/types";
-import { cn, generateWorkItemLink } from "@operis/utils";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { ISearchIssueResponse } from "@operoz/types";
+import { cn, generateWorkItemLink } from "@operoz/utils";
 // components
 import { ExistingIssuesListModal } from "@/components/core/modals/existing-issues-list-modal";
 // hooks

@@ -5,7 +5,7 @@ import type {
   IIssueDisplayProperties,
   IProjectCustomFieldLite,
   TCustomFieldValue,
-} from "@operis/types";
+} from "@operoz/types";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 
 const LAYOUT_FIELD_TYPES = new Set(["date", "datetime"]);

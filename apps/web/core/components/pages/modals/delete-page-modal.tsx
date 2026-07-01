@@ -2,9 +2,9 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 // ui
 import { useParams } from "next/navigation";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { AlertModalCore } from "@operis/ui";
-import { getPageName } from "@operis/utils";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { AlertModalCore } from "@operoz/ui";
+import { getPageName } from "@operoz/utils";
 // constants
 // plane web hooks
 import { useAppRouter } from "@/hooks/use-app-router";

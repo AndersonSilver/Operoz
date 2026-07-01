@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 // ui
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { CloseIcon, ModuleStatusIcon } from "@operis/propel/icons";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { CloseIcon, ModuleStatusIcon } from "@operoz/propel/icons";
 // constants
 
 type Props = {

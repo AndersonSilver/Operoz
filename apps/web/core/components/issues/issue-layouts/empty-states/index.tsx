@@ -1,5 +1,5 @@
 // plane web components
-import { EIssuesStoreType } from "@operis/types";
+import { EIssuesStoreType } from "@operoz/types";
 import { TeamEmptyState } from "@/plane-web/components/issues/issue-layouts/empty-states/team-issues";
 import { TeamProjectWorkItemEmptyState } from "@/plane-web/components/issues/issue-layouts/empty-states/team-project";
 import { TeamViewEmptyState } from "@/plane-web/components/issues/issue-layouts/empty-states/team-view-issues";

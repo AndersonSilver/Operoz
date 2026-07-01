@@ -1,6 +1,6 @@
 import { LayoutGrid, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
 
 type Props = {
   canCreate: boolean;
@@ -19,7 +19,13 @@ export function BoardsSidebarEmptyState(props: Props) {
       <p className="text-13 font-medium text-secondary">{t("boards.empty_sidebar_title")}</p>
       <p className="mt-1 text-11 leading-relaxed text-tertiary">{t("boards.empty_sidebar_description")}</p>
       {canCreate && (
-        <Button variant="secondary" size="sm" className="mt-3" onClick={onCreate} prependIcon={<Plus className="size-3.5" />}>
+        <Button
+          variant="secondary"
+          size="sm"
+          className="mt-3"
+          onClick={onCreate}
+          prependIcon={<Plus className="size-3.5" />}
+        >
           {t("boards.empty_sidebar_cta")}
         </Button>
       )}

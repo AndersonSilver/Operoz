@@ -1,11 +1,11 @@
 import { isEmpty } from "lodash-es";
 // plane constants
-import type { EIssueFilterType } from "@operis/constants";
+import type { EIssueFilterType } from "@operoz/constants";
 import {
   EIssueGroupByToServerOptions,
   EServerGroupByToFilterOptions,
   ENABLE_ISSUE_DEPENDENCIES,
-} from "@operis/constants";
+} from "@operoz/constants";
 import type {
   EIssuesStoreType,
   IIssueDisplayFilterOptions,
@@ -18,10 +18,10 @@ import type {
   TIssueParams,
   TStaticViewTypes,
   TWorkItemFilterExpression,
-} from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 // helpers
-import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operis/utils";
+import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operoz/utils";
 // lib
 import { storage } from "@/lib/local-storage";
 import { getEnabledDisplayFilters } from "@/plane-web/store/issue/helpers/filter-utils";

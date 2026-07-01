@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ArchiveX } from "lucide-react";
 // plane imports
-import { PROJECT_AUTOMATION_MONTHS, EUserPermissions, EUserPermissionsLevel, EIconSize } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { StateGroupIcon, StatePropertyIcon } from "@operis/propel/icons";
-import type { IProject } from "@operis/types";
-import { CustomSelect, CustomSearchSelect, ToggleSwitch, Loader } from "@operis/ui";
+import { PROJECT_AUTOMATION_MONTHS, EUserPermissions, EUserPermissionsLevel, EIconSize } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { StateGroupIcon, StatePropertyIcon } from "@operoz/propel/icons";
+import type { IProject } from "@operoz/types";
+import { CustomSelect, CustomSearchSelect, ToggleSwitch, Loader } from "@operoz/ui";
 import { SelectMonthModal } from "@/components/automation";
 import { SettingsControlItem } from "@/components/settings/control-item";
 // hooks

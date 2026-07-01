@@ -1,8 +1,8 @@
 import { CalendarDays } from "lucide-react";
 // plane imports
-import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operis/propel/icons";
-import type { TStateGroups } from "@operis/types";
-import { cn, renderFormattedDate, shouldHighlightIssueDueDate } from "@operis/utils";
+import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operoz/propel/icons";
+import type { TStateGroups } from "@operoz/types";
+import { cn, renderFormattedDate, shouldHighlightIssueDueDate } from "@operoz/utils";
 
 type Props = {
   startDate: string | null;

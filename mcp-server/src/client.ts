@@ -1,4 +1,4 @@
-import type { OperisConfig } from "./config.js";
+import type { OperozConfig } from "./config.js";
 
 export type ApiSurface = "v1" | "app" | "public" | "instances" | "auth";
 
@@ -12,7 +12,7 @@ export type RequestOptions = {
   form?: Record<string, string>;
 };
 
-export class OperisApiError extends Error {
+export class OperozApiError extends Error {
   constructor(
     message: string,
     public status: number,
@@ -21,7 +21,7 @@ export class OperisApiError extends Error {
     public retryAfterMs?: number
   ) {
     super(message);
-    this.name = "OperisApiError";
+    this.name = "OperozApiError";
   }
 }
 
@@ -42,10 +42,10 @@ function parseRetryAfterMs(response: Response): number | undefined {
   return undefined;
 }
 
-export class OperisClient {
+export class OperozClient {
   private sessionCookie?: string;
 
-  constructor(private config: OperisConfig) {
+  constructor(private config: OperozConfig) {
     this.sessionCookie = config.sessionCookie;
   }
 
@@ -107,12 +107,12 @@ export class OperisClient {
 
     if (surface === "v1" && !this.config.apiKey) {
       throw new Error(
-        "OPERIS_API_KEY é obrigatório para a API v1. Crie um token em Definições → API tokens (ou God mode)."
+        "OPEROZ_API_KEY é obrigatório para a API v1. Crie um token em Definições → API tokens (ou God mode)."
       );
     }
     if (surface === "app" && !this.sessionCookie) {
       throw new Error(
-        "Sessão necessária para /api/* (boards, etc.). Use operis_sign_in ou defina OPERIS_SESSION_COOKIE."
+        "Sessão necessária para /api/* (boards, etc.). Use operoz_sign_in ou defina OPEROZ_SESSION_COOKIE."
       );
     }
 
@@ -157,8 +157,8 @@ export class OperisClient {
 
     if (response.status >= 400) {
       const retryAfterMs = response.status === 429 ? parseRetryAfterMs(response) : undefined;
-      throw new OperisApiError(
-        `Operis API ${method} ${path} → ${response.status}`,
+      throw new OperozApiError(
+        `Operoz API ${method} ${path} → ${response.status}`,
         response.status,
         parsed,
         retryAfterMs

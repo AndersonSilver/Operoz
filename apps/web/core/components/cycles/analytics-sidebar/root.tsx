@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 // local imports
 import useCyclesDetails from "../active-cycle/use-cycles-details";
 import { CycleAnalyticsProgress } from "./issue-progress";

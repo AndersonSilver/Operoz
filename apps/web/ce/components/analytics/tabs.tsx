@@ -1,4 +1,4 @@
-import type { AnalyticsTab } from "@operis/types";
+import type { AnalyticsTab } from "@operoz/types";
 import { Overview } from "@/components/analytics/overview";
 import { WorkItems } from "@/components/analytics/work-items";
 

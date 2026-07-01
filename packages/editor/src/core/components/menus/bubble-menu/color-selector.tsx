@@ -2,7 +2,7 @@ import type { Editor } from "@tiptap/react";
 import { ALargeSmall, Ban } from "lucide-react";
 import { useMemo } from "react";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // constants
 import { COLORS_LIST } from "@/constants/common";
 // local imports

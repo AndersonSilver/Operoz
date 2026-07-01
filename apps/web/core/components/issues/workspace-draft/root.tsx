@@ -2,12 +2,12 @@ import { Fragment } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 // plane imports
-import { EUserPermissionsLevel, EDraftIssuePaginationType } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
-import { EUserWorkspaceRoles } from "@operis/types";
+import { EUserPermissionsLevel, EDraftIssuePaginationType } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
+import { EUserWorkspaceRoles } from "@operoz/types";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useProject } from "@/hooks/store/use-project";

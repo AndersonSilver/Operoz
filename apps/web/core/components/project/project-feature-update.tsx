@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // ui
-import { Button, getButtonStyling } from "@operis/propel/button";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { Row } from "@operis/ui";
+import { Button, getButtonStyling } from "@operoz/propel/button";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { Row } from "@operoz/ui";
 // components
 // hooks
 import { useProject } from "@/hooks/store/use-project";

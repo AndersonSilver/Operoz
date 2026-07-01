@@ -1,4 +1,4 @@
-import type { TModuleStatus } from "../module/modules";
+import type { TModuleStatus, TModuleGanttBarColorMode } from "../module/modules";
 
 /** Módulo agregado no board (resposta de GET …/boards/{slug}/modules/). */
 export interface IBoardModule {
@@ -11,4 +11,6 @@ export interface IBoardModule {
   status: TModuleStatus | null;
   sort_order: number;
   archived_at: string | null;
+  gantt_bar_color_mode?: TModuleGanttBarColorMode;
+  gantt_bar_custom_color?: string;
 }

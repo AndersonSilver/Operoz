@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // hooks
-import { CycleIcon } from "@operis/propel/icons";
+import { CycleIcon } from "@operoz/propel/icons";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // components
 import { IssueActivityBlockComponent } from "./";

@@ -1,11 +1,11 @@
 import type { SetStateAction } from "react";
 import { observer } from "mobx-react";
 import { GripVertical } from "lucide-react";
-import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import { EditIcon, StateGroupIcon } from "@operis/propel/icons";
-import type { IState, TStateOperationsCallbacks } from "@operis/types";
+import { EditIcon, StateGroupIcon } from "@operoz/propel/icons";
+import type { IState, TStateOperationsCallbacks } from "@operoz/types";
 // local imports
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { getLocalizedStateName } from "./state-display.utils";

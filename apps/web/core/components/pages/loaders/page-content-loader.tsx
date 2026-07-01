@@ -1,6 +1,6 @@
 // plane imports
-import { Loader } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { Loader } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   className?: string;

@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IBoardMember,
   IBoardPermissionCatalog,
@@ -6,7 +6,7 @@ import type {
   TBoardMemberAssignData,
   TBoardRoleFormData,
   TBoardRolePermissionsMap,
-} from "@operis/types";
+} from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardAccessService extends APIService {
@@ -30,11 +30,7 @@ export class BoardAccessService extends APIService {
       });
   }
 
-  async createBoardRole(
-    workspaceSlug: string,
-    boardSlug: string,
-    data: TBoardRoleFormData
-  ): Promise<IBoardRole> {
+  async createBoardRole(workspaceSlug: string, boardSlug: string, data: TBoardRoleFormData): Promise<IBoardRole> {
     return this.post(`/api/workspaces/${workspaceSlug}/boards/${boardSlug}/roles/`, data)
       .then((response) => response?.data)
       .catch((error) => {

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { Menu } from "@headlessui/react";
-import type { IWorkspace } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { IWorkspace } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { WorkspaceLogo } from "../logo";
 
 type Props = {

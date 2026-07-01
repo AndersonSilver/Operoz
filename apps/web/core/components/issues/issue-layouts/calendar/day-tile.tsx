@@ -3,12 +3,12 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 import { observer } from "mobx-react";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate } from "@operoz/types";
 // types
 // ui
 // components
-import { cn, getDate, renderFormattedPayloadDate } from "@operis/utils";
+import { cn, getDate, renderFormattedPayloadDate } from "@operoz/utils";
 import { highlightIssueOnDrop } from "@/components/issues/issue-layouts/utils";
 // helpers
 import { MONTHS_LIST } from "@/constants/calendar";

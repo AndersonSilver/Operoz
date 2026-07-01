@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-import { CYCLE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TCycleGroups } from "@operis/types";
+import { CYCLE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TCycleGroups } from "@operoz/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // types

@@ -1,11 +1,11 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { EditorRefApi } from "@operis/editor";
-import { EFileAssetType } from "@operis/types";
-import type { TNameDescriptionLoader } from "@operis/types";
+import type { EditorRefApi } from "@operoz/editor";
+import { EFileAssetType } from "@operoz/types";
+import type { TNameDescriptionLoader } from "@operoz/types";
 // components
-import { getTextContent } from "@operis/utils";
+import { getTextContent } from "@operoz/utils";
 // components
 import { DescriptionVersionsRoot } from "@/components/core/description-versions";
 import { DescriptionInput } from "@/components/editor/rich-text/description-input";

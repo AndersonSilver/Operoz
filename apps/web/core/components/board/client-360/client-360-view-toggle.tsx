@@ -2,15 +2,15 @@ import type { LucideIcon } from "lucide-react";
 
 import { Check, Grid3x3, LayoutGrid, List, Table2 } from "lucide-react";
 
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 
-import { IconButton } from "@operis/propel/icon-button";
+import { IconButton } from "@operoz/propel/icon-button";
 
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 
-import { CustomMenu } from "@operis/ui";
+import { CustomMenu } from "@operoz/ui";
 
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 export type Client360ViewMode = "table" | "grid" | "list" | "matrix";
 

@@ -45,7 +45,7 @@ O coração da OQL é o **mapa de campos** — fonte única que liga um identifi
 OQL a: lookup ORM, tipo, operadores válidos e função de coerção de valor.
 
 ```python
-# operis/oql/fields.py
+# operoz/oql/fields.py
 @dataclass(frozen=True)
 class OqlField:
     key: str                      # "status"

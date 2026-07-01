@@ -1,6 +1,6 @@
 import type { Tool } from "@modelcontextprotocol/sdk/types.js";
-import type { OperisClient } from "../client.js";
-import { ConsultoriaApi, getWsSlug } from "./operis-api.js";
+import type { OperozClient } from "../client.js";
+import { ConsultoriaApi, getWsSlug } from "./operoz-api.js";
 import { discoverConsultoriaOperations } from "./discover.js";
 import { archiveProject, createProject, getProject, listProjects, updateProject } from "./handlers/projects.js";
 import { createModule, deleteModule, listModules, updateModule } from "./handlers/modules.js";
@@ -14,7 +14,7 @@ type Args = Record<string, unknown>;
 export const CONSULTORIA_TOOLS: Tool[] = [
   {
     name: "consultoria_get_capabilities",
-    description: "Mapa de domínios e operações do MCP de Consultoria Operis.",
+    description: "Mapa de domínios e operações do MCP de Consultoria Operoz.",
     inputSchema: { type: "object", properties: {} },
   },
   {
@@ -39,14 +39,14 @@ export const CONSULTORIA_TOOLS: Tool[] = [
     name: "consultoria_execute",
     description:
       "Executa uma operação de consultoria pelo name (obtido de consultoria_discover). " +
-      "Parâmetros no top-level ou em body{}. Requer workspace_slug (ou env OPERIS_WORKSPACE_SLUG) e project_id para a maioria das operações.",
+      "Parâmetros no top-level ou em body{}. Requer workspace_slug (ou env OPEROZ_WORKSPACE_SLUG) e project_id para a maioria das operações.",
     inputSchema: {
       type: "object",
       properties: {
         operation: { type: "string", description: "Nome da operação (ex: create_module, approve_prd)" },
         workspace_slug: {
           type: "string",
-          description: "Slug do workspace (opcional se OPERIS_WORKSPACE_SLUG está definido)",
+          description: "Slug do workspace (opcional se OPEROZ_WORKSPACE_SLUG está definido)",
         },
         body: { type: "object", description: "Parâmetros da operação", additionalProperties: true },
       },
@@ -92,14 +92,14 @@ function errorResult(error: unknown) {
   return jsonResult({ error: error instanceof Error ? error.message : String(error) });
 }
 
-export async function handleConsultoriaCall(client: OperisClient | null, name: string, args: Args) {
+export async function handleConsultoriaCall(client: OperozClient | null, name: string, args: Args) {
   try {
     if (name === "consultoria_get_capabilities") {
       return jsonResult({
         total_operations: ALL_CONSULTORIA_OPERATIONS.length,
         domains: groupByDomain(),
         workflow: ["consultoria_discover", "consultoria_execute"],
-        note: "Requer OPERIS_SESSION_COOKIE + OPERIS_WORKSPACE_SLUG configurados.",
+        note: "Requer OPEROZ_SESSION_COOKIE + OPEROZ_WORKSPACE_SLUG configurados.",
       });
     }
 
@@ -131,7 +131,7 @@ export async function handleConsultoriaCall(client: OperisClient | null, name: s
 
       if (!client) {
         return jsonResult({
-          error: "Cliente Operis não disponível. Configure OPERIS_SESSION_COOKIE ou OPERIS_API_KEY.",
+          error: "Cliente Operoz não disponível. Configure OPEROZ_SESSION_COOKIE ou OPEROZ_API_KEY.",
         });
       }
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 // plane imports
-// import { useTranslation } from "@operis/i18n";
-import type { TIssueEntityData, TIssueSearchResponse, TActivityEntityData } from "@operis/types";
-// import { generateWorkItemLink } from "@operis/utils";
+// import { useTranslation } from "@operoz/i18n";
+import type { TIssueEntityData, TIssueSearchResponse, TActivityEntityData } from "@operoz/types";
+// import { generateWorkItemLink } from "@operoz/utils";
 // components
 // import { CommandPaletteEntityList } from "@/components/command-palette";
 // import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-root";

@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { TIssueServiceType } from "@operis/types";
-import { Collapsible } from "@operis/ui";
+import type { TIssueServiceType } from "@operoz/types";
+import { Collapsible } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // local imports

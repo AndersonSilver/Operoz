@@ -1,1 +1,1 @@
-export { cn } from "@operis/utils";
+export { cn } from "@operoz/utils";

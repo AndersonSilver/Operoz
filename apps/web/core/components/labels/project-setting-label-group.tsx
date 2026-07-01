@@ -3,8 +3,8 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { Disclosure, Transition } from "@headlessui/react";
 // plane imports
-import { EditIcon, TrashIcon, ChevronDownIcon } from "@operis/propel/icons";
-import type { IIssueLabel } from "@operis/types";
+import { EditIcon, TrashIcon, ChevronDownIcon } from "@operoz/propel/icons";
+import type { IIssueLabel } from "@operoz/types";
 // components
 import type { TLabelOperationsCallbacks } from "./create-update-label-inline";
 import { CreateUpdateLabelInline } from "./create-update-label-inline";

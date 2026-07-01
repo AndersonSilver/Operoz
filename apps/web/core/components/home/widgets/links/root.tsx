@@ -2,9 +2,9 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
-import type { THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
+import type { THomeWidgetProps } from "@operoz/types";
 import { useHome } from "@/hooks/store/use-home";
 import { LinkCreateUpdateModal } from "./create-update-link-modal";
 import { ProjectLinkList } from "./links";

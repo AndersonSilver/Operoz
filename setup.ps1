@@ -1,4 +1,4 @@
-# Operis - setup local no Windows (PowerShell)
+# Operoz - setup local no Windows (PowerShell)
 # Same idea as setup.sh: copy .env files, Django SECRET_KEY, pnpm install.
 
 $ErrorActionPreference = "Stop"
@@ -29,7 +29,7 @@ function New-PlaneSecretKey {
 }
 
 Write-Host ""
-Write-Host "Operis - preparando ambiente de desenvolvimento..." -ForegroundColor Cyan
+Write-Host "Operoz - preparando ambiente de desenvolvimento..." -ForegroundColor Cyan
 Write-Host ""
 
 $pairs = @(

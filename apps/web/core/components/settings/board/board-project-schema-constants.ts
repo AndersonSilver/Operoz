@@ -1,4 +1,4 @@
-import type { TProjectStandardFieldKey } from "@operis/types";
+import type { TProjectStandardFieldKey } from "@operoz/types";
 
 /** Campos de sistema do Projeto — criados automaticamente; não se apagam, só ocultam. */
 export const PROJECT_STANDARD_FIELD_KEYS: TProjectStandardFieldKey[] = [

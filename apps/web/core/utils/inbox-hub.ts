@@ -1,4 +1,4 @@
-import { EHubMode } from "@operis/types";
+import { EHubMode } from "@operoz/types";
 
 export function getInboxHubBasePath(workspaceSlug: string, projectId: string, hubMode: EHubMode): string {
   const segment = hubMode === EHubMode.SUPPORT ? "sustentacao" : "intake";

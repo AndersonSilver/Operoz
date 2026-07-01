@@ -1,6 +1,6 @@
 // plane imports
-import type { ADDITIONAL_EXTENSIONS } from "@operis/utils";
-import { CORE_EXTENSIONS } from "@operis/utils";
+import type { ADDITIONAL_EXTENSIONS } from "@operoz/utils";
+import { CORE_EXTENSIONS } from "@operoz/utils";
 // plane editor imports
 import type { ExtensionFileSetStorageKey } from "@/plane-editor/types/storage";
 

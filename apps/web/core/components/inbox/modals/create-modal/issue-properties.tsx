@@ -1,10 +1,10 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { ETabIndices } from "@operis/constants";
-import { ParentPropertyIcon } from "@operis/propel/icons";
-import type { ISearchIssueResponse, TIssue } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { renderFormattedPayloadDate, getDate, getTabIndex } from "@operis/utils";
+import { ETabIndices } from "@operoz/constants";
+import { ParentPropertyIcon } from "@operoz/propel/icons";
+import type { ISearchIssueResponse, TIssue } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { renderFormattedPayloadDate, getDate, getTabIndex } from "@operoz/utils";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";

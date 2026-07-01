@@ -1,7 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
+import { AlertsSettingsSection } from "@/components/notifications/alerts-settings-section";
 import { AlertLogList } from "@/components/notifications/alert-log/alert-log-list";
 import { useUserPermissions } from "@/hooks/store/user";
 import type { Route } from "./+types/page";
@@ -17,10 +18,9 @@ function AlertLogsSettingsPage({ params }: Route.ComponentProps) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <h2 className="text-14 font-medium text-primary">{t("alert.logs.title")}</h2>
+    <AlertsSettingsSection title={t("alert.logs.title")} description={t("alert.logs.lead")}>
       <AlertLogList workspaceSlug={workspaceSlug} />
-    </div>
+    </AlertsSettingsSection>
   );
 }
 

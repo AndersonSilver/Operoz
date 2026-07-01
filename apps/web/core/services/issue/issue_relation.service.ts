@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TIssueRelation, TIssue } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TIssueRelation, TIssue } from "@operoz/types";
 // helpers
 // Plane-web
 import type { TIssueRelationTypes } from "@/plane-web/types";

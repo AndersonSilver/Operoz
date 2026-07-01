@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 // plane imports
-import { CustomSearchSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { CustomSearchSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import useTimezone from "@/hooks/use-timezone";
 

@@ -1,4 +1,4 @@
-import type { EInboxIssueSource, TSupportTicketMetadata } from "@operis/types";
+import type { EInboxIssueSource, TSupportTicketMetadata } from "@operoz/types";
 
 export type TInboxSourcePill = {
   source: EInboxIssueSource;

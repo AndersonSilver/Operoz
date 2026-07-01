@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 // plane types
-import { PriorityIcon, StateGroupIcon, WorkItemsIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TActivityEntityData, TIssueEntityData } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { PriorityIcon, StateGroupIcon, WorkItemsIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TActivityEntityData, TIssueEntityData } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // plane ui
-import { calculateTimeAgo, generateWorkItemLink } from "@operis/utils";
+import { calculateTimeAgo, generateWorkItemLink } from "@operoz/utils";
 // components
 import { ListItem } from "@/components/core/list";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 // assets
 import AllFiltersImage from "@/app/assets/empty-state/cycle/all-filters.svg?url";
 import NameFilterImage from "@/app/assets/empty-state/cycle/name-filter.svg?url";

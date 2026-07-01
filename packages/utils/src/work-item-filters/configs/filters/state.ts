@@ -1,7 +1,7 @@
 // plane imports
-import { STATE_GROUPS } from "@operis/constants";
-import type { IState, TFilterProperty, TStateGroups, TSupportedOperators } from "@operis/types";
-import { COLLECTION_OPERATOR, EQUALITY_OPERATOR } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { IState, TFilterProperty, TStateGroups, TSupportedOperators } from "@operoz/types";
+import { COLLECTION_OPERATOR, EQUALITY_OPERATOR } from "@operoz/types";
 // local imports
 import type { IFilterIconConfig, TCreateFilterConfig, TCreateFilterConfigParams } from "../../../rich-filters";
 import { createFilterConfig, getMultiSelectConfig, createOperatorConfigEntry } from "../../../rich-filters";

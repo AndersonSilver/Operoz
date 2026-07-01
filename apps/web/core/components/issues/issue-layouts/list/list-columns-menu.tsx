@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { Columns3 } from "lucide-react";
 import { useParams } from "next/navigation";
-import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
-import type { IIssueDisplayProperties } from "@operis/types";
+import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
+import type { IIssueDisplayProperties } from "@operoz/types";
 import { FilterDisplayProperties } from "@/components/issues/issue-layouts/filters/header/display-filters/display-properties";
 import { resolveBoardListDisplayProperties } from "@/components/issues/issue-layouts/list-display-properties";
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters/header/helpers/dropdown";

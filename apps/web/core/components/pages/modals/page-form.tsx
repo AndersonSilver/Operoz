@@ -3,15 +3,15 @@ import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 
 // plane imports
-import { ETabIndices, EPageAccess } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { GlobeIcon, LockIcon, PageIcon } from "@operis/propel/icons";
-import type { ISvgIcons } from "@operis/propel/icons";
-import type { TPage } from "@operis/types";
-import { Input } from "@operis/ui";
-import { getTabIndex } from "@operis/utils";
+import { ETabIndices, EPageAccess } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { GlobeIcon, LockIcon, PageIcon } from "@operoz/propel/icons";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import type { TPage } from "@operoz/types";
+import { Input } from "@operoz/ui";
+import { getTabIndex } from "@operoz/utils";
 // components
 import { AccessField } from "@/components/common/access-field";
 // hooks

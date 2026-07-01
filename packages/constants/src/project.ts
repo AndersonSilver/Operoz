@@ -1,5 +1,5 @@
 // plane imports
-import type { TProjectAppliedDisplayFilterKeys, TProjectOrderByOptions } from "@operis/types";
+import type { TProjectAppliedDisplayFilterKeys, TProjectOrderByOptions } from "@operoz/types";
 // local imports
 
 export type TNetworkChoiceIconKey = "Lock" | "Globe2";

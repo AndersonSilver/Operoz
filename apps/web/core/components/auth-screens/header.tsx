@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
-import { AUTH_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { PlaneLockup } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { AUTH_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { PlaneLockup } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 import { PageHead } from "@/components/core/page-title";
 import { EAuthModes } from "@/helpers/authentication.helper";
 import { useInstance } from "@/hooks/store/use-instance";

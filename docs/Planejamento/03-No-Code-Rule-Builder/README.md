@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis já tem um **motor de automação potente** (`apps/api/operis/automation/`:
+O Operoz já tem um **motor de automação potente** (`apps/api/operoz/automation/`:
 compiler → dispatcher → executor, grafo JSON, packs, playbooks, DLQ, policy,
 governance). O que falta é a **camada no-code acessível**: hoje a configuração é
 demasiado técnica. Esta feature entrega o builder visual `WHEN → IF → THEN` ao
@@ -18,13 +18,13 @@ actions, branches, smart values, scheduled rules, templates, governança.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Reusar `BoardAutomationRule` (graph JSON) + compiler/dispatcher/executor | Motor novo — duplicação massiva |
-| 2 | Reusar o canvas React Flow da automação, com paleta no-code amigável | Editor novo |
-| 3 | Catálogo de triggers/conditions/actions declarativo (registry) | Nós hard-coded |
-| 4 | Smart values `{{issue.summary}}` via template engine, com escaping | Interpolação ingénua |
-| 5 | Dry-run obrigatório antes de ativar (reusar `dry_run_event.py`) | Ativar sem teste |
+| #   | Decisão                                                                  | Alternativa rejeitada           |
+| --- | ------------------------------------------------------------------------ | ------------------------------- |
+| 1   | Reusar `BoardAutomationRule` (graph JSON) + compiler/dispatcher/executor | Motor novo — duplicação massiva |
+| 2   | Reusar o canvas React Flow da automação, com paleta no-code amigável     | Editor novo                     |
+| 3   | Catálogo de triggers/conditions/actions declarativo (registry)           | Nós hard-coded                  |
+| 4   | Smart values `{{issue.summary}}` via template engine, com escaping       | Interpolação ingénua            |
+| 5   | Dry-run obrigatório antes de ativar (reusar `dry_run_event.py`)          | Ativar sem teste                |
 
 ## Escopo
 

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspace } from "@operis/types";
-import { ToggleSwitch } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspace } from "@operoz/types";
+import { ToggleSwitch } from "@operoz/ui";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 
 type NotificationFlagKey =

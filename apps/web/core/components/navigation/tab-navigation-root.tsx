@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams, useLocation, Link, useNavigate } from "react-router";
-import { EUserPermissionsLevel, EUserPermissions } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TabNavigationList, TabNavigationItem } from "@operis/propel/tab-navigation";
-import type { EUserProjectRoles } from "@operis/types";
+import { EUserPermissionsLevel, EUserPermissions } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TabNavigationList, TabNavigationItem } from "@operoz/propel/tab-navigation";
+import type { EUserProjectRoles } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";

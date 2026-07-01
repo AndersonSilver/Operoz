@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TIntakeForm, TIntakeFormWritePayload } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TIntakeForm, TIntakeFormWritePayload } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 function parseIntakeFormList(data: unknown): TIntakeForm[] {
@@ -42,11 +42,9 @@ export class IntakeFormService extends APIService {
   }
 
   async destroy(workspaceSlug: string, projectId: string, formId: string): Promise<void> {
-    await this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/intake-forms/${formId}/`).catch(
-      (err) => {
-        throw err?.response?.data;
-      }
-    );
+    await this.delete(`/api/workspaces/${workspaceSlug}/projects/${projectId}/intake-forms/${formId}/`).catch((err) => {
+      throw err?.response?.data;
+    });
   }
 }
 

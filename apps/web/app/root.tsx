@@ -4,9 +4,9 @@ import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
 import { ThemeProvider } from "next-themes";
 // plane imports
-import { SITE_DESCRIPTION, SITE_NAME } from "@operis/constants";
-import { DEFAULT_LOCALE } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { SITE_DESCRIPTION, SITE_NAME } from "@operoz/constants";
+import { DEFAULT_LOCALE } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 // types
 // assets
 import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";

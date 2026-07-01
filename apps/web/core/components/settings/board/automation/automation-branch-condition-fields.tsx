@@ -1,4 +1,4 @@
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { DECISION_CONDITION_OPTIONS } from "./automation-utils";
 import type { AutomationBoardContext } from "./use-automation-board-context";
 import { ConfigCheckboxList, ConfigField, ConfigSelect } from "./automation-config-primitives";
@@ -29,9 +29,7 @@ export function AutomationBranchConditionFields(props: Props) {
   };
 
   if (filterKey === "decision.else") {
-    return (
-      <p className="text-11 text-tertiary">{t("boards.settings.automation.decision.else_hint")}</p>
-    );
+    return <p className="text-11 text-tertiary">{t("boards.settings.automation.decision.else_hint")}</p>;
   }
 
   if (filterKey === "filter.state") {
@@ -100,10 +98,7 @@ export function AutomationBranchConditionFields(props: Props) {
   return null;
 }
 
-export function AutomationBranchConditionSelect(props: {
-  value: string;
-  onChange: (filterKey: string) => void;
-}) {
+export function AutomationBranchConditionSelect(props: { value: string; onChange: (filterKey: string) => void }) {
   const { value, onChange } = props;
   const { t } = useTranslation();
   return (

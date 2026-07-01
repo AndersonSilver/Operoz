@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // plane imports
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 // types
 import type { IIssue } from "@/types/issue";
 // local imports

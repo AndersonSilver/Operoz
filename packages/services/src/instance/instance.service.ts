@@ -1,5 +1,5 @@
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   IFormattedInstanceConfiguration,
   IInstance,
@@ -7,7 +7,7 @@ import type {
   IInstanceConfiguration,
   IInstanceInfo,
   TPage,
-} from "@operis/types";
+} from "@operoz/types";
 // api service
 import { APIService } from "../api.service";
 

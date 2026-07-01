@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { cn } from "@operoz/ui";
 import { useBoard } from "@/hooks/store/use-board";
 import { WorkspaceBoardsSettingsBoardCard } from "./workspace-boards-settings-board-card";
 import {
@@ -41,11 +41,7 @@ export const WorkspaceBoardsSettingsList = observer(function WorkspaceBoardsSett
 
   return (
     <div className="flex flex-col gap-4">
-      <WorkspaceBoardsSettingsToolbar
-        filters={filters}
-        resultCount={filteredBoards.length}
-        onChange={setFilters}
-      />
+      <WorkspaceBoardsSettingsToolbar filters={filters} resultCount={filteredBoards.length} onChange={setFilters} />
 
       {filteredBoards.length === 0 ? (
         <EmptyStateCompact
@@ -74,10 +70,10 @@ export const WorkspaceBoardsSettingsList = observer(function WorkspaceBoardsSett
               type="button"
               onClick={onCreate}
               className={cn(
-                "group flex min-h-[248px] h-full w-full flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-subtle",
+                "group flex h-full min-h-[248px] w-full flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-subtle",
                 "bg-transparent px-5 py-8 text-center transition-all duration-150",
                 "hover:border-accent-subtle hover:bg-accent-subtle/10",
-                "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary focus-visible:ring-offset-2 focus-visible:ring-offset-surface-1"
+                "focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
               )}
             >
               <span className="grid size-11 place-items-center rounded-xl border border-subtle bg-layer-1 text-accent-primary transition-colors group-hover:border-accent-subtle group-hover:bg-accent-subtle/30">

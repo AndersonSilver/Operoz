@@ -1,8 +1,8 @@
 import { clone } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // plane imports
-import { SitesStateService } from "@operis/services";
-import type { IState } from "@operis/types";
+import { SitesStateService } from "@operoz/services";
+import type { IState } from "@operoz/types";
 // helpers
 import { sortStates } from "@/helpers/state.helper";
 // store

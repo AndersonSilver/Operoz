@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard } from "@operis/types";
-import { AlertModalCore } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard } from "@operoz/types";
+import { AlertModalCore } from "@operoz/ui";
 import { useBoard } from "@/hooks/store/use-board";
 
 type Props = {

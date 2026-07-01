@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { ArrowRight } from "lucide-react";
 // helpers
-import type { IBlockUpdateData, IGanttBlock } from "@operis/types";
-import { cn } from "@operis/utils";
+import type { IBlockUpdateData, IGanttBlock } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
@@ -93,29 +93,29 @@ export const BlockRow = observer(function BlockRow(props: Props) {
           "border border-r-0 border-strong-1": isBlockFocused,
         })}
       >
-        {isBlockVisibleOnChart
-          ? isHidden && (
-              <button
-                type="button"
-                className="sticky z-[5] grid h-8 w-8 translate-y-1.5 cursor-pointer place-items-center rounded-sm border border-strong bg-layer-1 text-secondary hover:text-primary"
-                style={{
-                  left: `${sidebarWidth + 4}px`,
-                }}
-                onClick={() => handleScrollToBlock(block)}
-              >
-                <ArrowRight
-                  className={cn("h-3.5 w-3.5", {
-                    "rotate-180": isBlockHiddenOnLeft,
-                  })}
-                />
-              </button>
-            )
-          : (
-            <>
-              <UnscheduledBlockRow />
-              {enableAddBlock && <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />}
-            </>
-          )}
+        {isBlockVisibleOnChart ? (
+          isHidden && (
+            <button
+              type="button"
+              className="sticky z-[5] grid h-8 w-8 translate-y-1.5 cursor-pointer place-items-center rounded-sm border border-strong bg-layer-1 text-secondary hover:text-primary"
+              style={{
+                left: `${sidebarWidth + 4}px`,
+              }}
+              onClick={() => handleScrollToBlock(block)}
+            >
+              <ArrowRight
+                className={cn("h-3.5 w-3.5", {
+                  "rotate-180": isBlockHiddenOnLeft,
+                })}
+              />
+            </button>
+          )
+        ) : (
+          <>
+            <UnscheduledBlockRow />
+            {enableAddBlock && <ChartAddBlock block={block} blockUpdateHandler={blockUpdateHandler} />}
+          </>
+        )}
       </div>
     </div>
   );

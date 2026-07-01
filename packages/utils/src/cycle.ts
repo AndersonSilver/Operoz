@@ -1,7 +1,7 @@
 import { startOfToday, format } from "date-fns";
 import { isEmpty, orderBy, sortBy, uniqBy } from "lodash-es";
 // plane imports
-import type { ICycle, TCycleFilters, TProgressSnapshot } from "@operis/types";
+import type { ICycle, TCycleFilters, TProgressSnapshot } from "@operoz/types";
 // local imports
 import { findTotalDaysInRange, generateDateArray, getDate } from "./datetime";
 import { satisfiesDateFilter } from "./filter";

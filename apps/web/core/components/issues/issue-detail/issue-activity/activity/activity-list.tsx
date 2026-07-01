@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // helpers
-import { getValidKeysFromObject } from "@operis/utils";
+import { getValidKeysFromObject } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // plane web components

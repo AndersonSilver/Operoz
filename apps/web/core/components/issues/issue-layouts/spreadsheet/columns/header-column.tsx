@@ -1,12 +1,12 @@
 //ui
 import { ArrowDownWideNarrow, ArrowUpNarrowWide, CheckIcon, ChevronDownIcon, Eraser, MoveRight } from "lucide-react";
 // constants
-import { SPREADSHEET_PROPERTY_DETAILS } from "@operis/constants";
+import { SPREADSHEET_PROPERTY_DETAILS } from "@operoz/constants";
 // i18n
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // types
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, TIssueOrderByOptions } from "@operis/types";
-import { CustomMenu, Row } from "@operis/ui";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, TIssueOrderByOptions } from "@operoz/types";
+import { CustomMenu, Row } from "@operoz/ui";
 import useLocalStorage from "@/hooks/use-local-storage";
 import { SpreadSheetPropertyIcon } from "../../utils";
 

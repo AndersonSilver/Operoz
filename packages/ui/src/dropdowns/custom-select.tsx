@@ -3,8 +3,8 @@ import { Combobox } from "@headlessui/react";
 import React, { createContext, useCallback, useContext, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
-import { useOutsideClickDetector } from "@operis/hooks";
-import { CheckIcon, ChevronDownIcon } from "@operis/propel/icons";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
 // plane helpers
 // hooks
 import { useDropdownKeyDown } from "../hooks/use-dropdown-key-down";
@@ -43,6 +43,15 @@ function CustomSelect(props: ICustomSelectProps) {
 
   const { styles, attributes } = usePopper(referenceElement, popperElement, {
     placement: placement ?? "bottom-start",
+    strategy: "fixed",
+    modifiers: [
+      { name: "offset", options: { offset: [0, 4] } },
+      { name: "preventOverflow", options: { padding: 12 } },
+      {
+        name: "flip",
+        options: { fallbackPlacements: ["top-start", "bottom-start", "top-end", "bottom-end"] },
+      },
+    ],
   });
 
   const openDropdown = useCallback(() => {
@@ -116,7 +125,7 @@ function CustomSelect(props: ICustomSelectProps) {
             <Combobox.Options data-prevent-outside-click>
               <div
                 className={cn(
-                  "z-30 my-1 min-w-48 overflow-y-scroll rounded-md border-[0.5px] border-subtle-1 bg-surface-1 px-2 py-2.5 text-11 whitespace-nowrap focus:outline-none",
+                  "z-[100] my-1 min-w-48 overflow-y-scroll rounded-md border-[0.5px] border-subtle-1 bg-surface-1 px-2 py-2.5 text-11 whitespace-nowrap focus:outline-none",
                   optionsClassName
                 )}
                 ref={setPopperElement}

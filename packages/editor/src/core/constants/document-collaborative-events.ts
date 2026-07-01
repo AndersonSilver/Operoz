@@ -1,5 +1,5 @@
-import type { EPageAccess } from "@operis/constants";
-import type { TPage } from "@operis/types";
+import type { EPageAccess } from "@operoz/constants";
+import type { TPage } from "@operoz/types";
 import type { CreatePayload, BaseActionPayload } from "@/types";
 
 // Define all payload types for each event.

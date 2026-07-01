@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { PanelLeft } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { IntakeIcon } from "@operis/propel/icons";
-import { EInboxIssueCurrentTab, EHubMode } from "@operis/types";
-import type { THubMode } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { IntakeIcon } from "@operoz/propel/icons";
+import { EInboxIssueCurrentTab, EHubMode } from "@operoz/types";
+import type { THubMode } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   BOARD_HUB_INTAKE_DETAIL,
   BOARD_HUB_INTAKE_SIDEBAR,

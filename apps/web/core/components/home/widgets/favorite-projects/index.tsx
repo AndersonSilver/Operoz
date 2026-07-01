@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { IFavorite, THomeWidgetProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import type { IFavorite, THomeWidgetProps } from "@operoz/types";
 import { useFavoriteItemDetails } from "@/hooks/use-favorite-item-details";
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { WidgetSection } from "../shared/widget-section";
@@ -40,11 +40,7 @@ export const FavoriteProjectsWidget = observer(function FavoriteProjectsWidget(p
 
   const favorites = Object.values(groupedFavorites)
     .filter(
-      (fav) =>
-        !fav.is_folder &&
-        !fav.parent &&
-        fav.entity_identifier &&
-        HOME_FAVORITE_ENTITY_TYPES.has(fav.entity_type)
+      (fav) => !fav.is_folder && !fav.parent && fav.entity_identifier && HOME_FAVORITE_ENTITY_TYPES.has(fav.entity_type)
     )
     .slice(0, 6);
 

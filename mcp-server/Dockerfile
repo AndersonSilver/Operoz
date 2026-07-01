@@ -1,4 +1,4 @@
-# Operis MCP — HTTP (Streamable HTTP) para Cursor em equipa
+# Operoz MCP — HTTP (Streamable HTTP) para Cursor em equipa
 FROM node:22-alpine AS builder
 
 WORKDIR /app

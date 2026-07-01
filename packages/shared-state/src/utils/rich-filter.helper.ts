@@ -1,7 +1,7 @@
 // plane imports
-import type { TBuildFilterExpressionParams, TExternalFilter, TFilterProperty, TFilterValue } from "@operis/types";
-import { LOGICAL_OPERATOR } from "@operis/types";
-import { getOperatorForPayload } from "@operis/utils";
+import type { TBuildFilterExpressionParams, TExternalFilter, TFilterProperty, TFilterValue } from "@operoz/types";
+import { LOGICAL_OPERATOR } from "@operoz/types";
+import { getOperatorForPayload } from "@operoz/utils";
 // local imports
 import { FilterInstance } from "../store/rich-filters/filter";
 

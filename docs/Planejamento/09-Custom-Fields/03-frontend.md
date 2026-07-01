@@ -9,7 +9,7 @@ core/components/custom-fields/
 ├── field-definition-list.tsx     # gerir campos do workspace
 ├── field-definition-modal.tsx    # criar/editar campo (form do schema do tipo)
 ├── field-configuration-editor.tsx# required/hidden/readonly/default por contexto
-├── widgets/                       # render por tipo (reusa @operis/ui)
+├── widgets/                       # render por tipo (reusa @operoz/ui)
 │   ├── text-field.tsx
 │   ├── number-field.tsx
 │   ├── select-field.tsx
@@ -27,7 +27,7 @@ core/components/custom-fields/
 - **`issue-custom-fields`** lê a field configuration do contexto (tipo de issue)
   e rende­riza só os campos visíveis, marcando obrigatórios e desabilitando
   readonly. Um único componente despacha por `field_type` para o widget certo.
-- Widgets reutilizam primitivos de `@operis/ui` (não recriar inputs).
+- Widgets reutilizam primitivos de `@operoz/ui` (não recriar inputs).
 
 ## Store
 
@@ -43,11 +43,13 @@ core/store/custom-fields/custom-field.store.ts → CustomFieldStore
 `custom-field.service.ts`: `listFields`, `fieldTypes`, `saveField`,
 `configurations`, `setValue`, `components`, `resolutions`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TCustomField = {
-  id: string; key: string; field_type: string;
+  id: string;
+  key: string;
+  field_type: string;
   settings: Record<string, unknown>;
 };
 export type TCustomValue = { field: string; value: unknown };

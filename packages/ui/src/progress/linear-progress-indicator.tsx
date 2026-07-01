@@ -1,5 +1,5 @@
 import React from "react";
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "../utils";
 
 type Props = {

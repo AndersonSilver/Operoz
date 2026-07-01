@@ -1,7 +1,7 @@
-import { useTranslation } from "@operis/i18n";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { TClient360Health, TClient360HealthBreakdownItem } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { TClient360Health, TClient360HealthBreakdownItem } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import { Client360HealthBreakdownTooltipContent } from "@/components/board/client-360/client-360-health-breakdown";
 

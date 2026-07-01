@@ -1,5 +1,5 @@
-import type { ChartDataType, IGanttBlock } from "@operis/types";
-import { addDaysToDate, findTotalDaysInRange, getDate } from "@operis/utils";
+import type { ChartDataType, IGanttBlock } from "@operoz/types";
+import { addDaysToDate, findTotalDaysInRange, getDate } from "@operoz/utils";
 import { DEFAULT_BLOCK_WIDTH } from "../constants";
 
 /**

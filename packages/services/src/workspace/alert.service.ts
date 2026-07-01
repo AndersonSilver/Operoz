@@ -1,4 +1,4 @@
-import { API_BASE_URL } from "@operis/constants";
+import { API_BASE_URL } from "@operoz/constants";
 import type {
   TAlertLogFilters,
   TAlertLogPaginated,
@@ -8,7 +8,7 @@ import type {
   TGoogleCalendarOAuthStart,
   TUserAlertPreferences,
   TUserExternalAccount,
-} from "@operis/types";
+} from "@operoz/types";
 import { APIService } from "../api.service";
 
 export class AlertService extends APIService {

@@ -1,7 +1,7 @@
 import { Copy, ExternalLink, FileText, Pencil, Trash2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { cn, renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { cn, renderFormattedDate } from "@operoz/utils";
 import type { IntakeFormTableRow } from "./intake-form-table";
 import "@/components/settings/board/automation/automation-list.css";
 

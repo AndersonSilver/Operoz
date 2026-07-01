@@ -1,10 +1,10 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import type { EProjectFeatureKey } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Header } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { EProjectFeatureKey } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Header } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 import { useProject } from "@/hooks/store/use-project";
@@ -45,16 +45,11 @@ export const ProjectFeaturePageTitle = observer(function ProjectFeaturePageTitle
   }
 
   return (
-    <div
-      className={cn(
-        "flex min-w-0 items-center gap-3",
-        hasBoardWallpaper && BOARD_HUB_IMMERSIVE_TEXT_SHADOW
-      )}
-    >
+    <div className={cn("flex min-w-0 items-center gap-3", hasBoardWallpaper && BOARD_HUB_IMMERSIVE_TEXT_SHADOW)}>
       {resolvedIcon ? (
         <span
           className={cn(
-            "grid size-8 shrink-0 place-items-center rounded-md border border-subtle/60 bg-layer-1/70 shadow-sm backdrop-blur-sm",
+            "shadow-sm grid size-8 shrink-0 place-items-center rounded-md border border-subtle/60 bg-layer-1/70 backdrop-blur-sm",
             insideWorkSurface && "border-white/10"
           )}
           aria-hidden
@@ -66,15 +61,13 @@ export const ProjectFeaturePageTitle = observer(function ProjectFeaturePageTitle
         <div className="flex min-w-0 flex-col gap-0.5">
           <h1
             className={cn(
-              "truncate text-15 font-semibold tracking-tight text-primary",
+              "text-15 truncate font-semibold tracking-tight text-primary",
               isLoading && "h-5 w-32 animate-pulse rounded-sm bg-layer-3"
             )}
           >
             {!isLoading ? resolvedTitle : null}
           </h1>
-          {!isLoading && subtitle ? (
-            <p className="truncate text-13 text-tertiary">{subtitle}</p>
-          ) : null}
+          {!isLoading && subtitle ? <p className="truncate text-13 text-tertiary">{subtitle}</p> : null}
         </div>
         {trailing}
       </div>

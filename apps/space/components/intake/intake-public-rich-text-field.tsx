@@ -1,10 +1,10 @@
 import { useMemo, useRef, useState } from "react";
-import { MAX_FILE_SIZE } from "@operis/constants";
-import { RichTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, TExtensions, TFileHandler } from "@operis/editor";
-import type { TCustomComponentsMetaData } from "@operis/utils";
-import { useTranslation } from "@operis/i18n";
-import { isEditorEmpty } from "@operis/utils";
+import { MAX_FILE_SIZE } from "@operoz/constants";
+import { RichTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, TExtensions, TFileHandler } from "@operoz/editor";
+import type { TCustomComponentsMetaData } from "@operoz/utils";
+import { useTranslation } from "@operoz/i18n";
+import { isEditorEmpty } from "@operoz/utils";
 import { IntakePublicEditorToolbar } from "./intake-public-editor-toolbar";
 
 const EMPTY_EDITOR_METADATA: TCustomComponentsMetaData = {

@@ -1,6 +1,6 @@
 // helpers
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 
 type TUpgradeBadge = {
   className?: string;

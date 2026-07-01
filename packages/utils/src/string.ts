@@ -1,4 +1,4 @@
-import type { Content, JSONContent } from "@operis/types";
+import type { Content, JSONContent } from "@operoz/types";
 import striptags from "striptags";
 
 /**
@@ -154,8 +154,7 @@ export const checkEmailValidity = (email: string): boolean => {
 };
 
 export const isEmptyHtmlString = (htmlString: string, allowedHTMLTags: string[] = []) => {
-  const cleanText =
-    allowedHTMLTags.length === 0 ? striptags(htmlString) : striptags(htmlString, allowedHTMLTags);
+  const cleanText = allowedHTMLTags.length === 0 ? striptags(htmlString) : striptags(htmlString, allowedHTMLTags);
   return cleanText.trim() === "";
 };
 

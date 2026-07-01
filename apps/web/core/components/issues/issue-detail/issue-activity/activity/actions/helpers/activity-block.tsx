@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 import { Network } from "lucide-react";
 // plane imports
-import { Tooltip } from "@operis/propel/tooltip";
-import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operis/utils";
+import { Tooltip } from "@operoz/propel/tooltip";
+import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operoz/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 // plane web imports

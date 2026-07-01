@@ -1,10 +1,10 @@
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane imports
-import type { IGanttBlock } from "@operis/types";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { IGanttBlock } from "@operoz/types";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { MultipleSelectEntityAction } from "@/components/core/multiple-select";
 import { IssueGanttSidebarBlock } from "@/components/issues/issue-layouts/gantt/blocks";

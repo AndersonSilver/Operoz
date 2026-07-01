@@ -1,7 +1,7 @@
 import { AlertTriangle, Banknote, DollarSign, Gauge, TrendingDown, TrendingUp, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import type { TClient360FinopsPayload } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TClient360FinopsPayload } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import {
   Client360BentoGrid,
   Client360BentoMetric,

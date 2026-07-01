@@ -3,15 +3,15 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ArchiveRestoreIcon, FileOutput, LockKeyhole, LockKeyholeOpen } from "lucide-react";
 // constants
-import { EPageAccess } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EPageAccess } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // plane editor
-import { LinkIcon, CopyIcon, LockIcon, NewTabIcon, ArchiveIcon, TrashIcon, GlobeIcon } from "@operis/propel/icons";
+import { LinkIcon, CopyIcon, LockIcon, NewTabIcon, ArchiveIcon, TrashIcon, GlobeIcon } from "@operoz/propel/icons";
 // plane ui
-import type { TContextMenuItem } from "@operis/ui";
-import { ContextMenu, CustomMenu } from "@operis/ui";
+import type { TContextMenuItem } from "@operoz/ui";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { DeletePageModal } from "@/components/pages/modals/delete-page-modal";
 // hooks
 import { usePageOperations } from "@/hooks/use-page-operations";

@@ -2,7 +2,7 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { request } from "@playwright/test";
-import { checkStackHealth, seedOperisF0Data } from "./helpers/api";
+import { checkStackHealth, seedOperozF0Data } from "./helpers/api";
 import { cacheFilePath } from "./helpers/test-data";
 
 const rootDir = join(dirname(fileURLToPath(import.meta.url)), "..");
@@ -15,7 +15,7 @@ export default async function globalSetup() {
 
   const apiContext = await request.newContext({ baseURL: apiUrl });
   console.log("→ F0 E2E: seed API (user, workspace, board, projeto, issue)…");
-  const testData = await seedOperisF0Data(apiContext, apiUrl);
+  const testData = await seedOperozF0Data(apiContext, apiUrl);
 
   mkdirSync(dirname(cacheFilePath()), { recursive: true });
   writeFileSync(cacheFilePath(), JSON.stringify(testData, null, 2));

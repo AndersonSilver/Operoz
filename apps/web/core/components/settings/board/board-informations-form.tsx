@@ -14,13 +14,13 @@ import {
   UserCog,
   Users,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operis/propel/emoji-icon-picker";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import type { IBoard, IUserLite, TBoardFormData, TLogoProps } from "@operis/types";
-import { Input, TextArea, cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import type { IBoard, IUserLite, TBoardFormData, TLogoProps } from "@operoz/types";
+import { Input, TextArea, cn } from "@operoz/ui";
 import { WorkspaceMemberSelect } from "@/components/workspace/workspace-member-select";
 import { useBoard } from "@/hooks/store/use-board";
 import { useUserPermissions } from "@/hooks/store/user";
@@ -89,7 +89,7 @@ export function BoardInformationsForm(props: Props) {
   const isAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE, workspaceSlug);
 
   const toMemberId = (user: IUserLite | string | null | undefined) =>
-    user && typeof user === "object" ? user.id : user ?? null;
+    user && typeof user === "object" ? user.id : (user ?? null);
 
   const {
     control,
@@ -135,8 +135,7 @@ export function BoardInformationsForm(props: Props) {
     if (!canSave) return;
     try {
       const boardLead = data.board_lead === "none" || !data.board_lead ? null : data.board_lead;
-      const defaultAssignee =
-        data.default_assignee === "none" || !data.default_assignee ? null : data.default_assignee;
+      const defaultAssignee = data.default_assignee === "none" || !data.default_assignee ? null : data.default_assignee;
       const payload: Partial<TBoardFormData> = {
         name: data.name,
         description: data.description,
@@ -195,15 +194,12 @@ export function BoardInformationsForm(props: Props) {
                     isOpen={isEmojiPickerOpen}
                     handleToggle={setIsEmojiPickerOpen}
                     label={
-                      <span
-                        className="board-informations-logo-btn"
-                        aria-label={t("boards.settings.change_icon")}
-                      >
+                      <span className="board-informations-logo-btn" aria-label={t("boards.settings.change_icon")}>
                         <span className="board-informations-logo-frame board-informations-logo-frame-lg">
                           <Logo logo={watchedLogo ?? value} size={48} />
                           <span className="board-informations-logo-overlay">
                             <Pencil className="size-4 text-on-color" strokeWidth={1.75} />
-                            <span className="text-10 font-medium leading-tight text-on-color">
+                            <span className="text-10 leading-tight font-medium text-on-color">
                               {t("boards.settings.change_icon")}
                             </span>
                           </span>
@@ -280,9 +276,7 @@ export function BoardInformationsForm(props: Props) {
                       hasError={Boolean(errors.name)}
                       className={cn("h-9 w-full border-0 bg-transparent shadow-none", issueFormControlBaseClass)}
                     />
-                    {errors.name && (
-                      <p className="text-11 text-danger-primary">{String(errors.name.message ?? "")}</p>
-                    )}
+                    {errors.name && <p className="text-11 text-danger-primary">{String(errors.name.message ?? "")}</p>}
                   </div>
                 )}
               />
@@ -309,11 +303,7 @@ export function BoardInformationsForm(props: Props) {
             </div>
 
             <div className="board-informations-team-divider space-y-4">
-              <SectionHeading
-                icon={Users}
-                title={t("boards.settings.informations_section_team")}
-                tone="warning"
-              />
+              <SectionHeading icon={Users} title={t("boards.settings.informations_section_team")} tone="warning" />
 
               <div className="board-informations-team-fields">
                 <Controller
@@ -331,9 +321,7 @@ export function BoardInformationsForm(props: Props) {
                           workspaceSlug={workspaceSlug}
                           value={value}
                           onChange={onChange}
-                          selectedMemberFromApi={
-                            typeof board.board_lead === "object" ? board.board_lead : null
-                          }
+                          selectedMemberFromApi={typeof board.board_lead === "object" ? board.board_lead : null}
                           isDisabled={!isAdmin}
                         />
                       </div>
@@ -370,10 +358,7 @@ export function BoardInformationsForm(props: Props) {
           </div>
 
           <footer className="board-informations-panel-footer board-informations-form-footer">
-            <span
-              className="board-informations-status-pill"
-              data-state={canSave ? "dirty" : "saved"}
-            >
+            <span className="board-informations-status-pill" data-state={canSave ? "dirty" : "saved"}>
               {!canSave && <CheckCircle2 className="size-3.5" strokeWidth={1.75} />}
               {canSave ? t("boards.settings.unsaved_changes") : t("boards.settings.all_changes_saved")}
             </span>

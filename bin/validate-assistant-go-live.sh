@@ -18,7 +18,7 @@ echo "==> Go-live Assistente Operoz"
 echo "    Monorepo: $ROOT"
 
 echo "==> Subindo serviços mínimos..."
-"${COMPOSE[@]}" up -d api api-chat assistant-chat-worker operis-db operis-redis operis-mq >/dev/null
+"${COMPOSE[@]}" up -d api api-chat assistant-chat-worker operoz-db operoz-redis operoz-mq >/dev/null
 
 echo "==> Validação Django (container api)..."
 "${COMPOSE[@]}" exec -T api python manage.py validate_assistant_go_live "$@"

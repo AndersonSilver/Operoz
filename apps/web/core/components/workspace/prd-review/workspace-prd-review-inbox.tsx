@@ -4,12 +4,12 @@ import { useState } from "react";
 import useSWR from "swr";
 import Link from "next/link";
 import { FileText, RefreshCw } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Badge } from "@operis/propel/badge";
-import type { TBadgeVariant } from "@operis/propel/badge";
-import { Button } from "@operis/propel/button";
-import { IconButton } from "@operis/propel/icon-button";
-import { Tooltip } from "@operis/propel/tooltip";
+import { useTranslation } from "@operoz/i18n";
+import { Badge } from "@operoz/propel/badge";
+import type { TBadgeVariant } from "@operoz/propel/badge";
+import { Button } from "@operoz/propel/button";
+import { IconButton } from "@operoz/propel/icon-button";
+import { Tooltip } from "@operoz/propel/tooltip";
 import { WorkspacePrdReviewService } from "@/services/workspace-prd-review.service";
 
 type Props = {

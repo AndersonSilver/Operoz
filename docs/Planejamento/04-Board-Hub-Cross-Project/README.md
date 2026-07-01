@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis introduziu a entidade **`Board`** (squad) que agrega N projetos — um
+O Operoz introduziu a entidade **`Board`** (squad) que agrega N projetos — um
 diferencial sobre o Jira. A estrutura existe, mas as **vistas agregadas**
 (Kanban, Backlog, Cronograma, Calendário cross-project) estão incompletas. Esta
 feature completa o hub do board para paridade com o "Squad as a Service" do Jira.
@@ -17,13 +17,13 @@ projeto e rich filters no contexto do board, KPIs/meta.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Reusar layouts de issue existentes (kanban/list/gantt/calendar) parametrizados por board | Componentes novos por vista |
-| 2 | API agregada do board reusa querysets de issue com filtro `board` | Endpoints duplicados por projeto |
-| 3 | `GroupedOffsetPaginator` para Kanban (agrupar por estado) | Paginação simples (perde grupos) |
-| 4 | Filtros do board reusam rich-filters + OQL (feature 02) | Filtros próprios do board |
-| 5 | KPIs do board via endpoint `meta/` cacheado | Calcular no cliente |
+| #   | Decisão                                                                                  | Alternativa rejeitada            |
+| --- | ---------------------------------------------------------------------------------------- | -------------------------------- |
+| 1   | Reusar layouts de issue existentes (kanban/list/gantt/calendar) parametrizados por board | Componentes novos por vista      |
+| 2   | API agregada do board reusa querysets de issue com filtro `board`                        | Endpoints duplicados por projeto |
+| 3   | `GroupedOffsetPaginator` para Kanban (agrupar por estado)                                | Paginação simples (perde grupos) |
+| 4   | Filtros do board reusam rich-filters + OQL (feature 02)                                  | Filtros próprios do board        |
+| 5   | KPIs do board via endpoint `meta/` cacheado                                              | Calcular no cliente              |
 
 ## Escopo
 

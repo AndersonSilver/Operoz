@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EIssuesStoreType } from "@operis/types";
-import type { TIssue, TIssueGroupByOptions, TIssueOrderByOptions } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EIssuesStoreType } from "@operoz/types";
+import type { TIssue, TIssueGroupByOptions, TIssueOrderByOptions } from "@operoz/types";
 import type { GroupDropLocation } from "@/components/issues/issue-layouts/utils";
 import { handleGroupDragDrop } from "@/components/issues/issue-layouts/utils";
 import { ISSUE_FILTER_DEFAULT_DATA } from "@/store/issue/helpers/base-issues.store";
@@ -40,8 +40,7 @@ export const useGroupIssuesDragNDrop = (
     issues: { getIssueIds, addCycleToIssue, removeCycleFromIssue, changeModulesInIssue, moveIssueBetweenGroups },
   } = useIssues(storeType);
 
-  const effectiveGroupBy =
-    storeType === EIssuesStoreType.MODULE ? ("state" as TIssueGroupByOptions) : groupBy;
+  const effectiveGroupBy = storeType === EIssuesStoreType.MODULE ? ("state" as TIssueGroupByOptions) : groupBy;
 
   /**
    * update Issue on Drop, checks if modules or cycles are changed and then calls appropriate functions
@@ -106,12 +105,7 @@ export const useGroupIssuesDragNDrop = (
     )
       return;
 
-    if (
-      source.id &&
-      source.groupId &&
-      destination.groupId &&
-      source.groupId !== destination.groupId
-    ) {
+    if (source.id && source.groupId && destination.groupId && source.groupId !== destination.groupId) {
       moveIssueBetweenGroups(source.id, source.groupId, destination.groupId);
     }
 

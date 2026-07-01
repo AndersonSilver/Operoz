@@ -3,7 +3,7 @@
 
 import useFontFaceObserver from "use-font-face-observer";
 // plane imports
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 // local imports
 import { getEmojiSize, stringToEmoji } from "./helper";
 import { LUCIDE_ICONS_LIST } from "./lucide-icons";

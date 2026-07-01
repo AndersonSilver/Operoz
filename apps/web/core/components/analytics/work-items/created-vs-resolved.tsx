@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // plane package imports
-import { useTranslation } from "@operis/i18n";
-import { AreaChart } from "@operis/propel/charts/area-chart";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import type { IChartResponse, TChartData } from "@operis/types";
-import { renderFormattedDate } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { AreaChart } from "@operoz/propel/charts/area-chart";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import type { IChartResponse, TChartData } from "@operoz/types";
+import { renderFormattedDate } from "@operoz/utils";
 // hooks
 import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";

@@ -1,7 +1,7 @@
 import { FileText, Inbox, Plus } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 import "./intake-settings.css";
 
 type Variant = "disabled" | "empty";

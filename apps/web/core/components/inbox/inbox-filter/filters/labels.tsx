@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import type { IIssueLabel } from "@operis/types";
-import { Loader } from "@operis/ui";
+import type { IIssueLabel } from "@operoz/types";
+import { Loader } from "@operoz/ui";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks

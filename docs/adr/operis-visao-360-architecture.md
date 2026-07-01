@@ -17,7 +17,7 @@ O MVP Visão 360 expõe carteira de clientes via `GET /api/workspaces/{slug}/cli
 ### 2. Health score e semáforo
 
 - Score 0–100 é fonte; `health` (ok/warning/critical) derivado por board settings.
-- Transição documentada em [operis-visao-360-health-score-transition.md](./operis-visao-360-health-score-transition.md).
+- Transição documentada em [operoz-visao-360-health-score-transition.md](./operoz-visao-360-health-score-transition.md).
 
 ### 3. Agregação workspace vs board
 
@@ -64,6 +64,6 @@ WorkspaceClient360ViewSet.list
 
 ## Referências
 
-- `operis/utils/client_360.py`, `client_360_enterprise.py`
-- `operis/app/views/workspace/client_360*.py`
-- `docs/operis-visao-360-roadmap.md`
+- `operoz/utils/client_360.py`, `client_360_enterprise.py`
+- `operoz/app/views/workspace/client_360*.py`
+- `docs/operoz-visao-360-roadmap.md`

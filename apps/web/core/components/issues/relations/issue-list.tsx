@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import type { TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // Plane-web imports
 import type { TIssueRelationTypes } from "@/plane-web/types";
 // local imports

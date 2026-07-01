@@ -2,16 +2,16 @@ import type { MutableRefObject } from "react";
 import { useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 // plane helpers
-import { PROJECT_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
-import { useOutsideClickDetector } from "@operis/hooks";
-import type { ISvgIcons } from "@operis/propel/icons";
-import { CloseIcon } from "@operis/propel/icons";
+import { PROJECT_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 // types
-import type { IIssueLabel } from "@operis/types";
+import type { IIssueLabel } from "@operoz/types";
 // ui
-import { CustomMenu, DragHandle } from "@operis/ui";
+import { CustomMenu, DragHandle } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // components
 import { LabelName } from "./label-name";
 

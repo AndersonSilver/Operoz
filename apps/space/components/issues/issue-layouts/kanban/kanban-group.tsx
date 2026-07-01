@@ -9,8 +9,8 @@ import type {
   TIssueGroupByOptions,
   TPaginationData,
   TLoader,
-} from "@operis/types";
-import { cn } from "@operis/utils";
+} from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 // local imports

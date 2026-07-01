@@ -1,5 +1,5 @@
-import type { TChartColorScheme } from "@operis/types";
-import { ChartXAxisProperty } from "@operis/types";
+import type { TChartColorScheme } from "@operoz/types";
+import { ChartXAxisProperty } from "@operoz/types";
 
 export const LABEL_CLASSNAME = "uppercase text-tertiary/60 text-13 tracking-wide";
 export const AXIS_LABEL_CLASSNAME = "uppercase text-tertiary/60 text-13 tracking-wide";

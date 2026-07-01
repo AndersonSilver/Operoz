@@ -1,7 +1,7 @@
 // ui
-import { Checkbox } from "@operis/ui";
+import { Checkbox } from "@operoz/ui";
 // helpers
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 

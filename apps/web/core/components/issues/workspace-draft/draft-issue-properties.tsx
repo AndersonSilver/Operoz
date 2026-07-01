@@ -2,10 +2,10 @@ import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // icons
-import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operis/propel/icons";
+import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operoz/propel/icons";
 // types
-import type { TIssuePriorities, TWorkspaceDraftIssue } from "@operis/types";
-import { getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@operis/utils";
+import type { TIssuePriorities, TWorkspaceDraftIssue } from "@operoz/types";
+import { getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@operoz/utils";
 // components
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";

@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { TIssueServiceType, TWorkItemWidgets } from "@operis/types";
+import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 // Plane-web

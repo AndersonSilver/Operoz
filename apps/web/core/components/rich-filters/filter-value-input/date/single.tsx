@@ -1,8 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 // plane imports
-import type { TDateFilterFieldConfig, TFilterConditionNodeForDisplay, TFilterProperty } from "@operis/types";
-import { cn, renderFormattedPayloadDate } from "@operis/utils";
+import type { TDateFilterFieldConfig, TFilterConditionNodeForDisplay, TFilterProperty } from "@operoz/types";
+import { cn, renderFormattedPayloadDate } from "@operoz/utils";
 import { DateDropdown } from "@/components/dropdowns/date";
 import { COMMON_FILTER_ITEM_BORDER_CLASSNAME, EMPTY_FILTER_PLACEHOLDER_TEXT } from "../../shared";
 

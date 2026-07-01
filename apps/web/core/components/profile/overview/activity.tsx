@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 // ui
-import { useTranslation } from "@operis/i18n";
-import { Avatar } from "@operis/propel/avatar";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { Loader, Card } from "@operis/ui";
-import { calculateTimeAgo, getFileURL } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Avatar } from "@operoz/propel/avatar";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { Loader, Card } from "@operoz/ui";
+import { calculateTimeAgo, getFileURL } from "@operoz/utils";
 // components
 import { ActivityMessage, IssueLink } from "@/components/core/activity";
 // constants

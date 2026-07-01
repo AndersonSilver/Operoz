@@ -1,5 +1,5 @@
-import { useTranslation } from "@operis/i18n";
-import { PlusIcon } from "@operis/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { PlusIcon } from "@operoz/propel/icons";
 
 type TProps = {
   onClick: () => void;

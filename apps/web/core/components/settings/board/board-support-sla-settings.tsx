@@ -3,12 +3,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Clock, Gauge, Timer } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, TBoardSupportSlaPolicyRules, TSupportCriticality } from "@operis/types";
-import { Input, Loader } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, TBoardSupportSlaPolicyRules, TSupportCriticality } from "@operoz/types";
+import { Input, Loader } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { boardSupportSlaPolicyService } from "@/services/board/board-support-sla-policy.service";
 import { SupportSettingsHero } from "@/components/settings/board/support/support-settings-hero";
 

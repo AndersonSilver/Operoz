@@ -1,5 +1,5 @@
 {
-  "extends": "@operis/typescript-config/node-library.json",
+  "extends": "@operoz/typescript-config/node-library.json",
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,

@@ -3,7 +3,7 @@ import { createContext, useContext } from "react";
 import { observer } from "mobx-react";
 import { AppHeader, type AppHeaderProps } from "@/components/core/app-header";
 import { ContentWrapper } from "@/components/core/content-wrapper";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import {
   BOARD_HUB_GLASS_HEADER,
   BOARD_HUB_PROJECT_WORK_SURFACE,

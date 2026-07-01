@@ -6,11 +6,11 @@ import { usePopper } from "react-popper";
 import { LogOut } from "lucide-react";
 import { Popover, Transition } from "@headlessui/react";
 // plane imports
-import { API_BASE_URL } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { AuthService } from "@operis/services";
-import { Avatar } from "@operis/ui";
-import { getFileURL } from "@operis/utils";
+import { API_BASE_URL } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { AuthService } from "@operoz/services";
+import { Avatar } from "@operoz/ui";
+import { getFileURL } from "@operoz/utils";
 // helpers
 import { queryParamGenerator } from "@/helpers/query-param-generator";
 // hooks

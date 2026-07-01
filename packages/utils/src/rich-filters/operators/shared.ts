@@ -1,4 +1,4 @@
-import type { TAllAvailableOperatorsForDisplay, TSupportedOperators } from "@operis/types";
+import type { TAllAvailableOperatorsForDisplay, TSupportedOperators } from "@operoz/types";
 
 /**
  * Result type for operator conversion

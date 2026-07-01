@@ -2,9 +2,10 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 // ui
-import { MODULE_STATUS } from "@operis/constants";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
 // components
 import { useGanttSidebarWidth } from "@/components/gantt-chart/contexts/gantt-sidebar-width";
 import { getBlockViewDetails } from "@/components/issues/issue-layouts/utils";
@@ -28,12 +29,14 @@ export const ModuleGanttBlock = observer(function ModuleGanttBlock(props: Props)
   // derived values
   const moduleDetails = getModuleById(moduleId);
   // hooks
+  const { t } = useTranslation();
   const { isMobile } = usePlatformOS();
   const { sidebarWidth } = useGanttSidebarWidth();
 
   const { message, blockStyle } = getBlockViewDetails(
     moduleDetails,
-    MODULE_STATUS.find((s) => s.value === moduleDetails?.status)?.color ?? ""
+    MODULE_STATUS.find((s) => s.value === moduleDetails?.status)?.color ?? "",
+    t
   );
 
   return (

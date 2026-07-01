@@ -5,11 +5,11 @@ import { Controller, useForm } from "react-hook-form";
 // icons
 import { CircleCheck } from "lucide-react";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import { Button, getButtonStyling } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Input } from "@operis/ui";
-import { cn, checkEmailValidity } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button, getButtonStyling } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Input } from "@operoz/ui";
+import { cn, checkEmailValidity } from "@operoz/utils";
 // hooks
 import useTimer from "@/hooks/use-timer";
 // services

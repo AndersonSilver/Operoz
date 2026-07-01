@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-import { WORKSPACE_SETTINGS_TRACKER_ELEMENTS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import type { IWebhook, TWebhookEventTypes } from "@operis/types";
+import { WORKSPACE_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import type { IWebhook, TWebhookEventTypes } from "@operoz/types";
 // hooks
 import {
   WebhookIndividualEventOptions,

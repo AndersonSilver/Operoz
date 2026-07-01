@@ -1,8 +1,8 @@
 import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 // types
-import type { IUserTheme, TUserProfile } from "@operis/types";
-import { EStartOfTheWeek } from "@operis/types";
+import type { IUserTheme, TUserProfile } from "@operoz/types";
+import { EStartOfTheWeek } from "@operoz/types";
 // services
 import { UserService } from "@/services/user.service";
 // store

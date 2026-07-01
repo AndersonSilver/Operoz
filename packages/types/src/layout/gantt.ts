@@ -15,7 +15,26 @@ export interface IGanttBlock {
   start_date: string | undefined;
   target_date: string | undefined;
   meta?: Record<string, any>;
+  /** IDs of blocks that this block is blocking (this block is the predecessor) */
+  blocking_ids?: string[];
+  /** IDs of blocks that are blocking this block (predecessors of this block) */
+  blocked_by_ids?: string[];
 }
+
+/**
+ * Transient state of an in-progress dependency drag.
+ * null when no drag is occurring.
+ */
+export type TDependencyDragState = {
+  sourceBlockId: string;
+  /** "right" = this block must finish before target starts (Finish-to-Start) */
+  sourceSide: "left" | "right";
+  /** cursor position relative to the gantt items container */
+  currentX: number;
+  currentY: number;
+  /** block id under the cursor (if any valid drop target) */
+  targetBlockId: string | null;
+} | null;
 
 export interface IBlockUpdateData {
   sort_order?: {

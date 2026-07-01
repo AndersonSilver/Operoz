@@ -5,4 +5,9 @@ export const REVERSE_RELATIONS: { [key in TIssueRelationTypes]: TIssueRelationTy
   blocking: "blocked_by",
   relates_to: "relates_to",
   duplicate: "duplicate",
+  // Temporal dependency inverses (Finish-to-Start variants)
+  start_before: "start_after",
+  start_after: "start_before",
+  finish_before: "finish_after",
+  finish_after: "finish_before",
 };

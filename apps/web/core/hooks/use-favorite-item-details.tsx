@@ -1,7 +1,7 @@
 // plane imports
-import type { IFavorite } from "@operis/types";
+import type { IFavorite } from "@operoz/types";
 // components
-import { getPageName } from "@operis/utils";
+import { getPageName } from "@operoz/utils";
 import {
   generateFavoriteItemLink,
   getFavoriteItemIcon,

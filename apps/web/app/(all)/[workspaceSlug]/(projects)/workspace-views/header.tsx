@@ -7,13 +7,13 @@ import {
   ISSUE_DISPLAY_FILTERS_BY_PAGE,
   GLOBAL_VIEW_TRACKER_ELEMENTS,
   DEFAULT_GLOBAL_VIEWS_LIST,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { ViewsIcon } from "@operis/propel/icons";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, ICustomSearchSelectOption } from "@operis/types";
-import { EIssuesStoreType, EIssueLayoutTypes } from "@operis/types";
-import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@operis/ui";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { ViewsIcon } from "@operoz/propel/icons";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, ICustomSearchSelectOption } from "@operoz/types";
+import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { Breadcrumbs, Header, BreadcrumbNavigationSearchDropdown } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { SwitcherLabel } from "@/components/common/switcher-label";

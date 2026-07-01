@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import { Expand, Shrink } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // plane
-import type { TGanttViews } from "@operis/types";
-import { Row } from "@operis/ui";
+import type { TGanttViews } from "@operoz/types";
+import { Row } from "@operoz/ui";
 // components
 import { BOARD_HUB_GANTT_SURFACE, useBoardHubHasBackground } from "@/components/board/board-hub-background";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 //
 import { GANTT_BREADCRUMBS_HEIGHT } from "../constants";
 

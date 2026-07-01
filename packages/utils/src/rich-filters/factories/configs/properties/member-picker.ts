@@ -1,6 +1,6 @@
 // plane imports
-import type { IUserLite, TFilterProperty } from "@operis/types";
-import { EQUALITY_OPERATOR } from "@operis/types";
+import type { IUserLite, TFilterProperty } from "@operoz/types";
+import { EQUALITY_OPERATOR } from "@operoz/types";
 // local imports
 import type { TCreateFilterConfig } from "../shared";
 import { createFilterConfig, createOperatorConfigEntry } from "../shared";

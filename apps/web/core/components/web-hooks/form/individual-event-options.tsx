@@ -1,7 +1,7 @@
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-import type { IWebhook } from "@operis/types";
-import { Checkbox } from "@operis/ui";
+import type { IWebhook } from "@operoz/types";
+import { Checkbox } from "@operoz/ui";
 
 export const INDIVIDUAL_WEBHOOK_OPTIONS: {
   key: keyof IWebhook;

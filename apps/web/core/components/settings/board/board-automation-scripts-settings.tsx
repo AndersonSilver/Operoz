@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Code2 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardAutomationScript } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardAutomationScript } from "@operoz/types";
 import { BoardService } from "@/services/board/board.service";
 import { BoardAutomationAssetsList } from "./automation/board-automation-assets-list";
 import { useAutomationMemberLabels } from "./automation/use-automation-member-labels";

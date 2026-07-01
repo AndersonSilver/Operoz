@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { CircleAlert } from "lucide-react";
 // plane imports
-import type { TExternalFilter, TFilterProperty } from "@operis/types";
+import type { TExternalFilter, TFilterProperty } from "@operoz/types";
 // local imports
 import { FilterItemCloseButton } from "./close-button";
 import { FilterItemContainer } from "./container";

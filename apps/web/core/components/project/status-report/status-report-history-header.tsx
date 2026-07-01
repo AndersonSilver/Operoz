@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { History } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
 
 type Props = {
@@ -22,9 +22,7 @@ export function StatusReportHistoryHeader(props: Props) {
           </span>
           <div>
             <h2 className="text-13 font-semibold text-primary">{t("project.status_report.history_title")}</h2>
-            <p className="text-11 text-tertiary">
-              {t("project.status_report.history_count", { count })}
-            </p>
+            <p className="text-11 text-tertiary">{t("project.status_report.history_count", { count })}</p>
           </div>
         </div>
         <div className="flex w-full min-w-0 justify-end sm:w-auto">{toolbar}</div>

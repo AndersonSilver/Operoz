@@ -1,11 +1,11 @@
 import React, { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
-import { EIconSize } from "@operis/constants";
-import { StateGroupIcon } from "@operis/propel/icons";
-import type { IState } from "@operis/types";
+import { EIconSize } from "@operoz/constants";
+import { StateGroupIcon } from "@operoz/propel/icons";
+import type { IState } from "@operoz/types";
 // components
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // ui
 // types

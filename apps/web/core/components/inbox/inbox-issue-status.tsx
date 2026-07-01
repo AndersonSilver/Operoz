@@ -2,10 +2,10 @@ import React from "react";
 import { observer } from "mobx-react";
 // constants
 // helpers
-import { INBOX_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EHubMode, EInboxIssueStatus } from "@operis/types";
-import { cn, findHowManyDaysLeft } from "@operis/utils";
+import { INBOX_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EHubMode, EInboxIssueStatus } from "@operoz/types";
+import { cn, findHowManyDaysLeft } from "@operoz/utils";
 // store
 import type { IInboxIssueStore } from "@/store/inbox/inbox-issue.store";
 import { ICON_PROPERTIES, InboxStatusIcon } from "./inbox-status-icon";

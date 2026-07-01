@@ -13,10 +13,10 @@ import {
   ThumbsUp,
   X,
 } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TextArea } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TextArea } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import { AssistantThinkingIndicator } from "@/components/assistant/assistant-thinking-indicator";
 import { AssistantActionProposal } from "@/components/assistant/assistant-action-proposal";
@@ -215,7 +215,7 @@ export const OperozAssistantPanel = observer(function OperozAssistantPanel({
                         <AssistantAutomationProposal
                           workspaceSlug={slug}
                           proposal={
-                            message.metadata.automation_proposal as import("@operis/types").TAssistantAutomationProposal
+                            message.metadata.automation_proposal as import("@operoz/types").TAssistantAutomationProposal
                           }
                         />
                       )}
@@ -224,7 +224,7 @@ export const OperozAssistantPanel = observer(function OperozAssistantPanel({
                           workspaceSlug={slug}
                           proposal={
                             message.metadata
-                              .pack_install_proposal as import("@operis/types").TAssistantPackInstallProposal
+                              .pack_install_proposal as import("@operoz/types").TAssistantPackInstallProposal
                           }
                         />
                       )}
@@ -236,7 +236,7 @@ export const OperozAssistantPanel = observer(function OperozAssistantPanel({
                             workspaceSlug={slug}
                             sessionId={assistant.activeSessionId}
                             proposal={
-                              message.metadata.action_proposal as import("@operis/types").TAssistantActionProposal
+                              message.metadata.action_proposal as import("@operoz/types").TAssistantActionProposal
                             }
                           />
                         )}

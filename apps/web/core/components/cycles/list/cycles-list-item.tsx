@@ -2,12 +2,12 @@ import type { MouseEvent } from "react";
 import { useRef } from "react";
 import { observer } from "mobx-react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { CheckIcon } from "@operis/propel/icons";
+import { CheckIcon } from "@operoz/propel/icons";
 // plane imports
-import type { TCycleGroups } from "@operis/types";
-import { CircularProgressIndicator } from "@operis/ui";
+import type { TCycleGroups } from "@operoz/types";
+import { CircularProgressIndicator } from "@operoz/ui";
 // components
-import { generateQueryParams, calculateCycleProgress } from "@operis/utils";
+import { generateQueryParams, calculateCycleProgress } from "@operoz/utils";
 import { ListItem } from "@/components/core/list";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";

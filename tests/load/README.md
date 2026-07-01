@@ -5,7 +5,7 @@
 ### Go-live staging (gate completo)
 
 ```bash
-cd Operis
+cd Operoz
 chmod +x bin/validate-assistant-go-live.sh
 ./bin/validate-assistant-go-live.sh
 ```
@@ -47,7 +47,7 @@ curl -b "sessionid=..." \
 ## Executar (150 VUs, ramp 5 min, sustain 10 min)
 
 ```bash
-cd Operis
+cd Operoz
 
 export BASE_URL="http://localhost:8000"
 export CHAT_API_URL="http://localhost:8001"

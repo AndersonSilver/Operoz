@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { PageHead } from "@/components/core/page-title";
 import { WorkspaceClient360List } from "@/components/workspace/client-360/workspace-client-360-list";
 import { useWorkspace } from "@/hooks/store/use-workspace";

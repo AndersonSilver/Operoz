@@ -1,11 +1,11 @@
-# 02 — OQL (Operis Query Language) (P0)
+# 02 — OQL (Operoz Query Language) (P0)
 
 > Pré-requisito: [`00-VISAO-GERAL`](../00-VISAO-GERAL/).
 
 ## Visão
 
 O Jira domina em grande parte pela **JQL** — uma linguagem de query que nenhum
-concorrente iguala. O Operis tem rich filters (UI) mas não uma linguagem
+concorrente iguala. O Operoz tem rich filters (UI) mas não uma linguagem
 textual. A **OQL** traz queries tipo `project = "APP" AND status = "In Progress"
 AND assignee = currentUser() ORDER BY priority DESC`, compiladas com segurança
 para Django ORM.
@@ -17,13 +17,13 @@ página de pesquisa avançada.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | OQL compila para **Django `Q` objects**, nunca SQL string | SQL interpolado — injeção |
-| 2 | Parser com gramática formal (lark/pyparsing) | Regex ad-hoc — frágil e inseguro |
-| 3 | Whitelist de campos e funções; tradução campo→ORM explícita | Mapear qualquer atributo — fuga de dados |
-| 4 | Autocomplete via endpoint de metadados (campos/valores/funções) | Hard-code no frontend |
-| 5 | NL→OQL como camada opcional sobre o LLM existente, com validação do parser | LLM gera SQL direto |
+| #   | Decisão                                                                    | Alternativa rejeitada                    |
+| --- | -------------------------------------------------------------------------- | ---------------------------------------- |
+| 1   | OQL compila para **Django `Q` objects**, nunca SQL string                  | SQL interpolado — injeção                |
+| 2   | Parser com gramática formal (lark/pyparsing)                               | Regex ad-hoc — frágil e inseguro         |
+| 3   | Whitelist de campos e funções; tradução campo→ORM explícita                | Mapear qualquer atributo — fuga de dados |
+| 4   | Autocomplete via endpoint de metadados (campos/valores/funções)            | Hard-code no frontend                    |
+| 5   | NL→OQL como camada opcional sobre o LLM existente, com validação do parser | LLM gera SQL direto                      |
 
 ## Escopo
 
@@ -53,5 +53,5 @@ de board (feature 04) e de subscription (feature 08) consomem este motor.
 ## Reuso
 
 - CodeMirror (já dependência do editor) para a UI.
-- Assistente LLM existente (`apps/api/operis/assistant/`) para NL→OQL.
+- Assistente LLM existente (`apps/api/operoz/assistant/`) para NL→OQL.
 - `View`/`Workspace views` existentes para guardar queries OQL.

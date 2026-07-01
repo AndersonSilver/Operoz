@@ -1,4 +1,4 @@
-import type { TClient360Client, TClient360Summary } from "@operis/types";
+import type { TClient360Client, TClient360Summary } from "@operoz/types";
 
 export function buildClient360PortfolioAiPayload(
   summary: TClient360Summary,

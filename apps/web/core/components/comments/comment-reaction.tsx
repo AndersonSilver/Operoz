@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
-import { stringToEmoji } from "@operis/propel/emoji-icon-picker";
-import { EmojiReactionGroup, EmojiReactionPicker } from "@operis/propel/emoji-reaction";
-import type { EmojiReactionType } from "@operis/propel/emoji-reaction";
-import type { TCommentsOperations, TIssueComment } from "@operis/types";
+import { stringToEmoji } from "@operoz/propel/emoji-icon-picker";
+import { EmojiReactionGroup, EmojiReactionPicker } from "@operoz/propel/emoji-reaction";
+import type { EmojiReactionType } from "@operoz/propel/emoji-reaction";
+import type { TCommentsOperations, TIssueComment } from "@operoz/types";
 // helpers
 // local imports
 

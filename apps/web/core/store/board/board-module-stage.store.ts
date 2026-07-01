@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-import type { IBoardModuleStage, TBoardModuleStageFormData, TBoardModuleStageUpdateData } from "@operis/types";
+import type { IBoardModuleStage, TBoardModuleStageFormData, TBoardModuleStageUpdateData } from "@operoz/types";
 import { BoardModuleStageService } from "@/services/board/board-module-stage.service";
 
 export interface IBoardModuleStageStore {

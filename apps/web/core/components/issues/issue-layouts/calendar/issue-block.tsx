@@ -4,10 +4,10 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 // plane imports
-import { useOutsideClickDetector } from "@operis/hooks";
-import { Popover } from "@operis/propel/popover";
-import type { TIssue } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useOutsideClickDetector } from "@operoz/hooks";
+import { Popover } from "@operoz/propel/popover";
+import type { TIssue } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";

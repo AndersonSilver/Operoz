@@ -1,4 +1,4 @@
-import type { IBoardPermissionTreeNode, IBoardRole, TBoardRolePermissionsMap } from "@operis/types";
+import type { IBoardPermissionTreeNode, IBoardRole, TBoardRolePermissionsMap } from "@operoz/types";
 
 export const boardPermissionI18nKey = (permissionKey: string) =>
   `boards.settings.permissions.keys.${permissionKey.replace(/\./g, "_")}`;

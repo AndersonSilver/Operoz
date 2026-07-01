@@ -1,6 +1,6 @@
 import React from "react";
 // plane imports
-import { CheckIcon } from "@operis/propel/icons";
+import { CheckIcon } from "@operoz/propel/icons";
 
 type Props = {
   icon?: React.ReactNode;

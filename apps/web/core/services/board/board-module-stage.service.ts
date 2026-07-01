@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IBoardModuleStage, TBoardModuleStageFormData, TBoardModuleStageUpdateData } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IBoardModuleStage, TBoardModuleStageFormData, TBoardModuleStageUpdateData } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 export class BoardModuleStageService extends APIService {

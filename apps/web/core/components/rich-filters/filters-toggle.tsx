@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 // plane imports
-import { IconButton } from "@operis/propel/icon-button";
-import { FilterIcon, FilterAppliedIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
-import type { IFilterInstance } from "@operis/shared-state";
-import type { TExternalFilter, TFilterProperty } from "@operis/types";
+import { IconButton } from "@operoz/propel/icon-button";
+import { FilterIcon, FilterAppliedIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
+import type { IFilterInstance } from "@operoz/shared-state";
+import type { TExternalFilter, TFilterProperty } from "@operoz/types";
 // components
 import { AddFilterButton } from "@/components/rich-filters/add-filters/button";
 import { PROJECT_HUB_GHOST_BUTTON_CLASS } from "@/components/project/project-hub-toolbar";
@@ -84,7 +84,11 @@ export const FiltersToggle = observer(function FiltersToggle<P extends TFilterPr
       variant={isHub ? "ghost" : "secondary"}
       icon={showFilterRowChangesPill ? FilterAppliedIcon : FilterIcon}
       onClick={handleToggleFilter}
-      className={cn(isHub ? HUB_ICON_CLASSNAME : undefined, !isHub && buttonClassName, isHub && showFilterRowChangesPill && "border-accent-subtle bg-accent-subtle/40 text-accent-primary")}
+      className={cn(
+        isHub ? HUB_ICON_CLASSNAME : undefined,
+        !isHub && buttonClassName,
+        isHub && showFilterRowChangesPill && "border-accent-subtle bg-accent-subtle/40 text-accent-primary"
+      )}
       iconClassName={iconClassName}
     />
   );

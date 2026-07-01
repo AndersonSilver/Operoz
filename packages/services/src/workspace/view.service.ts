@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { IWorkspaceView, TIssuesResponse } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { IWorkspaceView, TIssuesResponse } from "@operoz/types";
 import { APIService } from "../api.service";
 
 export class WorkspaceViewService extends APIService {

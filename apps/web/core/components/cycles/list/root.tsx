@@ -2,10 +2,10 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Disclosure } from "@headlessui/react";
 // components
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
-import { ContentWrapper, ERowVariant } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ContentWrapper, ERowVariant } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { ListLayout } from "@/components/core/list";
 import { ActiveCycleRoot } from "@/plane-web/components/cycles";
 // local imports

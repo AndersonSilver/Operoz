@@ -3,10 +3,10 @@ import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 // plane imports
-import { ETabIndices } from "@operis/constants";
+import { ETabIndices } from "@operoz/constants";
 // types
-import type { TIssue } from "@operis/types";
-import { cn, getTabIndex } from "@operis/utils";
+import type { TIssue } from "@operoz/types";
+import { cn, getTabIndex } from "@operoz/utils";
 // components
 import { ProjectDropdown } from "@/components/dropdowns/project/dropdown";
 // hooks

@@ -3,11 +3,11 @@ import { observer } from "mobx-react";
 import { Link } from "react-router";
 import { useParams, useSearchParams } from "next/navigation";
 // plane types
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueDisplayProperties } from "@operis/types";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueDisplayProperties } from "@operoz/types";
 // plane ui
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // helpers
 import { queryParamGenerator } from "@/helpers/query-param-generator";
 // hooks

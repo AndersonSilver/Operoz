@@ -2,8 +2,8 @@ import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
 // plane imports
-import type { TWorkItemFilterCondition } from "@operis/shared-state";
-import { EIssuesStoreType } from "@operis/types";
+import type { TWorkItemFilterCondition } from "@operoz/shared-state";
+import { EIssuesStoreType } from "@operoz/types";
 // constants
 import { CYCLE_ISSUES_WITH_PARAMS } from "@/constants/fetch-keys";
 // hooks

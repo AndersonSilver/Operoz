@@ -1,13 +1,13 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
-import { GANTT_TIMELINE_TYPE } from "@operis/types";
+import { GANTT_TIMELINE_TYPE } from "@operoz/types";
 import type {
   IBaseLayoutsGanttItem,
   IBaseLayoutsGanttProps,
   TGanttBlockUpdateData,
   IBlockUpdateDependencyData,
-} from "@operis/types";
-import { cn } from "@operis/utils";
+} from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { TimeLineTypeContext } from "@/components/gantt-chart/contexts";
 import { GanttChartRoot } from "@/components/gantt-chart/root";
 import { BaseGanttSidebar } from "./sidebar";

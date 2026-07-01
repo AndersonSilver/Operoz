@@ -7,8 +7,8 @@ import type {
   IssuePaginationOptions,
   TIssuesResponse,
   TBulkOperationsPayload,
-} from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 import { getCalendarPaginationOptions } from "@/components/issues/issue-layouts/calendar/utils";
 // helpers
 // base class
@@ -180,10 +180,7 @@ export class ProjectIssues extends BaseIssuesStore implements IProjectIssues {
 
     if (displayFilters?.layout === EIssueLayoutTypes.CALENDAR) {
       const calendarLayout = displayFilters.calendar?.layout ?? "month";
-      const calendarOptions = getCalendarPaginationOptions(
-        this.rootIssueStore.issueCalendarView,
-        calendarLayout
-      );
+      const calendarOptions = getCalendarPaginationOptions(this.rootIssueStore.issueCalendarView, calendarLayout);
 
       if (!calendarOptions) return;
 

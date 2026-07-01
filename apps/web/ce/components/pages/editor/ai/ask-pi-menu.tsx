@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { CircleArrowUp, CornerDownRight, RefreshCcw, Sparkles } from "lucide-react";
 // ui
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 // helpers
 // hooks

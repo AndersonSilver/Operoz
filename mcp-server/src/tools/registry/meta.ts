@@ -5,30 +5,30 @@ import { op } from "./types.js";
 
 /** Perfil agent (Cursor): discover → execute */
 export const AGENT_TOOL_NAMES = new Set([
-  "operis_get_capabilities",
-  "operis_discover",
-  "operis_execute",
-  "operis_sign_in",
-  "operis_api_v1_request",
-  "operis_api_app_request",
-  "operis_get_openapi_schema",
+  "operoz_get_capabilities",
+  "operoz_discover",
+  "operoz_execute",
+  "operoz_sign_in",
+  "operoz_api_v1_request",
+  "operoz_api_app_request",
+  "operoz_get_openapi_schema",
 ]);
 
 /** Perfil full: meta legado + registo completo */
-export const FULL_META_TOOL_NAMES = new Set([...AGENT_TOOL_NAMES, "operis_list_operations"]);
+export const FULL_META_TOOL_NAMES = new Set([...AGENT_TOOL_NAMES, "operoz_list_operations"]);
 
 export const META_TOOL_NAMES = FULL_META_TOOL_NAMES;
 
 const CAPABILITIES_TOOL: Tool = {
-  name: "operis_get_capabilities",
+  name: "operoz_get_capabilities",
   description: "Mapa de domínios, contagens e perfil MCP activo (agent ou full).",
   inputSchema: { type: "object", properties: {} },
 };
 
 const DISCOVER_TOOL: Tool = {
-  name: "operis_discover",
+  name: "operoz_discover",
   description:
-    "Descobre operações Operis por intenção (ex: list work items, create page). Devolve name, pathParams e método para operis_execute.",
+    "Descobre operações Operoz por intenção (ex: list work items, create page). Devolve name, pathParams e método para operoz_execute.",
   inputSchema: {
     type: "object",
     properties: {
@@ -47,13 +47,13 @@ const DISCOVER_TOOL: Tool = {
 };
 
 const EXECUTE_TOOL: Tool = {
-  name: "operis_execute",
+  name: "operoz_execute",
   description:
-    "Executa uma operação pelo name (de operis_discover). Path params no top-level; body/query como objetos.",
+    "Executa uma operação pelo name (de operoz_discover). Path params no top-level; body/query como objetos.",
   inputSchema: {
     type: "object",
     properties: {
-      operation: { type: "string", description: "Nome exacto da operação (ex: operis_work_items_list)" },
+      operation: { type: "string", description: "Nome exacto da operação (ex: operoz_work_items_list)" },
       body: { type: "object", description: "Corpo JSON (POST/PATCH/PUT)", additionalProperties: true },
       query: { type: "object", description: "Query string", additionalProperties: true },
     },
@@ -63,8 +63,8 @@ const EXECUTE_TOOL: Tool = {
 };
 
 const LIST_OPERATIONS_TOOL: Tool = {
-  name: "operis_list_operations",
-  description: "Lista operações MCP (perfil full). No perfil agent, preferir operis_discover.",
+  name: "operoz_list_operations",
+  description: "Lista operações MCP (perfil full). No perfil agent, preferir operoz_discover.",
   inputSchema: {
     type: "object",
     properties: {
@@ -75,13 +75,13 @@ const LIST_OPERATIONS_TOOL: Tool = {
 };
 
 const OPENAPI_TOOL: Tool = {
-  name: "operis_get_openapi_schema",
+  name: "operoz_get_openapi_schema",
   description: "Schema OpenAPI em /api/schema/ (sessão ou DEBUG).",
   inputSchema: { type: "object", properties: {} },
 };
 
 const API_V1_TOOL: Tool = {
-  name: "operis_api_v1_request",
+  name: "operoz_api_v1_request",
   description: "Escape hatch: chamada genérica /api/v1/* com X-Api-Key.",
   inputSchema: {
     type: "object",
@@ -96,7 +96,7 @@ const API_V1_TOOL: Tool = {
 };
 
 const API_APP_TOOL: Tool = {
-  name: "operis_api_app_request",
+  name: "operoz_api_app_request",
   description: "Escape hatch: chamada genérica /api/* com sessão.",
   inputSchema: {
     type: "object",
@@ -111,7 +111,7 @@ const API_APP_TOOL: Tool = {
 };
 
 const SIGN_IN_TOOL: Tool = {
-  name: "operis_sign_in",
+  name: "operoz_sign_in",
   description: "Login email/senha → cookie de sessão para API app.",
   inputSchema: {
     type: "object",
@@ -138,6 +138,6 @@ export const FULL_META_TOOLS: Tool[] = [...AGENT_TOOLS, LIST_OPERATIONS_TOOL];
 export const META_TOOLS: Tool[] = FULL_META_TOOLS;
 
 export const META_OPERATIONS: ToolOperation[] = [
-  op("instance", "operis_get_instance", "Estado da instância Operis", "instances", "GET", "/", []),
-  op("users", "operis_get_current_user", "Utilizador autenticado (v1)", "v1", "GET", "/users/me/", []),
+  op("instance", "operoz_get_instance", "Estado da instância Operoz", "instances", "GET", "/", []),
+  op("users", "operoz_get_current_user", "Utilizador autenticado (v1)", "v1", "GET", "/users/me/", []),
 ];

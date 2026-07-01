@@ -2,10 +2,10 @@
 
 import React from "react";
 // plane imports
-import { AreaChart } from "@operis/propel/charts/area-chart";
-import { useTranslation } from "@operis/i18n";
-import type { TChartData, TModuleCompletionChartDistribution } from "@operis/types";
-import { renderFormattedDateWithoutYear } from "@operis/utils";
+import { AreaChart } from "@operoz/propel/charts/area-chart";
+import { useTranslation } from "@operoz/i18n";
+import type { TChartData, TModuleCompletionChartDistribution } from "@operoz/types";
+import { renderFormattedDateWithoutYear } from "@operoz/utils";
 
 type Props = {
   distribution: TModuleCompletionChartDistribution;

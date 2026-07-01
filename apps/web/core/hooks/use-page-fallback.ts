@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { EditorRefApi, CollaborationState } from "@operis/editor";
+import type { EditorRefApi, CollaborationState } from "@operoz/editor";
 // plane editor
-import { convertBinaryDataToBase64String, getBinaryDataFromDocumentEditorHTMLString } from "@operis/editor";
+import { convertBinaryDataToBase64String, getBinaryDataFromDocumentEditorHTMLString } from "@operoz/editor";
 // plane types
-import type { TDocumentPayload } from "@operis/types";
+import type { TDocumentPayload } from "@operoz/types";
 // hooks
 import useAutoSave from "@/hooks/use-auto-save";
 import type { TPageInstance } from "@/store/pages/base-page";

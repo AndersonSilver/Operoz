@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { xor } from "lodash-es";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
+import { useTranslation } from "@operoz/i18n";
 // hooks
 // components
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { ModuleDropdown } from "@/components/dropdowns/module/dropdown";
 // ui
 // helpers

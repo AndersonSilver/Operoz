@@ -1,6 +1,6 @@
 import { Bot, Gauge, ThumbsUp, Wrench } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/ui";
 import "@/components/exporter/workspace-exports-settings.css";
 
 export function WorkspaceAssistantSettingsHero() {

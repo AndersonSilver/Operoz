@@ -6,8 +6,8 @@ import type {
   TFilterGroupNode,
   TFilterProperty,
   TFilterValue,
-} from "@operis/types";
-import { FILTER_NODE_TYPE } from "@operis/types";
+} from "@operoz/types";
+import { FILTER_NODE_TYPE } from "@operoz/types";
 // local imports
 import { isConditionNode, isGroupNode } from "../types/core";
 import { processGroupNode } from "../types/shared";

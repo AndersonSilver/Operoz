@@ -1,7 +1,7 @@
 import { Link } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { ISSUE_PRIORITY_FILTERS } from "@operis/constants";
-import type { TAutomationCatalog, TAutomationCatalogItem } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { ISSUE_PRIORITY_FILTERS } from "@operoz/constants";
+import type { TAutomationCatalog, TAutomationCatalogItem } from "@operoz/types";
 import type { AutomationNodeData } from "./automation-utils";
 import {
   ConfigCheckboxList,

@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis tem analytics, mas faltam os **relatórios agile prontos** que o Jira
+O Operoz tem analytics, mas faltam os **relatórios agile prontos** que o Jira
 oferece (roadmap §14): burndown, burnup, velocity, cumulative flow, control
 chart, time-in-status. Esta feature entrega um motor de métricas reutilizável
 que alimenta tanto páginas de relatório como gadgets de dashboard (feature 06).
@@ -17,13 +17,13 @@ time-in-status, forecast, export.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Motor de métricas central; relatórios e gadgets consomem-no | Calcular em cada sítio |
-| 2 | Time-in-status derivado de `IssueActivity` (gerado pela feature 01) | Tabela de tempos manual |
-| 3 | Snapshots periódicos (Celery) para séries históricas pesadas | Recalcular tudo on-read |
-| 4 | Export PDF/CSV/PNG reusa exporter existente | Lib de export nova |
-| 5 | Scope de métrica declarativo (project/cycle/board/OQL) | Métricas hard-coded por scope |
+| #   | Decisão                                                             | Alternativa rejeitada         |
+| --- | ------------------------------------------------------------------- | ----------------------------- |
+| 1   | Motor de métricas central; relatórios e gadgets consomem-no         | Calcular em cada sítio        |
+| 2   | Time-in-status derivado de `IssueActivity` (gerado pela feature 01) | Tabela de tempos manual       |
+| 3   | Snapshots periódicos (Celery) para séries históricas pesadas        | Recalcular tudo on-read       |
+| 4   | Export PDF/CSV/PNG reusa exporter existente                         | Lib de export nova            |
+| 5   | Scope de métrica declarativo (project/cycle/board/OQL)              | Métricas hard-coded por scope |
 
 ## Escopo
 

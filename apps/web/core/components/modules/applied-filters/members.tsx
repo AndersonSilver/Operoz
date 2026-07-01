@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-import { CloseIcon } from "@operis/propel/icons";
+import { CloseIcon } from "@operoz/propel/icons";
 // plane ui
-import { Avatar } from "@operis/ui";
+import { Avatar } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 

@@ -3,8 +3,8 @@ import type {
   ILayoutDisplayFiltersOptions,
   TIssueActivityComment,
   TWorkItemFilterProperty,
-} from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
+} from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
 import type { TIssueFilterPriorityObject } from "./common";
 import { ISSUE_DISPLAY_PROPERTIES_KEYS, SUB_ISSUES_DISPLAY_PROPERTIES_KEYS } from "./common";
 
@@ -217,7 +217,7 @@ export const ISSUE_DISPLAY_FILTERS_BY_PAGE: TIssueFiltersToDisplayByPageType = {
         },
         extra_options: {
           access: true,
-          values: ["sub_issue"],
+          values: ["sub_issue", "expand"],
         },
       },
       calendar: {
@@ -337,7 +337,7 @@ export const ISSUE_DISPLAY_FILTERS_BY_PAGE: TIssueFiltersToDisplayByPageType = {
         },
         extra_options: {
           access: true,
-          values: ["sub_issue"],
+          values: ["sub_issue", "expand"],
         },
       },
     },
@@ -423,7 +423,7 @@ export const filterActivityOnSelectedFilters = (
     return filters.includes(activity.activity_type as TActivityFilters);
   });
 
-export const ENABLE_ISSUE_DEPENDENCIES = false;
+export const ENABLE_ISSUE_DEPENDENCIES = true;
 
 export const BASE_ACTIVITY_FILTER_TYPES = [
   EActivityFilterType.ACTIVITY,

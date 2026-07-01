@@ -2,8 +2,8 @@ import { isEmpty, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 // base class
 import { computedFn } from "mobx-utils";
-import type { TSupportedFilterTypeForUpdate } from "@operis/constants";
-import { EIssueFilterType } from "@operis/constants";
+import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
+import { EIssueFilterType } from "@operoz/constants";
 import type {
   IIssueDisplayFilterOptions,
   IIssueDisplayProperties,
@@ -13,9 +13,9 @@ import type {
   IssuePaginationOptions,
   TWorkItemFilterExpression,
   TSupportedFilterForUpdate,
-} from "@operis/types";
-import { EIssueLayoutTypes, EIssuesStoreType } from "@operis/types";
-import { handleIssueQueryParamsByLayout } from "@operis/utils";
+} from "@operoz/types";
+import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
+import { handleIssueQueryParamsByLayout } from "@operoz/utils";
 import type { IBaseIssueFilterStore } from "../helpers/issue-filter-helper.store";
 import { IssueFilterHelperStore } from "../helpers/issue-filter-helper.store";
 // helpers

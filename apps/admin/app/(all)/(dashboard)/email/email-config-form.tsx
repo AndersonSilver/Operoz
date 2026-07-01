@@ -2,10 +2,10 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 import { KeyRound, Server } from "lucide-react";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IFormattedInstanceConfiguration, TInstanceEmailConfigurationKeys } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IFormattedInstanceConfiguration, TInstanceEmailConfigurationKeys } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
 import type { TControllerInputFormField } from "@/components/common/controller-input";
 import { ControllerInput } from "@/components/common/controller-input";
 import {

@@ -1,4 +1,4 @@
-import { EViewAccess } from "@operis/types";
+import { EViewAccess } from "@operoz/types";
 
 export const VIEW_ACCESS_SPECIFIERS: {
   key: EViewAccess;

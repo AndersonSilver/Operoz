@@ -3,8 +3,8 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { History, MessageSquare } from "lucide-react";
 // plane imports
-import type { IUserActivityResponse } from "@operis/types";
-import { calculateTimeAgo, getFileURL } from "@operis/utils";
+import type { IUserActivityResponse } from "@operoz/types";
+import { calculateTimeAgo, getFileURL } from "@operoz/utils";
 // components
 import { ActivityIcon, ActivityMessage, IssueLink } from "@/components/core/activity";
 import { RichTextEditor } from "@/components/editor/rich-text";

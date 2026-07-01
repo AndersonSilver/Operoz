@@ -1,9 +1,9 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IIssueLabel, TIssue, TIssueServiceType } from "@operis/types";
-import { EIssueServiceType } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IIssueLabel, TIssue, TIssueServiceType } from "@operoz/types";
+import { EIssueServiceType } from "@operoz/types";
 // components
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

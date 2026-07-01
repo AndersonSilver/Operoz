@@ -1,5 +1,5 @@
 // types
-import type { TDeDupeIssue } from "@operis/types";
+import type { TDeDupeIssue } from "@operoz/types";
 
 type TDuplicateModalRootProps = {
   workspaceSlug: string;

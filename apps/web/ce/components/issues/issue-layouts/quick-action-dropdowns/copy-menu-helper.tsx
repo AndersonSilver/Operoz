@@ -1,5 +1,5 @@
-import type { ISvgIcons } from "@operis/propel/icons";
-import type { TContextMenuItem } from "@operis/ui";
+import type { ISvgIcons } from "@operoz/propel/icons";
+import type { TContextMenuItem } from "@operoz/ui";
 
 export interface CopyMenuHelperProps {
   baseItem: {

@@ -2,13 +2,13 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 // constants
-import { EPageAccess, EProjectFeatureKey } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
+import { EPageAccess, EProjectFeatureKey } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
 // plane types
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TPage } from "@operis/types";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TPage } from "@operoz/types";
 // plane ui
-import { Header } from "@operis/ui";
+import { Header } from "@operoz/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import {

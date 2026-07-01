@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
-import type { ISearchIssueResponse, TIssue } from "@operis/types";
-import type { IIssueCustomFieldValuePayload } from "@operis/types";
+import type { ISearchIssueResponse, TIssue } from "@operoz/types";
+import type { IIssueCustomFieldValuePayload } from "@operoz/types";
 import { IssueModalContext } from "@/components/issues/issue-modal/context";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";

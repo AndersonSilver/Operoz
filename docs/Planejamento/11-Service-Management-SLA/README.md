@@ -4,7 +4,7 @@
 
 ## Visão
 
-O Operis já tem peças de suporte/sustentação (`board_support_queue.py`,
+O Operoz já tem peças de suporte/sustentação (`board_support_queue.py`,
 `board_support_sla_policy.py`, Intake) mas incompletas face ao Jira Service
 Management (roadmap §20). Esta feature completa SLAs com timers e business hours,
 filas, request types, aprovações e portal de cliente — reutilizando os modelos
@@ -17,13 +17,13 @@ tracking, queues, approvals, escalation, business hours, email channel.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | Completar `board_support_*` existentes em vez de novo módulo | Reescrever suporte |
-| 2 | SLA timer com pausa/retoma baseado em `BusinessCalendar` | Tempo de relógio cru |
-| 3 | Escalation via automação (feature 03) por evento "SLA em risco" | Motor de escalation próprio |
-| 4 | Portal de cliente sobre o app `Space` existente | Novo app público |
-| 5 | Approvals como passo no workflow (feature 01) | Fluxo de aprovação isolado |
+| #   | Decisão                                                         | Alternativa rejeitada       |
+| --- | --------------------------------------------------------------- | --------------------------- |
+| 1   | Completar `board_support_*` existentes em vez de novo módulo    | Reescrever suporte          |
+| 2   | SLA timer com pausa/retoma baseado em `BusinessCalendar`        | Tempo de relógio cru        |
+| 3   | Escalation via automação (feature 03) por evento "SLA em risco" | Motor de escalation próprio |
+| 4   | Portal de cliente sobre o app `Space` existente                 | Novo app público            |
+| 5   | Approvals como passo no workflow (feature 01)                   | Fluxo de aprovação isolado  |
 
 ## Escopo
 

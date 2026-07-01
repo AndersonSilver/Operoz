@@ -3,12 +3,12 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
 // plane types
-import { getButtonStyling } from "@operis/propel/button";
-import type { TSearchEntityRequestPayload, TWebhookConnectionQueryParams } from "@operis/types";
-import { EFileAssetType } from "@operis/types";
+import { getButtonStyling } from "@operoz/propel/button";
+import type { TSearchEntityRequestPayload, TWebhookConnectionQueryParams } from "@operoz/types";
+import { EFileAssetType } from "@operoz/types";
 // plane ui
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // components
 import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
 import { LogoSpinner } from "@/components/common/logo-spinner";

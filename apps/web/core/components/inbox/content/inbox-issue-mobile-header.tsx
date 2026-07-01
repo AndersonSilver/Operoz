@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Clock, FileStack, MoreHorizontal, PanelLeft, MoveRight } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { IconButton, getIconButtonStyling } from "@operis/propel/icon-button";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton, getIconButtonStyling } from "@operoz/propel/icon-button";
 import {
   LinkIcon,
   TrashIcon,
@@ -9,12 +9,12 @@ import {
   ChevronUpIcon,
   CheckCircleFilledIcon,
   CloseCircleFilledIcon,
-} from "@operis/propel/icons";
-import type { TNameDescriptionLoader } from "@operis/types";
-import { EHubMode } from "@operis/types";
+} from "@operoz/propel/icons";
+import type { TNameDescriptionLoader } from "@operoz/types";
+import { EHubMode } from "@operoz/types";
 
-import { Header, CustomMenu, EHeaderVariant } from "@operis/ui";
-import { cn, findHowManyDaysLeft } from "@operis/utils";
+import { Header, CustomMenu, EHeaderVariant } from "@operoz/ui";
+import { cn, findHowManyDaysLeft } from "@operoz/utils";
 // components
 import { NameDescriptionUpdateStatus } from "@/components/issues/issue-update-status";
 // store types

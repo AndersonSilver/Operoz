@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Link } from "react-router";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Button } from "@operis/propel/button";
-import type { IBoard, TLogoProps } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Button } from "@operoz/propel/button";
+import type { IBoard, TLogoProps } from "@operoz/types";
 import { SettingsHeading } from "@/components/settings/heading";
 import { useBoard } from "@/hooks/store/use-board";
 import { BoardLogoPropsField } from "./board-logo-props-field";
@@ -75,10 +75,7 @@ export const BoardGanttIconsSettings = observer(function BoardGanttIconsSettings
       <div className="mt-6 rounded-lg border border-subtle bg-layer-2/40 p-4">
         <p className="text-body-sm-medium text-primary">{t("boards.settings.gantt_icons.cards_heading")}</p>
         <p className="mt-1 text-13 text-tertiary">{t("boards.settings.gantt_icons.cards_description")}</p>
-        <Link
-          to={issueTypesHref}
-          className="mt-3 inline-block text-13 font-medium text-accent-primary hover:underline"
-        >
+        <Link to={issueTypesHref} className="mt-3 inline-block text-13 font-medium text-accent-primary hover:underline">
           {t("boards.settings.gantt_icons.cards_link")}
         </Link>
       </div>

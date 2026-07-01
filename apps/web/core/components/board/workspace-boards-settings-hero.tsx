@@ -1,6 +1,6 @@
 import { Archive, FolderKanban, LayoutGrid, Users } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/ui";
 import "./workspace-boards-settings.css";
 
 type Props = {
@@ -13,7 +13,11 @@ export function WorkspaceBoardsSettingsHero(props: Props) {
 
   const highlights = [
     { icon: Users, label: t("workspace_settings.settings.boards.hero.highlights.teams"), tone: "accent" as const },
-    { icon: FolderKanban, label: t("workspace_settings.settings.boards.hero.highlights.projects"), tone: "success" as const },
+    {
+      icon: FolderKanban,
+      label: t("workspace_settings.settings.boards.hero.highlights.projects"),
+      tone: "success" as const,
+    },
     { icon: Archive, label: t("workspace_settings.settings.boards.hero.highlights.archive"), tone: "warning" as const },
   ];
 
@@ -31,11 +35,11 @@ export function WorkspaceBoardsSettingsHero(props: Props) {
       />
 
       <div className="relative flex items-start gap-4 p-5 lg:p-6">
-        <span className="grid size-12 shrink-0 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary shadow-sm">
+        <span className="shadow-sm grid size-12 shrink-0 place-items-center rounded-xl border border-subtle bg-accent-subtle text-accent-primary">
           <LayoutGrid className="size-5" strokeWidth={1.75} />
         </span>
         <div className="min-w-0">
-          <p className="text-11 font-semibold uppercase tracking-widest text-tertiary">Operoz</p>
+          <p className="tracking-widest text-11 font-semibold text-tertiary uppercase">Operoz</p>
           <div className="mt-0.5 flex flex-wrap items-center gap-2">
             <h1 className="text-18 font-semibold tracking-tight text-primary">
               {t("workspace_settings.settings.boards.title")}

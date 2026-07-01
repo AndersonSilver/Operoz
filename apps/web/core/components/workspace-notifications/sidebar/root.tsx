@@ -2,11 +2,11 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import type { TNotificationTab } from "@operis/constants";
-import { NOTIFICATION_TABS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Header, Row, ERowVariant, EHeaderVariant, ContentWrapper } from "@operis/ui";
-import { cn, getNumberCount } from "@operis/utils";
+import type { TNotificationTab } from "@operoz/constants";
+import { NOTIFICATION_TABS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Header, Row, ERowVariant, EHeaderVariant, ContentWrapper } from "@operoz/ui";
+import { cn, getNumberCount } from "@operoz/utils";
 // components
 import { CountChip } from "@/components/common/count-chip";
 // hooks
@@ -58,11 +58,7 @@ export const NotificationsSidebarRoot = observer(function NotificationsSidebarRo
     <div
       className={cn(
         "relative z-[10] h-full flex-shrink-0 border-0 border-subtle bg-surface-1 transition-all max-md:overflow-hidden md:border-r",
-        embedded
-          ? "w-full"
-          : currentSelectedNotificationId
-            ? "w-0 md:w-3/12"
-            : "w-full md:w-3/12"
+        embedded ? "w-full" : currentSelectedNotificationId ? "w-0 md:w-3/12" : "w-full md:w-3/12"
       )}
     >
       <div className="relative flex h-full w-full flex-col">

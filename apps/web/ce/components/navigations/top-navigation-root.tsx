@@ -1,17 +1,17 @@
 // components
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { TopNavPowerK } from "@/components/navigation";
 import { HelpMenuRoot } from "@/components/workspace/sidebar/help-section/root";
 import { UserMenuRoot } from "@/components/workspace/sidebar/user-menu-root";
 import { WorkspaceMenuRoot } from "@/components/workspace/sidebar/workspace-menu-root";
 import { useAppRailPreferences } from "@/hooks/use-navigation-preferences";
 import { useWorkspacePaths } from "@/hooks/use-workspace-paths";
-import { Tooltip } from "@operis/propel/tooltip";
+import { Tooltip } from "@operoz/propel/tooltip";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 import { AppSidebarToggleButton } from "@/components/sidebar/sidebar-toggle-button";
-import { InboxIcon } from "@operis/propel/icons";
+import { InboxIcon } from "@operoz/propel/icons";
 import useSWR from "swr";
 import { useWorkspaceNotifications } from "@/hooks/store/notifications";
 export const TopNavigationRoot = observer(function TopNavigationRoot() {

@@ -2,7 +2,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { PlaneNewIcon } from "@operis/propel/icons";
+import { PlaneNewIcon } from "@operoz/propel/icons";
 import type { AppSidebarItemData } from "@/components/sidebar/sidebar-item";
 import { useWorkspacePaths } from "@/hooks/use-workspace-paths";
 

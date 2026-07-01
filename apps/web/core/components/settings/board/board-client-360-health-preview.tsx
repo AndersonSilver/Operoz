@@ -1,8 +1,8 @@
 import { useMemo } from "react";
-import { useTranslation } from "@operis/i18n";
-import type { IBoardClient360HealthSettings } from "@operis/types";
-import type { TClient360Client } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { IBoardClient360HealthSettings } from "@operoz/types";
+import type { TClient360Client } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import {
   simulateBoardHealthScores,

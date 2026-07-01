@@ -1,7 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Plus } from "lucide-react";
-import { Button } from "@operis/propel/button";
-import { cn } from "@operis/ui";
+import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/ui";
 import { AutomationHeroIllustration } from "./automation-hero-illustration";
 import "./automation-list.css";
 
@@ -66,14 +66,14 @@ export function AutomationListHero(props: Props) {
           <div className="flex min-w-0 items-start gap-4">
             <span
               className={cn(
-                "grid size-12 shrink-0 place-items-center rounded-xl border border-subtle shadow-sm",
+                "shadow-sm grid size-12 shrink-0 place-items-center rounded-xl border border-subtle",
                 accentClass
               )}
             >
               <Icon className="size-5" strokeWidth={1.75} />
             </span>
             <div className="min-w-0 flex-1">
-              <p className="text-11 font-semibold uppercase tracking-widest text-tertiary">Operoz</p>
+              <p className="tracking-widest text-11 font-semibold text-tertiary uppercase">Operoz</p>
               <h1 className="mt-0.5 text-18 font-semibold tracking-tight text-primary">{title}</h1>
               <p className="mt-2 max-w-lg text-13 leading-relaxed text-secondary">{description}</p>
               {highlights && highlights.length > 0 && (
@@ -113,7 +113,7 @@ export function AutomationListHero(props: Props) {
               size="lg"
               onClick={onCreate}
               loading={creating}
-              className="w-full shadow-sm lg:min-w-[11rem]"
+              className="shadow-sm w-full lg:min-w-[11rem]"
             >
               <Plus className="size-4" />
               {createLabel}

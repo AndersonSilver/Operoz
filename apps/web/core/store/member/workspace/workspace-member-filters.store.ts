@@ -1,8 +1,8 @@
 import { action, makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
 // types
-import type { EUserPermissions } from "@operis/constants";
-import type { IUserLite } from "@operis/types";
+import type { EUserPermissions } from "@operoz/constants";
+import type { IUserLite } from "@operoz/types";
 // local imports
 import type { IMemberFilters } from "../utils";
 import { sortWorkspaceMembers } from "../utils";

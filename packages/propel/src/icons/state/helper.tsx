@@ -1,5 +1,5 @@
-import { EIconSize } from "@operis/constants";
-import type { TIntakeStateGroups } from "@operis/types";
+import { EIconSize } from "@operoz/constants";
+import type { TIntakeStateGroups } from "@operoz/types";
 
 export interface IStateGroupIcon {
   className?: string;

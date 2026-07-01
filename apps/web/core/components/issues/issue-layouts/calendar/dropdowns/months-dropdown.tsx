@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Popover, Transition } from "@headlessui/react";
-import { ChevronLeftIcon, ChevronRightIcon } from "@operis/propel/icons";
+import { ChevronLeftIcon, ChevronRightIcon } from "@operoz/propel/icons";
 //hooks
 // icons
 // constants
-import { getDate } from "@operis/utils";
+import { getDate } from "@operoz/utils";
 import { MONTHS_LIST } from "@/constants/calendar";
 import { useCalendarView } from "@/hooks/store/use-calendar-view";
 import type { ICycleIssuesFilter } from "@/store/issue/cycle";

@@ -1,8 +1,8 @@
 import { pull, find, concat, set, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 // Plane Imports
-import type { TIssueReaction, TIssueReactionMap, TIssueReactionIdMap, TIssueServiceType } from "@operis/types";
-import { groupReactions } from "@operis/utils";
+import type { TIssueReaction, TIssueReactionMap, TIssueReactionIdMap, TIssueServiceType } from "@operoz/types";
+import { groupReactions } from "@operoz/utils";
 // services
 import { IssueReactionService } from "@/services/issue";
 // types

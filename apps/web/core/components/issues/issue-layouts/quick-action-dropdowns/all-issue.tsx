@@ -3,11 +3,11 @@ import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { ARCHIVABLE_STATE_GROUPS } from "@operis/constants";
-import type { TIssue } from "@operis/types";
-import { EIssuesStoreType } from "@operis/types";
-import { ContextMenu, CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { ARCHIVABLE_STATE_GROUPS } from "@operoz/constants";
+import type { TIssue } from "@operoz/types";
+import { EIssuesStoreType } from "@operoz/types";
+import { ContextMenu, CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";

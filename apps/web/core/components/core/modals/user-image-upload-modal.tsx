@@ -2,13 +2,13 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useDropzone } from "react-dropzone";
 // plane imports
-import { ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@operis/constants";
-import { Button } from "@operis/propel/button";
-import { UserCirclePropertyIcon } from "@operis/propel/icons";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { EFileAssetType } from "@operis/types";
-import { EModalPosition, EModalWidth, ModalCore } from "@operis/ui";
-import { getAssetIdFromUrl, getFileURL, checkURLValidity } from "@operis/utils";
+import { ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@operoz/constants";
+import { Button } from "@operoz/propel/button";
+import { UserCirclePropertyIcon } from "@operoz/propel/icons";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { EFileAssetType } from "@operoz/types";
+import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
+import { getAssetIdFromUrl, getFileURL, checkURLValidity } from "@operoz/utils";
 // services
 import { FileService } from "@/services/file.service";
 const fileService = new FileService();

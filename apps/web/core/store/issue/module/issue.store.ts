@@ -1,5 +1,5 @@
 import { action, makeObservable, runInAction } from "mobx";
-import { ALL_ISSUES } from "@operis/constants";
+import { ALL_ISSUES } from "@operoz/constants";
 // base class
 import type {
   TIssue,
@@ -8,11 +8,11 @@ import type {
   IssuePaginationOptions,
   TIssuesResponse,
   TBulkOperationsPayload,
-} from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
 import { getModuleCalendarPaginationOptions } from "@/components/issues/issue-layouts/calendar/utils";
 // helpers
-import { getDistributionPathsPostUpdate, isAxiosCancelError } from "@operis/utils";
+import { getDistributionPathsPostUpdate, isAxiosCancelError } from "@operoz/utils";
 import type { IBaseIssuesStore } from "../helpers/base-issues.store";
 import { BaseIssuesStore } from "../helpers/base-issues.store";
 //

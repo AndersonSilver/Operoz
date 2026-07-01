@@ -1,9 +1,9 @@
 import type { AxiosRequestConfig } from "axios";
 // plane types
-import { API_BASE_URL } from "@operis/constants";
-import { getFileMetaDataForUpload, generateFileUploadPayload } from "@operis/services";
-import type { EFileAssetType, TFileEntityInfo, TFileSignedURLResponse } from "@operis/types";
-import { getAssetIdFromUrl } from "@operis/utils";
+import { API_BASE_URL } from "@operoz/constants";
+import { getFileMetaDataForUpload, generateFileUploadPayload } from "@operoz/services";
+import type { EFileAssetType, TFileEntityInfo, TFileSignedURLResponse } from "@operoz/types";
+import { getAssetIdFromUrl } from "@operoz/utils";
 // helpers
 // services
 import { APIService } from "@/services/api.service";

@@ -1,9 +1,9 @@
 import { forwardRef } from "react";
 // plane imports
-import { RichTextEditorWithRef } from "@operis/editor";
-import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operis/editor";
-import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operis/types";
-import { cn } from "@operis/utils";
+import { RichTextEditorWithRef } from "@operoz/editor";
+import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operoz/editor";
+import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // components
 import { EditorMentionsRoot } from "@/components/editor/embeds/mentions";
 // hooks

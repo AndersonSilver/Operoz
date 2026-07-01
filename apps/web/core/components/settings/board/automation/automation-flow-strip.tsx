@@ -1,5 +1,5 @@
 import { ArrowRight, GitBranch, Play, Zap } from "lucide-react";
-import { cn } from "@operis/ui";
+import { cn } from "@operoz/ui";
 
 type Props = {
   triggerLabel?: string | null;
@@ -42,9 +42,7 @@ export function AutomationFlowStrip(props: Props) {
         {stepCount > 1 && (
           <>
             <ArrowRight className="size-3 shrink-0 text-placeholder" strokeWidth={1.75} />
-            <span className="rounded-md bg-layer-2 px-1.5 py-0.5 text-10 font-medium text-tertiary">
-              {stepCount}
-            </span>
+            <span className="rounded-md bg-layer-2 px-1.5 py-0.5 text-10 font-medium text-tertiary">{stepCount}</span>
           </>
         )}
 

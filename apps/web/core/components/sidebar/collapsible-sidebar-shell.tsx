@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { SIDEBAR_HOVER_STRIP_WIDTH } from "@/constants/collapsible-sidebar";
 
 type Props = {

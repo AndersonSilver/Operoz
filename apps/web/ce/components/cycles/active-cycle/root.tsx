@@ -1,11 +1,11 @@
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Disclosure } from "@headlessui/react";
-import { EmptyStateDetailed } from "@operis/propel/empty-state";
+import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 // plane imports
-import { useTranslation } from "@operis/i18n";
-import type { ICycle } from "@operis/types";
-import { Row } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import type { ICycle } from "@operoz/types";
+import { Row } from "@operoz/ui";
 // assets
 import darkActiveCycleAsset from "@/app/assets/empty-state/cycle/active-dark.webp?url";
 import lightActiveCycleAsset from "@/app/assets/empty-state/cycle/active-light.webp?url";
@@ -16,7 +16,7 @@ import { ActiveCycleProgress } from "@/components/cycles/active-cycle/progress";
 import useCyclesDetails from "@/components/cycles/active-cycle/use-cycles-details";
 import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-background";
 import { CycleListGroupHeader } from "@/components/cycles/list/cycle-list-group-header";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import { CyclesListItem } from "@/components/cycles/list/cycles-list-item";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";

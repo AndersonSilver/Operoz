@@ -1,5 +1,5 @@
 // plane imports
-import { MAX_FILE_SIZE } from "@operis/constants";
+import { MAX_FILE_SIZE } from "@operoz/constants";
 // hooks
 import { useInstance } from "@/hooks/store/use-instance";
 

@@ -1,11 +1,11 @@
 import useSWR from "swr";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IBoard, IBoardClient360HealthSettings } from "@operis/types";
-import { Button } from "@operis/propel/button";
-import { Loader } from "@operis/ui";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IBoard, IBoardClient360HealthSettings } from "@operoz/types";
+import { Button } from "@operoz/propel/button";
+import { Loader } from "@operoz/ui";
 import { defaultWeekPeriod } from "@/components/board/client-360/client-360-utils";
 import { BoardClient360HealthPreviewPanel } from "@/components/settings/board/board-client-360-health-preview";
 import { BoardClient360IntakeTypesPanel } from "@/components/settings/board/board-client-360-intake-types-panel";

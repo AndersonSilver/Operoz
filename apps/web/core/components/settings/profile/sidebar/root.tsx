@@ -1,7 +1,7 @@
 // plane imports
-import { ScrollArea } from "@operis/propel/scrollarea";
-import type { TProfileSettingsTabs } from "@operis/types";
-import { cn } from "@operis/utils";
+import { ScrollArea } from "@operoz/propel/scrollarea";
+import type { TProfileSettingsTabs } from "@operoz/types";
+import { cn } from "@operoz/utils";
 // local imports
 import { ProfileSettingsSidebarHeader } from "./header";
 import { ProfileSettingsSidebarItemCategories } from "./item-categories";

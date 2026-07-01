@@ -1,5 +1,5 @@
 import { Logger as HocuspocusLogger } from "@hocuspocus/extension-logger";
-import { logger } from "@operis/logger";
+import { logger } from "@operoz/logger";
 
 export class Logger extends HocuspocusLogger {
   constructor() {

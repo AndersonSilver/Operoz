@@ -11,7 +11,7 @@ import {
   StickyNote,
   UserRound,
 } from "lucide-react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 
 const ICON_CLASS = "size-3.5 shrink-0";
 

@@ -2,14 +2,14 @@ import { unset, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 // plane imports
-import type { TUserPermissions, TUserPermissionsLevel } from "@operis/constants";
+import type { TUserPermissions, TUserPermissionsLevel } from "@operoz/constants";
 import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORKSPACE_SIDEBAR_DYNAMIC_NAVIGATION_ITEMS_LINKS,
-} from "@operis/constants";
-import type { EUserProjectRoles, IUserProjectsRole, IWorkspaceMemberMe, TProjectMembership } from "@operis/types";
-import { EUserWorkspaceRoles } from "@operis/types";
+} from "@operoz/constants";
+import type { EUserProjectRoles, IUserProjectsRole, IWorkspaceMemberMe, TProjectMembership } from "@operoz/types";
+import { EUserWorkspaceRoles } from "@operoz/types";
 // plane web imports
 import { WorkspaceService } from "@/services/workspace.service";
 import type { RootStore } from "@/plane-web/store/root.store";

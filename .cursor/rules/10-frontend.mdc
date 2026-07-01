@@ -1,0 +1,68 @@
+---
+description: Padrões sênior para código frontend (componentes, estado, estilo, acessibilidade)
+globs: ["**/*.tsx","**/*.jsx","**/*.ts","**/*.css","**/*.scss","**/components/**"]
+alwaysApply: false
+---
+
+# Frontend — Padrões Sênior
+
+## Componentes
+
+- Componentes pequenos e com uma responsabilidade clara. Se um componente passou de
+  ~150-200 linhas ou está fazendo fetch + lógica de negócio + apresentação, quebre.
+- Extraia lógica reutilizável para hooks customizados (`useX`), não duplique.
+- Props explícitas e tipadas. Evite `any`/`props: any`. Nada de "prop drilling" além
+  de 2-3 níveis — nesse ponto, considere Context ou state manager.
+- Componentes de apresentação (burros) separados de componentes com lógica/dados
+  sempre que a complexidade justificar.
+
+## Estado
+
+- Estado local (`useState`) para UI efêmera. Estado de servidor (dados vindos de API)
+  deve viver em uma lib de data-fetching (React Query/SWR/TanStack Query) e não em
+  `useState` + `useEffect` manual — evita bugs de race condition e cache implícito.
+- Não duplique estado derivável. Se algo pode ser calculado a partir de outro estado,
+  calcule no render (ou `useMemo` se for caro), não guarde em outro `useState`.
+- Global state (Redux/Zustand/Context) só para o que é *realmente* global. A maioria
+  dos dados é local a uma árvore de componentes.
+
+## Performance
+
+- Não otimize prematuramente com `useMemo`/`useCallback`/`React.memo` em tudo. Use
+  quando houver um problema de performance medido ou um caso claro (listas grandes,
+  callbacks passados para componentes memoizados).
+- Liste grandes (>100 itens) → virtualização (`react-window`/`virtua`).
+- Imagens: sempre com dimensões definidas (evita layout shift), lazy loading fora do
+  viewport inicial, formatos modernos (webp/avif) quando possível.
+- Cuidado com bundles: novas dependências pesadas precisam de justificativa.
+
+## Acessibilidade (não opcional)
+
+- HTML semântico primeiro (`button`, `nav`, `header`, `label`) antes de `div` + JS.
+- Todo elemento interativo precisa ser navegável por teclado e ter foco visível.
+- Imagens com `alt` significativo (ou `alt=""` se decorativa).
+- Formulários: `label` associado a cada input, mensagens de erro anunciadas
+  (`aria-describedby`, `role="alert"`).
+- Contraste de cor mínimo AA (4.5:1 para texto normal).
+
+## Estilo e CSS
+
+- Siga o sistema de design/tokens já existente no projeto (spacing, cores, tipografia)
+  em vez de valores mágicos hardcoded.
+- Mobile-first quando o projeto usa breakpoints responsivos.
+- Evite `!important` e seletores excessivamente específicos.
+
+## Erros e loading
+
+- Todo componente que faz fetch precisa tratar 3 estados: loading, erro, vazio —
+  não só o "caminho feliz" com dados.
+- Erros de UI não devem quebrar a página inteira: use error boundaries nos pontos
+  certos da árvore.
+
+## Antes de finalizar
+
+- [ ] Sem `console.log` esquecido
+- [ ] Sem `any` desnecessário
+- [ ] Testado com teclado (tab) e leitor de tela mentalmente
+- [ ] Estados de loading/erro/vazio cobertos
+- [ ] Nenhum warning novo no console do browser

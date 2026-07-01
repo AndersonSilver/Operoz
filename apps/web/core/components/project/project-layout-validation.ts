@@ -1,4 +1,4 @@
-import type { IBoardProjectFieldLayout, IProject, TCustomFieldValue, TProjectStandardFieldKey } from "@operis/types";
+import type { IBoardProjectFieldLayout, IProject, TCustomFieldValue, TProjectStandardFieldKey } from "@operoz/types";
 
 export function isEmptyCustomFieldValue(val: TCustomFieldValue | undefined): boolean {
   if (val === undefined || val === null || val === "") return true;

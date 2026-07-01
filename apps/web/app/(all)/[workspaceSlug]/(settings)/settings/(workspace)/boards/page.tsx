@@ -1,16 +1,16 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { CreateBoardModal } from "@/components/board/create-board-modal";
 import { WorkspaceBoardsSettingsHero } from "@/components/board/workspace-boards-settings-hero";
 import { WorkspaceBoardsSettingsList } from "@/components/board/workspace-boards-settings-list";
 import { PageHead } from "@/components/core/page-title";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
-import { Loader } from "@operis/ui";
+import { Loader } from "@operoz/ui";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -72,23 +72,20 @@ function BoardsSettingsPage({ params }: Route.ComponentProps) {
             <Loader.Item height="220px" />
           </Loader>
         ) : hasBoards ? (
-          <WorkspaceBoardsSettingsList
-            workspaceSlug={workspaceSlug}
-            onCreate={() => setShowCreateModal(true)}
-          />
+          <WorkspaceBoardsSettingsList workspaceSlug={workspaceSlug} onCreate={() => setShowCreateModal(true)} />
         ) : (
           <div className="w-full">
-              <EmptyStateCompact
-                assetKey="project"
-                title={t("settings_empty_state.boards.title")}
-                description={t("settings_empty_state.boards.description")}
-                actions={[
-                  {
-                    label: t("settings_empty_state.boards.cta_primary"),
-                    onClick: () => setShowCreateModal(true),
-                  },
-                ]}
-              />
+            <EmptyStateCompact
+              assetKey="project"
+              title={t("settings_empty_state.boards.title")}
+              description={t("settings_empty_state.boards.description")}
+              actions={[
+                {
+                  label: t("settings_empty_state.boards.cta_primary"),
+                  onClick: () => setShowCreateModal(true),
+                },
+              ]}
+            />
           </div>
         )}
       </div>

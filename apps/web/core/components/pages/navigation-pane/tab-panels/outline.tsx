@@ -1,5 +1,5 @@
 // plane imports
-import { ScrollArea } from "@operis/propel/scrollarea";
+import { ScrollArea } from "@operoz/propel/scrollarea";
 // plane web imports
 import { PageNavigationPaneOutlineTabEmptyState } from "@/plane-web/components/pages/navigation-pane/tab-panels/empty-states/outline";
 // store

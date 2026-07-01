@@ -3,15 +3,15 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Controller, FormProvider, useForm } from "react-hook-form";
 // editor
-import { ETabIndices, DEFAULT_WORK_ITEM_FORM_VALUES } from "@operis/constants";
-import type { EditorRefApi } from "@operis/editor";
+import { ETabIndices, DEFAULT_WORK_ITEM_FORM_VALUES } from "@operoz/constants";
+import type { EditorRefApi } from "@operoz/editor";
 // i18n
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TIssue, TWorkspaceDraftIssue } from "@operis/types";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TIssue, TWorkspaceDraftIssue } from "@operoz/types";
 // hooks
-import { ToggleSwitch } from "@operis/ui";
+import { ToggleSwitch } from "@operoz/ui";
 import {
   convertWorkItemDataToSearchResponse,
   getUpdateFormDataForReset,
@@ -19,7 +19,7 @@ import {
   getTextContent,
   getChangedIssuefields,
   getTabIndex,
-} from "@operis/utils";
+} from "@operoz/utils";
 // components
 import {
   IssueDefaultProperties,
@@ -389,8 +389,7 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
             <div className="rounded-t-lg bg-surface-1 px-6 pt-5 pb-1">
               <h3 className="text-16 font-semibold text-primary">{modalTitle}</h3>
               <p className="mt-1 text-11 text-tertiary">
-                {t("issue_modal_required_fields_hint")}{" "}
-                <span className="text-danger-primary">*</span>
+                {t("issue_modal_required_fields_hint")} <span className="text-danger-primary">*</span>
               </p>
             </div>
             <div className="vertical-scrollbar scrollbar-sm max-h-[min(72vh,580px)] overflow-y-auto bg-surface-1 px-6 pb-4">
@@ -551,10 +550,7 @@ export const IssueFormRoot = observer(function IssueFormRoot(props: IssueFormPro
             </div>
             <div className="rounded-b-lg border-t border-subtle bg-surface-1 px-6 py-3">
               {showActionButtons && (
-                <div
-                  className="flex items-center justify-between gap-4"
-                  tabIndex={getIndex("create_more")}
-                >
+                <div className="flex items-center justify-between gap-4" tabIndex={getIndex("create_more")}>
                   {!data?.id ? (
                     <div
                       className="inline-flex cursor-pointer items-center gap-2"

@@ -8,14 +8,14 @@ import {
   EUserPermissions,
   EUserPermissionsLevel,
   WORK_ITEM_TRACKER_ELEMENTS,
-} from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { LockIcon, ViewsIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IModule } from "@operis/types";
-import { EIssuesStoreType, EViewAccess, EIssueLayoutTypes } from "@operis/types";
-import { Header } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { LockIcon, ViewsIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IModule } from "@operoz/types";
+import { EIssuesStoreType, EViewAccess, EIssueLayoutTypes } from "@operoz/types";
+import { Header } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { BOARD_HUB_TOOLBAR_CLUSTER } from "@/components/board/board-hub-background";
 import { CountChip } from "@/components/common/count-chip";
 import { SwitcherIcon } from "@/components/common/switcher-label";
@@ -101,9 +101,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
 
   if (!viewDetails || !workspaceSlug || !projectId || !viewId) return null;
 
-  const viewIcon = (
-    <SwitcherIcon logo_props={viewDetails.logo_props} LabelIcon={ViewsIcon} size={16} />
-  );
+  const viewIcon = <SwitcherIcon logo_props={viewDetails.logo_props} LabelIcon={ViewsIcon} size={16} />;
 
   return (
     <ProjectFeaturePageHeader>
@@ -215,7 +213,7 @@ export const ProjectViewIssuesHeader = observer(function ProjectViewIssuesHeader
             </div>
             {canUserCreateIssue && !viewDetails.is_locked ? (
               <ProjectHubPrimaryAction
-                className="hidden sm:flex shrink-0"
+                className="hidden shrink-0 sm:flex"
                 onClick={() => toggleCreateIssueModal(true, EIssuesStoreType.PROJECT_VIEW)}
                 data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.PROJECT_VIEW}
               >

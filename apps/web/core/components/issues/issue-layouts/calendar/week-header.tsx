@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-import { EStartOfTheWeek } from "@operis/types";
-import { getOrderedDays } from "@operis/utils";
+import { EStartOfTheWeek } from "@operoz/types";
+import { getOrderedDays } from "@operoz/utils";
 import { DAYS_LIST } from "@/constants/calendar";
 // helpers
 // hooks

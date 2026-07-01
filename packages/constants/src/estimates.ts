@@ -1,5 +1,5 @@
 // plane imports
-import type { TEstimateSystems } from "@operis/types";
+import type { TEstimateSystems } from "@operoz/types";
 
 export const MAX_ESTIMATE_POINT_INPUT_LENGTH = 20;
 

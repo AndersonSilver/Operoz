@@ -1,5 +1,5 @@
 {
-  "extends": "@operis/typescript-config/react-library.json",
+  "extends": "@operoz/typescript-config/react-library.json",
   "compilerOptions": {
     "exactOptionalPropertyTypes": false,
     "paths": {

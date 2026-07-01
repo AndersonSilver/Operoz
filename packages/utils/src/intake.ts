@@ -1,6 +1,6 @@
 import { subDays } from "date-fns";
 // plane imports
-import { EPastDurationFilters } from "@operis/constants";
+import { EPastDurationFilters } from "@operoz/constants";
 // local imports
 import { renderFormattedPayloadDate } from "./datetime";
 

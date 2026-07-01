@@ -1,5 +1,5 @@
-import { API_BASE_URL } from "@operis/constants";
-import type { TBoardIntakeForm, TBoardIntakeFormWritePayload } from "@operis/types";
+import { API_BASE_URL } from "@operoz/constants";
+import type { TBoardIntakeForm, TBoardIntakeFormWritePayload } from "@operoz/types";
 import { APIService } from "@/services/api.service";
 
 function parseBoardIntakeFormList(data: unknown): TBoardIntakeForm[] {

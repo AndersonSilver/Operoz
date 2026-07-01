@@ -1,5 +1,5 @@
 import { createContext, useContext } from "react";
-import type { TTimelineType } from "@operis/types";
+import type { TTimelineType } from "@operoz/types";
 
 export const TimeLineTypeContext = createContext<TTimelineType | undefined>(undefined);
 
@@ -9,3 +9,5 @@ export const useTimeLineType = () => {
 };
 
 export { GanttSidebarWidthProvider, useGanttSidebarWidth } from "./gantt-sidebar-width";
+export { GanttDependencyContext, useGanttDependency } from "./gantt-dependency";
+export type { OnCreateDependencyFn, OnDeleteDependencyFn } from "./gantt-dependency";

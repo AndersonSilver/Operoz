@@ -1,5 +1,5 @@
 import { range } from "lodash-es";
-import { Row } from "@operis/ui";
+import { Row } from "@operoz/ui";
 import { BLOCK_HEIGHT } from "@/components/gantt-chart/constants";
 import { getRandomLength } from "../utils";
 

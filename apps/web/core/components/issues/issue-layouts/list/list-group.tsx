@@ -5,9 +5,9 @@ import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // plane imports
-import { DRAG_ALLOWED_GROUPS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { DRAG_ALLOWED_GROUPS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type {
   IGroupByColumn,
   TIssueMap,
@@ -16,10 +16,10 @@ import type {
   TIssue,
   IIssueDisplayProperties,
   TIssueKanbanFilters,
-} from "@operis/types";
-import { EIssueLayoutTypes } from "@operis/types";
-import { Row } from "@operis/ui";
-import { cn } from "@operis/utils";
+} from "@operoz/types";
+import { EIssueLayoutTypes } from "@operoz/types";
+import { Row } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 // components
 import { ListLoaderItemRow } from "@/components/ui/loader/layouts/list-layout-loader";
 // hooks

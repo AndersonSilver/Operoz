@@ -3,9 +3,9 @@ import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 // hooks
-import { CloseIcon, SearchIcon } from "@operis/propel/icons";
-import { useTranslation } from "@operis/i18n";
-import { cn } from "@operis/utils";
+import { CloseIcon, SearchIcon } from "@operoz/propel/icons";
+import { useTranslation } from "@operoz/i18n";
+import { cn } from "@operoz/utils";
 // power-k
 import type { TPowerKCommandConfig, TPowerKContext } from "@/components/power-k/core/types";
 import { ProjectsAppPowerKCommandsList } from "@/components/power-k/ui/modal/commands-list";

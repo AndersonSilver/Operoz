@@ -2,11 +2,11 @@ import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { Triangle } from "lucide-react";
 // plane types
-import { useTranslation } from "@operis/i18n";
-import { EEstimateSystem } from "@operis/types";
-import type { TIssue } from "@operis/types";
-import { Spinner } from "@operis/ui";
-import { convertMinutesToHoursMinutesString } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { EEstimateSystem } from "@operoz/types";
+import type { TIssue } from "@operoz/types";
+import { Spinner } from "@operoz/ui";
+import { convertMinutesToHoursMinutesString } from "@operoz/utils";
 // hooks
 import { useEstimate, useProjectEstimates } from "@/hooks/store/estimates";
 // local imports

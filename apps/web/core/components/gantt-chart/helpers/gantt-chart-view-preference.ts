@@ -1,4 +1,4 @@
-import type { TGanttViews } from "@operis/types";
+import type { TGanttViews } from "@operoz/types";
 
 const STORAGE_KEY = "plane_gantt_chart_view_preferences";
 
@@ -48,10 +48,7 @@ export const resolveGanttChartViewScope = (params: GanttChartViewScopeParams): s
   return "workspace";
 };
 
-export const getSavedGanttChartView = (
-  workspaceSlug: string,
-  scope: string
-): TGanttViews | undefined => {
+export const getSavedGanttChartView = (workspaceSlug: string, scope: string): TGanttViews | undefined => {
   const view = readPreferences()[buildScopeKey(workspaceSlug, scope)];
   return view && VALID_VIEWS.includes(view) ? view : undefined;
 };

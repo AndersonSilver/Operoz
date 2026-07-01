@@ -1,4 +1,4 @@
-import type { TClient360Client, TClient360SummaryDelta } from "@operis/types";
+import type { TClient360Client, TClient360SummaryDelta } from "@operoz/types";
 
 export function computeScopedSummaryDelta(clients: TClient360Client[]): TClient360SummaryDelta | undefined {
   const active = clients.filter((client) => client.period_compare?.available);

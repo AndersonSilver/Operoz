@@ -2,16 +2,16 @@ import { useCallback, useMemo, useState, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-import { EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { ArchiveIcon, CloseIcon, TrashIcon } from "@operis/propel/icons";
-import { Logo } from "@operis/propel/emoji-icon-picker";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { TBulkIssueProperties, TBulkOperationsPayload } from "@operis/types";
-import { EUserPermissions } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { cn, renderFormattedPayloadDate } from "@operis/utils";
+import { EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { ArchiveIcon, CloseIcon, TrashIcon } from "@operoz/propel/icons";
+import { Logo } from "@operoz/propel/emoji-icon-picker";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { TBulkIssueProperties, TBulkOperationsPayload } from "@operoz/types";
+import { EUserPermissions } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { cn, renderFormattedPayloadDate } from "@operoz/utils";
 import { CycleDropdown } from "@/components/dropdowns/cycle";
 import { DateDropdown } from "@/components/dropdowns/date";
 import type { TButtonVariants } from "@/components/dropdowns/types";
@@ -69,6 +69,7 @@ const BULK_DROPDOWN_SHARED_PROPS = {
   buttonContainerClassName: "h-full w-full",
   className: BULK_DROPDOWN_SHELL_CLASS,
   renderByDefault: true,
+  placement: "bottom-start" as const,
 } as const;
 
 function BulkFieldSlot(props: { active?: boolean; children: ReactNode }) {
@@ -77,7 +78,7 @@ function BulkFieldSlot(props: { active?: boolean; children: ReactNode }) {
   return (
     <div
       className={cn(
-        "h-8 shrink-0 overflow-hidden rounded-md",
+        "h-8 shrink-0 overflow-visible rounded-md",
         BULK_CHIP_BORDER_CLASS,
         BULK_FIELD_WIDTH_CLASS,
         active && "border-accent-primary/60 hover:border-accent-primary/70 bg-accent-primary/10"
@@ -235,7 +236,7 @@ export const BulkOperationsActionBar = observer(function BulkOperationsActionBar
   const selectedType = issueTypes.find((type) => type.id === draft.type_id);
 
   return (
-    <div className={cn("shrink-0 border-b border-subtle/70 bg-canvas/95 px-3 py-2.5 backdrop-blur-md", className)}>
+    <div className={cn("relative z-30 shrink-0 border-b border-subtle/70 bg-canvas/95 px-3 py-2.5", className)}>
       <div className={cn(PROJECT_HUB_TOOLBAR_SHELL, "w-full flex-wrap gap-y-2")}>
         <div className={cn(PROJECT_HUB_TOOLBAR_SEGMENT, "shrink-0")}>
           <div
@@ -301,6 +302,7 @@ export const BulkOperationsActionBar = observer(function BulkOperationsActionBar
               <CustomSelect
                 value={draft.type_id ?? ""}
                 onChange={(val: string) => setField("type_id", val || null)}
+                placement="bottom-start"
                 label={
                   selectedType ? (
                     <span className="flex items-center gap-1.5 text-12 font-medium text-secondary">
@@ -348,6 +350,7 @@ export const BulkOperationsActionBar = observer(function BulkOperationsActionBar
               hideDropdownArrow={false}
               noLabelBorder
               placeholderText="Tags"
+              placement="bottom-start"
               buttonClassName={BULK_DROPDOWN_INNER_BUTTON_CLASS}
               className={BULK_DROPDOWN_SHELL_CLASS}
               fullHeight

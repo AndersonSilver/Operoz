@@ -1,9 +1,9 @@
 import React from "react";
 import { Command } from "cmdk";
 // plane imports
-import { START_OF_THE_WEEK_OPTIONS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { EStartOfTheWeek } from "@operis/types";
+import { START_OF_THE_WEEK_OPTIONS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { EStartOfTheWeek } from "@operoz/types";
 // local imports
 import { PowerKModalCommandItem } from "../../modal/command-item";
 

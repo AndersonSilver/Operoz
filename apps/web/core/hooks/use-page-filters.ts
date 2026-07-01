@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 // plane editor
-import type { TEditorFontSize, TEditorFontStyle } from "@operis/editor";
+import type { TEditorFontSize, TEditorFontStyle } from "@operoz/editor";
 // hooks
 import useLocalStorage from "@/hooks/use-local-storage";
 

@@ -1,4 +1,4 @@
-import type { TFilterGroupNode, TFilterProperty } from "@operis/types";
+import type { TFilterGroupNode, TFilterProperty } from "@operoz/types";
 import { processGroupNode } from "../../types/shared";
 import type { TTreeTransformFn, TTreeTransformResult } from "./core";
 import { transformGroupWithChildren } from "./core";

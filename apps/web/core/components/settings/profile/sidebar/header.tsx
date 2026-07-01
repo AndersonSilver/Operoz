@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 // plane imports
-import { Avatar } from "@operis/ui";
+import { Avatar } from "@operoz/ui";
 // hooks
 import { useUser } from "@/hooks/store/user";
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 
 export const ProfileSettingsSidebarHeader = observer(function ProfileSettingsSidebarHeader() {
   // store hooks

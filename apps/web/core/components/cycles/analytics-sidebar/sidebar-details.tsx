@@ -3,14 +3,14 @@ import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareUser } from "lucide-react";
 // plane types
-import { EEstimateSystem } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { MembersPropertyIcon, WorkItemsIcon } from "@operis/propel/icons";
-import type { ICycle } from "@operis/types";
+import { EEstimateSystem } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { MembersPropertyIcon, WorkItemsIcon } from "@operoz/propel/icons";
+import type { ICycle } from "@operoz/types";
 // plane ui
-import { Avatar, AvatarGroup, TextArea } from "@operis/ui";
+import { Avatar, AvatarGroup, TextArea } from "@operoz/ui";
 // helpers
-import { getFileURL } from "@operis/utils";
+import { getFileURL } from "@operoz/utils";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useMember } from "@/hooks/store/use-member";

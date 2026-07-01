@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { Archive, Image, MoreHorizontal, Settings } from "lucide-react";
-import { EUserPermissions, EUserPermissionsLevel } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { IconButton } from "@operis/propel/icon-button";
-import type { IBoard } from "@operis/types";
-import { CustomMenu } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { IconButton } from "@operoz/propel/icon-button";
+import type { IBoard } from "@operoz/types";
+import { CustomMenu } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { ArchiveBoardModal } from "@/components/board/archive-board-modal";
 import {
   BoardHubBackgroundModal,

@@ -10,7 +10,7 @@ import { PageNavigationPaneAssetsTabPanel } from "./assets";
 import { PageNavigationPaneInfoTabPanel } from "./info/root";
 import { PageNavigationPaneOutlineTabPanel } from "./outline";
 import { PageReviewPanel } from "@/components/pages/review/page-review-panel";
-import { Tabs } from "@operis/propel/tabs";
+import { Tabs } from "@operoz/propel/tabs";
 
 type Props = {
   page: TPageInstance;

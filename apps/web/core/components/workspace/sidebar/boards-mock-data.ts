@@ -1,4 +1,4 @@
-import type { TLogoProps } from "@operis/types";
+import type { TLogoProps } from "@operoz/types";
 
 export type TBoardSidebarMockProject = {
   id: string;

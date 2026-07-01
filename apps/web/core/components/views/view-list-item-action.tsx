@@ -3,14 +3,14 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Earth } from "lucide-react";
 // plane imports
-import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operis/constants";
-import { useLocalStorage } from "@operis/hooks";
-import { LockIcon } from "@operis/propel/icons";
-import { Tooltip } from "@operis/propel/tooltip";
-import type { IProjectView } from "@operis/types";
-import { EViewAccess } from "@operis/types";
-import { FavoriteStar } from "@operis/ui";
-import { getPublishViewLink } from "@operis/utils";
+import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
+import { useLocalStorage } from "@operoz/hooks";
+import { LockIcon } from "@operoz/propel/icons";
+import { Tooltip } from "@operoz/propel/tooltip";
+import type { IProjectView } from "@operoz/types";
+import { EViewAccess } from "@operoz/types";
+import { FavoriteStar } from "@operoz/ui";
+import { getPublishViewLink } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectView } from "@/hooks/store/use-project-view";

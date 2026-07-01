@@ -24,7 +24,7 @@ core/components/workflow/
   da automação. Nós = estados; arestas = transições com `data.conditions`,
   `data.validators`, `data.postFunctions`.
 - `nodeTypes = { state: StateNode }`; cor do nó deriva do `group` do estado
-  (backlog/started/done) usando o tema do `@operis/ui`.
+  (backlog/started/done) usando o tema do `@operoz/ui`.
 
 ## Store MobX
 
@@ -40,14 +40,19 @@ export class WorkflowStore implements IWorkflowStore {
 
   constructor(private rootStore: CoreRootStore) {
     makeObservable(this, {
-      workflowsMap: observable, graphByWorkflow: observable,
-      fetchWorkflows: action, saveGraph: action, publish: action,
+      workflowsMap: observable,
+      graphByWorkflow: observable,
+      fetchWorkflows: action,
+      saveGraph: action,
+      publish: action,
     });
   }
 
   saveGraph = async (slug: string, id: string, graph: TWorkflowGraph) => {
     const saved = await this.service.putGraph(slug, id, graph);
-    runInAction(() => { this.graphByWorkflow[id] = saved; });
+    runInAction(() => {
+      this.graphByWorkflow[id] = saved;
+    });
   };
 }
 ```
@@ -58,18 +63,25 @@ export class WorkflowStore implements IWorkflowStore {
 `list`, `retrieve`, `create`, `update`, `getGraph`, `putGraph`, `publish`,
 `listSchemes`, `saveScheme`.
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 Reutilizar a forma de `TAutomationGraph`:
 
 ```ts
 export type TWorkflowGraph = {
   nodes: { id: string; data: { state_id: string } }[];
-  edges: { id: string; source: string; target: string;
-           data: { name: string; is_global: boolean;
-                   conditions: TTransitionRule[];
-                   validators: TTransitionRule[];
-                   post_functions: TTransitionRule[] } }[];
+  edges: {
+    id: string;
+    source: string;
+    target: string;
+    data: {
+      name: string;
+      is_global: boolean;
+      conditions: TTransitionRule[];
+      validators: TTransitionRule[];
+      post_functions: TTransitionRule[];
+    };
+  }[];
 };
 export type TTransitionRule = { type: string; config: Record<string, unknown> };
 ```

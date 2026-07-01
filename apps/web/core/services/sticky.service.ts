@@ -1,6 +1,6 @@
 // helpers
-import { STICKIES_PER_PAGE, API_BASE_URL } from "@operis/constants";
-import type { TSticky } from "@operis/types";
+import { STICKIES_PER_PAGE, API_BASE_URL } from "@operoz/constants";
+import type { TSticky } from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
 

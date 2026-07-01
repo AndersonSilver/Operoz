@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-import { EIssueServiceType } from "@operis/types";
+import { EIssueServiceType } from "@operoz/types";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
@@ -31,13 +31,15 @@ type ProviderProps = {
 
 export const GanttSubIssueExpansionProvider = observer(function GanttSubIssueExpansionProvider(props: ProviderProps) {
   const { children, issueIds, isEpic = false } = props;
-  const { workspaceSlug } = useParams();
-  const storeType = useIssueStoreType() as GanttStoreType;
-  const { issuesFilter } = useIssues(storeType);
   const {
     issue: { getIssueById },
     subIssues: subIssuesStore,
+    relation: relationStore,
   } = useIssueDetail(isEpic ? EIssueServiceType.EPICS : EIssueServiceType.ISSUES);
+
+  const { workspaceSlug, projectId } = useParams();
+  const storeType = useIssueStoreType() as GanttStoreType;
+  const { issuesFilter } = useIssues(storeType);
 
   const [expandedIssueIds, setExpandedIssueIds] = useState<Set<string>>(() => new Set());
 
@@ -93,6 +95,17 @@ export const GanttSubIssueExpansionProvider = observer(function GanttSubIssueExp
   })();
 
   const displayBlockIds = displayRows.map((row) => row.issueId);
+
+  // Sub-issues API omits relation expand — hydrate relationMap for every visible Gantt row.
+  useEffect(() => {
+    if (!workspaceSlug || !displayBlockIds.length) return;
+
+    const slug = workspaceSlug.toString();
+    const resolvedProjectId = projectId?.toString() ?? getIssueById(displayBlockIds[0])?.project_id;
+    if (!resolvedProjectId) return;
+
+    void relationStore.fetchRelationsForIssues(slug, resolvedProjectId, displayBlockIds);
+  }, [displayBlockIds, getIssueById, projectId, relationStore, workspaceSlug]);
 
   const value = useMemo(
     () => ({

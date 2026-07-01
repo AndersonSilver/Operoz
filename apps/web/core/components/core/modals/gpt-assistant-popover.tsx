@@ -5,12 +5,12 @@ import { Controller, useForm } from "react-hook-form";
 import { usePopper } from "react-popper";
 import { AlertCircle } from "lucide-react";
 import { Popover, Transition } from "@headlessui/react";
-import type { EditorRefApi } from "@operis/editor";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import { Input } from "@operis/ui";
-import { cn } from "@operis/utils";
+import type { EditorRefApi } from "@operoz/editor";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import { Input } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
 import { AIService } from "@/services/ai.service";
 
@@ -78,9 +78,7 @@ export function GptAssistantPanel(props: GptAssistantPanelProps) {
     const error = (err as { data?: { error?: string }; status?: number })?.data?.error;
     const status = (err as { status?: number })?.status;
     const errorMessage =
-      status === 429
-        ? error || t("issue_modal_ai_error_rate_limit")
-        : error || t("issue_modal_ai_error_generic");
+      status === 429 ? error || t("issue_modal_ai_error_rate_limit") : error || t("issue_modal_ai_error_generic");
 
     setToast({
       type: TOAST_TYPE.ERROR,
@@ -165,9 +163,7 @@ export function GptAssistantPanel(props: GptAssistantPanelProps) {
       : t("issue_modal_ai_generate_again");
 
   const taskPlaceholder =
-    prompt && prompt !== ""
-      ? t("issue_modal_ai_task_placeholder_with_content")
-      : t("issue_modal_ai_task_placeholder");
+    prompt && prompt !== "" ? t("issue_modal_ai_task_placeholder_with_content") : t("issue_modal_ai_task_placeholder");
 
   return (
     <div
@@ -205,7 +201,7 @@ export function GptAssistantPanel(props: GptAssistantPanelProps) {
         >
           {isInline ? (
             <div
-              className="prose prose-invert max-w-none text-13 [&_p]:my-1"
+              className="prose-invert max-w-none text-13 prose [&_p]:my-1"
               dangerouslySetInnerHTML={{ __html: response }}
             />
           ) : (
@@ -225,9 +221,7 @@ export function GptAssistantPanel(props: GptAssistantPanelProps) {
         </div>
       )}
 
-      {invalidResponse && (
-        <p className="text-13 text-danger-primary">{t("issue_modal_ai_invalid_response")}</p>
-      )}
+      {invalidResponse && <p className="text-13 text-danger-primary">{t("issue_modal_ai_invalid_response")}</p>}
 
       <Controller
         control={control}

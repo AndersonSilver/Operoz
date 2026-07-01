@@ -1,7 +1,7 @@
-import type { TNetworkChoiceIconKey } from "@operis/constants";
+import type { TNetworkChoiceIconKey } from "@operoz/constants";
 // plane imports
-import { GlobeIcon, LockIcon } from "@operis/propel/icons";
-import { cn } from "@operis/utils";
+import { GlobeIcon, LockIcon } from "@operoz/propel/icons";
+import { cn } from "@operoz/utils";
 
 type Props = {
   iconKey: TNetworkChoiceIconKey;

@@ -21,8 +21,8 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ClipboardPaste, Copy } from "lucide-react";
-import { useTranslation } from "@operis/i18n";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
+import { useTranslation } from "@operoz/i18n";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import "./automation-canvas.css";
 import { AutomationFlowNode } from "./automation-node";
 import { DecisionFlowNode } from "./decision-flow-node";
@@ -42,7 +42,7 @@ import {
   removeEdgeFromGraph,
   removeNodeFromGraph,
 } from "./automation-utils";
-import type { TAutomationGraph } from "@operis/types";
+import type { TAutomationGraph } from "@operoz/types";
 
 type Props = {
   graph: TAutomationGraph;

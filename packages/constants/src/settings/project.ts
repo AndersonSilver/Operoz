@@ -1,6 +1,6 @@
 // plane imports
-import { EUserProjectRoles } from "@operis/types";
-import type { TProjectSettingsItem, TProjectSettingsTabs } from "@operis/types";
+import { EUserProjectRoles } from "@operoz/types";
+import type { TProjectSettingsItem, TProjectSettingsTabs } from "@operoz/types";
 
 export enum PROJECT_SETTINGS_CATEGORY {
   GENERAL = "general",

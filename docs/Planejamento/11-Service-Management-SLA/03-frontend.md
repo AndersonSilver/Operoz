@@ -46,12 +46,14 @@ core/store/service-management/queue.store.ts → QueueStore
 `issueSla`, `queues`, `queueIssues`, `requestTypes`, `approvals`, `decide`.
 Portal usa um `portal.service.ts` separado (rotas públicas).
 
-## Tipos (`@operis/types`)
+## Tipos (`@operoz/types`)
 
 ```ts
 export type TSlaTimer = {
-  metric: string; status: "running" | "paused" | "met" | "breached";
-  remaining_seconds?: number; breach_at?: string;
+  metric: string;
+  status: "running" | "paused" | "met" | "breached";
+  remaining_seconds?: number;
+  breach_at?: string;
 };
 ```
 

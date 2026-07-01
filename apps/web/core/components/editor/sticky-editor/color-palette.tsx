@@ -1,4 +1,4 @@
-import type { TSticky } from "@operis/types";
+import type { TSticky } from "@operoz/types";
 
 export const STICKY_COLORS_LIST: {
   key: string;

@@ -1,5 +1,5 @@
-import type { TPlacement } from "@operis/propel/utils/placement";
-import type { TIssue } from "@operis/types";
+import type { TPlacement } from "@operoz/propel/utils/placement";
+import type { TIssue } from "@operoz/types";
 
 export interface IQuickActionProps {
   parentRef: React.RefObject<HTMLElement>;

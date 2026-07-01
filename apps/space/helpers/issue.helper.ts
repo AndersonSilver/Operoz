@@ -1,7 +1,7 @@
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 // plane internal
-import { STATE_GROUPS } from "@operis/constants";
-import type { TStateGroups } from "@operis/types";
+import { STATE_GROUPS } from "@operoz/constants";
+import type { TStateGroups } from "@operoz/types";
 // helpers
 import { getDate } from "@/helpers/date-time.helper";
 

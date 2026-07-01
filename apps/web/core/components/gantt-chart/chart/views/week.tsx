@@ -1,16 +1,19 @@
 import { observer } from "mobx-react";
+import { useTranslation } from "@operoz/i18n";
 // plane utils
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
 import { useGanttSidebarWidth } from "../../contexts/gantt-sidebar-width";
 import { HEADER_HEIGHT } from "../../constants";
+import { formatGanttWeekMonthRangeTitle } from "../../helpers/gantt-date-labels";
 import type { IWeekBlock } from "../../views";
 
 export const WeekChartView = observer(function WeekChartView(_props: any) {
   const { currentViewData, renderView } = useTimeLineChartStore();
   const { sidebarWidth } = useGanttSidebarWidth();
+  const { t, currentLocale } = useTranslation();
   const weekBlocks: IWeekBlock[] = renderView;
 
   return (
@@ -36,10 +39,10 @@ export const WeekChartView = observer(function WeekChartView(_props: any) {
                     left: `${sidebarWidth}px`,
                   }}
                 >
-                  {block?.title}
+                  {formatGanttWeekMonthRangeTitle(block.startDate, block.endDate, currentLocale)}
                 </div>
                 <div className="sticky px-3 py-2 text-11 whitespace-nowrap text-placeholder capitalize">
-                  {block?.weekData?.title}
+                  {t("issue.gantt.week_label", { week: block.weekNumber })}
                 </div>
               </div>
               {/** Days Sub title */}

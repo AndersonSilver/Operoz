@@ -1,9 +1,9 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { DueDatePropertyIcon } from "@operis/propel/icons";
+import { DueDatePropertyIcon } from "@operoz/propel/icons";
 // types
-import type { TIssue } from "@operis/types";
-import { cn, getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@operis/utils";
+import type { TIssue } from "@operoz/types";
+import { cn, getDate, renderFormattedPayloadDate, shouldHighlightIssueDueDate } from "@operoz/utils";
 // components
 import { DateDropdown } from "@/components/dropdowns/date";
 // helpers

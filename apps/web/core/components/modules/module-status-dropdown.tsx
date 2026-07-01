@@ -1,12 +1,12 @@
 import React from "react";
 import { observer } from "mobx-react";
-import { MODULE_STATUS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import type { TModuleStatus } from "@operis/propel/icons";
-import { ModuleStatusIcon } from "@operis/propel/icons";
-import type { IModule } from "@operis/types";
-import { CustomSelect } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { MODULE_STATUS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import type { TModuleStatus } from "@operoz/propel/icons";
+import { ModuleStatusIcon } from "@operoz/propel/icons";
+import type { IModule } from "@operoz/types";
+import { CustomSelect } from "@operoz/ui";
+import { cn } from "@operoz/utils";
 
 type Props = {
   isDisabled: boolean;

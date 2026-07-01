@@ -1,5 +1,5 @@
-import type { TCoreSupportedOperators, TCoreSupportedDateFilterOperators } from "@operis/types";
-import { CORE_EQUALITY_OPERATOR, CORE_COLLECTION_OPERATOR, CORE_COMPARISON_OPERATOR } from "@operis/types";
+import type { TCoreSupportedOperators, TCoreSupportedDateFilterOperators } from "@operoz/types";
+import { CORE_EQUALITY_OPERATOR, CORE_COLLECTION_OPERATOR, CORE_COMPARISON_OPERATOR } from "@operoz/types";
 
 /**
  * Core operator labels

@@ -1,18 +1,26 @@
-import { useCallback, useMemo, useState } from "react";
-import { Loader2, MessageSquarePlus, Pencil, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { Plus } from "lucide-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { EmptyStateCompact } from "@operis/propel/empty-state";
-import { Input } from "@operis/propel/input";
-import { setToast, TOAST_TYPE } from "@operis/propel/toast";
-import { TextArea, ToggleSwitch } from "@operis/ui";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { EmptyStateCompact } from "@operoz/propel/empty-state";
+import { Input } from "@operoz/propel/input";
+import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
+import { TextArea, ToggleSwitch, Loader, cn } from "@operoz/ui";
 import {
   DiscordSlashCommandService,
   type TDiscordSlashCommand,
   type TDiscordSlashCommandPayload,
 } from "@/services/discord-slash-command.service";
+import { DiscordInteractionsEndpointCard } from "./discord-interactions-endpoint-card";
+import { DiscordSlashCommandCard } from "./discord-slash-command-card";
+import {
+  DEFAULT_DISCORD_COMMANDS_FILTERS,
+  DiscordSlashCommandsToolbar,
+  hasActiveDiscordCommandsFilters,
+  type DiscordCommandsFilters,
+} from "./discord-slash-commands-toolbar";
+import "./discord-settings.css";
 
 type FormState = {
   name: string;
@@ -59,20 +67,17 @@ function toPayload(form: FormState): TDiscordSlashCommandPayload {
   };
 }
 
-function StatusBadge({ status }: { status: TDiscordSlashCommand["registration_status"] }) {
-  const { t } = useTranslation();
-  const tone =
-    status === "synced"
-      ? "text-success-primary bg-success-subtle/40"
-      : status === "failed"
-        ? "text-danger-primary bg-danger-subtle/40"
-        : "text-warning-primary bg-warning-subtle/40";
+function filterCommands(commands: TDiscordSlashCommand[], filters: DiscordCommandsFilters): TDiscordSlashCommand[] {
+  const query = filters.query.trim().toLowerCase();
 
-  return (
-    <span className={cn("inline-flex rounded-sm px-2 py-0.5 text-11 font-medium", tone)}>
-      {t(`workspace_settings.settings.discord.status.${status}`)}
-    </span>
-  );
+  return commands.filter((command) => {
+    if (filters.status !== "all" && command.registration_status !== filters.status) return false;
+    if (!query) return true;
+
+    const haystack =
+      `/${command.name} ${command.description} ${command.board_slug ?? ""} ${command.guild_id ?? ""}`.toLowerCase();
+    return haystack.includes(query);
+  });
 }
 
 function CommandForm(props: {
@@ -87,106 +92,123 @@ function CommandForm(props: {
   const { form, onChange, onSubmit, onCancel, submitting, editing } = props;
 
   return (
-    <div className="space-y-4 rounded-xl border border-subtle bg-surface-1 p-4">
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label className="mb-1 block text-11 font-medium text-tertiary">
-            {t("workspace_settings.settings.discord.form.name")}
-          </label>
-          <Input
-            value={form.name}
-            onChange={(event) => onChange({ ...form, name: event.target.value.toLowerCase() })}
-            placeholder="resumo-squad"
-            disabled={submitting}
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-11 font-medium text-tertiary">
-            {t("workspace_settings.settings.discord.form.guild_id")} *
-          </label>
-          <Input
-            value={form.guild_id}
-            onChange={(event) => onChange({ ...form, guild_id: event.target.value })}
-            placeholder="123456789012345678"
-            disabled={submitting}
-          />
-        </div>
-      </div>
-
-      <div>
-        <label className="mb-1 block text-11 font-medium text-tertiary">
-          {t("workspace_settings.settings.discord.form.description")}
-        </label>
-        <Input
-          value={form.description}
-          onChange={(event) => onChange({ ...form, description: event.target.value })}
-          disabled={submitting}
-        />
-      </div>
-
-      <div>
-        <label className="mb-1 block text-11 font-medium text-tertiary">
-          {t("workspace_settings.settings.discord.form.prompt_instructions")}
-        </label>
-        <TextArea
-          value={form.prompt_instructions}
-          onChange={(event) => onChange({ ...form, prompt_instructions: event.target.value })}
-          rows={5}
-          disabled={submitting}
-        />
-      </div>
-
-      <div className="grid gap-3 sm:grid-cols-2">
-        <div>
-          <label className="mb-1 block text-11 font-medium text-tertiary">
-            {t("workspace_settings.settings.discord.form.board_slug")}
-          </label>
-          <Input
-            value={form.board_slug}
-            onChange={(event) => onChange({ ...form, board_slug: event.target.value })}
-            disabled={submitting}
-          />
-        </div>
-        <div>
-          <label className="mb-1 block text-11 font-medium text-tertiary">
-            {t("workspace_settings.settings.discord.form.default_project")}
-          </label>
-          <Input
-            value={form.default_project}
-            onChange={(event) => onChange({ ...form, default_project: event.target.value })}
-            placeholder="uuid do projeto"
-            disabled={submitting}
-          />
-        </div>
-      </div>
-
-      <div className="flex items-center justify-between rounded-md border border-subtle bg-layer-2/30 px-3 py-2">
-        <div>
-          <p className="text-13 font-medium text-primary">{t("workspace_settings.settings.discord.form.enabled")}</p>
-          <p className="text-12 text-tertiary">{t("workspace_settings.settings.discord.form.enabled_hint")}</p>
-        </div>
-        <ToggleSwitch
-          value={form.is_enabled}
-          onChange={(value) => onChange({ ...form, is_enabled: value })}
-          disabled={submitting}
-        />
-      </div>
-
-      <div className="flex justify-end gap-2">
-        <Button variant="secondary" size="sm" onClick={onCancel} disabled={submitting}>
-          {t("cancel")}
-        </Button>
-        <Button variant="primary" size="sm" onClick={onSubmit} loading={submitting}>
+    <article className="overflow-hidden rounded-xl border border-subtle bg-layer-1">
+      <div className="border-b border-subtle px-5 py-4">
+        <h3 className="text-14 font-semibold text-primary">
           {editing
-            ? t("workspace_settings.settings.discord.form.save")
-            : t("workspace_settings.settings.discord.form.create")}
-        </Button>
+            ? t("workspace_settings.settings.discord.form.edit_title")
+            : t("workspace_settings.settings.discord.form.create_title")}
+        </h3>
+        <p className="mt-1 text-12 text-secondary">{t("workspace_settings.settings.discord.form.lead")}</p>
       </div>
-    </div>
+
+      <div className="space-y-4 p-5">
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-11 font-medium text-tertiary">
+              {t("workspace_settings.settings.discord.form.name")}
+            </label>
+            <Input
+              value={form.name}
+              onChange={(event) => onChange({ ...form, name: event.target.value.toLowerCase() })}
+              placeholder="status-projeto"
+              disabled={submitting}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-11 font-medium text-tertiary">
+              {t("workspace_settings.settings.discord.form.guild_id")} *
+            </label>
+            <Input
+              value={form.guild_id}
+              onChange={(event) => onChange({ ...form, guild_id: event.target.value })}
+              placeholder="123456789012345678"
+              disabled={submitting}
+            />
+          </div>
+        </div>
+
+        <div>
+          <label className="mb-1 block text-11 font-medium text-tertiary">
+            {t("workspace_settings.settings.discord.form.description")}
+          </label>
+          <Input
+            value={form.description}
+            onChange={(event) => onChange({ ...form, description: event.target.value })}
+            disabled={submitting}
+          />
+        </div>
+
+        <div>
+          <label className="mb-1 block text-11 font-medium text-tertiary">
+            {t("workspace_settings.settings.discord.form.prompt_instructions")}
+          </label>
+          <TextArea
+            value={form.prompt_instructions}
+            onChange={(event) => onChange({ ...form, prompt_instructions: event.target.value })}
+            rows={5}
+            disabled={submitting}
+          />
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-2">
+          <div>
+            <label className="mb-1 block text-11 font-medium text-tertiary">
+              {t("workspace_settings.settings.discord.form.board_slug")}
+            </label>
+            <Input
+              value={form.board_slug}
+              onChange={(event) => onChange({ ...form, board_slug: event.target.value })}
+              disabled={submitting}
+            />
+          </div>
+          <div>
+            <label className="mb-1 block text-11 font-medium text-tertiary">
+              {t("workspace_settings.settings.discord.form.default_project")}
+            </label>
+            <Input
+              value={form.default_project}
+              onChange={(event) => onChange({ ...form, default_project: event.target.value })}
+              placeholder="uuid do projeto"
+              disabled={submitting}
+            />
+          </div>
+        </div>
+
+        <div className="flex items-center justify-between rounded-lg border border-subtle bg-surface-1 px-3 py-2.5">
+          <div>
+            <p className="text-13 font-medium text-primary">{t("workspace_settings.settings.discord.form.enabled")}</p>
+            <p className="text-12 text-tertiary">{t("workspace_settings.settings.discord.form.enabled_hint")}</p>
+          </div>
+          <ToggleSwitch
+            value={form.is_enabled}
+            onChange={(value) => onChange({ ...form, is_enabled: value })}
+            disabled={submitting}
+          />
+        </div>
+
+        <div className="flex justify-end gap-2 border-t border-subtle pt-4">
+          <Button variant="secondary" size="sm" onClick={onCancel} disabled={submitting}>
+            {t("cancel")}
+          </Button>
+          <Button variant="primary" size="sm" onClick={onSubmit} loading={submitting}>
+            {editing
+              ? t("workspace_settings.settings.discord.form.save")
+              : t("workspace_settings.settings.discord.form.create")}
+          </Button>
+        </div>
+      </div>
+    </article>
   );
 }
 
-export function WorkspaceDiscordSlashCommandsPanel({ workspaceSlug }: { workspaceSlug: string }) {
+type PanelProps = {
+  workspaceSlug: string;
+  onCommandCountChange?: (count: number) => void;
+};
+
+export function WorkspaceDiscordSlashCommandsPanel(props: PanelProps) {
+  const { workspaceSlug, onCommandCountChange } = props;
   const { t } = useTranslation();
   const service = useMemo(() => new DiscordSlashCommandService(), []);
   const swrKey = `DISCORD_SLASH_COMMANDS_${workspaceSlug}`;
@@ -197,6 +219,15 @@ export function WorkspaceDiscordSlashCommandsPanel({ workspaceSlug }: { workspac
   const [editing, setEditing] = useState<TDiscordSlashCommand | null>(null);
   const [form, setForm] = useState<FormState>(EMPTY_FORM);
   const [submitting, setSubmitting] = useState(false);
+  const [filters, setFilters] = useState(DEFAULT_DISCORD_COMMANDS_FILTERS);
+
+  const list = commands ?? [];
+
+  useEffect(() => {
+    onCommandCountChange?.(list.length);
+  }, [list.length, onCommandCountChange]);
+
+  const filteredCommands = useMemo(() => filterCommands(list, filters), [list, filters]);
 
   const resetForm = useCallback(() => {
     setForm(EMPTY_FORM);
@@ -250,115 +281,116 @@ export function WorkspaceDiscordSlashCommandsPanel({ workspaceSlug }: { workspac
     setShowForm(true);
   };
 
-  if (isLoading && !commands) {
-    return (
-      <div className="flex min-h-[16rem] items-center justify-center rounded-xl border border-subtle bg-layer-1">
-        <Loader2 className="size-6 animate-spin text-accent-primary" strokeWidth={1.75} />
-      </div>
-    );
-  }
+  return (
+    <div className="flex flex-col gap-6">
+      <DiscordInteractionsEndpointCard />
 
-  const list = commands ?? [];
+      <section className="flex flex-col gap-4">
+        <div className="flex flex-wrap items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h2 className="text-15 font-semibold tracking-tight text-primary">
+              {t("workspace_settings.settings.discord.commands_title")}
+            </h2>
+            <p className="mt-1 max-w-2xl text-13 leading-relaxed text-secondary">
+              {t("workspace_settings.settings.discord.commands_description")}
+            </p>
+          </div>
+          {!showForm ? (
+            <Button variant="primary" size="base" onClick={startCreate}>
+              {t("workspace_settings.settings.discord.add_command")}
+            </Button>
+          ) : null}
+        </div>
+
+        {showForm ? (
+          <CommandForm
+            form={form}
+            onChange={setForm}
+            onSubmit={handleSubmit}
+            onCancel={resetForm}
+            submitting={submitting}
+            editing={Boolean(editing)}
+          />
+        ) : null}
+
+        {isLoading && !commands ? (
+          <Loader className="discord-settings-card-grid w-full">
+            <Loader.Item height="200px" />
+            <Loader.Item height="200px" />
+          </Loader>
+        ) : list.length === 0 && !showForm ? (
+          <EmptyStateCompact
+            assetKey="webhook"
+            title={t("workspace_settings.settings.discord.empty_title")}
+            description={t("workspace_settings.settings.discord.empty_description")}
+            actions={[{ label: t("workspace_settings.settings.discord.add_command"), onClick: startCreate }]}
+          />
+        ) : (
+          <>
+            <DiscordSlashCommandsToolbar
+              filters={filters}
+              resultCount={filteredCommands.length}
+              onChange={setFilters}
+            />
+
+            {filteredCommands.length === 0 ? (
+              <EmptyStateCompact
+                assetKey="search"
+                title={t("workspace_settings.settings.discord.filters.empty_search")}
+                description={t("workspace_settings.settings.discord.filters.empty_search_hint")}
+                actions={
+                  hasActiveDiscordCommandsFilters(filters)
+                    ? [
+                        {
+                          label: t("workspace_settings.settings.discord.filters.clear"),
+                          onClick: () => setFilters(DEFAULT_DISCORD_COMMANDS_FILTERS),
+                        },
+                      ]
+                    : undefined
+                }
+              />
+            ) : (
+              <div className="discord-settings-card-grid">
+                {!showForm && <CreateCommandCard onClick={startCreate} />}
+                {filteredCommands.map((command) => (
+                  <DiscordSlashCommandCard
+                    key={command.id}
+                    command={command}
+                    onEdit={() => startEdit(command)}
+                    onDelete={() => void handleDelete(command)}
+                    disabled={submitting}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </section>
+    </div>
+  );
+}
+
+function CreateCommandCard({ onClick }: { onClick: () => void }) {
+  const { t } = useTranslation();
 
   return (
-    <div className="space-y-4">
-      <div className="rounded-xl border border-subtle bg-layer-2/25 p-4">
-        <p className="text-11 font-semibold tracking-wide text-tertiary uppercase">
-          {t("workspace_settings.settings.discord.setup_title")}
-        </p>
-        <p className="mt-1 text-12 leading-relaxed text-secondary">
-          {t("workspace_settings.settings.discord.setup_description")}
-        </p>
-        <code className="mt-2 block rounded-sm bg-layer-2 px-2 py-1 text-11 text-primary">
-          POST /api/discord/interactions/
-        </code>
-      </div>
-
-      <div className="flex items-center justify-between gap-3">
-        <div>
-          <h3 className="text-13 font-semibold text-primary">
-            {t("workspace_settings.settings.discord.commands_title")}
-          </h3>
-          <p className="text-12 text-tertiary">{t("workspace_settings.settings.discord.commands_description")}</p>
-        </div>
-        {!showForm ? (
-          <Button variant="primary" size="sm" onClick={startCreate}>
-            <MessageSquarePlus className="size-4" strokeWidth={1.75} />
-            {t("workspace_settings.settings.discord.add_command")}
-          </Button>
-        ) : null}
-      </div>
-
-      {showForm ? (
-        <CommandForm
-          form={form}
-          onChange={setForm}
-          onSubmit={handleSubmit}
-          onCancel={resetForm}
-          submitting={submitting}
-          editing={Boolean(editing)}
-        />
-      ) : null}
-
-      {list.length === 0 && !showForm ? (
-        <EmptyStateCompact
-          assetKey="webhook"
-          title={t("workspace_settings.settings.discord.empty_title")}
-          description={t("workspace_settings.settings.discord.empty_description")}
-          actions={[{ label: t("workspace_settings.settings.discord.add_command"), onClick: startCreate }]}
-          align="start"
-          rootClassName="py-16"
-        />
-      ) : (
-        <div className="overflow-hidden rounded-xl border border-subtle bg-layer-1">
-          <table className="w-full text-left text-13">
-            <thead className="border-b border-subtle bg-layer-2/40 text-11 tracking-wide text-tertiary uppercase">
-              <tr>
-                <th className="px-4 py-3 font-medium">{t("workspace_settings.settings.discord.table.command")}</th>
-                <th className="px-4 py-3 font-medium">{t("workspace_settings.settings.discord.table.scope")}</th>
-                <th className="px-4 py-3 font-medium">{t("workspace_settings.settings.discord.table.status")}</th>
-                <th className="px-4 py-3 text-right font-medium">
-                  {t("workspace_settings.settings.discord.table.actions")}
-                </th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-subtle">
-              {list.map((command) => (
-                <tr key={command.id} className="hover:bg-layer-transparent-hover">
-                  <td className="px-4 py-3">
-                    <p className="font-medium text-primary">/{command.name}</p>
-                    <p className="text-12 text-tertiary">{command.description}</p>
-                  </td>
-                  <td className="px-4 py-3 text-12 text-secondary">
-                    {command.guild_id
-                      ? `guild:${command.guild_id}`
-                      : t("workspace_settings.settings.discord.scope_global")}
-                    {command.board_slug ? (
-                      <span className="mt-1 block text-11 text-tertiary">board:{command.board_slug}</span>
-                    ) : null}
-                  </td>
-                  <td className="px-4 py-3">
-                    <StatusBadge status={command.registration_status} />
-                    {command.registration_error ? (
-                      <p className="mt-1 max-w-xs truncate text-11 text-danger-primary">{command.registration_error}</p>
-                    ) : null}
-                  </td>
-                  <td className="px-4 py-3">
-                    <div className="flex justify-end gap-1">
-                      <Button variant="ghost" size="sm" onClick={() => startEdit(command)} disabled={submitting}>
-                        <Pencil className="size-3.5" strokeWidth={1.75} />
-                      </Button>
-                      <Button variant="ghost" size="sm" onClick={() => handleDelete(command)} disabled={submitting}>
-                        <Trash2 className="size-3.5 text-danger-primary" strokeWidth={1.75} />
-                      </Button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "group flex h-full min-h-[200px] w-full flex-col items-center justify-center gap-2.5 rounded-xl border-2 border-dashed border-subtle",
+        "bg-transparent px-5 py-8 text-center transition-all duration-150",
+        "hover:border-accent-subtle hover:bg-accent-subtle/10",
+        "focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none"
       )}
-    </div>
+    >
+      <span className="grid size-11 place-items-center rounded-xl border border-subtle bg-layer-1 text-accent-primary transition-colors group-hover:border-accent-subtle group-hover:bg-accent-subtle/30">
+        <Plus className="size-5" strokeWidth={1.75} />
+      </span>
+      <span className="text-13 font-semibold text-primary">{t("workspace_settings.settings.discord.add_command")}</span>
+      <span className="max-w-[12rem] text-11 leading-relaxed text-tertiary">
+        {t("workspace_settings.settings.discord.create_hint")}
+      </span>
+    </button>
   );
 }

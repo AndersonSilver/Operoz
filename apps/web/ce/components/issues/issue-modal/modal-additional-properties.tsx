@@ -1,9 +1,9 @@
 import { useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import { useTranslation } from "@operis/i18n";
-import type { TCustomFieldValue } from "@operis/types";
-import { cn } from "@operis/utils";
+import { useTranslation } from "@operoz/i18n";
+import type { TCustomFieldValue } from "@operoz/types";
+import { cn } from "@operoz/utils";
 import { useIssueModal } from "@/hooks/context/use-issue-modal";
 import { useBoard } from "@/hooks/store/use-board";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
@@ -48,9 +48,7 @@ export const WorkItemModalAdditionalProperties = observer(function WorkItemModal
   }, [board?.slug, getBoardCustomFields, workspaceSlug]);
 
   const sortedFields = useMemo(() => {
-    const onBoard = board?.slug
-      ? fields.filter((f) => boardFieldsByCustomId.has(f.id))
-      : fields;
+    const onBoard = board?.slug ? fields.filter((f) => boardFieldsByCustomId.has(f.id)) : fields;
     return [...onBoard].sort((a, b) => {
       const orderA = boardFieldsByCustomId.get(a.id)?.sort_order ?? 0;
       const orderB = boardFieldsByCustomId.get(b.id)?.sort_order ?? 0;

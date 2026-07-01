@@ -25,15 +25,15 @@ Workspace (empresa)
                 └── Subtarefa …
 ```
 
-| Nível (vocabulário Tech4Humans) | Entidade no Plane | Notas |
-|--------------------------------|-------------------|--------|
-| Workspace | `Workspace` | ex.: Tech4Humans |
-| Board (time) | `Board` *(novo)* | ex.: Squad as a Service |
-| Projeto (épico) | `Project` | O «épico» do negócio **é o projeto**, não o Módulo |
-| Card | `Issue` | Item de trabalho |
-| Subtarefa | `Issue` com `parent` | Pode aninhar vários níveis |
+| Nível (vocabulário Tech4Humans) | Entidade no Plane    | Notas                                              |
+| ------------------------------- | -------------------- | -------------------------------------------------- |
+| Workspace                       | `Workspace`          | ex.: Tech4Humans                                   |
+| Board (time)                    | `Board` _(novo)_     | ex.: Squad as a Service                            |
+| Projeto (épico)                 | `Project`            | O «épico» do negócio **é o projeto**, não o Módulo |
+| Card                            | `Issue`              | Item de trabalho                                   |
+| Subtarefa                       | `Issue` com `parent` | Pode aninhar vários níveis                         |
 
-**Dentro do projeto (opcional, inalterado no Plane):** **Módulos** e **Ciclos** continuam como agrupamentos *dentro* do épico/projeto (marcos, sprints). Não substituem Board nem Projeto.
+**Dentro do projeto (opcional, inalterado no Plane):** **Módulos** e **Ciclos** continuam como agrupamentos _dentro_ do épico/projeto (marcos, sprints). Não substituem Board nem Projeto.
 
 **Sidebar (MVP):** mostrar só até **Board → Projetos**. Cards e subtarefas entram ao abrir o projeto (como hoje).
 
@@ -52,20 +52,20 @@ Workspace (empresa)
 
 ## Mapa das etapas
 
-| Etapa | Nome | Foco | Backend? | Risco de quebrar |
-|-------|------|------|----------|------------------|
-| **0** | Congelar design UI | Doc + checklist visual | Não | Nenhum |
-| **1** | i18n + tipos TS | Textos «Boards», tipos vazios | Não | Nenhum |
-| **2** | Sidebar mock | Hierarquia visual com dados falsos | Não | Baixo (componente novo) |
-| **3** | Modais mock | Criar board / escolher board (sem API) | Não | Baixo |
-| **4** | Página board vazia | Layout `/boards/{slug}` estático | Não | Baixo |
-| **5** | BD + API boards | Modelo + CRUD mínimo | Sim | Médio (migração) |
-| **6** | Ligar sidebar à API | Substituir mock por dados reais | Sim | Médio |
-| **7** | Projeto ↔ board | POST/PATCH projeto + modal criar | Sim | Médio |
-| **8** | «Sem board» + mover | Legado D10 + mover projeto | Sim | Baixo |
-| **9** | Analytics filtro | Seletor board nas analytics | Sim | Baixo |
-| **10** | Settings + arquivar | Gerir boards no workspace | Sim | Baixo |
-| **11+** | MVP-2 (Cronograma…) | Hub Jira | Sim | Alto — fase posterior |
+| Etapa   | Nome                | Foco                                   | Backend? | Risco de quebrar        |
+| ------- | ------------------- | -------------------------------------- | -------- | ----------------------- |
+| **0**   | Congelar design UI  | Doc + checklist visual                 | Não      | Nenhum                  |
+| **1**   | i18n + tipos TS     | Textos «Boards», tipos vazios          | Não      | Nenhum                  |
+| **2**   | Sidebar mock        | Hierarquia visual com dados falsos     | Não      | Baixo (componente novo) |
+| **3**   | Modais mock         | Criar board / escolher board (sem API) | Não      | Baixo                   |
+| **4**   | Página board vazia  | Layout `/boards/{slug}` estático       | Não      | Baixo                   |
+| **5**   | BD + API boards     | Modelo + CRUD mínimo                   | Sim      | Médio (migração)        |
+| **6**   | Ligar sidebar à API | Substituir mock por dados reais        | Sim      | Médio                   |
+| **7**   | Projeto ↔ board     | POST/PATCH projeto + modal criar       | Sim      | Médio                   |
+| **8**   | «Sem board» + mover | Legado D10 + mover projeto             | Sim      | Baixo                   |
+| **9**   | Analytics filtro    | Seletor board nas analytics            | Sim      | Baixo                   |
+| **10**  | Settings + arquivar | Gerir boards no workspace              | Sim      | Baixo                   |
+| **11+** | MVP-2 (Cronograma…) | Hub Jira                               | Sim      | Alto — fase posterior   |
 
 ---
 
@@ -112,7 +112,7 @@ Workspace (empresa)
 - Não alterar sidebar ainda
 - Não alterar API
 
-**Como validar:** build de `@operis/types` e `@operis/i18n`; app igual à atual.
+**Como validar:** build de `@operoz/types` e `@operoz/i18n`; app igual à atual.
 
 **PARAR → pedir OK para Etapa 2**
 
@@ -210,9 +210,9 @@ Workspace (empresa)
 
 Resumo — detalhe em [implementação](./tech4humans-boards-implementacao.md):
 
-- **8:** Sem board + mover projeto  
-- **9:** Analytics  
-- **10:** Settings workspace + arquivar board  
+- **8:** Sem board + mover projeto
+- **9:** Analytics
+- **10:** Settings workspace + arquivar board
 
 Cada uma com **PARAR** antes da seguinte.
 
@@ -234,11 +234,11 @@ Cronograma, backlog cross-project, Kanban no board, etc. — **não** fazem part
 
 ## Estado atual
 
-| Etapa | Status |
-|-------|--------|
-| 0 | Aprovada — [design-sidebar-etapa0](./tech4humans-boards-design-sidebar-etapa0.md) |
-| 1 | Concluída — tipos + i18n |
-| 2–10 | Concluídas (MVP-1 estrutural + polish sidebar/nav) |
+| Etapa | Status                                                                                  |
+| ----- | --------------------------------------------------------------------------------------- |
+| 0     | Aprovada — [design-sidebar-etapa0](./tech4humans-boards-design-sidebar-etapa0.md)       |
+| 1     | Concluída — tipos + i18n                                                                |
+| 2–10  | Concluídas (MVP-1 estrutural + polish sidebar/nav)                                      |
 | MVP-2 | Planejado — [mvp2-plano](./tech4humans-boards-mvp2-plano.md); backlog parcial em código |
 
 ---

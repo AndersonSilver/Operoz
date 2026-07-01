@@ -2,14 +2,14 @@ import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operis/constants";
-import { useTranslation } from "@operis/i18n";
-import { Button } from "@operis/propel/button";
-import { TOAST_TYPE, setToast } from "@operis/propel/toast";
-import type { IWorkspace } from "@operis/types";
+import { ORGANIZATION_SIZE, RESTRICTED_URLS } from "@operoz/constants";
+import { useTranslation } from "@operoz/i18n";
+import { Button } from "@operoz/propel/button";
+import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
+import type { IWorkspace } from "@operoz/types";
 // ui
-import { CustomSelect, Input } from "@operis/ui";
-import { validateWorkspaceName, validateSlug } from "@operis/utils";
+import { CustomSelect, Input } from "@operoz/ui";
+import { validateWorkspaceName, validateSlug } from "@operoz/utils";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useAppRouter } from "@/hooks/use-app-router";

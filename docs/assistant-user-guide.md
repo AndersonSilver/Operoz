@@ -70,6 +70,6 @@ Estas ferramentas só **propõem** alterações — nada é aplicado sem o seu c
 
 ## Documentação relacionada
 
-- [Segurança](./operis-assistant-security.md)
+- [Segurança](./operoz-assistant-security.md)
 - [Métricas de qualidade](./assistant-quality-metrics.md)
 - [Guia admin](./assistant-admin-guide.md)

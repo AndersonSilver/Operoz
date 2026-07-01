@@ -1,7 +1,7 @@
 import * as React from "react";
-import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operis/propel/icons";
-import type { TModuleLayoutOptions } from "@operis/types";
-import { cn } from "@operis/utils";
+import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operoz/propel/icons";
+import type { TModuleLayoutOptions } from "@operoz/types";
+import { cn } from "@operoz/utils";
 
 interface ILayoutIcon {
   className?: string;

@@ -1,9 +1,9 @@
 import { set } from "lodash-es";
 import { observable, action, computed, makeObservable, runInAction } from "mobx";
 // plane internal packages
-import type { TInstanceStatus } from "@operis/constants";
-import { EInstanceStatus } from "@operis/constants";
-import { InstanceService } from "@operis/services";
+import type { TInstanceStatus } from "@operoz/constants";
+import { EInstanceStatus } from "@operoz/constants";
+import { InstanceService } from "@operoz/services";
 import type {
   IInstance,
   IInstanceAdmin,
@@ -11,7 +11,7 @@ import type {
   IFormattedInstanceConfiguration,
   IInstanceInfo,
   IInstanceConfig,
-} from "@operis/types";
+} from "@operoz/types";
 // root store
 import type { RootStore } from "@/store/root.store";
 

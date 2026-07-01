@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { ProjectIcon } from "@operis/propel/icons";
+import { ProjectIcon } from "@operoz/propel/icons";
 // components
 import { ProjectLogo } from "@/components/common/project-logo";
 // store

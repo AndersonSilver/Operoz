@@ -4,8 +4,8 @@
 
 ## Visão
 
-O Operis não tem **worklog/timesheet** nativo (gap total no roadmap §19). Para
-equipas de consultoria/delivery — o público-alvo do Operis — registo de horas e
+O Operoz não tem **worklog/timesheet** nativo (gap total no roadmap §19). Para
+equipas de consultoria/delivery — o público-alvo do Operoz — registo de horas e
 faturabilidade são críticos. Esta feature traz worklog, estimativas, timer e
 relatório de horas, com forte ligação ao diferencial **Custos/FinOps** (Cliente
 360).
@@ -17,13 +17,13 @@ estimate, painel de tempo, timesheet, billable hours, timer, weekly view.
 
 ## Decisões-chave
 
-| # | Decisão | Alternativa rejeitada |
-| --- | --- | --- |
-| 1 | `Worklog` é entidade `ProjectBaseModel` independente | Campos no Issue — perde histórico/auditoria |
-| 2 | Estimativas em segundos (original/remaining) no Issue | Só story points (já existem) |
-| 3 | Timer como sessão server-side (resistente a refresh) | Só no cliente |
-| 4 | `is_billable` + `activity_type` para FinOps/Cliente 360 | Horas sem categorização |
-| 5 | Permissões edit_own vs edit_all (reuso da matriz da feature 07) | Toda a gente edita tudo |
+| #   | Decisão                                                         | Alternativa rejeitada                       |
+| --- | --------------------------------------------------------------- | ------------------------------------------- |
+| 1   | `Worklog` é entidade `ProjectBaseModel` independente            | Campos no Issue — perde histórico/auditoria |
+| 2   | Estimativas em segundos (original/remaining) no Issue           | Só story points (já existem)                |
+| 3   | Timer como sessão server-side (resistente a refresh)            | Só no cliente                               |
+| 4   | `is_billable` + `activity_type` para FinOps/Cliente 360         | Horas sem categorização                     |
+| 5   | Permissões edit_own vs edit_all (reuso da matriz da feature 07) | Toda a gente edita tudo                     |
 
 ## Escopo
 

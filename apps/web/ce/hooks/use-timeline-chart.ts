@@ -1,6 +1,6 @@
 // types
-import type { TTimelineTypeCore } from "@operis/types";
-import { GANTT_TIMELINE_TYPE } from "@operis/types";
+import type { TTimelineTypeCore } from "@operoz/types";
+import { GANTT_TIMELINE_TYPE } from "@operoz/types";
 // Plane-web
 
 import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";

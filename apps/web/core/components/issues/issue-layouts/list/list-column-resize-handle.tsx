@@ -1,6 +1,6 @@
 import type { MouseEvent as ReactMouseEvent } from "react";
 import { useCallback } from "react";
-import { cn } from "@operis/utils";
+import { cn } from "@operoz/utils";
 import type { TListGridResizableColumn } from "../properties/list-property-columns";
 
 type Props = {
@@ -48,7 +48,7 @@ export function ListColumnResizeHandle(props: Props) {
       onMouseDown={handleMouseDown}
       className={cn(
         "absolute top-0 right-0 z-[1] h-full w-1.5 translate-x-1/2 cursor-col-resize",
-        "opacity-0 transition-opacity hover:bg-accent-primary/40 group-hover/column-header:opacity-100",
+        "opacity-0 transition-opacity group-hover/column-header:opacity-100 hover:bg-accent-primary/40",
         className
       )}
     />

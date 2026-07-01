@@ -1,8 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-import type { IProject } from "@operis/types";
-import type { TCustomFieldValue } from "@operis/types";
+import type { IProject } from "@operoz/types";
+import type { TCustomFieldValue } from "@operoz/types";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
 import { BoardProjectDynamicFields } from "./board-project-dynamic-fields";
@@ -26,9 +26,7 @@ export const ProjectBoardLayoutSection = observer(function ProjectBoardLayoutSec
   const service = useMemo(() => new BoardCustomFieldService(), []);
 
   const { data: formLayoutData } = useSWR(
-    workspaceSlug && project.id && project.board_id
-      ? `PROJECT_FORM_LAYOUT_${workspaceSlug}_${project.id}`
-      : null,
+    workspaceSlug && project.id && project.board_id ? `PROJECT_FORM_LAYOUT_${workspaceSlug}_${project.id}` : null,
     () => fetchProjectFormLayout(workspaceSlug, project.id),
     { revalidateIfStale: false, revalidateOnFocus: false, shouldRetryOnError: false }
   );
