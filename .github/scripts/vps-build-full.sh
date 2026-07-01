@@ -3,14 +3,15 @@
 # Uso: OPEROZ_REPO_PATH=/root/operoz-selfhost/Operoz OPEROZ_APP_PATH=/root/operoz-selfhost/plane-app bash vps-build-full.sh
 set -euo pipefail
 
-OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operoz-selfhost/Operoz}"
-OPEROZ_APP_PATH="${OPEROZ_APP_PATH:-/root/operoz-selfhost/plane-app}"
+OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operis-selfhost/Operis}"
+OPEROZ_APP_PATH="${OPEROZ_APP_PATH:-/root/operis-selfhost/plane-app}"
 GIT_BRANCH="${GIT_BRANCH:-preview}"
-ENV_FILE="${OPEROZ_APP_PATH}/operoz.env"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
+
+ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
 
 DOCKERHUB_USER="myoperoz"
 APP_RELEASE="stable"
@@ -51,7 +52,7 @@ tag_image "plane-backend" "apps/api/Dockerfile.api" "apps/api"
 tag_image "plane-proxy" "apps/proxy/Dockerfile.ce" "apps/proxy"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
-  echo "ERRO: operoz.env não encontrado em ${OPEROZ_APP_PATH}"
+  echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"
   exit 1
 fi
 

@@ -44,8 +44,15 @@ if [[ ! -f "${COMPOSE_FILE}" ]]; then
   exit 1
 fi
 
+# Migração rebrand: operis-mcp ocupava a porta 3100 antes de operoz-mcp existir.
+if docker ps -a --format '{{.Names}}' | grep -qx operis-mcp; then
+  echo "==> Remover container legado operis-mcp (libera porta 3100)"
+  docker stop operis-mcp 2>/dev/null || true
+  docker rm operis-mcp 2>/dev/null || true
+fi
+
 echo "==> Subir operoz-mcp"
-docker compose -f "${COMPOSE_FILE}" --env-file "${OPEROZ_MCP_ENV}" up -d --pull never --force-recreate operoz-mcp
+docker compose -f "${COMPOSE_FILE}" --env-file "${OPEROZ_MCP_ENV}" up -d --pull never --force-recreate --remove-orphans operoz-mcp
 
 echo "==> Health (localhost:3100)"
 sleep 3
