@@ -4,6 +4,7 @@ from operoz.utils.jira_ops.jira_dates import (
     jira_issue_dates,
     jira_search_date_fields,
     jira_search_date_fields_for_client,
+    normalize_issue_date_range,
     register_jira_date_fields,
     score_start_date_field_name,
 )
@@ -79,6 +80,23 @@ def test_jira_issue_dates_fallback_when_start_field_empty():
     start, target = jira_issue_dates(fields)
     assert start == date(2026, 4, 27)
     assert target == date(2026, 6, 1)
+
+
+def test_jira_issue_dates_swaps_when_start_after_target():
+    """Import Jira: campos de data invertidos não devem quebrar o serializer."""
+    fields = {
+        "customfield_10015": "2026-06-20",
+        "duedate": "2026-06-01",
+    }
+    start, target = jira_issue_dates(fields)
+    assert start == date(2026, 6, 1)
+    assert target == date(2026, 6, 20)
+
+
+def test_normalize_issue_date_range_swaps_inverted_pair():
+    start, target = normalize_issue_date_range(date(2026, 6, 20), date(2026, 6, 1))
+    assert start == date(2026, 6, 1)
+    assert target == date(2026, 6, 20)
 
 
 def test_resolve_jira_custom_field_ids_by_name():

@@ -12,6 +12,12 @@ import { useDropdownKeyDown } from "../hooks/use-dropdown-key-down";
 import { cn } from "../utils";
 // types
 import type { ICustomSelectItemProps, ICustomSelectProps } from "./helper";
+import {
+  assignChildRef,
+  mergeTriggerElementProps,
+  resolveCustomButtonTrigger,
+  unwrapCustomButtonElement,
+} from "./custom-button-trigger";
 
 // Context to share the close handler with option components
 const DropdownContext = createContext<() => void>(() => {});
@@ -68,6 +74,54 @@ function CustomSelect(props: ICustomSelectProps) {
     else openDropdown();
   }, [closeDropdown, isOpen, openDropdown]);
 
+  const assignReferenceElement = useCallback(
+    (node: HTMLButtonElement | null) => {
+      setReferenceElement(node);
+      assignChildRef(node, customButton);
+    },
+    [customButton]
+  );
+
+  const renderTriggerButton = (content: React.ReactNode) => (
+    <button
+      ref={assignReferenceElement}
+      type="button"
+      className={cn(
+        "flex items-center justify-between gap-1 rounded text-11",
+        disabled ? "cursor-not-allowed text-secondary" : "cursor-pointer hover:bg-layer-transparent-hover",
+        customButtonClassName
+      )}
+      onClick={toggleDropdown}
+      disabled={disabled}
+    >
+      {content}
+    </button>
+  );
+
+  const renderCustomButton = () => {
+    if (!customButton) return null;
+
+    const resolved = resolveCustomButtonTrigger(customButton);
+
+    if (resolved) {
+      return React.cloneElement(
+        resolved,
+        mergeTriggerElementProps(resolved, {
+          ref: assignReferenceElement,
+          disabled,
+          className: customButtonClassName,
+          onClick: toggleDropdown,
+        })
+      );
+    }
+
+    if (!React.isValidElement(customButton)) {
+      return renderTriggerButton(customButton);
+    }
+
+    return renderTriggerButton(unwrapCustomButtonElement(customButton) ?? customButton);
+  };
+
   return (
     <DropdownContext.Provider value={closeDropdown}>
       <Combobox
@@ -85,18 +139,7 @@ function CustomSelect(props: ICustomSelectProps) {
       >
         <>
           {customButton ? (
-            <Combobox.Button as={React.Fragment}>
-              <button
-                ref={setReferenceElement}
-                type="button"
-                className={`flex items-center justify-between gap-1 rounded text-11 ${
-                  disabled ? "cursor-not-allowed text-secondary" : "cursor-pointer hover:bg-layer-transparent-hover"
-                } ${customButtonClassName}`}
-                onClick={toggleDropdown}
-              >
-                {customButton}
-              </button>
-            </Combobox.Button>
+            <Combobox.Button as={React.Fragment}>{renderCustomButton()}</Combobox.Button>
           ) : (
             <Combobox.Button as={React.Fragment}>
               <button

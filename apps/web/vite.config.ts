@@ -20,6 +20,8 @@ const servicesSrcEntry = path.resolve(workspaceRoot, "packages/services/src/inde
 const typesSrcEntry = path.resolve(workspaceRoot, "packages/types/src/index.ts");
 const constantsSrcEntry = path.resolve(workspaceRoot, "packages/constants/src/index.ts");
 
+const editorIsEmojiSupportedEntry = path.resolve(workspaceRoot, "packages/editor/src/core/utils/is-emoji-supported.ts");
+
 const editorPkg = path.resolve(__dirname, "../../packages/editor/package.json");
 const requireEditor = createRequire(editorPkg);
 
@@ -63,6 +65,10 @@ export default defineConfig(({ command }) => {
     {
       find: "@operoz/services",
       replacement: servicesSrcEntry,
+    },
+    {
+      find: "is-emoji-supported",
+      replacement: editorIsEmojiSupportedEntry,
     },
     ...Object.entries(prosemirrorAliases).map(([find, replacement]) => ({ find, replacement })),
     { find: "next/link", replacement: path.resolve(__dirname, "app/compat/next/link.tsx") },

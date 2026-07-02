@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, type ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useLocation } from "react-router";
@@ -27,31 +27,36 @@ function parseRouteContext(pathname: string): TAssistantSessionContext {
   return {};
 }
 
-export const OperozAssistantShell = observer(function OperozAssistantShell() {
+const OperozAssistantEnabledGate = observer(function OperozAssistantEnabledGate({ children }: { children: ReactNode }) {
+  const { config: instanceConfig } = useInstance();
+
+  if (!isOperozAssistantEnabled(instanceConfig)) {
+    return null;
+  }
+
+  return <>{children}</>;
+});
+
+const OperozAssistantShellBody = observer(function OperozAssistantShellBody({ slug }: { slug: string }) {
   const { t } = useTranslation();
-  const { workspaceSlug } = useParams();
   const location = useLocation();
   const assistant = useAssistant();
-  const { config: instanceConfig } = useInstance();
-  const assistantEnabled = isOperozAssistantEnabled(instanceConfig);
   const { storedValue: isExpanded, setValue: setIsExpanded } = useLocalStorage<boolean>(
     "operoz-assistant-panel-expanded",
     false
   );
 
-  const slug = workspaceSlug?.toString();
   const routeContext = useMemo(() => parseRouteContext(location.pathname), [location.pathname]);
   const initialContext = useMemo(() => {
-    if (!slug) return routeContext;
     const persisted = readPersistedAssistantContext(slug);
     return mergeAssistantRouteContext(routeContext, persisted);
   }, [slug, routeContext]);
   const expanded = isExpanded ?? false;
 
   useEffect(() => {
-    if (!assistant.isOpen || !slug) return;
+    if (!assistant.isOpen) return;
     void assistant.initializeForWorkspace(slug, initialContext);
-  }, [assistant.isOpen, slug, initialContext.board_slug, initialContext.project_id]);
+  }, [assistant, assistant.isOpen, slug, initialContext.board_slug, initialContext.project_id]);
 
   useEffect(() => {
     if (!assistant.isOpen) return;
@@ -65,10 +70,6 @@ export const OperozAssistantShell = observer(function OperozAssistantShell() {
     window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [assistant.isOpen, assistant]);
-
-  if (!assistantEnabled || !slug) {
-    return null;
-  }
 
   const handleToggle = () => {
     if (!assistant.isOpen) {
@@ -130,3 +131,18 @@ export const OperozAssistantShell = observer(function OperozAssistantShell() {
     </>
   );
 });
+
+export function OperozAssistantShell() {
+  const { workspaceSlug } = useParams();
+  const slug = workspaceSlug?.toString();
+
+  if (!slug) {
+    return null;
+  }
+
+  return (
+    <OperozAssistantEnabledGate>
+      <OperozAssistantShellBody slug={slug} />
+    </OperozAssistantEnabledGate>
+  );
+}

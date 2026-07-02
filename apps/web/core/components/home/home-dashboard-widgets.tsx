@@ -99,10 +99,14 @@ export const HOME_WIDGETS_LIST: {
   },
 };
 
-function renderWidgetGrid(widgetNodes: ReactNode[]) {
+function renderWidgetGrid(widgetNodes: ReactNode[], gridKey: string) {
   if (widgetNodes.length === 0) return null;
 
-  return <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">{widgetNodes}</div>;
+  return (
+    <div key={gridKey} className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
+      {widgetNodes}
+    </div>
+  );
 }
 
 export const DashboardWidgets = observer(function DashboardWidgets() {
@@ -128,11 +132,13 @@ export const DashboardWidgets = observer(function DashboardWidgets() {
 
   const enabledWidgetNodes: ReactNode[] = [];
   const halfWidthBatch: ReactNode[] = [];
+  const halfWidthBatchKeys: THomeWidgetKeys[] = [];
 
   const flushHalfWidthBatch = () => {
     if (halfWidthBatch.length === 0) return;
-    enabledWidgetNodes.push(renderWidgetGrid([...halfWidthBatch]));
+    enabledWidgetNodes.push(renderWidgetGrid([...halfWidthBatch], halfWidthBatchKeys.join("-")));
     halfWidthBatch.length = 0;
+    halfWidthBatchKeys.length = 0;
   };
 
   orderedWidgets.forEach((key) => {
@@ -157,6 +163,7 @@ export const DashboardWidgets = observer(function DashboardWidgets() {
       );
     } else {
       halfWidthBatch.push(widgetElement);
+      halfWidthBatchKeys.push(key);
     }
   });
 

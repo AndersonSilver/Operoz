@@ -12,7 +12,7 @@ import { ListColumnResizeHandle } from "./list-column-resize-handle";
 import {
   LIST_GRID_ROW_GAP,
   LIST_BULK_SELECT_CHECKBOX_CELL_CLASS,
-  useListGridColumnsContext,
+  useListGridColumnsContextOptional,
 } from "./list-grid-columns-context";
 
 type Props = {
@@ -44,8 +44,11 @@ function ListHeaderCell(props: { align?: TListPropertyColumnAlign; children: Rea
 export const ListPropertiesColumnsHeader = observer(function ListPropertiesColumnsHeader(props: Props) {
   const { isEpic: _isEpic = false, showBulkSelectGutter = false } = props;
   const { t } = useTranslation();
+  const gridCtx = useListGridColumnsContextOptional();
+  if (!gridCtx) return null;
+
   const { columns, customFieldColumns, layoutGridTemplateColumns, propertyGridTemplateColumns, resizeColumnByDelta } =
-    useListGridColumnsContext();
+    gridCtx;
 
   if (!columns.length && !customFieldColumns.length) return null;
 

@@ -420,11 +420,13 @@ export class ProjectInboxStore implements IProjectInboxStore {
       });
     } catch (error) {
       console.error("Error fetching the intake issues", error);
-      this.loader = undefined;
-      this.error = {
-        message: "Error fetching the intake work items please try again later.",
-        status: "init-error",
-      };
+      runInAction(() => {
+        this.loader = undefined;
+        this.error = {
+          message: "Error fetching the intake work items please try again later.",
+          status: "init-error",
+        };
+      });
       throw error;
     }
   };
@@ -461,10 +463,12 @@ export class ProjectInboxStore implements IProjectInboxStore {
       } else set(this, ["inboxIssuePaginationInfo", "next_page_results"], false);
     } catch (error) {
       console.error("Error fetching the intake issues", error);
-      this.error = {
-        message: "Error fetching the paginated intake work items please try again later.",
-        status: "pagination-error",
-      };
+      runInAction(() => {
+        this.error = {
+          message: "Error fetching the paginated intake work items please try again later.",
+          status: "pagination-error",
+        };
+      });
       throw error;
     }
   };
@@ -504,7 +508,9 @@ export class ProjectInboxStore implements IProjectInboxStore {
       return inboxIssue;
     } catch (error) {
       console.error("Error fetching the intake issue with intake issue id");
-      this.loader = undefined;
+      runInAction(() => {
+        this.loader = undefined;
+      });
       throw error;
     }
   };

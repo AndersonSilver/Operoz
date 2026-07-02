@@ -16,6 +16,12 @@ import type {
   ICustomSubMenuTriggerProps,
   ICustomSubMenuContentProps,
 } from "./helper";
+import {
+  assignChildRef,
+  mergeTriggerElementProps,
+  resolveCustomButtonTrigger,
+  unwrapCustomButtonElement,
+} from "./custom-button-trigger";
 
 interface PortalProps {
   children: React.ReactNode;
@@ -51,20 +57,6 @@ const MenuContext = React.createContext<{
 } | null>(null);
 
 const CloseMenuContext = React.createContext<(() => void) | null>(null);
-
-function shouldWrapCustomButtonTrigger(element: React.ReactElement): boolean {
-  if (typeof element.type === "string") {
-    return element.type !== "button" && element.type !== "a";
-  }
-
-  const displayName = (element.type as { displayName?: string })?.displayName ?? "";
-  // Only skip wrap for components that forward Popover.Button props (onClick, ref) to a native button.
-  if (displayName === "plane-ui-icon-button" || displayName === "plane-ui-button") {
-    return false;
-  }
-
-  return true;
-}
 
 function CustomMenuOpenSync(props: { open: boolean; onOpen?: () => void }) {
   const { open, onOpen } = props;
@@ -137,12 +129,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
   const assignReferenceElement = React.useCallback(
     (node: HTMLButtonElement | null) => {
       setReferenceElement(node);
-      if (!React.isValidElement(customButton)) return;
-      const childRef = (customButton as React.ReactElement & { ref?: React.Ref<HTMLButtonElement> }).ref;
-      if (typeof childRef === "function") childRef(node);
-      else if (childRef && typeof childRef === "object") {
-        (childRef as React.MutableRefObject<HTMLButtonElement | null>).current = node;
-      }
+      assignChildRef(node, customButton);
     },
     [customButton]
   );
@@ -161,28 +148,26 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
   );
 
   const renderCustomButton = () => {
+    const resolved = resolveCustomButtonTrigger(customButton);
+
+    if (resolved) {
+      return React.cloneElement(
+        resolved,
+        mergeTriggerElementProps(resolved, {
+          ref: assignReferenceElement,
+          disabled,
+          "aria-label": ariaLabel,
+          tabIndex: customButtonTabIndex,
+          className: customButtonClassName,
+        })
+      );
+    }
+
     if (!React.isValidElement(customButton)) {
       return renderTriggerButton(customButton);
     }
 
-    const customButtonElement = customButton as React.ReactElement<{
-      className?: string;
-      disabled?: boolean;
-      "aria-label"?: string;
-      variant?: string;
-    }>;
-
-    if (shouldWrapCustomButtonTrigger(customButtonElement)) {
-      return renderTriggerButton(customButton);
-    }
-
-    return React.cloneElement(customButtonElement, {
-      ref: assignReferenceElement,
-      disabled: disabled || customButtonElement.props.disabled,
-      "aria-label": ariaLabel ?? customButtonElement.props["aria-label"],
-      tabIndex: customButtonTabIndex,
-      className: cn(customButtonClassName, customButtonElement.props.className),
-    });
+    return renderTriggerButton(unwrapCustomButtonElement(customButton) ?? customButton);
   };
 
   const portalTarget = portalElement ?? (typeof document !== "undefined" ? document.body : null);

@@ -28,11 +28,13 @@ import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { IssueBulkOperationsRoot } from "@/plane-web/components/issues/bulk-operations";
 // plane web hooks
 import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-status";
+import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 // utils
 import type { GroupDropLocation } from "../utils";
 import { getGroupByColumns, isWorkspaceLevel, isSubGrouped } from "../utils";
 import { ListGroup } from "./list-group";
 import { ListGridColumnsProvider } from "./list-grid-columns-context";
+import { ListPropertiesColumnsHeader } from "./list-properties-columns-header";
 import type { TRenderQuickActions } from "./list-view-types";
 
 export interface IList {
@@ -149,7 +151,79 @@ export const List = observer(function List(props: IList) {
   } else {
     entities = orderedGroups;
   }
-  const listContent = (
+  const renderListGroups = (selectionHelpers: TSelectionHelper) =>
+    groups.map((group: IGroupByColumn) => (
+      <ListGroup
+        key={group.id}
+        groupIssueIds={groupedIssueIds?.[group.id]}
+        issuesMap={issuesMap}
+        group_by={group_by}
+        group={group}
+        updateIssue={updateIssue}
+        quickActions={quickActions}
+        orderBy={orderBy}
+        getGroupIndex={getGroupIndex}
+        handleOnDrop={handleOnDrop}
+        displayProperties={displayProperties}
+        enableIssueQuickAdd={enableIssueQuickAdd}
+        showEmptyGroup={showEmptyGroup}
+        canEditProperties={canEditProperties}
+        quickAddCallback={quickAddCallback}
+        disableIssueCreation={disableIssueCreation}
+        addIssuesToView={addIssuesToView}
+        isCompletedCycle={isCompletedCycle}
+        loadMoreIssues={loadMoreIssues}
+        containerRef={containerRef}
+        selectionHelpers={selectionHelpers}
+        handleCollapsedGroups={handleCollapsedGroups}
+        collapsedGroups={collapsedGroups}
+        isEpic={isEpic}
+      />
+    ));
+
+  const renderListScrollArea = (selectionHelpers: TSelectionHelper) => {
+    const scrollContent = (
+      <div ref={containerRef} className="vertical-scrollbar relative scrollbar-lg min-h-0 flex-1 overflow-auto">
+        {!group_by && useListGridLayout && displayProperties ? (
+          <div className="w-full min-w-0">
+            <ListPropertiesColumnsHeader
+              displayProperties={displayProperties}
+              isEpic={isEpic}
+              showBulkSelectGutter={Boolean(
+                routerProjectId &&
+                canEditProperties(routerProjectId.toString()) &&
+                !selectionHelpers.isSelectionDisabled &&
+                !isEpic
+              )}
+            />
+          </div>
+        ) : null}
+        {renderListGroups(selectionHelpers)}
+      </div>
+    );
+
+    if (!useListGridLayout || !displayProperties) {
+      return scrollContent;
+    }
+
+    return (
+      <ListGridColumnsProvider
+        displayProperties={displayProperties}
+        isEpic={isEpic}
+        crossProject={storeType === EIssuesStoreType.BOARD}
+        showModules={Boolean(currentProjectDetails?.module_view)}
+        showCycles={Boolean(currentProjectDetails?.cycle_view)}
+        showEstimate={estimateEnabled}
+        storageKey={listGridStorageKey}
+        workspaceSlug={workspaceSlug?.toString()}
+        boardSlug={boardSlug?.toString()}
+      >
+        {scrollContent}
+      </ListGridColumnsProvider>
+    );
+  };
+
+  return (
     <div className="relative flex size-full flex-col">
       {groups && (
         <MultipleSelectGroup
@@ -160,58 +234,11 @@ export const List = observer(function List(props: IList) {
           {(helpers) => (
             <>
               <IssueBulkOperationsRoot selectionHelpers={helpers} />
-              <div ref={containerRef} className="vertical-scrollbar relative scrollbar-lg min-h-0 flex-1 overflow-auto">
-                {groups.map((group: IGroupByColumn) => (
-                  <ListGroup
-                    key={group.id}
-                    groupIssueIds={groupedIssueIds?.[group.id]}
-                    issuesMap={issuesMap}
-                    group_by={group_by}
-                    group={group}
-                    updateIssue={updateIssue}
-                    quickActions={quickActions}
-                    orderBy={orderBy}
-                    getGroupIndex={getGroupIndex}
-                    handleOnDrop={handleOnDrop}
-                    displayProperties={displayProperties}
-                    enableIssueQuickAdd={enableIssueQuickAdd}
-                    showEmptyGroup={showEmptyGroup}
-                    canEditProperties={canEditProperties}
-                    quickAddCallback={quickAddCallback}
-                    disableIssueCreation={disableIssueCreation}
-                    addIssuesToView={addIssuesToView}
-                    isCompletedCycle={isCompletedCycle}
-                    loadMoreIssues={loadMoreIssues}
-                    containerRef={containerRef}
-                    selectionHelpers={helpers}
-                    handleCollapsedGroups={handleCollapsedGroups}
-                    collapsedGroups={collapsedGroups}
-                    isEpic={isEpic}
-                  />
-                ))}
-              </div>
+              {renderListScrollArea(helpers)}
             </>
           )}
         </MultipleSelectGroup>
       )}
     </div>
-  );
-
-  if (!useListGridLayout || !displayProperties) return listContent;
-
-  return (
-    <ListGridColumnsProvider
-      displayProperties={displayProperties}
-      isEpic={isEpic}
-      crossProject={storeType === EIssuesStoreType.BOARD}
-      showModules={Boolean(currentProjectDetails?.module_view)}
-      showCycles={Boolean(currentProjectDetails?.cycle_view)}
-      showEstimate={estimateEnabled}
-      storageKey={listGridStorageKey}
-      workspaceSlug={workspaceSlug?.toString()}
-      boardSlug={boardSlug?.toString()}
-    >
-      {listContent}
-    </ListGridColumnsProvider>
   );
 });

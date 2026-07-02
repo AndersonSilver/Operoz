@@ -56,11 +56,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang={DEFAULT_LOCALE}>
       <head>
         <meta name="theme-color" content="#fff" />
-        <link rel="icon" type="image/svg+xml" href="/brand/favicon.svg" />
         <link rel="icon" type="image/png" sizes="32x32" href={favicon32} />
         <link rel="icon" type="image/png" sizes="16x16" href={favicon16} />
+        <link rel="shortcut icon" type="image/png" href={favicon32} />
         <link rel="manifest" href="/site.webmanifest.json" />
-        <link rel="shortcut icon" type="image/svg+xml" href="/brand/favicon.svg" />
         {/* Meta info for PWA */}
         <meta name="application-name" content="Operoz" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

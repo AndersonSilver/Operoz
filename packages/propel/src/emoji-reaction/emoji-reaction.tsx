@@ -50,7 +50,8 @@ const EmojiReaction = React.forwardRef(function EmojiReaction(
   }: EmojiReactionProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
-  const handleClick = () => {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
     onReactionClick?.(emoji);
   };
 
@@ -97,9 +98,15 @@ const EmojiReaction = React.forwardRef(function EmojiReaction(
 });
 
 const EmojiReactionButton = React.forwardRef(function EmojiReactionButton(
-  { onAddReaction, className, ...props }: EmojiReactionButtonProps,
+  { onAddReaction, className, onClick, ...props }: EmojiReactionButtonProps,
   ref: React.ForwardedRef<HTMLButtonElement>
 ) {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    onClick?.(event);
+    onAddReaction?.();
+  };
+
   return (
     <Tooltip tooltipContent="Add reaction">
       <IconButton
@@ -107,7 +114,7 @@ const EmojiReactionButton = React.forwardRef(function EmojiReactionButton(
         icon={AddReactionIcon}
         variant="ghost"
         size="sm"
-        onClick={onAddReaction}
+        onClick={handleClick}
         className={className}
         {...props}
       />

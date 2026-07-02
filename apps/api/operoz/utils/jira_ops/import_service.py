@@ -39,7 +39,7 @@ from .jira_custom_fields import (
     sync_issue_jira_custom_fields,
 )
 from .jira_client import JiraOpsClient
-from .jira_dates import jira_issue_dates, set_active_jira_cloud
+from .jira_dates import jira_issue_dates, normalize_issue_date_range, set_active_jira_cloud
 from .workspace_config import get_board_for_jira_ops, get_workspace_credentials
 
 JIRA_STATE_TO_OPEROZ = {
@@ -281,6 +281,8 @@ def _finalize_imported_modules(epic_key_to_module: dict[str, Module], epics: lis
                 ).aggregate(max_target=Max("target_date"))["max_target"]
             )
 
+        start, target = normalize_issue_date_range(start, target)
+
         update_fields: list[str] = []
         if mod.start_date != start:
             mod.start_date = start
@@ -426,7 +428,7 @@ def _touch_issue_fields(
 
 def _issue_create_payload(fields: dict, key: str, project: Project, **extra: Any) -> dict[str, Any]:
     state = resolve_state(project, fields)
-    start, target = jira_issue_dates(fields)
+    start, target = normalize_issue_date_range(*jira_issue_dates(fields))
     payload: dict[str, Any] = {
         "name": (fields.get("summary") or key)[:255],
         "description_html": issue_description_html(key, fields),
@@ -822,6 +824,7 @@ def run_jira_ops_import(
                 "project_id": str(project.id),
                 "workspace_id": str(workspace.id),
                 "default_assignee_id": project.default_assignee_id,
+                "normalize_inverted_dates": True,
             },
         )
         ser.is_valid(raise_exception=True)
@@ -891,6 +894,7 @@ def run_jira_ops_import(
                 "project_id": str(project.id),
                 "workspace_id": str(workspace.id),
                 "default_assignee_id": project.default_assignee_id,
+                "normalize_inverted_dates": True,
             },
         )
         ser.is_valid(raise_exception=True)

@@ -3,14 +3,11 @@ import { observer } from "mobx-react";
 import type { FileRejection } from "react-dropzone";
 import { useDropzone } from "react-dropzone";
 import { PlusIcon } from "@operoz/propel/icons";
-// plane imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TIssueServiceType } from "@operoz/types";
-// hooks
+import { mergeTriggerElementProps, resolveCustomButtonTrigger } from "@operoz/ui";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// plane web hooks
 import { useFileSize } from "@/plane-web/hooks/use-file-size";
-// local imports
 import { useAttachmentOperations } from "./helper";
 
 type Props = {
@@ -24,20 +21,16 @@ type Props = {
 
 export const IssueAttachmentActionButton = observer(function IssueAttachmentActionButton(props: Props) {
   const { workspaceSlug, projectId, issueId, customButton, disabled = false, issueServiceType } = props;
-  // state
   const [isLoading, setIsLoading] = useState(false);
-  // store hooks
   const { setLastWidgetAction, fetchActivities } = useIssueDetail(issueServiceType);
-  // file size
   const { maxFileSize } = useFileSize();
-  // operations
   const { operations: attachmentOperations } = useAttachmentOperations(
     workspaceSlug,
     projectId,
     issueId,
     issueServiceType
   );
-  // handlers
+
   const handleFetchPropertyActivities = useCallback(() => {
     fetchActivities(workspaceSlug, projectId, issueId);
   }, [fetchActivities, workspaceSlug, projectId, issueId]);
@@ -76,7 +69,6 @@ export const IssueAttachmentActionButton = observer(function IssueAttachmentActi
             ? "Only one file can be uploaded at a time."
             : `File must be of ${maxFileSize / 1024 / 1024}MB or less in size.`,
       });
-      return;
     },
     [attachmentOperations, maxFileSize, workspaceSlug, handleFetchPropertyActivities, setLastWidgetAction]
   );
@@ -88,16 +80,41 @@ export const IssueAttachmentActionButton = observer(function IssueAttachmentActi
     disabled: isLoading || disabled,
   });
 
+  const fallback = <PlusIcon className="h-4 w-4" />;
+  const resolved = customButton ? resolveCustomButtonTrigger(customButton) : null;
+  const isDisabled = isLoading || disabled;
+
+  if (resolved) {
+    const { onClick, ...rootProps } = getRootProps();
+
+    return (
+      <>
+        <input {...getInputProps()} />
+        {React.cloneElement(
+          resolved,
+          mergeTriggerElementProps(resolved, {
+            type: "button",
+            disabled: isDisabled,
+            ...rootProps,
+            onClick: (event: React.MouseEvent<HTMLButtonElement>) => {
+              event.stopPropagation();
+              onClick?.(event);
+            },
+          })
+        )}
+      </>
+    );
+  }
+
   return (
     <div
       onClick={(e) => {
-        // TODO: Remove extra div and move event propagation to button
         e.stopPropagation();
       }}
     >
-      <button {...getRootProps()} type="button" disabled={disabled}>
+      <button {...getRootProps()} type="button" disabled={isDisabled}>
         <input {...getInputProps()} />
-        {customButton ? customButton : <PlusIcon className="h-4 w-4" />}
+        {customButton ?? fallback}
       </button>
     </div>
   );

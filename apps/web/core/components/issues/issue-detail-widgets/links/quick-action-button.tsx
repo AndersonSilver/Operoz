@@ -1,9 +1,8 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { PlusIcon } from "@operoz/propel/icons";
-// plane imports
 import type { TIssueServiceType } from "@operoz/types";
-// hooks
+import { mergeTriggerElementProps, resolveCustomButtonTrigger } from "@operoz/ui";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 
 type Props = {
@@ -14,19 +13,31 @@ type Props = {
 
 export const IssueLinksActionButton = observer(function IssueLinksActionButton(props: Props) {
   const { customButton, disabled = false, issueServiceType } = props;
-  // store hooks
   const { toggleIssueLinkModal } = useIssueDetail(issueServiceType);
 
-  // handlers
   const handleOnClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     e.stopPropagation();
     toggleIssueLinkModal(true);
   };
 
+  const fallback = <PlusIcon className="h-4 w-4" />;
+  const resolved = customButton ? resolveCustomButtonTrigger(customButton) : null;
+
+  if (resolved) {
+    return React.cloneElement(
+      resolved,
+      mergeTriggerElementProps(resolved, {
+        type: "button",
+        disabled,
+        onClick: handleOnClick,
+      })
+    );
+  }
+
   return (
     <button type="button" onClick={handleOnClick} disabled={disabled}>
-      {customButton ? customButton : <PlusIcon className="h-4 w-4" />}
+      {customButton ?? fallback}
     </button>
   );
 });

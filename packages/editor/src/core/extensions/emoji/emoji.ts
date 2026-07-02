@@ -18,7 +18,7 @@ import { Plugin, PluginKey, TextSelection } from "@tiptap/pm/state";
 import type { SuggestionOptions } from "@tiptap/suggestion";
 import Suggestion from "@tiptap/suggestion";
 import emojiRegex from "emoji-regex";
-import { isEmojiSupported } from "is-emoji-supported";
+import { isEmojiSupported } from "@/utils/is-emoji-supported";
 // helpers
 import { customFindSuggestionMatch } from "@/helpers/find-suggestion-match";
 

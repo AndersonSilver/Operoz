@@ -1,12 +1,40 @@
 import React from "react";
 // helpers
-import { Button } from "@operoz/propel/button";
+import { getButtonStyling } from "@operoz/propel/button";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";
 // types
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { BACKGROUND_BUTTON_VARIANTS, BORDER_BUTTON_VARIANTS } from "./constants";
 import type { TButtonVariants } from "./types";
+
+type DropdownButtonSurfaceProps = {
+  children: React.ReactNode;
+  className?: string;
+  isActive?: boolean;
+};
+
+const DropdownButtonSurface = React.forwardRef<HTMLSpanElement, DropdownButtonSurfaceProps>(
+  function DropdownButtonSurface(props, ref) {
+    const { children, className, isActive } = props;
+
+    return (
+      <span
+        ref={ref}
+        className={cn(
+          getButtonStyling("ghost", "sm"),
+          "flex h-full w-full items-center justify-start gap-1.5",
+          className,
+          isActive && "bg-layer-transparent-active"
+        )}
+      >
+        {children}
+      </span>
+    );
+  }
+);
+
+DropdownButtonSurface.displayName = "DropdownButtonSurface";
 
 export type DropdownButtonProps = {
   children: React.ReactNode;
@@ -72,19 +100,9 @@ function BorderButton(props: ButtonProps) {
       isMobile={isMobile}
       renderByDefault={renderToolTipByDefault}
     >
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "flex h-full w-full items-center justify-start gap-1.5 border-[0.5px] border-strong",
-          {
-            "bg-layer-transparent-active": isActive,
-          },
-          className
-        )}
-      >
+      <DropdownButtonSurface isActive={isActive} className={cn("border-[0.5px] border-strong", className)}>
         {children}
-      </Button>
+      </DropdownButtonSurface>
     </Tooltip>
   );
 }
@@ -100,16 +118,11 @@ function BackgroundButton(props: ButtonProps) {
       isMobile={isMobile}
       renderByDefault={renderToolTipByDefault}
     >
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "flex h-full w-full items-center justify-between gap-1.5 bg-layer-3 hover:bg-layer-1-hover",
-          className
-        )}
+      <DropdownButtonSurface
+        className={cn("items-center justify-between bg-layer-3 hover:bg-layer-1-hover", className)}
       >
         {children}
-      </Button>
+      </DropdownButtonSurface>
     </Tooltip>
   );
 }
@@ -125,19 +138,9 @@ function TransparentButton(props: ButtonProps) {
       isMobile={isMobile}
       renderByDefault={renderToolTipByDefault}
     >
-      <Button
-        variant="ghost"
-        size="sm"
-        className={cn(
-          "flex h-full w-full items-center justify-between gap-1.5",
-          {
-            "bg-layer-transparent-active": isActive,
-          },
-          className
-        )}
-      >
+      <DropdownButtonSurface isActive={isActive} className={cn("items-center justify-between", className)}>
         {children}
-      </Button>
+      </DropdownButtonSurface>
     </Tooltip>
   );
 }

@@ -18,11 +18,35 @@ type ITooltipProps = {
   side?: TSide;
   align?: TAlign;
   sideOffset?: number;
-  /** Pass `true` only when `children` is a native `<button>`. Defaults to `false`. */
-  nativeButton?: boolean;
 };
 
-export function Tooltip(props: ITooltipProps) {
+function mergeHandler<E extends React.SyntheticEvent>(
+  parentHandler: React.EventHandler<E> | undefined,
+  childHandler: React.EventHandler<E> | undefined
+) {
+  if (parentHandler && childHandler) {
+    return (event: E) => {
+      parentHandler(event);
+      childHandler(event);
+    };
+  }
+  return parentHandler ?? childHandler;
+}
+
+function composeRefs<T>(...refs: Array<React.Ref<T> | undefined>) {
+  return (node: T | null) => {
+    for (const ref of refs) {
+      if (!ref) continue;
+      if (typeof ref === "function") {
+        ref(node);
+      } else if (typeof ref === "object") {
+        (ref as React.MutableRefObject<T | null>).current = node;
+      }
+    }
+  };
+}
+
+export const Tooltip = React.forwardRef<HTMLElement, ITooltipProps>(function Tooltip(props, forwardedRef) {
   const {
     tooltipHeading,
     tooltipContent,
@@ -36,7 +60,6 @@ export function Tooltip(props: ITooltipProps) {
     sideOffset = 10,
     closeDelay,
     isMobile = false,
-    nativeButton,
   } = props;
   const { finalSide, finalAlign } = React.useMemo(() => {
     if (position) {
@@ -46,10 +69,32 @@ export function Tooltip(props: ITooltipProps) {
     return { finalSide: side, finalAlign: align };
   }, [position, side, align]);
 
+  const triggerChild = React.isValidElement(children)
+    ? React.cloneElement(children, {
+        ref: composeRefs(forwardedRef, (children as { ref?: React.Ref<HTMLElement> }).ref),
+        onClick: mergeHandler(
+          (props as React.HTMLAttributes<HTMLElement>).onClick,
+          (children.props as React.HTMLAttributes<HTMLElement>).onClick
+        ),
+        onMouseDown: mergeHandler(
+          (props as React.HTMLAttributes<HTMLElement>).onMouseDown,
+          (children.props as React.HTMLAttributes<HTMLElement>).onMouseDown
+        ),
+        onPointerDown: mergeHandler(
+          (props as React.HTMLAttributes<HTMLElement>).onPointerDown,
+          (children.props as React.HTMLAttributes<HTMLElement>).onPointerDown
+        ),
+        onKeyDown: mergeHandler(
+          (props as React.HTMLAttributes<HTMLElement>).onKeyDown,
+          (children.props as React.HTMLAttributes<HTMLElement>).onKeyDown
+        ),
+      } as React.HTMLAttributes<HTMLElement>)
+    : children;
+
   return (
     <BaseTooltip.Provider>
       <BaseTooltip.Root delay={openDelay} closeDelay={closeDelay} disabled={disabled}>
-        <BaseTooltip.Trigger render={children} nativeButton={nativeButton ?? false} />
+        <BaseTooltip.Trigger render={triggerChild} />
         <BaseTooltip.Portal>
           <BaseTooltip.Positioner
             className={cn(
@@ -65,9 +110,7 @@ export function Tooltip(props: ITooltipProps) {
             render={
               <BaseTooltip.Popup>
                 {/* Use div (not p): tooltipContent is ReactNode and often includes <p>, <div>, or lists — p cannot nest p/block. */}
-                {tooltipHeading && (
-                  <div className="text-caption-md-medium text-primary">{tooltipHeading}</div>
-                )}
+                {tooltipHeading && <div className="text-caption-md-medium text-primary">{tooltipHeading}</div>}
                 {tooltipContent && (
                   <div
                     className={cn("text-caption-sm-regular text-secondary", {
@@ -84,4 +127,6 @@ export function Tooltip(props: ITooltipProps) {
       </BaseTooltip.Root>
     </BaseTooltip.Provider>
   );
-}
+});
+
+Tooltip.displayName = "Tooltip";

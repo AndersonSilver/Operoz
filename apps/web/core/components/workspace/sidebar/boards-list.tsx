@@ -24,6 +24,20 @@ import { BoardSidebarBoardItem } from "./board-sidebar-board-item";
 import { BoardsSidebarEmptyState } from "./boards-empty-state";
 import { SidebarProjectsListItem } from "./projects-list-item";
 
+function getScrollableParent(element: HTMLElement): HTMLElement | null {
+  let current: HTMLElement | null = element.parentElement;
+
+  while (current) {
+    const { overflowY } = getComputedStyle(current);
+    if (overflowY === "auto" || overflowY === "scroll" || overflowY === "overlay") {
+      return current;
+    }
+    current = current.parentElement;
+  }
+
+  return null;
+}
+
 export const SidebarBoardsList = observer(function SidebarBoardsList() {
   const { t } = useTranslation();
   const { workspaceSlug } = useParams();
@@ -117,7 +131,10 @@ export const SidebarBoardsList = observer(function SidebarBoardsList() {
     };
 
   useEffect(() => {
-    const element = boardsPanelRef.current;
+    const panel = boardsPanelRef.current;
+    if (!panel) return;
+
+    const element = getScrollableParent(panel);
     if (!element) return;
 
     return combine(

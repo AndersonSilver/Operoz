@@ -3714,6 +3714,19 @@ export default {
       mismatch: "As senhas não coincidem",
       match: "Senhas coincidem",
     },
+    workspace: {
+      no_invites_creation_disabled:
+        "Parece que você não tem convites para um espaço de trabalho e o administrador da instância restringiu a criação de novos espaços. Peça a um proprietário ou administrador para convidá-lo primeiro e volte a esta tela para entrar.",
+    },
+    switch_account: {
+      wrong_email: "E-mail incorreto?",
+      title: "Trocar conta",
+      description: "Se você se cadastrou com {email} sem querer, pode trocar para outra conta aqui.",
+      action: "Trocar conta",
+      switching: "Trocando...",
+      sign_out_error_title: "Erro",
+      sign_out_error_message: "Não foi possível sair. Tente novamente.",
+    },
   },
   product_tour: {
     welcome: {

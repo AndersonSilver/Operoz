@@ -1,4 +1,4 @@
-//
+import { forwardRef } from "react";
 import { cn } from "@operoz/utils";
 
 type TCountChip = {
@@ -6,11 +6,12 @@ type TCountChip = {
   className?: string;
 };
 
-export function CountChip(props: TCountChip) {
+export const CountChip = forwardRef<HTMLDivElement, TCountChip>(function CountChip(props, ref) {
   const { count, className = "" } = props;
 
   return (
     <div
+      ref={ref}
       className={cn(
         "relative flex flex-shrink-0 items-center justify-center rounded-xl bg-accent-primary/20 px-2.5 py-0.5 text-caption-sm-semibold text-accent-primary",
         className
@@ -19,4 +20,6 @@ export function CountChip(props: TCountChip) {
       {count}
     </div>
   );
-}
+});
+
+CountChip.displayName = "CountChip";

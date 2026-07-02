@@ -74,7 +74,7 @@ export const SubIssuesActionButton = observer(function SubIssuesActionButton(pro
   ];
 
   // button element
-  const customButtonElement = customButton ? <>{customButton}</> : <PlusIcon className="h-4 w-4" />;
+  const customButtonElement = customButton ?? <PlusIcon className="h-4 w-4" />;
 
   return (
     <CustomMenu customButton={customButtonElement} placement="bottom-start" disabled={disabled} closeOnSelect>

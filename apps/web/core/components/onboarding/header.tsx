@@ -3,6 +3,7 @@ import { PlaneLockup, ChevronLeftIcon } from "@operoz/propel/icons";
 import { EOnboardingSteps } from "@operoz/types";
 import { cn } from "@operoz/utils";
 import { useUser } from "@/hooks/store/user";
+import { OnboardingLanguageSelect } from "./language-select";
 import { SwitchAccountDropdown } from "./switch-account-dropdown";
 
 type OnboardingHeaderProps = {
@@ -55,7 +56,10 @@ export const OnboardingHeader = observer(function OnboardingHeader(props: Onboar
             </span>
           </div>
         </div>
-        <SwitchAccountDropdown fullName={userName} />
+        <div className="flex items-center gap-2">
+          <OnboardingLanguageSelect />
+          <SwitchAccountDropdown fullName={userName} />
+        </div>
       </div>
     </div>
   );

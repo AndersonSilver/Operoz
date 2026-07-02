@@ -136,7 +136,10 @@ class IssueCreateSerializer(BaseSerializer):
             and attrs.get("target_date", None) is not None
             and attrs.get("start_date", None) > attrs.get("target_date", None)
         ):
-            raise serializers.ValidationError("Start date cannot exceed target date")
+            if self.context.get("normalize_inverted_dates"):
+                attrs["start_date"], attrs["target_date"] = attrs["target_date"], attrs["start_date"]
+            else:
+                raise serializers.ValidationError("Start date cannot exceed target date")
 
         # Validate description content for security
         if "description_html" in attrs and attrs["description_html"]:

@@ -36,6 +36,7 @@ from operoz.db.models import (
 from operoz.bgtasks.webhook_task import model_activity, webhook_activity
 from .base import BaseAPIView
 from operoz.utils.host import base_host
+from operoz.utils.project_intake import get_or_create_default_project_intake
 from operoz.api.serializers import (
     ProjectSerializer,
     ProjectCreateSerializer,
@@ -425,13 +426,7 @@ class ProjectDetailAPIEndpoint(BaseAPIView):
             if serializer.is_valid():
                 serializer.save()
                 if serializer.data["intake_view"]:
-                    intake = Intake.objects.filter(project=project, is_default=True).first()
-                    if not intake:
-                        Intake.objects.create(
-                            name=f"{project.name} Intake",
-                            project=project,
-                            is_default=True,
-                        )
+                    get_or_create_default_project_intake(project)
 
                 project = self.get_queryset().filter(pk=serializer.instance.id).first()
 

@@ -10,11 +10,11 @@ import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 
 type BlockProps = {
   activity: TActivityEntityData;
-  ref: React.RefObject<HTMLDivElement>;
+  parentRef: React.RefObject<HTMLDivElement>;
   workspaceSlug: string;
 };
 export function RecentProject(props: BlockProps) {
-  const { activity, ref, workspaceSlug } = props;
+  const { activity, parentRef, workspaceSlug } = props;
   // router
   const router = useRouter();
   // derived values
@@ -65,7 +65,7 @@ export function RecentProject(props: BlockProps) {
           )}
         </div>
       }
-      parentRef={ref}
+      parentRef={parentRef}
       disableLink={false}
       className="my-auto border-none !px-2 py-3"
       itemClassName="my-auto"

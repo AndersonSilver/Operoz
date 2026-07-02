@@ -3,7 +3,7 @@ import React, { forwardRef } from "react";
 // helpers
 import { cn } from "./utils";
 
-interface IDragHandle {
+interface IDragHandle extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   className?: string;
   disabled?: boolean;
 }
@@ -12,7 +12,7 @@ export const DragHandle = forwardRef(function DragHandle(
   props: IDragHandle,
   ref: React.ForwardedRef<HTMLButtonElement | null>
 ) {
-  const { className, disabled = false } = props;
+  const { className, disabled = false, ...buttonProps } = props;
 
   if (disabled) {
     return <div className="h-[18px] w-[14px]" />;
@@ -27,6 +27,7 @@ export const DragHandle = forwardRef(function DragHandle(
         e.stopPropagation();
       }}
       ref={ref}
+      {...buttonProps}
     >
       <MoreVertical className="h-3.5 w-3.5 stroke-placeholder" />
       <MoreVertical className="-ml-5 h-3.5 w-3.5 stroke-placeholder" />

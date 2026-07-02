@@ -31,10 +31,10 @@ import "@fontsource/ibm-plex-mono";
 const APP_TITLE = "Operoz";
 
 export const links: LinksFunction = () => [
-  { rel: "icon", type: "image/svg+xml", href: "/brand/favicon.svg" },
-  { rel: "shortcut icon", type: "image/svg+xml", href: "/brand/favicon.svg" },
   { rel: "icon", type: "image/png", sizes: "32x32", href: favicon32 },
   { rel: "icon", type: "image/png", sizes: "16x16", href: favicon16 },
+  { rel: "shortcut icon", type: "image/png", href: favicon32 },
+  { rel: "icon", href: faviconIco },
   { rel: "manifest", href: "/site.webmanifest.json" },
   { rel: "apple-touch-icon", href: icon512 },
   { rel: "apple-touch-icon", sizes: "180x180", href: icon180 },

@@ -49,6 +49,7 @@ export const BulkSelectCheckboxCell = observer(function BulkSelectCheckboxCell(p
       <Checkbox
         checked={isSelected}
         disabled={disabled}
+        readOnly
         tabIndex={-1}
         aria-hidden
         className="pointer-events-none size-3.5 !outline-none"

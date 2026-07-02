@@ -58,6 +58,7 @@ from operoz.utils.host import base_host
 from operoz.automation.hooks import emit_intake_submitted, emit_issue_created
 from operoz.alerts.enqueue import schedule_support_alert
 from operoz.db.models.intake import SourceType, IntakeTicketKind
+from operoz.utils.project_intake import get_or_create_default_project_intake
 
 
 class IntakeViewSet(BaseViewSet):
@@ -182,11 +183,20 @@ class IntakeIssueViewSet(BaseViewSet):
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def list(self, request, slug, project_id):
-        intake = Intake.objects.filter(workspace__slug=slug, project_id=project_id).first()
-        if not intake:
-            return Response({"error": "Intake not found"}, status=status.HTTP_404_NOT_FOUND)
+        project = Project.objects.get(pk=project_id, workspace__slug=slug)
+        ticket_kind = request.GET.get("ticket_kind", IntakeTicketKind.SUPPORT)
+        if ticket_kind == IntakeTicketKind.INTAKE and not project.intake_view:
+            return Response(
+                {"error": "Intake is not enabled for this project"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        if ticket_kind == IntakeTicketKind.SUPPORT and not project.support_view:
+            return Response(
+                {"error": "Support is not enabled for this project"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        project = Project.objects.get(pk=project_id)
+        intake = get_or_create_default_project_intake(project)
         filters = issue_filters(request.GET, "GET", "issue__")
         intake_issue = (
             IntakeIssue.objects.filter(intake_id=intake.id, project_id=project_id, **filters)
@@ -204,7 +214,6 @@ class IntakeIssueViewSet(BaseViewSet):
             )
         ).order_by(request.GET.get("order_by", "-issue__created_at"))
 
-        ticket_kind = request.GET.get("ticket_kind", IntakeTicketKind.SUPPORT)
         if ticket_kind in (IntakeTicketKind.INTAKE, IntakeTicketKind.SUPPORT):
             intake_issue = intake_issue.filter(ticket_kind=ticket_kind)
 
@@ -296,7 +305,6 @@ class IntakeIssueViewSet(BaseViewSet):
         )
         if serializer.is_valid():
             serializer.save()
-            intake_id = Intake.objects.filter(workspace__slug=slug, project_id=project_id).first()
             ticket_kind = request.data.get("ticket_kind", IntakeTicketKind.INTAKE)
             if ticket_kind not in (IntakeTicketKind.INTAKE, IntakeTicketKind.SUPPORT):
                 ticket_kind = IntakeTicketKind.INTAKE
@@ -304,9 +312,10 @@ class IntakeIssueViewSet(BaseViewSet):
                 return Response({"error": "Support is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
             if ticket_kind == IntakeTicketKind.INTAKE and not project.intake_view:
                 return Response({"error": "Intake is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
+            intake = get_or_create_default_project_intake(project)
             # create an intake issue
             intake_issue = IntakeIssue.objects.create(
-                intake_id=intake_id.id,
+                intake_id=intake.id,
                 project_id=project_id,
                 issue_id=serializer.data["id"],
                 source=SourceType.IN_APP,

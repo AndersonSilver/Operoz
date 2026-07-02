@@ -39,6 +39,7 @@ from operoz.db.models.intake import IntakeIssueStatus
 from operoz.utils.board_custom_fields import sync_board_custom_fields_to_project
 from operoz.utils.board_issue_types import sync_board_issue_types_to_project
 from operoz.utils.host import base_host
+from operoz.utils.project_intake import get_or_create_default_project_intake
 
 
 class ProjectViewSet(BaseViewSet):
@@ -394,13 +395,7 @@ class ProjectViewSet(BaseViewSet):
                 sync_board_issue_types_to_project(serializer.instance, request.user)
                 sync_board_custom_fields_to_project(serializer.instance, request.user)
             if intake_view or support_view:
-                intake = Intake.objects.filter(project=project, is_default=True).first()
-                if not intake:
-                    Intake.objects.create(
-                        name=f"{project.name} Intake",
-                        project=project,
-                        is_default=True,
-                    )
+                get_or_create_default_project_intake(serializer.instance)
 
             project = self.get_queryset().filter(pk=serializer.data["id"]).first()
 

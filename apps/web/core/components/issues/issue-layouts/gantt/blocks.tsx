@@ -236,7 +236,7 @@ export const IssueGanttSidebarBlock = observer(function IssueGanttSidebarBlock(p
               displayProperties={sidebarDisplayProperties}
             />
           )}
-          <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile} nativeButton={false}>
+          <Tooltip tooltipContent={issueDetails?.name} isMobile={isMobile}>
             <span className="flex-grow truncate text-13 font-medium">{issueDetails?.name}</span>
           </Tooltip>
           <IssueSubIssuesIndicator

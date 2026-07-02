@@ -202,4 +202,14 @@ def jira_issue_dates(fields: dict) -> tuple[date | None, date | None]:
         start_field=used_start_field or start_field,
     )
 
+    return normalize_issue_date_range(start, target)
+
+
+def normalize_issue_date_range(
+    start: date | None,
+    target: date | None,
+) -> tuple[date | None, date | None]:
+    """Garante start <= target quando ambas existem (Jira pode enviar campos trocados)."""
+    if start is not None and target is not None and start > target:
+        return target, start
     return start, target

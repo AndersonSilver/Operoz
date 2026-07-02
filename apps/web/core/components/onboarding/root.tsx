@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
+import { DEFAULT_LOCALE, useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IWorkspaceMemberInvitation, TOnboardingStep, TOnboardingSteps, TUserProfile } from "@operoz/types";
 import { EOnboardingSteps } from "@operoz/types";
@@ -17,6 +18,7 @@ type Props = {
 
 export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [] }: Props) {
   const [currentStep, setCurrentStep] = useState<TOnboardingStep>(EOnboardingSteps.PROFILE_SETUP);
+  const { changeLanguage } = useTranslation();
   const { data: user } = useUser();
   const { data: userProfile, updateUserProfile, finishUserOnboarding } = useUserProfile();
   const { workspaces } = useWorkspace();
@@ -38,6 +40,16 @@ export const OnboardingRoot = observer(function OnboardingRoot({ invitations = [
 
   const currentStepNumber = stepOrder.indexOf(currentStep) + 1;
   const totalSteps = stepOrder.length;
+
+  useEffect(() => {
+    if (!user?.id) return;
+
+    const profileLanguage = userProfile?.language;
+    if (!profileLanguage) {
+      changeLanguage(DEFAULT_LOCALE);
+      void updateUserProfile({ language: DEFAULT_LOCALE });
+    }
+  }, [user?.id, userProfile?.language, changeLanguage, updateUserProfile]);
 
   const finishOnboarding = useCallback(async () => {
     if (!user) return;

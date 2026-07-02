@@ -3,7 +3,6 @@ import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { observer } from "mobx-react";
-import { useParams } from "next/navigation";
 // plane imports
 import { DRAG_ALLOWED_GROUPS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -41,7 +40,6 @@ import {
 } from "../utils";
 import { IssueBlocksList } from "./blocks-list";
 import { HeaderGroupByCard } from "./headers/group-by-card";
-import { ListPropertiesColumnsHeader } from "./list-properties-columns-header";
 import type { TRenderQuickActions } from "./list-view-types";
 
 interface Props {
@@ -98,10 +96,6 @@ export const ListGroup = observer(function ListGroup(props: Props) {
   } = props;
 
   const { t } = useTranslation();
-  const { projectId } = useParams();
-  const showBulkSelectGutter = Boolean(
-    projectId && canEditProperties(projectId?.toString()) && !selectionHelpers.isSelectionDisabled && !isEpic
-  );
   const [isDraggingOverColumn, setIsDraggingOverColumn] = useState(false);
   const groupTitle =
     group.id === "All Issues" ? t(isEpic ? "issue.epics" : "default_global_view.all_issues") : group.name;
@@ -297,15 +291,6 @@ export const ListGroup = observer(function ListGroup(props: Props) {
             isDraggingOverColumn={isDraggingOverColumn}
             isEpic={isEpic}
           />
-          {!group_by && displayProperties && (
-            <div className="w-full min-w-0">
-              <ListPropertiesColumnsHeader
-                displayProperties={displayProperties}
-                isEpic={isEpic}
-                showBulkSelectGutter={showBulkSelectGutter}
-              />
-            </div>
-          )}
           {groupIssueIds && (
             <div className="w-full min-w-0">
               <IssueBlocksList

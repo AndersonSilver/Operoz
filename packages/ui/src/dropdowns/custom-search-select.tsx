@@ -11,6 +11,12 @@ import { Tooltip } from "@operoz/propel/tooltip";
 import { useDropdownKeyDown } from "../hooks/use-dropdown-key-down";
 import { cn } from "../utils";
 import type { ICustomSearchSelectProps } from "./helper";
+import {
+  assignChildRef,
+  mergeTriggerElementProps,
+  resolveCustomButtonTrigger,
+  unwrapCustomButtonElement,
+} from "./custom-button-trigger";
 
 export function CustomSearchSelect(props: ICustomSearchSelectProps) {
   const {
@@ -82,6 +88,54 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
     else openDropdown();
   };
 
+  const assignReferenceElement = (node: HTMLButtonElement | null) => {
+    setReferenceElement(node);
+    assignChildRef(node, customButton);
+  };
+
+  const renderTriggerButton = (content: React.ReactNode) => (
+    <button
+      ref={assignReferenceElement}
+      type="button"
+      className={cn(
+        "flex w-auto max-w-none shrink-0 items-center justify-between gap-1 text-11",
+        {
+          "cursor-not-allowed text-secondary": disabled,
+          "cursor-pointer hover:bg-layer-transparent-hover": !disabled,
+        },
+        customButtonClassName
+      )}
+      onClick={toggleDropdown}
+      disabled={disabled}
+    >
+      {content}
+    </button>
+  );
+
+  const renderCustomButton = () => {
+    if (!customButton) return null;
+
+    const resolved = resolveCustomButtonTrigger(customButton);
+
+    if (resolved) {
+      return React.cloneElement(
+        resolved,
+        mergeTriggerElementProps(resolved, {
+          ref: assignReferenceElement,
+          disabled,
+          className: customButtonClassName,
+          onClick: toggleDropdown,
+        })
+      );
+    }
+
+    if (!React.isValidElement(customButton)) {
+      return renderTriggerButton(customButton);
+    }
+
+    return renderTriggerButton(unwrapCustomButtonElement(customButton) ?? customButton);
+  };
+
   return (
     <Combobox
       as="div"
@@ -97,23 +151,7 @@ export function CustomSearchSelect(props: ICustomSearchSelectProps) {
         return (
           <>
             {customButton ? (
-              <Combobox.Button as={React.Fragment}>
-                <button
-                  ref={setReferenceElement}
-                  type="button"
-                  className={cn(
-                    "flex w-auto max-w-none shrink-0 items-center justify-between gap-1 text-11",
-                    {
-                      "cursor-not-allowed text-secondary": disabled,
-                      "cursor-pointer hover:bg-layer-transparent-hover": !disabled,
-                    },
-                    customButtonClassName
-                  )}
-                  onClick={toggleDropdown}
-                >
-                  {customButton}
-                </button>
-              </Combobox.Button>
+              <Combobox.Button as={React.Fragment}>{renderCustomButton()}</Combobox.Button>
             ) : (
               <Combobox.Button as={React.Fragment}>
                 <button

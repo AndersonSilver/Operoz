@@ -68,7 +68,7 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
   const [boardInstruction, setBoardInstruction] = useState<"DRAG_OVER" | "DRAG_BELOW" | undefined>(undefined);
 
   const boardRowRef = useRef<HTMLDivElement | null>(null);
-  const boardDragHandleRef = useRef<HTMLButtonElement | null>(null);
+  const boardDragHandleRef = useRef<HTMLDivElement | null>(null);
 
   const isWorkspaceAdmin = allowPermissions([EUserPermissions.ADMIN], EUserPermissionsLevel.WORKSPACE);
   const projectDragInstanceId = `BOARD_PROJECTS_${board.id}`;
@@ -151,14 +151,13 @@ export const BoardSidebarBoardItem = observer(function BoardSidebarBoardItem(pro
           className="flex w-full items-center rounded-md py-0.5 pr-1 pl-1 transition-colors hover:bg-accent-subtle/20"
         >
           {enableBoardReorder && isWorkspaceAdmin && (
-            <button
-              type="button"
+            <div
               ref={boardDragHandleRef}
-              className="mr-0.5 hidden cursor-grab text-placeholder group-hover/board-row:block"
+              className="mr-0.5 hidden cursor-grab group-hover/board-row:block"
               aria-label={t("drag_to_rearrange")}
             >
               <DragHandle className="bg-transparent" />
-            </button>
+            </div>
           )}
           <button
             type="button"

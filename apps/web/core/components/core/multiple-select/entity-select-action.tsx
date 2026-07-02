@@ -1,3 +1,4 @@
+import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 // ui
 import { Checkbox } from "@operoz/ui";
@@ -21,21 +22,38 @@ export const MultipleSelectEntityAction = observer(function MultipleSelectEntity
 
   if (selectionHelpers.isSelectionDisabled) return null;
 
+  const handleToggle = (event: MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    event.preventDefault();
+    if (disabled) return;
+    selectionHelpers.handleEntityClick(event, id, groupId);
+  };
+
   return (
-    <Checkbox
-      className={cn("size-3.5 !outline-none", className)}
-      iconClassName="size-3"
-      onMouseDown={(e) => {
-        e.stopPropagation();
-      }}
-      onClick={(e) => {
-        e.stopPropagation();
-        selectionHelpers.handleEntityClick(e, id, groupId);
-      }}
-      checked={isSelected}
+    <button
+      type="button"
+      className={cn(
+        "relative z-30 flex shrink-0 cursor-pointer items-center border-0 bg-transparent p-0",
+        disabled && "cursor-not-allowed",
+        className
+      )}
+      aria-label="Selecionar item"
+      aria-pressed={isSelected}
+      disabled={disabled}
       data-entity-group-id={groupId}
       data-entity-id={id}
-      disabled={disabled}
-    />
+      onPointerDown={(event) => event.stopPropagation()}
+      onClick={handleToggle}
+    >
+      <Checkbox
+        className="size-3.5 !outline-none"
+        iconClassName="size-3"
+        checked={isSelected}
+        disabled={disabled}
+        readOnly
+        tabIndex={-1}
+        aria-hidden
+      />
+    </button>
   );
 });
