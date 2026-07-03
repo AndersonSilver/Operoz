@@ -10,13 +10,21 @@ DEBUG = int(os.environ.get("DEBUG", 0)) == 1
 # Honor the 'X-Forwarded-Proto' header for request.is_secure()
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
 
+# HTTP security headers
+SECURE_HSTS_SECONDS = int(os.environ.get("SECURE_HSTS_SECONDS", "31536000"))
+SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+SECURE_HSTS_PRELOAD = True
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_SSL_REDIRECT = os.environ.get("SECURE_SSL_REDIRECT", "1") == "1"
+X_FRAME_OPTIONS = "DENY"
+
 INSTALLED_APPS += ("scout_apm.django",)  # noqa
 
 
 # Scout Settings
 SCOUT_MONITOR = os.environ.get("SCOUT_MONITOR", False)
 SCOUT_KEY = os.environ.get("SCOUT_KEY", "")
-SCOUT_NAME = "Plane"
+SCOUT_NAME = os.environ.get("SCOUT_NAME", "Operoz")
 
 LOG_DIR = os.path.join(BASE_DIR, "logs")  # noqa
 
@@ -94,6 +102,11 @@ LOGGING = {
         "operoz.migrations": {
             "level": "DEBUG" if DEBUG else "INFO",
             "handlers": ["console"],
+            "propagate": False,
+        },
+        "operoz.security.audit": {
+            "level": "INFO",
+            "handlers": ["console", "file"],
             "propagate": False,
         },
     },

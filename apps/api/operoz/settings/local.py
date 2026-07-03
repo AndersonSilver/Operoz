@@ -86,5 +86,10 @@ LOGGING = {
             "handlers": ["console"],
             "propagate": False,
         },
+        "operoz.security.audit": {
+            "level": "INFO",
+            "handlers": ["console"],
+            "propagate": False,
+        },
     },
 }

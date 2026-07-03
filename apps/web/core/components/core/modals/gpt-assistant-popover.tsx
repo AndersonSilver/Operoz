@@ -1,5 +1,6 @@
 import type { Ref } from "react";
 import React, { useCallback, useEffect, useState, useRef, Fragment } from "react";
+import DOMPurify from "dompurify";
 import type { Placement } from "@popperjs/core";
 import { Controller, useForm } from "react-hook-form";
 import { usePopper } from "react-popper";
@@ -202,7 +203,7 @@ export function GptAssistantPanel(props: GptAssistantPanelProps) {
           {isInline ? (
             <div
               className="prose-invert max-w-none text-13 prose [&_p]:my-1"
-              dangerouslySetInnerHTML={{ __html: response }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(response) }}
             />
           ) : (
             <>

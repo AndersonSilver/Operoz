@@ -1,4 +1,5 @@
 import { useMemo } from "react";
+import DOMPurify from "dompurify";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
@@ -121,7 +122,7 @@ export const InboxIssueMainContent = observer(function InboxIssueMainContent(pro
           {issue.description_html ? (
             <div
               className="prose-sm max-w-none text-secondary prose"
-              dangerouslySetInnerHTML={{ __html: issue.description_html }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(issue.description_html) }}
             />
           ) : null}
         </section>

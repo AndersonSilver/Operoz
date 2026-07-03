@@ -48,12 +48,30 @@ class MagicCodeProvider(CredentialAdapter):
         self.code = code
 
     def initiate(self):
-        ## Generate a random token
-        token = str(secrets.randbelow(900000) + 100000)
+        # 32-byte URL-safe token: ~192 bits of entropy vs 6-digit code (~20 bits)
+        token = secrets.token_urlsafe(32)
 
         ri = redis_instance()
 
         key = "magic_" + str(self.key)
+
+        # Rate limit by IP: max 5 requests per 10 minutes from the same origin IP
+        if self.request:
+            from operoz.utils.ip_address import get_client_ip
+
+            ip = get_client_ip(self.request)
+            ip_key = f"magic_ip_{ip}"
+            ip_attempts = ri.get(ip_key)
+            if ip_attempts and int(ip_attempts) >= 5:
+                raise AuthenticationException(
+                    error_code=AUTHENTICATION_ERROR_CODES["EMAIL_CODE_ATTEMPT_EXHAUSTED_SIGN_IN"],
+                    error_message="EMAIL_CODE_ATTEMPT_EXHAUSTED_SIGN_IN",
+                    payload={"email": str(self.key)},
+                )
+            pipe = ri.pipeline()
+            pipe.incr(ip_key)
+            pipe.expire(ip_key, 600)
+            pipe.execute()
 
         # Check if the key already exists in python
         if ri.exists(key):
@@ -81,11 +99,11 @@ class MagicCodeProvider(CredentialAdapter):
                 "email": str(self.key),
                 "token": token,
             }
-            expiry = 600
+            expiry = 300  # reduced from 600s to 300s
             ri.set(key, json.dumps(value), ex=expiry)
         else:
             value = {"current_attempt": 0, "email": self.key, "token": token}
-            expiry = 600
+            expiry = 300  # reduced from 600s to 300s
 
             ri.set(key, json.dumps(value), ex=expiry)
         return key, token

@@ -1,7 +1,12 @@
 # Python imports
 import ipaddress
+import os
 import socket
 from urllib.parse import urlparse
+
+
+# Short DNS resolution timeout reduces the window for DNS rebinding attacks.
+_DNS_TIMEOUT_SECONDS = float(os.environ.get("DNS_VALIDATION_TIMEOUT", "3"))
 
 
 def validate_url(url, allowed_ips=None):
@@ -27,7 +32,16 @@ def validate_url(url, allowed_ips=None):
         raise ValueError("Invalid URL scheme. Only HTTP and HTTPS are allowed")
 
     try:
-        addr_info = socket.getaddrinfo(hostname, None)
+        # Low timeout shrinks the DNS rebinding window; attacker-controlled DNS
+        # would need to flip the record between getaddrinfo and the TCP connect.
+        old_timeout = socket.getdefaulttimeout()
+        socket.setdefaulttimeout(_DNS_TIMEOUT_SECONDS)
+        try:
+            addr_info = socket.getaddrinfo(hostname, None)
+        finally:
+            socket.setdefaulttimeout(old_timeout)
+    except socket.timeout:
+        raise ValueError("Hostname DNS resolution timed out")
     except socket.gaierror:
         raise ValueError("Hostname could not be resolved")
 
@@ -44,10 +58,18 @@ def validate_url(url, allowed_ips=None):
             raise ValueError("Access to private/internal networks is not allowed")
 
 
-def get_client_ip(request):
-    x_forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
-    if x_forwarded_for:
-        ip = x_forwarded_for.split(",")[0]
-    else:
-        ip = request.META.get("REMOTE_ADDR")
-    return ip
+# Comma-separated list of trusted reverse-proxy IPs whose X-Forwarded-For header we trust.
+# When empty (default), X-Forwarded-For is ignored and REMOTE_ADDR is used directly.
+_TRUSTED_PROXY_IPS: frozenset[str] = frozenset(
+    ip.strip() for ip in os.environ.get("TRUSTED_PROXY_IPS", "").split(",") if ip.strip()
+)
+
+
+def get_client_ip(request) -> str:
+    remote_addr: str = request.META.get("REMOTE_ADDR", "")
+    if _TRUSTED_PROXY_IPS and remote_addr in _TRUSTED_PROXY_IPS:
+        xff: str = request.META.get("HTTP_X_FORWARDED_FOR", "")
+        if xff:
+            # Use the last entry — added by the trusted proxy, not forged by the client
+            return xff.split(",")[-1].strip()
+    return remote_addr

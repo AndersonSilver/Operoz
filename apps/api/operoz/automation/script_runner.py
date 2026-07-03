@@ -97,7 +97,10 @@ if (__resultFile) {{
             tmp_path = Path(tmp.name)
 
         result_path = tmp_path.with_suffix(".result.json")
-        env = {**os.environ, RESULT_ENV_KEY: str(result_path)}
+        # Allowlist: never expose server credentials (DATABASE_URL, AWS_*, REDIS_URL, etc.) to user scripts
+        _safe_env_keys = {"PATH", "NODE_PATH", "HOME", "TMPDIR", "LANG", "LC_ALL", RESULT_ENV_KEY}
+        env = {k: v for k, v in os.environ.items() if k in _safe_env_keys}
+        env[RESULT_ENV_KEY] = str(result_path)
         if max_memory_mb:
             env["NODE_OPTIONS"] = f"--max-old-space-size={max_memory_mb}"
 

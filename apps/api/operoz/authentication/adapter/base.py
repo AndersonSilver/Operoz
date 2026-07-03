@@ -21,6 +21,7 @@ from operoz.bgtasks.user_activation_email_task import user_activation_email
 from operoz.db.models import FileAsset, Profile, User, WorkspaceMemberInvite
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.settings.storage import S3Storage
+from operoz.utils.audit_log import log_login_failure, log_login_success
 from operoz.utils.exception_logger import log_exception
 from operoz.utils.host import base_host
 from operoz.utils.ip_address import get_client_ip
@@ -391,6 +392,14 @@ class Adapter:
 
         # Save user data
         user = self.save_user_data(user=user)
+
+        # Audit log — emit after all state is committed
+        log_login_success(
+            user_id=str(user.id),
+            email=email,
+            ip=get_client_ip(self.request) if self.request else "",
+            provider=self.provider,
+        )
 
         # Call callback if present
         if self.callback:

@@ -11,7 +11,6 @@ from urllib.parse import urljoin
 import dj_database_url
 
 # Django imports
-from django.core.management.utils import get_random_secret_key
 from corsheaders.defaults import default_headers
 
 
@@ -21,8 +20,12 @@ from operoz.utils.url import is_valid_url
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# Secret Key
-SECRET_KEY = os.environ.get("SECRET_KEY", get_random_secret_key())
+# Secret Key — must be set explicitly; a random fallback would invalidate all sessions on restart
+SECRET_KEY = os.environ.get("SECRET_KEY")
+if not SECRET_KEY:
+    from django.core.exceptions import ImproperlyConfigured
+
+    raise ImproperlyConfigured("SECRET_KEY environment variable must be set")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", "0"))
@@ -45,8 +48,16 @@ for _cidr in _webhook_allowed_ips_raw.split(","):
     except ValueError:
         _logger.warning("WEBHOOK_ALLOWED_IPS: skipping invalid entry %r", _cidr)
 
-# Allowed Hosts
-ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "*").split(",")
+# Allowed Hosts — wildcard default is unsafe; require explicit configuration
+_allowed_hosts_raw = os.environ.get("ALLOWED_HOSTS", "")
+if not _allowed_hosts_raw:
+    from django.core.exceptions import ImproperlyConfigured
+
+    raise ImproperlyConfigured(
+        "ALLOWED_HOSTS environment variable must be set. "
+        "For local development, use: ALLOWED_HOSTS=localhost,127.0.0.1"
+    )
+ALLOWED_HOSTS = _allowed_hosts_raw.split(",")
 
 # Application definition
 INSTALLED_APPS = [
@@ -132,15 +143,18 @@ TEMPLATES = [
 
 
 # CORS Settings
-CORS_ALLOW_CREDENTIALS = True
 cors_origins_raw = os.environ.get("CORS_ALLOWED_ORIGINS", "")
 # filter out empty strings
 cors_allowed_origins = [origin.strip() for origin in cors_origins_raw.split(",") if origin.strip()]
 if cors_allowed_origins:
     CORS_ALLOWED_ORIGINS = cors_allowed_origins
+    CORS_ALLOW_CREDENTIALS = True
     secure_origins = False if [origin for origin in cors_allowed_origins if "http:" in origin] else True
 else:
+    # Never combine Allow-All-Origins with Allow-Credentials — violates CORS spec
+    # and enables cross-site authenticated requests from any origin.
     CORS_ALLOW_ALL_ORIGINS = True
+    CORS_ALLOW_CREDENTIALS = False
     secure_origins = False
 
 CORS_ALLOW_HEADERS = [*default_headers, "X-API-Key"]
@@ -210,7 +224,7 @@ if REDIS_SSL:
             "LOCATION": REDIS_URL,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": False},
+                "CONNECTION_POOL_KWARGS": {"ssl_cert_reqs": "required"},
             },
         }
     }
@@ -268,8 +282,8 @@ AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID", "access-key")
 AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY", "secret-key")
 AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_S3_BUCKET_NAME", "uploads")
 AWS_REGION = os.environ.get("AWS_REGION", "")
-AWS_DEFAULT_ACL = "public-read"
-AWS_QUERYSTRING_AUTH = False
+AWS_DEFAULT_ACL = "private"
+AWS_QUERYSTRING_AUTH = True  # presigned URLs for every download — no public file exposure
 AWS_S3_FILE_OVERWRITE = False
 AWS_S3_ENDPOINT_URL = os.environ.get("AWS_S3_ENDPOINT_URL", None) or os.environ.get("MINIO_ENDPOINT_URL", None)
 if AWS_S3_ENDPOINT_URL and USE_MINIO:
@@ -461,6 +475,7 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = int(os.environ.get("FILE_SIZE_LIMIT", 5242880))
 # Cookie Settings
 SESSION_COOKIE_SECURE = secure_origins
 SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = os.environ.get("SESSION_COOKIE_SAMESITE", "Lax")
 SESSION_ENGINE = "operoz.db.models.session"
 SESSION_COOKIE_AGE = int(os.environ.get("SESSION_COOKIE_AGE", 604800))
 SESSION_COOKIE_NAME = os.environ.get("SESSION_COOKIE_NAME", "session-id")
@@ -474,6 +489,7 @@ ADMIN_SESSION_COOKIE_AGE = int(os.environ.get("ADMIN_SESSION_COOKIE_AGE", 3600))
 # CSRF cookies
 CSRF_COOKIE_SECURE = secure_origins
 CSRF_COOKIE_HTTPONLY = True
+CSRF_COOKIE_SAMESITE = os.environ.get("CSRF_COOKIE_SAMESITE", "Lax")
 CSRF_TRUSTED_ORIGINS = cors_allowed_origins
 CSRF_COOKIE_DOMAIN = os.environ.get("COOKIE_DOMAIN", None)
 CSRF_FAILURE_VIEW = "operoz.authentication.views.common.csrf_failure"
@@ -591,11 +607,10 @@ ATTACHMENT_MIME_TYPES = [
     "font/woff2",
     # Other
     "text/css",
-    "text/javascript",
+    # text/javascript, text/html and application/xhtml+xml are intentionally excluded:
+    # browsers execute them directly, making them XSS vectors via upload.
     "application/json",
     "text/xml",
-    "text/html",
-    "application/xhtml+xml",
     "text/csv",
     "application/xml",
     # SQL

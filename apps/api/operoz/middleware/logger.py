@@ -1,4 +1,5 @@
 # Python imports
+import hashlib
 import logging
 import time
 
@@ -115,15 +116,19 @@ class APITokenLogMiddleware:
         if not api_key:
             return
 
+        _SENSITIVE_HEADERS = frozenset(("x-api-key", "authorization", "cookie", "set-cookie"))
+
         try:
             log_data = {
-                "token_identifier": api_key,
+                # Store a truncated hash — never the token itself
+                "token_identifier": hashlib.sha256(api_key.encode()).hexdigest()[:16],
                 "path": request.path,
                 "method": request.method,
                 "query_params": request.META.get("QUERY_STRING", ""),
-                "headers": str(request.headers),
-                "body": self._safe_decode_body(request_body) if request_body else None,
-                "response_body": self._safe_decode_body(response.content) if response.content else None,
+                "headers": {k: v for k, v in request.headers.items() if k.lower() not in _SENSITIVE_HEADERS},
+                "body": (self._safe_decode_body(request_body) or "")[:1000] if request_body else None,
+                # response_body omitted — may contain PII; log only size for diagnostics
+                "response_size": len(response.content) if response.content else 0,
                 "response_code": response.status_code,
                 "ip_address": get_client_ip(request=request),
                 "user_agent": request.META.get("HTTP_USER_AGENT", None),

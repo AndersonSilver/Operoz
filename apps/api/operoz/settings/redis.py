@@ -12,7 +12,7 @@ def redis_instance():
             port=url.port,
             password=url.password,
             ssl=True,
-            ssl_cert_reqs=None,
+            ssl_cert_reqs="required",
         )
     else:
         ri = redis.Redis.from_url(settings.REDIS_URL, db=0)

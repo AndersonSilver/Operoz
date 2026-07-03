@@ -23,6 +23,8 @@ from operoz.authentication.adapter.error import (
     AUTHENTICATION_ERROR_CODES,
 )
 from operoz.authentication.rate_limit import AuthenticationThrottle
+from operoz.utils.audit_log import log_login_failure
+from operoz.utils.ip_address import get_client_ip
 from operoz.utils.path_validator import get_safe_redirect_url
 
 
@@ -116,6 +118,12 @@ class MagicSignInEndpoint(View):
             return HttpResponseRedirect(url)
 
         except AuthenticationException as e:
+            log_login_failure(
+                email=email,
+                ip=get_client_ip(request),
+                provider="magic-code",
+                reason=e.error_message,
+            )
             params = e.get_error_dict()
             url = get_safe_redirect_url(
                 base_url=base_host(request=request, is_app=True),
@@ -183,6 +191,12 @@ class MagicSignUpEndpoint(View):
             return HttpResponseRedirect(url)
 
         except AuthenticationException as e:
+            log_login_failure(
+                email=email,
+                ip=get_client_ip(request),
+                provider="magic-code-signup",
+                reason=e.error_message,
+            )
             params = e.get_error_dict()
             url = get_safe_redirect_url(
                 base_url=base_host(request=request, is_app=True),

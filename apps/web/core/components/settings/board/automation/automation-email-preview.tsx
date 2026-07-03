@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import { useTranslation } from "@operoz/i18n";
 
 type Props = {
@@ -21,7 +22,7 @@ export function AutomationEmailPreview(props: Props) {
         {htmlBody.trim() ? (
           <div
             className="rounded-md border border-subtle bg-layer-1 p-4 text-13 text-primary [&_a]:text-accent-primary [&_h1]:text-18 [&_h1]:font-semibold [&_p]:mt-2"
-            dangerouslySetInnerHTML={{ __html: htmlBody }}
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(htmlBody) }}
           />
         ) : (
           <div className="flex h-full min-h-[200px] items-center justify-center rounded-md border border-dashed border-subtle">
