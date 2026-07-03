@@ -119,6 +119,10 @@ scripts/
 !.github/scripts/**
 !apps/space/scripts/
 !apps/space/scripts/**
+!apps/web/scripts/
+!apps/web/scripts/**
+!apps/admin/scripts/
+!apps/admin/scripts/**
 
 # MCP na VPS (segredos locais)
 deployments/mcp/operoz-mcp.env

@@ -75,12 +75,26 @@ RUN --mount=type=cache,id=pnpm-store,target=/pnpm/store CI=true pnpm install --o
 # Build only the admin package
 RUN pnpm turbo run build --filter=admin
 
+# Compute CSP sha256 hashes for the inline <script> tags this exact build emitted
+# into index.html, so nginx can allow-list them instead of using 'unsafe-inline'.
+RUN node apps/admin/scripts/generate-csp-script-hashes.mjs apps/admin/build/client/index.html \
+  > apps/admin/build/client/.csp-script-hashes
+
 # =========================================================================== #
 
 FROM nginx:1.29-alpine AS production
 
 COPY apps/admin/nginx/nginx.conf /etc/nginx/nginx.conf
 COPY --from=installer /app/apps/admin/build/client /usr/share/nginx/html/god-mode
+
+# Inject the build-specific inline-script hashes into the CSP header, then drop
+# the hash file so it isn't served as a static asset.
+RUN --mount=type=bind,from=installer,source=/app/apps/admin/build/client/.csp-script-hashes,target=/tmp/.csp-script-hashes \
+  HASHES="$(cat /tmp/.csp-script-hashes)"; \
+  if [ -z "$HASHES" ]; then echo "ERROR: empty CSP script hashes — refusing to build with a broken CSP" >&2; exit 1; fi; \
+  sed -i "s|__INLINE_SCRIPT_HASHES__|${HASHES}|" /etc/nginx/nginx.conf; \
+  if grep -q "__INLINE_SCRIPT_HASHES__" /etc/nginx/nginx.conf; then echo "ERROR: CSP placeholder was not substituted" >&2; exit 1; fi; \
+  rm -f /usr/share/nginx/html/god-mode/.csp-script-hashes
 
 EXPOSE 3000
 
