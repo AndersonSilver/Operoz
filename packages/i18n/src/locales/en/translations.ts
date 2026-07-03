@@ -6107,7 +6107,7 @@ export default {
         "We are processing content (text, markdown, or embedded HTML) so the assistant can search this page.",
       indexed_label: "In assistant",
       indexed_tooltip:
-        "This page is in the assistant knowledge base ({count, plural, one {# chunk} other {# chunks} indexed).",
+        "This page is in the assistant knowledge base ({count, plural, one {# chunk} other {# chunks}} indexed).",
       failed_label: "Index failed",
       failed_tooltip: "Could not index for the assistant. Check LLM_API_KEY and the assistant queue worker.",
       stale_label: "Updating index",
@@ -6117,7 +6117,7 @@ export default {
         "This page is not in the assistant knowledge base yet. Save the document or wait for automatic indexing.",
       countdown_remaining: "Estimated time remaining: {time}",
       countdown_finishing: "Finishing indexing…",
-      indexed_duration: "Indexed in {time} · {count, plural, one {# chunk} other {# chunks}",
+      indexed_duration: "Indexed in {time} · {count, plural, one {# chunk} other {# chunks}}",
     },
   },
   page_editor: {

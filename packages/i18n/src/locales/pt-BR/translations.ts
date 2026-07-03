@@ -6338,7 +6338,7 @@ export default {
         "Estamos processando o conteúdo (texto, markdown ou HTML embutido) para o assistente poder buscar nesta página.",
       indexed_label: "No assistente",
       indexed_tooltip:
-        "Esta página está na base de conhecimento do assistente ({count, plural, one {# trecho} other {# trechos} indexados).",
+        "Esta página está na base de conhecimento do assistente ({count, plural, one {# trecho indexado} other {# trechos indexados}}).",
       failed_label: "Falha na indexação",
       failed_tooltip: "Não foi possível indexar para o assistente. Verifique LLM_API_KEY e o worker da fila assistant.",
       stale_label: "Atualizando índice",
@@ -6348,7 +6348,7 @@ export default {
         "O documento ainda não entrou na base do assistente. Aguarde alguns segundos — a indexação será iniciada automaticamente após o salvamento.",
       countdown_remaining: "Tempo estimado restante: {time}",
       countdown_finishing: "Finalizando indexação…",
-      indexed_duration: "Indexado em {time} · {count, plural, one {# trecho} other {# trechos}",
+      indexed_duration: "Indexado em {time} · {count, plural, one {# trecho} other {# trechos}}",
     },
   },
   page_editor: {
