@@ -4,6 +4,7 @@ import { cn } from "@operoz/utils";
 // assets
 import emptyCycle from "@/app/assets/empty-state/cycle.svg?url";
 // components
+import { BOARD_HUB_GLASS_PANEL, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { EmptyState } from "@/components/common/empty-state";
 import { PageHead } from "@/components/core/page-title";
 import useCyclesDetails from "@/components/cycles/active-cycle/use-cycles-details";
@@ -26,6 +27,7 @@ function CycleDetailPage({ params }: Route.ComponentProps) {
   // const { issuesFilter } = useIssues(EIssuesStoreType.CYCLE);
   // hooks
   const { setValue, storedValue } = useLocalStorage("cycle_sidebar_collapsed", false);
+  const hasBoardBackground = useBoardHubHasBackground();
 
   useCyclesDetails({
     workspaceSlug,
@@ -59,14 +61,17 @@ function CycleDetailPage({ params }: Route.ComponentProps) {
         />
       ) : (
         <>
-          <div className="flex h-full w-full">
-            <div className="h-full w-full overflow-hidden">
+          <div className="flex h-full min-h-0 w-full overflow-hidden">
+            <div className="min-h-0 min-w-0 flex-1 overflow-hidden">
               <CycleLayoutRoot />
             </div>
             {!isSidebarCollapsed && (
               <div
                 className={cn(
-                  "vertical-scrollbar absolute right-0 z-13 flex scrollbar-sm h-full w-[21.5rem] flex-shrink-0 flex-col gap-3.5 overflow-y-auto border-l border-subtle bg-surface-1 px-4 shadow-raised-200 duration-300"
+                  "vertical-scrollbar flex scrollbar-sm h-full w-[21.5rem] flex-shrink-0 flex-col gap-3.5 overflow-y-auto border-l px-4 duration-300",
+                  hasBoardBackground
+                    ? cn(BOARD_HUB_GLASS_PANEL, "shadow-sm border-subtle/50")
+                    : "border-subtle bg-surface-1 shadow-raised-200"
                 )}
               >
                 <CycleDetailsSidebar

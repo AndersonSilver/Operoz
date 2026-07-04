@@ -17,14 +17,14 @@ import { Button } from "@operoz/propel/button";
 import { IconButton } from "@operoz/propel/icon-button";
 import { CycleIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
-import type { ICustomSearchSelectOption, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
+import type { IIssueDisplayFilterOptions, IIssueDisplayProperties, IModule } from "@operoz/types";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
-import { Breadcrumbs, BreadcrumbNavigationSearchDropdown, Header } from "@operoz/ui";
+import { Header } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 // components
+import { BOARD_HUB_TOOLBAR_CLUSTER } from "@/components/board/board-hub-background";
 import { WorkItemsModal } from "@/components/analytics/work-items/modal";
-import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
-import { SwitcherLabel } from "@/components/common/switcher-label";
+import { CountChip } from "@/components/common/count-chip";
 import { CycleQuickActions } from "@/components/cycles/quick-actions";
 import {
   DisplayFiltersSelection,
@@ -32,6 +32,13 @@ import {
   LayoutSelection,
   MobileLayoutSelection,
 } from "@/components/issues/issue-layouts/filters";
+import {
+  ProjectFeaturePageActions,
+  ProjectFeaturePageHeader,
+  ProjectFeaturePageTitle,
+} from "@/components/project/project-feature-page-header";
+import { ProjectHubModuleSearchSelect } from "@/components/project/project-hub-module-search-select";
+import { ProjectHubPrimaryAction, ProjectHubToolbarDivider } from "@/components/project/project-hub-toolbar";
 import { WorkItemFiltersToggle } from "@/components/work-item-filters/filters-toggle";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
@@ -41,8 +48,6 @@ import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import useLocalStorage from "@/hooks/use-local-storage";
-// plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
 
 export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
   // refs
@@ -106,19 +111,11 @@ export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
     EUserPermissionsLevel.PROJECT
   );
 
-  const switcherOptions = currentProjectCycleIds
-    ?.map((id) => {
-      const _cycle = id === cycleId ? cycleDetails : getCycleById(id);
-      if (!_cycle) return;
-      return {
-        value: _cycle.id,
-        query: _cycle.name,
-        content: <SwitcherLabel name={_cycle.name} LabelIcon={CycleIcon} />,
-      };
-    })
-    .filter((option) => option !== undefined) as ICustomSearchSelectOption[];
+  const showCycleSearch = Boolean(currentProjectCycleIds && currentProjectCycleIds.length > 1);
 
   const workItemsCount = getGroupIssueCount(undefined, undefined, false);
+
+  if (!cycleDetails || !workspaceSlug || !projectId || !cycleId) return null;
 
   return (
     <>
@@ -128,40 +125,14 @@ export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
         onClose={() => setAnalyticsModal(false)}
         cycleDetails={cycleDetails ?? undefined}
       />
-      <Header className="!h-auto !min-h-11 !flex-col !items-stretch !justify-start gap-2 !py-2">
-        <Header.LeftItem className="w-full min-w-0">
-          <div className="flex w-full min-w-0 items-center gap-2">
-            <Breadcrumbs className="min-w-0 flex-1" onBack={router.back} isLoading={loader === "init-loader"}>
-              <CommonProjectBreadcrumbs workspaceSlug={workspaceSlug?.toString()} projectId={projectId?.toString()} />
-              <Breadcrumbs.Item
-                component={
-                  <BreadcrumbLink
-                    label="Cycles"
-                    href={`/${workspaceSlug}/projects/${projectId}/cycles/`}
-                    icon={<CycleIcon className="h-4 w-4 text-tertiary" />}
-                  />
-                }
-              />
-              <Breadcrumbs.Item
-                component={
-                  <BreadcrumbNavigationSearchDropdown
-                    selectedItem={cycleId}
-                    navigationItems={switcherOptions}
-                    onChange={(value: string) => {
-                      router.push(`/${workspaceSlug}/projects/${projectId}/cycles/${value}`);
-                    }}
-                    title={cycleDetails?.name}
-                    icon={
-                      <Breadcrumbs.Icon>
-                        <CycleIcon className="size-4 flex-shrink-0 text-tertiary" />
-                      </Breadcrumbs.Icon>
-                    }
-                    isLast
-                  />
-                }
-                isLast
-              />
-            </Breadcrumbs>
+      <ProjectFeaturePageHeader>
+        <Header.LeftItem className="min-w-0 flex-1">
+          <div className="flex min-w-0 items-center gap-2.5">
+            <ProjectFeaturePageTitle
+              title={cycleDetails.name}
+              icon={<CycleIcon className="size-4 text-secondary" strokeWidth={1.75} />}
+              isLoading={loader === "init-loader"}
+            />
             {workItemsCount && workItemsCount > 0 ? (
               <Tooltip
                 isMobile={isMobile}
@@ -170,102 +141,134 @@ export const CycleIssuesHeader = observer(function CycleIssuesHeader() {
                 } in this cycle`}
                 position="bottom"
               >
-                <span className="flex flex-shrink-0 cursor-default items-center justify-center rounded-xl bg-accent-primary/20 px-2 text-center text-11 font-semibold text-accent-primary">
-                  {workItemsCount}
-                </span>
+                <CountChip count={workItemsCount} />
               </Tooltip>
             ) : null}
           </div>
         </Header.LeftItem>
-        <Header.RightItem className="w-full shrink-0 flex-wrap items-center justify-end">
-          <div className="hidden items-center gap-2 md:flex">
-            <div className="hidden @4xl:flex">
-              <LayoutSelection
-                layouts={[
-                  EIssueLayoutTypes.LIST,
-                  EIssueLayoutTypes.KANBAN,
-                  EIssueLayoutTypes.CALENDAR,
-                  EIssueLayoutTypes.SPREADSHEET,
-                  EIssueLayoutTypes.GANTT,
-                ]}
-                onChange={(layout) => handleLayoutChange(layout)}
-                selectedLayout={activeLayout}
-              />
-            </div>
-            <div className="flex @4xl:hidden">
-              <MobileLayoutSelection
-                layouts={[
-                  EIssueLayoutTypes.LIST,
-                  EIssueLayoutTypes.KANBAN,
-                  EIssueLayoutTypes.CALENDAR,
-                  EIssueLayoutTypes.SPREADSHEET,
-                  EIssueLayoutTypes.GANTT,
-                ]}
-                onChange={(layout) => handleLayoutChange(layout)}
-                activeLayout={activeLayout}
-              />
-            </div>
-            <WorkItemFiltersToggle entityType={EIssuesStoreType.CYCLE} entityId={cycleId} />
-            <FiltersDropdown
-              title={t("common.display")}
-              placement="bottom-end"
-              miniIcon={<SlidersHorizontal className="size-3.5" />}
-            >
-              <DisplayFiltersSelection
-                layoutDisplayFiltersOptions={
-                  activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
-                }
-                displayFilters={issueFilters?.displayFilters ?? {}}
-                handleDisplayFiltersUpdate={handleDisplayFilters}
-                displayProperties={issueFilters?.displayProperties ?? {}}
-                handleDisplayPropertiesUpdate={handleDisplayProperties}
-                ignoreGroupedFilters={["cycle"]}
-                cycleViewDisabled={!currentProjectDetails?.cycle_view}
-                moduleViewDisabled={!currentProjectDetails?.module_view}
-              />
-            </FiltersDropdown>
+        <Header.RightItem className="shrink-0">
+          <ProjectFeaturePageActions>
+            <div className={cn("flex flex-wrap items-center justify-end gap-2", BOARD_HUB_TOOLBAR_CLUSTER)}>
+              <div className="shadow-sm hidden items-center gap-2.5 rounded-md border border-subtle/60 bg-layer-2/70 px-2.5 py-1.5 backdrop-blur-sm md:flex">
+                {showCycleSearch ? (
+                  <>
+                    <ProjectHubModuleSearchSelect
+                      variant="toolbar"
+                      multiple={false}
+                      labelIcon={CycleIcon}
+                      moduleIds={currentProjectCycleIds ?? []}
+                      getModuleById={(id) => {
+                        const cycle = getCycleById(id);
+                        if (!cycle) return null;
+                        return { id: cycle.id, name: cycle.name } as unknown as IModule;
+                      }}
+                      value={cycleId.toString()}
+                      onChange={(next) => {
+                        const id = Array.isArray(next) ? next[0] : next;
+                        if (id && id !== cycleId) {
+                          router.push(`/${workspaceSlug}/projects/${projectId}/cycles/${id}`);
+                        }
+                      }}
+                      disabled={loader === "init-loader"}
+                    />
+                    <ProjectHubToolbarDivider />
+                  </>
+                ) : null}
+                <div className="hidden @4xl:flex">
+                  <LayoutSelection
+                    layouts={[
+                      EIssueLayoutTypes.LIST,
+                      EIssueLayoutTypes.KANBAN,
+                      EIssueLayoutTypes.CALENDAR,
+                      EIssueLayoutTypes.SPREADSHEET,
+                      EIssueLayoutTypes.GANTT,
+                    ]}
+                    onChange={(layout) => handleLayoutChange(layout)}
+                    selectedLayout={activeLayout}
+                  />
+                </div>
+                <div className="flex @4xl:hidden">
+                  <MobileLayoutSelection
+                    layouts={[
+                      EIssueLayoutTypes.LIST,
+                      EIssueLayoutTypes.KANBAN,
+                      EIssueLayoutTypes.CALENDAR,
+                      EIssueLayoutTypes.SPREADSHEET,
+                      EIssueLayoutTypes.GANTT,
+                    ]}
+                    onChange={(layout) => handleLayoutChange(layout)}
+                    activeLayout={activeLayout}
+                  />
+                </div>
+                <WorkItemFiltersToggle entityType={EIssuesStoreType.CYCLE} entityId={cycleId} />
+                <FiltersDropdown
+                  title={t("common.display")}
+                  placement="bottom-end"
+                  miniIcon={<SlidersHorizontal className="size-3.5" />}
+                  appearance="hub"
+                >
+                  <DisplayFiltersSelection
+                    layoutDisplayFiltersOptions={
+                      activeLayout ? ISSUE_DISPLAY_FILTERS_BY_PAGE.issues.layoutOptions[activeLayout] : undefined
+                    }
+                    displayFilters={issueFilters?.displayFilters ?? {}}
+                    handleDisplayFiltersUpdate={handleDisplayFilters}
+                    displayProperties={issueFilters?.displayProperties ?? {}}
+                    handleDisplayPropertiesUpdate={handleDisplayProperties}
+                    ignoreGroupedFilters={["cycle"]}
+                    cycleViewDisabled={!currentProjectDetails?.cycle_view}
+                    moduleViewDisabled={!currentProjectDetails?.module_view}
+                  />
+                </FiltersDropdown>
+              </div>
 
-            {canUserCreateIssue && (
-              <>
-                <Button onClick={() => setAnalyticsModal(true)} variant="secondary" size="lg">
-                  <span className="hidden @4xl:flex">Analytics</span>
-                  <span className="@4xl:hidden">
-                    <ChartNoAxesColumn className="size-3.5" />
-                  </span>
-                </Button>
-                {!isCompletedCycle && (
+              {canUserCreateIssue && (
+                <>
                   <Button
-                    variant="primary"
+                    className="hidden md:flex"
+                    onClick={() => setAnalyticsModal(true)}
+                    variant="secondary"
                     size="lg"
-                    onClick={() => {
-                      toggleCreateIssueModal(true, EIssuesStoreType.CYCLE);
-                    }}
-                    data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.CYCLE}
                   >
-                    {t("issue.add.label")}
+                    <span className="hidden @4xl:flex">Analytics</span>
+                    <span className="@4xl:hidden">
+                      <ChartNoAxesColumn className="size-3.5" />
+                    </span>
                   </Button>
-                )}
-              </>
-            )}
-            <IconButton
-              variant="tertiary"
-              size="lg"
-              icon={PanelRight}
-              onClick={toggleSidebar}
-              className={cn({
-                "bg-accent-subtle text-accent-primary": !isSidebarCollapsed,
-              })}
-            />
-            <CycleQuickActions
-              parentRef={parentRef}
-              cycleId={cycleId}
-              projectId={projectId}
-              workspaceSlug={workspaceSlug}
-              customClassName="flex-shrink-0 flex items-center justify-center size-[26px] bg-layer-1/70 rounded-sm"
-            />
-          </div>
+                  {!isCompletedCycle && (
+                    <ProjectHubPrimaryAction
+                      className="hidden shrink-0 sm:flex"
+                      onClick={() => {
+                        toggleCreateIssueModal(true, EIssuesStoreType.CYCLE);
+                      }}
+                      data-ph-element={WORK_ITEM_TRACKER_ELEMENTS.HEADER_ADD_BUTTON.CYCLE}
+                    >
+                      <span className="sm:hidden">{t("add")}</span>
+                      <span className="hidden sm:inline">{t("issue.add.label")}</span>
+                    </ProjectHubPrimaryAction>
+                  )}
+                </>
+              )}
+              <IconButton
+                variant="tertiary"
+                size="lg"
+                icon={PanelRight}
+                onClick={toggleSidebar}
+                className={cn({
+                  "bg-accent-subtle text-accent-primary": !isSidebarCollapsed,
+                })}
+              />
+              <CycleQuickActions
+                parentRef={parentRef}
+                cycleId={cycleId}
+                projectId={projectId}
+                workspaceSlug={workspaceSlug}
+                customClassName="flex size-[26px] shrink-0 items-center justify-center rounded-sm"
+              />
+            </div>
+          </ProjectFeaturePageActions>
         </Header.RightItem>
-      </Header>
+      </ProjectFeaturePageHeader>
     </>
   );
 });

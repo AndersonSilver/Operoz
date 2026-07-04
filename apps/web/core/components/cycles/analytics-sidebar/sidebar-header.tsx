@@ -8,8 +8,9 @@ import { useTranslation } from "@operoz/i18n";
 import { ChevronRightIcon } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { ICycle } from "@operoz/types";
-import { getDate, renderFormattedPayloadDate } from "@operoz/utils";
+import { cn, getDate, renderFormattedPayloadDate } from "@operoz/utils";
 // components
+import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { DateRangeDropdown } from "@/components/dropdowns/date-range";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
@@ -39,6 +40,7 @@ export const CycleSidebarHeader = observer(function CycleSidebarHeader(props: Pr
   const { allowPermissions } = useUserPermissions();
   const { updateCycleDetails } = useCycle();
   const { t } = useTranslation();
+  const hasBoardWallpaper = useBoardHubHasBackground();
   const { renderFormattedDateInUserTimezone, getProjectUTCOffset } = useTimeZoneConverter(projectId);
 
   // derived values
@@ -115,7 +117,12 @@ export const CycleSidebarHeader = observer(function CycleSidebarHeader(props: Pr
 
   return (
     <>
-      <div className="sticky top-0 z-10 flex items-center justify-between bg-surface-1 pt-2">
+      <div
+        className={cn("sticky top-0 z-10 flex items-center justify-between pt-2", {
+          "bg-surface-1": !hasBoardWallpaper,
+          "bg-surface-1/70 backdrop-blur-sm": hasBoardWallpaper,
+        })}
+      >
         <div className="flex size-5 items-center justify-center">
           <button
             className="flex size-6 flex-shrink-0 items-center justify-center rounded-full bg-layer-3 hover:bg-layer-3-hover"
@@ -127,10 +134,10 @@ export const CycleSidebarHeader = observer(function CycleSidebarHeader(props: Pr
       </div>
       <div className="flex w-full flex-col gap-2">
         <div className="flex items-start justify-between gap-3 pt-2">
-          <h4 className="w-full text-18 font-semibold break-words text-primary">{cycleDetails.name}</h4>
+          <h4 className="w-full min-w-0 text-18 font-semibold break-words text-primary">{cycleDetails.name}</h4>
           {currentCycle && (
             <span
-              className="flex h-6 min-w-20 items-center justify-center truncate rounded-sm px-3 text-center text-11 font-medium whitespace-nowrap"
+              className="flex h-6 flex-shrink-0 items-center justify-center truncate rounded-sm px-3 text-center text-11 font-medium whitespace-nowrap"
               style={{
                 color: currentCycle.color,
                 backgroundColor: `${currentCycle.color}20`,

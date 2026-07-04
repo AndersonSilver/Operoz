@@ -110,7 +110,7 @@ export const CycleOptions = observer(function CycleOptions(props: CycleOptionsPr
     query === "" ? options : options?.filter((o) => o.query.toLowerCase().includes(query.toLowerCase()));
 
   return createPortal(
-    <Combobox.Options className={`fixed ${ISSUE_DROPDOWN_PORTAL_Z_CLASS}`} static>
+    <Combobox.Options className={`fixed ${ISSUE_DROPDOWN_PORTAL_Z_CLASS}`} data-prevent-outside-click static>
       <div
         className="my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none"
         ref={setPopperElement}
