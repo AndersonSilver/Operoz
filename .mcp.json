@@ -1,12 +1,9 @@
 {
   "mcpServers": {
     "operoz": {
-      "command": "node",
-      "args": ["mcp-server/dist/index.js"],
-      "env": {
-        "OPEROZ_API_BASE_URL": "${OPEROZ_API_BASE_URL}",
-        "OPEROZ_API_KEY": "${OPEROZ_API_KEY}",
-        "OPEROZ_MCP_PROFILE": "agent"
+      "url": "https://mcp.operoz.io/mcp",
+      "headers": {
+        "Authorization": "Bearer ${OPEROZ_API_KEY}"
       }
     }
   }
