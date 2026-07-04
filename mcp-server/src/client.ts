@@ -93,7 +93,7 @@ export class OperozClient {
       headers.set("Content-Type", "application/json");
     }
 
-    if (surface === "v1" && this.config.apiKey) {
+    if (["v1", "app"].includes(surface) && this.config.apiKey) {
       headers.set("X-Api-Key", this.config.apiKey);
     }
     if (["app", "auth", "instances"].includes(surface) && this.sessionCookie) {
@@ -110,9 +110,9 @@ export class OperozClient {
         "OPEROZ_API_KEY é obrigatório para a API v1. Crie um token em Definições → API tokens (ou God mode)."
       );
     }
-    if (surface === "app" && !this.sessionCookie) {
+    if (surface === "app" && !this.config.apiKey && !this.sessionCookie) {
       throw new Error(
-        "Sessão necessária para /api/* (boards, etc.). Use operoz_sign_in ou defina OPEROZ_SESSION_COOKIE."
+        "Auth necessária para /api/* (boards, etc.). Defina OPEROZ_API_KEY (recomendado) ou use operoz_sign_in / OPEROZ_SESSION_COOKIE."
       );
     }
 
