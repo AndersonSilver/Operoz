@@ -63,7 +63,7 @@ function buildCapabilities() {
       profile === "agent" ? ["operoz_discover", "operoz_execute"] : ["operoz_list_operations ou endpoint directo"],
     auth: {
       v1: "Header X-Api-Key → OPEROZ_API_KEY ou Authorization: Bearer",
-      app: "Cookie de sessão → operoz_sign_in, OPEROZ_SESSION_COOKIE ou X-Operoz-Session",
+      app: "Header X-Api-Key → OPEROZ_API_KEY (recomendado); alternativa legada: operoz_sign_in ou OPEROZ_SESSION_COOKIE",
     },
     domains,
     surfaces: {
@@ -208,7 +208,8 @@ async function handleMetaTool(
       const result = await client.signIn(str(args, "email"), str(args, "password"));
       return jsonResult({
         ok: true,
-        message: "Sessão guardada para chamadas /api/*.",
+        message:
+          "Sessão guardada para chamadas /api/*. Nota: com OPEROZ_API_KEY configurado, este passo é dispensável.",
         ...result,
       });
     }

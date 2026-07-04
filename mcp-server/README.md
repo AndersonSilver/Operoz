@@ -4,13 +4,14 @@ Servidor [MCP](https://modelcontextprotocol.io) para o **Operoz** — expõe wor
 
 ## Autenticação
 
-| Superfície    | Prefixo           | Auth                                                 |
-| ------------- | ----------------- | ---------------------------------------------------- |
-| API v1        | `/api/v1/`        | `OPEROZ_API_KEY` (header `X-Api-Key`)                |
-| API app (web) | `/api/`           | Sessão (`operoz_sign_in` ou `OPEROZ_SESSION_COOKIE`) |
-| Instância     | `/api/instances/` | Público (setup)                                      |
+| Superfície    | Prefixo           | Auth                                                      |
+| ------------- | ----------------- | --------------------------------------------------------- |
+| API v1        | `/api/v1/`        | `OPEROZ_API_KEY` (header `X-Api-Key`)                     |
+| API app (web) | `/api/`           | `OPEROZ_API_KEY` (header `X-Api-Key`) — mesmo token da v1 |
+| Instância     | `/api/instances/` | Público (setup)                                           |
 
-**Boards e Cliente 360** usam a API **app** → precisas de sessão ou `operoz_sign_in`.
+**Boards e Cliente 360** usam a API **app**, mas já aceitam o mesmo `OPEROZ_API_KEY` — não é preciso sessão.
+Sessão (`operoz_sign_in` ou `OPEROZ_SESSION_COOKIE`) continua a funcionar como alternativa legada, caso prefiras autenticar por email/senha em vez de token.
 
 ## Instalação
 
