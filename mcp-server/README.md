@@ -76,9 +76,11 @@ Configure `OPEROZ_MCP_PROFILE=agent` no `.env` ou no `mcp.json` (default se omit
 
 ### Perfil `full` (legado / debug)
 
-`OPEROZ_MCP_PROFILE=full` expõe **676** ferramentas (1 por endpoint HTTP). Útil fora do Cursor ou para testes; no Agent do Cursor prefira `agent` (limite ~40 tools entre todos os MCP servers).
+`OPEROZ_MCP_PROFILE=full` expõe **670** ferramentas (1 por endpoint HTTP). Útil fora do Cursor ou para testes; no Agent do Cursor prefira `agent` (limite ~40 tools entre todos os MCP servers).
 
-Domínios no registo interno: `work_items`, `boards`, `automation`, `playbooks`, `assistant`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, …
+Domínios no registo interno: `work_items`, `boards`, `automation`, `playbooks`, `assistant`, `pages`, `projects`, `workspaces`, `cycles`, `modules`, `states`, `labels`, `estimates`, `webhooks`, `views`, `analytics`, `assets`, `notifications`, `intake`, `members`, `invitations`, `stickies`, `ai`, `jira`, `users`, `search`, `misc`, `instance`.
+
+Cada domínio vive no seu próprio arquivo em `src/tools/registry/app-<domínio>.ts` (ex.: `app-boards.ts`, `app-automation.ts`, `app-assistant.ts`) — nenhum arquivo concentra mais que ~15% do registro total, o que facilita achar/manter o endpoint certo sem cair numa gaveta de miscelânea.
 
 ## Servidor HTTP (equipa sem clone)
 
@@ -130,6 +132,19 @@ Guia completo: [docs/operoz-mcp-empresa.md](../docs/operoz-mcp-empresa.md)
 npm run dev
 npm run dev:http
 ```
+
+## Testes
+
+```bash
+npm test              # roda a suíte uma vez
+npm run test:watch    # modo watch
+npm run test:coverage # com relatório de cobertura
+```
+
+Cobertura: `OperozClient` (headers, erros, retry-after, sign-in), roteamento de
+tools (`operoz_discover`/`operoz_execute`, gating por perfil `agent`/`full`),
+`buildPath`/`executeOperation`, e integridade do registry (nomes únicos, path
+params consistentes, nenhum domínio virando gaveta de miscelânea).
 
 ## Empresa (~150 utilizadores Cursor, sem clone)
 
