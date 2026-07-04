@@ -2,7 +2,6 @@ import { Server } from "@modelcontextprotocol/sdk/server/index.js";
 import { CallToolRequestSchema, ListToolsRequestSchema } from "@modelcontextprotocol/sdk/types.js";
 
 import type { OperozClient } from "./client.js";
-import { CONSULTORIA_TOOLS, handleConsultoriaCall } from "./consultoria/index.js";
 import { OPEROZ_TOOLS } from "./tools/definitions.js";
 import { handleToolCall } from "./tools/handlers.js";
 
@@ -20,15 +19,12 @@ export function createOperozMcpServer(client: OperozClient): Server {
   );
 
   server.setRequestHandler(ListToolsRequestSchema, async () => ({
-    tools: [...OPEROZ_TOOLS, ...CONSULTORIA_TOOLS],
+    tools: OPEROZ_TOOLS,
   }));
 
   server.setRequestHandler(CallToolRequestSchema, async (request) => {
     const { name } = request.params;
     const args = (request.params.arguments ?? {}) as Record<string, unknown>;
-    if (name.startsWith("consultoria_")) {
-      return handleConsultoriaCall(client, name, args);
-    }
     return handleToolCall(client, name, args);
   });
 
