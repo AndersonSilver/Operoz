@@ -18,7 +18,7 @@ export function ComboboxPortalOptions(props: Props) {
   if (typeof document === "undefined") return null;
 
   return createPortal(
-    <Combobox.Options className={cn("fixed", ISSUE_DROPDOWN_PORTAL_Z_CLASS)} static>
+    <Combobox.Options className={cn("fixed", ISSUE_DROPDOWN_PORTAL_Z_CLASS)} data-prevent-outside-click static>
       <div
         className={cn(
           "my-1 w-48 rounded-sm border-[0.5px] border-strong bg-surface-1 px-2 py-2.5 text-11 shadow-raised-200 focus:outline-none",

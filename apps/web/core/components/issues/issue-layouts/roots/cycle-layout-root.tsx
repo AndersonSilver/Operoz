@@ -6,6 +6,11 @@ import useSWR from "swr";
 // plane constants
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
+import { cn } from "@operoz/utils";
+import {
+  BOARD_HUB_PROJECT_WORK_SURFACE_INNER,
+  useBoardHubHasBackground,
+} from "@/components/board/board-hub-background";
 // components
 import { TransferIssues } from "@/components/cycles/transfer-issues";
 import { TransferIssuesModal } from "@/components/cycles/transfer-issues-modal";
@@ -52,6 +57,7 @@ export const CycleLayoutRoot = observer(function CycleLayoutRoot() {
   // store hooks
   const { issuesFilter } = useIssues(EIssuesStoreType.CYCLE);
   const { getCycleById } = useCycle();
+  const hasBoardWallpaper = useBoardHubHasBackground();
   // state
   const [transferIssuesModal, setTransferIssuesModal] = useState(false);
   // derived values
@@ -106,14 +112,23 @@ export const CycleLayoutRoot = observer(function CycleLayoutRoot() {
                 />
               )}
               {cycleWorkItemsFilter && (
-                <WorkItemFiltersRow
-                  filter={cycleWorkItemsFilter}
-                  trackerElements={{
-                    saveView: PROJECT_VIEW_TRACKER_ELEMENTS.CYCLE_HEADER_SAVE_AS_VIEW_BUTTON,
-                  }}
-                />
+                <div
+                  className={cn(
+                    "shrink-0 border-b border-subtle",
+                    hasBoardWallpaper ? "border-subtle/40 bg-layer-1/80 backdrop-blur-sm" : "bg-layer-1"
+                  )}
+                >
+                  <WorkItemFiltersRow
+                    filter={cycleWorkItemsFilter}
+                    trackerElements={{
+                      saveView: PROJECT_VIEW_TRACKER_ELEMENTS.CYCLE_HEADER_SAVE_AS_VIEW_BUTTON,
+                    }}
+                  />
+                </div>
               )}
-              <div className="h-full w-full overflow-auto">
+              <div
+                className={cn("relative min-h-0 min-w-0 flex-1 overflow-auto", BOARD_HUB_PROJECT_WORK_SURFACE_INNER)}
+              >
                 <CycleIssueLayout activeLayout={activeLayout} cycleId={cycleId} isCompletedCycle={isCompletedCycle} />
               </div>
               {/* peek overview */}
