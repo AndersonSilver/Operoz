@@ -51,6 +51,17 @@ describe("handleToolCall — perfil agent", () => {
     const payload = JSON.parse(result.content[0].text);
     expect(payload.error).toMatch(/Operação desconhecida/);
   });
+
+  it("operoz_discover sem match nenhum devolve matches vazio e dica de como refinar, não tools aleatórias", async () => {
+    const { handleToolCall } = await loadHandlers("agent");
+    const result = await handleToolCall(fakeClient(), "operoz_discover", {
+      query: "zzqxvbnkjshdfoo whatthefff32 blorpxyz999",
+    });
+    const payload = JSON.parse(result.content[0].text);
+    expect(payload.count).toBe(0);
+    expect(payload.matches).toEqual([]);
+    expect(payload.next_step).toMatch(/Nenhuma operação encontrada/);
+  });
 });
 
 describe("handleToolCall — perfil full", () => {

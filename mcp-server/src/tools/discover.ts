@@ -93,8 +93,10 @@ export function discoverOperations(
     .sort((a, b) => b.score - a.score)
     .slice(0, limit);
 
+  // Query informada mas sem nenhum match de relevância: não inventa resultado.
+  // Devolver operações aleatórias do pool faria parecer que aquilo é o que foi pedido.
   if (ranked.length === 0) {
-    return pool.slice(0, limit).map((operation) => toMatch(operation));
+    return [];
   }
 
   return ranked.map(({ operation, score }) => toMatch(operation, score));

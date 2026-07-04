@@ -45,9 +45,9 @@ describe("discoverOperations", () => {
     expect(matches[0].score ?? 0).toBeGreaterThan(0);
   });
 
-  it("sem match de score, cai de volta para o pool filtrado", () => {
-    const matches = discoverOperations(FIXTURE, { query: "xyz-inexistente", domain: "boards" });
-    expect(matches.map((m) => m.name).sort()).toEqual(["operoz_create_board", "operoz_list_boards"]);
+  it("query sem nenhum match de relevância devolve vazio (não inventa resultado)", () => {
+    const matches = discoverOperations(FIXTURE, { query: "xyz-termo-sem-relacao-nenhuma", domain: "boards" });
+    expect(matches).toEqual([]);
   });
 
   it("limit é sempre entre 1 e 25", () => {

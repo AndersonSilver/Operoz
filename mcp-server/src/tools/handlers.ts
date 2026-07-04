@@ -128,7 +128,10 @@ async function handleMetaTool(
       return jsonResult({
         profile: OPEROZ_MCP_PROFILE,
         count: matches.length,
-        next_step: "Chame operoz_execute com operation=<name> e path params no top-level.",
+        next_step:
+          matches.length > 0
+            ? "Chame operoz_execute com operation=<name> e path params no top-level."
+            : "Nenhuma operação encontrada para essa busca. Tente uma query mais genérica (menos palavras, termos do domínio em vez da intenção completa), remova o filtro de domain/surface, ou use operoz_get_capabilities para ver os domínios disponíveis.",
         matches,
       });
     }
