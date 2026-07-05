@@ -129,12 +129,12 @@ export class OperozClient {
       init.body = JSON.stringify(body);
     }
 
-    const response = await fetch(url, init);
+    const initialResponse = await fetch(url, init);
 
     // Capture session from sign-in
     if (surface === "auth" && method === "POST") {
-      const setCookie = response.headers.getSetCookie?.() ?? [];
-      const legacy = response.headers.get("set-cookie");
+      const setCookie = initialResponse.headers.getSetCookie?.() ?? [];
+      const legacy = initialResponse.headers.get("set-cookie");
       const parts = [...setCookie, ...(legacy ? [legacy] : [])];
       const sessionParts = parts
         .flatMap((c) => c.split(","))
@@ -143,6 +143,37 @@ export class OperozClient {
       if (sessionParts.length) {
         this.sessionCookie = sessionParts.join("; ");
       }
+    }
+
+    // Endpoints de asset (download de arquivo/HTML embutido) respondem com 302 para uma
+    // URL presigned (S3/MinIO). Como usamos redirect:"manual", seguimos manualmente aqui
+    // para poder ler o conteúdo real em vez de tratar o redirect como erro/corpo vazio.
+    const response =
+      surface !== "auth" && initialResponse.status >= 300 && initialResponse.status < 400
+        ? await this.followRedirect(initialResponse)
+        : initialResponse;
+
+    const contentType = response.headers.get("content-type") ?? "";
+    const isBinary =
+      contentType !== "" &&
+      !/^(text\/|application\/json|application\/xml|application\/javascript|image\/svg)/i.test(contentType);
+
+    if (isBinary) {
+      if (response.status >= 400) {
+        throw new OperozApiError(`Operoz API ${method} ${path} → ${response.status}`, response.status, undefined);
+      }
+      const buffer = Buffer.from(await response.arrayBuffer());
+      const MAX_INLINE_BYTES = 2 * 1024 * 1024;
+      if (buffer.length > MAX_INLINE_BYTES) {
+        return {
+          binary: true,
+          contentType,
+          sizeBytes: buffer.length,
+          downloadUrl: response.url,
+          note: `Arquivo binário de ${buffer.length} bytes excede o limite de ${MAX_INLINE_BYTES} bytes para retorno inline via MCP. Use downloadUrl para baixar diretamente (URL assinada, válida por tempo limitado).`,
+        } as T;
+      }
+      return { binary: true, contentType, base64: buffer.toString("base64") } as T;
     }
 
     const text = await response.text();
@@ -170,6 +201,14 @@ export class OperozClient {
     }
 
     return parsed as T;
+  }
+
+  private async followRedirect(response: Response): Promise<Response> {
+    const location = response.headers.get("location");
+    if (!location) return response;
+    // URL presigned já contém sua própria autenticação (assinatura); não reenviamos
+    // Cookie/X-Api-Key, que seriam irrelevantes (e potencialmente indesejados) no storage.
+    return fetch(location, { method: "GET" });
   }
 
   async signIn(email: string, password: string): Promise<{ sessionCookie: string }> {

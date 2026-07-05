@@ -8,7 +8,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/check/{asset_id}/",
-    ["workspace_slug","asset_id"]
+    ["workspace_slug", "asset_id"]
   ),
   op(
     "assets",
@@ -17,7 +17,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "assets",
@@ -26,7 +27,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/file-assets/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "assets",
@@ -35,16 +37,16 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/{asset_id}/",
-    ["workspace_slug","asset_id"]
+    ["workspace_slug", "asset_id"]
   ),
   op(
     "assets",
     "operoz_download_workspace_asset",
-    "Download asset",
+    "Baixa o conteúdo de um asset como anexo (content-disposition=attachment), incluindo HTML embutido em páginas/PRDs. Funciona para qualquer entity_type.",
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/download/{asset_id}/",
-    ["workspace_slug","asset_id"]
+    ["workspace_slug", "asset_id"]
   ),
   op(
     "assets",
@@ -53,7 +55,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/duplicate-assets/{asset_id}/",
-    ["workspace_slug","asset_id"], { body: true }
+    ["workspace_slug", "asset_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -62,7 +65,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/file-assets/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "assets",
@@ -71,7 +75,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/file-assets/{workspace_id}/{asset_key}/",
-    ["workspace_id","asset_key"], { body: true }
+    ["workspace_id", "asset_key"],
+    { body: true }
   ),
   op(
     "assets",
@@ -80,7 +85,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/file-assets/{workspace_id}/{asset_key}/",
-    ["workspace_id","asset_key"]
+    ["workspace_id", "asset_key"]
   ),
   op(
     "assets",
@@ -89,7 +94,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/file-assets/{workspace_id}/{asset_key}/",
-    ["workspace_id","asset_key"], { body: true }
+    ["workspace_id", "asset_key"],
+    { body: true }
   ),
   op(
     "assets",
@@ -98,16 +104,17 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/file-assets/{workspace_id}/{asset_key}/restore/",
-    ["workspace_id","asset_key"], { body: true }
+    ["workspace_id", "asset_key"],
+    { body: true }
   ),
   op(
     "assets",
     "operoz_get_asset_v2",
-    "Detalhe asset v2",
+    "Baixa o conteúdo de um asset do workspace (imagem, PDF, HTML embutido em página/PRD etc.). Use esta operação para obter o conteúdo real do arquivo; funciona para qualquer entity_type, incluindo assets de página (ex: htmlDocumentEmbed).",
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/{asset_id}/",
-    ["workspace_slug","asset_id"]
+    ["workspace_slug", "asset_id"]
   ),
   op(
     "assets",
@@ -134,7 +141,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -143,7 +151,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "assets",
@@ -152,7 +161,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/download/{asset_id}/",
-    ["workspace_slug","project_id","asset_id"]
+    ["workspace_slug", "project_id", "asset_id"]
   ),
   op(
     "assets",
@@ -161,7 +170,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "assets",
@@ -170,7 +179,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/{pk}/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "assets",
@@ -179,7 +188,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -188,7 +198,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "assets",
@@ -197,7 +208,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -206,7 +218,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "assets",
@@ -215,7 +228,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/{entity_id}/bulk/",
-    ["workspace_slug","project_id","entity_id"], { body: true }
+    ["workspace_slug", "project_id", "entity_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -224,12 +238,13 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/restore/{asset_id}/",
-    ["workspace_slug","asset_id"], { body: true }
+    ["workspace_slug", "asset_id"],
+    { body: true }
   ),
   op(
     "assets",
     "operoz_static_file_asset_get",
-    "Static File Asset (Consulta)",
+    "Static File Asset (Consulta). Só aceita entity_type USER_AVATAR/USER_COVER/WORKSPACE_LOGO/PROJECT_COVER (retorna 400 para outros, incluindo assets de página/PRD). Para baixar HTML embutido em página, use operoz_get_asset_v2 ou operoz_download_workspace_asset.",
     "app",
     "GET",
     "/assets/v2/static/{asset_id}/",
@@ -242,17 +257,12 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/{asset_id}/",
-    ["workspace_slug","asset_id"], { body: true }
+    ["workspace_slug", "asset_id"],
+    { body: true }
   ),
-  op(
-    "assets",
-    "operoz_user_assets_delete",
-    "User Assets (Remove)",
-    "app",
-    "DELETE",
-    "/users/file-assets/",
-    [], { body: true }
-  ),
+  op("assets", "operoz_user_assets_delete", "User Assets (Remove)", "app", "DELETE", "/users/file-assets/", [], {
+    body: true,
+  }),
   op(
     "assets",
     "operoz_user_assets_delete_2",
@@ -260,35 +270,16 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/users/file-assets/{asset_key}/",
-    ["asset_key"], { body: true }
+    ["asset_key"],
+    { body: true }
   ),
-  op(
-    "assets",
-    "operoz_user_assets_get",
-    "User Assets (Consulta)",
-    "app",
-    "GET",
-    "/users/file-assets/",
-    []
-  ),
-  op(
-    "assets",
-    "operoz_user_assets_get_2",
-    "User Assets (Consulta)",
-    "app",
-    "GET",
-    "/users/file-assets/{asset_key}/",
-    ["asset_key"]
-  ),
-  op(
-    "assets",
-    "operoz_user_assets_post",
-    "User Assets (Executa)",
-    "app",
-    "POST",
-    "/users/file-assets/",
-    [], { body: true }
-  ),
+  op("assets", "operoz_user_assets_get", "User Assets (Consulta)", "app", "GET", "/users/file-assets/", []),
+  op("assets", "operoz_user_assets_get_2", "User Assets (Consulta)", "app", "GET", "/users/file-assets/{asset_key}/", [
+    "asset_key",
+  ]),
+  op("assets", "operoz_user_assets_post", "User Assets (Executa)", "app", "POST", "/users/file-assets/", [], {
+    body: true,
+  }),
   op(
     "assets",
     "operoz_user_assets_post_2",
@@ -296,7 +287,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/users/file-assets/{asset_key}/",
-    ["asset_key"], { body: true }
+    ["asset_key"],
+    { body: true }
   ),
   op(
     "assets",
@@ -305,7 +297,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/user-assets/",
-    [], { body: true }
+    [],
+    { body: true }
   ),
   op(
     "assets",
@@ -314,7 +307,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/user-assets/{asset_id}/",
-    ["asset_id"], { body: true }
+    ["asset_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -323,7 +317,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/user-assets/",
-    [], { body: true }
+    [],
+    { body: true }
   ),
   op(
     "assets",
@@ -332,17 +327,12 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/user-assets/{asset_id}/",
-    ["asset_id"], { body: true }
+    ["asset_id"],
+    { body: true }
   ),
-  op(
-    "assets",
-    "operoz_user_assets_v2_post",
-    "User Assets V2 (Executa)",
-    "app",
-    "POST",
-    "/assets/v2/user-assets/",
-    [], { body: true }
-  ),
+  op("assets", "operoz_user_assets_v2_post", "User Assets V2 (Executa)", "app", "POST", "/assets/v2/user-assets/", [], {
+    body: true,
+  }),
   op(
     "assets",
     "operoz_user_assets_v2_post_2",
@@ -350,7 +340,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/user-assets/{asset_id}/",
-    ["asset_id"], { body: true }
+    ["asset_id"],
+    { body: true }
   ),
   op(
     "assets",
@@ -359,7 +350,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "assets",
@@ -368,7 +360,8 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "assets",
@@ -377,6 +370,7 @@ export const APP_ASSET_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/{asset_id}/",
-    ["workspace_slug","asset_id"], { body: true }
+    ["workspace_slug", "asset_id"],
+    { body: true }
   ),
 ];
