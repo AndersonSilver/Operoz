@@ -17,6 +17,8 @@ ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
+PREVIOUS_SHA="$(operoz_current_repo_sha "${OPEROZ_REPO_PATH}" || true)"
+
 echo "==> Atualizar código (${GIT_BRANCH}) em ${OPEROZ_REPO_PATH}"
 if [[ -d "${OPEROZ_REPO_PATH}/.git" ]]; then
   cd "${OPEROZ_REPO_PATH}"
@@ -49,6 +51,10 @@ operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --no-deps --pull neve
 echo "==> Estado"
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps web
 
-operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" || true
+if ! operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
+  echo "::error::Health check falhou após o deploy do web."
+  operoz_print_rollback_hint "${PREVIOUS_SHA}"
+  exit 1
+fi
 
 echo "==> Deploy web concluído"

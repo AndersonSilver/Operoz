@@ -1,5 +1,6 @@
-# Gates de release Operoz — build web + testes API críticos antes do deploy.
-# Complementa ci-assistant.yml (escopo estreito) e deploy-operoz.yml (build/deploy).
+# Gates de release Operoz — qualidade (lint/format/types) + testes JS/API + build web
+# antes do deploy. Complementa ci-assistant.yml (escopo estreito, outros branches) e
+# deploy-operoz.yml (build/deploy).
 
 name: CI Operoz Release
 
@@ -14,6 +15,55 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Format (blocking)
+        run: pnpm turbo run check:format
+
+      # Débito existente de lint/types no monorepo ainda não foi zerado — reportamos
+      # sem quebrar o merge. Remover `continue-on-error` quando o backlog for zerado
+      # (ver aviso do bot de CI/CD de 2026-07-07).
+      - name: Lint (informativo — não bloqueia ainda)
+        continue-on-error: true
+        run: pnpm turbo run check:lint --continue
+
+      - name: Types (informativo — não bloqueia ainda)
+        continue-on-error: true
+        run: pnpm turbo run check:types --continue
+
+  js-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Vitest (live + codemods)
+        run: pnpm turbo run test --filter=live --filter=@operoz/codemods
+
   web-build:
     runs-on: ubuntu-latest
     timeout-minutes: 90
@@ -97,8 +147,8 @@ jobs:
         run: |
           python -m pytest \
             operoz/tests/contract/app/test_prd_review.py \
-            operoz/tests/unit/assistant/test_prd_review_summary_tool.py \
             operoz/tests/unit/assistant/ \
+            operoz/tests/unit/devops/test_celery_queue_monitor.py \
             operoz/tests/contract/app/test_assistant_app.py \
             -q --tb=short
 

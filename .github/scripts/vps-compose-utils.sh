@@ -190,6 +190,27 @@ operoz_listen_http_port() {
   echo "${port}"
 }
 
+# SHA em HEAD no checkout do VPS antes do `git reset --hard` para a nova revisão
+# — usado só para orientar rollback manual se o health check pós-deploy falhar.
+# As imagens da revisão anterior continuam publicadas no GHCR com a tag :<sha>.
+operoz_current_repo_sha() {
+  local repo_path="${1:?repo_path required}"
+  [[ -d "${repo_path}/.git" ]] || return 1
+  git -C "${repo_path}" rev-parse HEAD 2>/dev/null
+}
+
+# Mensagem de rollback manual a partir do SHA capturado antes do `git reset --hard`.
+operoz_print_rollback_hint() {
+  local previous_sha="${1:-}"
+
+  if [[ -n "${previous_sha}" ]]; then
+    echo "Rollback manual: o commit anterior era ${previous_sha} — as imagens com a tag :${previous_sha} ainda existem no GHCR."
+    echo "  Reverta o branch preview para ${previous_sha} (ou repita o deploy manualmente apontando pra essas tags)."
+  else
+    echo "Não foi possível capturar o commit anterior (primeiro deploy?). Rollback manual: reverta o branch preview e rode 'Deploy Operoz' de novo."
+  fi
+}
+
 # Aguarda proxy/API responder (evita falso positivo após recreate).
 operoz_health_check() {
   local app_path="${1:?app_path required}"

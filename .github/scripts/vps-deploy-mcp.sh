@@ -8,8 +8,14 @@ set -euo pipefail
 : "${GIT_BRANCH:=preview}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=vps-compose-utils.sh
+source "${SCRIPT_DIR}/vps-compose-utils.sh"
+
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
+
+PREVIOUS_SHA="$(operoz_current_repo_sha "${OPEROZ_REPO_PATH}" || true)"
 
 echo "==> Atualizar código (${GIT_BRANCH}) em ${OPEROZ_REPO_PATH}"
 if [[ -d "${OPEROZ_REPO_PATH}/.git" ]]; then
@@ -56,11 +62,23 @@ docker compose -f "${COMPOSE_FILE}" --env-file "${OPEROZ_MCP_ENV}" up -d --pull 
 
 echo "==> Health (localhost:3100)"
 sleep 3
-if curl -fsS "http://127.0.0.1:3100/health" | head -c 200; then
-  echo ""
-else
-  echo "WARN: health check falhou — verifique logs: docker logs operoz-mcp"
+health_ok=false
+for attempt in $(seq 1 10); do
+  if curl -fsS "http://127.0.0.1:3100/health" -o /dev/null 2>/dev/null; then
+    health_ok=true
+    break
+  fi
+  sleep 2
+done
+
+if [[ "${health_ok}" != "true" ]]; then
+  echo "::error::Health check do operoz-mcp falhou após o deploy."
+  echo "Logs: docker logs operoz-mcp"
+  docker logs --tail=40 operoz-mcp 2>/dev/null || true
+  operoz_print_rollback_hint "${PREVIOUS_SHA}"
+  exit 1
 fi
+echo "==> Health check OK"
 
 echo "==> Estado"
 docker compose -f "${COMPOSE_FILE}" --env-file "${OPEROZ_MCP_ENV}" ps operoz-mcp

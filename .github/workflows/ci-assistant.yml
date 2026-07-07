@@ -1,11 +1,16 @@
 # Testes do Assistente Operoz — unit + contract API.
 # Dispara em PR/push que tocam backend assistant ou este workflow.
+#
+# preview fica de fora de propósito: ci-operoz-release.yml já roda essa mesma
+# suíte (incondicionalmente) como gate de release para esse branch — rodar aqui
+# também seria CI duplicado. Este workflow cobre main/develop e PRs para outros
+# branches, com feedback mais rápido via path filter.
 
 name: CI Assistant Operoz
 
 on:
   push:
-    branches: [preview, main, develop]
+    branches: [main, develop]
     paths:
       - "apps/api/operoz/assistant/**"
       - "apps/api/operoz/bgtasks/assistant_index_task.py"
@@ -16,6 +21,7 @@ on:
       - "apps/api/operoz/db/management/commands/check_celery_queues.py"
       - ".github/workflows/ci-assistant.yml"
   pull_request:
+    branches-ignore: [preview]
     paths:
       - "apps/api/operoz/assistant/**"
       - "apps/api/operoz/bgtasks/assistant_index_task.py"

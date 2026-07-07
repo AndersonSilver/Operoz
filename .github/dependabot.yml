@@ -1,0 +1,57 @@
+version: 2
+
+updates:
+  # Monorepo JS/TS (pnpm workspace) — apps/*, packages/*
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "fix(deps)"
+
+  # MCP server tem lockfile próprio (npm), fora do workspace pnpm
+  - package-ecosystem: npm
+    directory: "/mcp-server"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "fix(mcp-deps)"
+
+  # Backend Django
+  - package-ecosystem: pip
+    directory: "/apps/api"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 10
+    groups:
+      minor-and-patch:
+        update-types:
+          - minor
+          - patch
+    commit-message:
+      prefix: "fix(api-deps)"
+
+  # Actions usadas nos workflows
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 5
+    commit-message:
+      prefix: "ci"

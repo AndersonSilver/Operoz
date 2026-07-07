@@ -218,6 +218,11 @@ jobs:
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
     runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
     timeout-minutes: 45
+    # Cria/usa o Environment "production" no GitHub. Isso sozinho não bloqueia nada —
+    # para exigir aprovação manual antes de todo deploy, configure em
+    # Settings → Environments → production → "Required reviewers" (não dá pra fazer
+    # isso só com o arquivo do workflow).
+    environment: production
     permissions:
       contents: read
       packages: read

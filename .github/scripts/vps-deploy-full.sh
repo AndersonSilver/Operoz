@@ -26,6 +26,8 @@ ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
+PREVIOUS_SHA="$(operoz_current_repo_sha "${OPEROZ_REPO_PATH}" || true)"
+
 echo "==> Atualizar código"
 cd "${OPEROZ_REPO_PATH}"
 git fetch origin "${GIT_BRANCH}"
@@ -36,6 +38,7 @@ for entry in "${SERVICES[@]}"; do
   local_name="${entry##*:}"
   image_name="${local_name#myoperoz/}"
   remote="${IMAGE_PREFIX}/${ghcr_name}:preview"
+
   echo "==> Pull ${remote}"
   docker pull "${remote}"
   docker tag "${remote}" "${local_name}:preview"
@@ -79,6 +82,10 @@ fi
 
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps
 
-operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" || true
+if ! operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
+  echo "::error::Health check falhou após o deploy full."
+  operoz_print_rollback_hint "${PREVIOUS_SHA}"
+  exit 1
+fi
 
 echo "==> Deploy full concluído"
