@@ -21,14 +21,11 @@ export const parseFrameLayoutAttr = (value: string | null | undefined): THtmlDoc
 };
 
 /** Permite apenas comprimentos CSS simples no iframe (evita injeção em style). */
-export const isSafeCssMinHeight = (v: string): boolean =>
-  /^\d+(\.\d+)?\s*(px|vh|vw|rem|em|%)$/i.test(v.trim());
+export const isSafeCssMinHeight = (v: string): boolean => /^\d+(\.\d+)?\s*(px|vh|vw|rem|em|%)$/i.test(v.trim());
 
 export const getHtmlDocumentFileMap = (editor: Editor) => editor.storage.htmlDocumentEmbed?.fileMap;
 
 export const getHtmlDocumentBlockId = (id: string) => `editor-html-document-${id}`;
 
 export const isLikelyHtmlFile = (file: File): boolean =>
-  file.type === "text/html" ||
-  file.type === "application/xhtml+xml" ||
-  /\.html?$/i.test(file.name);
+  file.type === "text/html" || file.type === "application/xhtml+xml" || /\.html?$/i.test(file.name);

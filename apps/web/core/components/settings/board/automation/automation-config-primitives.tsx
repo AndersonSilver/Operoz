@@ -38,11 +38,7 @@ export function ConfigSelect(props: {
   );
 }
 
-export function ConfigTextInput(props: {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-}) {
+export function ConfigTextInput(props: { value: string; onChange: (value: string) => void; placeholder?: string }) {
   const { value, onChange, placeholder } = props;
   return (
     <input

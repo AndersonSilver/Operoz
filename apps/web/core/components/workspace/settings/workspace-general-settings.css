@@ -34,11 +34,7 @@
 }
 
 .workspace-general-danger-header {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--bg-danger-subtle) 55%, transparent),
-    transparent 70%
-  );
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-danger-subtle) 55%, transparent), transparent 70%);
 }
 
 .workspace-general-identity-panel {
@@ -119,11 +115,7 @@
   gap: 0.75rem;
   margin-top: auto;
   border-top: 1px solid var(--border-subtle-1);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in srgb, var(--bg-layer-2) 55%, transparent)
-  );
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-layer-2) 55%, transparent));
   padding: 1rem 1.25rem;
 }
 

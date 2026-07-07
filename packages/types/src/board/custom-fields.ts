@@ -40,13 +40,7 @@ export interface IBoardStandardFieldConfig {
   is_system: true;
 }
 
-export type TCustomFieldValue =
-  | string
-  | number
-  | boolean
-  | null
-  | string[]
-  | { member_id?: string };
+export type TCustomFieldValue = string | number | boolean | null | string[] | { member_id?: string };
 
 export interface IWorkspaceCustomField {
   id: string;

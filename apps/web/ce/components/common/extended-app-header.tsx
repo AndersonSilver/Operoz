@@ -6,7 +6,7 @@ export const ExtendedAppHeader = observer(function ExtendedAppHeader(props: { he
 
   return (
     <div className="flex min-w-0 flex-1 items-center gap-2">
-      <div className="min-w-0 w-full flex-1">{header}</div>
+      <div className="w-full min-w-0 flex-1">{header}</div>
     </div>
   );
 });

@@ -11,9 +11,7 @@ const AnalyticsFilterActions = observer(function AnalyticsFilterActions() {
 
   return (
     <div className="flex items-center justify-end gap-2">
-      {ENABLE_WORKSPACE_BOARDS && (
-        <AnalyticsBoardSelect value={selectedBoardId} onChange={updateSelectedBoard} />
-      )}
+      {ENABLE_WORKSPACE_BOARDS && <AnalyticsBoardSelect value={selectedBoardId} onChange={updateSelectedBoard} />}
       <ProjectSelect
         value={selectedProjects}
         onChange={(val) => {

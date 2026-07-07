@@ -18,7 +18,6 @@
   isolation: isolate;
 }
 
-
 @media (min-width: 1024px) {
   .board-informations-split-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -52,11 +51,7 @@
 
 .board-informations-settings-panel {
   border-color: color-mix(in srgb, var(--border-subtle-1) 90%, transparent);
-  background: linear-gradient(
-    180deg,
-    color-mix(in srgb, var(--bg-layer-2) 30%, var(--bg-layer-1)),
-    var(--bg-layer-1)
-  );
+  background: linear-gradient(180deg, color-mix(in srgb, var(--bg-layer-2) 30%, var(--bg-layer-1)), var(--bg-layer-1));
   box-shadow:
     0 0 0 1px color-mix(in srgb, var(--bg-accent-primary) 6%, transparent),
     0 16px 40px -24px color-mix(in srgb, black 45%, transparent),
@@ -92,19 +87,11 @@
 }
 
 .board-informations-identity-panel .board-informations-panel-header {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--bg-accent-subtle) 45%, transparent),
-    transparent 65%
-  );
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-accent-subtle) 45%, transparent), transparent 65%);
 }
 
 .board-informations-settings-panel .board-informations-panel-header {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--bg-success-subtle) 35%, transparent),
-    transparent 65%
-  );
+  background: linear-gradient(135deg, color-mix(in srgb, var(--bg-success-subtle) 35%, transparent), transparent 65%);
 }
 
 .board-informations-panel-body {
@@ -117,11 +104,7 @@
   margin-top: auto;
   flex-shrink: 0;
   border-top: 1px solid color-mix(in srgb, var(--border-subtle-1) 75%, transparent);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in srgb, var(--bg-layer-2) 65%, transparent)
-  );
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-layer-2) 65%, transparent));
   padding: 1rem 1.25rem;
 }
 

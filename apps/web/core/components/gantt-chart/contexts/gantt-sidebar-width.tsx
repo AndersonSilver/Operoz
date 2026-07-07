@@ -1,17 +1,6 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useRef,
-  useState,
-  type ReactNode,
-} from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState, type ReactNode } from "react";
 import { GANTT_SIDEBAR_MAX_WIDTH, GANTT_SIDEBAR_MIN_WIDTH, SIDEBAR_WIDTH } from "../constants";
-import {
-  getSavedGanttSidebarWidth,
-  saveGanttSidebarWidth,
-} from "../helpers/gantt-sidebar-width-preference";
+import { getSavedGanttSidebarWidth, saveGanttSidebarWidth } from "../helpers/gantt-sidebar-width-preference";
 
 type TGanttSidebarWidthContext = {
   sidebarWidth: number;
@@ -104,7 +93,9 @@ export function GanttSidebarWidthProvider(props: ProviderProps) {
   }, [isResizing, scope, workspaceSlug]);
 
   return (
-    <GanttSidebarWidthContext.Provider value={{ sidebarWidth, isResizing, isSidebarCollapsed, toggleSidebarCollapse, startResizing }}>
+    <GanttSidebarWidthContext.Provider
+      value={{ sidebarWidth, isResizing, isSidebarCollapsed, toggleSidebarCollapse, startResizing }}
+    >
       {children}
     </GanttSidebarWidthContext.Provider>
   );

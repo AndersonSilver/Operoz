@@ -39,16 +39,7 @@ function Header(props: HeaderProps) {
 }
 
 function LeftItem(props: HeaderProps) {
-  return (
-    <div
-      className={cn(
-        "flex min-w-0 flex-1 items-center gap-2",
-        props.className
-      )}
-    >
-      {props.children}
-    </div>
-  );
+  return <div className={cn("flex min-w-0 flex-1 items-center gap-2", props.className)}>{props.children}</div>;
 }
 
 function RightItem(props: HeaderProps) {

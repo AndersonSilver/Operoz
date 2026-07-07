@@ -1,4 +1,3 @@
-
 /**
  * Ensures that a URL has a trailing slash while preserving query parameters and fragments
  * @param url - The URL to process

@@ -80,11 +80,7 @@
   gap: 0.75rem;
   margin-top: auto;
   border-top: 1px solid var(--border-subtle-1);
-  background: linear-gradient(
-    180deg,
-    transparent,
-    color-mix(in srgb, var(--bg-layer-2) 55%, transparent)
-  );
+  background: linear-gradient(180deg, transparent, color-mix(in srgb, var(--bg-layer-2) 55%, transparent));
   padding: 1rem 1.25rem;
 }
 

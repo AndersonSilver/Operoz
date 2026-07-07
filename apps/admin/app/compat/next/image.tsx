@@ -1,4 +1,3 @@
-
 import React from "react";
 
 type NextImageProps = React.ImgHTMLAttributes<HTMLImageElement> & {

@@ -43,7 +43,9 @@
 /* end ai handle */
 
 .ProseMirror:not(.dragging)
-  .ProseMirror-selectednode:not(.node-imageComponent):not(.node-image):not(.table-wrapper):not(.node-htmlDocumentEmbed) {
+  .ProseMirror-selectednode:not(.node-imageComponent):not(.node-image):not(.table-wrapper):not(
+    .node-htmlDocumentEmbed
+  ) {
   position: relative;
   cursor: grab;
   outline: none !important;
