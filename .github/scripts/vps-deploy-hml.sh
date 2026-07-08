@@ -58,15 +58,37 @@ echo "==> Rodar migrações HML"
 cd "${HML_APP_PATH}"
 docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 
-echo "==> Recriar stack HML (sem infra — DB/Redis/MQ/MinIO permanecem)"
+echo "==> Recriar API e workers HML"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  web hml-api hml-worker hml-beat-worker hml-admin hml-proxy
+  hml-api hml-worker hml-beat-worker
+
+echo "==> Aguardar hml-api responder (collectstatic + gunicorn podem levar ~2 min)"
+api_ready=false
+for attempt in $(seq 1 90); do
+  if docker compose --env-file hml.env -p plane-app-hml exec -T hml-api \
+    wget -q -O /dev/null http://127.0.0.1:8000/api/instances/ 2>/dev/null; then
+    echo "==> hml-api pronta (tentativa ${attempt})"
+    api_ready=true
+    break
+  fi
+  sleep 3
+done
+if [[ "${api_ready}" != "true" ]]; then
+  echo "::error::hml-api não ficou pronta em 4,5 min" >&2
+  docker compose --env-file hml.env -p plane-app-hml logs --tail=60 hml-api 2>/dev/null || true
+  exit 1
+fi
+
+echo "==> Recriar web, admin e proxy HML"
+docker compose --env-file hml.env -p plane-app-hml up -d \
+  --no-deps --pull never --force-recreate \
+  web hml-admin hml-proxy
 
 echo "==> Estado HML"
 docker compose --env-file hml.env -p plane-app-hml ps
 
-echo "==> Health check HML"
+echo "==> Health check HML (via proxy)"
 HML_PORT=$(grep -E '^LISTEN_HTTP_PORT=' "${HML_ENV_FILE}" | cut -d= -f2 | tr -d '"' || echo "8081")
 for attempt in $(seq 1 30); do
   if curl -sf "http://127.0.0.1:${HML_PORT}/api/instances/" -o /dev/null 2>/dev/null; then
@@ -74,7 +96,7 @@ for attempt in $(seq 1 30); do
     break
   fi
   if [[ "${attempt}" -eq 30 ]]; then
-    echo "::error::Health check HML falhou após 60s" >&2
+    echo "::error::Health check HML falhou após 60s (proxy)" >&2
     docker compose --env-file hml.env -p plane-app-hml logs --tail=40 hml-proxy 2>/dev/null || true
     exit 1
   fi
