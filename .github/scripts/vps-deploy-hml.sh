@@ -1,15 +1,22 @@
 #!/usr/bin/env bash
-# Deploy Operoz HML — atualiza imagens e recria containers da stack de homologação.
-# Roda no runner self-hosted (VPS) ou via SSH.
+# Deploy Operoz HML — atualiza imagens :hml e recria containers da stack de homologação.
+# Disparado apenas por push na branch main (ver deploy-hml.yml).
 set -euo pipefail
 
 : "${GHCR_TOKEN:?GHCR_TOKEN is required}"
 : "${HML_IMAGE_PREFIX:?HML_IMAGE_PREFIX is required}"
 : "${HML_APP_PATH:?HML_APP_PATH is required}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
-: "${GIT_BRANCH:=hml}"
+: "${GIT_REF:=main}"
+: "${IMAGE_TAG:=hml}"
+: "${LOCAL_RELEASE_TAG:=hml}"
 
 HML_ENV_FILE="${HML_APP_PATH}/hml.env"
+OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operis-selfhost/Operis}"
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=vps-compose-utils.sh
+source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
 if [[ ! -f "${HML_ENV_FILE}" ]]; then
   echo "ERRO: ${HML_ENV_FILE} não encontrado. Execute o setup inicial primeiro." >&2
@@ -19,19 +26,23 @@ fi
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
+echo "==> Atualizar código (${GIT_REF}) em ${OPEROZ_REPO_PATH}"
+operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
+
 SERVICES=(
   "plane-frontend:myoperoz/plane-frontend"
   "plane-backend:myoperoz/plane-backend"
   "plane-proxy:myoperoz/plane-proxy"
+  "plane-admin:myoperoz/plane-admin"
 )
 
 for entry in "${SERVICES[@]}"; do
   ghcr_name="${entry%%:*}"
   local_name="${entry##*:}"
-  remote="${HML_IMAGE_PREFIX}/${ghcr_name}:hml"
+  remote="${HML_IMAGE_PREFIX}/${ghcr_name}:${IMAGE_TAG}"
   echo "==> Pull ${remote}"
   docker pull "${remote}"
-  docker tag "${remote}" "${local_name}:hml"
+  operoz_tag_pulled_image "${remote}" "${local_name}" "${LOCAL_RELEASE_TAG}"
 done
 
 echo "==> Sincronizar WEB_URL no hml.env"
@@ -50,7 +61,7 @@ docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 echo "==> Recriar stack HML (sem infra — DB/Redis/MQ/MinIO permanecem)"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  web hml-api hml-worker hml-beat-worker hml-proxy
+  web hml-api hml-worker hml-beat-worker hml-admin hml-proxy
 
 echo "==> Estado HML"
 docker compose --env-file hml.env -p plane-app-hml ps

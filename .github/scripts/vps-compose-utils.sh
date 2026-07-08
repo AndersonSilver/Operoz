@@ -75,6 +75,49 @@ operoz_legacy_operis_overlay() {
   echo "${repo_path}/deployments/cli/community/docker-compose.legacy-operis.yml"
 }
 
+# Sincroniza repo no VPS por branch (origin/ref) ou tag anotada.
+operoz_sync_git_ref() {
+  local repo_path="${1:?repo_path required}"
+  local git_ref="${2:?git_ref required}"
+
+  if [[ ! -d "${repo_path}/.git" ]]; then
+    echo "WARN: repo não encontrado em ${repo_path}; apenas imagens serão atualizadas."
+    return 0
+  fi
+
+  cd "${repo_path}"
+  git fetch origin --tags
+
+  if git rev-parse "refs/tags/${git_ref}" >/dev/null 2>&1; then
+    echo "==> Checkout tag ${git_ref}"
+    git checkout -f "refs/tags/${git_ref}"
+    return 0
+  fi
+
+  echo "==> Checkout branch ${git_ref}"
+  git fetch origin "${git_ref}"
+  git reset --hard "origin/${git_ref}"
+}
+
+# Aplica tags locais usadas pelo docker compose após pull do GHCR.
+operoz_tag_pulled_image() {
+  local source_image="${1:?source_image required}"
+  local local_name="${2:?local_name required}" # ex. myoperoz/plane-frontend
+  local primary_tag="${3:?primary_tag required}" # ex. stable ou hml
+
+  docker tag "${source_image}" "${local_name}:${primary_tag}"
+
+  case "${primary_tag}" in
+    stable)
+      docker tag "${source_image}" "${local_name}:preview"
+      docker tag "${source_image}" "${local_name}:local"
+      ;;
+    preview)
+      docker tag "${source_image}" "${local_name}:local"
+      ;;
+  esac
+}
+
 # Duplica tags myoperoz/* → myoperis/* quando o plane-app ainda referencia myoperis.
 operoz_tag_legacy_image_aliases() {
   local app_path="${1:?app_path required}"

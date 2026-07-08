@@ -1,13 +1,13 @@
-# Gates de release Operoz — build web + testes API críticos antes do deploy.
-# Complementa ci-assistant.yml (escopo estreito) e deploy-operoz.yml (build/deploy).
+# Gates de release Operoz — valida código na branch main antes do deploy de homologação.
+# Produção é publicada por tag v* (deploy-operoz.yml).
 
 name: CI Operoz Release
 
 on:
   push:
-    branches: [preview]
+    branches: [main]
   pull_request:
-    branches: [preview]
+    branches: [main]
 
 concurrency:
   group: ci-operoz-release-${{ github.ref }}

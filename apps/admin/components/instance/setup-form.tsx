@@ -51,6 +51,21 @@ const defaultFromData: TFormData = {
   is_telemetry_enabled: true,
 };
 
+const PASSWORD_CRITERIA_LABELS: Record<string, string> = {
+  length: "Mín. 8 caracteres",
+  uppercase: "Mín. 1 letra maiúscula",
+  lowercase: "Mín. 1 letra minúscula",
+  number: "Mín. 1 número",
+  special: "Mín. 1 caractere especial",
+};
+
+const PASSWORD_STRENGTH_MESSAGES: Partial<Record<E_PASSWORD_STRENGTH, string>> = {
+  [E_PASSWORD_STRENGTH.EMPTY]: "Digite sua senha",
+  [E_PASSWORD_STRENGTH.LENGTH_NOT_VALID]: "Senha muito curta",
+  [E_PASSWORD_STRENGTH.STRENGTH_NOT_VALID]: "Senha fraca",
+  [E_PASSWORD_STRENGTH.STRENGTH_VALID]: "Senha forte",
+};
+
 export function InstanceSetupForm() {
   // search params
   const searchParams = useSearchParams();
@@ -136,8 +151,8 @@ export function InstanceSetupForm() {
   return (
     <AuthCard>
       <FormHeader
-        heading="Setup your Plane Instance"
-        subHeading="Post setup you will be able to manage this Plane instance."
+        heading="Configure sua instância Operoz"
+        subHeading="Após a configuração, você poderá gerenciar esta instância Operoz."
       />
       {errorData.type &&
         errorData?.message &&
@@ -157,7 +172,7 @@ export function InstanceSetupForm() {
         <div className="flex flex-col items-center gap-4 sm:flex-row">
           <div className="w-full space-y-1">
             <label className="text-13 font-medium text-tertiary" htmlFor="first_name">
-              First name <span className="text-danger-primary">*</span>
+              Nome <span className="text-danger-primary">*</span>
             </label>
             <Input
               className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
@@ -165,7 +180,7 @@ export function InstanceSetupForm() {
               name="first_name"
               type="text"
               inputSize="md"
-              placeholder="Wilber"
+              placeholder="João"
               value={formData.first_name}
               onChange={(e) => {
                 const validation = validatePersonName(e.target.value);
@@ -180,7 +195,7 @@ export function InstanceSetupForm() {
           </div>
           <div className="w-full space-y-1">
             <label className="text-13 font-medium text-tertiary" htmlFor="last_name">
-              Last name <span className="text-danger-primary">*</span>
+              Sobrenome <span className="text-danger-primary">*</span>
             </label>
             <Input
               className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
@@ -188,7 +203,7 @@ export function InstanceSetupForm() {
               name="last_name"
               type="text"
               inputSize="md"
-              placeholder="Wright"
+              placeholder="Silva"
               value={formData.last_name}
               onChange={(e) => {
                 const validation = validatePersonName(e.target.value);
@@ -204,7 +219,7 @@ export function InstanceSetupForm() {
 
         <div className="w-full space-y-1">
           <label className="text-13 font-medium text-tertiary" htmlFor="email">
-            Email <span className="text-danger-primary">*</span>
+            E-mail <span className="text-danger-primary">*</span>
           </label>
           <Input
             className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
@@ -212,7 +227,7 @@ export function InstanceSetupForm() {
             name="email"
             type="email"
             inputSize="md"
-            placeholder="name@company.com"
+            placeholder="nome@empresa.com"
             value={formData.email}
             onChange={(e) => handleFormChange("email", e.target.value)}
             hasError={errorData.type && errorData.type === EErrorCodes.INVALID_EMAIL ? true : false}
@@ -225,7 +240,7 @@ export function InstanceSetupForm() {
 
         <div className="w-full space-y-1">
           <label className="text-13 font-medium text-tertiary" htmlFor="company_name">
-            Company name <span className="text-danger-primary">*</span>
+            Nome da empresa <span className="text-danger-primary">*</span>
           </label>
           <Input
             className="w-full border border-subtle !bg-surface-1 placeholder:text-placeholder"
@@ -233,7 +248,7 @@ export function InstanceSetupForm() {
             name="company_name"
             type="text"
             inputSize="md"
-            placeholder="Company name"
+            placeholder="Nome da empresa"
             value={formData.company_name}
             onChange={(e) => {
               const validation = validateCompanyName(e.target.value, false);
@@ -247,7 +262,7 @@ export function InstanceSetupForm() {
 
         <div className="w-full space-y-1">
           <label className="text-13 font-medium text-tertiary" htmlFor="password">
-            Set a password <span className="text-danger-primary">*</span>
+            Definir uma senha <span className="text-danger-primary">*</span>
           </label>
           <div className="relative">
             <Input
@@ -256,7 +271,7 @@ export function InstanceSetupForm() {
               name="password"
               type={showPassword.password ? "text" : "password"}
               inputSize="md"
-              placeholder="New password"
+              placeholder="Nova senha"
               value={formData.password}
               onChange={(e) => handleFormChange("password", e.target.value)}
               hasError={errorData.type && errorData.type === EErrorCodes.INVALID_PASSWORD ? true : false}
@@ -287,12 +302,17 @@ export function InstanceSetupForm() {
           {errorData.type && errorData.type === EErrorCodes.INVALID_PASSWORD && errorData.message && (
             <p className="px-1 text-11 text-danger-primary">{errorData.message}</p>
           )}
-          <PasswordStrengthIndicator password={formData.password} isFocused={isPasswordInputFocused} />
+          <PasswordStrengthIndicator
+            password={formData.password}
+            isFocused={isPasswordInputFocused}
+            criteriaLabels={PASSWORD_CRITERIA_LABELS}
+            strengthMessages={PASSWORD_STRENGTH_MESSAGES}
+          />
         </div>
 
         <div className="w-full space-y-1">
           <label className="text-13 font-medium text-tertiary" htmlFor="confirm_password">
-            Confirm password <span className="text-danger-primary">*</span>
+            Confirmar senha <span className="text-danger-primary">*</span>
           </label>
           <div className="relative">
             <Input
@@ -302,7 +322,7 @@ export function InstanceSetupForm() {
               inputSize="md"
               value={formData.confirm_password}
               onChange={(e) => handleFormChange("confirm_password", e.target.value)}
-              placeholder="Confirm password"
+              placeholder="Confirmar senha"
               className="w-full border border-subtle !bg-surface-1 pr-12 placeholder:text-placeholder"
               onFocus={() => setIsRetryPasswordInputFocused(true)}
               onBlur={() => setIsRetryPasswordInputFocused(false)}
@@ -330,7 +350,7 @@ export function InstanceSetupForm() {
           </div>
           {!!formData.confirm_password &&
             formData.password !== formData.confirm_password &&
-            renderPasswordMatchError && <span className="text-13 text-danger-primary">Passwords don{"'"}t match</span>}
+            renderPasswordMatchError && <span className="text-13 text-danger-primary">As senhas não coincidem</span>}
         </div>
 
         <div className="relative flex gap-2">
@@ -344,22 +364,22 @@ export function InstanceSetupForm() {
             />
           </div>
           <label className="cursor-pointer text-13 font-medium text-tertiary" htmlFor="is_telemetry_enabled">
-            Allow Plane to anonymously collect usage events.{" "}
+            Permitir que o Operoz colete eventos de uso anonimamente.{" "}
             <a
               tabIndex={-1}
-              href="https://developers.plane.so/self-hosting/telemetry"
+              href="https://operoz.io"
               target="_blank"
               rel="noopener noreferrer"
               className="text-blue-500 hover:text-blue-600 flex-shrink-0 text-13 font-medium"
             >
-              See More
+              Saiba mais
             </a>
           </label>
         </div>
 
         <div className="py-2">
           <Button type="submit" size="xl" className="w-full" disabled={isButtonDisabled}>
-            {isSubmitting ? <Spinner height="20px" width="20px" /> : "Continue"}
+            {isSubmitting ? <Spinner height="20px" width="20px" /> : "Continuar"}
           </Button>
         </div>
       </form>

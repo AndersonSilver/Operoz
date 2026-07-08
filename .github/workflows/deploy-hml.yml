@@ -1,19 +1,16 @@
-# Deploy Operoz HML (homologação) — build + deploy na stack isolada em hml.operoz.io.
+# Deploy de HOMOLOGAÇÃO — disparado SOMENTE por push na branch main.
+# Outras branches não publicam em hml.operoz.io.
 #
-# Dispara em push para branch `hml` ou via workflow_dispatch.
-# Não exige approval gate — HML é ambiente de teste, não produção.
+# Fluxo:
+#   git push origin main  →  build imagens :hml  →  hml.operoz.io
 #
-# Variables necessárias (Settings → Variables):
-#   OPEROZ_WEB_URL   — https://www.operoz.io (padrão) — HML usa hml.operoz.io fixo
-#   OPEROZ_REPO_PATH — /root/operis-selfhost/Operis
-#   HML_APP_PATH     — /root/operis-selfhost/plane-app-hml
-#   OPERIS_SELF_HOSTED_RUNNER — "true" para usar runner no VPS
+# Produção: tag v* (workflow deploy-operoz.yml).
 
 name: Deploy Operoz HML
 
 on:
   push:
-    branches: [hml]
+    branches: [main]
   workflow_dispatch:
     inputs:
       skip_build:
@@ -23,7 +20,7 @@ on:
         type: boolean
 
 concurrency:
-  group: deploy-hml-${{ github.ref }}
+  group: deploy-hml-main
   cancel-in-progress: true
 
 env:
@@ -55,7 +52,7 @@ jobs:
 
   build:
     needs: meta
-    if: ${{ !inputs.skip_build }}
+    if: ${{ github.ref == 'refs/heads/main' && !inputs.skip_build }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
@@ -65,6 +62,8 @@ jobs:
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: main
 
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
 
@@ -101,6 +100,22 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build e push plane-admin:hml
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: apps/admin/Dockerfile.admin
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/plane-admin:hml
+            ${{ env.IMAGE_PREFIX }}/plane-admin:${{ github.sha }}
+          build-args: |
+            VITE_API_BASE_URL=https://hml.operoz.io
+            VITE_WEB_BASE_URL=https://hml.operoz.io
+            VITE_ADMIN_BASE_URL=https://hml.operoz.io
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
       - name: Build e push plane-proxy:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
@@ -115,9 +130,14 @@ jobs:
 
   deploy:
     needs: [meta, build]
-    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    if: >-
+      github.ref == 'refs/heads/main' &&
+      !cancelled() &&
+      !contains(needs.*.result, 'failure') &&
+      (needs.build.result == 'success' || needs.build.result == 'skipped')
     runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
     timeout-minutes: 30
+    environment: homologation
     permissions:
       contents: read
       packages: read
@@ -125,11 +145,16 @@ jobs:
       HML_IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
       HML_APP_PATH: ${{ vars.HML_APP_PATH || '/root/operis-selfhost/plane-app-hml' }}
       HML_WEB_URL: https://hml.operoz.io
+      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
+      IMAGE_TAG: hml
+      LOCAL_RELEASE_TAG: hml
+      GIT_REF: main
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       GITHUB_ACTOR: ${{ github.actor }}
-      GIT_BRANCH: hml
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: main
 
       - name: Deploy HML (runner self-hosted)
         if: ${{ needs.meta.outputs.use_self_hosted == 'true' }}
@@ -141,7 +166,7 @@ jobs:
           set +e
           nc -zv -w 15 "${{ secrets.VPS_HOST }}" 22
           if [[ $? -ne 0 ]]; then
-            echo "::error::Porta 22 inacessível. Configure OPERIS_SELF_HOSTED_RUNNER=true ou abra SSH no firewall Hostinger."
+            echo "::error::Porta 22 inacessível. Configure OPEROZ_SELF_HOSTED_RUNNER=true."
             exit 1
           fi
 
@@ -153,8 +178,11 @@ jobs:
           HML_IMAGE_PREFIX: ${{ env.HML_IMAGE_PREFIX }}
           HML_APP_PATH: ${{ env.HML_APP_PATH }}
           HML_WEB_URL: https://hml.operoz.io
+          OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
+          IMAGE_TAG: hml
+          LOCAL_RELEASE_TAG: hml
+          GIT_REF: main
           GITHUB_ACTOR: ${{ github.actor }}
-          GIT_BRANCH: hml
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USER }}
@@ -162,5 +190,5 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,HML_IMAGE_PREFIX,HML_APP_PATH,HML_WEB_URL,GITHUB_ACTOR,GIT_BRANCH
+          envs: GHCR_TOKEN,HML_IMAGE_PREFIX,HML_APP_PATH,HML_WEB_URL,OPEROZ_REPO_PATH,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-hml.sh

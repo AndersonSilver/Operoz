@@ -1,30 +1,24 @@
-# Build da imagem web no GitHub Actions, push para GHCR e deploy no VPS (Operoz self-host).
+# Deploy de PRODUÇÃO — disparado por tag de release (v*), não por push de branch.
 #
-# Secrets obrigatórios (Settings → Secrets and variables → Actions):
-#   VPS_HOST          — ex. 72.61.51.247
-#   VPS_USER          — ex. root
-#   VPS_SSH_KEY       — chave privada SSH (conteúdo completo do id_rsa)
+# Fluxo recomendado:
+#   1. Merge / push na branch main → valida e publica em hml.operoz.io
+#   2. Quando aprovado: git tag v1.2.3 && git push origin v1.2.3 → produção (operoz.io)
 #
-# Variables recomendadas (Settings → Variables):
-#   OPEROZ_WEB_URL    — https://www.operoz.io (URL pública; build do frontend + sync operoz.env)
-#   OPEROZ_REPO_PATH  — /root/operis-selfhost/Operis (legado operis-selfhost OK)
-#   OPEROZ_APP_PATH   — /root/operis-selfhost/plane-app
-#   OPEROZ_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operoz-runner.sh)
-#   OPEROZ_DEPLOY_ON_PUSH — "web" (padrão), "full" (stack em cada push), ou deixar vazio e usar [deploy-full] no commit
-#   Push que altera apps/api|space|admin|live|proxy dispara build-full automaticamente (path filter)
-#
-# SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall Hostinger.
-#
-# Job e2e-smoke: roda após deploy bem-sucedido contra https://operoz.io.
-#   Cria dados de teste isolados (user único por run com Date.now()), sem depender de secrets extra.
+# Secrets: VPS_HOST, VPS_USER, VPS_SSH_KEY
+# Variables: OPEROZ_WEB_URL, OPEROZ_REPO_PATH, OPEROZ_APP_PATH, OPEROZ_SELF_HOSTED_RUNNER
 
-name: Deploy Operoz
+name: Deploy Operoz (Produção)
 
 on:
   push:
-    branches: [preview]
+    tags:
+      - "v*"
   workflow_dispatch:
     inputs:
+      release_tag:
+        description: "Tag de release no GHCR (ex. v1.2.3)"
+        required: true
+        type: string
       deploy_target:
         description: "O que publicar"
         required: true
@@ -35,13 +29,13 @@ on:
           - mcp
           - full
       skip_build:
-        description: "Só redeploy (pula build; usa tag preview já no GHCR)"
+        description: "Só redeploy (pula build; usa tag já no GHCR)"
         required: false
         default: false
         type: boolean
 
 concurrency:
-  group: deploy-operoz-${{ github.ref }}
+  group: deploy-operoz-prod-${{ github.ref }}
   cancel-in-progress: true
 
 env:
@@ -55,25 +49,22 @@ jobs:
     outputs:
       image_repo: ${{ steps.lower.outputs.image_repo }}
       use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
-      full_deploy: ${{ steps.mode.outputs.full_deploy }}
+      release_tag: ${{ steps.version.outputs.release_tag }}
       build_stack: ${{ steps.mode.outputs.build_stack }}
     steps:
-      - name: Checkout (path filter em push)
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-
-      - name: Detectar mudanças na stack (api, space, admin, live, proxy)
-        uses: dorny/paths-filter@d1c1ffe0248fe513906c8e24db8ea791d46f8590 # v3
-        id: paths
-        if: github.event_name == 'push'
-        with:
-          filters: |
-            stack:
-              - 'apps/api/**'
-              - 'apps/space/**'
-              - 'apps/admin/**'
-              - 'apps/live/**'
-              - 'apps/proxy/**'
-              - '.github/scripts/vps-deploy-full.sh'
+      - name: Resolver tag de release
+        id: version
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            tag="${{ inputs.release_tag }}"
+          else
+            tag="${GITHUB_REF#refs/tags/}"
+          fi
+          if [[ ! "${tag}" =~ ^v ]]; then
+            echo "::error::Tag de produção deve começar com v (ex. v1.2.3); recebido: ${tag}"
+            exit 1
+          fi
+          echo "release_tag=${tag}" >> "$GITHUB_OUTPUT"
 
       - name: GHCR exige nome do repositório em minúsculas
         id: lower
@@ -90,64 +81,50 @@ jobs:
             echo "use_self_hosted=false" >> "$GITHUB_OUTPUT"
           fi
 
-          full=false
-          stack_paths=false
-
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
-            full=true
-          elif [[ "${{ github.event_name }}" == "push" ]]; then
-            if [[ "${{ vars.OPEROZ_DEPLOY_ON_PUSH }}" == "full" ]]; then
-              full=true
-            elif echo "${{ github.event.head_commit.message }}" | grep -qF '[deploy-full]'; then
-              full=true
-            elif [[ "${{ steps.paths.outputs.stack }}" == "true" ]]; then
-              stack_paths=true
-            fi
-          fi
-
           build_stack=false
-          if [[ "$full" == "true" || "$stack_paths" == "true" ]]; then
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            build_stack=true
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
             build_stack=true
           fi
-
-          echo "full_deploy=${full}" >> "$GITHUB_OUTPUT"
           echo "build_stack=${build_stack}" >> "$GITHUB_OUTPUT"
-          echo "Modo: full_deploy=${full} stack_paths=${stack_paths} build_stack=${build_stack}"
 
   build-web:
     needs: meta
-    if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' || inputs.deploy_target == 'mcp') }}
+    if: ${{ !inputs.skip_build && (github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
     permissions:
       contents: read
       packages: write
     env:
+      RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
     steps:
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: refs/tags/${{ needs.meta.outputs.release_tag }}
+          fetch-depth: 0
 
-      - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
 
-      - name: Login to GHCR
-        uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push plane-frontend
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
+      - name: Build e push plane-frontend
+        if: ${{ github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           file: apps/web/Dockerfile.web
           push: true
           tags: |
-            ${{ env.WEB_IMAGE_NAME }}:preview
+            ${{ env.WEB_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
+            ${{ env.WEB_IMAGE_NAME }}:stable
             ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
           build-args: |
             VITE_ENABLE_BOARDS=true
@@ -155,15 +132,16 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build and push operoz-mcp
-        if: ${{ github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
+      - name: Build e push operoz-mcp
+        if: ${{ github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full' }}
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: mcp-server
           file: mcp-server/Dockerfile
           push: true
           tags: |
-            ${{ env.MCP_IMAGE_NAME }}:preview
+            ${{ env.MCP_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
+            ${{ env.MCP_IMAGE_NAME }}:stable
             ${{ env.MCP_IMAGE_NAME }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -177,6 +155,7 @@ jobs:
       contents: read
       packages: write
     env:
+      RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
     strategy:
       fail-fast: false
@@ -199,19 +178,25 @@ jobs:
             file: apps/proxy/Dockerfile.ce
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: refs/tags/${{ needs.meta.outputs.release_tag }}
+          fetch-depth: 0
+
       - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
       - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
       - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: ${{ matrix.context }}
           file: ${{ matrix.file }}
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:preview
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ env.RELEASE_TAG }}
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:stable
             ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
@@ -226,49 +211,49 @@ jobs:
       contents: read
       packages: read
     env:
+      RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+      IMAGE_TAG: ${{ needs.meta.outputs.release_tag }}
+      LOCAL_RELEASE_TAG: stable
+      GIT_REF: ${{ needs.meta.outputs.release_tag }}
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
       OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/plane-app' }}
-      GIT_BRANCH: preview
       GITHUB_ACTOR: ${{ github.actor }}
     steps:
-      - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
 
-      - name: Preflight SSH (só modo remoto)
+      - name: Preflight SSH (modo remoto)
         if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
         run: |
           set +e
           nc -zv -w 15 "${{ secrets.VPS_HOST }}" 22
-          code=$?
-          if [[ $code -ne 0 ]]; then
-            echo "::error::Porta 22 inacessível a partir do runner GitHub (timeout/firewall Hostinger)."
-            echo "Soluções: (1) abrir SSH no firewall do painel Hostinger para 0.0.0.0/0"
-            echo "          (2) instalar runner no VPS: .github/scripts/install-operoz-runner.sh"
-            echo "          (3) variável OPEROZ_SELF_HOSTED_RUNNER=true"
+          if [[ $? -ne 0 ]]; then
+            echo "::error::Porta 22 inacessível. Configure OPEROZ_SELF_HOSTED_RUNNER=true ou abra SSH."
             exit 1
           fi
 
       - name: Deploy web (runner local)
-        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         env:
-          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-web.sh
 
-      - name: Deploy web on VPS (SSH)
-        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
+      - name: Deploy web via SSH
+        if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted != 'true' && (github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          LOCAL_RELEASE_TAG: stable
+          GIT_REF: ${{ env.GIT_REF }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
-          GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -277,25 +262,26 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,WEB_IMAGE,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,WEB_IMAGE,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-web.sh
 
       - name: Deploy MCP (runner local)
-        if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
         env:
-          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
-          OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
         run: bash .github/scripts/vps-deploy-mcp.sh
 
-      - name: Deploy MCP on VPS (SSH)
-        if: ${{ needs.meta.outputs.use_self_hosted != 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
+      - name: Deploy MCP via SSH
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' && (github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
         uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          LOCAL_RELEASE_TAG: stable
+          GIT_REF: ${{ env.GIT_REF }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
-          GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -304,26 +290,27 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,MCP_IMAGE,OPEROZ_REPO_PATH,OPEROZ_MCP_ENV,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,MCP_IMAGE,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,OPEROZ_REPO_PATH,OPEROZ_MCP_ENV,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-mcp.sh
 
       - name: Deploy full stack (runner local)
         if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
         env:
-          IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-full.sh
 
-      - name: Deploy full stack on VPS (SSH)
+      - name: Deploy full stack via SSH
         if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted != 'true' }}
         uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+          IMAGE_TAG: ${{ env.IMAGE_TAG }}
+          LOCAL_RELEASE_TAG: stable
+          GIT_REF: ${{ env.GIT_REF }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
-          GIT_BRANCH: preview
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -332,11 +319,11 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,IMAGE_PREFIX,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,IMAGE_PREFIX,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-full.sh
 
   e2e-smoke:
-    needs: deploy
+    needs: [meta, deploy]
     if: ${{ success() && github.event_name == 'push' }}
     runs-on: ubuntu-latest
     timeout-minutes: 20
@@ -345,6 +332,9 @@ jobs:
       E2E_API_URL: ${{ vars.OPEROZ_WEB_URL || 'https://operoz.io' }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: refs/tags/${{ needs.meta.outputs.release_tag }}
+          fetch-depth: 0
 
       - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
 

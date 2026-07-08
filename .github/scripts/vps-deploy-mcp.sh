@@ -5,27 +5,21 @@ set -euo pipefail
 : "${MCP_IMAGE:?MCP_IMAGE is required}"
 : "${OPEROZ_REPO_PATH:?OPEROZ_REPO_PATH is required}"
 : "${OPEROZ_MCP_ENV:=${OPEROZ_REPO_PATH}/deployments/mcp/operoz-mcp.env}"
-: "${GIT_BRANCH:=preview}"
+: "${GIT_REF:=${GIT_BRANCH:-preview}}"
+: "${LOCAL_RELEASE_TAG:=stable}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
-echo "==> Atualizar código (${GIT_BRANCH}) em ${OPEROZ_REPO_PATH}"
-if [[ -d "${OPEROZ_REPO_PATH}/.git" ]]; then
-  cd "${OPEROZ_REPO_PATH}"
-  git fetch origin "${GIT_BRANCH}"
-  git reset --hard "origin/${GIT_BRANCH}"
-else
-  echo "WARN: repo não encontrado em ${OPEROZ_REPO_PATH}; apenas imagem será atualizada."
-fi
+echo "==> Atualizar código (${GIT_REF}) em ${OPEROZ_REPO_PATH}"
+operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 
 echo "==> Pull imagem MCP: ${MCP_IMAGE}"
 docker pull "${MCP_IMAGE}"
 
 echo "==> Tags locais"
-docker tag "${MCP_IMAGE}" myoperoz/operoz-mcp:preview
-docker tag "${MCP_IMAGE}" myoperoz/operoz-mcp:stable
+operoz_tag_pulled_image "${MCP_IMAGE}" "myoperoz/operoz-mcp" "${LOCAL_RELEASE_TAG}"
 
 if [[ ! -f "${OPEROZ_MCP_ENV}" ]]; then
   EXAMPLE="${OPEROZ_REPO_PATH}/deployments/mcp/operoz-mcp.env.example"
