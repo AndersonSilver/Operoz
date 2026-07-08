@@ -75,15 +75,8 @@ class WorkflowTransitionSerializer(DynamicBaseSerializer):
     validators = TransitionValidatorSerializer(many=True, read_only=True)
     post_functions = TransitionPostFunctionSerializer(many=True, read_only=True)
     screen = TransitionScreenSerializer(read_only=True)
-    from_state = serializers.PrimaryKeyRelatedField(
-        queryset=State.objects.all(),
-        required=False,
-        allow_null=True
-    )
-    to_state = serializers.PrimaryKeyRelatedField(
-        queryset=State.objects.all(),
-        required=True
-    )
+    from_state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all(), required=False, allow_null=True)
+    to_state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all(), required=True)
 
     class Meta:
         model = WorkflowTransition
@@ -111,11 +104,7 @@ class WorkflowTransitionSerializer(DynamicBaseSerializer):
 
 class WorkflowSerializer(DynamicBaseSerializer):
     transitions = WorkflowTransitionSerializer(many=True, read_only=True)
-    initial_state = serializers.PrimaryKeyRelatedField(
-        queryset=State.objects.all(),
-        required=False,
-        allow_null=True
-    )
+    initial_state = serializers.PrimaryKeyRelatedField(queryset=State.objects.all(), required=False, allow_null=True)
 
     class Meta:
         model = Workflow
@@ -149,14 +138,9 @@ class WorkflowGraphSerializer(serializers.Serializer):
     Serializer for workflow graph representation (nodes and edges).
     Used by the visual editor to save/load workflow graphs.
     """
-    nodes = serializers.ListField(
-        child=serializers.DictField(),
-        required=True
-    )
-    edges = serializers.ListField(
-        child=serializers.DictField(),
-        required=True
-    )
+
+    nodes = serializers.ListField(child=serializers.DictField(), required=True)
+    edges = serializers.ListField(child=serializers.DictField(), required=True)
 
     def validate_nodes(self, value):
         """Validate that all nodes have required fields"""
@@ -176,15 +160,8 @@ class WorkflowGraphSerializer(serializers.Serializer):
 
 
 class WorkflowSchemeEntrySerializer(DynamicBaseSerializer):
-    issue_type = serializers.PrimaryKeyRelatedField(
-        queryset=IssueType.objects.all(),
-        required=False,
-        allow_null=True
-    )
-    workflow = serializers.PrimaryKeyRelatedField(
-        queryset=Workflow.objects.all(),
-        required=True
-    )
+    issue_type = serializers.PrimaryKeyRelatedField(queryset=IssueType.objects.all(), required=False, allow_null=True)
+    workflow = serializers.PrimaryKeyRelatedField(queryset=Workflow.objects.all(), required=True)
 
     class Meta:
         model = WorkflowSchemeEntry
@@ -262,6 +239,7 @@ class IssueTransitionSerializer(DynamicBaseSerializer):
     Serializer for available transitions on an issue.
     Used by the issue detail page to show available transitions.
     """
+
     id = serializers.UUIDField(read_only=True)
     name = serializers.CharField(read_only=True)
     to_state_id = serializers.UUIDField(read_only=True)
@@ -285,11 +263,13 @@ class TransitionExecuteSerializer(serializers.Serializer):
     """
     Serializer for executing a transition.
     """
+
     comment = serializers.CharField(required=False, allow_blank=True)
     fields = serializers.DictField(required=False)
 
 
 class TransitionExecutionErrorSerializer(serializers.Serializer):
     """Serializer for transition execution errors"""
+
     error = serializers.CharField()
     fields = serializers.DictField(required=False)

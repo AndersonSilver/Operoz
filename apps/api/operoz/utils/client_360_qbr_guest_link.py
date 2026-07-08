@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from datetime import timedelta
-from typing import Any
 
-from django.db.models import Q
 from django.utils import timezone
 
 from operoz.utils.host import frontend_base_url
@@ -15,7 +13,6 @@ from operoz.db.models import (
     Project,
 )
 from operoz.utils.client_360 import WeekPeriod, parse_week_period
-from operoz.utils.client_360_qbr_export import qbr_to_html, qbr_to_markdown
 from operoz.utils.client_360_qbr_service import build_client_qbr_context, build_workspace_portfolio_qbr_context
 
 DEFAULT_GUEST_LINK_TTL_DAYS = 14
@@ -31,7 +28,10 @@ def parse_guest_link_ttl_days(raw) -> tuple[int, str | None]:
     except (TypeError, ValueError):
         return DEFAULT_GUEST_LINK_TTL_DAYS, "expires_in_days must be an integer"
     if days < MIN_GUEST_LINK_TTL_DAYS or days > MAX_GUEST_LINK_TTL_DAYS:
-        return DEFAULT_GUEST_LINK_TTL_DAYS, f"expires_in_days must be between {MIN_GUEST_LINK_TTL_DAYS} and {MAX_GUEST_LINK_TTL_DAYS}"
+        return (
+            DEFAULT_GUEST_LINK_TTL_DAYS,
+            f"expires_in_days must be between {MIN_GUEST_LINK_TTL_DAYS} and {MAX_GUEST_LINK_TTL_DAYS}",
+        )
     return days, None
 
 
@@ -40,11 +40,7 @@ def build_guest_link_url(token: str) -> str:
 
 
 def resolve_guest_link(token: str) -> tuple[Client360QbrGuestLink | None, dict | None, int]:
-    link = (
-        Client360QbrGuestLink.objects.filter(token=token)
-        .select_related("workspace", "project")
-        .first()
-    )
+    link = Client360QbrGuestLink.objects.filter(token=token).select_related("workspace", "project").first()
     if not link:
         return None, {"error": "Link not found"}, 404
     if link.revoked_at:
@@ -129,11 +125,7 @@ def _sanitize_client_row(client: dict) -> dict:
         "status_report": client.get("status_report"),
         "issues": client.get("issues"),
         "support": client.get("support"),
-        "board": (
-            {"name": client.get("board", {}).get("name")}
-            if client.get("board")
-            else None
-        ),
+        "board": ({"name": client.get("board", {}).get("name")} if client.get("board") else None),
     }
 
 
@@ -181,6 +173,7 @@ def build_guest_portal_payload(link: Client360QbrGuestLink) -> dict:
             "sso_provider": (enterprise.get("guest_sso_config") or {}).get("provider"),
         },
     }
+
 
 def serialize_guest_link(link: Client360QbrGuestLink) -> dict:
     return {

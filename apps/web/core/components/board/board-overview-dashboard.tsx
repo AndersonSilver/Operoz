@@ -141,7 +141,7 @@ export function BoardOverviewStatusChart({ meta }: { meta: IBoardMeta }) {
 
   if (!total) {
     return (
-      <EmptyStateCompact assetKey="work-items" assetClassName="size-16" title={t("boards.overview_status_empty")} />
+      <EmptyStateCompact assetKey="work-item" assetClassName="size-16" title={t("boards.overview_status_empty")} />
     );
   }
 
@@ -241,9 +241,7 @@ export function BoardOverviewTypeChart({ meta }: { meta: IBoardMeta }) {
   const total = meta.total_issues;
 
   if (!total || meta.type_distribution.length === 0) {
-    return (
-      <EmptyStateCompact assetKey="work-items" assetClassName="size-16" title={t("boards.overview_types_empty")} />
-    );
+    return <EmptyStateCompact assetKey="work-item" assetClassName="size-16" title={t("boards.overview_types_empty")} />;
   }
 
   return (
@@ -276,9 +274,7 @@ export function BoardOverviewRecentActivity({ meta, workspaceSlug }: { meta: IBo
   const router = useAppRouter();
 
   if (meta.recent_activity.length === 0) {
-    return (
-      <EmptyStateCompact assetKey="activity" assetClassName="size-16" title={t("boards.overview_activity_empty")} />
-    );
+    return <EmptyStateCompact assetKey="update" assetClassName="size-16" title={t("boards.overview_activity_empty")} />;
   }
 
   return (

@@ -3,9 +3,10 @@
 // ============================================================
 export * from "./common";
 export type TChartLegend = {
-  align: "left" | "center" | "right";
-  verticalAlign: "top" | "middle" | "bottom";
-  layout: "horizontal" | "vertical";
+  show?: boolean;
+  align?: "left" | "center" | "right";
+  verticalAlign?: "top" | "middle" | "bottom";
+  layout?: "horizontal" | "vertical";
   wrapperStyles?: React.CSSProperties;
 };
 

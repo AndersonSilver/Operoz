@@ -40,16 +40,27 @@ def _fan_out_graph(*, slow: bool = False) -> dict:
                 "data": {
                     "kind": "parallel",
                     "catalog_key": "parallel.fan_out",
-                    "config": {"join_policy": "all", "branches": [{"id": "b1", "label": "A"}, {"id": "b2", "label": "B"}]},
+                    "config": {
+                        "join_policy": "all",
+                        "branches": [{"id": "b1", "label": "A"}, {"id": "b2", "label": "B"}],
+                    },
                 },
             },
             {
                 "id": "a1",
-                "data": {"kind": "action", "catalog_key": "action.webhook", "config": {"url": "https://a.example/hook", "_delay": delay}},
+                "data": {
+                    "kind": "action",
+                    "catalog_key": "action.webhook",
+                    "config": {"url": "https://a.example/hook", "_delay": delay},
+                },
             },
             {
                 "id": "a2",
-                "data": {"kind": "action", "catalog_key": "action.webhook", "config": {"url": "https://b.example/hook", "_delay": delay}},
+                "data": {
+                    "kind": "action",
+                    "catalog_key": "action.webhook",
+                    "config": {"url": "https://b.example/hook", "_delay": delay},
+                },
             },
         ],
         "edges": [
@@ -81,7 +92,11 @@ def _retry_graph(fail_times: int = 2) -> dict:
             },
             {
                 "id": "a1",
-                "data": {"kind": "action", "catalog_key": "action.webhook", "config": {"url": "https://retry.example/hook"}},
+                "data": {
+                    "kind": "action",
+                    "catalog_key": "action.webhook",
+                    "config": {"url": "https://retry.example/hook"},
+                },
             },
         ],
         "edges": [

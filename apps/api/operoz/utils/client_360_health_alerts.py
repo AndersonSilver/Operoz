@@ -23,9 +23,7 @@ def build_client360_list_summary(clients: list[dict]) -> dict:
         "total_clients": len(clients),
         "health_critical": sum(1 for c in clients if c["health"] == "critical"),
         "health_warning": sum(1 for c in clients if c["health"] == "warning"),
-        "report_missing": sum(
-            1 for c in clients if c["status_report"]["coverage"] == "missing"
-        ),
+        "report_missing": sum(1 for c in clients if c["status_report"]["coverage"] == "missing"),
         "total_overdue": sum(c["issues"]["overdue"] for c in clients),
         "total_support_open": sum(c["support"]["open_count"] for c in clients),
         "health_score_alert": sum(1 for c in clients if c.get("health_score_alert")),

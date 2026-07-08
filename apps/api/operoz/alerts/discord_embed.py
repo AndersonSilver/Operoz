@@ -32,9 +32,7 @@ CONTENT_INTROS: dict[str, str] = {
     "missing_due_date": "Um card está sem data de vencimento.",
     "state_change": "O estado de um card foi alterado.",
     "assignee_change": "A responsabilidade de um card foi atualizada.",
-    "support_ticket_created": (
-        "Novo chamado de suporte criado, será validado junto com as demandas do time."
-    ),
+    "support_ticket_created": ("Novo chamado de suporte criado, será validado junto com as demandas do time."),
     "support_ticket_accepted": "Chamado de suporte aceito e em tratamento.",
     "support_sla_approaching": "O SLA de um chamado de suporte está próximo do limite.",
     "support_sla_breached": "O SLA de um chamado de suporte foi violado.",

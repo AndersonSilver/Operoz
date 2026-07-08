@@ -137,15 +137,7 @@ const AppSidebarStaticItem = forwardRef<HTMLDivElement, AppSidebarStaticItemProp
 // MAIN COMPONENT
 // ============================================================================
 
-export type AppSidebarItemComponent = React.FC<AppSidebarItemProps> & {
-  Label: React.FC<AppSidebarItemLabelProps>;
-  Icon: React.FC<AppSidebarItemIconProps>;
-  Link: React.FC<AppSidebarLinkItemProps>;
-  Button: React.FC<AppSidebarButtonItemProps>;
-  Static: React.FC<AppSidebarStaticItemProps>;
-};
-
-const AppSidebarItem = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement, AppSidebarItemProps>(
+const AppSidebarItemBase = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLDivElement, AppSidebarItemProps>(
   function AppSidebarItem({ variant = "link", item }, ref) {
     if (!item) return null;
 
@@ -179,14 +171,18 @@ const AppSidebarItem = forwardRef<HTMLAnchorElement | HTMLButtonElement | HTMLDi
 );
 
 // ============================================================================
-// COMPOUND COMPONENT ASSIGNMENT
+// COMPOUND COMPONENT EXPORT
 // ============================================================================
 
-AppSidebarItem.Label = AppSidebarItemLabel;
-AppSidebarItem.Icon = AppSidebarItemIcon;
-AppSidebarItem.Link = AppSidebarLinkItem;
-AppSidebarItem.Button = AppSidebarButtonItem;
-AppSidebarItem.Static = AppSidebarStaticItem;
+// Object.assign produces a correctly-typed compound component without mutating
+// the ForwardRefExoticComponent returned by forwardRef (which TypeScript does not
+// allow extending via direct property assignment).
+export const AppSidebarItem = Object.assign(AppSidebarItemBase, {
+  Label: AppSidebarItemLabel,
+  Icon: AppSidebarItemIcon,
+  Link: AppSidebarLinkItem,
+  Button: AppSidebarButtonItem,
+  Static: AppSidebarStaticItem,
+});
 
-export { AppSidebarItem };
 export type { AppSidebarItemData, AppSidebarItemProps };

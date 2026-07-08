@@ -10,7 +10,6 @@ from operoz.app.views.workspace.prd_review import (
 )
 
 from operoz.app.views.workspace.client_360_narrative import (
-    BoardClient360ReminderLogsEndpoint,
     WorkspaceClient360NarrativeEndpoint,
 )
 from operoz.app.views.workspace.client_360_operational import (

@@ -714,7 +714,7 @@ export const getBlockViewDetails = (
       message = t ? t("issue.gantt.bar_until", { date }) : `Until ${date}`;
     }
   } else if (isBlockComplete) {
-    message = `${formatBarDate(block?.start_date)} – ${formatBarDate(block?.target_date)}`;
+    message = `${formatBarDate(block?.start_date ?? "")} – ${formatBarDate(block?.target_date ?? "")}`;
   }
 
   return {

@@ -20,10 +20,7 @@ from operoz.license.models import Instance
 
 
 class Command(BaseCommand):
-    help = (
-        "Gate go-live staging do assistente: env, serviços HTTP, validate --deep, "
-        "smoke SSE, opcional LLM real e k6"
-    )
+    help = "Gate go-live staging do assistente: env, serviços HTTP, validate --deep, smoke SSE, opcional LLM real e k6"
 
     def add_arguments(self, parser):
         parser.add_argument(
@@ -189,9 +186,7 @@ class Command(BaseCommand):
             "ok" if getattr(settings, "ASSISTANT_METRICS_TOKEN", "") else "MISSING (recomendado)"
         )
         detail["ASSISTANT_MAX_CONCURRENT_LLM"] = getattr(settings, "ASSISTANT_MAX_CONCURRENT_LLM", "?")
-        detail["ASSISTANT_CHAT_STREAM_IDLE_SECONDS"] = getattr(
-            settings, "ASSISTANT_CHAT_STREAM_IDLE_SECONDS", 90
-        )
+        detail["ASSISTANT_CHAT_STREAM_IDLE_SECONDS"] = getattr(settings, "ASSISTANT_CHAT_STREAM_IDLE_SECONDS", 90)
         detail["ASSISTANT_CHAT_JOB_STALE_SECONDS"] = getattr(settings, "ASSISTANT_CHAT_JOB_STALE_SECONDS", 900)
         ok = bool(llm) if require_llm else True
         return ok, detail
@@ -290,9 +285,7 @@ class Command(BaseCommand):
         if not workspace:
             return None
         member = (
-            WorkspaceMember.objects.filter(workspace=workspace, role=ROLE.ADMIN.value)
-            .select_related("member")
-            .first()
+            WorkspaceMember.objects.filter(workspace=workspace, role=ROLE.ADMIN.value).select_related("member").first()
         )
         if member:
             return workspace, member.member

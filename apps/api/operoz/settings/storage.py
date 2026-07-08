@@ -43,7 +43,9 @@ class S3Storage(S3Boto3Storage):
             # has no proxy, so use MINIO_PUBLIC_ENDPOINT_URL (e.g. http://localhost:9000) instead of request host.
             public_ep = (os.environ.get("MINIO_PUBLIC_ENDPOINT_URL") or "").strip()
             if request and public_ep:
-                endpoint_url = public_ep if public_ep.startswith(("http://", "https://")) else f"{endpoint_protocol}://{public_ep}"
+                endpoint_url = (
+                    public_ep if public_ep.startswith(("http://", "https://")) else f"{endpoint_protocol}://{public_ep}"
+                )
                 endpoint_url = endpoint_url.rstrip("/")
             elif request:
                 endpoint_url = f"{endpoint_protocol}://{request.get_host()}"

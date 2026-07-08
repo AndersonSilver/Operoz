@@ -29,7 +29,7 @@ from operoz.assistant.security.rate_limit import (
     release_active_chat,
 )
 from operoz.assistant.tools import handlers as _tool_handlers  # noqa: F401
-from operoz.assistant.llm.http_client import llm_error_message, llm_user_message
+from operoz.assistant.llm.http_client import llm_user_message
 from operoz.assistant.tools.registry import execute_tool, list_openai_tools
 from operoz.assistant.types import AssistantActorContext
 from operoz.db.models import AssistantMessage, AssistantSession, Board
@@ -363,7 +363,8 @@ def _iter_chat_events_body(
         final_model = round_model
         record_assistant_usage(
             session.workspace,
-            prompt_tokens=estimate_tokens(user_message) + sum(estimate_tokens(m.get("content", "")) for m in llm_messages),
+            prompt_tokens=estimate_tokens(user_message)
+            + sum(estimate_tokens(m.get("content", "")) for m in llm_messages),
             completion_tokens=estimate_tokens(final_content),
         )
         break

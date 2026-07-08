@@ -17,10 +17,7 @@ from operoz.db.models import Page, Project, ProjectMember, ProjectPage, SearchEm
 @pytest.mark.unit
 class TestParseHtmlDocumentEmbeds:
     def test_extracts_src_and_title(self):
-        html = (
-            '<p>Intro</p><html-document-embed src="abc-123" title="Manual da Tradição">'
-            "</html-document-embed>"
-        )
+        html = '<p>Intro</p><html-document-embed src="abc-123" title="Manual da Tradição"></html-document-embed>'
         assert parse_html_document_embeds(html) == [("abc-123", "Manual da Tradição")]
 
     def test_self_closing_embed(self):
@@ -100,12 +97,8 @@ class TestBuildPageIndexableText:
         mock_read_asset.assert_called_once_with("asset-from-json")
 
     @patch("operoz.assistant.page_content.read_html_document_asset_text")
-    def test_includes_embedded_html_asset(
-        self, mock_read_asset, create_user, workspace, mute_assistant_auto_index
-    ):
-        mock_read_asset.return_value = (
-            "Processos da Tradicao\n\nRitual semanal e governanca operacional."
-        )
+    def test_includes_embedded_html_asset(self, mock_read_asset, create_user, workspace, mute_assistant_auto_index):
+        mock_read_asset.return_value = "Processos da Tradicao\n\nRitual semanal e governanca operacional."
         page = Page.objects.create(
             name="Manual da Tradição",
             description_html=(

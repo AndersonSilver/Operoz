@@ -111,11 +111,11 @@ export class IssueRelationStore implements IIssueRelationStore {
   };
 
   /** MobX-safe merge — lodash `set` on relationMap can miss dependency sync observers. */
-  private assignIssueRelations(issueId: string, partial: TIssueRelationIdMap) {
+  private assignIssueRelations(issueId: string, partial: Partial<TIssueRelationIdMap>) {
     this.relationMap[issueId] = {
       ...(this.relationMap[issueId] ?? {}),
       ...partial,
-    };
+    } as TIssueRelationIdMap;
   }
 
   private appendReverseRelation(relatedId: string, reverseRelatedType: TIssueRelationTypes, issueId: string) {
@@ -320,7 +320,7 @@ export class IssueRelationStore implements IIssueRelationStore {
           if (isEqual(existing, issueRelations)) continue;
 
           // Direct assignment so MobX reliably notifies observers (lodash set can miss).
-          this.relationMap[issue.id] = issueRelations;
+          this.relationMap[issue.id] = issueRelations as TIssueRelationIdMap;
         }
       });
     } catch (_e) {

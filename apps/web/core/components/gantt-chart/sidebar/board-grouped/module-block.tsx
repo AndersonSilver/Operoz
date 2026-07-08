@@ -15,6 +15,7 @@ import {
 import { getGanttScheduleDisplay } from "@/components/gantt-chart/helpers/schedule-display";
 import { useTranslation } from "@operoz/i18n";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
+import { useBoardGroupedTimelineStore } from "@/hooks/store/use-board-grouped-timeline";
 
 type Props = {
   block: IGanttBlock;
@@ -71,7 +72,13 @@ export const BoardModuleSidebarBlock = observer(function BoardModuleSidebarBlock
         <BoardGanttRowIcon
           logo={board?.gantt_module_logo_props}
           size={14}
-          fallback={<ModuleStatusIcon status={status ?? "backlog"} height="16px" width="16px" />}
+          fallback={
+            <ModuleStatusIcon
+              status={(status ?? "backlog") as import("@operoz/types").TModuleStatus}
+              height="16px"
+              width="16px"
+            />
+          }
         />
         <button
           type="button"

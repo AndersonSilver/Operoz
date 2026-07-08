@@ -42,10 +42,8 @@ export const WorkflowSchemeIssueTypeSelect = observer(function WorkflowSchemeIss
           </span>
         )
       }
-      buttonVariant="border-with-text"
       buttonClassName="text-12 w-full justify-between"
       className={className}
-      dropdownArrow
       disabled={disabled}
     >
       <CustomSelect.Option value={ALL_TYPES_VALUE}>

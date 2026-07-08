@@ -109,6 +109,8 @@ function exportColumnValue(columnId: ExportColumnId, client: TClient360Client, t
       return client.responsible_stakeholder;
     case "responsible":
       return client.project_lead?.display_name ?? "";
+    default:
+      return "";
   }
 }
 
@@ -124,6 +126,8 @@ function exportDeltaValue(client: TClient360Client, columnId: (typeof DELTA_COLU
       return compare.report_coverage_delta != null ? String(compare.report_coverage_delta) : "";
     case "delta_support_open":
       return compare.support_open_delta != null ? String(compare.support_open_delta) : "";
+    default:
+      return "";
   }
 }
 

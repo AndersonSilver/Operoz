@@ -117,9 +117,7 @@ def _vector_candidates(ctx: AssistantActorContext, query_vector: list[float]) ->
     limit = _rag_candidate_limit()
     _set_hnsw_ef_search(_rag_hnsw_ef_search())
     rows = list(
-        _base_queryset(ctx)
-        .annotate(distance=CosineDistance("embedding", query_vector))
-        .order_by("distance")[:limit]
+        _base_queryset(ctx).annotate(distance=CosineDistance("embedding", query_vector)).order_by("distance")[:limit]
     )
     return [(row, rank + 1) for rank, row in enumerate(rows)]
 

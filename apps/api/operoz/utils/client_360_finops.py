@@ -14,7 +14,6 @@ from operoz.db.models import (
     Client360ConsultantAllocation,
     Client360HarnessCostLineItem,
     Client360ProjectFinopsProfile,
-    Issue,
     WorkspaceClient360FinopsSettings,
 )
 from operoz.utils.client_360 import CLOSED_STATE_GROUPS, WeekPeriod
@@ -275,9 +274,7 @@ def build_finops_summary(clients: list[dict], settings: dict) -> dict:
     with_margin = [c for c in clients if c.get("finops", {}).get("margin_pct") is not None]
     total_cost = sum(c["finops"]["harness_cost_mtd"] for c in with_cost)
     avg_margin = (
-        round(sum(c["finops"]["margin_pct"] for c in with_margin) / len(with_margin), 1)
-        if with_margin
-        else None
+        round(sum(c["finops"]["margin_pct"] for c in with_margin) / len(with_margin), 1) if with_margin else None
     )
     alerts = sum(1 for c in clients if c.get("finops", {}).get("finops_alert"))
     top_variance = sorted(

@@ -190,7 +190,7 @@ export const BoardPlaybooksSettings = observer(function BoardPlaybooksSettings(p
         {playbooks.map((item) => (
           <Button
             key={item.id}
-            variant={item.id === selectedId ? "primary" : "neutral-primary"}
+            variant={item.id === selectedId ? "primary" : "primary"}
             size="sm"
             onClick={() => {
               setSelectedId(item.id);
@@ -240,7 +240,7 @@ export const BoardPlaybooksSettings = observer(function BoardPlaybooksSettings(p
               <TextArea
                 value={form.draft_markdown}
                 onChange={(event) => setForm((prev) => ({ ...prev, draft_markdown: event.target.value }))}
-                textareaSize="lg"
+                textAreaSize="md"
                 className="font-mono min-h-[320px]"
               />
             </label>
@@ -260,10 +260,10 @@ export const BoardPlaybooksSettings = observer(function BoardPlaybooksSettings(p
             <Button variant="primary" size="sm" onClick={handleSave} disabled={saving}>
               {t("save")}
             </Button>
-            <Button variant="neutral-primary" size="sm" onClick={handlePublish} disabled={saving}>
+            <Button variant="primary" size="sm" onClick={handlePublish} disabled={saving}>
               {t("boards.settings.playbooks.publish_button")}
             </Button>
-            <Button variant="link-danger" size="sm" onClick={handleDelete} disabled={saving}>
+            <Button variant="error-outline" size="sm" onClick={handleDelete} disabled={saving}>
               {t("boards.settings.playbooks.delete_button")}
             </Button>
           </div>

@@ -48,7 +48,7 @@ export function ArchiveBoardModal(props: Props) {
       isSubmitting={isArchiving}
       title={t("boards.archive_modal_title")}
       content={<>{t("boards.archive_modal_content", { name: board.name })}</>}
-      primaryButtonText={t("boards.archive")}
+      primaryButtonText={{ loading: t("boards.archive"), default: t("boards.archive") }}
     />
   );
 }

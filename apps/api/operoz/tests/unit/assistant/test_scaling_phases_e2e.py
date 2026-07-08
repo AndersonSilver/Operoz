@@ -3,6 +3,7 @@ Validação profunda por fase do epic Escala do Chat (Fases 1–7 + Governança)
 
 Executada via `python manage.py validate_assistant_scaling --deep`.
 """
+
 from __future__ import annotations
 
 import json
@@ -138,9 +139,7 @@ class TestPhase1Streaming:
 
     @patch("operoz.app.views.assistant.sessions.iter_chat_events")
     def test_sync_sse_endpoint_format(self, mock_iter, session_client, workspace, setup_instance):
-        create = session_client.post(
-            f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json"
-        )
+        create = session_client.post(f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json")
         session_id = create.data["id"]
 
         mock_iter.return_value = [
@@ -187,9 +186,7 @@ class TestPhase2Infrastructure:
         assert settings.ASSISTANT_MAX_CONCURRENT_LLM >= 1
 
     def test_pgbouncer_wiring_in_compose_and_settings(self):
-        settings_src = (
-            Path(__file__).resolve().parents[3] / "settings" / "common.py"
-        ).read_text(encoding="utf-8")
+        settings_src = (Path(__file__).resolve().parents[3] / "settings" / "common.py").read_text(encoding="utf-8")
         assert "DISABLE_SERVER_SIDE_CURSORS" in settings_src
         root = _repo_root_optional()
         if root is not None:
@@ -207,9 +204,7 @@ class TestPhase3AsyncQueue:
     @patch("operoz.bgtasks.assistant_chat_task.iter_chat_events")
     @patch("operoz.bgtasks.assistant_chat_task.wait_for_llm_resources", return_value=True)
     @patch("operoz.bgtasks.assistant_chat_task.release_llm_slot")
-    def test_celery_job_publishes_stream_events_until_done(
-        self, _release, _wait, mock_iter, create_user, workspace
-    ):
+    def test_celery_job_publishes_stream_events_until_done(self, _release, _wait, mock_iter, create_user, workspace):
         WorkspaceMember.objects.get_or_create(
             workspace=workspace, member=create_user, defaults={"role": ROLE.ADMIN.value}
         )
@@ -222,13 +217,15 @@ class TestPhase3AsyncQueue:
             status=AssistantChatJob.STATUS_QUEUED,
         )
 
-        mock_iter.return_value = iter([
-            {"type": "token", "content": "async"},
-            {
-                "type": "done",
-                "message": {"content": "async ok", "role": "assistant"},
-            },
-        ])
+        mock_iter.return_value = iter(
+            [
+                {"type": "token", "content": "async"},
+                {
+                    "type": "done",
+                    "message": {"content": "async ok", "role": "assistant"},
+                },
+            ]
+        )
 
         result = run_assistant_chat_job_task.run(str(job.id))
         assert result["ok"] is True
@@ -251,10 +248,10 @@ class TestPhase3AsyncQueue:
         assert types == ["queued", "token", "done"]
 
     @patch("operoz.app.views.assistant.sessions.enqueue_chat_job_safe")
-    def test_async_chat_returns_202_with_job_id(self, mock_enqueue, session_client, workspace, create_user, setup_instance):
-        create = session_client.post(
-            f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json"
-        )
+    def test_async_chat_returns_202_with_job_id(
+        self, mock_enqueue, session_client, workspace, create_user, setup_instance
+    ):
+        create = session_client.post(f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json")
         session_id = create.data["id"]
         session = AssistantSession.objects.get(pk=session_id)
         job = AssistantChatJob.objects.create(
@@ -299,9 +296,7 @@ class TestPhase4RagOptimization:
         WorkspaceMember.objects.get_or_create(
             workspace=workspace, member=create_user, defaults={"role": ROLE.ADMIN.value}
         )
-        session = AssistantSession.objects.create(
-            workspace=workspace, user=create_user, context={"board_slug": "b1"}
-        )
+        session = AssistantSession.objects.create(workspace=workspace, user=create_user, context={"board_slug": "b1"})
         mock_rag.return_value = [
             RetrievedChunk(
                 embedding_id="1",
@@ -392,9 +387,7 @@ class TestPhase5ConcurrencyProtection:
         job.refresh_from_db()
         assert job.status == AssistantChatJob.STATUS_FAILED
         types = _job_event_types(str(job.id))
-        assert "llm_wait_timeout" in str(types) or any(
-            t == "error" for t in types
-        )
+        assert "llm_wait_timeout" in str(types) or any(t == "error" for t in types)
 
 
 # ---------------------------------------------------------------------------
@@ -405,10 +398,10 @@ class TestPhase5ConcurrencyProtection:
 @pytest.mark.django_db
 class TestPhase6FrontendContract:
     @patch("operoz.app.views.assistant.sessions.enqueue_chat_job_safe")
-    def test_rate_limit_response_includes_retry_after_header(self, mock_enqueue, session_client, workspace, setup_instance):
-        create = session_client.post(
-            f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json"
-        )
+    def test_rate_limit_response_includes_retry_after_header(
+        self, mock_enqueue, session_client, workspace, setup_instance
+    ):
+        create = session_client.post(f"/api/workspaces/{workspace.slug}/assistant/sessions/", {}, format="json")
         session_id = create.data["id"]
         mock_enqueue.side_effect = AssistantServiceError("user_rate_limit", "Limite", retry_after=45)
 
@@ -422,7 +415,9 @@ class TestPhase6FrontendContract:
         assert response.data["error"] == "user_rate_limit"
 
     @patch("operoz.app.views.assistant.sessions.iter_job_events")
-    def test_job_stream_endpoint_requires_auth_and_ownership(self, mock_iter, session_client, workspace, create_user, setup_instance):
+    def test_job_stream_endpoint_requires_auth_and_ownership(
+        self, mock_iter, session_client, workspace, create_user, setup_instance
+    ):
         session = AssistantSession.objects.create(workspace=workspace, user=create_user, context={})
         job = AssistantChatJob.objects.create(
             session=session,
@@ -430,10 +425,12 @@ class TestPhase6FrontendContract:
             message="x",
             status=AssistantChatJob.STATUS_QUEUED,
         )
-        mock_iter.return_value = iter([
-            {"type": "queue_update", "queue_position": 2, "estimated_wait_seconds": 30},
-            {"type": "done", "message": {"content": "x", "role": "assistant"}},
-        ])
+        mock_iter.return_value = iter(
+            [
+                {"type": "queue_update", "queue_position": 2, "estimated_wait_seconds": 30},
+                {"type": "done", "message": {"content": "x", "role": "assistant"}},
+            ]
+        )
 
         url = f"/api/workspaces/{workspace.slug}/assistant/chat/jobs/{job.id}/stream/"
         response = session_client.get(url, HTTP_ACCEPT="text/event-stream")

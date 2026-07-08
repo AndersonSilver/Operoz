@@ -44,16 +44,24 @@ export function IdentifierText(props: TIdentifierTextProps) {
 
   return (
     <Tooltip tooltipContent="Click to copy" disabled={!enableClickToCopyIdentifier} position="top">
-      <button
-        type="button"
+      <span
+        role={enableClickToCopyIdentifier ? "button" : undefined}
+        tabIndex={enableClickToCopyIdentifier ? 0 : undefined}
         className={cn("text-12 font-medium whitespace-nowrap text-tertiary", textSizeClassName, variantClassName, {
           "cursor-pointer": enableClickToCopyIdentifier,
+          "cursor-default": !enableClickToCopyIdentifier,
         })}
-        onClick={handleCopyIssueIdentifier}
-        disabled={!enableClickToCopyIdentifier}
+        onClick={enableClickToCopyIdentifier ? handleCopyIssueIdentifier : undefined}
+        onKeyDown={
+          enableClickToCopyIdentifier
+            ? (e) => {
+                if (e.key === "Enter" || e.key === " ") handleCopyIssueIdentifier();
+              }
+            : undefined
+        }
       >
         {identifier}
-      </button>
+      </span>
     </Tooltip>
   );
 }

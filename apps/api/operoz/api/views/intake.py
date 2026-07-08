@@ -32,8 +32,6 @@ from operoz.utils.support_ticket import (
     build_delete_audit_payload,
     validate_delete_reason,
 )
-from operoz.app.serializers import IntakeIssueSerializer
-from operoz.bgtasks.issue_activities_task import issue_activity
 from .base import BaseAPIView
 from operoz.db.models.intake import SourceType
 from operoz.utils.openapi import (
@@ -118,9 +116,9 @@ class IntakeIssueListCreateAPIEndpoint(BaseAPIView):
         return self.paginate(
             request=request,
             queryset=(issue_queryset),
-            on_results=lambda intake_issues: IntakeIssueSerializer(
-                intake_issues, many=True, fields=self.fields, expand=self.expand
-            ).data,
+            on_results=lambda intake_issues: (
+                IntakeIssueSerializer(intake_issues, many=True, fields=self.fields, expand=self.expand).data
+            ),
         )
 
     @intake_docs(

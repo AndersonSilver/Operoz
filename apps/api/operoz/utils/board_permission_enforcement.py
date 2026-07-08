@@ -23,15 +23,13 @@ def permission_granted(keys: set[str], permission_key: str) -> bool:
 def user_has_explicit_board_roles(board_id, user_id) -> bool:
     if not board_id or not user_id:
         return False
-    return BoardMemberRole.objects.filter(
-        board_id=board_id, user_id=user_id, deleted_at__isnull=True
-    ).exists()
+    return BoardMemberRole.objects.filter(board_id=board_id, user_id=user_id, deleted_at__isnull=True).exists()
 
 
 def get_effective_board_permission_keys(board_id, user_id) -> set[str] | None:
     """
     None = utilizador sem funções explícitas no board → manter permissões de projeto/workspace.
-  """
+    """
     if not board_id or not user_id:
         return None
     if not user_has_explicit_board_roles(board_id, user_id):
@@ -80,9 +78,7 @@ def deny_for_issue_patch(user: User, project: Project, data: dict) -> Response |
     return None
 
 
-def deny_for_comment_mutation(
-    user: User, project: Project, *, actor_id, is_delete: bool
-) -> Response | None:
+def deny_for_comment_mutation(user: User, project: Project, *, actor_id, is_delete: bool) -> Response | None:
     if str(actor_id) == str(user.id):
         key = "items.comments.delete_own" if is_delete else "items.comments.edit_own"
     else:

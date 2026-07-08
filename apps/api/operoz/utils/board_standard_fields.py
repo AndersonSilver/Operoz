@@ -16,11 +16,7 @@ STANDARD_FIELD_DEFAULTS: list[tuple[str, float]] = [
 def ensure_board_standard_fields(board: Board, user=None) -> None:
     """Garante os campos padrão do card no board (não apagáveis do workspace)."""
     for field_key, sort_order in STANDARD_FIELD_DEFAULTS:
-        existing = (
-            BoardStandardField.objects.filter(board=board, field_key=field_key)
-            .order_by("-created_at")
-            .first()
-        )
+        existing = BoardStandardField.objects.filter(board=board, field_key=field_key).order_by("-created_at").first()
         if existing:
             if existing.deleted_at is not None:
                 existing.deleted_at = None

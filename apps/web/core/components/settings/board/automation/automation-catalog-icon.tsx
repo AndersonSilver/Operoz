@@ -45,9 +45,10 @@ export function AutomationCatalogIcon({ name, className }: Props) {
   return <Icon className={clsx("shrink-0", className)} aria-hidden />;
 }
 
-export const AUTOMATION_KIND_DEFAULT_ICON: Record<"trigger" | "filter" | "action" | "decision", string> = {
+export const AUTOMATION_KIND_DEFAULT_ICON: Record<"trigger" | "filter" | "action" | "decision" | "parallel", string> = {
   trigger: "bolt",
   filter: "circle-dot",
   action: "play",
   decision: "git-branch",
+  parallel: "corner-down-right",
 };

@@ -888,12 +888,8 @@ class IssueListDetailSerializer(serializers.Serializer):
 
         # Handle expanded fields — prefer prefetched cache (Gantt list) with expand fallback.
         prefetched = getattr(instance, "_prefetched_objects_cache", {})
-        include_relations = "issue_relation" in prefetched or (
-            self.expand and "issue_relation" in self.expand
-        )
-        include_related = "issue_related" in prefetched or (
-            self.expand and "issue_related" in self.expand
-        )
+        include_relations = "issue_relation" in prefetched or (self.expand and "issue_relation" in self.expand)
+        include_related = "issue_related" in prefetched or (self.expand and "issue_related" in self.expand)
 
         if include_relations:
             relations = []

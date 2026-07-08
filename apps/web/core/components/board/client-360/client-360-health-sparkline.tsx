@@ -19,7 +19,7 @@ type Props = {
 };
 
 export const Client360HealthSparkline = memo(function Client360HealthSparkline({ projectId, className }: Props) {
-  const { t, i18n } = useTranslation();
+  const { t, currentLocale } = useTranslation();
   const { requestHistory, getHistory, revision } = useClient360HealthHistory();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ export const Client360HealthSparkline = memo(function Client360HealthSparkline({
   }
 
   const tooltipRows = [...entry.history].reverse().map((item) => ({
-    label: formatClient360SparklineWeekLabel(item.period_start, i18n.language),
+    label: formatClient360SparklineWeekLabel(item.period_start, currentLocale),
     score: item.health_score,
   }));
 

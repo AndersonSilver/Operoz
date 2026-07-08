@@ -138,7 +138,7 @@ export function AutomationRulesListToolbar(props: Props) {
           })}
         </p>
         {hasActiveFilters && (
-          <Button variant="link-neutral" size="sm" onClick={onClear}>
+          <Button variant="link" size="sm" onClick={onClear}>
             {t("boards.settings.automation.rules_list.filters.clear")}
           </Button>
         )}

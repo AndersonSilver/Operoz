@@ -3,7 +3,6 @@ from __future__ import annotations
 import hashlib
 import json
 from datetime import date, timedelta
-from typing import Any
 
 from django.utils import timezone
 
@@ -100,11 +99,7 @@ def quarter_key_from_date(d: date) -> str:
 def build_weekly_briefing_facts(*, summary: dict, clients: list[dict], period: dict) -> dict:
     critical = [c for c in clients if c.get("health") == "critical"]
     warning = [c for c in clients if c.get("health") == "warning"]
-    missing_report = [
-        c
-        for c in clients
-        if (c.get("status_report") or {}).get("coverage") in ("missing", "partial")
-    ]
+    missing_report = [c for c in clients if (c.get("status_report") or {}).get("coverage") in ("missing", "partial")]
     return {
         "period": period,
         "summary": summary,
@@ -147,8 +142,7 @@ def generate_weekly_briefing_md(facts: dict) -> str:
         lines.append("## Top riscos (factos)")
         for row in top_critical:
             lines.append(
-                f"- **{row['name']}** — score {row.get('health_score')}, "
-                f"{row.get('overdue', 0)} cards atrasados"
+                f"- **{row['name']}** — score {row.get('health_score')}, {row.get('overdue', 0)} cards atrasados"
             )
         lines.append("")
     report_gaps = facts.get("report_gaps") or []
@@ -488,8 +482,7 @@ def retrieve_client_360_history(*, project_id, weeks: int = 8) -> dict:
         Client360HealthSnapshot.objects.filter(
             project_id=project_id,
             deleted_at__isnull=True,
-        )
-        .order_by("-period_start")[:weeks]
+        ).order_by("-period_start")[:weeks]
     )
     rows.reverse()
     if not rows:

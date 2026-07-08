@@ -90,7 +90,8 @@ export const ModuleIssuesHeader = observer(function ModuleIssuesHeader() {
   }, [moduleId, issuesFilter?.scopedModuleIds]);
 
   const handleModuleScopeChange = useCallback(
-    (ids: string[]) => {
+    (ids: string[] | string) => {
+      if (typeof ids === "string") ids = [ids];
       if (!workspaceSlug || !projectId || !moduleId || ids.length === 0) return;
 
       const uniqueIds = [...new Set(ids)];

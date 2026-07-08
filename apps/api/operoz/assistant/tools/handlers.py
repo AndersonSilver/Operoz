@@ -251,15 +251,19 @@ def handle_search_pages(ctx: AssistantActorContext, args: dict[str, Any]) -> Too
     project_id = args.get("project_id")
     limit = _clamp_limit(args.get("limit"))
 
-    pp_qs = ProjectPage.objects.filter(
-        project__workspace_id=ctx.workspace.id,
-        project__project_projectmember__member=ctx.user,
-        project__project_projectmember__is_active=True,
-    ).filter(
-        Q(page__name__icontains=query)
-        | Q(page__description_stripped__icontains=query)
-        | Q(page__description_html__icontains=query),
-    ).select_related("page", "project")
+    pp_qs = (
+        ProjectPage.objects.filter(
+            project__workspace_id=ctx.workspace.id,
+            project__project_projectmember__member=ctx.user,
+            project__project_projectmember__is_active=True,
+        )
+        .filter(
+            Q(page__name__icontains=query)
+            | Q(page__description_stripped__icontains=query)
+            | Q(page__description_html__icontains=query),
+        )
+        .select_related("page", "project")
+    )
     if project_id:
         pp_qs = pp_qs.filter(project_id=project_id)
     elif ctx.project_id:
@@ -396,9 +400,7 @@ def handle_get_prd_review_summary(ctx: AssistantActorContext, args: dict[str, An
     if page and not can_access_page(ctx, page, pid):
         return ToolResult(ok=False, error="review_session_not_found")
 
-    comments = list(
-        PageReviewComment.objects.filter(session=session).order_by("created_at")
-    )
+    comments = list(PageReviewComment.objects.filter(session=session).order_by("created_at"))
     summary_items: list[dict[str, Any]] = []
     citations: list[dict[str, Any]] = []
     for comment in comments:
@@ -846,7 +848,10 @@ def register_all_tools() -> None:
             "type": "object",
             "properties": {
                 "run_id": {"type": "string", "description": "UUID do run (opcional se rule_name informado)"},
-                "rule_name": {"type": "string", "description": "Nome parcial da regra para localizar o run mais recente"},
+                "rule_name": {
+                    "type": "string",
+                    "description": "Nome parcial da regra para localizar o run mais recente",
+                },
                 "board_slug": {"type": "string"},
             },
             "required": [],

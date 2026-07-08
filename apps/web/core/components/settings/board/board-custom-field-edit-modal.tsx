@@ -66,7 +66,7 @@ export function BoardCustomFieldEditModal(props: Props) {
         }
         payload.settings = { options: trimmedOptions };
       }
-      await updateWorkspaceCustomField(workspaceSlug, boardSlug, boardField.custom_field_id, payload);
+      await updateWorkspaceCustomField(workspaceSlug, boardSlug, boardField.custom_field_id!, payload);
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("boards.settings.fields.edit_success_title"),

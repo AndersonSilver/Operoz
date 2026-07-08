@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from operoz.db.models import (
-    Client360ConsultantAllocation,
     Client360ProjectFinopsProfile,
     WorkspaceClient360FinopsSettings,
 )

@@ -13,7 +13,16 @@ from .workspace_config import JiraOpsCredentials
 
 logger = logging.getLogger(__name__)
 
-BASE_SEARCH_FIELDS = ["summary", "description", "status", "issuetype", "parent", "priority", "attachment", "resolutiondate"]
+BASE_SEARCH_FIELDS = [
+    "summary",
+    "description",
+    "status",
+    "issuetype",
+    "parent",
+    "priority",
+    "attachment",
+    "resolutiondate",
+]
 
 DUE_DATE_NAME_HINTS = (
     "due date",
@@ -146,9 +155,9 @@ class JiraOpsClient:
         return issues
 
     def fetch_epics(self) -> list[dict]:
-        jql = f'project = {self.project_key} AND issuetype = Projeto'
+        jql = f"project = {self.project_key} AND issuetype = Projeto"
         return self.search_all(jql)
 
     def fetch_issues(self) -> list[dict]:
-        jql = f'project = {self.project_key} AND issuetype != Projeto'
+        jql = f"project = {self.project_key} AND issuetype != Projeto"
         return self.search_all(jql)

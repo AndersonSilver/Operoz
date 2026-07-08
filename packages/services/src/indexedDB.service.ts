@@ -12,7 +12,7 @@ export abstract class IndexedDBService {
     return new Promise((resolve, reject) => {
       const request = indexedDB.open(this.dbName, this.version);
 
-      request.onerror = () => reject(request.error);
+      request.addEventListener("error", () => reject(request.error));
       request.onsuccess = () => {
         this.db = request.result;
         resolve();
@@ -43,7 +43,7 @@ export abstract class IndexedDBService {
       });
 
       transaction.oncomplete = () => resolve();
-      transaction.onerror = () => reject(transaction.error);
+      transaction.addEventListener("error", () => reject(transaction.error));
     });
   }
 
@@ -56,7 +56,7 @@ export abstract class IndexedDBService {
     return new Promise((resolve, reject) => {
       const request = store.getAll();
       request.onsuccess = () => resolve(request.result);
-      request.onerror = () => reject(request.error);
+      request.addEventListener("error", () => reject(request.error));
     });
   }
 }

@@ -3,7 +3,7 @@ import { Link } from "react-router";
 import { ExternalLink } from "lucide-react";
 // plane imports
 import { useTranslation } from "@operoz/i18n";
-import { Button } from "@operoz/propel/button";
+import { cn } from "@operoz/utils";
 // components
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
@@ -60,12 +60,16 @@ function FeaturesSupportSettingsPage({ params }: Route.ComponentProps) {
               <p className="mt-1 text-13 leading-relaxed text-secondary">
                 {t("project_settings.features.support.board_link_description")}
               </p>
-              <Button variant="link-neutral" size="sm" className="mt-3 px-0" asChild>
-                <Link to={`/${workspaceSlug}/settings/boards/${boardSlug}/sustentacao/`}>
-                  {t("project_settings.features.support.board_link_cta")}
-                  <ExternalLink className="size-3.5" />
-                </Link>
-              </Button>
+              <Link
+                to={`/${workspaceSlug}/settings/boards/${boardSlug}/sustentacao/`}
+                className={cn(
+                  "mt-3 inline-flex items-center gap-1 text-caption-md-medium",
+                  "text-link-primary underline hover:text-link-primary-hover"
+                )}
+              >
+                {t("project_settings.features.support.board_link_cta")}
+                <ExternalLink className="size-3.5" />
+              </Link>
             </div>
           ) : null}
         </div>

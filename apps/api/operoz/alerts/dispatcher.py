@@ -19,7 +19,7 @@ from operoz.db.models import AlertLog, AlertRule
 from operoz.utils.host import frontend_base_url
 
 if TYPE_CHECKING:
-    from operoz.db.models import IntakeIssue, Issue, User
+    from operoz.db.models import Issue, User
 
 
 SUPPORT_ALERT_TYPES = frozenset(

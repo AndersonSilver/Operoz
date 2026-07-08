@@ -41,7 +41,9 @@ class BoardSupportQueueDetailEndpoint(BaseAPIView):
     @allow_workspace_or_board_admin
     def patch(self, request, slug, board_slug, queue_id):
         queue = self._get_queue(slug, board_slug, queue_id)
-        serializer = BoardSupportQueueWriteSerializer(queue, data=request.data, partial=True, context={"board": queue.board})
+        serializer = BoardSupportQueueWriteSerializer(
+            queue, data=request.data, partial=True, context={"board": queue.board}
+        )
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         queue = serializer.save(updated_by=request.user)

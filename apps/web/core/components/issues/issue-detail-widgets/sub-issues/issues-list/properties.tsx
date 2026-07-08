@@ -97,6 +97,7 @@ export const SubIssuesListItemStateCell = observer(function SubIssuesListItemSta
     <WithDisplayPropertiesHOC displayProperties={displayProperties} displayPropertyKey="state">
       <div className="flex h-7 items-center justify-start" onClick={handleEventPropagation}>
         <StateDropdown
+          buttonVariant="border-with-text"
           value={issue.state_id}
           projectId={issue.project_id ?? undefined}
           onChange={(val) =>

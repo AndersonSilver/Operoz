@@ -128,9 +128,7 @@ def ensure_operoz_custom_fields_for_jira(
         operoz_fields[spec.operoz_name] = custom_field
 
         board_link = (
-            BoardCustomField.objects.filter(board=board, custom_field=custom_field)
-            .order_by("-created_at")
-            .first()
+            BoardCustomField.objects.filter(board=board, custom_field=custom_field).order_by("-created_at").first()
         )
         if board_link and board_link.deleted_at is None:
             if not board_link.is_enabled:

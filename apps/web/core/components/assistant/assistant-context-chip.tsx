@@ -62,7 +62,7 @@ function ContextSelect(props: ContextSelectProps) {
   return (
     <CustomSelect
       value={value}
-      onChange={(nextValue) => onChange(String(nextValue))}
+      onChange={(nextValue: string) => onChange(String(nextValue))}
       placement="bottom-start"
       maxHeight="md"
       className="!relative !block !w-full !min-w-0 !flex-shrink"

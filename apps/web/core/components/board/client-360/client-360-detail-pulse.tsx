@@ -132,7 +132,7 @@ export function Client360DetailPulse({ workspaceSlug, projectId, period, data, s
               projectId={projectId}
               data={data}
               showActions={showActions}
-              showHealth={showHealth}
+              showHealth={showHealth ?? false}
               actions={actions}
               actionsLoading={actionsLoading}
               playbooks={playbooks}

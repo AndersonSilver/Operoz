@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import pytest
 
 from operoz.utils.client_360_period_compare import (
     build_client_period_compare,
@@ -19,8 +18,22 @@ class TestReportCoverageDelta:
 
 class TestComputeSummaryDelta:
     def test_overdue_improvement(self):
-        current = {"total_overdue": 5, "report_missing": 2, "health_critical": 1, "health_warning": 0, "total_support_open": 0, "health_score_alert": 0}
-        previous = {"total_overdue": 8, "report_missing": 2, "health_critical": 1, "health_warning": 0, "total_support_open": 0, "health_score_alert": 0}
+        current = {
+            "total_overdue": 5,
+            "report_missing": 2,
+            "health_critical": 1,
+            "health_warning": 0,
+            "total_support_open": 0,
+            "health_score_alert": 0,
+        }
+        previous = {
+            "total_overdue": 8,
+            "report_missing": 2,
+            "health_critical": 1,
+            "health_warning": 0,
+            "total_support_open": 0,
+            "health_score_alert": 0,
+        }
         delta = compute_summary_delta(current, previous)
         assert delta["total_overdue"] == -3
         assert delta["report_missing"] == 0

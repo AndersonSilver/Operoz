@@ -49,9 +49,7 @@ def test_index_entity_task_retries_on_rate_limit(mock_index_entity):
     task.max_retries = 8
 
     with patch.object(task, "retry", side_effect=AssertionError("should retry")) as mock_retry:
-        mock_retry.side_effect = lambda **kwargs: (_ for _ in ()).throw(
-            type("Retry", (Exception,), {})()
-        )
+        mock_retry.side_effect = lambda **kwargs: (_ for _ in ()).throw(type("Retry", (Exception,), {})())
         with pytest.raises(Exception):
             task.run("page", "00000000-0000-4000-8000-000000000001", "00000000-0000-4000-8000-000000000002")
 
@@ -127,7 +125,10 @@ def test_index_entity_preserves_embeddings_on_rate_limit(
     with pytest.raises(EmbeddingRateLimitError):
         index_entity(SearchEmbedding.ENTITY_ISSUE, str(issue.id))
 
-    assert SearchEmbedding.objects.filter(
-        entity_type=SearchEmbedding.ENTITY_ISSUE,
-        entity_id=issue.id,
-    ).count() == 1
+    assert (
+        SearchEmbedding.objects.filter(
+            entity_type=SearchEmbedding.ENTITY_ISSUE,
+            entity_id=issue.id,
+        ).count()
+        == 1
+    )

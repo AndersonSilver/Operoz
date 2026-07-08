@@ -7,7 +7,16 @@ import pytest
 from django.utils import timezone
 from rest_framework import status
 
-from operoz.db.models import Page, PageReviewComment, PageReviewEvent, PageReviewInvite, PageReviewSession, Project, ProjectMember, ProjectPage
+from operoz.db.models import (
+    Page,
+    PageReviewComment,
+    PageReviewEvent,
+    PageReviewInvite,
+    PageReviewSession,
+    Project,
+    ProjectMember,
+    ProjectPage,
+)
 
 
 @pytest.mark.contract
@@ -136,9 +145,7 @@ class TestPrdReviewGuestAPI:
         assert response.status_code == status.HTTP_200_OK
         mock_notify.assert_called_once_with(str(session.id), invite.email, PageReviewSession.STATUS_APPROVED)
 
-    def test_guest_inline_comment(
-        self, api_client, workspace, workspace_board, create_user, setup_instance
-    ):
+    def test_guest_inline_comment(self, api_client, workspace, workspace_board, create_user, setup_instance):
         _, _, session, invite = self._setup_page(workspace, workspace_board, create_user)
 
         response = api_client.post(
@@ -157,9 +164,7 @@ class TestPrdReviewGuestAPI:
         assert comment.quote == "Texto selecionado pelo cliente"
         assert comment.body == "Ajustar este trecho"
 
-    def test_guest_delete_comment(
-        self, api_client, workspace, workspace_board, create_user, setup_instance
-    ):
+    def test_guest_delete_comment(self, api_client, workspace, workspace_board, create_user, setup_instance):
         _, _, session, invite = self._setup_page(workspace, workspace_board, create_user)
         comment = PageReviewComment.objects.create(
             session=session,
@@ -179,9 +184,7 @@ class TestPrdReviewGuestAPI:
         assert response.data["deleted"] is True
         assert not PageReviewComment.objects.filter(pk=comment.id).exists()
 
-    def test_guest_render_html_includes_sdk(
-        self, api_client, workspace, workspace_board, create_user, setup_instance
-    ):
+    def test_guest_render_html_includes_sdk(self, api_client, workspace, workspace_board, create_user, setup_instance):
         _, _, _, invite = self._setup_page(workspace, workspace_board, create_user)
 
         response = api_client.get(f"/api/guest/prd-review/{invite.token}/")
@@ -420,7 +423,7 @@ class TestPrdReviewWorkspaceAPI:
             resolved_at=timezone.now(),
             created_by=create_user,
         )
-        comment = PageReviewComment.objects.create(
+        _comment = PageReviewComment.objects.create(
             session=session,
             comment_type=PageReviewComment.TYPE_SECTION,
             section_id="sec-scope",

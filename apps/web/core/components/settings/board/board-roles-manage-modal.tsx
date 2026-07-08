@@ -113,7 +113,7 @@ export const BoardRolesManageModal = observer(function BoardRolesManageModal(pro
                       {t("boards.settings.roles.duplicate")}
                     </Button>
                     {!role.is_system && (
-                      <Button variant="danger" size="sm" onClick={() => void handleDelete(role)}>
+                      <Button variant="error-fill" size="sm" onClick={() => void handleDelete(role)}>
                         <Trash2 className="size-3.5" />
                         {t("remove")}
                       </Button>

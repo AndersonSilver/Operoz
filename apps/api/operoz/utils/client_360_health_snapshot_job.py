@@ -60,7 +60,6 @@ def compute_project_health_from_aggregates(
     report_stats: dict | None,
     health_config,
 ) -> tuple[int, str]:
-    pid = str(project.id)
     issues = issue_stats or {
         "overdue": 0,
         "support_open": 0,
@@ -152,9 +151,7 @@ def run_weekly_health_snapshots(
         for project in batch:
             pid = str(project.id)
             try:
-                health_config = (
-                    health_config_map.get(str(project.board_id)) if project.board_id else None
-                )
+                health_config = health_config_map.get(str(project.board_id)) if project.board_id else None
                 score, health = compute_project_health_from_aggregates(
                     project,
                     target_period,

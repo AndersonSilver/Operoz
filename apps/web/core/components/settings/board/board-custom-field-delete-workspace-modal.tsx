@@ -22,7 +22,7 @@ export function BoardCustomFieldDeleteWorkspaceModal(props: Props) {
   const handleDelete = async () => {
     setIsSubmitting(true);
     try {
-      await deleteWorkspaceCustomField(workspaceSlug, boardSlug, boardField.custom_field_id);
+      await deleteWorkspaceCustomField(workspaceSlug, boardSlug, boardField.custom_field_id!);
       setToast({
         type: TOAST_TYPE.SUCCESS,
         title: t("boards.settings.fields.delete_workspace_success_title"),

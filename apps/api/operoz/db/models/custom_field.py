@@ -26,9 +26,7 @@ class CustomFieldType(models.TextChoices):
 class WorkspaceCustomField(BaseModel):
     """Catálogo de campos custom do workspace (Tech4Humans BC-2)."""
 
-    workspace = models.ForeignKey(
-        "db.Workspace", on_delete=models.CASCADE, related_name="workspace_custom_fields"
-    )
+    workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="workspace_custom_fields")
     name = models.CharField(max_length=255)
     key = models.SlugField(max_length=48, db_index=True)
     description = models.TextField(blank=True, default="")
@@ -135,9 +133,7 @@ class BoardCustomField(BaseModel):
 
     board = models.ForeignKey("db.Board", on_delete=models.CASCADE, related_name="board_custom_fields")
     workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="board_custom_fields")
-    custom_field = models.ForeignKey(
-        WorkspaceCustomField, on_delete=models.CASCADE, related_name="board_custom_fields"
-    )
+    custom_field = models.ForeignKey(WorkspaceCustomField, on_delete=models.CASCADE, related_name="board_custom_fields")
     sort_order = models.FloatField(default=65535)
     is_enabled = models.BooleanField(default=True)
     form_span = models.CharField(
@@ -191,16 +187,10 @@ class ProjectCustomField(ProjectBaseModel):
 class BoardProjectFieldLayout(BaseModel):
     """Layout do formulário de Projeto (épico) por board — ordem, secção, obrigatoriedade."""
 
-    board = models.ForeignKey(
-        "db.Board", on_delete=models.CASCADE, related_name="project_field_layouts"
-    )
-    workspace = models.ForeignKey(
-        "db.Workspace", on_delete=models.CASCADE, related_name="project_field_layouts"
-    )
+    board = models.ForeignKey("db.Board", on_delete=models.CASCADE, related_name="project_field_layouts")
+    workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="project_field_layouts")
     field_source = models.CharField(max_length=16, choices=BoardProjectFieldSource.choices)
-    standard_field_key = models.CharField(
-        max_length=32, choices=ProjectStandardFieldKey.choices, null=True, blank=True
-    )
+    standard_field_key = models.CharField(max_length=32, choices=ProjectStandardFieldKey.choices, null=True, blank=True)
     custom_field = models.ForeignKey(
         WorkspaceCustomField,
         on_delete=models.CASCADE,
@@ -245,9 +235,7 @@ class BoardProjectFieldLayout(BaseModel):
 class ProjectCustomFieldValue(ProjectBaseModel):
     """Valor de um campo custom num projeto (épico)."""
 
-    custom_field = models.ForeignKey(
-        WorkspaceCustomField, on_delete=models.CASCADE, related_name="project_values"
-    )
+    custom_field = models.ForeignKey(WorkspaceCustomField, on_delete=models.CASCADE, related_name="project_values")
     value = models.JSONField(default=dict, blank=True)
 
     class Meta:
@@ -270,9 +258,7 @@ class IssueCustomFieldValue(ProjectBaseModel):
     """Valor de um campo custom num card."""
 
     issue = models.ForeignKey("db.Issue", on_delete=models.CASCADE, related_name="custom_field_values")
-    custom_field = models.ForeignKey(
-        WorkspaceCustomField, on_delete=models.CASCADE, related_name="issue_values"
-    )
+    custom_field = models.ForeignKey(WorkspaceCustomField, on_delete=models.CASCADE, related_name="issue_values")
     value = models.JSONField(default=dict, blank=True)
 
     class Meta:

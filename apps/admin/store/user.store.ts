@@ -15,7 +15,7 @@ export interface IUserStore {
   currentUser: IUser | undefined;
   // fetch actions
   hydrate: (data: any) => void;
-  fetchCurrentUser: () => Promise<IUser>;
+  fetchCurrentUser: () => Promise<IUser | undefined>;
   reset: () => void;
   signOut: () => void;
 }

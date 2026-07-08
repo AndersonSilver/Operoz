@@ -27,10 +27,7 @@ class PageReviewSessionListCreateEndpoint(BaseAPIView):
         if not page:
             return Response({"error": "Page not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        sessions = (
-            PageReviewSession.objects.filter(page=page, project_id=project_id)
-            .order_by("-created_at")[:50]
-        )
+        sessions = PageReviewSession.objects.filter(page=page, project_id=project_id).order_by("-created_at")[:50]
         return Response([serialize_review_session(s) for s in sessions], status=status.HTTP_200_OK)
 
     def post(self, request, slug, project_id, page_id):
@@ -120,8 +117,7 @@ class PageReviewSessionDetailEndpoint(BaseAPIView):
             for e in PageReviewEvent.objects.filter(session=session).order_by("created_at")
         ]
         invites = [
-            serialize_review_invite(i)
-            for i in PageReviewInvite.objects.filter(session=session).order_by("-created_at")
+            serialize_review_invite(i) for i in PageReviewInvite.objects.filter(session=session).order_by("-created_at")
         ]
 
         payload = serialize_review_session(session)

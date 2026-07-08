@@ -36,9 +36,9 @@ export const useGroupIssuesDragNDrop = (
     issue: { getIssueById },
   } = useIssueDetail();
   const { updateIssue } = useIssuesActions(storeType);
-  const {
-    issues: { getIssueIds, addCycleToIssue, removeCycleFromIssue, changeModulesInIssue, moveIssueBetweenGroups },
-  } = useIssues(storeType);
+  const issuesStore = useIssues(storeType).issues as import("@/store/issue/helpers/base-issues.store").IBaseIssuesStore;
+  const { getIssueIds, addCycleToIssue, removeCycleFromIssue, changeModulesInIssue, moveIssueBetweenGroups } =
+    issuesStore;
 
   const effectiveGroupBy = storeType === EIssuesStoreType.MODULE ? ("state" as TIssueGroupByOptions) : groupBy;
 

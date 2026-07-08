@@ -11,7 +11,7 @@ from operoz.app.serializers.board_automation import (
     BoardAutomationRunSerializer,
 )
 from operoz.app.views.base import BaseAPIView
-from operoz.automation.catalog import catalog_for_board, ensure_catalog
+from operoz.automation.catalog import catalog_for_board
 from operoz.automation.domain import DomainEvent
 from dataclasses import replace
 
@@ -231,9 +231,7 @@ class BoardAutomationDryRunEndpoint(BaseAPIView):
                             if issue is not None:
                                 result["test_issue_id"] = str(issue.id)
                                 result["test_issue_name"] = issue.name
-                            run = persist_automation_run(
-                                rule, event, graph, result, dry_run=not live
-                            )
+                            run = persist_automation_run(rule, event, graph, result, dry_run=not live)
                             if run is not None:
                                 result["run_id"] = str(run.id)
                             if not live:

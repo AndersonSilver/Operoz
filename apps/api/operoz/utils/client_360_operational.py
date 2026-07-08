@@ -13,7 +13,6 @@ from operoz.db.models import (
     BoardClient360IntakeType,
     Issue,
     IssueRelation,
-    Label,
     Module,
     ModuleIssue,
 )
@@ -450,7 +449,6 @@ def build_module_delivery_heatmap(
     pending_filter = ~Q(state__group__in=CLOSED_STATE_GROUPS)
     module_ids = [row["module_id"] for row in module_rows if row.get("module_id")]
     overdue_by_module: dict[str, int] = {}
-    intake_by_module: dict[str, int] = {}
 
     if module_ids:
         links = ModuleIssue.objects.filter(
@@ -471,7 +469,6 @@ def build_module_delivery_heatmap(
             if link["issue_id"] in overdue_issue_ids:
                 overdue_by_module[mid] = overdue_by_module.get(mid, 0) + 1
 
-    metrics = ("report", "overdue", "intake")
     heatmap = []
     for row in module_rows:
         mid = row.get("module_id")

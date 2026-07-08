@@ -107,7 +107,7 @@ function CustomMenu(props: ICustomMenuDropdownProps) {
     strategy: "fixed",
     modifiers: [
       { name: "offset", options: { offset: [0, 4] } },
-      { name: "preventOverflow", options: { padding: 8, boundary: "viewport", rootBoundary: "viewport" } },
+      { name: "preventOverflow", options: { padding: 8, rootBoundary: "viewport" } },
       {
         name: "flip",
         options: { fallbackPlacements: ["top-end", "top-start", "bottom-start", "bottom-end"] },

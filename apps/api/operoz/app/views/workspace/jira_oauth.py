@@ -28,7 +28,6 @@ from operoz.utils.jira_ops.workspace_config import (
     credentials_from_config,
     get_or_create_config,
     get_workspace_credentials,
-    workspace_jira_configured,
 )
 
 
@@ -72,9 +71,7 @@ class JiraOpsOAuthCallbackEndpoint(BaseAPIView):
 
         if error or not state or not code:
             slug = workspace_slug_from_oauth_state(state or "")
-            return HttpResponseRedirect(
-                _settings_redirect(slug, jira_error=error or "missing_code")
-            )
+            return HttpResponseRedirect(_settings_redirect(slug, jira_error=error or "missing_code"))
 
         payload = pop_oauth_state(state)
         if not payload:
@@ -131,10 +128,7 @@ class WorkspaceJiraOpsOAuthSitesEndpoint(BaseAPIView):
                     }
                 )
             return Response({"sites": [], "pending": False})
-        sites = [
-            {"id": r.get("id"), "name": r.get("name"), "url": r.get("url")}
-            for r in pending.get("resources", [])
-        ]
+        sites = [{"id": r.get("id"), "name": r.get("name"), "url": r.get("url")} for r in pending.get("resources", [])]
         return Response({"sites": sites, "pending": True})
 
 
@@ -196,10 +190,6 @@ class WorkspaceJiraOpsJiraProjectsEndpoint(BaseAPIView):
                 status=status.HTTP_400_BAD_REQUEST,
             )
         projects = fetch_jira_projects(creds.api_token, creds.cloud_id)
-        items = [
-            {"key": p.get("key"), "name": p.get("name"), "id": p.get("id")}
-            for p in projects
-            if p.get("key")
-        ]
+        items = [{"key": p.get("key"), "name": p.get("name"), "id": p.get("id")} for p in projects if p.get("key")]
         items.sort(key=lambda x: (x.get("name") or "").lower())
         return Response({"projects": items})

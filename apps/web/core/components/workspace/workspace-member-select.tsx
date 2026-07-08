@@ -40,7 +40,7 @@ export const WorkspaceMemberSelect = observer(function WorkspaceMemberSelect(pro
     if (!membership) return null;
     const member = memberMap?.[membership.member];
     if (!member) return null;
-    return { member };
+    return { member, role: membership.role };
   };
 
   const memberIds = getWorkspaceMemberIds(workspaceSlug);

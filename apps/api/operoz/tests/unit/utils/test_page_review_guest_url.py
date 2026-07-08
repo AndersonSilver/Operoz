@@ -7,10 +7,7 @@ class TestPrdReviewGuestUrl:
     def test_guest_url_prefers_app_base_url(self, settings):
         settings.WEB_URL = "http://localhost:8000"
         settings.APP_BASE_URL = "http://localhost:3000"
-        assert (
-            build_prd_review_guest_url("operoz_prd_test")
-            == "http://localhost:3000/guest/prd-review/operoz_prd_test"
-        )
+        assert build_prd_review_guest_url("operoz_prd_test") == "http://localhost:3000/guest/prd-review/operoz_prd_test"
 
     def test_guest_url_falls_back_to_web_url(self, settings):
         settings.WEB_URL = "https://app.operoz.test"

@@ -2,7 +2,7 @@ import { API_BASE_URL } from "@operoz/constants";
 import type {
   IBoardCustomField,
   IBoardProjectFieldLayout,
-  IIssueCustomFieldValuePayload,
+  TIssueCustomFieldValuePayload,
   IProjectCustomFieldLite,
   IProjectFormLayoutResponse,
   IProjectIssueFormConfig,
@@ -141,7 +141,7 @@ export class BoardCustomFieldService extends APIService {
   async saveIssueCustomFieldValues(
     workspaceSlug: string,
     issueId: string,
-    values: IIssueCustomFieldValuePayload[]
+    values: TIssueCustomFieldValuePayload[]
   ): Promise<void> {
     return this.put(`/api/workspaces/${workspaceSlug}/issues/${issueId}/custom-fields/`, { values })
       .then(() => undefined)

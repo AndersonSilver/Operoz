@@ -188,8 +188,7 @@ class TestIndexStatus:
         page = Page.objects.create(
             name="Manual Tradição",
             description_html=(
-                '<html-document-embed src="00000000-0000-4000-8000-000000000001" '
-                'title="Manual"></html-document-embed>'
+                '<html-document-embed src="00000000-0000-4000-8000-000000000001" title="Manual"></html-document-embed>'
             ),
             workspace=workspace,
             owned_by=create_user,

@@ -1,7 +1,5 @@
 from operoz.utils.jira_ops.import_service import (
-    infer_module_status_from_linked_issues,
     resolve_module_status,
-    resolve_module_status_for_module,
 )
 
 

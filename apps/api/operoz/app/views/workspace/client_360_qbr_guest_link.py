@@ -60,7 +60,9 @@ class WorkspaceClient360QbrGuestLinkViewSet(BaseViewSet):
         if period_err:
             return Response({"error": period_err}, status=status.HTTP_400_BAD_REQUEST)
 
-        weeks, weeks_err = parse_qbr_weeks(str(request.data.get("weeks")) if request.data.get("weeks") is not None else None)
+        weeks, weeks_err = parse_qbr_weeks(
+            str(request.data.get("weeks")) if request.data.get("weeks") is not None else None
+        )
         if weeks_err:
             return Response({"error": weeks_err}, status=status.HTTP_400_BAD_REQUEST)
 

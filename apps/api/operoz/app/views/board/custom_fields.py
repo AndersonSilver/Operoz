@@ -41,9 +41,7 @@ class WorkspaceCustomFieldEndpoint(BaseAPIView):
     @allow_workspace_admin
     def post(self, request, slug):
         workspace = Workspace.objects.get(slug=slug)
-        serializer = WorkspaceCustomFieldSerializer(
-            data=request.data, context={"workspace_id": workspace.id}
-        )
+        serializer = WorkspaceCustomFieldSerializer(data=request.data, context={"workspace_id": workspace.id})
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
@@ -52,9 +50,7 @@ class WorkspaceCustomFieldEndpoint(BaseAPIView):
         field_type = data["field_type"]
         settings = data.get("settings") or {}
 
-        existing = WorkspaceCustomField.objects.filter(
-            workspace=workspace, name=name, deleted_at__isnull=True
-        ).first()
+        existing = WorkspaceCustomField.objects.filter(workspace=workspace, name=name, deleted_at__isnull=True).first()
 
         if existing:
             if existing.field_type != field_type:
@@ -110,9 +106,7 @@ class WorkspaceCustomFieldEndpoint(BaseAPIView):
 class WorkspaceCustomFieldDetailEndpoint(BaseAPIView):
     @allow_workspace_admin
     def patch(self, request, slug, pk):
-        field = WorkspaceCustomField.objects.get(
-            workspace__slug=slug, pk=pk, deleted_at__isnull=True
-        )
+        field = WorkspaceCustomField.objects.get(workspace__slug=slug, pk=pk, deleted_at__isnull=True)
         serializer = WorkspaceCustomFieldSerializer(
             field, data=request.data, partial=True, context={"workspace_id": field.workspace_id}
         )
@@ -142,9 +136,7 @@ class WorkspaceCustomFieldDetailEndpoint(BaseAPIView):
 
     @allow_workspace_admin
     def delete(self, request, slug, pk):
-        field = WorkspaceCustomField.objects.get(
-            workspace__slug=slug, pk=pk, deleted_at__isnull=True
-        )
+        field = WorkspaceCustomField.objects.get(workspace__slug=slug, pk=pk, deleted_at__isnull=True)
         delete_workspace_custom_field(field, request.user)
         return Response(status=status.HTTP_204_NO_CONTENT)
 
@@ -211,9 +203,7 @@ class BoardCustomFieldEndpoint(BaseAPIView):
                     )
                 custom_field = existing_field
                 update_fields = []
-                if data.get("description") is not None and existing_field.description != data.get(
-                    "description", ""
-                ):
+                if data.get("description") is not None and existing_field.description != data.get("description", ""):
                     existing_field.description = data.get("description", "")
                     update_fields.append("description")
                 if field_type in CustomFieldType.option_field_types() and settings.get("options"):
@@ -234,9 +224,7 @@ class BoardCustomFieldEndpoint(BaseAPIView):
                 )
 
         board_link = (
-            BoardCustomField.objects.filter(board=board, custom_field=custom_field)
-            .order_by("-created_at")
-            .first()
+            BoardCustomField.objects.filter(board=board, custom_field=custom_field).order_by("-created_at").first()
         )
 
         if board_link:
@@ -304,9 +292,7 @@ class BoardCustomFieldBulkAddEndpoint(BaseAPIView):
 
         for field_id in serializer.validated_data["custom_field_ids"]:
             existing_link = (
-                BoardCustomField.objects.filter(board=board, custom_field_id=field_id)
-                .order_by("-created_at")
-                .first()
+                BoardCustomField.objects.filter(board=board, custom_field_id=field_id).order_by("-created_at").first()
             )
             if existing_link and existing_link.deleted_at is None:
                 if not existing_link.is_enabled:
@@ -362,9 +348,7 @@ class BoardCustomFieldDetailEndpoint(BaseAPIView):
         board = self._get_board(slug, board_slug)
         standard_field = BoardStandardField.objects.filter(board=board, deleted_at__isnull=True, pk=pk).first()
         if standard_field:
-            serializer = BoardStandardFieldUpdateSerializer(
-                standard_field, data=request.data, partial=True
-            )
+            serializer = BoardStandardFieldUpdateSerializer(standard_field, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()
                 return Response(

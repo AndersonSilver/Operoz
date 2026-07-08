@@ -5,8 +5,6 @@ import pytest
 
 from operoz.workflow.conditions import check_conditions
 from operoz.workflow.engine import (
-    ConditionNotSatisfiedError,
-    ValidationError,
     execute_transition,
     get_available_transitions,
 )
@@ -27,7 +25,7 @@ def _transition(*, conditions=None, validators=None, to_state=None):
 @pytest.mark.unit
 def test_check_conditions_assignee_only_blocks_non_assignee():
     user = SimpleNamespace(id="user-1")
-    assignee = SimpleNamespace(id="user-2")
+    _assignee = SimpleNamespace(id="user-2")
     issue = Mock()
     issue.assignees.filter.return_value.exists.return_value = False
     issue.assignees.exists.return_value = True

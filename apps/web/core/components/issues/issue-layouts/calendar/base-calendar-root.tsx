@@ -81,9 +81,11 @@ export const BaseCalendarRoot = observer(function BaseCalendarRoot(props: IBaseC
     (storeType !== EIssuesStoreType.BOARD && storeType !== EIssuesStoreType.MODULE) ||
     displayFilters?.layout === EIssueLayoutTypes.CALENDAR;
 
-  const { startDate, endDate } =
-    issueCalendarView.getStartAndEndDate(layout) ??
-    issueCalendarView.getMonthDateRange(issueCalendarView.calendarFilters.activeMonthDate);
+  const { startDate, endDate } = issueCalendarView.getStartAndEndDate(layout) ??
+    issueCalendarView.getMonthDateRange(issueCalendarView.calendarFilters.activeMonthDate) ?? {
+      startDate: "",
+      endDate: "",
+    };
 
   useEffect(() => {
     issueCalendarView.regenerateCalendar();

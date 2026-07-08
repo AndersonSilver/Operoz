@@ -45,8 +45,20 @@ class TestClient360EnterpriseUtils:
             client360_customer=customer,
         )
         clients = [
-            {"project_id": str(project_a.id), "name": "Acme A", "health": "ok", "issues": {"overdue": 1}, "support": {"open_count": 0}},
-            {"project_id": str(project_b.id), "name": "Acme B", "health": "critical", "issues": {"overdue": 0}, "support": {"open_count": 2}},
+            {
+                "project_id": str(project_a.id),
+                "name": "Acme A",
+                "health": "ok",
+                "issues": {"overdue": 1},
+                "support": {"open_count": 0},
+            },
+            {
+                "project_id": str(project_b.id),
+                "name": "Acme B",
+                "health": "critical",
+                "issues": {"overdue": 0},
+                "support": {"open_count": 2},
+            },
         ]
         groups = group_clients_by_customer(clients, [project_a, project_b])
         acme = next(g for g in groups if g.get("customer_id") == str(customer.id))

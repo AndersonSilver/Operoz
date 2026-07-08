@@ -47,9 +47,7 @@ class TestWorkspaceClient360HealthHistoryAPI:
         "source",
     }
 
-    def test_empty_history_for_new_project(
-        self, session_client, workspace, client_360_project, setup_instance
-    ):
+    def test_empty_history_for_new_project(self, session_client, workspace, client_360_project, setup_instance):
         response = session_client.get(_health_history_url(workspace.slug, client_360_project.id))
         assert response.status_code == status.HTTP_200_OK
         assert set(response.data.keys()) == self.EXPECTED_TOP_KEYS

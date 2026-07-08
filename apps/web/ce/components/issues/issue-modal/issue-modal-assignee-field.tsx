@@ -1,6 +1,7 @@
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
+import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { MembersPropertyIcon } from "@operoz/propel/icons";
 import type { TIssue } from "@operoz/types";
@@ -68,7 +69,7 @@ export const IssueModalAssigneeField = observer(function IssueModalAssigneeField
               tabIndex={tabIndex}
               placeholder={t("issue_modal_assignee_automatic")}
               showUserDetails
-              icon={MembersPropertyIcon}
+              icon={MembersPropertyIcon as unknown as LucideIcon}
               buttonClassName={cn(issueFormControlBaseClass, "w-full")}
               buttonContainerClassName="w-full"
               className="w-full"

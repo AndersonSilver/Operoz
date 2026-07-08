@@ -92,7 +92,9 @@ def _strip_html_for_display(value: str) -> str:
     return value
 
 
-def build_submission_display(fields: list[dict[str, Any]] | None, submission: dict[str, Any] | None) -> list[dict[str, str]]:
+def build_submission_display(
+    fields: list[dict[str, Any]] | None, submission: dict[str, Any] | None
+) -> list[dict[str, str]]:
     if not fields or not submission:
         return []
     rows: list[dict[str, str]] = []

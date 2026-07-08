@@ -7,7 +7,7 @@ from typing import Iterable, Literal
 from django.db.models import Count, Q
 from django.utils import timezone
 
-from operoz.db.models import Board, BoardStatusReport, Issue, Module, Project
+from operoz.db.models import Board, BoardStatusReport, Module, Project
 from operoz.utils.client_360_health_alerts import (
     is_health_score_alert,
     resolve_score_alert_threshold,
@@ -220,15 +220,11 @@ def compute_health_score(
     Caps alinhados ao semáforo legado para casos críticos conhecidos.
     """
     w = weights or DEFAULT_HEALTH_SCORE_WEIGHTS
-    report_score, report_detail = _dimension_report_score(
-        report_coverage, modules_total, modules_published
-    )
+    report_score, report_detail = _dimension_report_score(report_coverage, modules_total, modules_published)
     overdue_score, overdue_detail = _dimension_overdue_score(overdue_issues)
     support_score, support_detail = _dimension_support_score(support_open, support_overdue)
 
-    weighted = round(
-        (report_score * w.report + overdue_score * w.overdue + support_score * w.support) / 100
-    )
+    weighted = round((report_score * w.report + overdue_score * w.overdue + support_score * w.support) / 100)
     score = _clamp_score(weighted)
 
     if report_coverage == "missing" and modules_total > 0:
@@ -255,13 +251,10 @@ def aggregate_issue_stats(issue_queryset, today: date) -> dict[str, dict[str, in
     pending_filter = ~Q(state__group__in=CLOSED_STATE_GROUPS)
     overdue_filter = pending_filter & Q(target_date__lt=today, target_date__isnull=False)
 
-    rows = (
-        issue_queryset.values("project_id")
-        .annotate(
-            total=Count("pk", distinct=True),
-            pending=Count("pk", filter=pending_filter, distinct=True),
-            overdue=Count("pk", filter=overdue_filter, distinct=True),
-        )
+    rows = issue_queryset.values("project_id").annotate(
+        total=Count("pk", distinct=True),
+        pending=Count("pk", filter=pending_filter, distinct=True),
+        overdue=Count("pk", filter=overdue_filter, distinct=True),
     )
     return {
         str(row["project_id"]): {
@@ -455,9 +448,7 @@ def build_client_row(
             "modules_published": modules_published,
             "modules_draft": modules_draft_only,
             "latest_report_id": rs.get("latest_report_id"),
-            "latest_published_at": (
-                rs["latest_published_at"].isoformat() if rs.get("latest_published_at") else None
-            ),
+            "latest_published_at": (rs["latest_published_at"].isoformat() if rs.get("latest_published_at") else None),
         },
         "health": health_result.health,
         "health_score": health_result.score,
@@ -522,9 +513,7 @@ def build_module_report_rows(
                 "module_name": None,
                 "status": "published" if project_report.published_at else "draft",
                 "report_id": str(project_report.id),
-                "published_at": (
-                    project_report.published_at.isoformat() if project_report.published_at else None
-                ),
+                "published_at": (project_report.published_at.isoformat() if project_report.published_at else None),
             },
         )
     return rows

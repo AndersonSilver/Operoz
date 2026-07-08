@@ -5,13 +5,17 @@ from typing import Any, Iterator
 
 from operoz.assistant.llm.anthropic_client import anthropic_chat_completion, anthropic_stream_chat_completion
 from operoz.assistant.llm.config import (
-    GEMINI_OPENAI_BASE_URL,
     SUPPORTED_PROVIDERS,
     get_configured_llm_base_url,
     get_llm_base_url,
     get_llm_config,
 )
-from operoz.assistant.llm.http_client import classify_llm_exception, create_openai_client, is_retryable_llm_error, llm_exception_detail
+from operoz.assistant.llm.http_client import (
+    classify_llm_exception,
+    create_openai_client,
+    is_retryable_llm_error,
+    llm_exception_detail,
+)
 from operoz.assistant.llm.key_pool import iter_available_keys, record_key_failure, record_key_success
 from operoz.utils.exception_logger import log_exception
 

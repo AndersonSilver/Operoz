@@ -54,7 +54,7 @@ const PriorityChart = observer(function PriorityChart(props: Props) {
   const { t } = useTranslation();
   // store hooks
   const { selectedDuration, isPeekView } = useAnalytics();
-  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams(props);
+  const { params: analyticsParams, cacheKey } = useAnalyticsFilterParams(props as unknown as Record<string, unknown>);
   const { workspaceStates } = useProjectState();
   const { resolvedTheme } = useTheme();
   // router

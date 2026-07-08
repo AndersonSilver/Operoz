@@ -13,15 +13,12 @@ class BoardModulesViewSet(BaseViewSet):
     use_read_replica = True
 
     def _get_board(self, slug: str, board_slug: str):
-        return (
-            Board.objects.filter(
-                workspace__slug=slug,
-                slug=board_slug,
-                archived_at__isnull=True,
-                deleted_at__isnull=True,
-            )
-            .first()
-        )
+        return Board.objects.filter(
+            workspace__slug=slug,
+            slug=board_slug,
+            archived_at__isnull=True,
+            deleted_at__isnull=True,
+        ).first()
 
     def _accessible_project_ids(self, slug: str, board_id: str):
         return (

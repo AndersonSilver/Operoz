@@ -188,7 +188,7 @@ export class BoardStore implements IBoardStore {
     await this.rootStore.favorite.addFavorite(workspaceSlug, {
       entity_type: "board",
       entity_identifier: boardId,
-      entity_data: { name: board.name, slug: board.slug },
+      entity_data: { name: board.name },
     });
   };
 

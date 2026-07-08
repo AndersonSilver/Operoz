@@ -4,7 +4,7 @@ import pytest
 
 from operoz.assistant.tools.handlers import handle_get_prd_review_summary
 from operoz.assistant.types import AssistantActorContext
-from operoz.db.models import Page, PageReviewComment, PageReviewSession, Project, ProjectMember, ProjectPage, Workspace
+from operoz.db.models import Page, PageReviewComment, PageReviewSession, Project, ProjectMember, ProjectPage
 
 
 @pytest.mark.unit

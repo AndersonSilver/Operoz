@@ -20,9 +20,7 @@ WORKFLOW_BOOTSTRAP_OPEN: WorkflowBootstrapMode = "open"
 
 
 def _project_states(project: Project) -> list[State]:
-    states = list(
-        State.objects.filter(project=project, deleted_at__isnull=True).order_by("sequence")
-    )
+    states = list(State.objects.filter(project=project, deleted_at__isnull=True).order_by("sequence"))
     if not states:
         raise ValueError("Project has no states")
     return states
@@ -34,12 +32,7 @@ def _transition_pairs(
     back_transition_mode: WorkflowBackTransitionMode = "none",
 ) -> list[tuple[State, State]]:
     if mode == WORKFLOW_BOOTSTRAP_OPEN:
-        return [
-            (from_state, to_state)
-            for from_state in states
-            for to_state in states
-            if from_state.id != to_state.id
-        ]
+        return [(from_state, to_state) for from_state in states for to_state in states if from_state.id != to_state.id]
 
     if len(states) < 2:
         return []
@@ -93,15 +86,11 @@ def create_workflow_from_project(
         description = "Auto-generated open workflow (all state transitions allowed)."
     elif resolved_back_mode == "adjacent":
         default_name = f"{project.name} — Linear (retorno)"
-        description = (
-            "Auto-generated linear workflow with adjacent back transitions "
-            "(e.g. In Progress → Todo)."
-        )
+        description = "Auto-generated linear workflow with adjacent back transitions (e.g. In Progress → Todo)."
     elif resolved_back_mode == "last_only":
         default_name = f"{project.name} — Linear (retorno final)"
         description = (
-            "Auto-generated linear workflow with a single back transition from the "
-            "last state to the previous one."
+            "Auto-generated linear workflow with a single back transition from the last state to the previous one."
         )
     else:
         default_name = f"{project.name} — Linear"

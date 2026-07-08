@@ -8,10 +8,7 @@ SENDER_LABEL = "Operoz PRD Review"
 
 
 def build_page_review_workspace_url(session: PageReviewSession) -> str:
-    return (
-        f"{frontend_base_url()}/"
-        f"{session.workspace.slug}/projects/{session.project_id}/pages/{session.page_id}"
-    )
+    return f"{frontend_base_url()}/{session.workspace.slug}/projects/{session.project_id}/pages/{session.page_id}"
 
 
 def collect_prd_review_notify_receivers(session: PageReviewSession) -> list[User]:

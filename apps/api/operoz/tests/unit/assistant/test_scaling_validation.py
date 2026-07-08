@@ -130,9 +130,13 @@ class TestScalingValidation:
 
         sessions: list[AssistantSession] = []
         for index in range(vus):
-            user = create_user if index == 0 else User.objects.create(
-                email=f"load-vu-{index}@plane.so",
-                username=f"load_vu_{index}",
+            user = (
+                create_user
+                if index == 0
+                else User.objects.create(
+                    email=f"load-vu-{index}@plane.so",
+                    username=f"load_vu_{index}",
+                )
             )
             if index > 0:
                 WorkspaceMember.objects.get_or_create(
@@ -192,8 +196,7 @@ class TestScalingValidation:
         )
 
         assert error_rate <= ERROR_RATE_MAX, (
-            f"Taxa de erro {error_rate:.2%} > {ERROR_RATE_MAX:.0%}. "
-            f"Falhas: {[f.get('error') for f in failures[:5]]}"
+            f"Taxa de erro {error_rate:.2%} > {ERROR_RATE_MAX:.0%}. Falhas: {[f.get('error') for f in failures[:5]]}"
         )
         assert p95_first_token is not None and p95_first_token < P95_FIRST_TOKEN_MS_MAX, (
             f"P95 first token {p95_first_token}ms >= {P95_FIRST_TOKEN_MS_MAX}ms"

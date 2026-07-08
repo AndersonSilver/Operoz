@@ -27,15 +27,19 @@ def test_custom_base_url_overrides_gemini_default():
 
 
 def test_gemini_model_alias_maps_deprecated_ids():
-    with patch("operoz.assistant.llm.config.get_api_key", return_value="sk-test"), patch(
-        "operoz.assistant.llm.config.list_api_keys",
-        return_value=[],
-    ), patch(
-        "operoz.assistant.llm.config.get_configuration_value",
-        side_effect=[
-            ("gemini", "gemini-1.5-flash"),
-            (None,),
-        ],
+    with (
+        patch("operoz.assistant.llm.config.get_api_key", return_value="sk-test"),
+        patch(
+            "operoz.assistant.llm.config.list_api_keys",
+            return_value=[],
+        ),
+        patch(
+            "operoz.assistant.llm.config.get_configuration_value",
+            side_effect=[
+                ("gemini", "gemini-1.5-flash"),
+                (None,),
+            ],
+        ),
     ):
         _api_key, model, provider, _ = get_llm_config()
         assert provider == "gemini"

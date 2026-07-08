@@ -1,3 +1,4 @@
+import type { SWRConfiguration } from "swr";
 import type { TClient360ReportCoverage } from "@operoz/types";
 
 /** Evita polling de 5s do SWR em erro e revalidações desnecessárias no hub do board. */

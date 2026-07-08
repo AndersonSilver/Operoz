@@ -1,4 +1,3 @@
-import axios from "axios";
 // api service
 import { APIService } from "../api.service";
 
@@ -8,7 +7,7 @@ import { APIService } from "../api.service";
  * @extends {APIService}
  */
 export class FileUploadService extends APIService {
-  private cancelSource: any;
+  private cancelSource: AbortController | undefined;
 
   constructor() {
     super("");
@@ -22,18 +21,18 @@ export class FileUploadService extends APIService {
    * @throws {Error} If the request fails
    */
   async uploadFile(url: string, data: FormData): Promise<void> {
-    this.cancelSource = axios.CancelToken.source();
+    this.cancelSource = new AbortController();
     return this.post(url, data, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
-      cancelToken: this.cancelSource.token,
+      signal: this.cancelSource.signal,
       withCredentials: false,
     })
       .then((response) => response?.data)
       .catch((error) => {
-        if (axios.isCancel(error)) {
-          console.log(error.message);
+        if (error?.name === "AbortError" || error?.code === "ERR_CANCELED") {
+          console.log("Upload canceled");
         } else {
           throw error?.response?.data;
         }
@@ -44,6 +43,6 @@ export class FileUploadService extends APIService {
    * Cancels the upload
    */
   cancelUpload() {
-    this.cancelSource.cancel("Upload canceled");
+    this.cancelSource?.abort("Upload canceled");
   }
 }

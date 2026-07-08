@@ -91,10 +91,7 @@ def resolve_report_client_label(
 
 def _table_item_cell_html(raw_label: str) -> str:
     full = (raw_label or "").strip() or "—"
-    return (
-        f'<td class="sr-table__item">'
-        f'<span class="sr-table__item-text">{_esc(full)}</span></td>'
-    )
+    return f'<td class="sr-table__item"><span class="sr-table__item-text">{_esc(full)}</span></td>'
 
 
 def _parse_pct_value(raw: Any) -> int | None:
@@ -121,7 +118,7 @@ def _pct_cell_html(pct_raw: Any, *, omit: bool = False) -> str:
 def _date_cell_html(value: Any) -> str:
     return (
         f'<td class="sr-table__cell sr-table__cell--compact sr-table__cell--date">'
-        f'{_esc(value if value not in (None, "") else "—")}</td>'
+        f"{_esc(value if value not in (None, '') else '—')}</td>"
     )
 
 
@@ -555,7 +552,7 @@ def _render_entregas_table_html(ctx: StatusReportExportContext) -> tuple[str, st
         omit_pct = row.get("mostrar_pct") is False
         tbody += (
             f'<tr><td class="sr-table__cell sr-table__cell--stage">'
-            f'{_esc(row.get("etapa", ""))}</td>'
+            f"{_esc(row.get('etapa', ''))}</td>"
             f"{_date_cell_html(row.get('data_inicio'))}"
             f"{_date_cell_html(row.get('data_entrega'))}"
             f"{_pct_cell_html(row.get('pct', '0'), omit=omit_pct)}</tr>"

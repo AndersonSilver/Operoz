@@ -6,8 +6,16 @@ from operoz.db.models import Workspace, WorkspaceClient360Settings
 
 # Score thresholds (default) → RAG label used by API field `health`.
 HEALTH_SCORE_RAG_MAPPING = (
-    {"field": "health", "source": "health_score", "rules": "score >= ok_min → ok; >= warning_min → warning; else critical"},
-    {"field": "legacy_health", "source": "compute_health()", "rules": "rule-based semáforo MVP (report/overdue/support)"},
+    {
+        "field": "health",
+        "source": "health_score",
+        "rules": "score >= ok_min → ok; >= warning_min → warning; else critical",
+    },
+    {
+        "field": "legacy_health",
+        "source": "compute_health()",
+        "rules": "rule-based semáforo MVP (report/overdue/support)",
+    },
 )
 
 # Deprecation: legacy_health remains until 2026-Q4; consumers should migrate to health + health_score.

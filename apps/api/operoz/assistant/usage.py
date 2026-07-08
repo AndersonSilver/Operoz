@@ -52,10 +52,7 @@ def get_usage_summary(workspace: Workspace, *, days: int = 7) -> dict[str, Any]:
     budget = _daily_token_budget()
     alert_ratio = _budget_alert_ratio()
     today = date.today()
-    rows = (
-        AssistantUsageDaily.objects.filter(workspace=workspace)
-        .order_by("-usage_date")[:days]
-    )
+    rows = AssistantUsageDaily.objects.filter(workspace=workspace).order_by("-usage_date")[:days]
     today_row = AssistantUsageDaily.objects.filter(workspace=workspace, usage_date=today).first()
     today_total = 0
     if today_row:

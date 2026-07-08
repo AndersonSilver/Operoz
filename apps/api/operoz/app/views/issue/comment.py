@@ -15,7 +15,7 @@ from rest_framework import status
 from .. import BaseViewSet
 from operoz.app.serializers import IssueCommentSerializer, CommentReactionSerializer
 from operoz.app.permissions import allow_permission, ROLE
-from operoz.db.models import IssueComment, ProjectMember, CommentReaction, Project, Issue
+from operoz.db.models import IssueComment, ProjectMember, CommentReaction, Issue
 from operoz.bgtasks.issue_activities_task import issue_activity
 from operoz.utils.host import base_host
 from operoz.bgtasks.webhook_task import model_activity
@@ -113,9 +113,7 @@ class IssueCommentViewSet(BaseViewSet):
     def partial_update(self, request, slug, project_id, issue_id, pk):
         issue_comment = IssueComment.objects.get(workspace__slug=slug, project_id=project_id, issue_id=issue_id, pk=pk)
         project = get_project_for_enforcement(project_id, slug)
-        if denied := deny_for_comment_mutation(
-            request.user, project, actor_id=issue_comment.actor_id, is_delete=False
-        ):
+        if denied := deny_for_comment_mutation(request.user, project, actor_id=issue_comment.actor_id, is_delete=False):
             return denied
         requested_data = json.dumps(self.request.data, cls=DjangoJSONEncoder)
         current_instance = json.dumps(IssueCommentSerializer(issue_comment).data, cls=DjangoJSONEncoder)
@@ -153,9 +151,7 @@ class IssueCommentViewSet(BaseViewSet):
     def destroy(self, request, slug, project_id, issue_id, pk):
         issue_comment = IssueComment.objects.get(workspace__slug=slug, project_id=project_id, issue_id=issue_id, pk=pk)
         project = get_project_for_enforcement(project_id, slug)
-        if denied := deny_for_comment_mutation(
-            request.user, project, actor_id=issue_comment.actor_id, is_delete=True
-        ):
+        if denied := deny_for_comment_mutation(request.user, project, actor_id=issue_comment.actor_id, is_delete=True):
             return denied
         current_instance = json.dumps(IssueCommentSerializer(issue_comment).data, cls=DjangoJSONEncoder)
         issue_comment.delete()

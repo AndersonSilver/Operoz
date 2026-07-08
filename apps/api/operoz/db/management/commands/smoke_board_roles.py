@@ -64,7 +64,9 @@ class Command(BaseCommand):
         member_user = User.objects.filter(email="anderson_silveira17@outlook.com").first()
         admin_user = User.objects.filter(email="andersonsilver18@gmail.com").first()
         if not member_user or not admin_user:
-            member_user = User.objects.filter(is_active=True).exclude(email=admin_user.email if admin_user else "").first()
+            member_user = (
+                User.objects.filter(is_active=True).exclude(email=admin_user.email if admin_user else "").first()
+            )
             admin_user = User.objects.filter(is_active=True).first()
 
         observer_role = BoardRole.objects.get(board=board, slug="observer", deleted_at__isnull=True)
@@ -111,7 +113,10 @@ class Command(BaseCommand):
         keys = get_effective_board_permission_keys(board.id, member_user.id)
         ok("Observador tem funções explícitas", keys is not None and "items.create" not in keys, str(keys))
         ok("Observador bloqueado items.create", deny_board_permission(member_user, project, "items.create") is not None)
-        ok("Observador permitido comments.add", deny_board_permission(member_user, project, "items.comments.add") is None)
+        ok(
+            "Observador permitido comments.add",
+            deny_board_permission(member_user, project, "items.comments.add") is None,
+        )
 
         factory = RequestFactory()
         req = factory.post(
@@ -153,7 +158,10 @@ class Command(BaseCommand):
             deleted_at=timezone.now()
         )
         ok("Sem board roles → keys None", get_effective_board_permission_keys(board.id, member_user.id) is None)
-        ok("Sem board roles → create não bloqueado por board", deny_board_permission(member_user, project, "items.create") is None)
+        ok(
+            "Sem board roles → create não bloqueado por board",
+            deny_board_permission(member_user, project, "items.create") is None,
+        )
 
         # --- board.administer em settings ---
         assign_role(member_user, admin_role)

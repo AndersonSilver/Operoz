@@ -58,6 +58,7 @@ export interface IBaseIssuesStore {
   groupedIssueIds: TGroupedIssues | TSubGroupedIssues | undefined; // object to store Issue Ids based on group or subgroup
   groupedIssueCount: TGroupedIssueCount; // map of groupId/subgroup and issue count of that particular group/subgroup
   issuePaginationData: TIssuePaginationData; // map of groupId/subgroup and pagination Data of that particular group/subgroup
+  paginationOptions: IssuePaginationOptions | undefined;
 
   //actions
   removeIssue: (workspaceSlug: string, projectId: string, issueId: string) => Promise<void>;
@@ -1405,7 +1406,7 @@ export abstract class BaseIssuesStore implements IBaseIssuesStore {
         };
 
         for (const issue of issueList) {
-          const rawGroupId = issue[groupKey];
+          const rawGroupId = (issue as Record<string, unknown>)[groupKey];
           const groupId =
             rawGroupId === null || rawGroupId === undefined || rawGroupId === ""
               ? "None"

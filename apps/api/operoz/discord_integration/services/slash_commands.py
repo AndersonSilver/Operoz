@@ -107,9 +107,7 @@ class DiscordSlashCommandService:
                     "body": response.text[:500],
                 },
             )
-            raise DiscordSlashCommandSyncError(
-                f"Discord API {response.status_code}: {response.text[:300]}"
-            )
+            raise DiscordSlashCommandSyncError(f"Discord API {response.status_code}: {response.text[:300]}")
 
         if response.status_code == 204:
             return {}

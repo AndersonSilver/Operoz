@@ -72,9 +72,7 @@ class BoardMemberEndpoint(BaseAPIView):
 
         for role in valid_roles:
             existing = (
-                BoardMemberRole.objects.filter(board=board, user_id=user_id, role=role)
-                .order_by("-created_at")
-                .first()
+                BoardMemberRole.objects.filter(board=board, user_id=user_id, role=role).order_by("-created_at").first()
             )
             if existing and existing.deleted_at is None:
                 continue
@@ -114,9 +112,7 @@ class BoardMemberDetailEndpoint(BaseAPIView):
             return Response({"error": "INVALID_ROLE"}, status=status.HTTP_400_BAD_REQUEST)
 
         now = timezone.now()
-        BoardMemberRole.objects.filter(board=board, user_id=user_id, deleted_at__isnull=True).update(
-            deleted_at=now
-        )
+        BoardMemberRole.objects.filter(board=board, user_id=user_id, deleted_at__isnull=True).update(deleted_at=now)
         for role in valid_roles:
             BoardMemberRole.objects.create(
                 board=board,

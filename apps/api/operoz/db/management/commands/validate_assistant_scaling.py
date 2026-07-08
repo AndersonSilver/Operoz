@@ -1,10 +1,7 @@
 from __future__ import annotations
 
-import concurrent.futures
-import statistics
 import subprocess
 import sys
-import time
 from pathlib import Path
 from typing import Any
 
@@ -12,8 +9,17 @@ from django.core.management.base import BaseCommand, CommandError
 from django.test import Client
 from django.test.utils import override_settings
 
-from operoz.assistant.observability import collect_assistant_metrics, evaluate_assistant_alerts, render_prometheus_metrics
-from operoz.devops.celery_queue_monitor import default_monitored_queues, get_queue_depths, queues_exceeding_threshold, default_alert_threshold
+from operoz.assistant.observability import (
+    collect_assistant_metrics,
+    evaluate_assistant_alerts,
+    render_prometheus_metrics,
+)
+from operoz.devops.celery_queue_monitor import (
+    default_monitored_queues,
+    get_queue_depths,
+    queues_exceeding_threshold,
+    default_alert_threshold,
+)
 
 PHASE_LABELS = {
     1: "Fase 1 — Streaming e caminho quente",
@@ -205,9 +211,7 @@ class Command(BaseCommand):
         if alerts:
             for alert in alerts:
                 self.stderr.write(
-                    self.style.WARNING(
-                        f"   ALERTA {alert['queue']}: {alert['depth']} >= {alert['threshold']}"
-                    )
+                    self.style.WARNING(f"   ALERTA {alert['queue']}: {alert['depth']} >= {alert['threshold']}")
                 )
             return [f"fila {a['queue']} acima do limiar" for a in alerts]
         self.stdout.write(self.style.SUCCESS("   OK — filas dentro dos limiares"))

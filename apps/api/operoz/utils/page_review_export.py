@@ -81,7 +81,7 @@ def _comments_appendix(session: PageReviewSession) -> str:
     return f"""
     <section style="page-break-before:always;margin-top:24px;">
       <h2 style="font-size:16px;margin:0 0 12px;">Comentários da revisão</h2>
-      {''.join(rows)}
+      {"".join(rows)}
     </section>
     """
 

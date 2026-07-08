@@ -46,9 +46,7 @@ def get_board_for_jira_ops(workspace: Workspace, board_slug: str | None) -> Boar
     slug = resolve_jira_board_slug(workspace, board_slug)
     board = Board.objects.filter(slug=slug, workspace=workspace, deleted_at__isnull=True).first()
     if not board:
-        raise ValueError(
-            "Nenhum board válido neste workspace. Crie um board antes de importar do Jira."
-        )
+        raise ValueError("Nenhum board válido neste workspace. Crie um board antes de importar do Jira.")
     return board
 
 

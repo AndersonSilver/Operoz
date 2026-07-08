@@ -70,14 +70,9 @@ def build_board_automation_analytics(board: Board, *, days: int = ANALYTICS_PERI
         day_keys.append(day_cursor.isoformat())
         day_cursor += timedelta(days=1)
 
-    timeline_buckets: dict[str, dict[str, int]] = {
-        day: {status: 0 for status in RUN_STATUSES} for day in day_keys
-    }
+    timeline_buckets: dict[str, dict[str, int]] = {day: {status: 0 for status in RUN_STATUSES} for day in day_keys}
     for row in (
-        runs.annotate(day=TruncDate("created_at"))
-        .values("day", "status")
-        .annotate(count=Count("id"))
-        .order_by("day")
+        runs.annotate(day=TruncDate("created_at")).values("day", "status").annotate(count=Count("id")).order_by("day")
     ):
         day_key = row["day"].isoformat()
         if day_key in timeline_buckets:
@@ -131,11 +126,7 @@ def build_board_automation_analytics(board: Board, *, days: int = ANALYTICS_PERI
         for row in runs.values("event_type").annotate(count=Count("id")).order_by("-count")
     ]
 
-    by_status = [
-        {"status": status, "count": count}
-        for status, count in status_map.items()
-        if count > 0
-    ]
+    by_status = [{"status": status, "count": count} for status, count in status_map.items() if count > 0]
 
     recent_failures = [
         {

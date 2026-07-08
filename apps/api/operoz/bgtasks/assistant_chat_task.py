@@ -29,9 +29,11 @@ TRANSIENT_ERRORS = (OperationalError, ConnectionError, TimeoutError)
     queue=ASSISTANT_CHAT_QUEUE,
 )
 def run_assistant_chat_job_task(self, job_id: str) -> dict:
-    job = AssistantChatJob.objects.select_related("session", "session__workspace", "session__user").filter(
-        pk=job_id
-    ).first()
+    job = (
+        AssistantChatJob.objects.select_related("session", "session__workspace", "session__user")
+        .filter(pk=job_id)
+        .first()
+    )
     if not job:
         logger.warning("assistant chat job not found job_id=%s", job_id)
         return {"ok": False, "error": "job_not_found"}

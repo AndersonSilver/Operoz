@@ -9,7 +9,6 @@ from django.db.models import QuerySet
 from operoz.db.models import BoardIntakeForm, Project
 from operoz.utils.intake_submission import IntakeSubmissionError, create_intake_submission
 from operoz.utils.host import base_host
-from operoz.utils.support_ticket import enrich_intake_extra
 
 
 UUID_RE = re.compile(
@@ -72,12 +71,7 @@ def _validate_project_id(value: str) -> str:
 
 
 def resolve_board_intake_project(*, board_id, project_id: str) -> Project:
-    project = (
-        board_intake_client_queryset(board_id)
-        .filter(pk=project_id)
-        .select_related("workspace")
-        .first()
-    )
+    project = board_intake_client_queryset(board_id).filter(pk=project_id).select_related("workspace").first()
     if project is None:
         raise IntakeSubmissionError(
             "Cliente inválido ou Sustentação inativa.",
@@ -86,7 +80,9 @@ def resolve_board_intake_project(*, board_id, project_id: str) -> Project:
     return project
 
 
-def extract_client_project_id(*, fields: list[dict[str, Any]], submission: dict[str, Any]) -> tuple[str, dict[str, Any]]:
+def extract_client_project_id(
+    *, fields: list[dict[str, Any]], submission: dict[str, Any]
+) -> tuple[str, dict[str, Any]]:
     field_id = _client_field_id(fields)
     if not field_id:
         raise IntakeSubmissionError("Formulário sem campo Cliente configurado.")

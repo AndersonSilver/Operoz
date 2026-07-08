@@ -1,5 +1,4 @@
 import uuid
-from unittest.mock import patch
 
 import pytest
 
@@ -9,12 +8,11 @@ from operoz.automation.policy import (
     can_enable_rule,
     get_or_create_board_policy,
     mark_dry_run_verified,
-    record_publish_audit,
     summarize_graph_diff,
     validate_script_source,
 )
 from operoz.automation.rule_lifecycle import publish_rule_draft, save_rule_draft
-from operoz.db.models import BoardAutomationPolicy, BoardAutomationPublishAudit, BoardAutomationRule
+from operoz.db.models import BoardAutomationPublishAudit, BoardAutomationRule
 
 
 def _webhook_graph(url: str) -> dict:

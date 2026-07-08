@@ -5,7 +5,11 @@ from typing import Any
 
 from django.core.management.base import BaseCommand
 
-from operoz.assistant.observability import collect_assistant_metrics, default_alert_thresholds, evaluate_assistant_alerts
+from operoz.assistant.observability import (
+    collect_assistant_metrics,
+    default_alert_thresholds,
+    evaluate_assistant_alerts,
+)
 
 
 class Command(BaseCommand):
@@ -31,9 +35,7 @@ class Command(BaseCommand):
         if options["json"]:
             import json
 
-            self.stdout.write(
-                json.dumps({"metrics": metrics, "thresholds": thresholds, "alerts": alerts}, indent=2)
-            )
+            self.stdout.write(json.dumps({"metrics": metrics, "thresholds": thresholds, "alerts": alerts}, indent=2))
             if options["fail_on_alert"] and alerts:
                 sys.exit(1)
             return

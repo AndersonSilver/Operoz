@@ -2,10 +2,9 @@ from datetime import date
 
 import pytest
 
-from operoz.alerts.discord_embed import build_discord_alert_embed, build_discord_alert_message
+from operoz.alerts.discord_embed import build_discord_alert_message
 from operoz.alerts.types import AlertContext, AlertSubject
 from operoz.discord_integration.services.discord_formatting import (
-    OPEROZ_EMBED_COLOR,
     OPEROZ_EMBED_COLOR_DANGER,
     OPEROZ_EMBED_COLOR_WARNING,
 )

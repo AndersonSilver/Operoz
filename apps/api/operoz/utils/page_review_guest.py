@@ -141,12 +141,7 @@ def inject_guest_prd_review_sdk(
         "readOnly": read_only,
         "autoInit": True,
     }
-    bootstrap = (
-        "<script>\n"
-        f"{sdk_js}\n"
-        f"initPrdReview({json.dumps(init_config)});\n"
-        "</script>"
-    )
+    bootstrap = f"<script>\n{sdk_js}\ninitPrdReview({json.dumps(init_config)});\n</script>"
 
     if re.search(r"</body>", body, flags=re.IGNORECASE):
         return re.sub(

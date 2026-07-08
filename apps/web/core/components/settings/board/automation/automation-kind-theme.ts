@@ -1,4 +1,4 @@
-export type AutomationVisualKind = "trigger" | "filter" | "action" | "decision";
+export type AutomationVisualKind = "trigger" | "filter" | "action" | "decision" | "parallel";
 
 export const AUTOMATION_KIND_THEME: Record<
   AutomationVisualKind,
@@ -42,6 +42,14 @@ export const AUTOMATION_KIND_THEME: Record<
     chip: "bg-[var(--extended-color-purple-500)]/15 text-[var(--extended-color-purple-500)]",
     dot: "bg-[var(--extended-color-purple-500)]",
     border: "border-[var(--extended-color-purple-500)]/30",
+  },
+  parallel: {
+    accentBar: "bg-[var(--extended-color-cyan-500)]",
+    iconWrap: "bg-[var(--extended-color-cyan-500)]/15",
+    iconColor: "text-[var(--extended-color-cyan-500)]",
+    chip: "bg-[var(--extended-color-cyan-500)]/15 text-[var(--extended-color-cyan-500)]",
+    dot: "bg-[var(--extended-color-cyan-500)]",
+    border: "border-[var(--extended-color-cyan-500)]/30",
   },
 };
 

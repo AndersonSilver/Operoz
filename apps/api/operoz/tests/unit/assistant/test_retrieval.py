@@ -12,7 +12,17 @@ from operoz.assistant.retrieval import (
     recall_at_k,
 )
 from operoz.assistant.types import AssistantActorContext
-from operoz.db.models import Issue, Page, Project, ProjectMember, ProjectPage, SearchEmbedding, State, User, WorkspaceMember
+from operoz.db.models import (
+    Issue,
+    Page,
+    Project,
+    ProjectMember,
+    ProjectPage,
+    SearchEmbedding,
+    State,
+    User,
+    WorkspaceMember,
+)
 
 
 def _unit_vector(dim: int, index: int = 0, value: float = 1.0) -> list[float]:
@@ -211,9 +221,7 @@ class TestHybridRetrieval:
 
     @patch("operoz.assistant.retrieval.embed_texts")
     @patch("operoz.assistant.retrieval.embed_query_cached")
-    def test_page_chunks_marked_untrusted(
-        self, mock_query_embed, mock_embed, create_user, workspace, workspace_board
-    ):
+    def test_page_chunks_marked_untrusted(self, mock_query_embed, mock_embed, create_user, workspace, workspace_board):
         WorkspaceMember.objects.get_or_create(
             workspace=workspace,
             member=create_user,

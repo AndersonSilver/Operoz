@@ -1,7 +1,7 @@
-import { useMemo, useState, type ComponentType } from "react";
+import { useMemo, useState, type FC } from "react";
 import { ChevronDown, Search, X } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-import { ModuleIcon } from "@operoz/propel/icons";
+import { ModuleIcon, type ISvgIcons } from "@operoz/propel/icons";
 import type { ICustomSearchSelectOption, IModule } from "@operoz/types";
 import { CustomSearchSelect } from "@operoz/ui";
 import { cn } from "@operoz/utils";
@@ -19,7 +19,7 @@ type ProjectHubModuleSearchSelectProps = {
   multiple?: boolean;
   searchPlaceholder?: string;
   searchHint?: string;
-  labelIcon?: ComponentType<{ className?: string }>;
+  labelIcon?: FC<ISvgIcons>;
 };
 
 export function ProjectHubModuleSearchSelect(props: ProjectHubModuleSearchSelectProps) {
@@ -138,9 +138,9 @@ export function ProjectHubModuleSearchSelect(props: ProjectHubModuleSearchSelect
   return (
     <CustomSearchSelect
       appearance="hub"
-      multiple={multiple}
+      multiple={multiple as true}
       options={options}
-      value={value}
+      value={value as unknown as string[] | null}
       onChange={handleChange}
       disabled={disabled || options.length === 0}
       placement="bottom-start"

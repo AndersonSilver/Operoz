@@ -11,7 +11,7 @@ from operoz.automation.domain import DomainEvent
 from operoz.automation.executor import build_execution_context
 from operoz.assistant.prompts import resolve_playbook_snippet
 from operoz.assistant.types import AssistantActorContext
-from operoz.db.models import BoardPlaybook, SearchEmbedding
+from operoz.db.models import BoardPlaybook
 from operoz.playbooks.lifecycle import publish_playbook
 from operoz.playbooks.resolver import (
     playbook_matches_intent,

@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "@operoz/constants";
 import { APIService } from "@/services/api.service";
 
 export type TPrdReviewInboxItem = {
@@ -29,6 +30,10 @@ export type TPrdReviewMetrics = {
 };
 
 export class WorkspacePrdReviewService extends APIService {
+  constructor() {
+    super(API_BASE_URL);
+  }
+
   async fetchInbox(
     workspaceSlug: string,
     params?: { status?: string; project_id?: string; limit?: number }

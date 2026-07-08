@@ -1,3 +1,4 @@
+import React from "react";
 import type { RefObject } from "react";
 import { useState, useRef } from "react";
 import { observer } from "mobx-react";
@@ -28,7 +29,7 @@ type Props = {
   isDragging?: boolean;
   isEpic?: boolean;
   canDrag?: boolean;
-  dragHandleRef?: RefObject<HTMLDivElement | null>;
+  dragHandleRef?: React.MutableRefObject<HTMLDivElement | null>;
 };
 
 export const CalendarIssueBlock = observer(function CalendarIssueBlock(props: Props) {

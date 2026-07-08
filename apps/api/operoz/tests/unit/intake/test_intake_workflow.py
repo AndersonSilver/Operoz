@@ -12,7 +12,7 @@ class TestIntakeWorkflow:
     @patch("operoz.utils.intake_workflow.State")
     def test_resolve_backlog_state_excludes_triage(self, mock_state):
         project = Mock(id="p1", workspace_id="w1")
-        triage = Mock(id="triage-id", group="triage")
+        _triage = Mock(id="triage-id", group="triage")
         backlog = Mock(id="backlog-id", group="backlog")
 
         qs = mock_state.objects.filter.return_value

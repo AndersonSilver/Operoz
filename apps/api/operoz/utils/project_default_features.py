@@ -27,9 +27,7 @@ def apply_default_project_features(data: dict) -> dict:
 def ensure_project_default_features(project: Project) -> None:
     """Persist default features on an existing project when any flag is disabled."""
     updates = {
-        field: value
-        for field, value in DEFAULT_PROJECT_FEATURE_FIELDS.items()
-        if getattr(project, field) is not value
+        field: value for field, value in DEFAULT_PROJECT_FEATURE_FIELDS.items() if getattr(project, field) is not value
     }
     if not updates:
         return

@@ -7,7 +7,7 @@ import { FilterOption } from "@/components/issues/issue-layouts/filters";
 
 // constants
 const ISSUE_EXTRA_OPTIONS: {
-  key: TIssueExtraOptions;
+  key: Exclude<TIssueExtraOptions, "expand">;
   titleTranslationKey: string;
 }[] = [
   {

@@ -78,7 +78,7 @@ export const GeneralConfigurationForm = observer(function GeneralConfigurationFo
               />
               <AdminReadOnlyField
                 label={t("god_mode.pages.general.instance_id_label")}
-                value={instance.instance_id}
+                value={instance.instance_id ?? ""}
                 mono
               />
             </div>

@@ -21,7 +21,7 @@ from operoz.bgtasks.user_activation_email_task import user_activation_email
 from operoz.db.models import FileAsset, Profile, User, WorkspaceMemberInvite
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.settings.storage import S3Storage
-from operoz.utils.audit_log import log_login_failure, log_login_success
+from operoz.utils.audit_log import log_login_success
 from operoz.utils.exception_logger import log_exception
 from operoz.utils.host import base_host
 from operoz.utils.ip_address import get_client_ip
@@ -100,9 +100,9 @@ class Adapter:
         """Check if sign up is enabled or not and raise exception if not enabled"""
 
         # Get configuration value
-        (ENABLE_SIGNUP,) = get_configuration_value([
-            {"key": "ENABLE_SIGNUP", "default": os.environ.get("ENABLE_SIGNUP", "1")}
-        ])
+        (ENABLE_SIGNUP,) = get_configuration_value(
+            [{"key": "ENABLE_SIGNUP", "default": os.environ.get("ENABLE_SIGNUP", "1")}]
+        )
 
         # Check if sign up is disabled and invite is present or not
         if ENABLE_SIGNUP == "0" and not WorkspaceMemberInvite.objects.filter(email=email).exists():

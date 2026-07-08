@@ -1,6 +1,6 @@
 import pytest
 
-from operoz.db.models import Workspace, WorkspaceClient360Settings
+from operoz.db.models import WorkspaceClient360Settings
 from operoz.utils.client_360 import build_client_row, compute_health, health_level_from_score
 from operoz.utils.client_360_display import (
     client_360_display_payload,

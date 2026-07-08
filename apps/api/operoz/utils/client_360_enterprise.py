@@ -137,7 +137,9 @@ def group_clients_by_customer(clients: list[dict], projects: list[Project]) -> l
         bucket["rollup"]["total_overdue"] += (client.get("issues") or {}).get("overdue", 0)
         bucket["rollup"]["total_support_open"] += (client.get("support") or {}).get("open_count", 0)
 
-    rows = list(grouped.values()) + [{"customer_id": None, "customer_name": c["name"], "projects": [c], "rollup": None} for c in orphans]
+    rows = list(grouped.values()) + [
+        {"customer_id": None, "customer_name": c["name"], "projects": [c], "rollup": None} for c in orphans
+    ]
     return rows
 
 
@@ -356,7 +358,11 @@ def build_instance_rollup(workspaces: list[Workspace]) -> dict:
         totals["clients"] += summary["total_clients"]
         totals["health_critical"] += summary["health_critical"]
         totals["total_overdue"] += summary["total_overdue"]
-    return {"period": {"start": period.start.isoformat(), "end": period.end.isoformat()}, "totals": totals, "workspaces": items}
+    return {
+        "period": {"start": period.start.isoformat(), "end": period.end.isoformat()},
+        "totals": totals,
+        "workspaces": items,
+    }
 
 
 def purge_retention_data(workspace_id, retention_weeks: int) -> dict:

@@ -10,9 +10,11 @@ def _unique_slug(board_id, base: str, *, exclude_id=None) -> str:
     slug = slugify(base)[:120] or "playbook"
     candidate = slug
     index = 2
-    while BoardPlaybook.objects.filter(board_id=board_id, slug=candidate, deleted_at__isnull=True).exclude(
-        pk=exclude_id
-    ).exists():
+    while (
+        BoardPlaybook.objects.filter(board_id=board_id, slug=candidate, deleted_at__isnull=True)
+        .exclude(pk=exclude_id)
+        .exists()
+    ):
         candidate = f"{slug}-{index}"
         index += 1
     return candidate

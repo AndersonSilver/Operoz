@@ -41,9 +41,7 @@ class BoardSerializer(BaseSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        data["board_lead"] = (
-            UserLiteSerializer(instance.board_lead).data if instance.board_lead_id else None
-        )
+        data["board_lead"] = UserLiteSerializer(instance.board_lead).data if instance.board_lead_id else None
         data["default_assignee"] = (
             UserLiteSerializer(instance.default_assignee).data if instance.default_assignee_id else None
         )

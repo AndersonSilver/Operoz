@@ -40,7 +40,9 @@ def execute_fan_out(
     branch_meta: list[dict[str, Any]] = []
     branch_ok: list[bool] = []
 
-    def run_branch(index: int, source_handle: str | None, target_id: str) -> tuple[int, str | None, str, list[dict[str, Any]], bool]:
+    def run_branch(
+        index: int, source_handle: str | None, target_id: str
+    ) -> tuple[int, str | None, str, list[dict[str, Any]], bool]:
         steps, ok = walk_branch(target_id)
         for step in steps:
             step["parallel_branch_index"] = index

@@ -12,9 +12,7 @@ from operoz.utils.board_standard_fields import ensure_board_standard_fields, get
 class ProjectCustomFieldEndpoint(BaseAPIView):
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")
     def get(self, request, slug, project_id):
-        project = Project.objects.get(
-            workspace__slug=slug, pk=project_id, deleted_at__isnull=True
-        )
+        project = Project.objects.get(workspace__slug=slug, pk=project_id, deleted_at__isnull=True)
         if project.board_id:
             sync_board_custom_fields_to_project(project, request.user)
             board = Board.objects.get(pk=project.board_id, deleted_at__isnull=True)
@@ -32,9 +30,7 @@ class ProjectCustomFieldEndpoint(BaseAPIView):
         return Response(
             {
                 "standard_fields": standard_data,
-                "enabled_standard_keys": get_enabled_standard_field_keys(project.board_id)
-                if project.board_id
-                else [],
+                "enabled_standard_keys": get_enabled_standard_field_keys(project.board_id) if project.board_id else [],
                 "custom_fields": WorkspaceCustomFieldSerializer(custom_fields, many=True).data,
             },
             status=status.HTTP_200_OK,

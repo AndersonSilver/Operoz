@@ -10,7 +10,6 @@ from operoz.app.views.base import BaseAPIView
 from operoz.db.models import BoardStatusReport, Project
 from operoz.utils.board_status_report import apply_live_entregas_from_module, default_report_title
 from operoz.utils.status_report_export import (
-    StatusReportExportContext,
     apply_live_report_row_labels,
     build_export_context,
     content_to_html,

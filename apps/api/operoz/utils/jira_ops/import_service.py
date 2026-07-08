@@ -273,13 +273,11 @@ def _finalize_imported_modules(epic_key_to_module: dict[str, Module], epics: lis
         module_status = resolve_module_status_for_module(mod, fields)
 
         if target is None:
-            target = (
-                Issue.objects.filter(
-                    issue_module__module=mod,
-                    target_date__isnull=False,
-                    deleted_at__isnull=True,
-                ).aggregate(max_target=Max("target_date"))["max_target"]
-            )
+            target = Issue.objects.filter(
+                issue_module__module=mod,
+                target_date__isnull=False,
+                deleted_at__isnull=True,
+            ).aggregate(max_target=Max("target_date"))["max_target"]
 
         start, target = normalize_issue_date_range(start, target)
 
@@ -391,9 +389,7 @@ def _apply_jira_issue_content(
             ]
         )
 
-    if custom_ctx and sync_issue_jira_custom_fields(
-        issue, fields, custom_ctx, project, workspace, actor
-    ):
+    if custom_ctx and sync_issue_jira_custom_fields(issue, fields, custom_ctx, project, workspace, actor):
         changed = True
 
     return changed
@@ -410,9 +406,7 @@ def _touch_issue_fields(
     client: JiraOpsClient | None = None,
     custom_ctx: JiraCustomFieldImportContext | None = None,
 ) -> bool:
-    if not issue_would_update(
-        issue, fields, key, project, client=client, custom_ctx=custom_ctx
-    ):
+    if not issue_would_update(issue, fields, key, project, client=client, custom_ctx=custom_ctx):
         return False
     return _apply_jira_issue_content(
         issue,
@@ -499,9 +493,7 @@ def preview_jira_ops_import(
             continue
         clients[client].append(epic)
 
-    existing_project_ids = set(
-        Project.objects.filter(workspace=workspace).values_list("identifier", flat=True)
-    )
+    existing_project_ids = set(Project.objects.filter(workspace=workspace).values_list("identifier", flat=True))
     existing_modules: dict[str, Module] = {
         m.external_id: m
         for m in Module.objects.filter(
@@ -663,9 +655,7 @@ def run_jira_ops_import(
 
     if jira_client:
         try:
-            custom_ctx = build_custom_field_import_context(
-                board, workspace, actor, jira_client._field_metadata
-            )
+            custom_ctx = build_custom_field_import_context(board, workspace, actor, jira_client._field_metadata)
             prepare_board_projects_for_jira_custom_fields(board, actor)
         except Exception:
             custom_ctx = None

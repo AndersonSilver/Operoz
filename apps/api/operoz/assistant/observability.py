@@ -194,9 +194,7 @@ def render_prometheus_metrics() -> str:
 
 def default_alert_thresholds() -> dict[str, int | float]:
     return {
-        "latency_p95_first_token_ms": int(
-            os.environ.get("ASSISTANT_ALERT_P95_FIRST_TOKEN_MS", "3000")
-        ),
+        "latency_p95_first_token_ms": int(os.environ.get("ASSISTANT_ALERT_P95_FIRST_TOKEN_MS", "3000")),
         "chat_error_rate": float(os.environ.get("ASSISTANT_ALERT_ERROR_RATE", "0.05")),
         "assistant_chat_queue_depth": int(
             os.environ.get(
@@ -247,9 +245,7 @@ def evaluate_assistant_alerts() -> list[dict[str, Any]]:
                 "code": "assistant_chat_queue_depth",
                 "value": queue_depth,
                 "threshold": thresholds["assistant_chat_queue_depth"],
-                "message": (
-                    f"assistant-chat queue {queue_depth} >= {thresholds['assistant_chat_queue_depth']}"
-                ),
+                "message": (f"assistant-chat queue {queue_depth} >= {thresholds['assistant_chat_queue_depth']}"),
             }
         )
 
@@ -260,9 +256,7 @@ def evaluate_assistant_alerts() -> list[dict[str, Any]]:
                 "code": "assistant_chat_stale_jobs",
                 "value": stale_jobs,
                 "threshold": thresholds["assistant_chat_stale_jobs"],
-                "message": (
-                    f"stale chat jobs {stale_jobs} >= {thresholds['assistant_chat_stale_jobs']}"
-                ),
+                "message": (f"stale chat jobs {stale_jobs} >= {thresholds['assistant_chat_stale_jobs']}"),
             }
         )
 

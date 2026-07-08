@@ -704,9 +704,7 @@ class ModuleViewSet(BaseViewSet):
                 "updated_at",
             ).first()
             module["stage_id"] = str(updated_module.stage_id) if updated_module and updated_module.stage_id else None
-            module["stage_detail"] = serialize_module_stage_detail(
-                updated_module.stage if updated_module else None
-            )
+            module["stage_detail"] = serialize_module_stage_detail(updated_module.stage if updated_module else None)
 
             # Send the model activity
             model_activity.delay(

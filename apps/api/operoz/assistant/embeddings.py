@@ -136,9 +136,7 @@ def get_embedding_config() -> tuple[str | None, str, str | None, str]:
     )
 
     if not api_key:
-        (api_key,) = get_configuration_value(
-            [{"key": "LLM_API_KEY", "default": os.environ.get("LLM_API_KEY", None)}]
-        )
+        (api_key,) = get_configuration_value([{"key": "LLM_API_KEY", "default": os.environ.get("LLM_API_KEY", None)}])
 
     provider_key = _resolve_embedding_provider(provider_key, api_key)
     configured_model = os.environ.get("ASSISTANT_EMBEDDING_MODEL", "").strip() or None
@@ -168,11 +166,7 @@ def _normalize_vector(vector: list[float]) -> list[float] | None:
         return vector
     if len(vector) > EMBEDDING_DIMENSIONS:
         return vector[:EMBEDDING_DIMENSIONS]
-    log_exception(
-        ValueError(
-            f"Embedding vector has {len(vector)} dimensions; expected {EMBEDDING_DIMENSIONS}"
-        )
-    )
+    log_exception(ValueError(f"Embedding vector has {len(vector)} dimensions; expected {EMBEDDING_DIMENSIONS}"))
     return None
 
 

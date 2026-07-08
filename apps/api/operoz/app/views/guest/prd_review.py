@@ -82,7 +82,9 @@ class PrdReviewGuestCommentEndpoint(BaseAPIView):
 
         comment_id = request.data.get("comment_id")
         if comment_id:
-            comment = PageReviewComment.objects.filter(pk=comment_id, session=session, author_email=invite.email).first()
+            comment = PageReviewComment.objects.filter(
+                pk=comment_id, session=session, author_email=invite.email
+            ).first()
             if not comment:
                 return Response({"error": "Comment not found"}, status=status.HTTP_404_NOT_FOUND)
             comment.body = body

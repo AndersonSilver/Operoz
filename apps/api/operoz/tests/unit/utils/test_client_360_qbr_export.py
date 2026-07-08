@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from datetime import date
 
-import pytest
 
 from operoz.utils.client_360 import WeekPeriod
 from operoz.utils.client_360_qbr_export import (
@@ -129,10 +128,7 @@ class TestQbrMarkdown:
         assert "## Riscos (narrativa)" in md
 
     def test_thirteen_week_matrix_summary(self):
-        weeks = [
-            {"period_start": f"2026-01-{day:02d}", "period_end": f"2026-01-{day+6:02d}"}
-            for day in range(1, 14)
-        ]
+        weeks = [{"period_start": f"2026-01-{day:02d}", "period_end": f"2026-01-{day + 6:02d}"} for day in range(1, 14)]
         cells = [{"period_start": week["period_start"], "coverage": "complete"} for week in weeks]
         summary = build_qbr_matrix_summary(weeks, cells)
         assert len(summary) == 13

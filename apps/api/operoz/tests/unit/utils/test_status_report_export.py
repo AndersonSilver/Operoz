@@ -150,7 +150,6 @@ def test_content_to_html_sprint_shows_sprint_tag_beside_consultor():
     assert html.index("sr-head-cell--sprint") < html.index("Consultor</span>")
 
 
-
 def test_content_to_html_etapa_table_auto_sizing():
     ctx = StatusReportExportContext(
         title="ALLIANZ",
@@ -230,8 +229,20 @@ def test_content_to_html_sprint_subtitle_module_count():
             "module_ids": ["1", "2"],
             "sections": {
                 "entregas_sprint": [
-                    {"item_label": module_a, "data_inicio": "—", "data_entrega_etapa": "—", "etapa_atual": "—", "pct_total": "10"},
-                    {"item_label": module_b, "data_inicio": "—", "data_entrega_etapa": "—", "etapa_atual": "—", "pct_total": "20"},
+                    {
+                        "item_label": module_a,
+                        "data_inicio": "—",
+                        "data_entrega_etapa": "—",
+                        "etapa_atual": "—",
+                        "pct_total": "10",
+                    },
+                    {
+                        "item_label": module_b,
+                        "data_inicio": "—",
+                        "data_entrega_etapa": "—",
+                        "etapa_atual": "—",
+                        "pct_total": "20",
+                    },
                 ],
                 "progress": {"pct": 15, "omitir_global": False},
                 "observacoes": {"em_execucao": [], "pontos_atencao": []},

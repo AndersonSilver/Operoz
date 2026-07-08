@@ -88,9 +88,7 @@ class CustomSlashCommand(BaseModel):
         if normalized_name != self.name:
             raise ValidationError({"name": "O nome deve estar em lowercase."})
         if not DISCORD_COMMAND_NAME_PATTERN.match(self.name):
-            raise ValidationError(
-                {"name": "Use apenas letras, números, underscore e hífen (máx. 32 caracteres)."}
-            )
+            raise ValidationError({"name": "Use apenas letras, números, underscore e hífen (máx. 32 caracteres)."})
 
     def save(self, *args, **kwargs) -> None:
         self.name = self.name.lower().strip()

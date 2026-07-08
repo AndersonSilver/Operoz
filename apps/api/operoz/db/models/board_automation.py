@@ -253,9 +253,7 @@ class BoardAutomationHook(BaseModel):
 
 
 class BoardAutomationPackInstall(BaseModel):
-    workspace = models.ForeignKey(
-        "db.Workspace", on_delete=models.CASCADE, related_name="automation_pack_installs"
-    )
+    workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="automation_pack_installs")
     board = models.ForeignKey("db.Board", on_delete=models.CASCADE, related_name="automation_pack_installs")
     pack_name = models.CharField(max_length=128)
     pack_version = models.CharField(max_length=32)

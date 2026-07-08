@@ -181,12 +181,7 @@ class IntakeIssueSerializer(BaseSerializer):
 
         instance = super().update(instance, validated_data)
 
-        if (
-            instance.ticket_kind == IntakeTicketKind.INTAKE
-            and new_status == 1
-            and previous_status != 1
-            and project
-        ):
+        if instance.ticket_kind == IntakeTicketKind.INTAKE and new_status == 1 and previous_status != 1 and project:
             promote_issue_to_backlog(instance.issue, project)
 
         return instance

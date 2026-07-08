@@ -25,7 +25,9 @@ _LATENCY_TTL_SECONDS = 86400 * 14
 
 
 def _defer_enabled() -> bool:
-    return str(getattr(settings, "ASSISTANT_DEFER_NONCRITICAL", os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1"))).lower() not in (
+    return str(
+        getattr(settings, "ASSISTANT_DEFER_NONCRITICAL", os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1"))
+    ).lower() not in (
         "0",
         "false",
         "no",

@@ -7,15 +7,12 @@ import pytest
 from operoz.assistant.embeddings import (
     DEFAULT_GEMINI_EMBEDDING_MODEL,
     DEFAULT_OPENAI_EMBEDDING_MODEL,
-    EmbeddingRateLimitError,
     _embedding_request_kwargs,
-    _maybe_raise_embedding_rate_limit,
     _resolve_embedding_model,
     _resolve_embedding_provider,
     embed_texts,
     gemini_embedding_base_url,
     get_embedding_config,
-    index_rate_limit_countdown,
 )
 
 
@@ -113,9 +110,7 @@ def test_embed_texts_uses_gemini_base_url(mock_config, mock_create_client):
     )
     mock_client = MagicMock()
     mock_create_client.return_value = mock_client
-    mock_client.embeddings.create.return_value = MagicMock(
-        data=[MagicMock(embedding=[0.1] * 1536)]
-    )
+    mock_client.embeddings.create.return_value = MagicMock(data=[MagicMock(embedding=[0.1] * 1536)])
 
     result = embed_texts(["conteúdo da página"], use_cache=False)
 

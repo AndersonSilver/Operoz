@@ -26,6 +26,7 @@ def _find_module(project: Project, module_name: str) -> Module | None:
             return candidate
     return None
 
+
 # Cards concluídos com testes passando (atualizar conforme execução)
 COMPLETED_CARD_TITLES: list[str] = [
     # Módulo 00
@@ -499,8 +500,7 @@ class Command(BaseCommand):
 
         self.stdout.write(
             self.style.SUCCESS(
-                f"\nResumo: {updated} atualizados, {already_done} já estavam Done, "
-                f"{len(not_found)} não encontrados"
+                f"\nResumo: {updated} atualizados, {already_done} já estavam Done, {len(not_found)} não encontrados"
             )
         )
         if not_found:

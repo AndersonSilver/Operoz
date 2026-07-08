@@ -165,9 +165,7 @@ def execute_simple_llm(command: CustomSlashCommand, user_input: str = "") -> Dis
     """Fallback sem ferramentas — LLM direta com prompt personalizado."""
     api_key, model, provider, degraded = get_llm_config()
     if degraded or not api_key or not model or not provider:
-        return build_error_reply(
-            "O assistente Operoz não está configurado nesta instância. Contacte o administrador."
-        )
+        return build_error_reply("O assistente Operoz não está configurado nesta instância. Contacte o administrador.")
 
     task = (
         "Você responde a um slash command do Discord integrado ao Operoz. "

@@ -62,7 +62,9 @@ class TestAssistantAPI:
     @patch("operoz.app.views.assistant.sessions.enqueue_chat_job_safe")
     @patch("operoz.assistant.chat_jobs.get_fair_queue_status", return_value=(1, 15))
     @patch("operoz.assistant.chat_jobs.register_fair_job")
-    def test_chat_async_enqueue_returns_202(self, _register, _queue, mock_enqueue, session_client, workspace, create_user, setup_instance):
+    def test_chat_async_enqueue_returns_202(
+        self, _register, _queue, mock_enqueue, session_client, workspace, create_user, setup_instance
+    ):
         create = session_client.post(self._sessions_url(workspace.slug), {}, format="json")
         session_id = create.data["id"]
 

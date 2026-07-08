@@ -54,9 +54,7 @@ def ensure_board_project_field_layout(board: Board, user=None) -> None:
 
 def get_board_project_field_layout(board_id):
     return (
-        BoardProjectFieldLayout.objects.filter(
-            board_id=board_id, is_enabled=True, deleted_at__isnull=True
-        )
+        BoardProjectFieldLayout.objects.filter(board_id=board_id, is_enabled=True, deleted_at__isnull=True)
         .select_related("custom_field")
         .order_by("sort_order", "standard_field_key", "custom_field__name")
     )

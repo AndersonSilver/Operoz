@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import Any
 
 from operoz.automation.catalog import ensure_catalog
 from operoz.automation.domain import DomainEvent

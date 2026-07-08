@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
-import { Controller, type Control, type UseFormSetValue, useWatch } from "react-hook-form";
+import { Controller, type Control, type UseFormSetValue, type Path, type PathValue, useWatch } from "react-hook-form";
 import useSWR from "swr";
 import { useParams } from "react-router";
 import { useTranslation } from "@operoz/i18n";
@@ -49,7 +49,7 @@ export const IssueTypeSelect = observer(function IssueTypeSelect<T extends Parti
   const { t } = useTranslation();
   const { fetchProjectIssueTypes, getProjectIssueTypes } = useBoardIssueType();
 
-  const typeId = useWatch({ control, name: "type_id" as keyof T & string });
+  const typeId = useWatch({ control, name: "type_id" as Path<T> }) as string | undefined;
 
   const { isLoading } = useSWR(
     workspaceSlug && projectId ? `PROJECT_ISSUE_TYPES_${workspaceSlug}_${projectId}` : null,
@@ -62,7 +62,7 @@ export const IssueTypeSelect = observer(function IssueTypeSelect<T extends Parti
   useEffect(() => {
     if (!setValue || !projectId || typeId || issueTypes.length === 0) return;
     const defaultType = issueTypes.find((type) => type.is_default) ?? issueTypes[0];
-    setValue("type_id" as keyof T & string, defaultType.id as T[keyof T & string], { shouldValidate: true });
+    setValue("type_id" as Path<T>, defaultType.id as unknown as PathValue<T, Path<T>>, { shouldValidate: true });
     handleFormChange?.();
   }, [typeId, issueTypes, projectId, setValue, handleFormChange]);
 
@@ -75,7 +75,7 @@ export const IssueTypeSelect = observer(function IssueTypeSelect<T extends Parti
   return (
     <Controller
       control={control}
-      name={"type_id" as keyof T & string}
+      name={"type_id" as Path<T>}
       render={({ field: { value, onChange } }) => (
         <CustomSelect
           value={value ?? ""}

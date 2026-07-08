@@ -42,8 +42,7 @@ def recompute_health_from_breakdown(
     support_score = scores.get("support", 0)
 
     weighted = round(
-        (report_score * weights.report + overdue_score * weights.overdue + support_score * weights.support)
-        / 100
+        (report_score * weights.report + overdue_score * weights.overdue + support_score * weights.support) / 100
     )
     score = _clamp_score(weighted)
 

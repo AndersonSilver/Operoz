@@ -7,7 +7,7 @@ from typing import TYPE_CHECKING
 from django.utils import timezone
 
 if TYPE_CHECKING:
-    from operoz.db.models import User, UserNotificationPreference
+    from operoz.db.models import UserNotificationPreference
 
 
 def is_in_quiet_hours(*, prefs: UserNotificationPreference | None, now: datetime | None = None) -> bool:

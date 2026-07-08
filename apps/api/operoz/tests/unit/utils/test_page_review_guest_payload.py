@@ -29,7 +29,7 @@ class TestStripLegacyPrdReviewScripts:
 
     def test_preserves_main_render_script_that_only_invokes_legacy_hook(self):
         html = (
-            "<html><body><div id=\"content\"></div>"
+            '<html><body><div id="content"></div>'
             "<script>function renderDoc() { document.getElementById('content').textContent = 'Tech4Humans'; }"
             "if (window.initApprovalAndComments) window.initApprovalAndComments();</script>"
             "</body></html>"
@@ -41,7 +41,7 @@ class TestStripLegacyPrdReviewScripts:
     def test_preserves_prd_md_embed_bootstrap_script(self):
         html = (
             "<html><body>"
-            "<script>window.__PRD_MD_EMBED__=\"# Title\\n\\nBody\";</script>"
+            '<script>window.__PRD_MD_EMBED__="# Title\\n\\nBody";</script>'
             "<script>function render() { /* calls */ if (window.initApprovalAndComments) window.initApprovalAndComments(); }</script>"
             "</body></html>"
         )
@@ -57,7 +57,9 @@ class TestInjectGuestPrdReviewSdk:
         html = "<html><body><p>Tech4Humans</p></body></html>"
         with patch("operoz.utils.page_review_guest.read_prd_review_sdk_bundle") as mock_sdk:
             mock_sdk.return_value = "function demo() { return /\\d+/.test('1'); }"
-            injected = __import__("operoz.utils.page_review_guest", fromlist=["inject_guest_prd_review_sdk"]).inject_guest_prd_review_sdk(
+            injected = __import__(
+                "operoz.utils.page_review_guest", fromlist=["inject_guest_prd_review_sdk"]
+            ).inject_guest_prd_review_sdk(
                 html,
                 invite=invite,
                 page_name="PRD",
@@ -66,6 +68,7 @@ class TestInjectGuestPrdReviewSdk:
         assert "initPrdReview" in injected
         assert "Tech4Humans" in injected
         assert "\\d+" in injected
+
     def test_merges_html_and_json_sources(self):
         embeds = collect_html_document_embeds_from_content(
             '<p class="editor-paragraph-block"></p>',
@@ -123,7 +126,7 @@ class TestBuildGuestPrdReviewPayload:
         prd_html = (
             "<!DOCTYPE html><html><head><title>PRD</title></head><body>"
             "<header>Tech4Humans</header>"
-            "<div id=\"content\">Full PRD body with Magalu stakeholders and objectives.</div>"
+            '<div id="content">Full PRD body with Magalu stakeholders and objectives.</div>'
             "<script>function renderDoc() { /* main */ if (window.initApprovalAndComments) window.initApprovalAndComments(); }</script>"
             "<script>function safeStorageSet(v) {} window.initApprovalAndComments = function() {}</script>"
             "</body></html>"
@@ -160,7 +163,9 @@ class TestBuildGuestPrdReviewPayload:
         mock_read_html.assert_called_once_with("asset-uuid-prd")
 
     @patch("operoz.assistant.page_content.read_html_document_asset_html")
-    def test_inject_guest_sdk_preserves_substantive_prd_body(self, mock_read_html, workspace, workspace_board, create_user):
+    def test_inject_guest_sdk_preserves_substantive_prd_body(
+        self, mock_read_html, workspace, workspace_board, create_user
+    ):
         mock_read_html.return_value = "<html><body><h1>Tech4Humans</h1><p>" + ("x" * 1200) + "</p></body></html>"
         invite = self._create_invite(
             workspace,

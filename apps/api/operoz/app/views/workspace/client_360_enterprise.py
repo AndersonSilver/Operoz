@@ -14,9 +14,7 @@ from operoz.app.views.workspace.client_360 import WorkspaceClient360ViewSet
 from operoz.db.models import (
     Client360AuditEntry,
     Client360Customer,
-    Client360WebhookDeliveryLog,
     Client360WebhookSubscription,
-    Project,
     Workspace,
     WorkspaceClient360EnterpriseSettings,
 )
@@ -185,7 +183,9 @@ class WorkspaceClient360AuditLogEndpoint(BaseAPIView):
         if not workspace:
             return Response({"error": "Workspace not found"}, status=status.HTTP_404_NOT_FOUND)
         entity_type = request.query_params.get("entity_type")
-        qs = Client360AuditEntry.objects.filter(workspace=workspace, deleted_at__isnull=True).order_by("-created_at")[:100]
+        qs = Client360AuditEntry.objects.filter(workspace=workspace, deleted_at__isnull=True).order_by("-created_at")[
+            :100
+        ]
         if entity_type:
             qs = qs.filter(entity_type=entity_type)
         payload = [
@@ -209,7 +209,9 @@ class WorkspaceClient360AuditExportEndpoint(BaseAPIView):
         workspace = Workspace.objects.filter(slug=slug, deleted_at__isnull=True).first()
         if not workspace:
             return Response({"error": "Workspace not found"}, status=status.HTTP_404_NOT_FOUND)
-        rows = Client360AuditEntry.objects.filter(workspace=workspace, deleted_at__isnull=True).order_by("-created_at")[:500]
+        rows = Client360AuditEntry.objects.filter(workspace=workspace, deleted_at__isnull=True).order_by("-created_at")[
+            :500
+        ]
         import csv
         import io
 

@@ -29,9 +29,7 @@ from bs4 import BeautifulSoup
 from operoz.bgtasks.email_notification_task import stack_email_notification
 
 # Activity fields Plane historically skipped for subscriber issue notifications (unless workspace enables extended).
-SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS = frozenset(
-    ("cycles", "modules", "reaction", "vote", "draft", "intake")
-)
+SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS = frozenset(("cycles", "modules", "reaction", "vote", "draft", "intake"))
 
 
 # =========== Issue Description Html Parsing and notification Functions ======================
@@ -214,11 +212,7 @@ def notifications(
             activities_for_notifications = (
                 issue_activities_created
                 if workspace.issue_notify_email_include_extended_activities
-                else [
-                    a
-                    for a in issue_activities_created
-                    if a.get("field") not in SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS
-                ]
+                else [a for a in issue_activities_created if a.get("field") not in SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS]
             )
             if not activities_for_notifications:
                 return
@@ -354,9 +348,7 @@ def notifications(
                         continue
 
                     send_email = False
-                    if workspace.issue_notify_assignees_always_email and (
-                        is_assignee or is_issue_creator
-                    ):
+                    if workspace.issue_notify_assignees_always_email and (is_assignee or is_issue_creator):
                         send_email = True
                     elif issue_activity.get("field") == "state" and preference.state_change:
                         send_email = True
@@ -583,14 +575,10 @@ def notifications(
                                         "new_value": str(last_activity.new_value),
                                         "old_value": str(last_activity.old_value),
                                         "old_identifier": (
-                                            str(last_activity.old_identifier)
-                                            if last_activity.old_identifier
-                                            else None
+                                            str(last_activity.old_identifier) if last_activity.old_identifier else None
                                         ),
                                         "new_identifier": (
-                                            str(last_activity.new_identifier)
-                                            if last_activity.new_identifier
-                                            else None
+                                            str(last_activity.new_identifier) if last_activity.new_identifier else None
                                         ),
                                     },
                                 },

@@ -18,7 +18,6 @@ from drf_spectacular.utils import OpenApiResponse, OpenApiRequest
 # Module imports
 from operoz.db.models import (
     Cycle,
-    Intake,
     Module,
     Project,
     DeployBoard,

@@ -3,7 +3,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from operoz.db.models import Issue, User
+    from operoz.db.models import User
 
 from operoz.alerts.types import AlertSubject
 

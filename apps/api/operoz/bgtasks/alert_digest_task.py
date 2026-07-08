@@ -29,7 +29,7 @@ def queue_alert_for_digest(*, user_id: str, workspace_id: str, payload: dict) ->
 @shared_task
 def send_daily_alert_digests() -> None:
     """Send batched digest emails for users with digest_daily preference."""
-    from operoz.db.models import User, UserNotificationPreference, Workspace
+    from operoz.db.models import UserNotificationPreference, Workspace
 
     today = timezone.localdate()
     try:

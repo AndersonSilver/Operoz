@@ -51,9 +51,7 @@ class BoardRoleEndpoint(BaseAPIView):
             slug_candidate = f"{base_slug}-{n}"
             n += 1
 
-        max_order = (
-            self._queryset(board).order_by("-sort_order").values_list("sort_order", flat=True).first()
-        )
+        max_order = self._queryset(board).order_by("-sort_order").values_list("sort_order", flat=True).first()
         role = BoardRole.objects.create(
             board=board,
             workspace_id=board.workspace_id,

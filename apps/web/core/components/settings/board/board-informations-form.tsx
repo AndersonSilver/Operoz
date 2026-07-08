@@ -13,6 +13,7 @@ import {
   UserCheck,
   UserCog,
   Users,
+  type LucideIcon,
 } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
@@ -37,12 +38,7 @@ type Props = {
 
 type SectionTone = "accent" | "success" | "warning";
 
-function SectionHeading(props: {
-  icon: React.ComponentType<{ className?: string; strokeWidth?: number }>;
-  title: string;
-  subtitle?: string;
-  tone?: SectionTone;
-}) {
+function SectionHeading(props: { icon: LucideIcon; title: string; subtitle?: string; tone?: SectionTone }) {
   const { icon: Icon, title, subtitle, tone = "accent" } = props;
 
   return (
@@ -62,7 +58,7 @@ function FieldLabel(props: {
   children: ReactNode;
   required?: boolean;
   hint?: string;
-  icon?: React.ComponentType<{ className?: string; strokeWidth?: number }>;
+  icon?: LucideIcon;
   spaced?: boolean;
 }) {
   const { children, required, hint, icon: Icon, spaced } = props;

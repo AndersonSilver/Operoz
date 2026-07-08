@@ -80,7 +80,5 @@ class TestClient360QbrGuestLinkAPI:
         assert revoke_response.status_code == status.HTTP_200_OK
         assert revoke_response.data["revoked_at"] is not None
 
-        public_response = session_client.get(
-            f"/api/guest/client-360/qbr/{create_response.data['token']}/"
-        )
+        public_response = session_client.get(f"/api/guest/client-360/qbr/{create_response.data['token']}/")
         assert public_response.status_code == status.HTTP_403_FORBIDDEN

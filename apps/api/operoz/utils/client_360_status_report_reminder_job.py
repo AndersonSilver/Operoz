@@ -4,11 +4,9 @@ import logging
 import zoneinfo
 from dataclasses import dataclass
 
-from django.db.models import Q
 from django.utils import timezone
 
 from operoz.db.models import (
-    Board,
     BoardClient360HealthSettings,
     Client360StatusReportReminderLog,
     Notification,

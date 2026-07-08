@@ -7,6 +7,7 @@ from django.db.models import Q
 from .project import ProjectBaseModel
 from operoz.db.mixins import SoftDeletionManager
 
+
 class StateGroup(models.TextChoices):
     BACKLOG = "backlog", "Backlog"
     UNSTARTED = "unstarted", "Unstarted"

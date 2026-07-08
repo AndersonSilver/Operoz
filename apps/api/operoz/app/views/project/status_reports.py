@@ -108,7 +108,9 @@ class ProjectStatusReportEndpoint(BaseAPIView):
         try:
             modules = self._get_modules(project, [str(module_id) for module_id in data["module_ids"]])
         except Module.DoesNotExist:
-            return Response({"module_ids": "One or more modules not found in this project."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"module_ids": "One or more modules not found in this project."}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         content = build_project_status_report_content(
             project=project,
@@ -289,12 +291,14 @@ class ProjectStatusReportExportEndpoint(BaseAPIView):
         qs = BoardStatusReport.objects.filter(project=project, pk=pk, deleted_at__isnull=True)
         if not self._is_project_admin(request, project):
             qs = qs.filter(published_at__isnull=False)
-        report = qs.select_related(
-            "board", "project", "module", "created_by", "created_by__avatar_asset", "workspace"
-        ).prefetch_related(
-            "report_modules__module",
-            "report_modules__module__stage",
-        ).get()
+        report = (
+            qs.select_related("board", "project", "module", "created_by", "created_by__avatar_asset", "workspace")
+            .prefetch_related(
+                "report_modules__module",
+                "report_modules__module__stage",
+            )
+            .get()
+        )
 
         export_format = (request.GET.get("format") or "md").lower().strip()
         ctx = build_export_context(report)

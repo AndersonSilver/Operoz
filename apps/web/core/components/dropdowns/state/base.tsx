@@ -1,3 +1,4 @@
+import React from "react";
 import type { ReactNode } from "react";
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
@@ -210,7 +211,7 @@ export const WorkItemStateDropdownBase = observer(function WorkItemStateDropdown
         <ComboboxPortalOptions
           popperElementRef={setPopperElement}
           popperStyles={styles.popper}
-          popperAttributes={attributes.popper}
+          popperAttributes={(attributes.popper ?? {}) as React.HTMLAttributes<HTMLDivElement>}
         >
           <div className="flex items-center gap-1.5 rounded-sm border border-subtle bg-surface-2 px-2">
             <SearchIcon className="h-3.5 w-3.5 text-placeholder" strokeWidth={1.5} />

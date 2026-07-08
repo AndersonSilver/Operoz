@@ -95,9 +95,7 @@ def embed_texts_cached(
         for (index, _), vector in zip(misses, fetched, strict=True):
             vectors[index] = vector
             if vector:
-                _store_cached_vector(
-                    CACHE_PREFIX, cache_scope, hashes[index], vector, ttl=_content_cache_ttl()
-                )
+                _store_cached_vector(CACHE_PREFIX, cache_scope, hashes[index], vector, ttl=_content_cache_ttl())
 
     return [v if v is not None else [] for v in vectors]
 
@@ -115,9 +113,7 @@ def embed_query_cached(query: str) -> list[float] | None:
         from operoz.assistant.observability import record_rag_cache_access
 
         record_rag_cache_access(hit=True)
-        logger.debug(
-            "assistant query embedding cache hit scope=%s digest=%s", cache_scope, digest[:12]
-        )
+        logger.debug("assistant query embedding cache hit scope=%s digest=%s", cache_scope, digest[:12])
         return cached
 
     from operoz.assistant.observability import record_rag_cache_access

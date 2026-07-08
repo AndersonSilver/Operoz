@@ -1,7 +1,7 @@
 # Module imports
 from .base import BaseSerializer
 from .issue import IssueExpandSerializer
-from operoz.db.models import IntakeIssue, Issue, State, StateGroup
+from operoz.db.models import IntakeIssue, Issue
 from rest_framework import serializers
 
 

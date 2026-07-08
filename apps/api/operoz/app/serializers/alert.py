@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from operoz.db.models import AlertLog, AlertRule, UserAlertPreference, UserExternalAccount
+from operoz.db.models import AlertLog, AlertRule, UserExternalAccount
 from operoz.db.models.alert import AlertRule as AlertRuleModel
 
 from .base import BaseSerializer

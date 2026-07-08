@@ -32,9 +32,7 @@ class TestScheduleCron:
         assert expr == "0 8 * * 1,3,5"
 
     def test_monthly_cron_expression(self):
-        expr = cron_from_config(
-            {"preset": "monthly", "time": "12:15", "day_of_month": 15, "timezone": "UTC"}
-        )
+        expr = cron_from_config({"preset": "monthly", "time": "12:15", "day_of_month": 15, "timezone": "UTC"})
         assert expr == "15 12 15 * *"
 
     def test_custom_cron(self):
@@ -72,6 +70,4 @@ class TestScheduleCron:
         assert is_slot_due(late, config) == "2026-06-10T01:51"
 
         # já processado
-        assert (
-            is_slot_due(now, config, last_slot="2026-06-10T01:51") is None
-        )
+        assert is_slot_due(now, config, last_slot="2026-06-10T01:51") is None

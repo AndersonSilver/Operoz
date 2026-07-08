@@ -38,14 +38,22 @@ class TestRuleLifecyclePersistence:
                 "nodes": [
                     {
                         "id": "t1",
-                        "data": {"kind": "trigger", "catalog_key": "issue.created", "label": "Card criado", "config": {}},
+                        "data": {
+                            "kind": "trigger",
+                            "catalog_key": "issue.created",
+                            "label": "Card criado",
+                            "config": {},
+                        },
                     }
                 ],
                 "edges": [],
             },
         )
         assert updated.graph["nodes"]
-        assert BoardAutomationRuleRevision.objects.filter(rule=rule, kind=BoardAutomationRuleRevision.KIND_DRAFT).count() == 1
+        assert (
+            BoardAutomationRuleRevision.objects.filter(rule=rule, kind=BoardAutomationRuleRevision.KIND_DRAFT).count()
+            == 1
+        )
         assert rule_has_unpublished_changes(updated) is True
 
     def test_publish_copies_draft_to_published(self, workspace_board, workspace, create_user):
@@ -76,7 +84,9 @@ class TestRuleLifecyclePersistence:
         assert published.published_version == 1
         assert rule_has_unpublished_changes(published) is False
         assert (
-            BoardAutomationRuleRevision.objects.filter(rule=rule, kind=BoardAutomationRuleRevision.KIND_PUBLISHED).count()
+            BoardAutomationRuleRevision.objects.filter(
+                rule=rule, kind=BoardAutomationRuleRevision.KIND_PUBLISHED
+            ).count()
             == 1
         )
 

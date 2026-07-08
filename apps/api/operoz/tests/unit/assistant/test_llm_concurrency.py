@@ -9,7 +9,6 @@ from operoz.assistant.llm.concurrency import (
     is_fair_turn,
     llm_semaphore_available,
     register_fair_job,
-    release_llm_slot,
     try_acquire_llm_slot,
 )
 from operoz.assistant.llm.key_pool import get_api_key, is_key_open, list_api_keys, record_key_failure

@@ -16,7 +16,9 @@ class BoardEmailNotificationAuditEndpoint(BaseAPIView):
             return Response({"error": "Board not found"}, status=status.HTTP_404_NOT_FOUND)
 
         project_ids = Project.objects.filter(board=board, deleted_at__isnull=True).values_list("id", flat=True)
-        issue_ids = Issue.objects.filter(project_id__in=project_ids, deleted_at__isnull=True).values_list("id", flat=True)
+        issue_ids = Issue.objects.filter(project_id__in=project_ids, deleted_at__isnull=True).values_list(
+            "id", flat=True
+        )
 
         logs = (
             EmailNotificationLog.objects.filter(entity_name="issue", entity_identifier__in=issue_ids)

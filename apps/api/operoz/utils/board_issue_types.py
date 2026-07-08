@@ -39,9 +39,7 @@ def board_issue_type_stage_color(board_issue_type) -> str | None:
 def ensure_default_issue_type_icons(board: Board) -> int:
     """Corrige tipos do catálogo que ainda usam emoji (não renderizam no picker material)."""
     updated = 0
-    for bit in BoardIssueType.objects.filter(board=board, deleted_at__isnull=True).select_related(
-        "issue_type"
-    ):
+    for bit in BoardIssueType.objects.filter(board=board, deleted_at__isnull=True).select_related("issue_type"):
         issue_type = bit.issue_type
         expected = DEFAULT_ISSUE_TYPE_ICON_BY_NAME.get(issue_type.name)
         if not expected:
@@ -118,9 +116,7 @@ def sync_board_issue_types_to_project(project: Project, user=None) -> None:
         project.is_issue_type_enabled = True
         project.save(update_fields=["is_issue_type_enabled", "updated_at"])
 
-    has_default = ProjectIssueType.objects.filter(
-        project=project, is_default=True, deleted_at__isnull=True
-    ).exists()
+    has_default = ProjectIssueType.objects.filter(project=project, is_default=True, deleted_at__isnull=True).exists()
 
     for idx, board_type in enumerate(board_types):
         defaults = {

@@ -134,9 +134,7 @@ class WorkspaceClient360ViewSet(BaseViewSet):
                 report_stats=report_stats_map.get(str(project.id)),
                 board=project.board,
                 health_config=health_config_map.get(str(project.board_id)) if project.board_id else None,
-                score_alert_threshold=(
-                    alert_threshold_map.get(str(project.board_id)) if project.board_id else None
-                ),
+                score_alert_threshold=(alert_threshold_map.get(str(project.board_id)) if project.board_id else None),
             )
             for project in projects
         ]
@@ -232,12 +230,8 @@ class WorkspaceClient360ViewSet(BaseViewSet):
         )
         module_counts = aggregate_module_counts([pid])
         report_stats_map = aggregate_status_reports([pid], period)
-        health_config_map = (
-            load_board_health_config_map([project.board_id]) if project.board_id else {}
-        )
-        alert_threshold_map = (
-            load_board_score_alert_threshold_map([project.board_id]) if project.board_id else {}
-        )
+        health_config_map = load_board_health_config_map([project.board_id]) if project.board_id else {}
+        alert_threshold_map = load_board_score_alert_threshold_map([project.board_id]) if project.board_id else {}
 
         client = build_client_row(
             project,
@@ -247,14 +241,10 @@ class WorkspaceClient360ViewSet(BaseViewSet):
             report_stats=report_stats_map.get(str(pid)),
             board=project.board,
             health_config=health_config_map.get(str(project.board_id)) if project.board_id else None,
-            score_alert_threshold=(
-                alert_threshold_map.get(str(project.board_id)) if project.board_id else None
-            ),
+            score_alert_threshold=(alert_threshold_map.get(str(project.board_id)) if project.board_id else None),
         )
 
-        modules = list(
-            Module.objects.filter(project_id=pid, archived_at__isnull=True).order_by("name")
-        )
+        modules = list(Module.objects.filter(project_id=pid, archived_at__isnull=True).order_by("name"))
         reports: dict[str | None, BoardStatusReport] = {}
         for r in BoardStatusReport.objects.filter(
             project_id=pid,

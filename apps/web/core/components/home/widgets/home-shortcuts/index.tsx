@@ -19,7 +19,7 @@ export const HomeShortcutsWidget = observer(function HomeShortcutsWidget(props: 
     <div className="flex flex-wrap items-center gap-2">
       <button
         type="button"
-        onClick={() => toggleCommandPaletteModal(true)}
+        onClick={() => togglePowerKModal(true)}
         className="rounded-md border border-subtle bg-layer-2 px-3 py-2 text-13 font-medium text-primary hover:bg-layer-1"
       >
         {t("home.shortcuts.search")} <span className="text-tertiary">⌘K</span>

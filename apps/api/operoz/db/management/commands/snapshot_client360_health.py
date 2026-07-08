@@ -8,7 +8,6 @@ from django.utils.dateparse import parse_date
 from operoz.utils.client_360 import WeekPeriod, parse_week_period
 from operoz.utils.client_360_health_snapshot_job import (
     run_weekly_health_snapshots,
-    snapshot_period_for_job,
 )
 
 

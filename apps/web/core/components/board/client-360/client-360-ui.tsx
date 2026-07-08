@@ -109,7 +109,7 @@ export function Client360Section({
   title: string;
   description?: string;
   action?: ReactNode;
-  children: ReactNode;
+  children?: ReactNode;
   className?: string;
   noPadding?: boolean;
   iconTone?: Client360Tone;
@@ -356,7 +356,7 @@ export function Client360SearchInput({
   value: string;
   onChange: (value: string) => void;
   placeholder: string;
-  inputRef?: RefObject<HTMLInputElement | null>;
+  inputRef?: RefObject<HTMLInputElement>;
   className?: string;
 }) {
   return (

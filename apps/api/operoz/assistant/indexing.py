@@ -8,7 +8,15 @@ from django.db import transaction
 from operoz.assistant.embeddings import content_hash, embed_texts
 from operoz.assistant.index_status import compute_page_fingerprint, persist_index_outcome
 from operoz.assistant.page_content import build_page_indexable_text
-from operoz.db.models import BoardPlaybook, Client360HealthSnapshot, Issue, IssueComment, Page, Project, ProjectPage, SearchEmbedding
+from operoz.db.models import (
+    BoardPlaybook,
+    Client360HealthSnapshot,
+    Issue,
+    IssueComment,
+    Page,
+    ProjectPage,
+    SearchEmbedding,
+)
 
 
 @dataclass
@@ -140,11 +148,7 @@ def build_comment_chunks(comment: IssueComment) -> list[IndexChunk]:
 
 def _load_entity_chunks(entity_type: str, entity_id: str) -> tuple[str | None, list[IndexChunk]]:
     if entity_type == SearchEmbedding.ENTITY_ISSUE:
-        issue = (
-            Issue.issue_objects.filter(pk=entity_id)
-            .select_related("project", "state")
-            .first()
-        )
+        issue = Issue.issue_objects.filter(pk=entity_id).select_related("project", "state").first()
         if not issue:
             return None, []
         return str(issue.workspace_id), build_issue_chunks(issue)
@@ -156,11 +160,7 @@ def _load_entity_chunks(entity_type: str, entity_id: str) -> tuple[str | None, l
         return str(page.workspace_id), build_page_chunks(page)
 
     if entity_type == SearchEmbedding.ENTITY_COMMENT:
-        comment = (
-            IssueComment.objects.filter(pk=entity_id)
-            .select_related("issue", "issue__project")
-            .first()
-        )
+        comment = IssueComment.objects.filter(pk=entity_id).select_related("issue", "issue__project").first()
         if not comment:
             return None, []
         return str(comment.workspace_id), build_comment_chunks(comment)

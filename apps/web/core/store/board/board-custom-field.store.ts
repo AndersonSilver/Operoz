@@ -178,7 +178,7 @@ export class BoardCustomFieldStore implements IBoardCustomFieldStore {
         this.workspaceCustomFieldsBySlug[workspaceSlug] = [
           ...wsFields,
           {
-            id: created.custom_field_id,
+            id: created.custom_field_id ?? "",
             name: created.name,
             key: created.key,
             description: created.description,

@@ -143,10 +143,7 @@ def _resolve_target_date(
     for key, value in fields.items():
         if key in excluded_keys:
             continue
-        if not (
-            str(key).startswith("customfield_")
-            or key in {"resolutiondate", "startdate"}
-        ):
+        if not (str(key).startswith("customfield_") or key in {"resolutiondate", "startdate"}):
             continue
         parsed = _parse_jira_date(value)
         if parsed:

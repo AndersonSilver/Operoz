@@ -1,6 +1,5 @@
 from django.http import HttpResponse
 from django.utils.dateparse import parse_date
-from django.utils import timezone
 from rest_framework import status
 from rest_framework.response import Response
 

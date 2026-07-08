@@ -12,9 +12,7 @@ from django.conf import settings
 from operoz.automation.validator import validate_graph
 
 _PLACEHOLDER = re.compile(r"^\{\{([a-zA-Z0-9_]+)\}\}$")
-_REQUIRED_TEMPLATE_KEYS = frozenset(
-    {"id", "version", "name", "description", "graph", "parameters"}
-)
+_REQUIRED_TEMPLATE_KEYS = frozenset({"id", "version", "name", "description", "graph", "parameters"})
 
 
 def automation_templates_dir() -> Path:

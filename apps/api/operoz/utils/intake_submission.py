@@ -477,9 +477,7 @@ def create_intake_submission(
             issue_id=str(issue.id),
             asset_ids=attachment_asset_ids,
         )
-    module_ids = _normalize_uuid_list(
-        issue_payload.get("module_ids") or form_defaults.get("module_ids")
-    )
+    module_ids = _normalize_uuid_list(issue_payload.get("module_ids") or form_defaults.get("module_ids"))
     if module_ids:
         valid_module_ids = Module.objects.filter(
             project_id=project.id,

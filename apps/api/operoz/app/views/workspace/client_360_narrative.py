@@ -46,9 +46,7 @@ class WorkspaceClient360NarrativeEndpoint(BaseAPIView):
             period_end=period.end,
             wins_md=serializer.validated_data.get("wins_md", existing.wins_md if existing else ""),
             risks_md=serializer.validated_data.get("risks_md", existing.risks_md if existing else ""),
-            next_steps_md=serializer.validated_data.get(
-                "next_steps_md", existing.next_steps_md if existing else ""
-            ),
+            next_steps_md=serializer.validated_data.get("next_steps_md", existing.next_steps_md if existing else ""),
         )
         return Response(serialize_narrative(row), status=status.HTTP_200_OK)
 

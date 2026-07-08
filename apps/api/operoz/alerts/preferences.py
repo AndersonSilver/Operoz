@@ -44,7 +44,9 @@ class UserAlertPreferences:
 def get_user_alert_preferences(user: User, workspace_id: str) -> UserAlertPreferences:
     overrides = {
         (row.alert_type, row.channel_type): row.enabled
-        for row in UserAlertPreference.objects.filter(user_id=user.id, workspace_id=workspace_id, deleted_at__isnull=True)
+        for row in UserAlertPreference.objects.filter(
+            user_id=user.id, workspace_id=workspace_id, deleted_at__isnull=True
+        )
     }
     notification_pref = (
         UserNotificationPreference.objects.filter(user_id=user.id, workspace_id=workspace_id, deleted_at__isnull=True)

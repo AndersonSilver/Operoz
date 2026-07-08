@@ -21,9 +21,7 @@ def slugify_field_key(name: str) -> str:
 def unique_field_key(workspace_id, base_key: str) -> str:
     key = base_key
     suffix = 1
-    while WorkspaceCustomField.objects.filter(
-        workspace_id=workspace_id, key=key, deleted_at__isnull=True
-    ).exists():
+    while WorkspaceCustomField.objects.filter(workspace_id=workspace_id, key=key, deleted_at__isnull=True).exists():
         key = f"{base_key}_{suffix}"[:48]
         suffix += 1
     return key
@@ -66,21 +64,15 @@ def delete_workspace_custom_field(field: WorkspaceCustomField, user=None) -> Non
     field.delete(soft=True)
 
     board_ids = set()
-    for board_link in BoardCustomField.objects.filter(
-        custom_field_id=field.id, deleted_at__isnull=True
-    ):
+    for board_link in BoardCustomField.objects.filter(custom_field_id=field.id, deleted_at__isnull=True):
         board_link.is_enabled = False
         board_link.delete(soft=True)
         board_ids.add(board_link.board_id)
 
-    for project_link in ProjectCustomField.objects.filter(
-        custom_field_id=field.id, deleted_at__isnull=True
-    ):
+    for project_link in ProjectCustomField.objects.filter(custom_field_id=field.id, deleted_at__isnull=True):
         project_link.delete(soft=True)
 
-    for issue_value in IssueCustomFieldValue.objects.filter(
-        custom_field_id=field.id, deleted_at__isnull=True
-    ):
+    for issue_value in IssueCustomFieldValue.objects.filter(custom_field_id=field.id, deleted_at__isnull=True):
         issue_value.delete(soft=True)
 
     for board in Board.objects.filter(id__in=board_ids, deleted_at__isnull=True):

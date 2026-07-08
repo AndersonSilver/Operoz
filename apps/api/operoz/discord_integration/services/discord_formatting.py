@@ -181,10 +181,7 @@ def _build_overview_summary_block(
         "─" * 36,
         f"{'Projetos'.ljust(label_width)}{_format_int(project_count)}",
         f"{'Concluído'.ljust(label_width)}{aggregate_pct}% {_status_indicator(aggregate_pct)}",
-        (
-            f"{'Issues'.ljust(label_width)}"
-            f"{_format_int(total_open)} abertas · {_format_int(total_completed)} fechadas"
-        ),
+        (f"{'Issues'.ljust(label_width)}{_format_int(total_open)} abertas · {_format_int(total_completed)} fechadas"),
         f"{'Sustentação'.ljust(label_width)}{_format_int(total_support)} abertos",
         f"{'Status report'.ljust(label_width)}{_format_int(reports_ok)}/{_format_int(project_count)} publicados",
     ]
@@ -199,8 +196,7 @@ def filter_stats_by_focus(stats: list[dict[str, object]], focus: str) -> list[di
     exact = [
         project
         for project in stats
-        if needle == str(project.get("name", "")).casefold()
-        or needle == str(project.get("identifier", "")).casefold()
+        if needle == str(project.get("name", "")).casefold() or needle == str(project.get("identifier", "")).casefold()
     ]
     if exact:
         return exact
@@ -208,8 +204,7 @@ def filter_stats_by_focus(stats: list[dict[str, object]], focus: str) -> list[di
     partial = [
         project
         for project in stats
-        if needle in str(project.get("name", "")).casefold()
-        or needle in str(project.get("identifier", "")).casefold()
+        if needle in str(project.get("name", "")).casefold() or needle in str(project.get("identifier", "")).casefold()
     ]
     return partial
 

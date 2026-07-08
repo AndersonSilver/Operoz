@@ -215,7 +215,7 @@ export const BoardAutomationTemplatesGallery = observer(function BoardAutomation
           <h4 className="text-15 font-semibold text-primary">{selected.name}</h4>
           <p className="text-12 text-tertiary">{selected.description}</p>
         </div>
-        <Button variant="neutral-primary" size="sm" onClick={resetWizard}>
+        <Button variant="ghost" size="sm" onClick={resetWizard}>
           {t("boards.settings.automation.templates.back_to_gallery")}
         </Button>
       </div>
@@ -232,7 +232,7 @@ export const BoardAutomationTemplatesGallery = observer(function BoardAutomation
                 <TextArea
                   value={paramValues[param.key] ?? ""}
                   onChange={(event) => setParamValues((prev) => ({ ...prev, [param.key]: event.target.value }))}
-                  textareaSize="sm"
+                  textAreaSize="sm"
                 />
               ) : (
                 <input
@@ -244,7 +244,7 @@ export const BoardAutomationTemplatesGallery = observer(function BoardAutomation
             </label>
           ))}
           <div className="flex flex-wrap gap-2 pt-2">
-            <Button variant="neutral-primary" size="sm" onClick={handleDryRun} disabled={saving}>
+            <Button variant="ghost" size="sm" onClick={handleDryRun} disabled={saving}>
               {t("boards.settings.automation.templates.dry_run_button")}
             </Button>
             <Button variant="primary" size="sm" onClick={() => handleInstall(false)} disabled={saving}>
@@ -268,7 +268,7 @@ export const BoardAutomationTemplatesGallery = observer(function BoardAutomation
             <Button variant="primary" size="sm" onClick={() => handleInstall(true)} disabled={saving}>
               {t("boards.settings.automation.templates.install_publish_button")}
             </Button>
-            <Button variant="neutral-primary" size="sm" onClick={() => setStep("configure")}>
+            <Button variant="ghost" size="sm" onClick={() => setStep("configure")}>
               {t("boards.settings.automation.templates.edit_params")}
             </Button>
           </div>

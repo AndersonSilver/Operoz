@@ -18,6 +18,7 @@ import {
   type Node,
   type NodeChange,
   type OnSelectionChangeParams,
+  type ReactFlowProps,
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { ClipboardPaste, Copy } from "lucide-react";
@@ -69,7 +70,7 @@ function isEditableTarget(target: EventTarget | null): boolean {
 
 function shouldPersistNodeChanges(changes: NodeChange<Node<AutomationNodeData>>[]): boolean {
   return changes.some((change) => {
-    if (change.type === "select" || change.type === "dimensions" || change.type === "reset") {
+    if (change.type === "select" || change.type === "dimensions") {
       return false;
     }
     if (change.type === "position") {
@@ -183,7 +184,7 @@ function CanvasInner(props: Props) {
     (changes: EdgeChange[]) => {
       onEdgesChangeInternal(changes);
 
-      const persistable = changes.filter((change) => change.type !== "select" && change.type !== "reset");
+      const persistable = changes.filter((change) => change.type !== "select");
       if (persistable.length === 0) return;
 
       const nextEdges = applyEdgeChanges(changes, edgesRef.current);
@@ -348,7 +349,7 @@ function CanvasInner(props: Props) {
       <ReactFlow
         nodes={nodes}
         edges={edges}
-        nodeTypes={nodeTypes}
+        nodeTypes={nodeTypes as ReactFlowProps["nodeTypes"]}
         onNodesChange={onNodesChange}
         onEdgesChange={onEdgesChange}
         onConnect={onConnect}
@@ -358,8 +359,6 @@ function CanvasInner(props: Props) {
         onEdgesDelete={handleEdgesDelete}
         deleteKeyCode={["Backspace", "Delete"]}
         elementsSelectable
-        nodesDeletable
-        edgesDeletable
         selectionOnDrag={false}
         panOnDrag={[1, 2]}
         multiSelectionKeyCode="Shift"

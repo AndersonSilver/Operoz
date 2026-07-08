@@ -11,9 +11,7 @@ from operoz.db.models import BoardAutomationRule, BoardAutomationRuleRevision
 
 
 def graphs_equal(left: dict[str, Any] | None, right: dict[str, Any] | None) -> bool:
-    return json.dumps(left or {}, sort_keys=True, default=str) == json.dumps(
-        right or {}, sort_keys=True, default=str
-    )
+    return json.dumps(left or {}, sort_keys=True, default=str) == json.dumps(right or {}, sort_keys=True, default=str)
 
 
 def rule_has_published_graph(rule: BoardAutomationRule) -> bool:

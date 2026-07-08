@@ -64,7 +64,9 @@ class TestWorkflowCrudContract:
         assert workflows.status_code == status.HTTP_200_OK
         assert schemes.status_code == status.HTTP_200_OK
 
-        workflow_results = workflows.data if isinstance(workflows.data, list) else workflows.data.get("results", workflows.data)
+        workflow_results = (
+            workflows.data if isinstance(workflows.data, list) else workflows.data.get("results", workflows.data)
+        )
         scheme_results = schemes.data if isinstance(schemes.data, list) else schemes.data.get("results", schemes.data)
         assert any(item["name"] == "Listed workflow" for item in workflow_results)
         assert any(item["name"] == "Listed scheme" for item in scheme_results)

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from celery import shared_task
 from django.db.models import Q
-from django.utils import timezone
 
 from operoz.alerts.access import user_can_receive_issue_alert
 from operoz.alerts.dispatcher import build_issue_url, dispatch_rule_for_subject

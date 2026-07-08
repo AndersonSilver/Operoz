@@ -2,9 +2,6 @@ from __future__ import annotations
 
 import csv
 import io
-from typing import Iterable
-
-from operoz.utils.client_360_matrix import CLIENT_360_MATRIX_SCHEMA_VERSION
 
 
 def build_client360_matrix_csv_content(
@@ -26,7 +23,6 @@ def build_client360_matrix_csv_content(
         "modules_published",
     ]
     writer.writerow(header)
-    week_index = {week["period_start"]: week for week in weeks}
     for client in clients:
         cells_by_start = {cell["period_start"]: cell for cell in client.get("cells") or []}
         for week in weeks:

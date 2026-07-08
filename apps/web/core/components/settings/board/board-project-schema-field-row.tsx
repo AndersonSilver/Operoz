@@ -47,7 +47,10 @@ export function BoardProjectSchemaFieldRow(props: Props) {
           <ChevronDown className="size-3.5" />
         </button>
       </div>
-      <BoardCustomFieldTypeGlyph fieldType={isStandard ? "standard" : item.field_type} size="sm" />
+      <BoardCustomFieldTypeGlyph
+        fieldType={isStandard ? "standard" : (item.field_type as import("@operoz/types").TCustomFieldType)}
+        size="sm"
+      />
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
         <span className="truncate text-13 font-medium text-primary">{getBoardProjectFieldDisplayName(item, t)}</span>
         {isStandard && (

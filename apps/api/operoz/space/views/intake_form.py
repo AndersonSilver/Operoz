@@ -16,7 +16,6 @@ from operoz.settings.storage import S3Storage
 from operoz.utils.intake_submission import IntakeSubmissionError, submit_intake_form
 from operoz.utils.board_intake_submission import (
     board_intake_client_queryset,
-    get_published_board_intake_form,
     serialize_board_intake_clients,
     submit_board_intake_form,
 )

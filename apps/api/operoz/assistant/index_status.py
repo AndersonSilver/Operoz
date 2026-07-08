@@ -156,9 +156,7 @@ def mark_index_processing(entity_type: str, entity_id: str) -> None:
 
 
 def _compute_index_duration_seconds(record: dict[str, Any]) -> int | None:
-    start = _parse_iso_datetime(record.get("queued_at")) or _parse_iso_datetime(
-        record.get("processing_started_at")
-    )
+    start = _parse_iso_datetime(record.get("queued_at")) or _parse_iso_datetime(record.get("processing_started_at"))
     if not start:
         return None
     return max(1, int((datetime.now(timezone.utc) - start).total_seconds()))

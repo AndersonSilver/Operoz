@@ -54,8 +54,7 @@ if not _allowed_hosts_raw:
     from django.core.exceptions import ImproperlyConfigured
 
     raise ImproperlyConfigured(
-        "ALLOWED_HOSTS environment variable must be set. "
-        "For local development, use: ALLOWED_HOSTS=localhost,127.0.0.1"
+        "ALLOWED_HOSTS environment variable must be set. For local development, use: ALLOWED_HOSTS=localhost,127.0.0.1"
     )
 ALLOWED_HOSTS = _allowed_hosts_raw.split(",")
 
@@ -354,9 +353,7 @@ ASSISTANT_ALERT_ERROR_RATE = float(os.environ.get("ASSISTANT_ALERT_ERROR_RATE", 
 ASSISTANT_REQUIRE_SESSION_SCOPE = os.environ.get("ASSISTANT_REQUIRE_SESSION_SCOPE", "1")
 LLM_MODEL_FALLBACK = os.environ.get("LLM_MODEL_FALLBACK", "")
 AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", "500"))
-AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(
-    os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000")
-)
+AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000"))
 _AUTOMATION_WORKSPACE_OVERRIDES_RAW = os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES", "{}")
 try:
     import json as _json

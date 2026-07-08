@@ -6,16 +6,14 @@ from operoz.app.serializers import IssueCustomFieldValueSerializer, IssueCustomF
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import Issue, IssueCustomFieldValue
 from operoz.utils.board_custom_fields import get_project_enabled_custom_fields
-from operoz.utils.board_permission_enforcement import deny_board_permission, get_project_for_enforcement
+from operoz.utils.board_permission_enforcement import deny_board_permission
 
 
 class IssueCustomFieldValueEndpoint(BaseAPIView):
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER], level="WORKSPACE")
     def get(self, request, slug, issue_id):
         issue = Issue.objects.get(workspace__slug=slug, pk=issue_id, deleted_at__isnull=True)
-        allowed_ids = set(
-            get_project_enabled_custom_fields(issue.project).values_list("id", flat=True)
-        )
+        allowed_ids = set(get_project_enabled_custom_fields(issue.project).values_list("id", flat=True))
         values = IssueCustomFieldValue.objects.filter(
             issue=issue, deleted_at__isnull=True, custom_field_id__in=allowed_ids
         ).select_related("custom_field")
@@ -35,9 +33,7 @@ class IssueCustomFieldValueEndpoint(BaseAPIView):
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        allowed_ids = set(
-            get_project_enabled_custom_fields(issue.project).values_list("id", flat=True)
-        )
+        allowed_ids = set(get_project_enabled_custom_fields(issue.project).values_list("id", flat=True))
         saved = []
 
         for item in serializer.validated_data["values"]:

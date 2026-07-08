@@ -30,7 +30,9 @@ LIVE_BACKFILL_LIMITATION = (
 )
 
 
-def parse_health_history_weeks(raw: str | None, *, default: int = DEFAULT_HEALTH_HISTORY_WEEKS) -> tuple[int, str | None]:
+def parse_health_history_weeks(
+    raw: str | None, *, default: int = DEFAULT_HEALTH_HISTORY_WEEKS
+) -> tuple[int, str | None]:
     if raw is None or raw == "":
         return default, None
     try:

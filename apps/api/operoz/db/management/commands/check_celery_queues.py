@@ -51,9 +51,7 @@ class Command(BaseCommand):
         if alerts:
             self.stderr.write(self.style.WARNING(f"\nAlertas (limiares por fila; global default={threshold}):"))
             for alert in alerts:
-                self.stderr.write(
-                    self.style.ERROR(f"  {alert['queue']}: {alert['depth']} >= {alert['threshold']}")
-                )
+                self.stderr.write(self.style.ERROR(f"  {alert['queue']}: {alert['depth']} >= {alert['threshold']}"))
             if options["fail_on_alert"]:
                 sys.exit(1)
         elif options["fail_on_alert"]:

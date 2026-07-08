@@ -39,11 +39,7 @@ def build_sync_comment_html(session: PageReviewSession, comments: list[PageRevie
     page_name = session.page.name if session.page_id else "PRD"
     url = build_page_review_workspace_url(session)
     items = "".join(format_review_comment_block(c) for c in comments)
-    return (
-        f"<p><strong>Feedback PRD — {page_name}</strong> "
-        f"(<a href=\"{url}\">abrir documento</a>)</p>"
-        f"<ul>{items}</ul>"
-    )
+    return f'<p><strong>Feedback PRD — {page_name}</strong> (<a href="{url}">abrir documento</a>)</p><ul>{items}</ul>'
 
 
 def sync_review_comments_to_issue(

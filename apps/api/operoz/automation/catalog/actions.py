@@ -162,9 +162,7 @@ def _action_send_email(
         return {"ok": False, "message": "Template de e-mail não selecionado"}
 
     try:
-        template = BoardAutomationEmailTemplate.objects.get(
-            pk=template_id, deleted_at__isnull=True, is_active=True
-        )
+        template = BoardAutomationEmailTemplate.objects.get(pk=template_id, deleted_at__isnull=True, is_active=True)
     except BoardAutomationEmailTemplate.DoesNotExist:
         return {"ok": False, "message": "Template de e-mail não encontrado ou inativo"}
 
@@ -174,11 +172,7 @@ def _action_send_email(
 
     if user_ids:
         emails.extend(
-            list(
-                User.objects.filter(id__in=user_ids, is_active=True)
-                .exclude(email="")
-                .values_list("email", flat=True)
-            )
+            list(User.objects.filter(id__in=user_ids, is_active=True).exclude(email="").values_list("email", flat=True))
         )
 
     emails = list(dict.fromkeys(emails))
@@ -298,7 +292,7 @@ def _action_ask_assistant(
         answer = "[dry-run] Resposta do assistente"
     else:
         result = llm_json_completion(
-            system="Responda em português (pt-BR) de forma concisa. JSON: {\"answer\": string}",
+            system='Responda em português (pt-BR) de forma concisa. JSON: {"answer": string}',
             user=f"{prompt}\n\nEvento: {event.to_dict()}",
         )
         if not result.get("ok"):

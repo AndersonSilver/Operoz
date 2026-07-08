@@ -203,9 +203,9 @@ def seed_board_roles(board: Board, user=None) -> None:
 def get_user_board_permission_keys(board_id, user_id) -> set[str]:
     if not user_id:
         return set()
-    role_ids = BoardMemberRole.objects.filter(
-        board_id=board_id, user_id=user_id, deleted_at__isnull=True
-    ).values_list("role_id", flat=True)
+    role_ids = BoardMemberRole.objects.filter(board_id=board_id, user_id=user_id, deleted_at__isnull=True).values_list(
+        "role_id", flat=True
+    )
     if not role_ids:
         return set()
     return set(

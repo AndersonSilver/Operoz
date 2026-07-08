@@ -1,3 +1,4 @@
+import React, { useRef } from "react";
 import { observer } from "mobx-react";
 import { PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type { TIssue } from "@operoz/types";
@@ -16,6 +17,7 @@ type WorkItemRowProps = {
 
 export const WorkItemRow = observer(function WorkItemRow(props: WorkItemRowProps) {
   const { issue, workspaceSlug } = props;
+  const itemRef = useRef<HTMLDivElement>(null);
   const { getStateById } = useProjectState();
   const { setPeekIssue } = useIssueDetail();
   const { setPeekIssue: setPeekEpic } = useIssueDetail(EIssueServiceType.EPICS);
@@ -38,7 +40,7 @@ export const WorkItemRow = observer(function WorkItemRow(props: WorkItemRowProps
     e.stopPropagation();
     const peekDetails = {
       workspaceSlug,
-      projectId: issue.project_id,
+      projectId: issue.project_id ?? "",
       issueId: issue.id,
     };
     if (issue.is_epic) setPeekEpic(peekDetails);
@@ -50,6 +52,7 @@ export const WorkItemRow = observer(function WorkItemRow(props: WorkItemRowProps
       key={issue.id}
       id={`home-issue-${issue.id}`}
       itemLink={workItemLink}
+      parentRef={itemRef}
       title={issue.name}
       prependTitleElement={
         <div className="flex flex-shrink-0 items-center gap-2">

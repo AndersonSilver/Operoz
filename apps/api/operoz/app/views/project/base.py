@@ -24,7 +24,6 @@ from operoz.bgtasks.webhook_task import model_activity, webhook_activity
 from operoz.db.models import (
     UserFavorite,
     DeployBoard,
-    Intake,
     Project,
     ProjectIdentifier,
     ProjectMember,

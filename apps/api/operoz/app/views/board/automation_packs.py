@@ -51,7 +51,9 @@ class BoardAutomationPackInstallEndpoint(BaseAPIView):
         except ValueError as exc:
             code = str(exc)
             if code == "pack_already_installed":
-                return Response({"error": "Pack já instalado neste board.", "code": code}, status=status.HTTP_409_CONFLICT)
+                return Response(
+                    {"error": "Pack já instalado neste board.", "code": code}, status=status.HTTP_409_CONFLICT
+                )
             if code.startswith("template_not_found:"):
                 return Response({"error": code, "code": "template_not_found"}, status=status.HTTP_400_BAD_REQUEST)
             return Response({"error": code, "code": "install_failed"}, status=status.HTTP_400_BAD_REQUEST)

@@ -157,9 +157,7 @@ class InstanceEndpoint(BaseAPIView):
 
         # Open AI settings
         data["has_llm_configured"] = bool(LLM_API_KEY)
-        data["operoz_assistant_enabled"] = (
-            ASSISTANT_ENABLED == "1" and VITE_ENABLE_OPEROZ_ASSISTANT == "1"
-        )
+        data["operoz_assistant_enabled"] = ASSISTANT_ENABLED == "1" and VITE_ENABLE_OPEROZ_ASSISTANT == "1"
 
         # File size settings
         data["file_size_limit"] = float(os.environ.get("FILE_SIZE_LIMIT", 5242880))

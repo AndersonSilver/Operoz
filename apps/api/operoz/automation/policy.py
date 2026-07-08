@@ -54,9 +54,7 @@ def get_or_create_board_policy(board) -> BoardAutomationPolicy:
 
 def get_board_policy(board_id: str) -> BoardAutomationPolicy | None:
     return (
-        BoardAutomationPolicy.objects.filter(board_id=board_id, deleted_at__isnull=True)
-        .select_related("board")
-        .first()
+        BoardAutomationPolicy.objects.filter(board_id=board_id, deleted_at__isnull=True).select_related("board").first()
     )
 
 

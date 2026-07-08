@@ -55,9 +55,7 @@ def _board_issues_queryset(workspace_slug: str, board_id: str, user: User):
     )
 
 
-def _project_module_issues_queryset(
-    workspace_slug: str, project_id: str, module_id: str, user=None
-):
+def _project_module_issues_queryset(workspace_slug: str, project_id: str, module_id: str, user=None):
     # Mesmo critério da listagem de issues do módulo (sem filtro extra por autor).
     del user  # compat: callers antigos passavam request.user
     return Issue.issue_objects.filter(
@@ -159,9 +157,7 @@ def _children_stats_for_parents(parent_ids: list, project_id) -> dict:
     }
 
 
-def _issue_work_item_counts(
-    issue: Issue, children_stats: dict
-) -> tuple[int, int]:
+def _issue_work_item_counts(issue: Issue, children_stats: dict) -> tuple[int, int]:
     """Retorna (concluídos, total) de itens de trabalho para um card de cronograma."""
     stats = children_stats.get(issue.id, {})
     total_children = stats.get("total_children") or 0
@@ -283,15 +279,12 @@ def progress_pct_from_entregas(entregas: list[dict]) -> int:
 
 
 def _module_completion_pct(module: Module) -> int:
-    stats = (
-        Issue.issue_objects.filter(
-            issue_module__module_id=module.id,
-            issue_module__deleted_at__isnull=True,
-        )
-        .aggregate(
-            total=Count("pk", distinct=True),
-            completed=Count("pk", distinct=True, filter=Q(state__group="completed")),
-        )
+    stats = Issue.issue_objects.filter(
+        issue_module__module_id=module.id,
+        issue_module__deleted_at__isnull=True,
+    ).aggregate(
+        total=Count("pk", distinct=True),
+        completed=Count("pk", distinct=True, filter=Q(state__group="completed")),
     )
     total = stats.get("total") or 0
     completed = stats.get("completed") or 0
@@ -447,9 +440,7 @@ def build_status_report_content(
 
     state_distribution = [
         {"state_group": row["state__group"], "count": row["count"]}
-        for row in issue_qs.values("state__group")
-        .annotate(count=Count("pk", distinct=True))
-        .order_by("state__group")
+        for row in issue_qs.values("state__group").annotate(count=Count("pk", distinct=True)).order_by("state__group")
     ]
 
     metrics = {
@@ -663,9 +654,7 @@ def _build_module_report_metrics(
 
     state_distribution = [
         {"state_group": row["state__group"], "count": row["count"]}
-        for row in issue_qs.values("state__group")
-        .annotate(count=Count("pk", distinct=True))
-        .order_by("state__group")
+        for row in issue_qs.values("state__group").annotate(count=Count("pk", distinct=True)).order_by("state__group")
     ]
 
     metrics = {

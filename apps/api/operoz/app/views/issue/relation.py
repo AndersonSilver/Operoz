@@ -18,7 +18,6 @@ from .. import BaseViewSet
 from operoz.app.serializers import IssueRelationSerializer, RelatedIssueSerializer
 from operoz.app.permissions import ProjectEntityPermission
 from operoz.db.models import (
-    Project,
     IssueRelation,
     Issue,
     FileAsset,

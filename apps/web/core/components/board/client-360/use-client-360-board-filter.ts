@@ -31,7 +31,7 @@ export function useClient360BoardFilter(workspaceSlug: string, availableBoards: 
       if (boardIds.length === 0) params.delete(CLIENT_360_BOARD_IDS_PARAM);
       else params.set(CLIENT_360_BOARD_IDS_PARAM, boardIds.join(","));
       const query = params.toString();
-      router.replace(query ? `${pathname}?${query}` : pathname, { scroll: false });
+      router.replace(query ? `${pathname}?${query}` : pathname);
     },
     [pathname, router, searchParams]
   );

@@ -40,7 +40,6 @@ from operoz.automation.hooks import (
     build_issue_automation_snapshot,
     emit_issue_created,
     emit_issue_updated,
-    serialize_issue_snapshot,
 )
 from operoz.bgtasks.issue_activities_task import issue_activity
 from operoz.bgtasks.issue_description_version_task import issue_description_version_task
@@ -846,21 +845,11 @@ class ProjectUserDisplayPropertyEndpoint(BaseAPIView):
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST])
     def patch(self, request, slug, project_id):
         try:
-            issue_property = ProjectUserProperty.objects.get(
-                user=request.user, 
-                project_id=project_id
-            )
+            issue_property = ProjectUserProperty.objects.get(user=request.user, project_id=project_id)
         except ProjectUserProperty.DoesNotExist:
-            issue_property = ProjectUserProperty.objects.create(
-                user=request.user, 
-                project_id=project_id
-            )
+            issue_property = ProjectUserProperty.objects.create(user=request.user, project_id=project_id)
 
-        serializer = ProjectUserPropertySerializer(
-            issue_property, 
-            data=request.data,
-            partial=True
-        )
+        serializer = ProjectUserPropertySerializer(issue_property, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)
@@ -942,9 +931,7 @@ class BulkOperationIssuesEndpoint(BaseAPIView):
 
     def _apply_modules(self, request, project_id, issue, module_ids):
         project = Project.objects.get(pk=project_id)
-        current_module_ids = set(
-            ModuleIssue.objects.filter(issue_id=issue.id).values_list("module_id", flat=True)
-        )
+        current_module_ids = set(ModuleIssue.objects.filter(issue_id=issue.id).values_list("module_id", flat=True))
         target_module_ids = set(module_ids or [])
 
         to_add = target_module_ids - current_module_ids
@@ -991,11 +978,7 @@ class BulkOperationIssuesEndpoint(BaseAPIView):
         if denied := deny_for_issue_patch(request.user, project, properties):
             return denied
 
-        issues = list(
-            Issue.issue_objects.filter(
-                workspace__slug=slug, project_id=project_id, pk__in=issue_ids
-            )
-        )
+        issues = list(Issue.issue_objects.filter(workspace__slug=slug, project_id=project_id, pk__in=issue_ids))
 
         if not issues:
             return Response({"error": "No matching work items found"}, status=status.HTTP_404_NOT_FOUND)
@@ -1426,9 +1409,9 @@ class IssueDetailEndpoint(BaseAPIView):
             order_by=order_by_param,
             queryset=issue,
             total_count_queryset=total_issue_queryset,
-            on_results=lambda issue: IssueListDetailSerializer(
-                issue, many=True, fields=self.fields, expand=self.expand
-            ).data,
+            on_results=lambda issue: (
+                IssueListDetailSerializer(issue, many=True, fields=self.fields, expand=self.expand).data
+            ),
         )
 
 

@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from typing import Any
 
-from operoz.automation.catalog import ensure_catalog
 from operoz.automation.compiler import compile_graph
 
 
@@ -41,11 +40,7 @@ def validate_graph(graph: dict[str, Any], *, board_id: str | None = None) -> dic
         if kind == "parallel":
             if key != "parallel.fan_out":
                 errors.append(f"Nó paralelo {node.get('id')} deve usar parallel.fan_out.")
-            outgoing = [
-                edge
-                for edge in (graph.get("edges") or [])
-                if edge.get("source") == node.get("id")
-            ]
+            outgoing = [edge for edge in (graph.get("edges") or []) if edge.get("source") == node.get("id")]
             if len(outgoing) < 2:
                 warnings.append(f"Fan-out {node.get('id')} deve ter pelo menos dois ramos conectados.")
             continue

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 
 from celery import shared_task
 

@@ -57,12 +57,8 @@ export const IssueTypeSelect = observer(function IssueTypeSelect(props: TIssueTy
             <span className="text-placeholder">{t("issue.add.type")}</span>
           )
         }
-        buttonVariant="transparent-with-text"
         buttonClassName={`text-body-xs-medium w-full ${issue.type_id ? "" : "text-placeholder"}`}
         className="group h-7.5 w-full grow"
-        buttonContainerClassName="w-full text-left h-7.5 rounded-sm"
-        dropdownArrow
-        dropdownArrowClassName="h-3.5 w-3.5 hidden group-hover:inline"
         disabled={disabled}
       >
         {issueTypes.map((type) => (

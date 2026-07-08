@@ -98,9 +98,7 @@ class ProjectStatusReportCreateSerializer(serializers.Serializer):
         title = (attrs.get("title") or "").strip()
         if kind == "sprint":
             if not title:
-                raise serializers.ValidationError(
-                    {"title": "Informe o nome da sprint (ex.: Sprint 1)."}
-                )
+                raise serializers.ValidationError({"title": "Informe o nome da sprint (ex.: Sprint 1)."})
             attrs["title"] = title
         elif title:
             attrs["title"] = title

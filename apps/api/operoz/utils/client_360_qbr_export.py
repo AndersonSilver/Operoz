@@ -166,9 +166,7 @@ def build_qbr_payload(data: QbrBuildInput) -> dict:
     chart_warnings = list(data.chart_warnings)
     sparkline = _sparkline_ascii(health_scores)
     if data.weeks_requested > 1 and sparkline == "—" and data.scope == "client":
-        chart_warnings.append(
-            "Gráfico de tendência indisponível — histórico parcial omitido do pacote QBR."
-        )
+        chart_warnings.append("Gráfico de tendência indisponível — histórico parcial omitido do pacote QBR.")
 
     title = (
         f"QBR — {data.client_detail['name']}"
@@ -255,9 +253,7 @@ def qbr_to_markdown(payload: dict) -> str:
             lines.extend(["### Status report por módulo", "", "| Módulo | Estado |", "| --- | --- |"])
             for module in modules:
                 status = module.get("status", "missing")
-                label = {"published": "Publicado", "draft": "Rascunho", "missing": "Em falta"}.get(
-                    status, status
-                )
+                label = {"published": "Publicado", "draft": "Rascunho", "missing": "Em falta"}.get(status, status)
                 lines.append(f"| {module.get('module_name') or '—'} | {label} |")
             lines.append("")
 
@@ -303,7 +299,14 @@ def qbr_to_markdown(payload: dict) -> str:
         lines.append("")
 
     if payload.get("scope") == "portfolio" and payload.get("clients"):
-        lines.extend(["## Carteira (semana de referência)", "", "| Cliente | Saúde | Score | Report | Atrasados |", "| --- | --- | ---: | --- | ---: |"])
+        lines.extend(
+            [
+                "## Carteira (semana de referência)",
+                "",
+                "| Cliente | Saúde | Score | Report | Atrasados |",
+                "| --- | --- | ---: | --- | ---: |",
+            ]
+        )
         for client in payload["clients"][:50]:
             lines.append(
                 f"| {client.get('name', '—')} | {_health_label(client.get('health', 'ok'))} | {client.get('health_score', '—')} | {_coverage_label(client.get('status_report', {}).get('coverage', 'n_a'))} | {client.get('issues', {}).get('overdue', 0)} |"
@@ -340,7 +343,6 @@ def qbr_to_markdown(payload: dict) -> str:
 
 def qbr_to_html(payload: dict) -> str:
     md = qbr_to_markdown(payload)
-    body = "<br/>\n".join(_esc(line) if line else "" for line in md.splitlines())
     warnings = payload.get("chart_warnings") or []
     warning_html = ""
     if warnings:
@@ -351,7 +353,7 @@ def qbr_to_html(payload: dict) -> str:
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8"/>
-  <title>{_esc(payload.get('title', 'QBR'))}</title>
+  <title>{_esc(payload.get("title", "QBR"))}</title>
   <style>
     body {{ font-family: Helvetica, Arial, sans-serif; font-size: 11pt; color: #111; margin: 24px; }}
     h1 {{ font-size: 20pt; margin-bottom: 4px; }}

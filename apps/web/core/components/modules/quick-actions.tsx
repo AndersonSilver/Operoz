@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { observer } from "mobx-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
@@ -125,7 +125,7 @@ export const ModuleQuickActions = observer(function ModuleQuickActions(props: Pr
           {additionalModals}
         </div>
       )}
-      <ContextMenu parentRef={parentRef} items={CONTEXT_MENU_ITEMS} />
+      <ContextMenu parentRef={parentRef as React.RefObject<HTMLElement>} items={CONTEXT_MENU_ITEMS} />
       <CustomMenu
         ellipsis
         placement="bottom-end"

@@ -279,8 +279,7 @@ def build_client360_matrix_payload(
         "anchor_period_start": anchor_period.start.isoformat(),
         "anchor_period_end": anchor_period.end.isoformat(),
         "weeks": [
-            {"period_start": period.start.isoformat(), "period_end": period.end.isoformat()}
-            for period in periods
+            {"period_start": period.start.isoformat(), "period_end": period.end.isoformat()} for period in periods
         ],
         "pagination": {
             "page": page,

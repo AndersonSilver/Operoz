@@ -52,7 +52,6 @@ const nodeTypes = {
 
 const edgeTypes = {
   [WORKFLOW_STEP_EDGE_TYPE]: WorkflowStepEdge,
-  step: WorkflowStepEdge,
 };
 
 function CanvasInner(props: Props) {

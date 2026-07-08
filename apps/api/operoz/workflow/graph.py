@@ -98,16 +98,16 @@ def merge_editor_layout(computed: Dict[str, Any], layout_source: Dict[str, Any])
 def build_graph_from_models(workflow: Workflow) -> Dict[str, Any]:
     """
     Convert workflow models to graph representation for the visual editor.
-    
+
     Args:
         workflow: The Workflow model instance
-    
+
     Returns:
         Dict with "nodes" and "edges" arrays
     """
     nodes = []
     edges = []
-    
+
     # Create nodes from states
     # Note: States are not stored in the workflow, they're referenced by transitions
     # We need to collect all unique states from transitions
@@ -117,7 +117,7 @@ def build_graph_from_models(workflow: Workflow) -> Dict[str, Any]:
             state_ids.add(transition.from_state.id)
         if transition.to_state:
             state_ids.add(transition.to_state.id)
-    
+
     # Add initial state if set
     if workflow.initial_state:
         state_ids.add(workflow.initial_state.id)
@@ -133,79 +133,68 @@ def build_graph_from_models(workflow: Workflow) -> Dict[str, Any]:
 
     # Create nodes for each state
     for state in states:
-        nodes.append({
-            "id": f"state-{state.id}",
-            "type": "state",
-            "position": positions.get(state.id, default_node_position(0)),
-            "data": {
-                "state_id": str(state.id),
-                "name": state.name,
-                "color": state.color,
-                "group": state.group,
-                "is_initial": workflow.initial_state_id == state.id if workflow.initial_state_id else False,
+        nodes.append(
+            {
+                "id": f"state-{state.id}",
+                "type": "state",
+                "position": positions.get(state.id, default_node_position(0)),
+                "data": {
+                    "state_id": str(state.id),
+                    "name": state.name,
+                    "color": state.color,
+                    "group": state.group,
+                    "is_initial": workflow.initial_state_id == state.id if workflow.initial_state_id else False,
+                },
             }
-        })
-    
+        )
+
     # Create edges from transitions
     for transition in workflow.transitions.all():
         from_state_id = str(transition.from_state.id) if transition.from_state else None
         to_state_id = str(transition.to_state.id)
-        
+
         edge_data = {
             "name": transition.name,
             "is_global": transition.is_global,
             "conditions": [
-                {
-                    "condition_type": c.condition_type,
-                    "config": c.config
-                }
-                for c in transition.conditions.all()
+                {"condition_type": c.condition_type, "config": c.config} for c in transition.conditions.all()
             ],
             "validators": [
-                {
-                    "validator_type": v.validator_type,
-                    "config": v.config
-                }
-                for v in transition.validators.all()
+                {"validator_type": v.validator_type, "config": v.config} for v in transition.validators.all()
             ],
             "post_functions": [
-                {
-                    "function_type": pf.function_type,
-                    "config": pf.config,
-                    "sort_order": pf.sort_order
-                }
+                {"function_type": pf.function_type, "config": pf.config, "sort_order": pf.sort_order}
                 for pf in transition.post_functions.all()
             ],
         }
-        
+
         # Add screen if exists
-        if hasattr(transition, 'screen') and transition.screen:
-            edge_data["screen"] = {
-                "fields": transition.screen.fields
-            }
-        
+        if hasattr(transition, "screen") and transition.screen:
+            edge_data["screen"] = {"fields": transition.screen.fields}
+
         if from_state_id:
-            edges.append({
-                "id": f"transition-{transition.id}",
-                "source": f"state-{from_state_id}",
-                "target": f"state-{to_state_id}",
-                "type": "transition",
-                "data": edge_data
-            })
+            edges.append(
+                {
+                    "id": f"transition-{transition.id}",
+                    "source": f"state-{from_state_id}",
+                    "target": f"state-{to_state_id}",
+                    "type": "transition",
+                    "data": edge_data,
+                }
+            )
         else:
             # Global transition - create a special edge
-            edges.append({
-                "id": f"transition-{transition.id}",
-                "source": "global",
-                "target": f"state-{to_state_id}",
-                "type": "transition",
-                "data": edge_data
-            })
-    
-    return {
-        "nodes": nodes,
-        "edges": edges
-    }
+            edges.append(
+                {
+                    "id": f"transition-{transition.id}",
+                    "source": "global",
+                    "target": f"state-{to_state_id}",
+                    "type": "transition",
+                    "data": edge_data,
+                }
+            )
+
+    return {"nodes": nodes, "edges": edges}
 
 
 def models_to_graph(workflow: Workflow) -> Dict[str, Any]:
@@ -224,34 +213,34 @@ def models_to_graph(workflow: Workflow) -> Dict[str, Any]:
 def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> None:
     """
     Convert graph representation to workflow models.
-    
+
     This is a destructive operation - it replaces all transitions in the workflow
     with the ones from the graph.
-    
+
     Args:
         workflow: The Workflow model instance to update
         graph: Dict with "nodes" and "edges" arrays
         user: The user making the changes (for audit)
-    
+
     Raises:
         ValueError: If graph is invalid or states don't exist
     """
     nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
-    
+
     # Validate that all referenced states exist and belong to the same workspace
     state_ids = set()
     for node in nodes:
         state_id = node.get("data", {}).get("state_id")
         if state_id:
             state_ids.add(state_id)
-    
+
     for edge in edges:
         target = edge.get("target", "")
         if target.startswith("state-"):
             state_id = target.replace("state-", "")
             state_ids.add(state_id)
-    
+
     # Verify all states exist and belong to the workspace
     for state_id in state_ids:
         try:
@@ -260,37 +249,37 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                 raise ValueError(f"State {state.name} belongs to a different workspace")
         except State.DoesNotExist:
             raise ValueError(f"State with id {state_id} does not exist")
-    
+
     with transaction.atomic():
         # Delete existing transitions
         workflow.transitions.all().delete()
-        
+
         # Create transitions from edges
         for edge in edges:
             edge_data = edge.get("data", {})
-            
+
             # Get source and target states
             target = edge.get("target", "")
             source = edge.get("source", "")
-            
+
             if not target.startswith("state-"):
                 continue
-            
+
             to_state_id = target.replace("state-", "")
             from_state_id = None
-            
+
             if source.startswith("state-"):
                 from_state_id = source.replace("state-", "")
             elif source != "global":
                 continue
-            
+
             # Get state objects
             try:
                 to_state = State.objects.get(id=to_state_id)
                 from_state = State.objects.get(id=from_state_id) if from_state_id else None
             except State.DoesNotExist:
                 continue
-            
+
             # Create transition
             transition = WorkflowTransition.objects.create(
                 workflow=workflow,
@@ -302,7 +291,7 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                 created_by=user,
                 updated_by=user,
             )
-            
+
             # Create conditions
             for condition_data in edge_data.get("conditions", []):
                 TransitionCondition.objects.create(
@@ -312,7 +301,7 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                     created_by=user,
                     updated_by=user,
                 )
-            
+
             # Create validators
             for validator_data in edge_data.get("validators", []):
                 TransitionValidator.objects.create(
@@ -322,7 +311,7 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                     created_by=user,
                     updated_by=user,
                 )
-            
+
             # Create post-functions
             for pf_data in edge_data.get("post_functions", []):
                 TransitionPostFunction.objects.create(
@@ -333,7 +322,7 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                     created_by=user,
                     updated_by=user,
                 )
-            
+
             # Create screen if present
             screen_data = edge_data.get("screen")
             if screen_data:
@@ -343,7 +332,7 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
                     created_by=user,
                     updated_by=user,
                 )
-        
+
         # Set initial state if specified in nodes
         # Look for a node marked as initial (this would be set by the editor)
         for node in nodes:
@@ -365,40 +354,40 @@ def graph_to_models(workflow: Workflow, graph: Dict[str, Any], user: User) -> No
 def validate_graph(graph: Dict[str, Any]) -> List[str]:
     """
     Validate a workflow graph for consistency.
-    
+
     Args:
         graph: Dict with "nodes" and "edges" arrays
-    
+
     Returns:
         List of error messages (empty if valid)
     """
     errors = []
     nodes = graph.get("nodes", [])
     edges = graph.get("edges", [])
-    
+
     # Check that there's at least one node
     if not nodes:
         errors.append("Workflow must have at least one state")
-    
+
     # Check that there's at least one initial state
     initial_nodes = [n for n in nodes if n.get("data", {}).get("is_initial")]
     if len(initial_nodes) == 0:
         errors.append("Workflow must have exactly one initial state")
     elif len(initial_nodes) > 1:
         errors.append("Workflow must have exactly one initial state")
-    
+
     # Check that all edges have valid source/target
     node_ids = {n.get("id") for n in nodes}
     for edge in edges:
         source = edge.get("source")
         target = edge.get("target")
-        
+
         if target not in node_ids and not target.startswith("state-"):
             errors.append(f"Edge {edge.get('id')} has invalid target: {target}")
-        
+
         if source != "global" and source not in node_ids and not source.startswith("state-"):
             errors.append(f"Edge {edge.get('id')} has invalid source: {source}")
-    
+
     # Check that all states are reachable (basic check)
     if nodes:
         # Collect all states that have incoming edges
@@ -407,17 +396,14 @@ def validate_graph(graph: Dict[str, Any]) -> List[str]:
             target = edge.get("target", "")
             if target.startswith("state-"):
                 reachable_state_ids.add(target.replace("state-", ""))
-        
+
         # Initial state should be reachable if there are transitions
         if initial_nodes and edges:
             initial_state_id = initial_nodes[0].get("data", {}).get("state_id")
             if initial_state_id not in reachable_state_ids:
                 # This is only an error if there are outgoing transitions from initial
-                has_outgoing = any(
-                    e.get("source", "").startswith(f"state-{initial_state_id}")
-                    for e in edges
-                )
+                has_outgoing = any(e.get("source", "").startswith(f"state-{initial_state_id}") for e in edges)
                 if not has_outgoing:
                     errors.append("Initial state has no outgoing transitions")
-    
+
     return errors

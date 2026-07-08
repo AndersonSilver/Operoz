@@ -33,9 +33,7 @@ ALLOWED_LOGO_COVER_IMAGE_TYPES = frozenset(
     }
 )
 
-LOGO_COVER_TYPE_ERROR = (
-    "Invalid file type. Only JPEG, PNG, WebP, JPG, GIF and SVG files are allowed."
-)
+LOGO_COVER_TYPE_ERROR = "Invalid file type. Only JPEG, PNG, WebP, JPG, GIF and SVG files are allowed."
 
 # Use string values so membership checks match JSON payload strings reliably (TextChoices quirks across Django versions).
 EDITOR_ASSET_ENTITY_TYPES = frozenset(

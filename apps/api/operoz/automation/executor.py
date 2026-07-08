@@ -30,10 +30,7 @@ def build_execution_context(event: DomainEvent, *, rule_id: str, automation_acto
         issue_id = event.payload["issue_id"]
     if issue_id:
         issue = (
-            Issue.objects.filter(id=issue_id)
-            .select_related("project", "state")
-            .prefetch_related("assignees")
-            .first()
+            Issue.objects.filter(id=issue_id).select_related("project", "state").prefetch_related("assignees").first()
         )
     playbook_snippets = ""
     if event.board_id:

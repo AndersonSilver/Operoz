@@ -355,4 +355,3 @@ def mark_job_failed(job: AssistantChatJob, *, error_code: str, error_message: st
 
 def new_client_message_id() -> str:
     return str(uuid.uuid4())
-

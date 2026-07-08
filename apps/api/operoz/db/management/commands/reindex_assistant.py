@@ -68,21 +68,13 @@ class Command(BaseCommand):
                     indexed += result.get("indexed", 0)
                 else:
                     errors += 1
-                    self.stdout.write(
-                        self.style.WARNING(
-                            f"  falha {entity_type}:{entity_id} → {result.get('error')}"
-                        )
-                    )
+                    self.stdout.write(self.style.WARNING(f"  falha {entity_type}:{entity_id} → {result.get('error')}"))
 
         if options["dry_run"]:
             self.stdout.write(self.style.SUCCESS(f"Dry-run: {total} entidades seriam processadas"))
             return
 
-        self.stdout.write(
-            self.style.SUCCESS(
-                f"Concluído: {total} entidades, {indexed} chunks/tasks, {errors} erros"
-            )
-        )
+        self.stdout.write(self.style.SUCCESS(f"Concluído: {total} entidades, {indexed} chunks/tasks, {errors} erros"))
 
     def _entity_ids(self, workspace: Workspace, entity_type: str, project_id: str | None) -> list[str]:
         if entity_type == SearchEmbedding.ENTITY_ISSUE:

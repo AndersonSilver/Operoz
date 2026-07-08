@@ -52,10 +52,7 @@ class WorkspaceJiraOpsSyncEndpoint(BaseAPIView):
         if not workspace_jira_configured(workspace):
             return Response(
                 {
-                    "error": (
-                        "Configure Cloud ID, e-mail e token da API Jira nesta página "
-                        "antes de sincronizar."
-                    ),
+                    "error": ("Configure Cloud ID, e-mail e token da API Jira nesta página antes de sincronizar."),
                 },
                 status=status.HTTP_400_BAD_REQUEST,
             )

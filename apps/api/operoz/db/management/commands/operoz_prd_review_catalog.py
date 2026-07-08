@@ -39,7 +39,7 @@ PRD_REVIEW_CATALOG: list[tuple[str, str, list[tuple[str, str, str]]]] = [
             ),
             (
                 "- ROADMAP DOC — PRD REVIEW FASES 0-5",
-                f"""<p><strong>Objetivo:</strong> Documento vivo do programa PRD Review ligado ao backlog OPEROZDP.</p>
+                """<p><strong>Objetivo:</strong> Documento vivo do programa PRD Review ligado ao backlog OPEROZDP.</p>
 <p><strong>Escopo:</strong></p>
 <ul>
 <li>Criar <code>Operoz/docs/operoz-prd-review-roadmap.md</code> com fases 0–5, APIs, rotas guest e checklist MCP.</li>
@@ -78,7 +78,7 @@ PRD_REVIEW_CATALOG: list[tuple[str, str, list[tuple[str, str, str]]]] = [
             ),
             (
                 "- SDK JS — @operoz/prd-review",
-                f"""<p><strong>Objetivo:</strong> Extrair lógica de aprovação/comentários do HTML monolítico para módulo reutilizável.</p>
+                """<p><strong>Objetivo:</strong> Extrair lógica de aprovação/comentários do HTML monolítico para módulo reutilizável.</p>
 <p><strong>Escopo:</strong></p>
 <ul>
 <li>Função <code>initPrdReview(&#123; pageId, reviewSessionId, apiBase, mode &#125;)</code>.</li>

@@ -16,7 +16,7 @@ class ProjectSupportQueueListEndpoint(BaseAPIView):
         project = Project.objects.filter(workspace__slug=slug, pk=project_id, deleted_at__isnull=True).first()
         if not project or not project.board_id:
             return Response([], status=status.HTTP_200_OK)
-        queues = BoardSupportQueue.objects.filter(
-            board_id=project.board_id, deleted_at__isnull=True
-        ).order_by("sort_order", "name")
+        queues = BoardSupportQueue.objects.filter(board_id=project.board_id, deleted_at__isnull=True).order_by(
+            "sort_order", "name"
+        )
         return Response(BoardSupportQueueSerializer(queues, many=True).data)

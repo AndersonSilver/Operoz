@@ -10,7 +10,9 @@ from operoz.db.models.user import User
 
 
 def _defer_enabled() -> bool:
-    return str(getattr(settings, "ASSISTANT_DEFER_NONCRITICAL", os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1"))).lower() not in (
+    return str(
+        getattr(settings, "ASSISTANT_DEFER_NONCRITICAL", os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1"))
+    ).lower() not in (
         "0",
         "false",
         "no",

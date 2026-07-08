@@ -32,8 +32,20 @@ class TestScoreAlertThreshold:
 class TestBuildClient360ListSummary:
     def test_counts_score_alerts(self):
         clients = [
-            {"health": "ok", "status_report": {"coverage": "complete"}, "issues": {"overdue": 0}, "support": {"open_count": 0}, "health_score_alert": True},
-            {"health": "warning", "status_report": {"coverage": "partial"}, "issues": {"overdue": 1}, "support": {"open_count": 0}, "health_score_alert": False},
+            {
+                "health": "ok",
+                "status_report": {"coverage": "complete"},
+                "issues": {"overdue": 0},
+                "support": {"open_count": 0},
+                "health_score_alert": True,
+            },
+            {
+                "health": "warning",
+                "status_report": {"coverage": "partial"},
+                "issues": {"overdue": 1},
+                "support": {"open_count": 0},
+                "health_score_alert": False,
+            },
         ]
         summary = build_client360_list_summary(clients)
         assert summary["health_score_alert"] == 1
@@ -53,7 +65,7 @@ class TestBuildClientRowScoreAlert:
             board=board,
             created_by=create_user,
         )
-        from operoz.utils.client_360 import WeekPeriod, current_week_period
+        from operoz.utils.client_360 import current_week_period
 
         period = current_week_period()
         row = build_client_row(

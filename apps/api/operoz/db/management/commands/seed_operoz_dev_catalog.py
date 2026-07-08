@@ -295,9 +295,10 @@ class Command(BaseCommand):
             sync_board_custom_fields_to_project(project, actor)
             self.stdout.write(self.style.SUCCESS(f"Projeto criado: {project.name}"))
 
-        done_state = State.objects.filter(project=project, group="completed").first() or State.objects.filter(
-            project=project, default=True
-        ).first()
+        done_state = (
+            State.objects.filter(project=project, group="completed").first()
+            or State.objects.filter(project=project, default=True).first()
+        )
 
         modules_created = 0
         cards_created = 0

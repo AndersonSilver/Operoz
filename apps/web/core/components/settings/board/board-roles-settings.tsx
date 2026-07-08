@@ -147,7 +147,7 @@ export const BoardRolesSettings = observer(function BoardRolesSettings(props: Pr
                   <Copy className="size-3.5" />
                 </Button>
                 {!role.is_system && (
-                  <Button variant="danger" size="sm" onClick={() => void handleDelete(role)}>
+                  <Button variant="error-fill" size="sm" onClick={() => void handleDelete(role)}>
                     <Trash2 className="size-3.5" />
                   </Button>
                 )}

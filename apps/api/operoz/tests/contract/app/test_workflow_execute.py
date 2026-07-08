@@ -37,10 +37,7 @@ def mute_user_notification_preferences_signal():
 
 class TestWorkflowExecuteBase:
     def execute_url(self, slug: str, project_id, issue_id, transition_id) -> str:
-        return (
-            f"/api/workspaces/{slug}/projects/{project_id}/issues/{issue_id}/"
-            f"transitions/{transition_id}/execute/"
-        )
+        return f"/api/workspaces/{slug}/projects/{project_id}/issues/{issue_id}/transitions/{transition_id}/execute/"
 
     def _create_project(self, workspace, workspace_board, create_user) -> Project:
         project = Project.objects.create(
@@ -201,9 +198,7 @@ class TestWorkflowExecuteContract(TestWorkflowExecuteBase):
         assert response.data["error"] == "condition_not_satisfied"
 
     @pytest.mark.django_db
-    def test_execute_validation_failed_returns_422(
-        self, session_client, workspace, workspace_board, create_user
-    ):
+    def test_execute_validation_failed_returns_422(self, session_client, workspace, workspace_board, create_user):
         project = self._create_project(workspace, workspace_board, create_user)
         issue, transition, _, _ = self._setup_workflow_issue(
             workspace, create_user, project, with_comment_validator=True

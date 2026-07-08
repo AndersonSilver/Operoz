@@ -1,4 +1,4 @@
-import type { IBoardModule, TIssue, TPartialProject } from "@operoz/types";
+import type { IBoardModule, IProject, TIssue, TPartialProject } from "@operoz/types";
 
 export const BOARD_PROJECT_BLOCK_PREFIX = "board-project:";
 export const BOARD_MODULE_BLOCK_PREFIX = "board-module:";
@@ -161,8 +161,8 @@ export const resolveBoardProjectGanttRow = (
     id: projectId,
     name: project?.name ?? fallbackName,
     sort_order: null,
-    start_date: range.start_date ?? project?.start_date ?? undefined,
-    target_date: range.target_date ?? project?.target_date ?? undefined,
+    start_date: range.start_date ?? (project as IProject | undefined)?.start_date ?? undefined,
+    target_date: range.target_date ?? (project as IProject | undefined)?.target_date ?? undefined,
     project_id: projectId,
     isBoardProjectRow: true,
   };

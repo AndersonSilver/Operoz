@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import date, timedelta
+from datetime import timedelta
 from unittest.mock import patch
 
 from django.core.management.base import BaseCommand
@@ -183,8 +183,12 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.MIGRATE_HEADING("\n=== Evaluators (lógica do scan) ==="))
         today = timezone.localdate()
-        self.stdout.write(f"  due_date_approaching(hoje): {evaluate_due_approaching(target_date=today, today=today, threshold_days=7)}")
-        self.stdout.write(f"  due_date_overdue(ontem): {evaluate_overdue(target_date=today - timedelta(days=1), today=today)}")
+        self.stdout.write(
+            f"  due_date_approaching(hoje): {evaluate_due_approaching(target_date=today, today=today, threshold_days=7)}"
+        )
+        self.stdout.write(
+            f"  due_date_overdue(ontem): {evaluate_overdue(target_date=today - timedelta(days=1), today=today)}"
+        )
         self.stdout.write(
             f"  missing_due_date(5d): {evaluate_no_due_date(target_date=None, created_at=timezone.now() - timedelta(days=5), grace_period_days=3)}"
         )

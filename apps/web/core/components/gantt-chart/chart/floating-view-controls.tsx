@@ -48,7 +48,7 @@ export function GanttChartFloatingViewControls(props: Props) {
             </button>
           )}
           {showToday && <div className="bg-subtle mx-1 h-4 w-px" />}
-          {VIEWS_LIST.map((chartView: { key: TGanttViews; i18n_title: string }) => (
+          {VIEWS_LIST.map((chartView) => (
             <button
               key={chartView.key}
               type="button"
@@ -58,7 +58,7 @@ export function GanttChartFloatingViewControls(props: Props) {
                   ? "bg-accent-primary text-on-color"
                   : "text-secondary hover:bg-layer-transparent-hover"
               )}
-              onClick={() => onChartView(chartView.key)}
+              onClick={() => onChartView(chartView.key as TGanttViews)}
             >
               {t(chartView.i18n_title)}
             </button>

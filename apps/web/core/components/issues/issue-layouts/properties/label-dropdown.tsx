@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { useParams } from "next/navigation";
 import { usePopper } from "react-popper";
@@ -241,7 +241,7 @@ export function LabelDropdown(props: ILabelDropdownProps) {
           <ComboboxPortalOptions
             popperElementRef={setPopperElement}
             popperStyles={styles.popper}
-            popperAttributes={attributes.popper}
+            popperAttributes={(attributes.popper ?? {}) as React.HTMLAttributes<HTMLDivElement>}
             panelClassName={cn("h-auto w-48 text-caption-sm-regular whitespace-nowrap", optionsClassName)}
           >
             <div className="flex w-full items-center justify-start rounded-sm border border-subtle bg-surface-2 px-2">

@@ -12,9 +12,7 @@ DEFAULT_CONFIDENCE_THRESHOLD = 80
 def _branch_catalog(branches: list[dict[str, Any]]) -> str:
     lines = []
     for branch in branches:
-        lines.append(
-            f"- id={branch.get('id')}: {branch.get('label')} — {branch.get('description') or ''}".strip()
-        )
+        lines.append(f"- id={branch.get('id')}: {branch.get('label')} — {branch.get('description') or ''}".strip())
     return "\n".join(lines)
 
 

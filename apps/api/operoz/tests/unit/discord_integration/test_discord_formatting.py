@@ -3,7 +3,6 @@ from __future__ import annotations
 from django.test import SimpleTestCase
 
 from operoz.discord_integration.services.discord_formatting import (
-    _format_report_status,
     build_focus_reply,
     build_overview_reply,
     filter_stats_by_focus,

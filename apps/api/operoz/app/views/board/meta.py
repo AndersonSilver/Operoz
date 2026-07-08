@@ -36,15 +36,12 @@ class BoardMetaViewSet(BaseViewSet):
     use_read_replica = True
 
     def _get_board(self, slug: str, board_slug: str):
-        return (
-            Board.objects.filter(
-                workspace__slug=slug,
-                slug=board_slug,
-                archived_at__isnull=True,
-                deleted_at__isnull=True,
-            )
-            .first()
-        )
+        return Board.objects.filter(
+            workspace__slug=slug,
+            slug=board_slug,
+            archived_at__isnull=True,
+            deleted_at__isnull=True,
+        ).first()
 
     def _board_issues_queryset(self, slug: str, board_id: str):
         return (
@@ -122,18 +119,14 @@ class BoardMetaViewSet(BaseViewSet):
                 "state_group": row["state__group"] or "unstarted",
                 "count": row["count"],
             }
-            for row in issue_queryset.values(
-                "state__id", "state__name", "state__color", "state__group"
-            )
+            for row in issue_queryset.values("state__id", "state__name", "state__color", "state__group")
             .annotate(count=Count("pk", distinct=True))
             .order_by("-count")
         ]
 
         priority_distribution = [
             {"priority": row["priority"], "count": row["count"]}
-            for row in issue_queryset.values("priority")
-            .annotate(count=Count("pk", distinct=True))
-            .order_by("-count")
+            for row in issue_queryset.values("priority").annotate(count=Count("pk", distinct=True)).order_by("-count")
         ]
 
         type_distribution = [

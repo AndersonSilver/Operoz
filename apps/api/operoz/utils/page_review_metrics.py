@@ -21,11 +21,10 @@ def accessible_review_sessions_qs(workspace, user):
 def compute_prd_review_metrics(workspace, user) -> dict:
     qs = accessible_review_sessions_qs(workspace, user)
     by_status = {
-        row["status"]: row["count"]
-        for row in qs.values("status").annotate(count=Count("id")).order_by("status")
+        row["status"]: row["count"] for row in qs.values("status").annotate(count=Count("id")).order_by("status")
     }
 
-    sent_or_resolved = qs.filter(
+    _sent_or_resolved = qs.filter(
         status__in=[
             PageReviewSession.STATUS_SENT,
             PageReviewSession.STATUS_APPROVED,
@@ -59,7 +58,9 @@ def compute_prd_review_metrics(workspace, user) -> dict:
     recent_total = recent_resolved.count()
     recent_approval_rate = round(recent_approved / recent_total, 4) if recent_total else None
 
-    pending_feedback = by_status.get(PageReviewSession.STATUS_SENT, 0) + by_status.get(PageReviewSession.STATUS_DRAFT, 0)
+    pending_feedback = by_status.get(PageReviewSession.STATUS_SENT, 0) + by_status.get(
+        PageReviewSession.STATUS_DRAFT, 0
+    )
 
     return {
         "total_sessions": qs.count(),

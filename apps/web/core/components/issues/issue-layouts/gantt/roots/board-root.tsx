@@ -8,7 +8,7 @@ import useSWR from "swr";
 import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
-import type { IBlockUpdateData, IIssueDisplayFilterOptions, TIssue } from "@operoz/types";
+import type { IBlockUpdateData, IBlockUpdateDependencyData, IIssueDisplayFilterOptions, TIssue } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";
 import { EIssueLayoutTypes, GANTT_TIMELINE_TYPE } from "@operoz/types";
 import { renderFormattedPayloadDate } from "@operoz/utils";
@@ -134,7 +134,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
     return issueIds.filter((id) => {
       const issue = getIssueById(id);
       if (!issue) return false;
-      if (selectedProjectIds.size > 0 && !selectedProjectIds.has(issue.project_id)) return false;
+      if (selectedProjectIds.size > 0 && !selectedProjectIds.has(issue.project_id ?? "")) return false;
       if (searchQuery && !issue.name?.toLowerCase().includes(searchQuery.toLowerCase())) return false;
       return true;
     });
@@ -203,7 +203,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
     const payload: Record<string, unknown> = { ...data };
     if (data.sort_order) payload.sort_order = data.sort_order.newSortOrder;
 
-    await updateIssue(issue.project_id, issue.id, payload);
+    await updateIssue?.(issue.project_id, issue.id, payload);
   };
 
   const canEditIssue = useCallback(
@@ -558,7 +558,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                 quickAdd={quickAdd}
                 loadMoreBlocks={loadMoreIssues}
                 canLoadMoreBlocks={nextPageResults}
-                updateBlockDates={updateBlockDates}
+                updateBlockDates={updateBlockDates as (updates: IBlockUpdateDependencyData[]) => Promise<void>}
                 showAllBlocks
                 showToday
                 enableDependency={(blockId) => canEditIssue(blockId)}

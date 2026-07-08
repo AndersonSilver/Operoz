@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-from datetime import date
 
 from django.db.models import Q
 from django.utils import timezone
 
-from operoz.db.models import BoardStatusReport, Issue, Module, Project, Workspace
+from operoz.db.models import BoardStatusReport, Module, Project, Workspace
 from operoz.utils.client_360 import (
     aggregate_client360_issue_stats,
     aggregate_module_counts,
     aggregate_status_reports,
     build_client_row,
     build_module_report_rows,
-    parse_week_period,
     CLOSED_STATE_GROUPS,
 )
 from operoz.utils.client_360_operational import load_board_support_sla_map
@@ -26,6 +24,7 @@ from operoz.utils.client_360_health_settings import (
 from operoz.utils.client_360_matrix import build_client360_matrix_payload
 from operoz.utils.client_360_period_compare import attach_period_compare
 from operoz.utils.client_360_qbr_export import QbrBuildInput, build_qbr_payload
+
 
 def build_workspace_portfolio_qbr_context(
     *,
@@ -137,12 +136,8 @@ def build_client_qbr_context(
     )
     module_counts = aggregate_module_counts([pid])
     report_stats_map = aggregate_status_reports([pid], period)
-    health_config_map = (
-        load_board_health_config_map([project.board_id]) if project.board_id else {}
-    )
-    alert_threshold_map = (
-        load_board_score_alert_threshold_map([project.board_id]) if project.board_id else {}
-    )
+    health_config_map = load_board_health_config_map([project.board_id]) if project.board_id else {}
+    alert_threshold_map = load_board_score_alert_threshold_map([project.board_id]) if project.board_id else {}
 
     client = build_client_row(
         project,
@@ -247,6 +242,8 @@ def build_client_qbr_context(
             health_history=health_history,
             matrix_weeks=matrix_payload.get("weeks"),
             matrix_cells=matrix_cells,
-            narrative=narrative if any([narrative.get("wins_md"), narrative.get("risks_md"), narrative.get("next_steps_md")]) else None,
+            narrative=narrative
+            if any([narrative.get("wins_md"), narrative.get("risks_md"), narrative.get("next_steps_md")])
+            else None,
         )
     )

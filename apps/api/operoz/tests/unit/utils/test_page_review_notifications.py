@@ -1,12 +1,10 @@
 from __future__ import annotations
 
-from datetime import timedelta
-from unittest.mock import patch
 
 import pytest
 from django.utils import timezone
 
-from operoz.db.models import Notification, Page, PageReviewComment, PageReviewSession, Project, ProjectMember, ProjectPage
+from operoz.db.models import Notification, Page, PageReviewSession, Project, ProjectMember, ProjectPage
 from operoz.utils.page_review_notifications import (
     ENTITY_NAME,
     create_prd_review_resolved_notifications,

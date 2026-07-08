@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
 import type { ISearchIssueResponse, TIssue } from "@operoz/types";
-import type { IIssueCustomFieldValuePayload } from "@operoz/types";
+import type { TIssueCustomFieldValuePayload } from "@operoz/types";
 import { IssueModalContext } from "@/components/issues/issue-modal/context";
 import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
@@ -51,7 +51,7 @@ export const IssueModalProvider = observer(function IssueModalProvider(props: TI
       workspaceSlug: string;
     }) => {
       const fieldIds = new Set(getProjectCustomFields(projectId).map((f) => f.id));
-      const values: IIssueCustomFieldValuePayload[] = Object.entries(issuePropertyValues)
+      const values: TIssueCustomFieldValuePayload[] = Object.entries(issuePropertyValues)
         .filter(([fieldId]) => fieldIds.has(fieldId))
         .map(([custom_field_id, value]) => ({ custom_field_id, value }));
 

@@ -9,29 +9,20 @@ from operoz.db.mixins import SoftDeletionManager
 
 class WorkflowManager(SoftDeletionManager):
     """Manager for Workflow models"""
-    
+
     def get_queryset(self):
         return super().get_queryset().select_related("workspace", "initial_state")
 
 
 class Workflow(BaseModel):
     """Workflow model for defining state transition rules"""
-    
-    workspace = models.ForeignKey(
-        "db.WorkSpace",
-        on_delete=models.CASCADE,
-        related_name="workflows"
-    )
+
+    workspace = models.ForeignKey("db.WorkSpace", on_delete=models.CASCADE, related_name="workflows")
     name = models.CharField(max_length=255)
     description = models.TextField(blank=True)
     is_active = models.BooleanField(default=True)
     is_draft = models.BooleanField(default=True)
-    initial_state = models.ForeignKey(
-        "db.State",
-        on_delete=models.SET_NULL,
-        null=True,
-        related_name="+"
-    )
+    initial_state = models.ForeignKey("db.State", on_delete=models.SET_NULL, null=True, related_name="+")
     published_at = models.DateTimeField(null=True, blank=True)
     published_version = models.PositiveIntegerField(default=0)
     published_graph = models.JSONField(null=True, blank=True)  # Snapshot of published graph
@@ -43,9 +34,7 @@ class Workflow(BaseModel):
         db_table = "workflows"
         constraints = [
             models.UniqueConstraint(
-                fields=["workspace", "name"],
-                condition=Q(deleted_at__isnull=True),
-                name="uq_workflow_workspace_name"
+                fields=["workspace", "name"], condition=Q(deleted_at__isnull=True), name="uq_workflow_workspace_name"
             ),
         ]
         indexes = [
@@ -61,38 +50,27 @@ class Workflow(BaseModel):
 
 class WorkflowTransitionManager(SoftDeletionManager):
     """Manager for WorkflowTransition models"""
-    
+
     def get_queryset(self):
-        return super().get_queryset().select_related(
-            "workflow",
-            "from_state",
-            "to_state"
-        ).prefetch_related(
-            "conditions",
-            "validators",
-            "post_functions"
+        return (
+            super()
+            .get_queryset()
+            .select_related("workflow", "from_state", "to_state")
+            .prefetch_related("conditions", "validators", "post_functions")
         )
 
 
 class WorkflowTransition(BaseModel):
     """Transition between states in a workflow"""
-    
-    workflow = models.ForeignKey(
-        Workflow,
-        on_delete=models.CASCADE,
-        related_name="transitions"
-    )
+
+    workflow = models.ForeignKey(Workflow, on_delete=models.CASCADE, related_name="transitions")
     from_state = models.ForeignKey(
         "db.State",
         on_delete=models.CASCADE,
         null=True,
-        related_name="+"  # null = global transition
+        related_name="+",  # null = global transition
     )
-    to_state = models.ForeignKey(
-        "db.State",
-        on_delete=models.CASCADE,
-        related_name="+"
-    )
+    to_state = models.ForeignKey("db.State", on_delete=models.CASCADE, related_name="+")
     name = models.CharField(max_length=120)  # "Start Progress", "Close"
     is_global = models.BooleanField(default=False)  # Available from any state
     sort_order = models.FloatField(default=10000)
@@ -115,12 +93,8 @@ class WorkflowTransition(BaseModel):
 
 class TransitionCondition(BaseModel):
     """Condition that must be met for a transition to be available"""
-    
-    transition = models.ForeignKey(
-        WorkflowTransition,
-        on_delete=models.CASCADE,
-        related_name="conditions"
-    )
+
+    transition = models.ForeignKey(WorkflowTransition, on_delete=models.CASCADE, related_name="conditions")
     condition_type = models.CharField(max_length=40)  # role/assignee_only/reporter_only/group
     config = models.JSONField(default=dict)
 
@@ -135,12 +109,8 @@ class TransitionCondition(BaseModel):
 
 class TransitionValidator(BaseModel):
     """Validator that checks if transition can be executed"""
-    
-    transition = models.ForeignKey(
-        WorkflowTransition,
-        on_delete=models.CASCADE,
-        related_name="validators"
-    )
+
+    transition = models.ForeignKey(WorkflowTransition, on_delete=models.CASCADE, related_name="validators")
     validator_type = models.CharField(max_length=40)  # required_fields/has_comment/regex
     config = models.JSONField(default=dict)
 
@@ -155,12 +125,8 @@ class TransitionValidator(BaseModel):
 
 class TransitionPostFunction(BaseModel):
     """Post-function that executes after a successful transition"""
-    
-    transition = models.ForeignKey(
-        WorkflowTransition,
-        on_delete=models.CASCADE,
-        related_name="post_functions"
-    )
+
+    transition = models.ForeignKey(WorkflowTransition, on_delete=models.CASCADE, related_name="post_functions")
     function_type = models.CharField(max_length=40)  # assign/clear_field/update_field/fire_event/webhook
     config = models.JSONField(default=dict)
     sort_order = models.FloatField(default=10000)
@@ -176,12 +142,8 @@ class TransitionPostFunction(BaseModel):
 
 class TransitionScreen(BaseModel):
     """Screen configuration for transition (fields to show/require)"""
-    
-    transition = models.OneToOneField(
-        WorkflowTransition,
-        on_delete=models.CASCADE,
-        related_name="screen"
-    )
+
+    transition = models.OneToOneField(WorkflowTransition, on_delete=models.CASCADE, related_name="screen")
     fields = models.JSONField(default=list)  # [{field_id, required}]
 
     class Meta:
@@ -195,19 +157,15 @@ class TransitionScreen(BaseModel):
 
 class WorkflowSchemeManager(SoftDeletionManager):
     """Manager for WorkflowScheme models"""
-    
+
     def get_queryset(self):
         return super().get_queryset().select_related("workspace").prefetch_related("entries")
 
 
 class WorkflowScheme(BaseModel):
     """Scheme that maps issue types to workflows"""
-    
-    workspace = models.ForeignKey(
-        "db.WorkSpace",
-        on_delete=models.CASCADE,
-        related_name="workflow_schemes"
-    )
+
+    workspace = models.ForeignKey("db.WorkSpace", on_delete=models.CASCADE, related_name="workflow_schemes")
     name = models.CharField(max_length=255)
     is_default = models.BooleanField(default=False)
 
@@ -224,30 +182,22 @@ class WorkflowScheme(BaseModel):
 
 class WorkflowSchemeEntryManager(SoftDeletionManager):
     """Manager for WorkflowSchemeEntry models"""
-    
+
     def get_queryset(self):
         return super().get_queryset().select_related("scheme", "issue_type", "workflow")
 
 
 class WorkflowSchemeEntry(BaseModel):
     """Entry mapping an issue type to a workflow in a scheme"""
-    
-    scheme = models.ForeignKey(
-        WorkflowScheme,
-        on_delete=models.CASCADE,
-        related_name="entries"
-    )
+
+    scheme = models.ForeignKey(WorkflowScheme, on_delete=models.CASCADE, related_name="entries")
     issue_type = models.ForeignKey(
         "db.IssueType",
         on_delete=models.CASCADE,
         null=True,
-        related_name="+"  # null = default for all types
+        related_name="+",  # null = default for all types
     )
-    workflow = models.ForeignKey(
-        Workflow,
-        on_delete=models.PROTECT,
-        related_name="+"
-    )
+    workflow = models.ForeignKey(Workflow, on_delete=models.PROTECT, related_name="+")
 
     objects = WorkflowSchemeEntryManager()
 
@@ -255,9 +205,7 @@ class WorkflowSchemeEntry(BaseModel):
         db_table = "workflow_scheme_entries"
         constraints = [
             models.UniqueConstraint(
-                fields=["scheme", "issue_type"],
-                condition=Q(deleted_at__isnull=True),
-                name="uq_scheme_issue_type"
+                fields=["scheme", "issue_type"], condition=Q(deleted_at__isnull=True), name="uq_scheme_issue_type"
             ),
         ]
         verbose_name = "Workflow Scheme Entry"

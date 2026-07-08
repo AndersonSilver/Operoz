@@ -49,7 +49,11 @@ class ServerSentEventRenderer(BaseRenderer):
 
 
 def _service_error_response(exc: AssistantServiceError) -> Response:
-    status_code = status.HTTP_429_TOO_MANY_REQUESTS if "rate_limit" in exc.code or exc.code == "llm_capacity" else status.HTTP_400_BAD_REQUEST
+    status_code = (
+        status.HTTP_429_TOO_MANY_REQUESTS
+        if "rate_limit" in exc.code or exc.code == "llm_capacity"
+        else status.HTTP_400_BAD_REQUEST
+    )
     if exc.code == "forbidden":
         status_code = status.HTTP_403_FORBIDDEN
     if exc.code in ("llm_not_configured", "llm_request_failed", "llm_connection_failed"):
@@ -146,10 +150,7 @@ class AssistantSessionMessagesEndpoint(BaseAPIView):
             message
             for message in messages
             if message.role != AssistantMessage.ROLE_TOOL
-            and not (
-                message.role == AssistantMessage.ROLE_ASSISTANT
-                and not (message.content or "").strip()
-            )
+            and not (message.role == AssistantMessage.ROLE_ASSISTANT and not (message.content or "").strip())
         ]
         return Response(AssistantMessageSerializer(visible, many=True).data)
 

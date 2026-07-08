@@ -84,9 +84,7 @@ def adf_to_html(doc: dict, media_urls: dict[str, str] | None = None) -> str:
     if doc.get("type") != "doc":
         return ""
     return "".join(
-        _adf_node_to_html(node, media_urls=media_urls)
-        for node in doc.get("content") or []
-        if isinstance(node, dict)
+        _adf_node_to_html(node, media_urls=media_urls) for node in doc.get("content") or [] if isinstance(node, dict)
     )
 
 
@@ -131,9 +129,7 @@ def _adf_node_to_html(node: dict, media_urls: dict[str, str] | None = None) -> s
         text = html.escape(node.get("text") or "")
         return _apply_marks(text, node.get("marks") or [])
 
-    children = "".join(
-        _adf_node_to_html(child, media_urls=media_urls) for child in content if isinstance(child, dict)
-    )
+    children = "".join(_adf_node_to_html(child, media_urls=media_urls) for child in content if isinstance(child, dict))
 
     if node_type == "doc":
         return children

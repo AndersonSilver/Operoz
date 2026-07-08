@@ -23,10 +23,14 @@ def _sign_request(private_key: Ed25519PrivateKey, body: bytes, timestamp: str | 
 
 
 def _public_key_hex(private_key: Ed25519PrivateKey) -> str:
-    return private_key.public_key().public_bytes(
-        encoding=serialization.Encoding.Raw,
-        format=serialization.PublicFormat.Raw,
-    ).hex()
+    return (
+        private_key.public_key()
+        .public_bytes(
+            encoding=serialization.Encoding.Raw,
+            format=serialization.PublicFormat.Raw,
+        )
+        .hex()
+    )
 
 
 @pytest.mark.django_db

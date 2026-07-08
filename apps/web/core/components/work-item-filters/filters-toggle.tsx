@@ -9,14 +9,15 @@ import { useWorkItemFilters } from "@/hooks/store/work-item-filters/use-work-ite
 type TWorkItemFiltersToggleProps = {
   entityType: EIssuesStoreType;
   entityId: string;
+  appearance?: "default" | "hub";
 };
 
 export const WorkItemFiltersToggle = observer(function WorkItemFiltersToggle(props: TWorkItemFiltersToggleProps) {
-  const { entityType, entityId } = props;
+  const { entityType, entityId, appearance } = props;
   // store hooks
   const { getFilter } = useWorkItemFilters();
   // derived values
   const filter = getFilter(entityType, entityId);
 
-  return <FiltersToggle filter={filter} />;
+  return <FiltersToggle filter={filter} appearance={appearance} />;
 });

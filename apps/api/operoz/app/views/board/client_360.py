@@ -41,6 +41,7 @@ from operoz.utils.client_360_matrix import (
 )
 from operoz.utils.client_360_matrix_csv_export import build_client360_matrix_csv_content, matrix_csv_filename
 from operoz.utils.client_360_qbr_export import parse_qbr_format, parse_qbr_weeks, qbr_to_markdown, qbr_to_pdf_bytes
+from operoz.utils.client_360_qbr_service import build_client_qbr_context, build_workspace_portfolio_qbr_context
 from operoz.utils.client_360_operational import apply_operational_enrichment, build_detail_operational_payload
 from operoz.utils.client_360_finops import (
     apply_finops_enrichment,
@@ -205,11 +206,7 @@ class BoardClient360ViewSet(BaseViewSet):
         if err:
             return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
 
-        project = (
-            self._accessible_projects(slug, board.id)
-            .filter(id=project_id)
-            .first()
-        )
+        project = self._accessible_projects(slug, board.id).filter(id=project_id).first()
         if not project:
             return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
 
@@ -239,9 +236,7 @@ class BoardClient360ViewSet(BaseViewSet):
             score_alert_threshold=alert_threshold_map.get(str(board.id)),
         )
 
-        modules = list(
-            Module.objects.filter(project_id=pid, archived_at__isnull=True).order_by("name")
-        )
+        modules = list(Module.objects.filter(project_id=pid, archived_at__isnull=True).order_by("name"))
         reports: dict[str | None, BoardStatusReport] = {}
         for r in BoardStatusReport.objects.filter(
             project_id=pid,
@@ -320,11 +315,7 @@ class BoardClient360ViewSet(BaseViewSet):
         if err:
             return Response({"error": err}, status=status.HTTP_400_BAD_REQUEST)
 
-        project = (
-            self._accessible_projects(slug, board.id)
-            .filter(id=project_id)
-            .first()
-        )
+        project = self._accessible_projects(slug, board.id).filter(id=project_id).first()
         if not project:
             return Response({"error": "Project not found"}, status=status.HTTP_404_NOT_FOUND)
 

@@ -309,7 +309,9 @@ class IntakeIssueViewSet(BaseViewSet):
             if ticket_kind not in (IntakeTicketKind.INTAKE, IntakeTicketKind.SUPPORT):
                 ticket_kind = IntakeTicketKind.INTAKE
             if ticket_kind == IntakeTicketKind.SUPPORT and not project.support_view:
-                return Response({"error": "Support is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error": "Support is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST
+                )
             if ticket_kind == IntakeTicketKind.INTAKE and not project.intake_view:
                 return Response({"error": "Intake is not enabled for this project"}, status=status.HTTP_400_BAD_REQUEST)
             intake = get_or_create_default_project_intake(project)
@@ -366,7 +368,7 @@ class IntakeIssueViewSet(BaseViewSet):
                     ),
                 )
                 .get(
-                    intake_id=intake_id.id,
+                    intake_id=intake.id,
                     issue_id=serializer.data["id"],
                     project_id=project_id,
                 )

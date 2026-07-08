@@ -1,10 +1,9 @@
 import pytest
-from datetime import date, timedelta
+from datetime import date
 
 from operoz.db.models import Client360HealthSnapshot
 from operoz.utils.client_360 import WeekPeriod, current_week_period
 from operoz.utils.client_360_health_history import (
-    HEALTH_HISTORY_SCHEMA_VERSION,
     parse_health_history_weeks,
     recent_week_periods,
     snapshot_to_history_item,

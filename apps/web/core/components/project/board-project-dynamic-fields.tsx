@@ -163,8 +163,8 @@ export function BoardProjectDynamicFields(props: Props) {
                 render={({ field: { value, onChange }, fieldState }) => (
                   <>
                     <MemberDropdown
-                      value={value ?? ""}
-                      onChange={onChange}
+                      value={(value as unknown as string | null) ?? null}
+                      onChange={onChange as (val: string | null) => void}
                       placeholder={t("lead")}
                       disabled={disabled}
                       buttonVariant="border-with-text"
@@ -220,8 +220,8 @@ export function BoardProjectDynamicFields(props: Props) {
                 render={({ field: { value, onChange }, fieldState }) => (
                   <>
                     <MemberDropdown
-                      value={value ?? ""}
-                      onChange={onChange}
+                      value={(value as unknown as string | null) ?? null}
+                      onChange={onChange as (val: string | null) => void}
                       placeholder={t("assignees")}
                       disabled={disabled}
                       buttonVariant="border-with-text"

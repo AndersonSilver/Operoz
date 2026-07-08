@@ -33,7 +33,8 @@ export const ModuleIssuesMobileHeader = observer(function ModuleIssuesMobileHead
   // store hooks
   const { currentProjectDetails } = useProject();
   const { getModuleById } = useModule();
-  const { issuesFilter, updateFilters } = useIssues(EIssuesStoreType.MODULE);
+  const { issuesFilter } = useIssues(EIssuesStoreType.MODULE);
+  const updateFilters = issuesFilter.updateFilters.bind(issuesFilter);
   // derived values
   const issueFilters = moduleId ? issuesFilter.getIssueFilters(moduleId.toString()) : undefined;
   const activeLayout = issueFilters?.displayFilters?.layout ?? EIssueLayoutTypes.LIST;

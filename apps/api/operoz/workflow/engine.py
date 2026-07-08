@@ -24,16 +24,19 @@ User = get_user_model()
 
 class WorkflowExecutionError(Exception):
     """Base exception for workflow execution errors"""
+
     pass
 
 
 class ConditionNotSatisfiedError(WorkflowExecutionError):
     """Raised when transition conditions are not met"""
+
     pass
 
 
 class ValidationError(WorkflowExecutionError):
     """Raised when transition validators fail"""
+
     def __init__(self, errors: list[str]):
         self.errors = errors
         super().__init__(", ".join(errors))
@@ -41,27 +44,25 @@ class ValidationError(WorkflowExecutionError):
 
 class ConcurrentStateChangeError(WorkflowExecutionError):
     """Raised when issue state changed during execution (optimistic lock)"""
+
     pass
 
 
 def execute_transition(
-    issue: Issue,
-    transition: WorkflowTransition,
-    actor: User,
-    data: Optional[Dict[str, Any]] = None
+    issue: Issue, transition: WorkflowTransition, actor: User, data: Optional[Dict[str, Any]] = None
 ) -> Issue:
     """
     Execute a workflow transition on an issue.
-    
+
     Args:
         issue: The issue to transition
         transition: The transition to execute
         actor: The user executing the transition
         data: Optional data for validators (fields, comment, etc.)
-    
+
     Returns:
         The updated issue
-    
+
     Raises:
         ConditionNotSatisfiedError: If conditions are not met
         ValidationError: If validators fail
@@ -69,36 +70,34 @@ def execute_transition(
     """
     if data is None:
         data = {}
-    
+
     # Store current state for optimistic locking
     current_state_id = issue.state_id
-    
+
     try:
         with transaction.atomic():
             # Step 1: Check conditions
             allowed, error_msg = check_conditions(actor, issue, transition)
             if not allowed:
                 raise ConditionNotSatisfiedError(error_msg)
-            
+
             # Step 2: Run validators
             validation_errors = run_validators(issue, data, transition)
             if validation_errors:
                 raise ValidationError(validation_errors)
-            
+
             # Step 3: Optimistic lock - check state hasn't changed
             issue.refresh_from_db(fields=["state_id"])
             if issue.state_id != current_state_id:
-                raise ConcurrentStateChangeError(
-                    "Issue state changed during transition execution"
-                )
-            
+                raise ConcurrentStateChangeError("Issue state changed during transition execution")
+
             # Step 4: Change state
             from_state = issue.state
             to_state = transition.to_state
-            
+
             issue.state = to_state
             issue.save(update_fields=["state"])
-            
+
             # Step 5: Record activity (same shape as issue_activities_task state tracking)
             comment = data.get("comment", "")
             IssueActivity.objects.create(
@@ -115,12 +114,12 @@ def execute_transition(
                 new_identifier=to_state.id,
                 epoch=time.time(),
             )
-            
+
             # Step 6: Run post-functions
             run_post_functions(issue, actor, transition)
-            
+
             return issue
-    
+
     except (ConditionNotSatisfiedError, ValidationError, ConcurrentStateChangeError):
         raise
     except Exception as e:
@@ -156,16 +155,16 @@ def resolve_issue_workflow(issue: Issue) -> Workflow | None:
 def get_available_transitions(issue: Issue, user: User) -> list[WorkflowTransition]:
     """
     Get all transitions available to a user for a given issue.
-    
+
     This includes:
     - Transitions from the current state
     - Global transitions (from_state is null)
     - Filtered by conditions the user satisfies
-    
+
     Args:
         issue: The issue to get transitions for
         user: The user to check conditions against
-    
+
     Returns:
         List of available WorkflowTransition objects
     """
@@ -174,17 +173,19 @@ def get_available_transitions(issue: Issue, user: User) -> list[WorkflowTransiti
         return []
 
     # Get transitions from current state + global transitions
-    transitions = WorkflowTransition.objects.filter(
-        workflow=workflow,
-    ).filter(
-        models.Q(from_state=issue.state) | models.Q(from_state__isnull=True, is_global=True)
-    ).prefetch_related("conditions", "screen")
-    
+    transitions = (
+        WorkflowTransition.objects.filter(
+            workflow=workflow,
+        )
+        .filter(models.Q(from_state=issue.state) | models.Q(from_state__isnull=True, is_global=True))
+        .prefetch_related("conditions", "screen")
+    )
+
     # Filter by conditions the user satisfies
     available_transitions = []
     for transition in transitions:
         allowed, _ = check_conditions(user, issue, transition)
         if allowed:
             available_transitions.append(transition)
-    
+
     return available_transitions

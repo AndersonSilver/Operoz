@@ -36,9 +36,7 @@ class BoardStatusReportEndpoint(BaseAPIView):
         ).exists()
 
     def _queryset(self, board, request, slug: str):
-        qs = BoardStatusReport.objects.filter(board=board, deleted_at__isnull=True).select_related(
-            "created_by"
-        )
+        qs = BoardStatusReport.objects.filter(board=board, deleted_at__isnull=True).select_related("created_by")
         if not self._is_workspace_admin(request, slug):
             qs = qs.filter(published_at__isnull=False)
         return qs.order_by("-period_end", "-created_at")
@@ -74,9 +72,7 @@ class BoardStatusReportEndpoint(BaseAPIView):
         if summary_html:
             content["sections"]["executive_summary"]["html"] = summary_html
 
-        title = (data.get("title") or "").strip() or default_report_title(
-            data["period_start"], data["period_end"]
-        )
+        title = (data.get("title") or "").strip() or default_report_title(data["period_start"], data["period_end"])
 
         report = BoardStatusReport.objects.create(
             board=board,

@@ -77,7 +77,9 @@ class BoardAutomationTemplateInstallEndpoint(BaseAPIView):
         board = _get_board(slug, board_slug)
         template = get_automation_template(template_id)
         if not template:
-            return Response({"error": "Template não encontrado.", "code": "not_found"}, status=status.HTTP_404_NOT_FOUND)
+            return Response(
+                {"error": "Template não encontrado.", "code": "not_found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
         parameters = request.data.get("parameters") or {}
         publish = bool(request.data.get("publish", False))

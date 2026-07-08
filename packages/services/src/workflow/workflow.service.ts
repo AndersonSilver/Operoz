@@ -1,13 +1,6 @@
 // plane imports
 import { API_BASE_URL } from "@operoz/constants";
-import type {
-  IWorkflow,
-  IWorkflowScheme,
-  IWorkflowSchemeEntry,
-  TWorkflowGraph,
-  IIssueTransition,
-  TTransitionExecutePayload,
-} from "@operoz/types";
+import type { IWorkflow, IWorkflowScheme, TWorkflowGraph, TTransitionExecutePayload } from "@operoz/types";
 // api service
 import { APIService } from "../api.service";
 

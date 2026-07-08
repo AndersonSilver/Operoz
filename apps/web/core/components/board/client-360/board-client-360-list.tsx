@@ -25,6 +25,7 @@ import { Client360PersonaToggle } from "@/components/board/client-360/client-360
 import { tableColumnsForPersona } from "@/components/board/client-360/client-360-persona-columns";
 import { useClient360Persona, type Client360Persona } from "@/components/board/client-360/use-client-360-persona";
 import { useClient360TableColumns } from "@/components/board/client-360/use-client-360-table-columns";
+import { Client360TableColumnsMenu } from "@/components/board/client-360/client-360-table-columns-menu";
 import { useClient360CompactTableView } from "@/components/board/client-360/use-client-360-compact-table-view";
 import { Client360PortfolioKpiStrip } from "@/components/board/client-360/client-360-portfolio-kpi-strip";
 import { Client360PortfolioPulse } from "@/components/board/client-360/client-360-portfolio-pulse";

@@ -1,5 +1,5 @@
 import type { AxiosInstance, AxiosRequestConfig } from "axios";
-import axios from "axios";
+import { create as axiosCreate } from "axios";
 
 /**
  * Abstract base class for making HTTP requests using axios
@@ -15,7 +15,7 @@ export abstract class APIService {
    */
   constructor(baseURL: string) {
     this.baseURL = baseURL;
-    this.axiosInstance = axios.create({
+    this.axiosInstance = axiosCreate({
       baseURL,
       withCredentials: true,
     });

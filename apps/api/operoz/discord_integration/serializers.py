@@ -40,9 +40,7 @@ class CustomSlashCommandSerializer(serializers.ModelSerializer):
     def validate_name(self, value: str) -> str:
         normalized = value.lower().strip()
         if not DISCORD_NAME_RE.match(normalized):
-            raise serializers.ValidationError(
-                "Use apenas letras, números, underscore e hífen (máx. 32 caracteres)."
-            )
+            raise serializers.ValidationError("Use apenas letras, números, underscore e hífen (máx. 32 caracteres).")
         return normalized
 
     def validate_description(self, value: str) -> str:
@@ -75,22 +73,27 @@ class CustomSlashCommandSerializer(serializers.ModelSerializer):
         if board_slug is not None:
             attrs["board_slug"] = board_slug.strip()
 
-        if workspace and board_slug and not Board.objects.filter(
-            workspace=workspace,
-            slug=board_slug.strip(),
-            deleted_at__isnull=True,
-        ).exists():
+        if (
+            workspace
+            and board_slug
+            and not Board.objects.filter(
+                workspace=workspace,
+                slug=board_slug.strip(),
+                deleted_at__isnull=True,
+            ).exists()
+        ):
             raise serializers.ValidationError({"board_slug": "Board não encontrado neste workspace."})
 
         if workspace and default_project is not None:
-            if default_project and not Project.objects.filter(
-                pk=default_project.pk,
-                workspace=workspace,
-                archived_at__isnull=True,
-            ).exists():
-                raise serializers.ValidationError(
-                    {"default_project": "Projeto não pertence a este workspace."}
-                )
+            if (
+                default_project
+                and not Project.objects.filter(
+                    pk=default_project.pk,
+                    workspace=workspace,
+                    archived_at__isnull=True,
+                ).exists()
+            ):
+                raise serializers.ValidationError({"default_project": "Projeto não pertence a este workspace."})
 
         if workspace and name:
             qs = CustomSlashCommand.objects.filter(
@@ -102,9 +105,7 @@ class CustomSlashCommandSerializer(serializers.ModelSerializer):
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
-                raise serializers.ValidationError(
-                    {"name": "Já existe um comando com este nome neste escopo."}
-                )
+                raise serializers.ValidationError({"name": "Já existe um comando com este nome neste escopo."})
 
         if name and not DISCORD_COMMAND_NAME_PATTERN.match(name.lower().strip()):
             raise serializers.ValidationError({"name": "Nome de comando inválido para o Discord."})

@@ -10,7 +10,6 @@ from django.db import transaction
 from operoz.app.permissions import ROLE
 from operoz.app.serializers import IssueCreateSerializer, ProjectSerializer
 from operoz.db.models import DEFAULT_STATES, Board, Module, ModuleIssue, Project, ProjectMember, State, User, Workspace
-from operoz.db.models.module import ModuleStatus
 from operoz.utils.board_custom_fields import sync_board_custom_fields_to_project
 from operoz.utils.board_issue_types import sync_board_issue_types_to_project
 from operoz.db.management.commands.operoz_chat_scaling_catalog import CHAT_SCALING_CATALOG
@@ -1119,7 +1118,9 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING(f"Projeto já existe: {project.name} ({project.id})"))
         elif options["dry_run"]:
             total_cards = sum(len(cards) for _, _, cards in CATALOG)
-            self.stdout.write(f"[dry-run] Criaria projeto {PROJECT_NAME} com {len(CATALOG)} módulos e {total_cards} cards")
+            self.stdout.write(
+                f"[dry-run] Criaria projeto {PROJECT_NAME} com {len(CATALOG)} módulos e {total_cards} cards"
+            )
             return
         else:
             data: dict[str, Any] = {
@@ -1189,10 +1190,7 @@ class Command(BaseCommand):
                         project=project,
                         workspace=workspace,
                         name=module_label[:255],
-                        description=(
-                            f"Backlog Plataforma Violenta — {strip_prefix(module_label)}. "
-                            f"Ref: {ROADMAP_DOC}"
-                        ),
+                        description=(f"Backlog Plataforma Violenta — {strip_prefix(module_label)}. Ref: {ROADMAP_DOC}"),
                         status=module_status,
                         created_by=actor,
                     )
@@ -1202,9 +1200,11 @@ class Command(BaseCommand):
 
                 for card_title, description_html, priority in cards:
                     card_label = prefixed_name(card_title)
-                    existing = ModuleIssue.objects.filter(module=module, issue__project=project).filter(
-                        issue__name__in=[card_label, card_title]
-                    ).exists()
+                    existing = (
+                        ModuleIssue.objects.filter(module=module, issue__project=project)
+                        .filter(issue__name__in=[card_label, card_title])
+                        .exists()
+                    )
                     if existing:
                         cards_skipped += 1
                         continue

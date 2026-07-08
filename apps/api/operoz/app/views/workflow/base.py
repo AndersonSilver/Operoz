@@ -13,7 +13,6 @@ from operoz.app.serializers.workflow import (
     WorkflowSerializer,
     WorkflowGraphSerializer,
     WorkflowSchemeSerializer,
-    WorkflowSchemeEntrySerializer,
     IssueTransitionSerializer,
     TransitionExecuteSerializer,
     TransitionScreenSerializer,
@@ -48,14 +47,12 @@ from operoz.workflow.bootstrap import create_workflow_from_project
 
 class WorkflowViewSet(BaseViewSet):
     """ViewSet for Workflow CRUD operations"""
-    
+
     serializer_class = WorkflowSerializer
     model = Workflow
 
     def get_queryset(self):
-        return Workflow.objects.filter(
-            workspace__slug=self.workspace_slug
-        ).select_related("initial_state", "workspace")
+        return Workflow.objects.filter(workspace__slug=self.workspace_slug).select_related("initial_state", "workspace")
 
     @allow_permission([ROLE.ADMIN], level="WORKSPACE")
     def create(self, request, slug):
@@ -68,11 +65,7 @@ class WorkflowViewSet(BaseViewSet):
     @allow_permission([ROLE.ADMIN], level="WORKSPACE")
     def partial_update(self, request, slug, pk):
         workflow = self.get_object()
-        serializer = WorkflowSerializer(
-            workflow,
-            data=request.data,
-            partial=True
-        )
+        serializer = WorkflowSerializer(workflow, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save(updated_by=request.user)
         return Response(serializer.data)
@@ -96,15 +89,12 @@ class WorkflowViewSet(BaseViewSet):
         workflow = self.get_object()
         serializer = WorkflowGraphSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         # Convert graph to models
         try:
             graph_to_models(workflow, serializer.validated_data, request.user)
         except ValueError as e:
-            return Response(
-                {"error": str(e)},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
         workflow.refresh_from_db()
         return Response(models_to_graph(workflow))
@@ -113,21 +103,17 @@ class WorkflowViewSet(BaseViewSet):
     def publish(self, request, slug, pk):
         """POST /workflows/{id}/publish/ - Publish draft workflow"""
         workflow = self.get_object()
-        
+
         if not workflow.is_draft:
-            return Response(
-                {"error": "Workflow is already published"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        
+            return Response({"error": "Workflow is already published"}, status=status.HTTP_400_BAD_REQUEST)
+
         # Validate workflow consistency
         errors = self._validate_workflow(workflow)
         if errors:
             return Response(
-                {"error": "Workflow validation failed", "errors": errors},
-                status=status.HTTP_400_BAD_REQUEST
+                {"error": "Workflow validation failed", "errors": errors}, status=status.HTTP_400_BAD_REQUEST
             )
-        
+
         # Publish workflow
         workflow.is_draft = False
         workflow.is_active = True
@@ -135,7 +121,7 @@ class WorkflowViewSet(BaseViewSet):
         workflow.published_version += 1
         workflow.published_graph = models_to_graph(workflow)
         workflow.save()
-        
+
         return Response(WorkflowSerializer(workflow).data)
 
     def _validate_workflow(self, workflow):
@@ -168,17 +154,19 @@ class WorkflowViewSet(BaseViewSet):
 
 class WorkflowSchemeViewSet(BaseViewSet):
     """ViewSet for WorkflowScheme CRUD operations"""
-    
+
     serializer_class = WorkflowSchemeSerializer
     model = WorkflowScheme
 
     def get_queryset(self):
-        return WorkflowScheme.objects.filter(
-            workspace__slug=self.workspace_slug
-        ).select_related("workspace").prefetch_related(
-            "entries",
-            "entries__workflow",
-            "entries__issue_type",
+        return (
+            WorkflowScheme.objects.filter(workspace__slug=self.workspace_slug)
+            .select_related("workspace")
+            .prefetch_related(
+                "entries",
+                "entries__workflow",
+                "entries__issue_type",
+            )
         )
 
     @allow_permission([ROLE.ADMIN], level="WORKSPACE")
@@ -192,11 +180,7 @@ class WorkflowSchemeViewSet(BaseViewSet):
     @allow_permission([ROLE.ADMIN], level="WORKSPACE")
     def partial_update(self, request, slug, pk):
         scheme = self.get_object()
-        serializer = WorkflowSchemeSerializer(
-            scheme,
-            data=request.data,
-            partial=True
-        )
+        serializer = WorkflowSchemeSerializer(scheme, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save(updated_by=request.user)
         return Response(serializer.data)
@@ -300,11 +284,13 @@ class WorkflowSchemeViewSet(BaseViewSet):
                 project.save(update_fields=["workflow_scheme", "updated_at"])
 
         scheme.refresh_from_db()
-        return Response({
-            "scheme": WorkflowSchemeSerializer(scheme).data,
-            "workflow_id": str(workflow.id),
-            "project_id": str(project.id),
-        })
+        return Response(
+            {
+                "scheme": WorkflowSchemeSerializer(scheme).data,
+                "workflow_id": str(workflow.id),
+                "project_id": str(project.id),
+            }
+        )
 
     @allow_permission([ROLE.ADMIN], level="WORKSPACE")
     def assign_projects(self, request, slug, pk):
@@ -336,7 +322,7 @@ class WorkflowSchemeViewSet(BaseViewSet):
 
 class IssueTransitionViewSet(BaseViewSet):
     """ViewSet for Issue transition operations"""
-    
+
     serializer_class = IssueTransitionSerializer
     model = WorkflowTransition
 
@@ -347,12 +333,8 @@ class IssueTransitionViewSet(BaseViewSet):
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
     def list(self, request, slug, project_id, issue_id):
         """GET /issues/{id}/transitions/ - Get available transitions for issue"""
-        issue = Issue.objects.get(
-            id=issue_id,
-            project_id=project_id,
-            workspace__slug=slug
-        )
-        
+        issue = Issue.objects.get(id=issue_id, project_id=project_id, workspace__slug=slug)
+
         transitions = get_available_transitions(issue, request.user)
         workflow = resolve_issue_workflow(issue)
 
@@ -364,19 +346,23 @@ class IssueTransitionViewSet(BaseViewSet):
             except TransitionScreen.DoesNotExist:
                 pass
 
-            data.append({
-                "id": str(transition.id),
-                "name": transition.name,
-                "to_state_id": str(transition.to_state.id),
-                "to_state_name": transition.to_state.name,
-                "to_state_group": transition.to_state.group,
-                "screen": screen_data,
-            })
+            data.append(
+                {
+                    "id": str(transition.id),
+                    "name": transition.name,
+                    "to_state_id": str(transition.to_state.id),
+                    "to_state_name": transition.to_state.name,
+                    "to_state_group": transition.to_state.group,
+                    "screen": screen_data,
+                }
+            )
 
-        return Response({
-            "workflow_configured": workflow is not None,
-            "transitions": data,
-        })
+        return Response(
+            {
+                "workflow_configured": workflow is not None,
+                "transitions": data,
+            }
+        )
 
     @allow_permission([ROLE.ADMIN, ROLE.MEMBER])
     def execute(self, request, slug, project_id, issue_id, tid):
@@ -410,39 +396,27 @@ class IssueTransitionViewSet(BaseViewSet):
         serializer = TransitionExecuteSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         data = serializer.validated_data
-        
+
         try:
-            updated_issue = execute_transition(
-                issue,
-                transition,
-                request.user,
-                data
-            )
-            
+            updated_issue = execute_transition(issue, transition, request.user, data)
+
             # Return updated issue
             from operoz.app.serializers import IssueSerializer
+
             return Response(IssueSerializer(updated_issue).data)
-        
+
         except ConditionNotSatisfiedError as e:
-            return Response(
-                {"error": "condition_not_satisfied", "message": str(e)},
-                status=status.HTTP_403_FORBIDDEN
-            )
-        
+            return Response({"error": "condition_not_satisfied", "message": str(e)}, status=status.HTTP_403_FORBIDDEN)
+
         except WorkflowValidationError as e:
             return Response(
-                {"error": "validation_failed", "fields": e.errors},
-                status=status.HTTP_422_UNPROCESSABLE_ENTITY
+                {"error": "validation_failed", "fields": e.errors}, status=status.HTTP_422_UNPROCESSABLE_ENTITY
             )
-        
+
         except ConcurrentStateChangeError as e:
-            return Response(
-                {"error": "concurrent_state_change", "message": str(e)},
-                status=status.HTTP_409_CONFLICT
-            )
-        
+            return Response({"error": "concurrent_state_change", "message": str(e)}, status=status.HTTP_409_CONFLICT)
+
         except WorkflowExecutionError as e:
             return Response(
-                {"error": "execution_failed", "message": str(e)},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"error": "execution_failed", "message": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
