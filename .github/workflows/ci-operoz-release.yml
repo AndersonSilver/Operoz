@@ -1,14 +1,20 @@
-# Gates de release Operoz — qualidade (lint/format/types) + testes JS/API + build web
-# antes do deploy. Complementa ci-assistant.yml (escopo estreito, outros branches) e
-# deploy-operoz.yml (build/deploy).
+# Gates de release Operoz — qualidade (lint/format/types) + testes JS/API + build web.
+# Complementa ci-assistant.yml (escopo estreito, outros branches) e deploy-operoz.yml
+# (build/deploy real).
+#
+# preview: branch de integração/dev — feature PRs mergeiam aqui primeiro, sem deploy
+#   automático (só os gates deste workflow).
+# main: promovido a partir de preview quando estável — todo push/PR aqui também passa
+#   por esses mesmos gates, e cada push dispara o deploy de homologação
+#   (deploy-operoz.yml). Produção só acontece via tag (v*.*.*), com aprovação manual.
 
 name: CI Operoz Release
 
 on:
   push:
-    branches: [preview]
+    branches: [preview, main]
   pull_request:
-    branches: [preview]
+    branches: [preview, main]
 
 concurrency:
   group: ci-operoz-release-${{ github.ref }}

@@ -1,25 +1,35 @@
-# Build da imagem web no GitHub Actions, push para GHCR e deploy no VPS (Operoz self-host).
+# Build das imagens no GitHub Actions, push para GHCR e deploy no VPS (Operoz self-host).
 #
-# Secrets obrigatórios (Settings → Secrets and variables → Actions):
-#   VPS_HOST          — ex. 72.61.51.247
-#   VPS_USER          — ex. root
-#   VPS_SSH_KEY       — chave privada SSH (conteúdo completo do id_rsa)
+# Modelo de release:
+#   push em `main`      -> ambiente de HOMOLOGAÇÃO (hml-operoz.io), automático.
+#   push de tag `v*.*.*` -> ambiente de PRODUÇÃO (operoz.io), sempre stack completa,
+#                           com aprovação manual obrigatória (Environment "production").
 #
-# Variables recomendadas (Settings → Variables):
-#   OPEROZ_WEB_URL    — https://www.operoz.io (URL pública; build do frontend + sync operoz.env)
-#   OPEROZ_REPO_PATH  — /root/operis-selfhost/Operis (legado operis-selfhost OK)
-#   OPEROZ_APP_PATH   — /root/operis-selfhost/plane-app
-#   OPEROZ_SELF_HOSTED_RUNNER — "true" após instalar runner no VPS (.github/scripts/install-operoz-runner.sh)
-#   OPEROZ_DEPLOY_ON_PUSH — "web" (padrão), "full" (stack em cada push), ou deixar vazio e usar [deploy-full] no commit
-#   Push que altera apps/api|space|admin|live|proxy dispara build-full automaticamente (path filter)
+# Cada ambiente lê suas próprias Variables/Secrets via GitHub Environments
+# (Settings → Environments → homologacao / production). Só o que DIFERE entre os
+# dois precisa ser configurado por ambiente:
+#   OPEROZ_WEB_URL    — https://hml-operoz.io (homolog) / https://www.operoz.io (prod)
+#   OPEROZ_REPO_PATH  — checkout git usado pelo deploy em cada stack
+#   OPEROZ_APP_PATH   — pasta do docker-compose de cada stack
+# VPS_HOST/VPS_USER/VPS_SSH_KEY continuam como Secrets do repositório (mesma VPS,
+# duas stacks separadas) — só duplique por ambiente se um dia forem servidores
+# diferentes.
 #
-# SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall Hostinger.
+# Approval de produção: Settings → Environments → production → Required reviewers.
+# Sem isso configurado, `environment: production` não bloqueia nada sozinho.
+#
+# Tags de imagem publicadas no GHCR:
+#   push em main   -> :homolog (mutável) e :<sha> (imutável)
+#   tag vX.Y.Z     -> :production (mutável) e :vX.Y.Z (imutável, útil pra rollback manual)
+#
+# SSH timeout do GitHub → VPS: se falhar, use runner self-hosted ou abra porta 22 no firewall.
 
 name: Deploy Operoz
 
 on:
   push:
-    branches: [preview]
+    branches: [main]
+    tags: ["v*.*.*"]
   workflow_dispatch:
     inputs:
       deploy_target:
@@ -32,7 +42,7 @@ on:
           - mcp
           - full
       skip_build:
-        description: "Só redeploy (pula build; usa tag preview já no GHCR)"
+        description: "Só redeploy (pula build; usa a imagem já publicada no GHCR)"
         required: false
         default: false
         type: boolean
@@ -52,8 +62,12 @@ jobs:
     outputs:
       image_repo: ${{ steps.lower.outputs.image_repo }}
       use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
-      full_deploy: ${{ steps.mode.outputs.full_deploy }}
       build_stack: ${{ steps.mode.outputs.build_stack }}
+      env_name: ${{ steps.mode.outputs.env_name }}
+      mutable_tag: ${{ steps.mode.outputs.mutable_tag }}
+      version_tag: ${{ steps.mode.outputs.version_tag }}
+      git_ref_type: ${{ steps.mode.outputs.git_ref_type }}
+      git_ref: ${{ steps.mode.outputs.git_ref }}
     steps:
       - name: Checkout (path filter em push)
         uses: actions/checkout@v4
@@ -61,7 +75,7 @@ jobs:
       - name: Detectar mudanças na stack (api, space, admin, live, proxy)
         uses: dorny/paths-filter@v3
         id: paths
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && github.ref_type == 'branch'
         with:
           filters: |
             stack:
@@ -78,9 +92,19 @@ jobs:
         env:
           GITHUB_REPOSITORY: ${{ github.repository }}
 
-      - name: Modo de deploy
+      - name: Modo de deploy (ambiente + tags de imagem + escopo)
         id: mode
         run: |
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            env_name=production
+            mutable_tag=production
+            version_tag="${{ github.ref_name }}"
+          else
+            env_name=homologacao
+            mutable_tag=homolog
+            version_tag="${{ github.sha }}"
+          fi
+
           if [[ "${{ vars.OPEROZ_SELF_HOSTED_RUNNER || vars.OPERIS_SELF_HOSTED_RUNNER }}" == "true" ]]; then
             echo "use_self_hosted=true" >> "$GITHUB_OUTPUT"
           else
@@ -90,7 +114,11 @@ jobs:
           full=false
           stack_paths=false
 
-          if [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
+          if [[ "${{ github.ref_type }}" == "tag" ]]; then
+            # Release de produção sempre recria a stack inteira — não dá pra confiar
+            # em path-filter de um único commit de tag contra o commit anterior.
+            full=true
+          elif [[ "${{ github.event_name }}" == "workflow_dispatch" && "${{ inputs.deploy_target }}" == "full" ]]; then
             full=true
           elif [[ "${{ github.event_name }}" == "push" ]]; then
             if [[ "${{ vars.OPEROZ_DEPLOY_ON_PUSH }}" == "full" ]]; then
@@ -107,15 +135,23 @@ jobs:
             build_stack=true
           fi
 
-          echo "full_deploy=${full}" >> "$GITHUB_OUTPUT"
-          echo "build_stack=${build_stack}" >> "$GITHUB_OUTPUT"
-          echo "Modo: full_deploy=${full} stack_paths=${stack_paths} build_stack=${build_stack}"
+          {
+            echo "build_stack=${build_stack}"
+            echo "env_name=${env_name}"
+            echo "mutable_tag=${mutable_tag}"
+            echo "version_tag=${version_tag}"
+            echo "git_ref_type=${{ github.ref_type }}"
+            echo "git_ref=${{ github.ref_name }}"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Modo: ambiente=${env_name} build_stack=${build_stack} tags=${mutable_tag}/${version_tag} ref=${{ github.ref_type }}:${{ github.ref_name }}"
 
   build-web:
     needs: meta
     if: ${{ !inputs.skip_build && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' || inputs.deploy_target == 'mcp') }}
     runs-on: ubuntu-latest
     timeout-minutes: 90
+    environment: ${{ needs.meta.outputs.env_name }}
     permissions:
       contents: read
       packages: write
@@ -144,8 +180,8 @@ jobs:
           file: apps/web/Dockerfile.web
           push: true
           tags: |
-            ${{ env.WEB_IMAGE_NAME }}:preview
-            ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.WEB_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
+            ${{ env.WEB_IMAGE_NAME }}:${{ needs.meta.outputs.version_tag }}
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
@@ -160,8 +196,8 @@ jobs:
           file: mcp-server/Dockerfile
           push: true
           tags: |
-            ${{ env.MCP_IMAGE_NAME }}:preview
-            ${{ env.MCP_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.MCP_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
+            ${{ env.MCP_IMAGE_NAME }}:${{ needs.meta.outputs.version_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -170,6 +206,7 @@ jobs:
     if: ${{ !inputs.skip_build && needs.meta.outputs.build_stack == 'true' }}
     runs-on: ubuntu-latest
     timeout-minutes: 180
+    environment: ${{ needs.meta.outputs.env_name }}
     permissions:
       contents: read
       packages: write
@@ -208,8 +245,8 @@ jobs:
           file: ${{ matrix.file }}
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:preview
-            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ needs.meta.outputs.mutable_tag }}
+            ${{ env.IMAGE_PREFIX }}/${{ matrix.service }}:${{ needs.meta.outputs.version_tag }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -218,11 +255,9 @@ jobs:
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
     runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
     timeout-minutes: 45
-    # Cria/usa o Environment "production" no GitHub. Isso sozinho não bloqueia nada —
-    # para exigir aprovação manual antes de todo deploy, configure em
-    # Settings → Environments → production → "Required reviewers" (não dá pra fazer
-    # isso só com o arquivo do workflow).
-    environment: production
+    # production tem Required reviewers (configurar em Settings → Environments);
+    # homologacao fica sem approval, é o ambiente de teste contínuo.
+    environment: ${{ needs.meta.outputs.env_name }}
     permissions:
       contents: read
       packages: read
@@ -231,9 +266,10 @@ jobs:
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
-      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/plane-app' }}
-      GIT_BRANCH: preview
+      OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH }}
+      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH }}
+      GIT_REF_TYPE: ${{ needs.meta.outputs.git_ref_type }}
+      GIT_REF: ${{ needs.meta.outputs.git_ref }}
       GITHUB_ACTOR: ${{ github.actor }}
     steps:
       - name: Checkout
@@ -256,7 +292,7 @@ jobs:
       - name: Deploy web (runner local)
         if: ${{ needs.meta.outputs.build_stack != 'true' && needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full') }}
         env:
-          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-web.sh
 
@@ -265,11 +301,12 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:preview
+          WEB_IMAGE: ${{ env.WEB_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
-          GIT_BRANCH: preview
+          GIT_REF_TYPE: ${{ env.GIT_REF_TYPE }}
+          GIT_REF: ${{ env.GIT_REF }}
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -278,13 +315,13 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,WEB_IMAGE,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,WEB_IMAGE,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_REF_TYPE,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-web.sh
 
       - name: Deploy MCP (runner local)
         if: ${{ needs.meta.outputs.use_self_hosted == 'true' && (github.event_name != 'workflow_dispatch' || inputs.deploy_target == 'web' || inputs.deploy_target == 'mcp' || inputs.deploy_target == 'full') }}
         env:
-          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
         run: bash .github/scripts/vps-deploy-mcp.sh
 
@@ -293,10 +330,11 @@ jobs:
         uses: appleboy/ssh-action@v1.2.0
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:preview
+          MCP_IMAGE: ${{ env.MCP_IMAGE_NAME }}:${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_MCP_ENV: ${{ vars.OPEROZ_MCP_ENV || '' }}
-          GIT_BRANCH: preview
+          GIT_REF_TYPE: ${{ env.GIT_REF_TYPE }}
+          GIT_REF: ${{ env.GIT_REF }}
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -305,13 +343,14 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,MCP_IMAGE,OPEROZ_REPO_PATH,OPEROZ_MCP_ENV,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,MCP_IMAGE,OPEROZ_REPO_PATH,OPEROZ_MCP_ENV,GIT_REF_TYPE,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-mcp.sh
 
       - name: Deploy full stack (runner local)
         if: ${{ needs.meta.outputs.build_stack == 'true' && needs.meta.outputs.use_self_hosted == 'true' }}
         env:
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+          MUTABLE_TAG: ${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
         run: bash .github/scripts/vps-deploy-full.sh
 
@@ -321,10 +360,12 @@ jobs:
         env:
           GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           IMAGE_PREFIX: ${{ env.IMAGE_PREFIX }}
+          MUTABLE_TAG: ${{ needs.meta.outputs.mutable_tag }}
           OPEROZ_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
           OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
           OPEROZ_APP_PATH: ${{ env.OPEROZ_APP_PATH }}
-          GIT_BRANCH: preview
+          GIT_REF_TYPE: ${{ env.GIT_REF_TYPE }}
+          GIT_REF: ${{ env.GIT_REF }}
           GITHUB_ACTOR: ${{ github.actor }}
         with:
           host: ${{ secrets.VPS_HOST }}
@@ -333,5 +374,5 @@ jobs:
           port: 22
           timeout: ${{ env.SSH_TIMEOUT }}
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
-          envs: GHCR_TOKEN,IMAGE_PREFIX,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_BRANCH,GITHUB_ACTOR
+          envs: GHCR_TOKEN,IMAGE_PREFIX,MUTABLE_TAG,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GIT_REF_TYPE,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-full.sh

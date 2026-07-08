@@ -190,24 +190,43 @@ operoz_listen_http_port() {
   echo "${port}"
 }
 
-# SHA em HEAD no checkout do VPS antes do `git reset --hard` para a nova revisão
-# — usado só para orientar rollback manual se o health check pós-deploy falhar.
-# As imagens da revisão anterior continuam publicadas no GHCR com a tag :<sha>.
+# SHA em HEAD no checkout do VPS antes do checkout da nova revisão — usado só
+# para orientar rollback manual se o health check pós-deploy falhar. As imagens
+# da revisão anterior continuam publicadas no GHCR com a tag :<sha> (homolog)
+# ou :<tag anterior> (produção).
 operoz_current_repo_sha() {
   local repo_path="${1:?repo_path required}"
   [[ -d "${repo_path}/.git" ]] || return 1
   git -C "${repo_path}" rev-parse HEAD 2>/dev/null
 }
 
-# Mensagem de rollback manual a partir do SHA capturado antes do `git reset --hard`.
+# Atualiza o checkout em repo_path para a ref pedida — branch (ex. main) ou
+# tag de release (ex. v1.4.0). GIT_REF_TYPE/GIT_REF vêm do job `meta` do
+# deploy-operoz.yml (github.ref_type / github.ref_name).
+operoz_checkout_ref() {
+  local repo_path="${1:?repo_path required}"
+  local ref_type="${2:?ref_type required}" # branch | tag
+  local ref="${3:?ref required}"
+
+  cd "${repo_path}"
+  if [[ "${ref_type}" == "tag" ]]; then
+    git fetch origin "refs/tags/${ref}:refs/tags/${ref}" --force
+    git reset --hard "refs/tags/${ref}"
+  else
+    git fetch origin "${ref}"
+    git reset --hard "origin/${ref}"
+  fi
+}
+
+# Mensagem de rollback manual a partir do SHA capturado antes do checkout da nova ref.
 operoz_print_rollback_hint() {
   local previous_sha="${1:-}"
 
   if [[ -n "${previous_sha}" ]]; then
-    echo "Rollback manual: o commit anterior era ${previous_sha} — as imagens com a tag :${previous_sha} ainda existem no GHCR."
-    echo "  Reverta o branch preview para ${previous_sha} (ou repita o deploy manualmente apontando pra essas tags)."
+    echo "Rollback manual: a revisão anterior era ${previous_sha} — as imagens dessa revisão ainda existem no GHCR (tag :${previous_sha} em homolog, ou a tag de release anterior em produção)."
+    echo "  Reverta o branch/tag pra essa revisão e rode 'Deploy Operoz' de novo (ou aponte manualmente pra essas imagens)."
   else
-    echo "Não foi possível capturar o commit anterior (primeiro deploy?). Rollback manual: reverta o branch preview e rode 'Deploy Operoz' de novo."
+    echo "Não foi possível capturar a revisão anterior (primeiro deploy?). Rollback manual: reverta o branch/tag e rode 'Deploy Operoz' de novo."
   fi
 }
 

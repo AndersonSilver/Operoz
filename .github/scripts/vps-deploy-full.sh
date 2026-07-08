@@ -5,7 +5,9 @@ set -euo pipefail
 : "${IMAGE_PREFIX:?IMAGE_PREFIX is required}"
 : "${OPEROZ_REPO_PATH:?OPEROZ_REPO_PATH is required}"
 : "${OPEROZ_APP_PATH:?OPEROZ_APP_PATH is required}"
-: "${GIT_BRANCH:=preview}"
+: "${GIT_REF_TYPE:=branch}"
+: "${GIT_REF:=main}"
+: "${MUTABLE_TAG:=homolog}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -28,16 +30,14 @@ echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdi
 
 PREVIOUS_SHA="$(operoz_current_repo_sha "${OPEROZ_REPO_PATH}" || true)"
 
-echo "==> Atualizar código"
-cd "${OPEROZ_REPO_PATH}"
-git fetch origin "${GIT_BRANCH}"
-git reset --hard "origin/${GIT_BRANCH}"
+echo "==> Atualizar código (${GIT_REF_TYPE}:${GIT_REF})"
+operoz_checkout_ref "${OPEROZ_REPO_PATH}" "${GIT_REF_TYPE}" "${GIT_REF}"
 
 for entry in "${SERVICES[@]}"; do
   ghcr_name="${entry%%:*}"
   local_name="${entry##*:}"
   image_name="${local_name#myoperoz/}"
-  remote="${IMAGE_PREFIX}/${ghcr_name}:preview"
+  remote="${IMAGE_PREFIX}/${ghcr_name}:${MUTABLE_TAG}"
 
   echo "==> Pull ${remote}"
   docker pull "${remote}"

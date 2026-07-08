@@ -5,7 +5,8 @@ set -euo pipefail
 : "${WEB_IMAGE:?WEB_IMAGE is required}"
 : "${OPEROZ_REPO_PATH:?OPEROZ_REPO_PATH is required}"
 : "${OPEROZ_APP_PATH:?OPEROZ_APP_PATH is required}"
-: "${GIT_BRANCH:=preview}"
+: "${GIT_REF_TYPE:=branch}"
+: "${GIT_REF:=main}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -19,11 +20,9 @@ echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdi
 
 PREVIOUS_SHA="$(operoz_current_repo_sha "${OPEROZ_REPO_PATH}" || true)"
 
-echo "==> Atualizar código (${GIT_BRANCH}) em ${OPEROZ_REPO_PATH}"
+echo "==> Atualizar código (${GIT_REF_TYPE}:${GIT_REF}) em ${OPEROZ_REPO_PATH}"
 if [[ -d "${OPEROZ_REPO_PATH}/.git" ]]; then
-  cd "${OPEROZ_REPO_PATH}"
-  git fetch origin "${GIT_BRANCH}"
-  git reset --hard "origin/${GIT_BRANCH}"
+  operoz_checkout_ref "${OPEROZ_REPO_PATH}" "${GIT_REF_TYPE}" "${GIT_REF}"
 else
   echo "WARN: repo não encontrado em ${OPEROZ_REPO_PATH}; apenas imagem será atualizada."
 fi
