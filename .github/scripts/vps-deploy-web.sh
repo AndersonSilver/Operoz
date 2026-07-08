@@ -49,6 +49,14 @@ operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --no-deps --pull neve
 echo "==> Estado"
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps web
 
-operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" || true
+PREV_SHA="$(git -C "${OPEROZ_REPO_PATH}" rev-parse HEAD 2>/dev/null || true)"
+
+if ! operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
+  echo "::error::Health check falhou após deploy web. Container pode estar quebrado." >&2
+  if [[ -n "${PREV_SHA}" ]]; then
+    echo "::notice::Para reverter: re-deploy com a imagem :${PREV_SHA} (tag já existe no GHCR)." >&2
+  fi
+  exit 1
+fi
 
 echo "==> Deploy web concluído"
