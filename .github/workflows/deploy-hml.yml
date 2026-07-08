@@ -1,0 +1,166 @@
+# Deploy Operoz HML (homologação) — build + deploy na stack isolada em hml.operoz.io.
+#
+# Dispara em push para branch `hml` ou via workflow_dispatch.
+# Não exige approval gate — HML é ambiente de teste, não produção.
+#
+# Variables necessárias (Settings → Variables):
+#   OPEROZ_WEB_URL   — https://www.operoz.io (padrão) — HML usa hml.operoz.io fixo
+#   OPEROZ_REPO_PATH — /root/operis-selfhost/Operis
+#   HML_APP_PATH     — /root/operis-selfhost/plane-app-hml
+#   OPERIS_SELF_HOSTED_RUNNER — "true" para usar runner no VPS
+
+name: Deploy Operoz HML
+
+on:
+  push:
+    branches: [hml]
+  workflow_dispatch:
+    inputs:
+      skip_build:
+        description: "Só redeploy (pula build; usa tag hml já no GHCR)"
+        required: false
+        default: false
+        type: boolean
+
+concurrency:
+  group: deploy-hml-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  REGISTRY: ghcr.io
+  SSH_TIMEOUT: 180s
+  SSH_COMMAND_TIMEOUT: 45m
+
+jobs:
+  meta:
+    runs-on: ubuntu-latest
+    outputs:
+      image_repo: ${{ steps.lower.outputs.image_repo }}
+      use_self_hosted: ${{ steps.mode.outputs.use_self_hosted }}
+    steps:
+      - name: GHCR exige nome em minúsculas
+        id: lower
+        run: echo "image_repo=$(echo "${GITHUB_REPOSITORY}" | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+        env:
+          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Detectar modo de runner
+        id: mode
+        run: |
+          if [[ "${{ vars.OPERIS_SELF_HOSTED_RUNNER || vars.OPEROZ_SELF_HOSTED_RUNNER }}" == "true" ]]; then
+            echo "use_self_hosted=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "use_self_hosted=false" >> "$GITHUB_OUTPUT"
+          fi
+
+  build:
+    needs: meta
+    if: ${{ !inputs.skip_build }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    permissions:
+      contents: read
+      packages: write
+    env:
+      IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build e push plane-frontend:hml
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: .
+          file: apps/web/Dockerfile.web
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/plane-frontend:hml
+            ${{ env.IMAGE_PREFIX }}/plane-frontend:${{ github.sha }}
+          build-args: |
+            VITE_ENABLE_BOARDS=true
+            VITE_API_BASE_URL=https://hml.operoz.io
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build e push plane-backend:hml
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: apps/api
+          file: apps/api/Dockerfile.api
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/plane-backend:hml
+            ${{ env.IMAGE_PREFIX }}/plane-backend:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build e push plane-proxy:hml
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: apps/proxy
+          file: apps/proxy/Dockerfile.ce
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/plane-proxy:hml
+            ${{ env.IMAGE_PREFIX }}/plane-proxy:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    needs: [meta, build]
+    if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}
+    runs-on: ${{ needs.meta.outputs.use_self_hosted == 'true' && 'self-hosted' || 'ubuntu-latest' }}
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      packages: read
+    env:
+      HML_IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+      HML_APP_PATH: ${{ vars.HML_APP_PATH || '/root/operis-selfhost/plane-app-hml' }}
+      HML_WEB_URL: https://hml.operoz.io
+      GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GITHUB_ACTOR: ${{ github.actor }}
+      GIT_BRANCH: hml
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Deploy HML (runner self-hosted)
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' }}
+        run: bash .github/scripts/vps-deploy-hml.sh
+
+      - name: Preflight SSH (modo remoto)
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
+        run: |
+          set +e
+          nc -zv -w 15 "${{ secrets.VPS_HOST }}" 22
+          if [[ $? -ne 0 ]]; then
+            echo "::error::Porta 22 inacessível. Configure OPERIS_SELF_HOSTED_RUNNER=true ou abra SSH no firewall Hostinger."
+            exit 1
+          fi
+
+      - name: Deploy HML via SSH
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
+        uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          HML_IMAGE_PREFIX: ${{ env.HML_IMAGE_PREFIX }}
+          HML_APP_PATH: ${{ env.HML_APP_PATH }}
+          HML_WEB_URL: https://hml.operoz.io
+          GITHUB_ACTOR: ${{ github.actor }}
+          GIT_BRANCH: hml
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
+          envs: GHCR_TOKEN,HML_IMAGE_PREFIX,HML_APP_PATH,HML_WEB_URL,GITHUB_ACTOR,GIT_BRANCH
+          script_path: .github/scripts/vps-deploy-hml.sh
