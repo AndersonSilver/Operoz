@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import hmac
+
 from django.conf import settings
 from django.http import HttpResponse
 from rest_framework import status
@@ -25,9 +27,9 @@ class AssistantOpsMetricsEndpoint(BaseAPIView):
             return Response({"error": "metrics_disabled"}, status=status.HTTP_404_NOT_FOUND)
 
         provided = (request.headers.get("Authorization") or "").removeprefix("Bearer ").strip()
-        if provided != token:
+        if not hmac.compare_digest(provided, token):
             provided = (request.headers.get("X-Metrics-Token") or "").strip()
-        if provided != token:
+        if not hmac.compare_digest(provided, token):
             return Response({"error": "unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
 
         accept = (request.headers.get("Accept") or "").lower()

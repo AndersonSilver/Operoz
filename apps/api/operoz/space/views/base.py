@@ -110,7 +110,7 @@ class BaseViewSet(TimezoneMixin, ModelViewSet, BasePaginator):
             return response
         except Exception as exc:
             response = self.handle_exception(exc)
-            return exc
+            return response
 
     @property
     def workspace_slug(self):
@@ -193,7 +193,7 @@ class BaseAPIView(TimezoneMixin, APIView, BasePaginator):
 
         except Exception as exc:
             response = self.handle_exception(exc)
-            return exc
+            return response
 
     @property
     def workspace_slug(self):

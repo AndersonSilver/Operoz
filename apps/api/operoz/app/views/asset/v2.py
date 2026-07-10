@@ -82,7 +82,9 @@ def validate_scoped_asset_upload(entity_type: str, file_type: str) -> tuple[bool
 
 def presigned_url_for_asset_view(storage, asset):
     content_type = normalize_upload_mime_type(asset.attributes.get("type") or "")
-    disposition = "inline" if content_type in ("text/html", "application/xhtml+xml") else "attachment"
+    # All user-uploaded assets are forced to download. HTML/XHTML in particular must never be
+    # served inline — browsers execute them, making them a stored-XSS vector.
+    disposition = "attachment"
     return storage.generate_presigned_url(
         object_name=asset.asset.name,
         disposition=disposition,
