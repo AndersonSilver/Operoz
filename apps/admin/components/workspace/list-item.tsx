@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-import { ExternalLink, Mail, Pencil, Trash2 } from "lucide-react";
+import { ExternalLink, Mail, Pencil, Plug, Trash2 } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { WEB_BASE_URL } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
@@ -10,7 +10,9 @@ import { useWorkspace } from "@/hooks/store";
 import { DeleteWorkspaceModal } from "./delete-workspace-modal";
 import { EditWorkspaceModal } from "./edit-workspace-modal";
 import { WorkspaceEmailConfigModal } from "./workspace-email-config-modal";
+import { WorkspaceIntegrationConfigModal } from "./workspace-integration-config-modal";
 import { WORKSPACE_NOTIFICATION_FLAGS } from "./workspace-notification-flags";
+import { WORKSPACE_INTEGRATION_FLAGS } from "./workspace-integration-flags";
 
 type TWorkspaceListItemProps = {
   workspaceId: string;
@@ -21,6 +23,7 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
   const { getWorkspaceById } = useWorkspace();
   const workspace = getWorkspaceById(workspaceId);
   const [isConfigOpen, setIsConfigOpen] = useState(false);
+  const [isIntegrationOpen, setIsIntegrationOpen] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
@@ -29,6 +32,7 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
   const workspaceUrl = `${WEB_BASE_URL}/${encodeURIComponent(workspace.slug)}`;
   const activeFlags = WORKSPACE_NOTIFICATION_FLAGS.filter((flag) => Boolean(workspace[flag.key])).length;
   const totalFlags = WORKSPACE_NOTIFICATION_FLAGS.length;
+  const activeIntegrations = WORKSPACE_INTEGRATION_FLAGS.filter((flag) => Boolean(workspace[flag.key])).length;
 
   const openWorkspace = () => {
     window.open(workspaceUrl, "_blank", "noopener,noreferrer");
@@ -91,7 +95,7 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
           </Tooltip>
         </div>
 
-        <div className="flex flex-1 flex-col justify-center p-4">
+        <div className="flex flex-1 flex-col justify-center gap-2 p-4">
           <button
             type="button"
             onClick={() => setIsConfigOpen(true)}
@@ -112,6 +116,26 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
                 : t("god_mode.pages.workspace.email_flags_none")}
             </span>
           </button>
+          <button
+            type="button"
+            onClick={() => setIsIntegrationOpen(true)}
+            className="group flex w-full flex-col gap-2 rounded-xl border border-subtle bg-layer-2/30 px-3 py-3 text-left transition-colors hover:border-strong hover:bg-layer-1-hover"
+          >
+            <span className="flex items-center gap-2 text-12 font-medium text-primary">
+              <Plug className="size-3.5 text-accent-primary" strokeWidth={1.75} />
+              {t("god_mode.pages.workspace.integrations.card_title")}
+            </span>
+            <span
+              className={cn(
+                "inline-flex w-fit rounded-full px-2 py-0.5 text-10 font-semibold tracking-wide uppercase",
+                activeIntegrations > 0 ? "bg-success-subtle text-success-primary" : "bg-layer-2 text-tertiary"
+              )}
+            >
+              {activeIntegrations > 0
+                ? t("god_mode.pages.workspace.integrations.flags_summary", { count: activeIntegrations })
+                : t("god_mode.pages.workspace.integrations.flags_none")}
+            </span>
+          </button>
         </div>
 
         <div
@@ -121,6 +145,10 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
           <Button variant="secondary" size="sm" className="h-8" onClick={() => setIsConfigOpen(true)}>
             <Mail className="size-3.5" strokeWidth={1.75} />
             {t("god_mode.pages.workspace.config_button")}
+          </Button>
+          <Button variant="secondary" size="sm" className="h-8" onClick={() => setIsIntegrationOpen(true)}>
+            <Plug className="size-3.5" strokeWidth={1.75} />
+            {t("god_mode.pages.workspace.integrations.button")}
           </Button>
           <Button variant="secondary" size="sm" className="h-8" onClick={() => setIsEditOpen(true)}>
             <Pencil className="size-3.5" strokeWidth={1.75} />
@@ -138,6 +166,11 @@ export const WorkspaceListItem = observer(function WorkspaceListItem({ workspace
       </article>
 
       <WorkspaceEmailConfigModal workspace={workspace} isOpen={isConfigOpen} onClose={() => setIsConfigOpen(false)} />
+      <WorkspaceIntegrationConfigModal
+        workspace={workspace}
+        isOpen={isIntegrationOpen}
+        onClose={() => setIsIntegrationOpen(false)}
+      />
       <EditWorkspaceModal workspace={workspace} isOpen={isEditOpen} onClose={() => setIsEditOpen(false)} />
       <DeleteWorkspaceModal workspace={workspace} isOpen={isDeleteOpen} onClose={() => setIsDeleteOpen(false)} />
     </>

@@ -38,6 +38,10 @@ export interface IWorkspaceStore {
       >
     >
   ) => Promise<void>;
+  patchWorkspaceIntegrationFlags: (
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "is_google_calendar_enabled" | "is_discord_dm_enabled">>
+  ) => Promise<void>;
 }
 
 export class WorkspaceStore implements IWorkspaceStore {
@@ -67,6 +71,7 @@ export class WorkspaceStore implements IWorkspaceStore {
       updateWorkspace: action,
       deleteWorkspace: action,
       patchWorkspaceIssueNotificationFlags: action,
+      patchWorkspaceIntegrationFlags: action,
     });
     this.instanceWorkspaceService = new InstanceWorkspaceService();
   }
@@ -230,6 +235,27 @@ export class WorkspaceStore implements IWorkspaceStore {
       });
     } catch (error) {
       console.error("Error updating workspace notification flags", error);
+      throw error;
+    } finally {
+      this.loader = "loaded";
+    }
+  };
+
+  patchWorkspaceIntegrationFlags = async (
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "is_google_calendar_enabled" | "is_discord_dm_enabled">>
+  ): Promise<void> => {
+    try {
+      this.loader = "mutation";
+      const updated = await this.instanceWorkspaceService.patchIntegrationFlags(workspaceId, data);
+      runInAction(() => {
+        const existing = this.workspaces[workspaceId];
+        if (existing) {
+          set(this.workspaces, [workspaceId], { ...existing, ...updated });
+        }
+      });
+    } catch (error) {
+      console.error("Error updating workspace integration flags", error);
       throw error;
     } finally {
       this.loader = "loaded";

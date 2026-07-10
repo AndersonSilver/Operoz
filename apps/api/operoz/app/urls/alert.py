@@ -1,6 +1,11 @@
 from django.urls import path
 
 from operoz.app.views.alerts.external_accounts import UserExternalAccountDeleteView, UserExternalAccountView
+from operoz.app.views.alerts.discord_oauth import (
+    DiscordOAuthDisconnectView,
+    DiscordOAuthCallbackView,
+    DiscordOAuthStartView,
+)
 from operoz.app.views.alerts.google_calendar_oauth import (
     GoogleCalendarDisconnectView,
     GoogleCalendarOAuthCallbackView,
@@ -60,5 +65,20 @@ urlpatterns = [
         "workspaces/<str:slug>/integrations/google-calendar/disconnect/",
         GoogleCalendarDisconnectView.as_view(),
         name="google-calendar-disconnect",
+    ),
+    path(
+        "workspaces/<str:slug>/integrations/discord/auth/start/",
+        DiscordOAuthStartView.as_view(),
+        name="discord-oauth-start",
+    ),
+    path(
+        "integrations/discord/auth/callback/",
+        DiscordOAuthCallbackView.as_view(),
+        name="discord-oauth-callback",
+    ),
+    path(
+        "workspaces/<str:slug>/integrations/discord/disconnect/",
+        DiscordOAuthDisconnectView.as_view(),
+        name="discord-disconnect",
     ),
 ]

@@ -23,6 +23,9 @@ class AlertRule(BaseModel):
         SUPPORT_SLA_APPROACHING = "support_sla_approaching", "Support SLA Approaching"
         SUPPORT_SLA_BREACHED = "support_sla_breached", "Support SLA Breached"
         SUPPORT_TICKET_CLOSED = "support_ticket_closed", "Support Ticket Closed"
+        SUPPORT_NO_TEAM_RESPONSE = "support_no_team_response", "Support No Team Response"
+        ISSUE_NO_ACTIVITY = "issue_no_activity", "Issue No Activity"
+        IN_PROGRESS_TOO_LONG = "in_progress_too_long", "In Progress Too Long"
 
     workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="alert_rules")
     project = models.ForeignKey(

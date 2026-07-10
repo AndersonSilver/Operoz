@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from datetime import date
+from datetime import date, timedelta
 
 from celery import shared_task
 from django.utils import timezone
@@ -16,7 +16,7 @@ from operoz.alerts.evaluator import (
     support_scan_extra,
 )
 from operoz.bgtasks.alert_dispatch_task import dispatch_alert, dispatch_support_alert
-from operoz.db.models import AlertRule, IntakeIssue, Issue, Workspace
+from operoz.db.models import AlertRule, IntakeIssue, Issue, Notification, Workspace
 from operoz.db.models.intake import IntakeIssueStatus, IntakeTicketKind
 
 
@@ -37,6 +37,9 @@ def check_due_date_alerts() -> None:
                 AlertRule.AlertType.MISSING_DUE_DATE,
                 AlertRule.AlertType.SUPPORT_SLA_APPROACHING,
                 AlertRule.AlertType.SUPPORT_SLA_BREACHED,
+                AlertRule.AlertType.ISSUE_NO_ACTIVITY,
+                AlertRule.AlertType.IN_PROGRESS_TOO_LONG,
+                AlertRule.AlertType.SUPPORT_NO_TEAM_RESPONSE,
             ],
         )
         if not rules.exists():
@@ -45,6 +48,11 @@ def check_due_date_alerts() -> None:
         _scan_due_date_issues(workspace.id, rules, today)
         _scan_missing_due_date_issues(workspace.id, rules, now)
         _scan_support_tickets(workspace.id, rules, now)
+        _scan_stale_issues(workspace.id, rules, now)
+        _scan_in_progress_issues(workspace.id, rules, now)
+        _scan_support_no_response(workspace.id, rules, now)
+
+    _check_snoozed_notifications(now)
 
 
 def _scan_due_date_issues(workspace_id, rules, today: date) -> None:
@@ -162,3 +170,138 @@ def _scan_support_tickets(workspace_id, rules, now) -> None:
                 alert_type=AlertRule.AlertType.SUPPORT_SLA_APPROACHING,
                 extra=extra,
             )
+
+
+def _scan_stale_issues(workspace_id, rules, now) -> None:
+    """Dispatch issue_no_activity for open cards not updated in threshold_days."""
+    stale_rule = rules.filter(alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY).first()
+    if not stale_rule:
+        return
+
+    threshold_days = int(stale_rule.config.get("threshold_days", 3))
+    cutoff = now - timedelta(days=threshold_days)
+
+    issues = (
+        Issue.objects.filter(
+            workspace_id=workspace_id,
+            deleted_at__isnull=True,
+            updated_at__lt=cutoff,
+        )
+        .exclude(state__group__in=["completed", "cancelled"])
+        .select_related("project", "state")
+        .iterator(chunk_size=500)
+    )
+
+    for issue in issues:
+        if not should_dispatch_for_issue(issue):
+            continue
+        dispatch_alert.delay(
+            issue_id=str(issue.id),
+            alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY,
+            extra={"days_inactive": (now - issue.updated_at).days},
+        )
+
+
+def _scan_in_progress_issues(workspace_id, rules, now) -> None:
+    """Dispatch in_progress_too_long for cards stuck in 'started' state beyond threshold_days."""
+    stuck_rule = rules.filter(alert_type=AlertRule.AlertType.IN_PROGRESS_TOO_LONG).first()
+    if not stuck_rule:
+        return
+
+    threshold_days = int(stuck_rule.config.get("threshold_days", 5))
+    cutoff = now - timedelta(days=threshold_days)
+
+    issues = (
+        Issue.objects.filter(
+            workspace_id=workspace_id,
+            deleted_at__isnull=True,
+            state__group="started",
+        )
+        .filter(
+            # Use state_changed_at when available, fall back to updated_at
+            state_changed_at__lt=cutoff,
+        )
+        .select_related("project", "state")
+        .iterator(chunk_size=500)
+    )
+
+    for issue in issues:
+        if not should_dispatch_for_issue(issue):
+            continue
+        changed_at = issue.state_changed_at or issue.updated_at
+        dispatch_alert.delay(
+            issue_id=str(issue.id),
+            alert_type=AlertRule.AlertType.IN_PROGRESS_TOO_LONG,
+            extra={"days_in_progress": (now - changed_at).days},
+        )
+
+
+def _scan_support_no_response(workspace_id, rules, now) -> None:
+    """Dispatch support_no_team_response for accepted tickets with no update in threshold_hours."""
+    no_response_rule = rules.filter(alert_type=AlertRule.AlertType.SUPPORT_NO_TEAM_RESPONSE).first()
+    if not no_response_rule:
+        return
+
+    threshold_hours = int(no_response_rule.config.get("threshold_hours", 4))
+    cutoff = now - timedelta(hours=threshold_hours)
+
+    intake_issues = (
+        IntakeIssue.objects.filter(
+            workspace_id=workspace_id,
+            ticket_kind=IntakeTicketKind.SUPPORT,
+            status=IntakeIssueStatus.ACCEPTED,
+            updated_at__lt=cutoff,
+            deleted_at__isnull=True,
+        )
+        .select_related("issue", "issue__project", "issue__state")
+        .iterator(chunk_size=500)
+    )
+
+    for intake_issue in intake_issues:
+        issue = intake_issue.issue
+        if issue.deleted_at is not None or not should_dispatch_for_issue(issue):
+            continue
+        hours_waiting = int((now - intake_issue.updated_at).total_seconds() / 3600)
+        dispatch_support_alert.delay(
+            intake_issue_id=str(intake_issue.id),
+            alert_type=AlertRule.AlertType.SUPPORT_NO_TEAM_RESPONSE,
+            extra={"hours_without_response": hours_waiting},
+        )
+
+
+def _check_snoozed_notifications(now) -> None:
+    """Re-dispatch alerts for in-app notifications whose snooze has expired but are still unread."""
+    expired = (
+        Notification.objects.filter(
+            snoozed_till__lte=now,
+            read_at__isnull=True,
+            archived_at__isnull=True,
+            entity_name="issue",
+        )
+        .select_related("workspace")
+        .iterator(chunk_size=500)
+    )
+
+    seen_issue_ids: set[str] = set()
+    for notif in expired:
+        # Clear the snooze so the notification resurfaces in-app
+        Notification.objects.filter(pk=notif.pk).update(snoozed_till=None)
+
+        issue_id = str(notif.entity_identifier)
+        if issue_id in seen_issue_ids:
+            continue
+        seen_issue_ids.add(issue_id)
+
+        # Extract the alert_type that was originally triggered
+        message = notif.message or {}
+        alert_type = message.get("alert_type")
+        if not alert_type:
+            # Fallback: parse from sender field ("alert:<type>")
+            sender = notif.sender or ""
+            if sender.startswith("alert:"):
+                alert_type = sender[len("alert:"):]
+
+        if not alert_type:
+            continue
+
+        dispatch_alert.delay(issue_id=issue_id, alert_type=alert_type)

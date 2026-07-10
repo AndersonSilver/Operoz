@@ -4,3 +4,4 @@ from .configuration import InstanceConfigurationSerializer
 from .admin import InstanceAdminSerializer, InstanceAdminMeSerializer
 from .workspace import WorkspaceSerializer, InstanceWorkspaceUpdateSerializer
 from .workspace_issue_notifications import WorkspaceIssueNotificationFlagsSerializer
+from .workspace_integration_flags import WorkspaceIntegrationFlagsSerializer

@@ -16,6 +16,7 @@ from operoz.license.api.views import (
     InstanceWorkSpaceEndpoint,
     InstanceWorkspaceDetailEndpoint,
     InstanceWorkspaceIssueNotificationFlagsEndpoint,
+    InstanceWorkspaceIntegrationFlagsEndpoint,
 )
 
 urlpatterns = [
@@ -78,5 +79,10 @@ urlpatterns = [
         "workspaces/<uuid:workspace_id>/issue-notification-flags/",
         InstanceWorkspaceIssueNotificationFlagsEndpoint.as_view(),
         name="instance-workspace-issue-notification-flags",
+    ),
+    path(
+        "workspaces/<uuid:workspace_id>/integration-flags/",
+        InstanceWorkspaceIntegrationFlagsEndpoint.as_view(),
+        name="instance-workspace-integration-flags",
     ),
 ]

@@ -34,6 +34,8 @@ export interface IAlertStore {
   fetchAlertLogs: (workspaceSlug: string, filters?: TAlertLogFilters) => Promise<TAlertLog[]>;
   startGoogleCalendarOAuth: (workspaceSlug: string) => Promise<string>;
   disconnectGoogleCalendar: (workspaceSlug: string) => Promise<void>;
+  startDiscordOAuth: (workspaceSlug: string) => Promise<string>;
+  disconnectDiscord: (workspaceSlug: string) => Promise<void>;
 }
 
 export class AlertStore implements IAlertStore {
@@ -72,6 +74,8 @@ export class AlertStore implements IAlertStore {
       fetchAlertLogs: action,
       startGoogleCalendarOAuth: action,
       disconnectGoogleCalendar: action,
+      startDiscordOAuth: action,
+      disconnectDiscord: action,
     });
     this.alertService = new AlertService();
   }
@@ -202,6 +206,18 @@ export class AlertStore implements IAlertStore {
     await this.alertService.disconnectGoogleCalendar(workspaceSlug);
     runInAction(() => {
       this.externalAccounts.delete("google_calendar");
+    });
+  };
+
+  startDiscordOAuth = async (workspaceSlug: string) => {
+    const response = await this.alertService.startDiscordOAuth(workspaceSlug);
+    return response.redirect_url;
+  };
+
+  disconnectDiscord = async (workspaceSlug: string) => {
+    await this.alertService.disconnectDiscord(workspaceSlug);
+    runInAction(() => {
+      this.externalAccounts.delete("discord");
     });
   };
 }

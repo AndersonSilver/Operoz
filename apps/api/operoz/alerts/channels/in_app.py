@@ -43,6 +43,9 @@ def _build_title(alert_type: str, issue_name: str) -> str:
         "support_sla_approaching": "SLA do chamado a expirar",
         "support_sla_breached": "SLA do chamado violado",
         "support_ticket_closed": "Chamado encerrado",
+        "support_no_team_response": "Chamado sem resposta da equipe",
+        "issue_no_activity": "Card sem atualização",
+        "in_progress_too_long": "Card parado em andamento",
     }
     prefix = labels.get(alert_type, "Alerta")
     return f"{prefix}: {issue_name}"
@@ -58,4 +61,10 @@ def _build_message(context: AlertContext) -> str:
         return f"SLA do chamado expira em {context.extra['minutes_until_sla']} minuto(s)."
     if context.extra.get("minutes_overdue") is not None:
         return f"SLA do chamado violado há {context.extra['minutes_overdue']} minuto(s)."
+    if context.extra.get("days_inactive") is not None:
+        return f"{issue.name} não recebe atualizações há {context.extra['days_inactive']} dia(s)."
+    if context.extra.get("days_in_progress") is not None:
+        return f"{issue.name} está em andamento há {context.extra['days_in_progress']} dia(s) sem progresso."
+    if context.extra.get("hours_without_response") is not None:
+        return f"Chamado sem resposta da equipe há {context.extra['hours_without_response']} hora(s)."
     return issue.name

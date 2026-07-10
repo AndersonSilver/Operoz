@@ -29,6 +29,7 @@ SUPPORT_ALERT_TYPES = frozenset(
         AlertRule.AlertType.SUPPORT_SLA_APPROACHING,
         AlertRule.AlertType.SUPPORT_SLA_BREACHED,
         AlertRule.AlertType.SUPPORT_TICKET_CLOSED,
+        AlertRule.AlertType.SUPPORT_NO_TEAM_RESPONSE,
     }
 )
 

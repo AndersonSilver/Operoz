@@ -7,6 +7,12 @@ const ProfileSettingsModal = lazy(() =>
   }))
 );
 
+const IntegrationsSetupModal = lazy(() =>
+  import("@/components/workspace/integrations-setup-modal").then((module) => ({
+    default: module.IntegrationsSetupModal,
+  }))
+);
+
 type TGlobalModalsProps = {
   workspaceSlug: string;
 };
@@ -16,11 +22,13 @@ type TGlobalModalsProps = {
  *
  * This includes:
  * - Profile settings modal
+ * - Integrations setup modal (blocking on first access when workspace requires integrations)
  */
-export const GlobalModals = observer(function GlobalModals(_props: TGlobalModalsProps) {
+export const GlobalModals = observer(function GlobalModals({ workspaceSlug }: TGlobalModalsProps) {
   return (
     <Suspense fallback={null}>
       <ProfileSettingsModal />
+      <IntegrationsSetupModal workspaceSlug={workspaceSlug} />
     </Suspense>
   );
 });

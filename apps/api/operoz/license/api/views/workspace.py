@@ -13,6 +13,7 @@ from operoz.license.api.serializers import (
     InstanceWorkspaceUpdateSerializer,
     WorkspaceSerializer,
     WorkspaceIssueNotificationFlagsSerializer,
+    WorkspaceIntegrationFlagsSerializer,
 )
 from operoz.utils.constants import RESTRICTED_WORKSPACE_SLUGS
 
@@ -119,6 +120,19 @@ class InstanceWorkspaceIssueNotificationFlagsEndpoint(BaseAPIView):
     def patch(self, request, workspace_id):
         workspace = get_object_or_404(Workspace, pk=workspace_id)
         serializer = WorkspaceIssueNotificationFlagsSerializer(workspace, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class InstanceWorkspaceIntegrationFlagsEndpoint(BaseAPIView):
+    """PATCH external integration flags for a single workspace (instance admin)."""
+
+    permission_classes = [InstanceAdminPermission]
+
+    def patch(self, request, workspace_id):
+        workspace = get_object_or_404(Workspace, pk=workspace_id)
+        serializer = WorkspaceIntegrationFlagsSerializer(workspace, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(serializer.data, status=status.HTTP_200_OK)

@@ -80,6 +80,10 @@ export type TGoogleCalendarOAuthStart = {
   redirect_url: string;
 };
 
+export type TDiscordOAuthStart = {
+  redirect_url: string;
+};
+
 export type TAlertLogStatus = "sent" | "failed" | "throttled" | "skipped";
 
 export type TAlertLog = {

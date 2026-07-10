@@ -94,6 +94,20 @@ export class InstanceWorkspaceService extends APIService {
   }
 
   /**
+   * Updates per-workspace external integration flags (instance admin / God Mode).
+   */
+  async patchIntegrationFlags(
+    workspaceId: string,
+    data: Partial<Pick<IWorkspace, "is_google_calendar_enabled" | "is_discord_dm_enabled">>
+  ): Promise<Pick<IWorkspace, "is_google_calendar_enabled" | "is_discord_dm_enabled">> {
+    return this.patch(`/api/instances/workspaces/${workspaceId}/integration-flags/`, data)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  /**
    * Updates workspace core fields (instance admin / God Mode).
    */
   async update(

@@ -33,6 +33,9 @@ export interface IWorkspace {
   issue_notify_email_include_extended_activities?: boolean;
   issue_notify_email_include_description_changes?: boolean;
   issue_notify_email_dispatch_immediately?: boolean;
+  /** God Mode — external integration toggles (API returns when listing instance workspaces). */
+  is_google_calendar_enabled?: boolean;
+  is_discord_dm_enabled?: boolean;
 }
 
 export interface IWorkspaceLite {

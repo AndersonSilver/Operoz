@@ -7,6 +7,7 @@ import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Button } from "@operoz/propel/button";
 import { cn } from "@operoz/ui";
 import { useAlertStore } from "@/hooks/store/notifications/use-alert";
+import { useWorkspace } from "@/hooks/store/use-workspace";
 import "../alerts-settings.css";
 
 function ExternalAccountCard({
@@ -170,14 +171,57 @@ export const GoogleCalendarConnectPanel = observer(function GoogleCalendarConnec
 export const DiscordLinkPanel = observer(function DiscordLinkPanel({ workspaceSlug }: { workspaceSlug: string }) {
   const { t } = useTranslation();
   const alertStore = useAlertStore();
-  const [discordId, setDiscordId] = useState("");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [connecting, setConnecting] = useState(false);
   const account = alertStore.externalAccounts.get("discord");
 
   useEffect(() => {
     void alertStore.fetchExternalAccounts(workspaceSlug);
   }, [alertStore, workspaceSlug]);
 
+  useEffect(() => {
+    const discord = searchParams.get("discord");
+    if (discord === "connected") {
+      setToast({
+        type: TOAST_TYPE.SUCCESS,
+        title: t("success"),
+        message: t("alert.accounts.discord_connected"),
+      });
+      void alertStore.fetchExternalAccounts(workspaceSlug);
+      searchParams.delete("discord");
+      setSearchParams(searchParams, { replace: true });
+    }
+    if (discord === "error") {
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("error"),
+        message: t("alert.accounts.discord_error"),
+      });
+      searchParams.delete("discord");
+      setSearchParams(searchParams, { replace: true });
+    }
+  }, [alertStore, searchParams, setSearchParams, t, workspaceSlug]);
+
+  const handleConnect = async () => {
+    setConnecting(true);
+    try {
+      const redirectUrl = await alertStore.startDiscordOAuth(workspaceSlug);
+      if (redirectUrl) {
+        window.location.href = redirectUrl;
+      }
+    } catch {
+      setToast({
+        type: TOAST_TYPE.ERROR,
+        title: t("error"),
+        message: t("alert.accounts.discord_error"),
+      });
+    } finally {
+      setConnecting(false);
+    }
+  };
+
   const isConnected = Boolean(account?.is_active);
+  const discordUsername = account?.metadata?.username as string | undefined;
 
   return (
     <ExternalAccountCard
@@ -191,41 +235,29 @@ export const DiscordLinkPanel = observer(function DiscordLinkPanel({ workspaceSl
       {isConnected ? (
         <>
           <p className="font-mono truncate rounded-md border border-subtle bg-surface-1 px-3 py-2 text-11 text-secondary">
-            {account?.external_id}
+            {discordUsername ? `@${discordUsername}` : account?.external_id}
           </p>
           <Button
             variant="secondary"
             size="sm"
             className="self-start"
             prependIcon={<Unlink className="size-3.5" />}
-            onClick={() => void alertStore.disconnectExternalAccount(workspaceSlug, "discord")}
+            onClick={() => void alertStore.disconnectDiscord(workspaceSlug)}
           >
             {t("alert.accounts.disconnect")}
           </Button>
         </>
       ) : (
-        <>
-          <input
-            className="focus:ring-accent-primary w-full rounded-md border border-subtle bg-surface-1 px-3 py-2 text-13 text-primary placeholder:text-tertiary focus:border-strong focus:ring-1 focus:outline-none"
-            value={discordId}
-            onChange={(e) => setDiscordId(e.target.value)}
-            placeholder={t("alert.accounts.discord_id_placeholder")}
-          />
-          <Button
-            variant="primary"
-            size="sm"
-            className="self-start"
-            prependIcon={<Link2 className="size-3.5" />}
-            onClick={() =>
-              void alertStore.connectExternalAccount(workspaceSlug, {
-                provider: "discord",
-                external_id: discordId.trim(),
-              })
-            }
-          >
-            {t("alert.accounts.connect")}
-          </Button>
-        </>
+        <Button
+          variant="primary"
+          size="sm"
+          className="self-start"
+          loading={connecting}
+          prependIcon={<Link2 className="size-3.5" />}
+          onClick={() => void handleConnect()}
+        >
+          {t("alert.accounts.discord_connect")}
+        </Button>
       )}
     </ExternalAccountCard>
   );
@@ -236,10 +268,18 @@ export const ExternalAccountsList = observer(function ExternalAccountsList({
 }: {
   workspaceSlug: string;
 }) {
+  const { getWorkspaceBySlug } = useWorkspace();
+  const workspace = getWorkspaceBySlug(workspaceSlug);
+
+  const calendarEnabled = Boolean(workspace?.is_google_calendar_enabled);
+  const discordEnabled = Boolean(workspace?.is_discord_dm_enabled);
+
+  if (!calendarEnabled && !discordEnabled) return null;
+
   return (
     <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-      <GoogleCalendarConnectPanel workspaceSlug={workspaceSlug} />
-      <DiscordLinkPanel workspaceSlug={workspaceSlug} />
+      {calendarEnabled && <GoogleCalendarConnectPanel workspaceSlug={workspaceSlug} />}
+      {discordEnabled && <DiscordLinkPanel workspaceSlug={workspaceSlug} />}
     </div>
   );
 });

@@ -89,6 +89,29 @@ DEFAULT_RULES: list[dict] = [
         "channels": ["in_app"],
         "config": {**SUPPORT_RECIPIENT_CONFIG},
     },
+    {
+        "alert_type": AlertRule.AlertType.SUPPORT_NO_TEAM_RESPONSE,
+        "name": "Chamado sem resposta da equipe",
+        "channels": ["email", "in_app", "discord_dm"],
+        "config": {**SUPPORT_RECIPIENT_CONFIG, "threshold_hours": 4},
+    },
+    {
+        "alert_type": AlertRule.AlertType.ISSUE_NO_ACTIVITY,
+        "name": "Card sem atualização",
+        "channels": ["email", "in_app"],
+        "config": {"threshold_days": 3, "notify_assignees": True, "notify_creator": False},
+        "escalation_schedule": [
+            {"days_inactive": 3, "channels": ["in_app"]},
+            {"days_inactive": 7, "channels": ["email", "in_app"]},
+            {"days_inactive": 14, "channels": ["email", "in_app", "discord_dm"]},
+        ],
+    },
+    {
+        "alert_type": AlertRule.AlertType.IN_PROGRESS_TOO_LONG,
+        "name": "Card parado em andamento",
+        "channels": ["email", "in_app"],
+        "config": {"threshold_days": 5, "notify_assignees": True, "notify_creator": True},
+    },
 ]
 
 

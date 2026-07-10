@@ -8,6 +8,7 @@ import type {
   TGoogleCalendarOAuthStart,
   TUserAlertPreferences,
   TUserExternalAccount,
+  TDiscordOAuthStart,
 } from "@operoz/types";
 import { APIService } from "../api.service";
 
@@ -106,6 +107,22 @@ export class AlertService extends APIService {
 
   async disconnectGoogleCalendar(workspaceSlug: string): Promise<void> {
     return this.post(`/api/workspaces/${workspaceSlug}/integrations/google-calendar/disconnect/`)
+      .then(() => undefined)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async startDiscordOAuth(workspaceSlug: string): Promise<TDiscordOAuthStart> {
+    return this.get(`/api/workspaces/${workspaceSlug}/integrations/discord/auth/start/`)
+      .then((response) => response?.data)
+      .catch((error) => {
+        throw error?.response?.data;
+      });
+  }
+
+  async disconnectDiscord(workspaceSlug: string): Promise<void> {
+    return this.post(`/api/workspaces/${workspaceSlug}/integrations/discord/disconnect/`)
       .then(() => undefined)
       .catch((error) => {
         throw error?.response?.data;

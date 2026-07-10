@@ -23,4 +23,5 @@ from .workspace import (
     InstanceWorkSpaceEndpoint,
     InstanceWorkspaceDetailEndpoint,
     InstanceWorkspaceIssueNotificationFlagsEndpoint,
+    InstanceWorkspaceIntegrationFlagsEndpoint,
 )

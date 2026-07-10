@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from celery import shared_task
 from django.db.models import Q
+from django.utils import timezone
 
 from operoz.alerts.access import user_can_receive_issue_alert
 from operoz.alerts.dispatcher import build_issue_url, dispatch_rule_for_subject
@@ -191,6 +192,7 @@ def dispatch_issue_update_alerts(
 
     changed = _diff_fields(before, after)
     if "state_id" in changed:
+        Issue.objects.filter(id=issue_id, deleted_at__isnull=True).update(state_changed_at=timezone.now())
         dispatch_alert.delay(
             issue_id=issue_id,
             alert_type=AlertRule.AlertType.STATE_CHANGE,

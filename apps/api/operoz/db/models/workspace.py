@@ -152,6 +152,16 @@ class Workspace(BaseModel):
         help_text="Trigger email queue processing right after logging (instead of waiting for the 5-minute beat).",
     )
 
+    # External integration toggles (instance admin / God Mode — per workspace)
+    is_google_calendar_enabled = models.BooleanField(
+        default=False,
+        help_text="Allow workspace members to connect Google Calendar for alert notifications.",
+    )
+    is_discord_dm_enabled = models.BooleanField(
+        default=False,
+        help_text="Allow workspace members to connect Discord DM for alert notifications.",
+    )
+
     def __str__(self):
         """Return name of the Workspace"""
         return self.name
