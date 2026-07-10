@@ -7,6 +7,7 @@ from operoz.app.permissions.page_review import PageReviewPermission
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import Issue, PageReviewComment, PageReviewEvent, PageReviewInvite, PageReviewSession, PageVersion
 from operoz.utils.page_review_guest import (
+    annotate_review_sessions,
     create_page_version_snapshot,
     create_review_invites,
     get_accessible_project,
@@ -27,7 +28,9 @@ class PageReviewSessionListCreateEndpoint(BaseAPIView):
         if not page:
             return Response({"error": "Page not found"}, status=status.HTTP_404_NOT_FOUND)
 
-        sessions = PageReviewSession.objects.filter(page=page, project_id=project_id).order_by("-created_at")[:50]
+        sessions = annotate_review_sessions(
+            PageReviewSession.objects.filter(page=page, project_id=project_id).order_by("-created_at")
+        )[:50]
         return Response([serialize_review_session(s) for s in sessions], status=status.HTTP_200_OK)
 
     def post(self, request, slug, project_id, page_id):

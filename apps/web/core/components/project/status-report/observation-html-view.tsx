@@ -1,3 +1,4 @@
+import DOMPurify from "dompurify";
 import { cn } from "@operoz/utils";
 
 function cleanListClasses(html: string): string {
@@ -39,6 +40,9 @@ const OBS_HTML_CLASS = cn(
 
 export function ObservationHtmlView({ html }: { html: string }) {
   return (
-    <div className={OBS_HTML_CLASS} dangerouslySetInnerHTML={{ __html: normalizeObservationHtmlForDisplay(html) }} />
+    <div
+      className={OBS_HTML_CLASS}
+      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(normalizeObservationHtmlForDisplay(html)) }}
+    />
   );
 }

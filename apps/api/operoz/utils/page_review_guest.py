@@ -6,6 +6,7 @@ from datetime import timedelta
 from pathlib import Path
 
 from django.conf import settings
+from django.db.models import Count, Q
 from django.utils import timezone
 
 from operoz.utils.host import api_public_base_url, frontend_base_url
@@ -243,7 +244,27 @@ def build_inline_comments_list(session: PageReviewSession) -> list[dict]:
     ]
 
 
+def annotate_review_sessions(queryset):
+    """Annotate a PageReviewSession queryset with comment/invite counts to avoid N+1 queries."""
+    return queryset.annotate(
+        _comment_count=Count("comments", distinct=True),
+        _invite_count=Count(
+            "invites",
+            filter=Q(invites__revoked_at__isnull=True),
+            distinct=True,
+        ),
+    )
+
+
 def serialize_review_session(session: PageReviewSession) -> dict:
+    # Use pre-annotated counts when available (batch list queries); fall back to per-object queries.
+    comment_count = getattr(session, "_comment_count", None)
+    if comment_count is None:
+        comment_count = PageReviewComment.objects.filter(session=session).count()
+    invite_count = getattr(session, "_invite_count", None)
+    if invite_count is None:
+        invite_count = PageReviewInvite.objects.filter(session=session, revoked_at__isnull=True).count()
+
     payload = {
         "id": str(session.id),
         "page_id": str(session.page_id),
@@ -253,8 +274,8 @@ def serialize_review_session(session: PageReviewSession) -> dict:
         "sent_at": session.sent_at.isoformat() if session.sent_at else None,
         "resolved_at": session.resolved_at.isoformat() if session.resolved_at else None,
         "created_at": session.created_at.isoformat() if session.created_at else None,
-        "comment_count": PageReviewComment.objects.filter(session=session).count(),
-        "invite_count": PageReviewInvite.objects.filter(session=session, revoked_at__isnull=True).count(),
+        "comment_count": comment_count,
+        "invite_count": invite_count,
     }
     page_version = getattr(session, "page_version", None)
     if page_version is not None and session.page_version_id:
