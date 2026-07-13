@@ -101,6 +101,10 @@ app.conf.beat_schedule = {
         "task": "operoz.bgtasks.alert_digest_task.send_daily_alert_digests",
         "schedule": crontab(hour=7, minute=0),  # UTC 07:00
     },
+    "send-weekly-stale-digest": {
+        "task": "operoz.bgtasks.alert_digest_task.send_weekly_stale_card_digest",
+        "schedule": crontab(hour=9, minute=0, day_of_week=1),  # Monday 09:00 UTC
+    },
 }
 
 

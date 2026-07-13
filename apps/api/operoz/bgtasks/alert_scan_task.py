@@ -16,7 +16,7 @@ from operoz.alerts.evaluator import (
     support_scan_extra,
 )
 from operoz.bgtasks.alert_dispatch_task import dispatch_alert, dispatch_support_alert
-from operoz.db.models import AlertRule, IntakeIssue, Issue, Notification, Workspace
+from operoz.db.models import AlertLog, AlertRule, IntakeIssue, Issue, Notification, Workspace
 from operoz.db.models.intake import IntakeIssueStatus, IntakeTicketKind
 
 
@@ -195,10 +195,16 @@ def _scan_stale_issues(workspace_id, rules, now) -> None:
     for issue in issues:
         if not should_dispatch_for_issue(issue):
             continue
+        prev_sent = AlertLog.objects.filter(
+            issue_id=issue.id,
+            alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY,
+            status=AlertLog.Status.SENT,
+        ).values("receiver_id").distinct().count()
         dispatch_alert.delay(
             issue_id=str(issue.id),
             alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY,
             extra={"days_inactive": (now - issue.updated_at).days},
+            escalate=prev_sent >= 3,
         )
 
 

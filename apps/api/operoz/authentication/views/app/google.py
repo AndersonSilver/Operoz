@@ -20,6 +20,48 @@ from operoz.authentication.adapter.error import (
 from operoz.utils.path_validator import get_safe_redirect_url
 
 
+def _save_calendar_token_for_user(user, provider) -> None:
+    """After Google login, persist the calendar token for all eligible workspaces."""
+    refresh_token = provider.token_data.get("refresh_token")
+    if not refresh_token:
+        return
+    try:
+        from operoz.alerts.oauth.google_calendar import encrypt_tokens
+        from operoz.db.models import WorkspaceMember
+        from operoz.db.models.external_account import UserExternalAccount
+
+        token_payload = {
+            "access_token": provider.token_data.get("access_token", ""),
+            "refresh_token": refresh_token,
+            "expires_at": str(provider.token_data.get("access_token_expired_at", "")),
+        }
+        encrypted = encrypt_tokens(token_payload)
+        external_id = provider.user_data.get("email", "")
+
+        workspace_ids = list(
+            WorkspaceMember.objects.filter(
+                member=user,
+                deleted_at__isnull=True,
+                workspace__is_google_calendar_enabled=True,
+                workspace__deleted_at__isnull=True,
+            ).values_list("workspace_id", flat=True)
+        )
+        for workspace_id in workspace_ids:
+            UserExternalAccount.objects.update_or_create(
+                user=user,
+                workspace_id=workspace_id,
+                provider=UserExternalAccount.Provider.GOOGLE_CALENDAR,
+                defaults={
+                    "external_id": external_id,
+                    "token_data": encrypted,
+                    "is_active": True,
+                    "deleted_at": None,
+                },
+            )
+    except Exception:
+        pass
+
+
 class GoogleOauthInitiateEndpoint(View):
     def get(self, request):
         request.session["host"] = base_host(request=request, is_app=True)
@@ -85,6 +127,8 @@ class GoogleCallbackEndpoint(View):
             user = provider.authenticate()
             # Login the user and record his device info
             user_login(request=request, user=user, is_app=True)
+            # Auto-save calendar token for workspaces that have calendar integration enabled
+            _save_calendar_token_for_user(user, provider)
             # Get the redirection path
             if next_path:
                 path = next_path

@@ -17,7 +17,11 @@ from operoz.authentication.adapter.error import (
 class GoogleOAuthProvider(OauthAdapter):
     token_url = "https://oauth2.googleapis.com/token"
     userinfo_url = "https://www.googleapis.com/oauth2/v2/userinfo"
-    scope = "https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"
+    scope = (
+        "https://www.googleapis.com/auth/userinfo.email "
+        "https://www.googleapis.com/auth/userinfo.profile "
+        "https://www.googleapis.com/auth/calendar.events"
+    )
     provider = "google"
 
     def __init__(self, request, code=None, state=None, callback=None):

@@ -209,7 +209,7 @@ def dispatch_issue_update_alerts(
 
 
 @shared_task
-def dispatch_alert(issue_id: str, alert_type: str, extra: dict | None = None) -> None:
+def dispatch_alert(issue_id: str, alert_type: str, extra: dict | None = None, escalate: bool = False) -> None:
     issue = (
         Issue.objects.select_related("project", "state", "workspace")
         .prefetch_related("assignees")
@@ -232,9 +232,11 @@ def dispatch_alert(issue_id: str, alert_type: str, extra: dict | None = None) ->
     )
     subject = AlertSubject(issue=issue, intake_issue=intake_issue)
     for rule in rules:
+        config_override = {**rule.config, "notify_project_lead": True} if escalate else None
         dispatch_rule_for_subject(
             rule=rule,
             subject=subject,
             alert_type=alert_type,
             extra=extra or {},
+            config_override=config_override,
         )

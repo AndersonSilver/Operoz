@@ -38,10 +38,13 @@ def build_issue_url(issue: Issue) -> str:
     return f"{frontend_base_url()}/{issue.workspace.slug}/projects/{issue.project_id}/issues/{issue.id}"
 
 
-def _resolve_recipients_for_alert(subject: AlertSubject, rule: AlertRule) -> list[User]:
+def _resolve_recipients_for_alert(
+    subject: AlertSubject, rule: AlertRule, config_override: dict | None = None
+) -> list[User]:
+    config = config_override if config_override is not None else (rule.config or {})
     if rule.alert_type in SUPPORT_ALERT_TYPES:
-        return resolve_support_recipients(subject, rule.config or {})
-    return resolve_recipients(subject, rule.config or {})
+        return resolve_support_recipients(subject, config)
+    return resolve_recipients(subject, config)
 
 
 def dispatch_to_channels(
@@ -143,8 +146,9 @@ def dispatch_rule_for_subject(
     alert_type: str,
     extra: dict | None = None,
     actor_id: str | None = None,
+    config_override: dict | None = None,
 ) -> None:
-    recipients = _resolve_recipients_for_alert(subject, rule)
+    recipients = _resolve_recipients_for_alert(subject, rule, config_override=config_override)
     for user in recipients:
         dispatch_to_channels(
             rule=rule,
