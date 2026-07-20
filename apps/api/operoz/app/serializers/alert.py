@@ -55,10 +55,18 @@ class UserExternalAccountSerializer(BaseSerializer):
             "external_id",
             "is_active",
             "last_synced_at",
+            "metadata",
             "created_at",
             "updated_at",
         )
-        read_only_fields = ("id", "is_active", "last_synced_at", "created_at", "updated_at")
+        read_only_fields = (
+            "id",
+            "is_active",
+            "last_synced_at",
+            "metadata",
+            "created_at",
+            "updated_at",
+        )
 
 
 class UserExternalAccountWriteSerializer(serializers.Serializer):

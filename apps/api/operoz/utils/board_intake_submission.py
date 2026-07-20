@@ -29,14 +29,18 @@ def assert_public_intake_rate_limit(*, anchor: str, client_ip: str | None) -> No
     cache.set(cache_key, count + 1, PUBLIC_SUBMIT_RATE_WINDOW_SECONDS)
 
 
-def board_intake_client_queryset(board_id) -> QuerySet[Project]:
+def board_intake_client_queryset(board_id, scope: str = "support") -> QuerySet[Project]:
+    filter_kwargs: dict[str, Any] = {
+        "board_id": board_id,
+        "archived_at__isnull": True,
+        "deleted_at__isnull": True,
+    }
+    if scope == "demand":
+        filter_kwargs["intake_view"] = True
+    else:
+        filter_kwargs["support_view"] = True
     return (
-        Project.objects.filter(
-            board_id=board_id,
-            archived_at__isnull=True,
-            deleted_at__isnull=True,
-            support_view=True,
-        )
+        Project.objects.filter(**filter_kwargs)
         .only("id", "name", "identifier", "board_id", "workspace_id", "support_view", "intake_view")
         .order_by("name")
     )
@@ -55,7 +59,7 @@ def serialize_board_intake_clients(projects: QuerySet[Project]) -> list[dict[str
 
 def _client_field_id(fields: list[dict[str, Any]]) -> str | None:
     for field in fields or []:
-        if field.get("field_type") == "client":
+        if field.get("field_type") in ("client", "circle"):
             return field.get("id")
     return None
 
@@ -70,9 +74,14 @@ def _validate_project_id(value: str) -> str:
     return candidate
 
 
-def resolve_board_intake_project(*, board_id, project_id: str) -> Project:
-    project = board_intake_client_queryset(board_id).filter(pk=project_id).select_related("workspace").first()
+def resolve_board_intake_project(*, board_id, project_id: str, scope: str = "support") -> Project:
+    project = board_intake_client_queryset(board_id, scope=scope).filter(pk=project_id).select_related("workspace").first()
     if project is None:
+        if scope == "demand":
+            raise IntakeSubmissionError(
+                "Círculo inválido ou Intake inativo.",
+                field_errors={"circle": "Círculo inválido ou Intake inativo para este board."},
+            )
         raise IntakeSubmissionError(
             "Cliente inválido ou Sustentação inativa.",
             field_errors={"client": "Cliente inválido ou Sustentação inativa para este board."},
@@ -99,10 +108,17 @@ def extract_client_project_id(
     return project_id, filtered
 
 
+def _routing_field_id(fields: list[dict[str, Any]]) -> str | None:
+    for field in fields or []:
+        if field.get("field_type") in ("client", "circle"):
+            return field.get("id")
+    return None
+
+
 def validate_board_intake_form_fields(form: BoardIntakeForm) -> None:
     fields = form.fields or []
-    if not _client_field_id(fields):
-        raise IntakeSubmissionError("Formulário do board precisa incluir o campo Cliente.")
+    if not _routing_field_id(fields):
+        raise IntakeSubmissionError("Formulário do board precisa incluir o campo Cliente ou Círculo.")
     if not any(field.get("field_type") == "name" for field in fields):
         raise IntakeSubmissionError("Formulário do board precisa incluir o campo Resumo.")
 
@@ -122,8 +138,9 @@ def submit_board_intake_form(
     assert_public_intake_rate_limit(anchor=form.anchor, client_ip=client_ip)
     validate_board_intake_form_fields(form)
 
+    scope = getattr(form, "form_scope", "support") or "support"
     project_id, payload = extract_client_project_id(fields=form.fields or [], submission=submission)
-    project = resolve_board_intake_project(board_id=form.board_id, project_id=project_id)
+    project = resolve_board_intake_project(board_id=form.board_id, project_id=project_id, scope=scope)
     origin = base_host(request=request, is_app=True) if request else None
 
     return create_intake_submission(

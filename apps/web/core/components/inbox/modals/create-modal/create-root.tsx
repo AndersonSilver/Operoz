@@ -38,6 +38,7 @@ type TInboxIssueCreateRoot = {
   handleModalClose: () => void;
   isDuplicateModalOpen: boolean;
   handleDuplicateIssueModal: (value: boolean) => void;
+  hubMode?: import("@operoz/types").THubMode;
 };
 
 export const defaultIssueData: Partial<TIssue> = {
@@ -53,7 +54,9 @@ export const defaultIssueData: Partial<TIssue> = {
 };
 
 export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props: TInboxIssueCreateRoot) {
-  const { workspaceSlug, projectId, handleModalClose, isDuplicateModalOpen, handleDuplicateIssueModal } = props;
+  const { workspaceSlug, projectId, handleModalClose, isDuplicateModalOpen, handleDuplicateIssueModal, hubMode } =
+    props;
+  const isIntakeHub = hubMode === EHubMode.INTAKE;
   // states
   const [uploadedAssetIds, setUploadedAssetIds] = useState<string[]>([]);
   // router
@@ -203,7 +206,9 @@ export const InboxIssueCreateRoot = observer(function InboxIssueCreateRoot(props
         <form ref={formRef} onSubmit={handleFormSubmit} className="flex w-full flex-col">
           <div className="space-y-5 rounded-t-lg bg-surface-1 p-5">
             <div className="flex items-center justify-between gap-2">
-              <h3 className="text-18 font-medium text-secondary">{t("inbox_issue.modal.title")}</h3>
+              <h3 className="text-18 font-medium text-secondary">
+                {isIntakeHub ? t("inbox_issue.modal.intake_title") : t("inbox_issue.modal.title")}
+              </h3>
               {duplicateIssues?.length > 0 && (
                 <DeDupeButtonRoot
                   workspaceSlug={workspaceSlug}

@@ -1,0 +1,45 @@
+{
+  "id": "intake-deferred",
+  "version": 1,
+  "name": "Recepção — pedido não priorizado",
+  "description": "Notifica o solicitante quando um pedido é marcado como não priorizado.",
+  "icon": "clock",
+  "category": "intake",
+  "default_rule_name": "Aviso de pedido não priorizado",
+  "default_description": "Template oficial Operoz — avisa o solicitante ao adiar/não priorizar um pedido.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Aviso de pedido não priorizado" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários extras (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-deferred",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "intake.deferred",
+          "label": "Recepção — pedido não priorizado",
+          "config": { "event_type": "intake.deferred" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-deferred", "target": "action-email" }]
+  }
+}

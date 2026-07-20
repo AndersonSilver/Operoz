@@ -35,6 +35,7 @@ class SourceType(models.TextChoices):
     IN_APP = "IN_APP"
     PUBLIC_FORM = "PUBLIC_FORM"
     EMAIL = "EMAIL"
+    DISCORD = "DISCORD"
 
 
 class IntakeTicketKind(models.TextChoices):
@@ -49,6 +50,13 @@ class IntakeIssueStatus(models.IntegerChoices):
     ACCEPTED = 1
     DUPLICATE = 2
     CLOSED = 3
+
+
+class IntakeOutcome(models.TextChoices):
+    CONVERTED = "converted", "Convertido"
+    CONSULTING = "consulting", "Consultoria"
+    DEFERRED = "deferred", "Não priorizado"
+    REJECTED = "rejected", "Recusado"
 
 
 class IntakeIssue(ProjectBaseModel):
@@ -104,6 +112,26 @@ class IntakeIssue(ProjectBaseModel):
         default=IntakeTicketKind.SUPPORT,
         db_index=True,
     )
+    # E1 — cross-project convert tracking
+    converted_to_issue = models.ForeignKey(
+        "db.Issue",
+        related_name="intake_converted_origin",
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+    )
+    # E2 — typed outcomes
+    outcome = models.CharField(
+        max_length=16,
+        choices=IntakeOutcome.choices,
+        null=True,
+        blank=True,
+        db_index=True,
+    )
+    outcome_note = models.TextField(blank=True, null=True)
+    deferred_until = models.DateField(null=True, blank=True)
+    # E5 — "pedir complemento" flag (stays PENDING but signals requester)
+    awaiting_info = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = "IntakeIssue"

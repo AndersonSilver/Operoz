@@ -6,13 +6,12 @@ import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 // components
-import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { PageHead } from "@/components/core/page-title";
 import { SettingsHeading } from "@/components/settings/heading";
 import { WebhookSettingsLoader } from "@/components/ui/loader/settings/web-hook";
 import { SettingsContentWrapper } from "@/components/settings/content-wrapper";
-import { WebhooksList, CreateWebhookModal } from "@/components/web-hooks";
+import { WebhooksList, CreateWebhookModal, WebhooksEmptyState } from "@/components/web-hooks";
 // hooks
 import { useWebhook } from "@/hooks/store/use-webhook";
 import { useWorkspace } from "@/hooks/store/use-workspace";
@@ -72,9 +71,11 @@ function WebhooksListPage({ params }: Route.ComponentProps) {
           title={t("workspace_settings.settings.webhooks.title")}
           description={t("workspace_settings.settings.webhooks.description")}
           control={
-            <Button variant="primary" size="lg" onClick={() => setShowCreateWebhookModal(true)}>
-              {t("workspace_settings.settings.webhooks.add_webhook")}
-            </Button>
+            Object.keys(webhooks).length > 0 ? (
+              <Button variant="primary" size="lg" onClick={() => setShowCreateWebhookModal(true)}>
+                {t("workspace_settings.settings.webhooks.add_webhook")}
+              </Button>
+            ) : undefined
           }
         />
         {Object.keys(webhooks).length > 0 ? (
@@ -82,24 +83,8 @@ function WebhooksListPage({ params }: Route.ComponentProps) {
             <WebhooksList />
           </div>
         ) : (
-          <div className="flex h-full w-full flex-col">
-            <div className="flex h-full w-full items-center justify-center">
-              <EmptyStateCompact
-                assetKey="webhook"
-                title={t("settings_empty_state.webhooks.title")}
-                description={t("settings_empty_state.webhooks.description")}
-                actions={[
-                  {
-                    label: t("settings_empty_state.webhooks.cta_primary"),
-                    onClick: () => {
-                      setShowCreateWebhookModal(true);
-                    },
-                  },
-                ]}
-                align="start"
-                rootClassName="py-20"
-              />
-            </div>
+          <div className="mt-4">
+            <WebhooksEmptyState onClick={() => setShowCreateWebhookModal(true)} />
           </div>
         )}
       </div>

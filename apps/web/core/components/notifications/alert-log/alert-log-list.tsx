@@ -20,6 +20,9 @@ const ALERT_TYPES: TAlertType[] = [
   "support_sla_approaching",
   "support_sla_breached",
   "support_ticket_closed",
+  "support_no_team_response",
+  "issue_no_activity",
+  "in_progress_too_long",
 ];
 
 const CHANNELS: TAlertChannel[] = ["email", "in_app", "discord_dm", "google_calendar"];

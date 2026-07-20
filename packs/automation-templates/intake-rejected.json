@@ -1,0 +1,45 @@
+{
+  "id": "intake-rejected",
+  "version": 1,
+  "name": "Recepção — pedido recusado",
+  "description": "Notifica o solicitante quando um pedido é recusado, incluindo a justificativa.",
+  "icon": "x-circle",
+  "category": "intake",
+  "default_rule_name": "Aviso de pedido recusado",
+  "default_description": "Template oficial Operoz — avisa o solicitante ao recusar um pedido.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Aviso de pedido recusado" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários extras (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-rejected",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "intake.rejected",
+          "label": "Recepção — pedido recusado",
+          "config": { "event_type": "intake.rejected" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-rejected", "target": "action-email" }]
+  }
+}

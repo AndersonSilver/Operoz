@@ -1,27 +1,32 @@
-import React from "react";
-// ui
+import { Plus, Webhook } from "lucide-react";
+import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
-// assets
-import EmptyWebhook from "@/app/assets/empty-state/web-hook.svg?url";
 
 type Props = {
   onClick: () => void;
 };
 
-export function WebhooksEmptyState(props: Props) {
-  const { onClick } = props;
+export function WebhooksEmptyState({ onClick }: Props) {
+  const { t } = useTranslation();
+
   return (
-    <div
-      className={`mx-auto flex w-full items-center justify-center rounded-xs border border-subtle bg-surface-2 px-16 py-10 lg:w-3/4`}
-    >
-      <div className="flex w-full flex-col items-center text-center">
-        <img src={EmptyWebhook} className="w-52 object-cover sm:w-60" alt="empty" />
-        <h6 className="mt-6 mb-3 text-18 font-semibold sm:mt-8">No webhooks</h6>
-        <p className="mb-7 text-tertiary sm:mb-8">Create webhooks to receive real-time updates and automate actions</p>
-        <Button className="flex items-center gap-1.5" onClick={onClick}>
-          Add webhook
-        </Button>
-      </div>
-    </div>
+    <section className="flex w-full flex-col items-start rounded-md border border-dashed border-subtle bg-layer-1 px-5 py-8">
+      <span className="grid size-10 place-items-center rounded-md border border-subtle bg-accent-subtle text-accent-primary">
+        <Webhook className="size-4" strokeWidth={1.75} />
+      </span>
+      <h3 className="mt-4 text-14 font-semibold text-primary">{t("settings_empty_state.webhooks.title")}</h3>
+      <p className="mt-1.5 max-w-md text-13 leading-5 text-tertiary">
+        {t("settings_empty_state.webhooks.description")}
+      </p>
+      <Button
+        variant="primary"
+        size="base"
+        className="mt-5"
+        onClick={onClick}
+        prependIcon={<Plus className="size-3.5" />}
+      >
+        {t("settings_empty_state.webhooks.cta_primary")}
+      </Button>
+    </section>
   );
 }

@@ -8,7 +8,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/archive/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -17,7 +18,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/bulk-archive-issues/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -26,7 +28,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/bulk-create-labels/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -35,7 +38,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/bulk-delete-issues/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -44,7 +48,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/comments/{comment_id}/reactions/",
-    ["workspace_slug","project_id","comment_id"], { body: true }
+    ["workspace_slug", "project_id", "comment_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -53,7 +58,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/comments/{comment_id}/reactions/{reaction_code}/",
-    ["workspace_slug","project_id","comment_id","reaction_code"], { body: true }
+    ["workspace_slug", "project_id", "comment_id", "reaction_code"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -62,7 +68,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/comments/{comment_id}/reactions/",
-    ["workspace_slug","project_id","comment_id"]
+    ["workspace_slug", "project_id", "comment_id"]
   ),
   op(
     "work_items",
@@ -71,16 +77,55 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/inbox-issues/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
     "operoz_create_intake_issue_app",
-    "Cria intake",
+    "Abre pedido na fila de entrada (Intake) de desenvolvimento. Use para registrar novas solicitações de desenvolvimento, melhoria ou análise de um cliente/produto. O pedido entra como Pendente e aguarda triagem antes de virar delivery.",
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/intake-issues/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    {
+      body: true,
+      bodySchema: {
+        type: "object",
+        description: "Pedido de desenvolvimento — coleta os 6 blocos de contexto mínimo antes de enviar.",
+        properties: {
+          issue: {
+            type: "object",
+            description: "Dados da issue que será criada na fila de entrada.",
+            properties: {
+              name: {
+                type: "string",
+                description: "Título resumido do pedido (obrigatório, máx. 255 caracteres).",
+              },
+              description_html: {
+                type: "string",
+                description: [
+                  "Descrição em HTML com os 6 blocos de contexto mínimo:",
+                  "1. Cliente / produto",
+                  "2. Problema de negócio (não a solução — a dor real)",
+                  "3. Alternativas já testadas",
+                  "4. Compromisso com o cliente (prazo prometido, SLA, expectativa criada)",
+                  "5. Impacto conhecido (usuários afetados, receita, urgência)",
+                  "6. Evidências / links (tickets, screenshots, gravações — opcional mas recomendado)",
+                ].join(" "),
+              },
+              priority: {
+                type: "string",
+                enum: ["low", "medium", "high", "urgent", "none"],
+                description: "Prioridade sugerida pelo solicitante. Default: none.",
+              },
+            },
+            required: ["name"],
+          },
+        },
+        required: ["issue"],
+      },
+    }
   ),
   op(
     "work_items",
@@ -89,7 +134,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -98,7 +144,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -107,7 +154,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -116,7 +164,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -125,7 +174,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/sub-issues/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -134,7 +184,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "work_items",
@@ -143,7 +193,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -152,7 +202,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -161,7 +211,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "work_items",
@@ -170,7 +220,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/work-items/{project_identifier}-{issue_identifier}/",
-    ["workspace_slug","project_identifier","issue_identifier"]
+    ["workspace_slug", "project_identifier", "issue_identifier"]
   ),
   op(
     "work_items",
@@ -179,7 +229,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/issues/{issue_id}/custom-fields/",
-    ["workspace_slug","issue_id"]
+    ["workspace_slug", "issue_id"]
   ),
   op(
     "work_items",
@@ -188,7 +238,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/history/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -197,7 +247,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/meta/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -206,7 +256,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/archive/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "work_items",
@@ -215,7 +265,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -224,7 +275,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -233,7 +285,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -242,7 +294,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -251,7 +303,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -260,7 +313,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -269,7 +323,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -278,7 +333,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -287,7 +343,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -296,7 +352,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -305,7 +361,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -314,7 +371,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -323,7 +381,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -332,7 +391,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/assets/v2/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/attachments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -341,7 +401,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-dates/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -350,7 +411,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -359,7 +420,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PUT",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -377,7 +439,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -386,7 +448,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PUT",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -395,7 +458,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/list/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -404,7 +467,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/reactions/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -413,7 +477,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/reactions/{reaction_code}/",
-    ["workspace_slug","project_id","issue_id","reaction_code"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "reaction_code"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -422,7 +487,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/reactions/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -431,7 +496,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-relation/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -440,7 +506,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-relation/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -449,7 +515,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/remove-relation/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -458,7 +525,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-subscribers/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -467,7 +535,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-subscribers/{subscriber_id}/",
-    ["workspace_slug","project_id","issue_id","subscriber_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "subscriber_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -476,7 +545,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-subscribers/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -485,7 +554,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/subscribe/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -494,7 +564,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/subscribe/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -503,7 +573,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/subscribe/",
-    ["workspace_slug","project_id","issue_id"], { body: true }
+    ["workspace_slug", "project_id", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -512,7 +583,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PUT",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -521,7 +593,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/versions/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"]
+    ["workspace_slug", "project_id", "issue_id", "pk"]
   ),
   op(
     "work_items",
@@ -530,7 +602,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -539,7 +612,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -548,7 +622,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/{pk}/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "work_items",
@@ -557,7 +631,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PUT",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -566,7 +641,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/archived-issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -575,7 +650,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/deleted-issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -584,16 +659,16 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/inbox-issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
     "operoz_list_intake_issues_app",
-    "Intake issues (app)",
+    "Lista pedidos na fila de entrada (Intake) de um projeto. Retorna itens pendentes de triagem, recusados, aceitos e adiados. Use para consultar o estado da fila antes de triar ou converter pedidos.",
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/intake-issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -602,7 +677,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -611,7 +686,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issue-labels/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -620,7 +695,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -629,7 +704,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/versions/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -638,7 +713,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -647,7 +722,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues-detail/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -656,7 +731,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/v2/issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -665,7 +740,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/sub-issues/",
-    ["workspace_slug","project_id","issue_id"]
+    ["workspace_slug", "project_id", "issue_id"]
   ),
   op(
     "work_items",
@@ -674,7 +749,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/user-properties/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -683,7 +758,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/user-properties/",
-    ["workspace_slug","project_id"], { body: true }
+    ["workspace_slug", "project_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -692,7 +768,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/search-issues/",
-    ["workspace_slug","project_id"]
+    ["workspace_slug", "project_id"]
   ),
   op(
     "work_items",
@@ -710,7 +786,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/archive/",
-    ["workspace_slug","project_id","pk"]
+    ["workspace_slug", "project_id", "pk"]
   ),
   op(
     "work_items",
@@ -719,16 +795,103 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/inbox-issues/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
     "operoz_update_intake_issue_app",
-    "Atualiza intake",
+    "Triagem de pedido na fila de entrada (Intake): aceitar, recusar, converter para outro projeto, encerrar como consultoria, adiar, ou pedir complemento de informação. Use após operoz_list_intake_issues_app para processar pedidos pendentes.",
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/intake-issues/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    {
+      body: true,
+      bodySchema: {
+        type: "object",
+        description: "Ação de triagem. Envie apenas os campos relevantes para a ação desejada.",
+        properties: {
+          status: {
+            type: "integer",
+            enum: [-2, -1, 0, 1, 2, 3],
+            description: [
+              "Estado do pedido:",
+              "-2 = Pendente (padrão / reabertura),",
+              "-1 = Recusado (exige decline_reason + decline_category),",
+              " 0 = Adiado / Snoozed (exige snoozed_till),",
+              " 1 = Aceito — converte em delivery (use destination_project_id para cross-project),",
+              " 2 = Duplicado (exige duplicate_to),",
+              " 3 = Encerrado (use outcome=consulting ou outcome=deferred — não envie status=3 sem outcome).",
+            ].join(" "),
+          },
+          destination_project_id: {
+            type: "string",
+            format: "uuid",
+            description:
+              "ID do projeto de delivery destino (ex: DWFF, WB). Quando informado junto com status=1, cria a issue no projeto destino e vincula ao pedido de origem via IssueRelation. Sem este campo, a issue é promovida para o backlog do mesmo projeto.",
+          },
+          outcome: {
+            type: "string",
+            enum: ["converted", "consulting", "deferred", "rejected"],
+            description: [
+              "Desfecho tipado do pedido (registrado para histórico).",
+              "converted = virou delivery (setado automaticamente no accept),",
+              "consulting = resolvido sem código — exige outcome_note,",
+              "deferred = não priorizado agora — use com status=3,",
+              "rejected = recusado definitivamente.",
+            ].join(" "),
+          },
+          outcome_note: {
+            type: "string",
+            description:
+              "Nota obrigatória quando outcome=consulting. Descreve o que foi orientado ou resolvido sem desenvolvimento.",
+          },
+          deferred_until: {
+            type: "string",
+            format: "date",
+            description: "Data (YYYY-MM-DD) para reavaliar o pedido quando outcome=deferred. Opcional mas recomendado.",
+          },
+          awaiting_info: {
+            type: "boolean",
+            description:
+              "true = pedir complemento de informação ao solicitante. O pedido permanece Pendente e um evento intake.needs_info é emitido para automações (ex: notificar solicitante). Não muda o status.",
+          },
+          decline_reason: {
+            type: "string",
+            description: "Justificativa de recusa (obrigatória quando status=-1).",
+          },
+          decline_category: {
+            type: "string",
+            enum: ["out_of_scope", "duplicate", "insufficient_info", "spam", "other"],
+            description: "Categoria de recusa (obrigatória quando status=-1).",
+          },
+          duplicate_to: {
+            type: "string",
+            format: "uuid",
+            description: "ID da issue original quando status=2 (duplicado).",
+          },
+          snoozed_till: {
+            type: "string",
+            format: "date-time",
+            description: "Data/hora ISO 8601 até quando adiar (status=0).",
+          },
+          snooze_reason: {
+            type: "string",
+            description: "Motivo do adiamento (status=0).",
+          },
+          issue: {
+            type: "object",
+            description: "Editar campos da issue vinculada ao pedido (nome, descrição, prioridade).",
+            properties: {
+              name: { type: "string" },
+              description_html: { type: "string" },
+              priority: { type: "string", enum: ["low", "medium", "high", "urgent", "none"] },
+            },
+          },
+        },
+      },
+    }
   ),
   op(
     "work_items",
@@ -737,7 +900,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{pk}/",
-    ["workspace_slug","project_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -746,7 +910,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/comments/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -755,7 +920,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PUT",
     "/workspaces/{workspace_slug}/issues/{issue_id}/custom-fields/",
-    ["workspace_slug","issue_id"], { body: true }
+    ["workspace_slug", "issue_id"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -764,7 +930,8 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/projects/{project_id}/issues/{issue_id}/issue-links/{pk}/",
-    ["workspace_slug","project_id","issue_id","pk"], { body: true }
+    ["workspace_slug", "project_id", "issue_id", "pk"],
+    { body: true }
   ),
   op(
     "work_items",
@@ -773,7 +940,7 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/work-items/{work_item_id}/description-versions/",
-    ["workspace_slug","project_id","work_item_id"]
+    ["workspace_slug", "project_id", "work_item_id"]
   ),
   op(
     "work_items",
@@ -782,6 +949,6 @@ export const APP_WORK_ITEM_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/projects/{project_id}/work-items/{work_item_id}/description-versions/{pk}/",
-    ["workspace_slug","project_id","work_item_id","pk"]
+    ["workspace_slug", "project_id", "work_item_id", "pk"]
   ),
 ];

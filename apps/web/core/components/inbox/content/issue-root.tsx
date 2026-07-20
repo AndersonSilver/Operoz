@@ -16,6 +16,7 @@ import { useProject } from "@/hooks/store/use-project";
 import { DeDupeIssuePopoverRoot } from "@/plane-web/components/de-dupe/duplicate-popover";
 import { useDebouncedDuplicateIssues } from "@/plane-web/hooks/use-debounced-duplicate-issues";
 import type { IInboxIssueStore } from "@/store/inbox/inbox-issue.store";
+import { IntakeOutcomePanel } from "../intake-outcome-panel";
 import { InboxIssueContentProperties } from "./issue-properties";
 import { SupportTicketMetadataPanel } from "./support-ticket-metadata-panel";
 import { SupportTicketMetricsPanel } from "./support-ticket-metrics-panel";
@@ -117,15 +118,18 @@ export const InboxIssueMainContent = observer(function InboxIssueMainContent(pro
           <SupportTicketTriagePanel inboxIssue={inboxIssue} />
         </>
       ) : (
-        <section className="space-y-4 px-4 pt-4">
-          <h2 className="text-18 font-semibold text-primary">{issue.name}</h2>
-          {issue.description_html ? (
-            <div
-              className="prose-sm max-w-none text-secondary prose"
-              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(issue.description_html) }}
-            />
-          ) : null}
-        </section>
+        <>
+          <IntakeOutcomePanel inboxIssue={inboxIssue} workspaceSlug={workspaceSlug} />
+          <section className="space-y-4 px-4 pt-4">
+            <h2 className="text-18 font-semibold text-primary">{issue.name}</h2>
+            {issue.description_html ? (
+              <div
+                className="prose-sm max-w-none text-secondary prose"
+                dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(issue.description_html) }}
+              />
+            ) : null}
+          </section>
+        </>
       )}
 
       {!isSupportHub ? (

@@ -9,6 +9,7 @@ import type {
   TInboxIssueDeclineCategory,
   TInboxIssueSupportUpdatePayload,
   TSupportTicketMetadata,
+  TIntakeOutcome,
 } from "@operoz/types";
 import { EInboxIssueStatus } from "@operoz/types";
 import { getPendingCountKey } from "@/utils/inbox-hub";
@@ -30,12 +31,16 @@ export interface IInboxIssueStore {
   created_by: string | undefined;
   duplicate_issue_detail: TInboxDuplicateIssueDetails | undefined;
   support_ticket: TSupportTicketMetadata | undefined;
+  outcome: TIntakeOutcome | null | undefined;
+  converted_to_issue: string | null | undefined;
   // actions
   updateInboxIssueStatus: (status: TInboxIssueStatus) => Promise<void>; // accept, decline
-  acceptInboxIssue: (queueId?: string) => Promise<void>;
+  acceptInboxIssue: (queueId?: string, destinationProjectId?: string) => Promise<void>;
   closeInboxIssue: (resolutionNote?: string) => Promise<void>;
   declineInboxIssue: (category: TInboxIssueDeclineCategory, reason: string) => Promise<void>;
   reopenInboxIssue: () => Promise<void>;
+  consultingInboxIssue: (note: string) => Promise<void>;
+  deferInboxIssue: (reason?: string) => Promise<void>;
   updateInboxIssueDuplicateTo: (issueId: string) => Promise<void>; // connecting the inbox issue to the project existing issue
   updateInboxIssueSnoozeTill: (date: Date | undefined, snoozeReason?: string) => Promise<void>; // snooze the issue
   updateSupportTicket: (payload: TInboxIssueSupportUpdatePayload) => Promise<void>;
@@ -56,6 +61,8 @@ export class InboxIssueStore implements IInboxIssueStore {
   created_by: string | undefined;
   duplicate_issue_detail: TInboxDuplicateIssueDetails | undefined = undefined;
   support_ticket: TSupportTicketMetadata | undefined = undefined;
+  outcome: TIntakeOutcome | null | undefined = undefined;
+  converted_to_issue: string | null | undefined = undefined;
   workspaceSlug: string;
   projectId: string;
   // services
@@ -77,6 +84,8 @@ export class InboxIssueStore implements IInboxIssueStore {
     this.source = data?.source || undefined;
     this.duplicate_issue_detail = data?.duplicate_issue_detail || undefined;
     this.support_ticket = data?.support_ticket || undefined;
+    this.outcome = data?.outcome ?? undefined;
+    this.converted_to_issue = data?.converted_to_issue ?? undefined;
     this.workspaceSlug = workspaceSlug;
     this.projectId = projectId;
     // services
@@ -93,12 +102,16 @@ export class InboxIssueStore implements IInboxIssueStore {
       support_ticket: observable,
       created_by: observable,
       source: observable,
+      outcome: observable,
+      converted_to_issue: observable,
       // actions
       updateInboxIssueStatus: action,
       acceptInboxIssue: action,
       closeInboxIssue: action,
       declineInboxIssue: action,
       reopenInboxIssue: action,
+      consultingInboxIssue: action,
+      deferInboxIssue: action,
       updateInboxIssueDuplicateTo: action,
       updateInboxIssueSnoozeTill: action,
       updateSupportTicket: action,
@@ -114,11 +127,14 @@ export class InboxIssueStore implements IInboxIssueStore {
     set(this.store.projectRoot.project.projectMap, [this.projectId, countKey], Math.max(0, currentCount + delta));
   };
 
-  acceptInboxIssue = async (queueId?: string) => {
+  acceptInboxIssue = async (queueId?: string, destinationProjectId?: string) => {
     if (!this.issue.id) return;
     const previousStatus = this.status;
-    const payload: Partial<TInboxIssue> = { status: EInboxIssueStatus.ACCEPTED };
+    const payload: Partial<TInboxIssue> & { destination_project_id?: string } = {
+      status: EInboxIssueStatus.ACCEPTED,
+    };
     if (queueId) payload.queue_id = queueId;
+    if (destinationProjectId) payload.destination_project_id = destinationProjectId;
     const inboxIssue = await this.inboxIssueService.update(this.workspaceSlug, this.projectId, this.issue.id, payload);
     runInAction(() => {
       set(this, "status", inboxIssue?.status);
@@ -199,6 +215,35 @@ export class InboxIssueStore implements IInboxIssueStore {
       if (previousStatus !== EInboxIssueStatus.PENDING && inboxIssue.status === EInboxIssueStatus.PENDING) {
         this.adjustPendingCount(1);
       }
+    });
+  };
+
+  consultingInboxIssue = async (note: string) => {
+    if (!this.issue.id) return;
+    const previousStatus = this.status;
+    // outcome + outcome_note are extra fields accepted by the API but not in TInboxIssue type
+    const payload = { outcome: "consulting", outcome_note: note } as unknown as Partial<TInboxIssue>;
+    const inboxIssue = await this.inboxIssueService.update(this.workspaceSlug, this.projectId, this.issue.id, payload);
+    runInAction(() => {
+      set(this, "status", inboxIssue?.status);
+      set(this, "outcome", inboxIssue?.outcome ?? "consulting");
+      if (previousStatus === EInboxIssueStatus.PENDING) this.adjustPendingCount(-1);
+    });
+  };
+
+  deferInboxIssue = async (reason?: string) => {
+    if (!this.issue.id) return;
+    const previousStatus = this.status;
+    // backend auto-sets status=3 (CLOSED) when outcome=deferred
+    const payload = {
+      outcome: "deferred",
+      ...(reason ? { outcome_note: reason } : {}),
+    } as unknown as Partial<TInboxIssue>;
+    const inboxIssue = await this.inboxIssueService.update(this.workspaceSlug, this.projectId, this.issue.id, payload);
+    runInAction(() => {
+      set(this, "status", inboxIssue?.status);
+      set(this, "outcome", inboxIssue?.outcome ?? "deferred");
+      if (previousStatus === EInboxIssueStatus.PENDING) this.adjustPendingCount(-1);
     });
   };
 

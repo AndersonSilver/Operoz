@@ -26,7 +26,8 @@ export type TIntakeFormFieldType =
   | "criticality"
   | "ticket_number"
   | "sla_due"
-  | "client";
+  | "client"
+  | "circle";
 
 export type TIntakeFormField = {
   id: string;

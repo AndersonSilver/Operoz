@@ -5,6 +5,7 @@ import {
   AlarmClock,
   Calendar,
   CheckSquare,
+  Circle,
   Clock,
   Hash,
   Link2,
@@ -182,6 +183,7 @@ export function fieldPreviewPlaceholderKey(fieldType: TIntakeFormFieldType): str
     case "select":
     case "criticality":
     case "client":
+    case "circle":
     case "labels":
     case "checkbox":
     case "priority":

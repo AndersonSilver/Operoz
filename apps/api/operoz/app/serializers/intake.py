@@ -7,9 +7,9 @@ from .issue import IssueIntakeSerializer, LabelLiteSerializer, IssueDetailSerial
 from .project import ProjectLiteSerializer
 from .state import StateLiteSerializer
 from .user import UserLiteSerializer
-from operoz.db.models import Intake, IntakeIssue, Issue
-from operoz.db.models.intake import IntakeTicketKind
-from operoz.utils.intake_workflow import promote_issue_to_backlog
+from operoz.db.models import Intake, IntakeIssue, Issue, Project
+from operoz.db.models.intake import IntakeTicketKind, IntakeOutcome
+from operoz.utils.intake_workflow import promote_issue_to_backlog, convert_intake_to_project, IntakeConvertError
 from operoz.utils.support_ticket import (
     SupportTicketValidationError,
     apply_support_field_updates,
@@ -48,6 +48,19 @@ class IntakeIssueSerializer(BaseSerializer):
     support_sla_due_at = serializers.CharField(write_only=True, required=False, allow_blank=True)
     reset_sla_from_criticality = serializers.BooleanField(write_only=True, required=False, default=False)
     support_ticket_number = serializers.CharField(write_only=True, required=False, allow_blank=True)
+    # E1 — cross-project convert
+    destination_project_id = serializers.UUIDField(write_only=True, required=False, allow_null=True)
+    # E2 — typed outcomes
+    outcome = serializers.ChoiceField(
+        choices=IntakeOutcome.choices,
+        write_only=True,
+        required=False,
+        allow_null=True,
+    )
+    outcome_note = serializers.CharField(write_only=True, required=False, allow_blank=True, allow_null=True)
+    deferred_until = serializers.DateField(write_only=True, required=False, allow_null=True)
+    # E5 — pedir complemento
+    awaiting_info = serializers.BooleanField(write_only=True, required=False, default=False)
 
     class Meta:
         model = IntakeIssue
@@ -73,8 +86,17 @@ class IntakeIssueSerializer(BaseSerializer):
             "reset_sla_from_criticality",
             "support_ticket_number",
             "ticket_kind",
+            # E1
+            "destination_project_id",
+            # E2
+            "outcome",
+            "outcome_note",
+            "deferred_until",
+            "converted_to_issue",
+            # E5
+            "awaiting_info",
         ]
-        read_only_fields = ["project", "workspace", "ticket_kind"]
+        read_only_fields = ["project", "workspace", "ticket_kind", "converted_to_issue"]
 
     def get_support_ticket(self, instance):
         if getattr(instance, "ticket_kind", None) == IntakeTicketKind.INTAKE:
@@ -86,6 +108,8 @@ class IntakeIssueSerializer(BaseSerializer):
         reopen = attrs.pop("reopen", False)
         attrs["_reopen"] = reopen
         queue_id = attrs.get("queue_id")
+        outcome = attrs.get("outcome")
+        outcome_note = attrs.get("outcome_note") or ""
         project = getattr(self.instance, "project", None) if self.instance else None
         ticket_kind = getattr(self.instance, "ticket_kind", IntakeTicketKind.SUPPORT)
 
@@ -114,10 +138,21 @@ class IntakeIssueSerializer(BaseSerializer):
                             project=project,
                         )
                 elif ticket_kind == IntakeTicketKind.INTAKE:
-                    if status == 3:
-                        raise SupportTicketValidationError("Intake tickets cannot be closed.", field="status")
                     if queue_id is not None:
                         raise SupportTicketValidationError("Queue is not used for intake.", field="queue_id")
+                    # consulting and deferred both map to CLOSED (status=3)
+                    if outcome == IntakeOutcome.CONSULTING:
+                        if not outcome_note.strip():
+                            raise serializers.ValidationError(
+                                {"outcome_note": "Nota é obrigatória para desfecho de consultoria."}
+                            )
+                        attrs["status"] = 3
+                    elif outcome == IntakeOutcome.DEFERRED:
+                        attrs["status"] = 3
+                    elif status == 3 and outcome not in (IntakeOutcome.CONSULTING, IntakeOutcome.DEFERRED):
+                        raise SupportTicketValidationError(
+                            "Use outcome='consulting' ou 'deferred' para encerrar um intake.", field="status"
+                        )
             except SupportTicketValidationError as exc:
                 field = exc.field or "queue_id"
                 raise serializers.ValidationError({field: str(exc)}) from exc
@@ -138,6 +173,13 @@ class IntakeIssueSerializer(BaseSerializer):
         support_sla_due_at = validated_data.pop("support_sla_due_at", None)
         reset_sla_from_criticality = validated_data.pop("reset_sla_from_criticality", False)
         support_ticket_number = validated_data.pop("support_ticket_number", None)
+        # E1/E2/E5 extras
+        destination_project_id = validated_data.pop("destination_project_id", None)
+        outcome = validated_data.pop("outcome", None)
+        outcome_note = validated_data.pop("outcome_note", None)
+        deferred_until = validated_data.pop("deferred_until", None)
+        awaiting_info = validated_data.pop("awaiting_info", False)
+
         new_status = validated_data.get("status", instance.status)
         previous_status = instance.status
 
@@ -179,10 +221,88 @@ class IntakeIssueSerializer(BaseSerializer):
                 field = exc.field or "support_criticality"
                 raise serializers.ValidationError({field: str(exc)}) from exc
 
+        # E2 — persist outcome fields before super().update()
+        if outcome is not None:
+            instance.outcome = outcome
+        if outcome_note is not None:
+            instance.outcome_note = outcome_note
+        if deferred_until is not None:
+            instance.deferred_until = deferred_until
+        # E5
+        if awaiting_info:
+            instance.awaiting_info = True
+
         instance = super().update(instance, validated_data)
 
         if instance.ticket_kind == IntakeTicketKind.INTAKE and new_status == 1 and previous_status != 1 and project:
-            promote_issue_to_backlog(instance.issue, project)
+            # E1 — cross-project convert
+            if destination_project_id and str(destination_project_id) != str(project.id):
+                try:
+                    dest_project = Project.objects.get(
+                        pk=destination_project_id,
+                        workspace_id=project.workspace_id,
+                    )
+                except Project.DoesNotExist:
+                    raise serializers.ValidationError(
+                        {"destination_project_id": "Projeto destino não encontrado neste workspace."}
+                    )
+                try:
+                    dest_issue = convert_intake_to_project(instance, dest_project, actor_id)
+                except IntakeConvertError as exc:
+                    raise serializers.ValidationError({"destination_project_id": str(exc)}) from exc
+                instance.outcome = IntakeOutcome.CONVERTED
+                instance.save(update_fields=["converted_to_issue", "outcome", "awaiting_info", "outcome_note", "deferred_until"])
+                from operoz.automation.hooks import emit_intake_converted
+                emit_intake_converted(
+                    instance.issue,
+                    actor_id=actor_id,
+                    destination_project_id=str(dest_project.id),
+                    destination_issue_id=str(dest_issue.id),
+                )
+            else:
+                promote_issue_to_backlog(instance.issue, project)
+                if outcome is None:
+                    instance.outcome = IntakeOutcome.CONVERTED
+                    instance.save(update_fields=["outcome"])
+                from operoz.automation.hooks import emit_intake_converted
+                emit_intake_converted(
+                    instance.issue,
+                    actor_id=actor_id,
+                    destination_project_id=str(project.id),
+                    destination_issue_id=str(instance.issue.id),
+                )
+
+        elif instance.ticket_kind == IntakeTicketKind.INTAKE and new_status == -1 and previous_status != -1:
+            instance.outcome = IntakeOutcome.REJECTED
+            instance.save(update_fields=["outcome"])
+            from operoz.automation.hooks import emit_intake_rejected
+            emit_intake_rejected(
+                instance.issue,
+                actor_id=actor_id,
+                decline_category=decline_category,
+                decline_reason=decline_reason,
+            )
+
+        elif instance.ticket_kind == IntakeTicketKind.INTAKE and outcome == IntakeOutcome.DEFERRED and new_status in (0, 3):
+            from operoz.automation.hooks import emit_intake_deferred
+            emit_intake_deferred(
+                instance.issue,
+                actor_id=actor_id,
+                deferred_until=str(deferred_until) if deferred_until else None,
+            )
+
+        elif instance.ticket_kind == IntakeTicketKind.INTAKE and outcome == IntakeOutcome.CONSULTING and new_status == 3:
+            from operoz.automation.hooks import emit_intake_consulting
+            emit_intake_consulting(
+                instance.issue,
+                actor_id=actor_id,
+                outcome_note=outcome_note,
+            )
+
+        elif instance.ticket_kind == IntakeTicketKind.INTAKE and awaiting_info:
+            instance.save(update_fields=["awaiting_info"])
+            from operoz.automation.hooks import emit_intake_needs_info
+            emit_intake_needs_info(instance.issue, actor_id=actor_id)
 
         return instance
 
@@ -212,8 +332,11 @@ class IntakeIssueDetailSerializer(BaseSerializer):
             "extra",
             "support_ticket",
             "issue",
+            "ticket_kind",
+            "outcome",
+            "converted_to_issue",
         ]
-        read_only_fields = ["project", "workspace"]
+        read_only_fields = ["project", "workspace", "ticket_kind", "outcome", "converted_to_issue"]
 
     def get_support_ticket(self, instance):
         return serialize_support_ticket_metadata(instance, getattr(instance, "project", None))

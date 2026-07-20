@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
-import { Clock, FileStack, MoreHorizontal, MoveRight } from "lucide-react";
+import { CalendarClock, Clock, FileStack, MessageSquare, MoreHorizontal, MoveRight } from "lucide-react";
 // plane imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -37,6 +37,8 @@ import { InboxIssueStatus } from "../inbox-issue-status";
 import { AcceptIntakeModal } from "../modals/accept-intake-modal";
 import { AcceptSupportTicketModal } from "../modals/accept-support-ticket-modal";
 import { CloseSupportTicketModal } from "../modals/close-support-ticket-modal";
+import { ConsultingIntakeModal } from "../modals/consulting-intake-modal";
+import { DeferIntakeModal } from "../modals/defer-intake-modal";
 import { DeclineIssueModal } from "../modals/decline-issue-modal";
 import { DeleteInboxIssueModal } from "../modals/delete-issue-modal";
 import { SelectDuplicateInboxIssueModal } from "../modals/select-duplicate";
@@ -74,6 +76,8 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
   const [closeIssueModal, setCloseIssueModal] = useState(false);
   const [declineIssueModal, setDeclineIssueModal] = useState(false);
   const [deleteIssueModal, setDeleteIssueModal] = useState(false);
+  const [consultingModal, setConsultingModal] = useState(false);
+  const [deferModal, setDeferModal] = useState(false);
   // store
   const { currentTab, deleteInboxIssue, filteredInboxIssueIds, handleCurrentTab } = useProjectInbox();
   const { allowPermissions } = useUserPermissions();
@@ -99,6 +103,8 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
   const canMarkAsDuplicate = isAllowed && (inboxIssue?.status === 0 || inboxIssue?.status === -2);
   const canMarkAsAccepted = isAllowed && (inboxIssue?.status === 0 || inboxIssue?.status === -2);
   const canMarkAsDeclined = isAllowed && (inboxIssue?.status === 0 || inboxIssue?.status === -2);
+  const canMarkAsConsulting = !isSupportHub && isAllowed && (inboxIssue?.status === 0 || inboxIssue?.status === -2);
+  const canMarkAsDeferred = !isSupportHub && isAllowed && (inboxIssue?.status === 0 || inboxIssue?.status === -2);
   const canDelete = canDeleteSupportTicket;
   const isDeclined = inboxIssue?.status === EInboxIssueStatus.DECLINED;
   const canCloseSupportTicket = isSupportHub && isAllowed && inboxIssue?.status === EInboxIssueStatus.ACCEPTED;
@@ -154,9 +160,9 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
     }
   };
 
-  const handleInboxIssueAcceptIntake = async () => {
+  const handleInboxIssueAcceptIntake = async (destinationProjectId?: string) => {
     if (!inboxIssue?.issue?.id) return;
-    await inboxIssue.acceptInboxIssue();
+    await inboxIssue.acceptInboxIssue(undefined, destinationProjectId);
     setAcceptIssueModal(false);
     setToast({
       type: TOAST_TYPE.SUCCESS,
@@ -183,6 +189,32 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
       type: TOAST_TYPE.SUCCESS,
       title: t("common.success"),
       message: t("inbox_issue.modals.close.success"),
+    });
+    handleCurrentTab(workspaceSlug, projectId, EInboxIssueCurrentTab.CLOSED);
+    handleRedirection(nextOrPreviousIssueId);
+  };
+
+  const handleInboxIssueConsulting = async (note: string) => {
+    const nextOrPreviousIssueId = redirectIssue();
+    await inboxIssue?.consultingInboxIssue(note);
+    setConsultingModal(false);
+    setToast({
+      type: TOAST_TYPE.SUCCESS,
+      title: t("common.success"),
+      message: t("inbox_issue.modals.consulting.success"),
+    });
+    handleCurrentTab(workspaceSlug, projectId, EInboxIssueCurrentTab.CLOSED);
+    handleRedirection(nextOrPreviousIssueId);
+  };
+
+  const handleInboxIssueDefer = async (reason?: string) => {
+    const nextOrPreviousIssueId = redirectIssue();
+    await inboxIssue?.deferInboxIssue(reason);
+    setDeferModal(false);
+    setToast({
+      type: TOAST_TYPE.SUCCESS,
+      title: t("common.success"),
+      message: t("inbox_issue.modals.defer.success"),
     });
     handleCurrentTab(workspaceSlug, projectId, EInboxIssueCurrentTab.CLOSED);
     handleRedirection(nextOrPreviousIssueId);
@@ -330,6 +362,18 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
           onClose={() => setDeclineIssueModal(false)}
           onSubmit={handleInboxIssueDecline}
         />
+        <ConsultingIntakeModal
+          data={inboxIssue?.issue || {}}
+          isOpen={consultingModal}
+          onClose={() => setConsultingModal(false)}
+          onSubmit={handleInboxIssueConsulting}
+        />
+        <DeferIntakeModal
+          data={inboxIssue?.issue || {}}
+          isOpen={deferModal}
+          onClose={() => setDeferModal(false)}
+          onSubmit={handleInboxIssueDefer}
+        />
         <DeleteInboxIssueModal
           data={inboxIssue?.issue}
           isOpen={deleteIssueModal}
@@ -405,6 +449,20 @@ export const InboxIssueActionsHeader = observer(function InboxIssueActionsHeader
               <Button variant="secondary" size="lg" onClick={() => setDeclineIssueModal(true)}>
                 <CloseCircleFilledIcon className="size-4 shrink-0 text-danger-secondary" />
                 {t("inbox_issue.actions.decline")}
+              </Button>
+            )}
+
+            {canMarkAsConsulting && (
+              <Button variant="secondary" size="lg" onClick={() => setConsultingModal(true)}>
+                <MessageSquare className="size-4 shrink-0" />
+                {t("inbox_issue.actions.consulting")}
+              </Button>
+            )}
+
+            {canMarkAsDeferred && (
+              <Button variant="secondary" size="lg" onClick={() => setDeferModal(true)}>
+                <CalendarClock className="size-4 shrink-0" />
+                {t("inbox_issue.actions.defer")}
               </Button>
             )}
 

@@ -1,5 +1,7 @@
 import { useState } from "react";
 // plane imports
+import type { THubMode } from "@operoz/types";
+import { EHubMode } from "@operoz/types";
 import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import useKeypress from "@/hooks/use-keypress";
@@ -11,10 +13,11 @@ type TInboxIssueCreateModalRoot = {
   projectId: string;
   modalState: boolean;
   handleModalClose: () => void;
+  hubMode?: THubMode;
 };
 
 export function InboxIssueCreateModalRoot(props: TInboxIssueCreateModalRoot) {
-  const { workspaceSlug, projectId, modalState, handleModalClose } = props;
+  const { workspaceSlug, projectId, modalState, handleModalClose, hubMode = EHubMode.SUPPORT } = props;
   // states
   const [isDuplicateModalOpen, setIsDuplicateModalOpen] = useState(false);
   // handlers
@@ -40,6 +43,7 @@ export function InboxIssueCreateModalRoot(props: TInboxIssueCreateModalRoot) {
         handleModalClose={handleModalClose}
         isDuplicateModalOpen={isDuplicateModalOpen}
         handleDuplicateIssueModal={handleDuplicateIssueModal}
+        hubMode={hubMode}
       />
     </ModalCore>
   );

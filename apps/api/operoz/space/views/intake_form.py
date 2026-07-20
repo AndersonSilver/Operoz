@@ -66,12 +66,15 @@ class IntakeFormPublicEndpoint(APIView):
             return Response({"error": "Form not found."}, status=status.HTTP_404_NOT_FOUND)
 
         if scope == "board":
-            clients = serialize_board_intake_clients(board_intake_client_queryset(form.board_id))
+            form_scope = getattr(form, "form_scope", "support") or "support"
+            clients = serialize_board_intake_clients(board_intake_client_queryset(form.board_id, scope=form_scope))
             if not clients:
-                return Response(
-                    {"error": "Nenhum cliente com Recepção ativa neste board."},
-                    status=status.HTTP_400_BAD_REQUEST,
+                error_msg = (
+                    "Nenhum círculo com Intake ativo neste board."
+                    if form_scope == "demand"
+                    else "Nenhum cliente com Recepção ativa neste board."
                 )
+                return Response({"error": error_msg}, status=status.HTTP_400_BAD_REQUEST)
             return Response(
                 BoardIntakeFormPublicSerializer(form, context={"clients": clients}).data,
             )

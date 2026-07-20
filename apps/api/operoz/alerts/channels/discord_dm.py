@@ -2,8 +2,9 @@ from __future__ import annotations
 
 from django.conf import settings
 
-from operoz.alerts.discord_embed import build_discord_alert_message
 from operoz.alerts.channels.base import BaseAlertChannel
+from operoz.alerts.discord_embed import build_discord_alert_message
+from operoz.alerts.oauth.discord import DISCORD_USER_AGENT
 from operoz.alerts.types import AlertContext, AlertResult
 from operoz.db.models import UserExternalAccount
 from operoz.db.models.external_account import UserExternalAccount as ExternalAccountModel
@@ -40,7 +41,11 @@ class DiscordDMChannel(BaseAlertChannel):
             import httpx
 
             content, embed = build_discord_alert_message(context)
-            headers = {"Authorization": f"Bot {bot_token}", "Content-Type": "application/json"}
+            headers = {
+                "Authorization": f"Bot {bot_token}",
+                "Content-Type": "application/json",
+                "User-Agent": DISCORD_USER_AGENT,
+            }
             dm_channel_id = (account.metadata or {}).get("dm_channel_id")
             if not dm_channel_id:
                 dm_response = httpx.post(

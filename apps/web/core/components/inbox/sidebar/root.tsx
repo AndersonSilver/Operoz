@@ -157,16 +157,28 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
                 ) : currentTab === EInboxIssueCurrentTab.OPEN ? (
                   <EmptyStateDetailed
                     assetKey="inbox"
-                    title={t("inbox_issue.empty_state.sidebar_open_tab.title")}
-                    description={t("inbox_issue.empty_state.sidebar_open_tab.description")}
+                    title={t(
+                      isSupportHub
+                        ? "inbox_issue.empty_state.sidebar_open_tab.title"
+                        : "inbox_issue.empty_state.sidebar_open_tab_intake.title"
+                    )}
+                    description={t(
+                      isSupportHub
+                        ? "inbox_issue.empty_state.sidebar_open_tab.description"
+                        : "inbox_issue.empty_state.sidebar_open_tab_intake.description"
+                    )}
                     assetClassName="size-20"
-                    actions={[
-                      {
-                        label: t("project_empty_state.intake_sidebar.cta_primary"),
-                        onClick: () => router.push(hubIssueUrl()),
-                        variant: "primary",
-                      },
-                    ]}
+                    actions={
+                      isSupportHub
+                        ? [
+                            {
+                              label: t("project_empty_state.intake_sidebar.cta_primary"),
+                              onClick: () => router.push(hubIssueUrl()),
+                              variant: "primary",
+                            },
+                          ]
+                        : undefined
+                    }
                     rootClassName="px-page-x"
                   />
                 ) : currentTab === EInboxIssueCurrentTab.IN_PROGRESS ? (
@@ -180,8 +192,16 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
                 ) : (
                   <EmptyStateDetailed
                     assetKey="inbox"
-                    title={t("inbox_issue.empty_state.sidebar_closed_tab.title")}
-                    description={t("inbox_issue.empty_state.sidebar_closed_tab.description")}
+                    title={t(
+                      isSupportHub
+                        ? "inbox_issue.empty_state.sidebar_closed_tab.title"
+                        : "inbox_issue.empty_state.sidebar_closed_tab_intake.title"
+                    )}
+                    description={t(
+                      isSupportHub
+                        ? "inbox_issue.empty_state.sidebar_closed_tab.description"
+                        : "inbox_issue.empty_state.sidebar_closed_tab_intake.description"
+                    )}
                     assetClassName="size-20"
                     rootClassName="px-page-x"
                   />

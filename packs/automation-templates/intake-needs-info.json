@@ -1,0 +1,45 @@
+{
+  "id": "intake-needs-info",
+  "version": 1,
+  "name": "Recepção — aguardando complemento",
+  "description": "Notifica o solicitante quando a triagem solicita informações adicionais antes de avançar.",
+  "icon": "help-circle",
+  "category": "intake",
+  "default_rule_name": "Aviso de complemento necessário",
+  "default_description": "Template oficial Operoz — cobra o solicitante ao pedir complemento de informação.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Aviso de complemento necessário" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários extras (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-needs-info",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "intake.needs_info",
+          "label": "Recepção — aguardando complemento",
+          "config": { "event_type": "intake.needs_info" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-needs-info", "target": "action-email" }]
+  }
+}

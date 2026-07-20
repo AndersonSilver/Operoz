@@ -1,0 +1,45 @@
+{
+  "id": "intake-converted",
+  "version": 1,
+  "name": "Recepção — pedido convertido",
+  "description": "Notifica o squad de destino quando um pedido é convertido em card de delivery.",
+  "icon": "check-circle",
+  "category": "intake",
+  "default_rule_name": "Aviso de conversão de pedido",
+  "default_description": "Template oficial Operoz — avisa o squad destino ao converter um pedido em delivery.",
+  "parameters": [
+    { "key": "rule_name", "type": "string", "label": "Nome da regra", "default": "Aviso de conversão de pedido" },
+    { "key": "template_id", "type": "string", "label": "ID do template de e-mail", "required": true, "default": "" },
+    { "key": "recipient_emails", "type": "array", "label": "Destinatários (e-mails)", "default": [] }
+  ],
+  "graph": {
+    "nodes": [
+      {
+        "id": "trigger-converted",
+        "type": "automationNode",
+        "position": { "x": 80, "y": 120 },
+        "data": {
+          "kind": "trigger",
+          "catalog_key": "intake.converted",
+          "label": "Recepção — pedido convertido",
+          "config": { "event_type": "intake.converted" }
+        }
+      },
+      {
+        "id": "action-email",
+        "type": "automationNode",
+        "position": { "x": 380, "y": 120 },
+        "data": {
+          "kind": "action",
+          "catalog_key": "action.send_email",
+          "label": "Enviar e-mail",
+          "config": {
+            "template_id": "{{template_id}}",
+            "recipient_emails": "{{recipient_emails}}"
+          }
+        }
+      }
+    ],
+    "edges": [{ "id": "edge-1", "source": "trigger-converted", "target": "action-email" }]
+  }
+}

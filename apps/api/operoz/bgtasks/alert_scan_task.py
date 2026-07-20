@@ -3,6 +3,8 @@ from __future__ import annotations
 from datetime import date, timedelta
 
 from celery import shared_task
+from django.db.models import Q
+from django.db.models.functions import TruncDate
 from django.utils import timezone
 
 from operoz.alerts.evaluator import (
@@ -18,6 +20,22 @@ from operoz.alerts.evaluator import (
 from operoz.bgtasks.alert_dispatch_task import dispatch_alert, dispatch_support_alert
 from operoz.db.models import AlertLog, AlertRule, IntakeIssue, Issue, Notification, Workspace
 from operoz.db.models.intake import IntakeIssueStatus, IntakeTicketKind
+
+
+def _prior_sent_alert_waves(*, issue_id, alert_type: str) -> int:
+    """Count distinct calendar days with SENT logs for this issue/type (≈ prior scan waves)."""
+    return (
+        AlertLog.objects.filter(
+            issue_id=issue_id,
+            alert_type=alert_type,
+            status=AlertLog.Status.SENT,
+            deleted_at__isnull=True,
+        )
+        .annotate(wave_day=TruncDate("created_at"))
+        .values("wave_day")
+        .distinct()
+        .count()
+    )
 
 
 @shared_task
@@ -195,16 +213,15 @@ def _scan_stale_issues(workspace_id, rules, now) -> None:
     for issue in issues:
         if not should_dispatch_for_issue(issue):
             continue
-        prev_sent = AlertLog.objects.filter(
+        prev_waves = _prior_sent_alert_waves(
             issue_id=issue.id,
             alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY,
-            status=AlertLog.Status.SENT,
-        ).values("receiver_id").distinct().count()
+        )
         dispatch_alert.delay(
             issue_id=str(issue.id),
             alert_type=AlertRule.AlertType.ISSUE_NO_ACTIVITY,
             extra={"days_inactive": (now - issue.updated_at).days},
-            escalate=prev_sent >= 3,
+            escalate=prev_waves >= 3,
         )
 
 
@@ -224,8 +241,8 @@ def _scan_in_progress_issues(workspace_id, rules, now) -> None:
             state__group="started",
         )
         .filter(
-            # Use state_changed_at when available, fall back to updated_at
-            state_changed_at__lt=cutoff,
+            Q(state_changed_at__lt=cutoff)
+            | Q(state_changed_at__isnull=True, updated_at__lt=cutoff)
         )
         .select_related("project", "state")
         .iterator(chunk_size=500)

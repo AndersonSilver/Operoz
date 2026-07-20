@@ -116,7 +116,7 @@ export function EditBoardForm(props: Props) {
         <div className="space-y-1">
           <p className="text-11 font-medium text-secondary">{t("boards.slug_label")}</p>
           <Input value={board.slug} disabled className="w-full opacity-70" />
-          <p className="text-11 text-tertiary">{t("boards.slug_hint")}</p>
+          <p className="text-11 text-tertiary">{t("boards.slug_hint", { slug: board.slug })}</p>
         </div>
 
         <Controller

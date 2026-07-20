@@ -7,8 +7,11 @@ import {
   CheckCircle,
   Clock,
   GitBranch,
+  Hourglass,
+  Inbox,
   Mail,
   MessageCircle,
+  PauseCircle,
   Pencil,
   PlusCircle,
   ShieldAlert,
@@ -37,6 +40,9 @@ const ALERT_TYPE_ICONS: Record<TAlertType, LucideIcon> = {
   support_sla_approaching: Timer,
   support_sla_breached: ShieldAlert,
   support_ticket_closed: Archive,
+  support_no_team_response: Inbox,
+  issue_no_activity: Hourglass,
+  in_progress_too_long: PauseCircle,
 };
 
 const CHANNEL_ICONS: Record<TAlertChannel, LucideIcon> = {
@@ -66,7 +72,7 @@ export function AlertRuleCard(props: Props) {
   const { getPartialProjectById } = useProject();
 
   const project = rule.project ? getPartialProjectById(rule.project) : null;
-  const TypeIcon = ALERT_TYPE_ICONS[rule.alert_type];
+  const TypeIcon = ALERT_TYPE_ICONS[rule.alert_type] ?? Bell;
   const displayName = rule.name || t(`alert.type.${rule.alert_type}` as "alert.type.issue_created");
   const channels = rule.channels ?? [];
 
@@ -124,7 +130,7 @@ export function AlertRuleCard(props: Props) {
         <div className="mt-4 flex flex-wrap gap-1.5">
           {channels.length > 0 ? (
             channels.map((channel) => {
-              const ChannelIcon = CHANNEL_ICONS[channel];
+              const ChannelIcon = CHANNEL_ICONS[channel] ?? Bell;
               return (
                 <span
                   key={channel}

@@ -191,14 +191,13 @@ export default {
         "Você não tem nenhum registro de exportação no momento. Depois de exportar dados, todos os registros aparecerão aqui.",
     },
     tokens: {
-      title: "Ainda não há token Pessoal",
-      description:
-        "Gere tokens de API seguros para conectar seu espaço de trabalho com sistemas e aplicativos externos.",
+      title: "Ainda não há tokens pessoais",
+      description: "Crie o primeiro para autenticar integrações externas. Você pode revogá-lo a qualquer momento.",
       cta_primary: "Adicionar token de API",
     },
     webhooks: {
-      title: "Ainda não foi adicionado nenhum Webhook",
-      description: "Automatize notificações para serviços externos quando ocorrerem eventos do projeto.",
+      title: "Ainda não há webhooks",
+      description: "Crie o primeiro para receber eventos do projeto em tempo real nos seus sistemas.",
       cta_primary: "Adicionar webhook",
     },
     boards: {

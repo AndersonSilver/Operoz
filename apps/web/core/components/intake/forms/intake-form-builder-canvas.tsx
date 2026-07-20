@@ -29,10 +29,10 @@ export function IntakeFormBuilderCanvas(props: Props) {
 
       <div className="space-y-2 p-4">
         {fields.map((field, index) => {
-          const catalog = getCatalogItem(field.field_type === "client" ? "select" : field.field_type);
-          const isSystem =
-            field.field_type === "name" || field.field_type === "description" || field.field_type === "client";
-          const Icon = field.field_type === "client" ? Users : catalog?.icon;
+          const isRouting = field.field_type === "client" || field.field_type === "circle";
+          const catalog = getCatalogItem(isRouting ? "select" : field.field_type);
+          const isSystem = field.field_type === "name" || field.field_type === "description" || isRouting;
+          const Icon = isRouting ? Users : catalog?.icon;
           const isSelected = selectedFieldId === field.id;
 
           return (

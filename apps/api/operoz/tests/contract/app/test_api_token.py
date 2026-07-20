@@ -336,7 +336,7 @@ class TestApiTokenEndpoint:
         session_client.force_authenticate(user=create_user)
         url = reverse("api-tokens-details", kwargs={"pk": create_api_token_for_user.pk})
         original_token = create_api_token_for_user.token
-        update_data = {"token": "plane_api_malicious_token_value"}
+        update_data = {"token": "operoz_api_malicious_token_value"}
 
         # Act
         response = session_client.patch(url, update_data, format="json")

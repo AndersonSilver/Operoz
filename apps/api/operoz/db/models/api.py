@@ -13,7 +13,7 @@ def generate_label_token():
 
 
 def generate_token():
-    return "plane_api_" + uuid4().hex
+    return "operoz_api_" + uuid4().hex
 
 
 class APIToken(BaseModel):

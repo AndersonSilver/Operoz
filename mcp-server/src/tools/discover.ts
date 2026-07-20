@@ -10,6 +10,7 @@ export type DiscoverMatch = {
   pathParams: string[];
   body?: boolean;
   query?: boolean;
+  bodySchema?: Record<string, unknown>;
   score?: number;
 };
 
@@ -31,6 +32,7 @@ function toMatch(operation: ToolOperation, score?: number): DiscoverMatch {
     pathParams: operation.pathParams,
     ...(operation.body ? { body: true } : {}),
     ...(operation.query ? { query: true } : {}),
+    ...(operation.bodySchema ? { bodySchema: operation.bodySchema } : {}),
     ...(score !== undefined && score > 0 ? { score } : {}),
   };
 }

@@ -4,7 +4,10 @@ from operoz.alerts.seed import seed_all_workspaces_missing_rules
 
 
 class Command(BaseCommand):
-    help = "Seed default alert rules for workspaces that have none."
+    help = (
+        "Seed missing default alert rules for all workspaces "
+        "(creates only alert_types that are not present yet)."
+    )
 
     def handle(self, *args, **options):
         created = seed_all_workspaces_missing_rules()

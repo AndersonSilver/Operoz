@@ -134,28 +134,34 @@ def send_weekly_stale_card_digest() -> None:
 
 
 def _send_stale_card_email(*, user, issues, workspace, email_config) -> None:
+    import html
+    import logging
+
+    logger = logging.getLogger("operoz.alerts.digest")
     (EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL, EMAIL_FROM) = email_config
     name = user.display_name or user.email
-    subject = f"[{workspace.name}] Seus cards parados esta semana"
+    workspace_name = workspace.name or ""
+    subject = f"[{workspace_name}] Seus cards parados esta semana"
     lines_html = "".join(
-        f"<li><strong>{i.name}</strong> — {i.project.name if i.project else ''} "
-        f"({i.state.name if i.state else 'sem estado'})</li>"
+        f"<li><strong>{html.escape(i.name or '')}</strong> — "
+        f"{html.escape(i.project.name if i.project else '')} "
+        f"({html.escape(i.state.name if i.state else 'sem estado')})</li>"
         for i in issues
     )
     lines_text = "\n".join(
         f"- {i.name} ({i.project.name if i.project else ''} / {i.state.name if i.state else 'sem estado'})"
         for i in issues
     )
-    html = (
-        f"<p>Olá {name},</p>"
-        f"<p>Os seguintes cards do workspace <strong>{workspace.name}</strong> "
+    html_body = (
+        f"<p>Olá {html.escape(name)},</p>"
+        f"<p>Os seguintes cards do workspace <strong>{html.escape(workspace_name)}</strong> "
         f"estão sem atualização há mais de 3 dias:</p>"
         f"<ul>{lines_html}</ul>"
         f"<p>Acesse o Operoz para atualizar o status de cada card.</p>"
     )
     text = (
         f"Olá {name},\n\n"
-        f"Os seguintes cards do workspace {workspace.name} estão sem atualização há mais de 3 dias:\n\n"
+        f"Os seguintes cards do workspace {workspace_name} estão sem atualização há mais de 3 dias:\n\n"
         f"{lines_text}\n\n"
         f"Acesse o Operoz para atualizar o status de cada card."
     )
@@ -169,7 +175,7 @@ def _send_stale_card_email(*, user, issues, workspace, email_config) -> None:
             use_ssl=EMAIL_USE_SSL == "1",
         )
         msg = EmailMultiAlternatives(subject, text, EMAIL_FROM, [user.email], connection=connection)
-        msg.attach_alternative(html, "text/html")
+        msg.attach_alternative(html_body, "text/html")
         msg.send()
     except Exception:
-        pass
+        logger.exception("Failed to send weekly stale card digest to %s", user.email)

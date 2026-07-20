@@ -13,6 +13,13 @@ def _matches_issue_event(event: DomainEvent, config: dict[str, Any]) -> bool:
     return event.entity_type == "issue"
 
 
+def _matches_intake_event(event: DomainEvent, config: dict[str, Any]) -> bool:
+    expected = config.get("event_type")
+    if expected and event.event_type != expected:
+        return False
+    return event.entity_type == "issue" and event.event_type.startswith("intake.")
+
+
 def _matches_prd_review_event(event: DomainEvent, config: dict[str, Any]) -> bool:
     expected = config.get("event_type")
     if expected and event.event_type != expected:
@@ -38,13 +45,43 @@ def register_triggers() -> None:
             "Dispara quando um item entra na recepção (formulário ou in-app).",
         ),
         (
+            "intake.converted",
+            "Recepção — pedido convertido",
+            "Dispara quando um pedido é convertido em card de delivery (mesmo projeto ou cross-project).",
+        ),
+        (
+            "intake.rejected",
+            "Recepção — pedido recusado",
+            "Dispara quando um pedido é recusado com justificativa.",
+        ),
+        (
+            "intake.deferred",
+            "Recepção — pedido não priorizado",
+            "Dispara quando um pedido é marcado como não priorizado (adiado).",
+        ),
+        (
+            "intake.consulting",
+            "Recepção — resolvido via consultoria",
+            "Dispara quando um pedido é encerrado como consultoria sem gerar delivery.",
+        ),
+        (
+            "intake.needs_info",
+            "Recepção — aguardando complemento",
+            "Dispara quando a triagem solicita informações adicionais ao solicitante.",
+        ),
+        (
             "prd_review.feedback_submitted",
             "PRD Review — feedback enviado",
             "Dispara quando o cliente envia feedback (alterações solicitadas) numa sessão PRD Review.",
         ),
     ]
     for key, label, description in triggers:
-        handler = _matches_prd_review_event if key.startswith("prd_review.") else _matches_issue_event
+        if key.startswith("prd_review."):
+            handler = _matches_prd_review_event
+        elif key.startswith("intake.") and key != "intake.submitted":
+            handler = _matches_intake_event
+        else:
+            handler = _matches_issue_event
         catalog.register(
             CatalogEntry(
                 key=key,

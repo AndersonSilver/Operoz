@@ -29,7 +29,10 @@ export type TAlertType =
   | "support_ticket_accepted"
   | "support_sla_approaching"
   | "support_sla_breached"
-  | "support_ticket_closed";
+  | "support_ticket_closed"
+  | "support_no_team_response"
+  | "issue_no_activity"
+  | "in_progress_too_long";
 
 export type TAlertChannel = "email" | "discord_dm" | "google_calendar" | "in_app";
 
@@ -58,6 +61,7 @@ export type TUserExternalAccount = {
   external_id: string;
   is_active: boolean;
   last_synced_at: string | null;
+  metadata?: Record<string, unknown>;
   created_at: string;
   updated_at?: string;
 };

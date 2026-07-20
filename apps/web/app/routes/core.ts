@@ -470,6 +470,10 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/sustentacao/page.tsx"
             ),
             route(
+              ":workspaceSlug/settings/boards/:boardSlug/intake",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/intake/page.tsx"
+            ),
+            route(
               ":workspaceSlug/settings/boards/:boardSlug/campos",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/campos/page.tsx"
             ),

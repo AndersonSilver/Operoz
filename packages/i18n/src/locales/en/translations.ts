@@ -1915,6 +1915,49 @@ export default {
         migrated_notice:
           "Project-level forms were migrated to the board. Manage them here; enable Inbox on each client project that should receive tickets.",
       },
+      demand_forms: {
+        default_name: "Demand intake form",
+        default_header: "Demand request",
+        default_submit_message: "Thank you. Your request has been received and will be reviewed by the team.",
+        title: "Demand intake forms",
+        subtitle:
+          "Create forms to receive demand requests. The Circle field routes the request to the correct project's intake queue.",
+        create: "New form",
+        created: "Form created.",
+        saved: "Form saved.",
+        deleted: "Form removed.",
+        delete_confirm: "Remove this form? Public links will stop working.",
+        load_error: "Could not load forms.",
+        empty: "No demand forms yet. Create the first one to centralize BTP requests.",
+        circle_field_locked: "The Circle field is required and cannot be removed.",
+        themes: {
+          default: "Default",
+          minimal: "Minimal",
+          support: "Support",
+          incident: "Incident",
+        },
+        theme_label: "Visual theme",
+        highlight_public: "Public links per form",
+        highlight_circle: "Automatic routing by circle",
+        column_form: "Form",
+        column_status: "Status",
+        column_meta: "Details",
+        column_link: "Public link",
+        column_actions: "Actions",
+        table_footer: "{count, plural, one {# form in this board} other {# forms in this board}}",
+        fields_count: "{count, plural, one {# field} other {# fields}}",
+        auth_required_badge: "Login required",
+        draft_hint: "Publish the form to generate the public link.",
+        published: "Published",
+        draft: "Draft",
+        copy_link: "Copy link",
+        open: "Open",
+        public_link: "Public link",
+        more_actions: "More actions",
+        grid_title: "Forms",
+        create_card_hint: "New demand intake form",
+        published_count: "{count, plural, one {# published} other {# published}}",
+      },
       support_queues: {
         title: "Support queues",
         subtitle:
@@ -1975,6 +2018,7 @@ export default {
         automation_policy: "Policies",
         playbooks: "Playbooks",
         intake_forms: "Support intake",
+        intake: "Intake",
         fields: "Fields",
         issue_types: "Work item types",
         issue_types_list: "Card type / Stage",
@@ -3190,7 +3234,7 @@ export default {
       },
       snoozed: {
         title: "Snoozed",
-        description: "{days, plural, one{# day} other{# days} to go",
+        description: "{days, plural, one{# day to go} other{# days to go}}",
       },
       accepted: {
         title: "In progress",
@@ -3232,9 +3276,17 @@ export default {
     modals: {
       accept: {
         title: "Accept support ticket",
+        intake_title: "Accept request",
         intake_description:
           "Confirm acceptance? The work item will be promoted to the project backlog and leave intake triage.",
         intake_success: "Item accepted and promoted to the backlog.",
+        convert_title: "Convert to another project",
+        convert_description:
+          "Choose the delivery project. A card will be created there linked to the originating request.",
+        convert_confirm: "Convert",
+        switch_to_convert: "Convert to another project…",
+        switch_to_same: "← Accept in this project",
+        select_project: "Select project…",
         content:
           "Confirm acceptance of ticket {value}? It will enter the selected queue — no board item will be created.",
         loading: "Accepting…",
@@ -3268,6 +3320,24 @@ export default {
       snooze: {
         reason_label: "Snooze reason (optional)",
         reason_placeholder: "e.g. waiting for customer reply…",
+      },
+      consulting: {
+        title: "Resolve via consulting",
+        description:
+          "This demand will be closed as resolved by consulting, without generating development. Describe how it was resolved.",
+        note_label: "How it was resolved",
+        note_placeholder: "Describe the solution or guidance given to the requester…",
+        loading: "Registering…",
+        success: "Demand closed via consulting.",
+      },
+      defer: {
+        title: "Not prioritize",
+        description:
+          "This demand will remain registered but will not be prioritized now. It can be re-evaluated at any time.",
+        reason_label: "Reason (optional)",
+        reason_placeholder: "e.g. outside current roadmap, waiting for more context…",
+        loading: "Registering…",
+        success: "Demand marked as not prioritized.",
       },
     },
     decline_categories: {
@@ -3394,6 +3464,15 @@ export default {
       move: "Accept {value} into backlog",
       reopen: "Reopen ticket",
       close: "Close ticket",
+      consulting: "Resolve via consulting",
+      defer: "Not prioritize",
+    },
+    outcomes: {
+      converted: "Converted to development",
+      consulting: "Resolved via consulting",
+      deferred: "Not prioritized",
+      rejected: "Rejected",
+      view_converted_issue: "View development item",
     },
     source: {
       in_app: "In-app",
@@ -3412,6 +3491,7 @@ export default {
     page_label_support: "{workspace} - Support",
     modal: {
       title: "Create support ticket",
+      intake_title: "Create request",
     },
     tabs: {
       open: "Open",
@@ -3426,6 +3506,10 @@ export default {
         title: "No open tickets",
         description: "Pending tickets awaiting triage appear here. Create a new ticket or wait for form submissions.",
       },
+      sidebar_open_tab_intake: {
+        title: "No open demands",
+        description: "Demands submitted through intake forms appear here for triage.",
+      },
       sidebar_in_progress_tab: {
         title: "No tickets in progress",
         description: "Accepted tickets routed to a queue appear here until they are closed.",
@@ -3433,6 +3517,10 @@ export default {
       sidebar_closed_tab: {
         title: "No closed tickets",
         description: "Closed, declined, and duplicate tickets are recorded here.",
+      },
+      sidebar_closed_tab_intake: {
+        title: "No closed demands",
+        description: "Converted, consulting-resolved, deferred, or rejected demands appear here.",
       },
       sidebar_filter: {
         title: "No matching work items",
@@ -3919,7 +4007,7 @@ export default {
     page_label: "{workspace} - General settings",
     key_created: "Key created",
     copy_key:
-      "Copy and save this secret key in Plane Pages. You can't see this key after you hit Close. A CSV file containing the key has been downloaded.",
+      "Copy and save this secret key. You can't see this key after you hit Close. A CSV file containing the key has been downloaded.",
     token_copied: "Token copied to clipboard.",
     settings: {
       general: {
@@ -5210,6 +5298,7 @@ export default {
             url: "URL",
             attachment: "Attachment",
             priority: "Priority",
+            circle: "Circle",
           },
           builder: {
             subtitle: "Build the form on the left and add fields from the right panel.",
@@ -6003,6 +6092,13 @@ export default {
     status_badge: "Instance unavailable",
     retry: "Try again",
   },
+  error_page: {
+    title: "Oops! Something went wrong.",
+    description:
+      "Operoz ran into an unexpected error. Don't worry, our team has been notified. Try reloading the page.",
+    status_badge: "Unexpected error",
+    retry: "Reload",
+  },
   operoz_manual: operozManualEn,
   operoz_assistant: {
     ask_operoz: "Ask Operoz",
@@ -6560,6 +6656,9 @@ export default {
       support_sla_approaching: "SLA approaching",
       support_sla_breached: "SLA breached",
       support_ticket_closed: "Support ticket closed",
+      support_no_team_response: "Support no team response",
+      issue_no_activity: "Issue no activity",
+      in_progress_too_long: "In progress too long",
     },
     channel: {
       email: "Email",

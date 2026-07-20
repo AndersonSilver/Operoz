@@ -96,7 +96,7 @@ def _validate_submission_fields_from_list(fields: list[dict[str, Any]], submissi
         if not field_id:
             continue
         field_type = field.get("field_type")
-        if field_type == "client":
+        if field_type in ("client", "circle"):
             continue
         required = bool(field.get("required"))
         label = field.get("label") or field_id
@@ -382,9 +382,15 @@ def create_intake_submission(
     notify: bool = True,
 ) -> IntakeIssue:
     if board_intake_form is not None:
-        if not project.support_view:
-            raise IntakeSubmissionError("Sustentação não está ativa neste projeto.")
-        ticket_kind = IntakeTicketKind.SUPPORT
+        board_form_scope = getattr(board_intake_form, "form_scope", "support") or "support"
+        if board_form_scope == "demand":
+            if not project.intake_view:
+                raise IntakeSubmissionError("Intake não está ativo neste projeto.")
+            ticket_kind = IntakeTicketKind.INTAKE
+        else:
+            if not project.support_view:
+                raise IntakeSubmissionError("Sustentação não está ativa neste projeto.")
+            ticket_kind = IntakeTicketKind.SUPPORT
     elif intake_form is not None:
         if not project.intake_view:
             raise IntakeSubmissionError("Intake não está ativo neste projeto.")

@@ -179,13 +179,13 @@ export default {
       description: "You don't have any export records right now. Once you export data, all records will appear here.",
     },
     tokens: {
-      title: "No Personal token yet",
-      description: "Generate secure API tokens to connect your workspace with external systems and applications.",
+      title: "No personal tokens yet",
+      description: "Create your first token to authenticate external integrations. You can revoke it anytime.",
       cta_primary: "Add API token",
     },
     webhooks: {
-      title: "No Webhook added yet",
-      description: "Automate notifications to external services when project events occur.",
+      title: "No webhooks yet",
+      description: "Create your first webhook to receive project events in real time on your systems.",
       cta_primary: "Add webhook",
     },
     boards: {

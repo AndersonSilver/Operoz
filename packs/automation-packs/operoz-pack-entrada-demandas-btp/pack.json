@@ -1,0 +1,85 @@
+{
+  "name": "operoz-pack-entrada-demandas-btp",
+  "version": "1.0.0",
+  "description": "Porta única de entrada de demandas de desenvolvimento: boas-vindas, avisos de decisão (convertido, recusado, consultoria, não priorizado, complemento) e formulário estruturado.",
+  "permissions": [
+    "intake.submitted",
+    "intake.converted",
+    "intake.rejected",
+    "intake.deferred",
+    "intake.consulting",
+    "intake.needs_info",
+    "action.send_email",
+    "action.notify"
+  ],
+  "hooks": "hooks/hooks.json",
+  "catalog": [],
+  "rules": [
+    {
+      "template_id": "intake-welcome",
+      "name": "[Pack BTP] Boas-vindas — pedido recebido",
+      "description": "Avisa a triagem quando um novo pedido entra na recepção.",
+      "parameters": {
+        "rule_name": "[Pack BTP] Boas-vindas — pedido recebido",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    },
+    {
+      "template_id": "intake-converted",
+      "name": "[Pack BTP] Aviso — pedido convertido em delivery",
+      "description": "Notifica o squad de destino quando um pedido é convertido em card de desenvolvimento.",
+      "parameters": {
+        "rule_name": "[Pack BTP] Aviso — pedido convertido em delivery",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    },
+    {
+      "template_id": "intake-rejected",
+      "name": "[Pack BTP] Aviso — pedido recusado",
+      "description": "Notifica o solicitante com a justificativa quando um pedido é recusado.",
+      "parameters": {
+        "rule_name": "[Pack BTP] Aviso — pedido recusado",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    },
+    {
+      "template_id": "intake-deferred",
+      "name": "[Pack BTP] Aviso — pedido não priorizado",
+      "description": "Notifica o solicitante quando um pedido é marcado como não priorizado (adiado).",
+      "parameters": {
+        "rule_name": "[Pack BTP] Aviso — pedido não priorizado",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    },
+    {
+      "template_id": "intake-consulting",
+      "name": "[Pack BTP] Aviso — resolvido por consultoria",
+      "description": "Notifica o solicitante quando o pedido é encerrado como consultoria sem gerar delivery.",
+      "parameters": {
+        "rule_name": "[Pack BTP] Aviso — resolvido por consultoria",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    },
+    {
+      "template_id": "intake-needs-info",
+      "name": "[Pack BTP] Aviso — complemento necessário",
+      "description": "Cobra o solicitante quando a triagem solicita informações adicionais.",
+      "parameters": {
+        "rule_name": "[Pack BTP] Aviso — complemento necessário",
+        "template_id": "",
+        "recipient_emails": []
+      },
+      "publish": false
+    }
+  ]
+}

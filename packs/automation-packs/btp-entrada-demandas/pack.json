@@ -1,0 +1,48 @@
+{
+  "name": "btp-entrada-demandas",
+  "version": "1.0.0",
+  "description": "Pack de automações para o fluxo de entrada de demandas BTP — boas-vindas, conversão, recusa, não priorizado e complemento.",
+  "permissions": ["intake:read", "intake:triage", "email:send", "notification:send"],
+  "rules": [
+    {
+      "template_id": "intake-welcome",
+      "name": "Boas-vindas ao solicitante",
+      "description": "Avisa a triagem quando um novo pedido entra na recepção.",
+      "parameters": {
+        "rule_name": "BTP — Boas-vindas intake",
+        "recipient_emails": []
+      },
+      "publish": true
+    },
+    {
+      "template_id": "intake-converted",
+      "name": "Pedido convertido em delivery",
+      "description": "Notifica o squad destino quando um pedido é convertido.",
+      "parameters": {
+        "rule_name": "BTP — Pedido convertido",
+        "recipient_emails": []
+      },
+      "publish": true
+    },
+    {
+      "template_id": "intake-rejected",
+      "name": "Pedido recusado",
+      "description": "Notifica o solicitante com a justificativa de recusa.",
+      "parameters": {
+        "rule_name": "BTP — Pedido recusado",
+        "recipient_emails": []
+      },
+      "publish": true
+    },
+    {
+      "template_id": "intake-deferred",
+      "name": "Pedido não priorizado",
+      "description": "Notifica o solicitante quando o pedido é adiado.",
+      "parameters": {
+        "rule_name": "BTP — Pedido não priorizado",
+        "recipient_emails": []
+      },
+      "publish": true
+    }
+  ]
+}

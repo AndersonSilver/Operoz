@@ -14,14 +14,18 @@ DISCORD_AUTH_URL = "https://discord.com/api/oauth2/authorize"
 DISCORD_TOKEN_URL = "https://discord.com/api/oauth2/token"
 DISCORD_USER_URL = "https://discord.com/api/users/@me"
 DISCORD_SCOPES = "identify"
+# Cloudflare blocks Python's default urllib User-Agent (HTTP 403, error 1010).
+DISCORD_USER_AGENT = "Operoz (https://operoz.com; DiscordOAuth/1.0)"
 STATE_TTL = 600
 STATE_SEPARATOR = "::"
 
 
 def redirect_uri() -> str:
+    # Keep trailing slash: Django route requires it, and Discord needs an exact
+    # match with the registered redirect (same pattern as Google Calendar OAuth).
     explicit = getattr(settings, "DISCORD_OAUTH_REDIRECT_URI", "") or ""
     if explicit:
-        return explicit.rstrip("/")
+        return explicit.rstrip("/") + "/"
     api_base = (getattr(settings, "WEB_URL", None) or "http://localhost:8000").rstrip("/")
     return f"{api_base}/api/integrations/discord/auth/callback/"
 
@@ -41,6 +45,7 @@ def _http_post(url: str, body: dict, headers: dict | None = None) -> dict[str, A
     data = urllib.parse.urlencode(body).encode("utf-8")
     req = urllib.request.Request(url, data=data, method="POST")
     req.add_header("Content-Type", "application/x-www-form-urlencoded")
+    req.add_header("User-Agent", DISCORD_USER_AGENT)
     if headers:
         for k, v in headers.items():
             req.add_header(k, v)
@@ -56,6 +61,7 @@ def _http_post(url: str, body: dict, headers: dict | None = None) -> dict[str, A
 def _http_get(url: str, access_token: str) -> dict[str, Any]:
     req = urllib.request.Request(url)
     req.add_header("Authorization", f"Bearer {access_token}")
+    req.add_header("User-Agent", DISCORD_USER_AGENT)
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             raw = resp.read().decode("utf-8")

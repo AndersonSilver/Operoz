@@ -2095,6 +2095,49 @@ export default {
         migrated_notice:
           "Formulários por projeto foram migrados para o board. Gerencie aqui; ative a sustentação em cada cliente que deve receber tickets.",
       },
+      demand_forms: {
+        default_name: "Formulário de demanda",
+        default_header: "Pedido de demanda",
+        default_submit_message: "Obrigado. Seu pedido foi recebido e será analisado pela equipe.",
+        title: "Formulários de demanda",
+        subtitle:
+          "Crie formulários para receber pedidos de demanda. O campo Círculo encaminha o pedido para a fila de intake do projeto correto.",
+        create: "Novo formulário",
+        created: "Formulário criado.",
+        saved: "Formulário guardado.",
+        deleted: "Formulário removido.",
+        delete_confirm: "Remover este formulário? Links públicos deixam de funcionar.",
+        load_error: "Não foi possível carregar os formulários.",
+        empty: "Nenhum formulário de demanda. Crie o primeiro para centralizar pedidos de BTP.",
+        circle_field_locked: "O campo Círculo é obrigatório e não pode ser removido.",
+        themes: {
+          default: "Padrão",
+          minimal: "Minimal",
+          support: "Suporte",
+          incident: "Incidente",
+        },
+        theme_label: "Tema visual",
+        highlight_public: "Links públicos por formulário",
+        highlight_circle: "Encaminhamento automático por círculo",
+        column_form: "Formulário",
+        column_status: "Estado",
+        column_meta: "Detalhes",
+        column_link: "Link público",
+        column_actions: "Ações",
+        table_footer: "{count, plural, one {# formulário neste board} other {# formulários neste board}}",
+        fields_count: "{count, plural, one {# campo} other {# campos}}",
+        auth_required_badge: "Login obrigatório",
+        draft_hint: "Publique o formulário para gerar o link público.",
+        published: "Publicado",
+        draft: "Rascunho",
+        copy_link: "Copiar link",
+        open: "Abrir",
+        public_link: "Link público",
+        more_actions: "Mais ações",
+        grid_title: "Formulários",
+        create_card_hint: "Novo formulário de recepção de demandas",
+        published_count: "{count, plural, one {# publicado} other {# publicados}}",
+      },
       support_queues: {
         title: "Filas de atendimento",
         subtitle:
@@ -2155,6 +2198,7 @@ export default {
         automation_policy: "Políticas",
         playbooks: "Playbooks",
         intake_forms: "Sustentação",
+        intake: "Intake",
         fields: "Campos",
         issue_types: "Tipos de ticket",
         issue_types_list: "Tipo de Card / Etapa",
@@ -3381,7 +3425,7 @@ export default {
       },
       snoozed: {
         title: "Adiado",
-        description: "{days, plural, one{Falta # dia} other{Faltam # dias}",
+        description: "{days, plural, one{Falta # dia} other{Faltam # dias}}",
       },
       accepted: {
         title: "Em atendimento",
@@ -3423,9 +3467,16 @@ export default {
     modals: {
       accept: {
         title: "Aceitar chamado de sustentação",
+        intake_title: "Aceitar pedido",
         intake_description:
           "Confirmar aceite? O item será promovido para o backlog do projeto e sairá da triagem de intake.",
         intake_success: "Item aceito e promovido para o backlog.",
+        convert_title: "Converter para outro projeto",
+        convert_description: "Escolha o projeto de delivery. Um card será criado lá com o vínculo ao pedido de origem.",
+        convert_confirm: "Converter",
+        switch_to_convert: "Converter para outro projeto…",
+        switch_to_same: "← Aceitar neste projeto",
+        select_project: "Selecionar projeto…",
         content:
           "Confirmar aceite do chamado {value}? Ele entrará em atendimento na fila selecionada — sem criar item no board.",
         loading: "Aceitando…",
@@ -3460,6 +3511,24 @@ export default {
       snooze: {
         reason_label: "Motivo do adiamento (opcional)",
         reason_placeholder: "Ex.: aguardando retorno do cliente…",
+      },
+      consulting: {
+        title: "Resolver via consultoria",
+        description:
+          "Esta demanda será encerrada como resolvida por consultoria, sem gerar desenvolvimento. Descreva como foi resolvida.",
+        note_label: "Como foi resolvida",
+        note_placeholder: "Descreva a solução ou orientação dada ao solicitante…",
+        loading: "Registrando…",
+        success: "Demanda encerrada via consultoria.",
+      },
+      defer: {
+        title: "Não priorizar",
+        description:
+          "Esta demanda ficará registrada mas não será priorizada agora. Pode ser reavaliada a qualquer momento.",
+        reason_label: "Motivo (opcional)",
+        reason_placeholder: "Ex.: fora do roadmap atual, aguardando mais contexto…",
+        loading: "Registrando…",
+        success: "Demanda marcada como não priorizada.",
       },
     },
     decline_categories: {
@@ -3585,6 +3654,15 @@ export default {
       move: "Aceitar {value} no backlog",
       reopen: "Reabrir chamado",
       close: "Encerrar chamado",
+      consulting: "Resolver via consultoria",
+      defer: "Não priorizar",
+    },
+    outcomes: {
+      converted: "Convertido em desenvolvimento",
+      consulting: "Resolvido via consultoria",
+      deferred: "Não priorizado",
+      rejected: "Recusado",
+      view_converted_issue: "Ver item de desenvolvimento",
     },
     source: {
       in_app: "No aplicativo",
@@ -3603,6 +3681,7 @@ export default {
     page_label_support: "{workspace} - Sustentação",
     modal: {
       title: "Criar chamado de sustentação",
+      intake_title: "Criar pedido",
     },
     tabs: {
       open: "Aberto",
@@ -3618,6 +3697,10 @@ export default {
         description:
           "Chamados pendentes de triagem aparecem aqui. Crie um novo chamado ou aguarde envios dos formulários.",
       },
+      sidebar_open_tab_intake: {
+        title: "Nenhuma demanda aberta",
+        description: "Demandas enviadas pelos formulários de intake aparecem aqui para triagem.",
+      },
       sidebar_in_progress_tab: {
         title: "Nenhum chamado em atendimento",
         description: "Chamados aceitos e encaminhados para uma fila aparecem aqui até serem encerrados.",
@@ -3625,6 +3708,10 @@ export default {
       sidebar_closed_tab: {
         title: "Nenhum chamado fechado",
         description: "Chamados encerrados, recusados ou duplicados ficam registrados aqui.",
+      },
+      sidebar_closed_tab_intake: {
+        title: "Nenhuma demanda encerrada",
+        description: "Demandas convertidas, encerradas por consultoria, não priorizadas ou recusadas aparecem aqui.",
       },
       sidebar_filter: {
         title: "Nenhum chamado correspondente",
@@ -4134,7 +4221,7 @@ export default {
     page_label: "{workspace} - Configurações gerais",
     key_created: "Chave criada",
     copy_key:
-      "Copie e salve esta chave secreta no Páginas do Plane. Você não pode ver esta chave depois de clicar em Fechar. Um arquivo CSV contendo a chave foi baixado.",
+      "Copie e salve esta chave secreta. Você não poderá vê-la depois de clicar em Fechar. Um arquivo CSV com a chave foi baixado.",
     token_copied: "Token copiado para a área de transferência.",
     settings: {
       general: {
@@ -5428,6 +5515,7 @@ export default {
             criticality: "Criticidade",
             ticket_number: "Número do chamado",
             sla_due: "SLA do chamado",
+            circle: "Círculo",
           },
           builder: {
             subtitle: "Monte o formulário à esquerda e adicione campos no painel à direita.",
@@ -6233,6 +6321,13 @@ export default {
     status_badge: "Instância indisponível",
     retry: "Tentar novamente",
   },
+  error_page: {
+    title: "Ops! Algo deu errado.",
+    description:
+      "O Operoz encontrou um erro inesperado. Não se preocupe, nossa equipe foi notificada. Tente recarregar a página.",
+    status_badge: "Erro inesperado",
+    retry: "Recarregar",
+  },
   operoz_manual: operozManualPtBR,
   operoz_assistant: {
     ask_operoz: "Perguntar ao Operoz",
@@ -6776,6 +6871,9 @@ export default {
       support_sla_approaching: "SLA próximo",
       support_sla_breached: "SLA violado",
       support_ticket_closed: "Ticket encerrado",
+      support_no_team_response: "Chamado sem resposta da equipe",
+      issue_no_activity: "Card sem atualização",
+      in_progress_too_long: "Card parado em andamento",
     },
     channel: {
       email: "E-mail",

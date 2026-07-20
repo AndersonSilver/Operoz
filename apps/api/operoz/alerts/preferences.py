@@ -3,11 +3,29 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 from operoz.db.models import AlertRule, UserAlertPreference, UserNotificationPreference
+from operoz.db.models.notification import default_alert_channels
 
 if TYPE_CHECKING:
     from operoz.db.models import User
 
 ALL_CHANNEL_TYPES = ("email", "discord_dm", "google_calendar", "in_app")
+
+
+def set_channel_enabled(*, user: User, channel_type: str, enabled: bool) -> None:
+    """Enable/disable a delivery channel on the user's global notification preference."""
+    if channel_type not in ALL_CHANNEL_TYPES:
+        return
+    pref, _ = UserNotificationPreference.objects.get_or_create(
+        user_id=user.id,
+        workspace=None,
+        defaults={"channels": default_alert_channels()},
+    )
+    channels = dict(pref.channels or default_alert_channels())
+    channel_cfg = dict(channels.get(channel_type) or {})
+    channel_cfg["enabled"] = enabled
+    channels[channel_type] = channel_cfg
+    pref.channels = channels
+    pref.save(update_fields=["channels", "updated_at"])
 
 
 class UserAlertPreferences:

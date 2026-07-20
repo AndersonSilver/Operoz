@@ -153,6 +153,8 @@ services:
     ports:
       - "6432:5432"
 
+  # Celery workers default to operoz.settings.production via manage.py — force local
+  # settings so ALLOWED_HOSTS / debug SMTP match the API container in this stack.
   worker:
     build:
       context: ./apps/api
@@ -177,6 +179,8 @@ services:
       - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -204,6 +208,8 @@ services:
       - operoz-redis
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -232,6 +238,8 @@ services:
       - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -260,6 +268,8 @@ services:
       - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -288,6 +298,8 @@ services:
       - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
@@ -317,6 +329,8 @@ services:
       - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
+      DJANGO_SETTINGS_MODULE: operoz.settings.local
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
       ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
       ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000

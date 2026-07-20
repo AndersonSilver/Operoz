@@ -13,7 +13,8 @@ class BoardIntakeFormListCreateEndpoint(BaseAPIView):
     @allow_workspace_or_board_admin
     def get(self, request, slug, board_slug):
         board = _get_board(slug, board_slug)
-        forms = BoardIntakeForm.objects.filter(board=board, deleted_at__isnull=True).order_by("-created_at")
+        scope = request.query_params.get("scope", "support")
+        forms = BoardIntakeForm.objects.filter(board=board, deleted_at__isnull=True, form_scope=scope).order_by("-created_at")
         return Response(BoardIntakeFormSerializer(forms, many=True, context={"request": request}).data)
 
     @allow_workspace_or_board_admin

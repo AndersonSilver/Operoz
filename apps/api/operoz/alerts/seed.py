@@ -116,12 +116,23 @@ DEFAULT_RULES: list[dict] = [
 
 
 def seed_default_alert_rules(*, workspace_id: str) -> int:
-    """Create default rules if none exist. Returns count created."""
-    if AlertRule.objects.filter(workspace_id=workspace_id, deleted_at__isnull=True).exists():
-        return 0
+    """Create any missing workspace-level default rules. Returns count created.
+
+    Safe for existing workspaces: only inserts alert_types that are not present yet
+    (so new rules like issue_no_activity land without wiping old config).
+    """
+    existing = set(
+        AlertRule.objects.filter(
+            workspace_id=workspace_id,
+            project_id__isnull=True,
+            deleted_at__isnull=True,
+        ).values_list("alert_type", flat=True)
+    )
 
     created = 0
     for spec in DEFAULT_RULES:
+        if spec["alert_type"] in existing:
+            continue
         AlertRule.objects.create(
             workspace_id=workspace_id,
             project_id=None,

@@ -147,7 +147,12 @@ export class ProjectInboxStore implements IProjectInboxStore {
     if (this.isSupportHub) {
       return [EInboxIssueStatus.CLOSED, EInboxIssueStatus.DECLINED, EInboxIssueStatus.DUPLICATE];
     }
-    return [EInboxIssueStatus.ACCEPTED, EInboxIssueStatus.DECLINED, EInboxIssueStatus.DUPLICATE];
+    return [
+      EInboxIssueStatus.ACCEPTED,
+      EInboxIssueStatus.CLOSED,
+      EInboxIssueStatus.DECLINED,
+      EInboxIssueStatus.DUPLICATE,
+    ];
   }
 
   /**
@@ -184,7 +189,11 @@ export class ProjectInboxStore implements IProjectInboxStore {
         : this.currentTab === EInboxIssueCurrentTab.IN_PROGRESS
           ? [EInboxIssueStatus.ACCEPTED]
           : this.closedStatusFilters;
-    appliedFilters = appliedFilters.filter((filter) => this.inboxFilters?.status?.includes(filter));
+    const activeStatusFilters = this.inboxFilters?.status || [];
+    // when no status filter is explicitly set, show all valid statuses for this tab
+    if (activeStatusFilters.length > 0) {
+      appliedFilters = appliedFilters.filter((filter) => activeStatusFilters.includes(filter));
+    }
     const currentTime = new Date().getTime();
 
     return this.currentTab === EInboxIssueCurrentTab.OPEN
@@ -263,6 +272,12 @@ export class ProjectInboxStore implements IProjectInboxStore {
       }
     }
 
+    // When on OPEN tab with no explicit status filter, send the valid open statuses so the API
+    // doesn't return closed/accepted issues
+    if (!filters.status && this.currentTab === EInboxIssueCurrentTab.OPEN) {
+      filters.status = `${EInboxIssueStatus.PENDING},${EInboxIssueStatus.SNOOZED}`;
+    }
+
     return {
       ...filters,
       ...sorting,
@@ -314,7 +329,9 @@ export class ProjectInboxStore implements IProjectInboxStore {
         set(this.filtersMap, [scopeKey], {
           status:
             tab === EInboxIssueCurrentTab.OPEN
-              ? [EInboxIssueStatus.PENDING]
+              ? this.isSupportHub
+                ? [EInboxIssueStatus.PENDING]
+                : []
               : tab === EInboxIssueCurrentTab.IN_PROGRESS
                 ? [EInboxIssueStatus.ACCEPTED]
                 : this.closedStatusFilters,
@@ -358,7 +375,9 @@ export class ProjectInboxStore implements IProjectInboxStore {
       set(this.filtersMap, [scopeKey], {
         status:
           tab === EInboxIssueCurrentTab.OPEN
-            ? [EInboxIssueStatus.PENDING]
+            ? this.isSupportHub
+              ? [EInboxIssueStatus.PENDING]
+              : []
             : tab === EInboxIssueCurrentTab.IN_PROGRESS
               ? [EInboxIssueStatus.ACCEPTED]
               : this.closedStatusFilters,

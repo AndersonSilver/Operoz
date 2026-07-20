@@ -57,7 +57,11 @@ export function IntakeFormFieldDrawer(props: Props) {
 
   const catalogItem = useMemo(() => (fieldType ? getCatalogItem(fieldType) : undefined), [fieldType]);
   const showOptions = !!catalogItem?.hasOptions;
-  const isSystemField = field?.field_type === "name" || field?.field_type === "description";
+  const isSystemField =
+    field?.field_type === "name" ||
+    field?.field_type === "description" ||
+    field?.field_type === "client" ||
+    field?.field_type === "circle";
   const canChangeFieldType = mode === "create" || (mode === "edit" && field && !isSystemField);
 
   const handleSubmit = () => {
@@ -246,7 +250,12 @@ export function IntakeFormFieldDrawer(props: Props) {
         <Button variant="secondary" className="h-9 w-full" onClick={onClose}>
           {t("common.cancel")}
         </Button>
-        {mode === "edit" && field && field.field_type !== "name" && field.field_type !== "description" ? (
+        {mode === "edit" &&
+        field &&
+        field.field_type !== "name" &&
+        field.field_type !== "description" &&
+        field.field_type !== "client" &&
+        field.field_type !== "circle" ? (
           <button
             type="button"
             className="flex h-9 w-full items-center justify-center gap-1.5 text-12 font-medium text-danger-primary hover:underline"

@@ -148,7 +148,7 @@ export function CreateBoardForm(props: Props) {
           {slugPreview && validateSlug(slugPreview) !== true && (
             <p className="text-11 text-danger-primary">{String(validateSlug(slugPreview))}</p>
           )}
-          <p className="text-11 text-tertiary">{t("boards.slug_hint")}</p>
+          <p className="text-11 text-tertiary">{t("boards.slug_hint", { slug: slugPreview })}</p>
         </div>
 
         <Controller

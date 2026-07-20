@@ -8,6 +8,8 @@ import type {
 
 export type { TBoardIntakeFormTheme, TBoardIntakeFormClientOption };
 
+export type TBoardFormScope = "support" | "demand";
+
 export type TBoardIntakeForm = {
   id: string;
   board: string;
@@ -21,6 +23,7 @@ export type TBoardIntakeForm = {
   submit_message?: string;
   require_auth?: boolean;
   theme: TBoardIntakeFormTheme;
+  form_scope: TBoardFormScope;
   public_url?: string | null;
   created_at?: string;
   updated_at?: string;
@@ -38,6 +41,7 @@ export type TBoardIntakeFormWritePayload = Partial<
     | "submit_message"
     | "require_auth"
     | "theme"
+    | "form_scope"
   >
 >;
 

@@ -1,6 +1,7 @@
 import {
   Bell,
   BookOpen,
+  ClipboardList,
   Columns3,
   GanttChart,
   HeartPulse,
@@ -24,6 +25,7 @@ export const BOARD_SETTINGS_ICONS: Record<string, LucideIcon> = {
   automation: Workflow,
   playbooks: BookOpen,
   intake_forms: Inbox,
+  intake: ClipboardList,
   fields: Wrench,
   issue_types: ListTree,
   issue_types_list: ListTree,

@@ -13,6 +13,8 @@ export type ToolOperation = {
   body?: boolean;
   query?: boolean;
   domain: string;
+  /** JSON Schema do corpo — substitui "additionalProperties: true" quando presente */
+  bodySchema?: Record<string, unknown>;
 };
 
 export function op(
@@ -23,7 +25,7 @@ export function op(
   method: HttpMethod,
   path: string,
   pathParams: string[],
-  options?: { body?: boolean; query?: boolean },
+  options?: { body?: boolean; query?: boolean; bodySchema?: Record<string, unknown> }
 ): ToolOperation {
   return {
     domain,
@@ -35,5 +37,6 @@ export function op(
     pathParams,
     body: options?.body,
     query: options?.query ?? method === "GET",
+    ...(options?.bodySchema ? { bodySchema: options.bodySchema } : {}),
   };
 }

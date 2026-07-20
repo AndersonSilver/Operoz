@@ -12,7 +12,7 @@ export function operationToMcpTool(operation: ToolOperation): Tool {
   }
 
   if (operation.body) {
-    properties.body = {
+    properties.body = operation.bodySchema ?? {
       type: "object",
       description: "Corpo JSON do pedido",
       additionalProperties: true,

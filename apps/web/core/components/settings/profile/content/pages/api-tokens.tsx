@@ -4,9 +4,9 @@ import useSWR from "swr";
 // plane imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
-import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { APITokenService } from "@operoz/services";
 // components
+import { ApiTokenEmptyState } from "@/components/api-token/empty-state";
 import { CreateApiTokenModal } from "@/components/api-token/modal/create-token-modal";
 import { ApiTokenListItem } from "@/components/api-token/token-list-item";
 import { ProfileSettingsHeading } from "@/components/settings/profile/heading";
@@ -28,6 +28,8 @@ export const APITokensProfileSettings = observer(function APITokensProfileSettin
     return <APITokenSettingsLoader />;
   }
 
+  const hasTokens = tokens.length > 0;
+
   return (
     <div className="size-full">
       <CreateApiTokenModal isOpen={isCreateTokenModalOpen} onClose={() => setIsCreateTokenModalOpen(false)} />
@@ -35,37 +37,22 @@ export const APITokensProfileSettings = observer(function APITokensProfileSettin
         title={t("account_settings.api_tokens.heading")}
         description={t("account_settings.api_tokens.description")}
         control={
-          <Button variant="primary" size="lg" onClick={() => setIsCreateTokenModalOpen(true)}>
-            {t("workspace_settings.settings.api_tokens.add_token")}
-          </Button>
+          hasTokens ? (
+            <Button variant="primary" size="lg" onClick={() => setIsCreateTokenModalOpen(true)}>
+              {t("workspace_settings.settings.api_tokens.add_token")}
+            </Button>
+          ) : undefined
         }
       />
       <div className="mt-7">
-        {tokens.length > 0 ? (
-          <>
-            <div>
-              {tokens.map((token) => (
-                <ApiTokenListItem key={token.id} token={token} />
-              ))}
-            </div>
-          </>
+        {hasTokens ? (
+          <div>
+            {tokens.map((token) => (
+              <ApiTokenListItem key={token.id} token={token} />
+            ))}
+          </div>
         ) : (
-          <EmptyStateCompact
-            assetKey="token"
-            assetClassName="size-20"
-            title={t("settings_empty_state.tokens.title")}
-            description={t("settings_empty_state.tokens.description")}
-            actions={[
-              {
-                label: t("settings_empty_state.tokens.cta_primary"),
-                onClick: () => {
-                  setIsCreateTokenModalOpen(true);
-                },
-              },
-            ]}
-            align="start"
-            rootClassName="py-20"
-          />
+          <ApiTokenEmptyState onClick={() => setIsCreateTokenModalOpen(true)} />
         )}
       </div>
     </div>

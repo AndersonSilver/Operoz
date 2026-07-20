@@ -76,6 +76,7 @@ export const ProjectInboxHeader = observer(function ProjectInboxHeader({ hubMode
           projectId={projectId.toString()}
           modalState={createModalOpen}
           handleModalClose={() => setCreateModalOpen(false)}
+          hubMode={hubMode}
         />
       ) : null}
     </>

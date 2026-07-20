@@ -21,14 +21,23 @@ from operoz.utils.path_validator import get_safe_redirect_url
 
 
 def _save_calendar_token_for_user(user, provider) -> None:
-    """After Google login, persist the calendar token for all eligible workspaces."""
+    """After Google login, persist the calendar token for all eligible workspaces.
+
+    Only runs when login OAuth client matches GOOGLE_CALENDAR_* credentials;
+    otherwise refresh would fail with a different Google Cloud OAuth client.
+    """
     refresh_token = provider.token_data.get("refresh_token")
     if not refresh_token:
         return
     try:
-        from operoz.alerts.oauth.google_calendar import encrypt_tokens
+        from operoz.alerts.oauth.google_calendar import encrypt_tokens, get_client_credentials
         from operoz.db.models import WorkspaceMember
         from operoz.db.models.external_account import UserExternalAccount
+
+        calendar_client_id, _ = get_client_credentials()
+        login_client_id = (getattr(provider, "client_id", None) or "").strip()
+        if not calendar_client_id or not login_client_id or login_client_id != calendar_client_id:
+            return
 
         token_payload = {
             "access_token": provider.token_data.get("access_token", ""),

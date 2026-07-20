@@ -34,7 +34,6 @@ import type {
   TIssuesResponse,
 } from "@operoz/types";
 import { APIService } from "@/services/api.service";
-import { logGanttDependencyRequest, logGanttDependencyResponse } from "@/lib/gantt-deps-debug";
 
 type TBoardListResponse = {
   results: IBoard[];
@@ -114,11 +113,8 @@ export class BoardService extends APIService {
     config: Record<string, unknown> = {}
   ): Promise<TIssuesResponse> {
     const url = `/api/workspaces/${workspaceSlug}/boards/${boardSlug}/issues/`;
-    logGanttDependencyRequest("board", "GET", url, params);
-
     return this.get(url, { params }, config)
       .then((response) => {
-        logGanttDependencyResponse("board", url, response?.data);
         return response?.data;
       })
       .catch((error) => {

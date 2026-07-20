@@ -19,7 +19,9 @@ def unique_board_intake_form_anchor(board_id, name: str, *, exclude_id=None) -> 
     base = slugify_intake_form_anchor(name)
     candidate = base
     index = 2
-    queryset = BoardIntakeForm.objects.filter(board_id=board_id, deleted_at__isnull=True)
+    # Must use all_objects (bypasses SoftDeletionManager) because anchor has a global UNIQUE
+    # constraint — soft-deleted rows still occupy their anchor slot in the DB.
+    queryset = BoardIntakeForm.all_objects.all()
     if exclude_id:
         queryset = queryset.exclude(pk=exclude_id)
     while queryset.filter(anchor=candidate).exists():
@@ -34,7 +36,9 @@ def unique_project_intake_form_anchor(project_id, name: str, *, exclude_id=None)
     base = slugify_intake_form_anchor(name)
     candidate = base
     index = 2
-    queryset = IntakeForm.objects.filter(project_id=project_id, deleted_at__isnull=True)
+    # Must use all_objects (bypasses SoftDeletionManager) because anchor has a global UNIQUE
+    # constraint — soft-deleted rows still occupy their anchor slot in the DB.
+    queryset = IntakeForm.all_objects.all()
     if exclude_id:
         queryset = queryset.exclude(pk=exclude_id)
     while queryset.filter(anchor=candidate).exists():

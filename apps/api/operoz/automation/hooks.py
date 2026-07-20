@@ -72,6 +72,59 @@ def emit_intake_submitted(
     )
 
 
+def emit_intake_converted(
+    issue,
+    *,
+    actor_id: str | None,
+    destination_project_id: str,
+    destination_issue_id: str,
+) -> None:
+    emit_issue_event(
+        event_type="intake.converted",
+        issue=issue,
+        actor_id=actor_id,
+        extra={
+            "destination_project_id": destination_project_id,
+            "destination_issue_id": destination_issue_id,
+        },
+    )
+
+
+def emit_intake_rejected(issue, *, actor_id: str | None, decline_category: str | None, decline_reason: str | None) -> None:
+    emit_issue_event(
+        event_type="intake.rejected",
+        issue=issue,
+        actor_id=actor_id,
+        extra={"decline_category": decline_category, "decline_reason": decline_reason},
+    )
+
+
+def emit_intake_deferred(issue, *, actor_id: str | None, deferred_until: str | None) -> None:
+    emit_issue_event(
+        event_type="intake.deferred",
+        issue=issue,
+        actor_id=actor_id,
+        extra={"deferred_until": deferred_until},
+    )
+
+
+def emit_intake_consulting(issue, *, actor_id: str | None, outcome_note: str | None) -> None:
+    emit_issue_event(
+        event_type="intake.consulting",
+        issue=issue,
+        actor_id=actor_id,
+        extra={"outcome_note": outcome_note},
+    )
+
+
+def emit_intake_needs_info(issue, *, actor_id: str | None) -> None:
+    emit_issue_event(
+        event_type="intake.needs_info",
+        issue=issue,
+        actor_id=actor_id,
+    )
+
+
 def emit_issue_updated(issue, *, actor_id: str | None, before: dict, after: dict) -> None:
     changed = _diff_changed_fields(before, after)
     emit_issue_event(

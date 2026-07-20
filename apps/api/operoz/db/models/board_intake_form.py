@@ -81,6 +81,11 @@ class BoardIntakeFormTheme(models.TextChoices):
     INCIDENT = "incident", "Incident"
 
 
+class BoardFormScope(models.TextChoices):
+    SUPPORT = "support", "Support"
+    DEMAND = "demand", "Demand"
+
+
 class BoardIntakeForm(BaseModel):
     workspace = models.ForeignKey("db.Workspace", on_delete=models.CASCADE, related_name="board_intake_forms")
     board = models.ForeignKey("db.Board", on_delete=models.CASCADE, related_name="intake_forms")
@@ -98,6 +103,11 @@ class BoardIntakeForm(BaseModel):
         choices=BoardIntakeFormTheme.choices,
         default=BoardIntakeFormTheme.DEFAULT,
     )
+    form_scope = models.CharField(
+        max_length=16,
+        choices=BoardFormScope.choices,
+        default=BoardFormScope.SUPPORT,
+    )
 
     class Meta:
         verbose_name = "BoardIntakeForm"
@@ -106,9 +116,9 @@ class BoardIntakeForm(BaseModel):
         ordering = ("-created_at",)
         constraints = [
             models.UniqueConstraint(
-                fields=["board", "name"],
+                fields=["board", "name", "form_scope"],
                 condition=models.Q(deleted_at__isnull=True),
-                name="board_intake_form_unique_name_board_when_deleted_at_null",
+                name="board_intake_form_unique_name_board_scope_when_deleted_at_null",
             )
         ]
         indexes = [

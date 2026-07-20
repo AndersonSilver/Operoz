@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import logging
+
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -16,11 +18,14 @@ from operoz.alerts.oauth.discord import (
     pop_oauth_state,
     workspace_slug_from_state,
 )
+from operoz.alerts.preferences import set_channel_enabled
 from operoz.app.permissions import ROLE, allow_permission
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import UserExternalAccount, Workspace
 from operoz.db.models.external_account import UserExternalAccount as ExternalAccountModel
 from operoz.utils.host import frontend_base_url
+
+logger = logging.getLogger("operoz.api.discord_oauth")
 
 
 class DiscordOAuthStartView(BaseAPIView):
@@ -54,31 +59,41 @@ class DiscordOAuthCallbackView(BaseAPIView):
 
         payload = pop_oauth_state(state)
         if not payload:
+            logger.warning("Discord OAuth callback: invalid or expired state")
             return HttpResponseRedirect(fail_url)
 
         workspace_slug = payload.get("workspace_slug") or workspace_slug
         user_id = payload.get("user_id")
         workspace = Workspace.objects.filter(slug=workspace_slug).first()
         if not workspace or not user_id:
+            logger.warning(
+                "Discord OAuth callback: workspace/user missing slug=%s user_id=%s",
+                workspace_slug,
+                user_id,
+            )
             return HttpResponseRedirect(fail_url)
 
         try:
             tokens = exchange_code_for_tokens(code)
             access_token = tokens.get("access_token")
             if not access_token:
+                logger.warning("Discord OAuth callback: token response missing access_token")
                 return HttpResponseRedirect(fail_url)
             discord_user = get_discord_user(access_token)
         except Exception:
+            logger.exception("Discord OAuth callback: token exchange or user fetch failed")
             return HttpResponseRedirect(fail_url)
 
         discord_id = discord_user.get("id")
         if not discord_id:
+            logger.warning("Discord OAuth callback: Discord user missing id")
             return HttpResponseRedirect(fail_url)
 
         from operoz.db.models import User
 
         user = User.objects.filter(pk=user_id).first()
         if not user:
+            logger.warning("Discord OAuth callback: local user not found id=%s", user_id)
             return HttpResponseRedirect(fail_url)
 
         discord_username = discord_user.get("username", "")
@@ -88,12 +103,13 @@ class DiscordOAuthCallbackView(BaseAPIView):
             provider=ExternalAccountModel.Provider.DISCORD,
             defaults={
                 "external_id": discord_id,
-                "token_data": "",
+                "token_data": None,
                 "is_active": True,
                 "metadata": {"username": discord_username},
                 "deleted_at": None,
             },
         )
+        set_channel_enabled(user=user, channel_type="discord_dm", enabled=True)
 
         success_url = f"{base}/{workspace_slug}/settings/notifications/external-accounts/?discord=connected"
         return HttpResponseRedirect(success_url)

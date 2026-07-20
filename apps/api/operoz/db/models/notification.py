@@ -75,10 +75,12 @@ def get_default_preference():
 
 
 def default_alert_channels():
+    # External channels default on; delivery still requires a linked account
+    # (dispatcher skips with "external account not linked" otherwise).
     return {
         "email": {"enabled": True, "frequency": "immediate"},
-        "discord_dm": {"enabled": False},
-        "google_calendar": {"enabled": False, "auto_create_events": True},
+        "discord_dm": {"enabled": True},
+        "google_calendar": {"enabled": True, "auto_create_events": True},
         "in_app": {"enabled": True},
     }
 

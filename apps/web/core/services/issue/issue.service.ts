@@ -15,7 +15,6 @@ import type {
 } from "@operoz/types";
 // services
 import { APIService } from "@/services/api.service";
-import { logGanttDependencyRequest, logGanttDependencyResponse } from "@/lib/gantt-deps-debug";
 
 export class IssueService extends APIService {
   private serviceType: TIssueServiceType;
@@ -43,8 +42,6 @@ export class IssueService extends APIService {
       (queries.expand as string)?.includes("issue_relation") && !queries.group_by
         ? `/api/workspaces/${workspaceSlug}/projects/${projectId}/${this.serviceType}-detail/`
         : `/api/workspaces/${workspaceSlug}/projects/${projectId}/${this.serviceType}/`;
-    logGanttDependencyRequest("project", "GET", path, queries ?? {});
-
     return this.get(
       path,
       {
@@ -53,7 +50,6 @@ export class IssueService extends APIService {
       config
     )
       .then((response) => {
-        logGanttDependencyResponse("project", path, response?.data);
         return response?.data;
       })
       .catch((error) => {

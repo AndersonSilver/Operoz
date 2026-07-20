@@ -60,7 +60,7 @@ function FieldControl(props: {
     submitting,
   } = props;
 
-  if (field.field_type === "client") {
+  if (field.field_type === "client" || field.field_type === "circle") {
     return (
       <select
         className="intake-public-select"
@@ -390,7 +390,7 @@ export function IntakePublicForm(props: Props) {
 
   const handleSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    const clientField = form.fields.find((field) => field.field_type === "client");
+    const clientField = form.fields.find((field) => field.field_type === "client" || field.field_type === "circle");
     if (clientField?.required && !values[clientField.id]) {
       setError(t("intake_public_form.client_required"));
       return;

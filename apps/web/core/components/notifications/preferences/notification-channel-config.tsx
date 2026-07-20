@@ -5,8 +5,11 @@ import {
   Calendar,
   CheckCircle,
   Clock,
+  Hourglass,
+  Inbox,
   Mail,
   Moon,
+  PauseCircle,
   PlusCircle,
   ShieldAlert,
   Ticket,
@@ -47,6 +50,9 @@ const ALERT_TYPE_ICONS: Record<TAlertType, LucideIcon> = {
   support_sla_approaching: Timer,
   support_sla_breached: ShieldAlert,
   support_ticket_closed: CheckCircle,
+  support_no_team_response: Inbox,
+  issue_no_activity: Hourglass,
+  in_progress_too_long: PauseCircle,
 };
 
 const SELECT_CLASS =
@@ -189,7 +195,16 @@ export const NotificationChannelConfig = observer(function NotificationChannelCo
     void alertStore.fetchPreferences(workspaceSlug);
   }, [alertStore, workspaceSlug]);
 
+  const isChannelMasterEnabled = (channel: TAlertChannel) => {
+    const cfg = alertStore.userPreferences?.channels?.[channel];
+    if (cfg && typeof cfg === "object" && "enabled" in cfg && typeof cfg.enabled === "boolean") {
+      return cfg.enabled;
+    }
+    return true;
+  };
+
   const isEnabled = (alertType: TAlertType, channel: TAlertChannel) => {
+    if (!isChannelMasterEnabled(channel)) return false;
     const pref = alertStore.userPreferences?.preferences.find(
       (p) => p.alert_type === alertType && p.channel_type === channel
     );
@@ -199,8 +214,22 @@ export const NotificationChannelConfig = observer(function NotificationChannelCo
   const toggle = (alertType: TAlertType, channel: TAlertChannel, enabled: boolean) => {
     const existing = alertStore.userPreferences?.preferences ?? [];
     const others = existing.filter((p) => !(p.alert_type === alertType && p.channel_type === channel));
+    const channels = alertStore.userPreferences?.channels ?? {};
+    // Turning a channel on for any alert type also flips the master channels.*.enabled
+    // flag — otherwise Discord/GCal stay skipped as "canal desativado nas preferências".
     void alertStore.updatePreferences(workspaceSlug, {
       preferences: [...others, { alert_type: alertType, channel_type: channel, enabled }],
+      ...(enabled
+        ? {
+            channels: {
+              ...channels,
+              [channel]: {
+                ...channels[channel],
+                enabled: true,
+              },
+            },
+          }
+        : {}),
     });
   };
 
@@ -213,7 +242,7 @@ export const NotificationChannelConfig = observer(function NotificationChannelCo
 
       <div className="alerts-settings-prefs-grid">
         {DEFAULT_TYPES.map((alertType) => {
-          const TypeIcon = ALERT_TYPE_ICONS[alertType];
+          const TypeIcon = ALERT_TYPE_ICONS[alertType] ?? Bell;
           return (
             <article key={alertType} className="overflow-hidden rounded-xl border border-subtle bg-layer-1">
               <div className="flex items-center gap-2.5 border-b border-subtle px-4 py-3">

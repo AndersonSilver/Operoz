@@ -17,6 +17,7 @@ from operoz.alerts.oauth.google_calendar import (
     token_expires_at,
     workspace_slug_from_state,
 )
+from operoz.alerts.preferences import set_channel_enabled
 from operoz.app.permissions import ROLE, allow_permission
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import UserExternalAccount, Workspace
@@ -93,6 +94,7 @@ class GoogleCalendarOAuthCallbackView(BaseAPIView):
         )
         account.last_synced_at = None
         account.save(update_fields=["last_synced_at", "updated_at"])
+        set_channel_enabled(user=user, channel_type="google_calendar", enabled=True)
 
         success_url = f"{base}/{workspace_slug}/settings/notifications/external-accounts/?gcal=connected"
         return HttpResponseRedirect(success_url)

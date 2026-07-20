@@ -535,6 +535,27 @@ def handle_get_automation_run(ctx: AssistantActorContext, args: dict[str, Any]) 
     )
 
 
+def handle_propose_intake_issue(ctx: AssistantActorContext, args: dict[str, Any]) -> ToolResult:
+    """Propose creation of an intake issue — user must confirm before it is persisted."""
+    from operoz.assistant.confirmed_actions import build_intake_create_proposal
+
+    project_id = str(args.get("project_id") or "")
+    name = str(args.get("name") or "")
+    description_html = str(args.get("description_html") or "")
+    priority = str(args.get("priority") or "none")
+
+    result = build_intake_create_proposal(
+        ctx=ctx,
+        project_id=project_id,
+        name=name,
+        description_html=description_html,
+        priority=priority,
+    )
+    if not result.get("ok"):
+        return ToolResult(ok=False, error=result.get("error", "unknown_error"))
+    return ToolResult(ok=True, data=result, citations=[])
+
+
 def handle_list_intake_pending(ctx: AssistantActorContext, args: dict[str, Any]) -> ToolResult:
     board_slug = args.get("board_slug") or ctx.board_slug
     project_id = args.get("project_id")
@@ -786,6 +807,32 @@ def register_all_tools() -> None:
             "required": ["run_id"],
         },
         handler=handle_get_automation_run,
+    )
+    register_tool(
+        "propose_intake_issue",
+        description=(
+            "Propõe a abertura de um pedido na recepção (intake) de um projeto; "
+            "o usuário DEVE confirmar antes de o card ser criado. "
+            "Usar sempre que alguém quiser registrar uma demanda de desenvolvimento."
+        ),
+        parameters={
+            "type": "object",
+            "properties": {
+                "project_id": {"type": "string", "description": "ID do projeto onde o intake está habilitado."},
+                "name": {"type": "string", "description": "Título resumido do pedido (obrigatório)."},
+                "description_html": {
+                    "type": "string",
+                    "description": "Descrição em HTML com contexto mínimo: cliente, problema, alternativas, compromisso.",
+                },
+                "priority": {
+                    "type": "string",
+                    "enum": ["low", "medium", "high", "urgent", "none"],
+                    "description": "Prioridade sugerida pelo solicitante.",
+                },
+            },
+            "required": ["project_id", "name"],
+        },
+        handler=handle_propose_intake_issue,
     )
     register_tool(
         "list_intake_pending",

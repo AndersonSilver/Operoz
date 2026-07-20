@@ -93,10 +93,14 @@ export type TInboxIssueSupportUpdatePayload = {
 
 export type TInboxIssueDeclineCategory = "out_of_scope" | "duplicate" | "insufficient_info" | "spam" | "other";
 
+export type TIntakeOutcome = "converted" | "consulting" | "deferred" | "rejected";
+
 export type TInboxIssue = {
   id: string;
   status: TInboxIssueStatus;
   ticket_kind?: THubMode;
+  outcome?: TIntakeOutcome | null;
+  converted_to_issue?: string | null;
   snoozed_till: Date | null;
   duplicate_to: string | undefined;
   source: EInboxIssueSource | undefined;

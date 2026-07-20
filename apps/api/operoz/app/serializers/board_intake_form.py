@@ -26,6 +26,7 @@ class BoardIntakeFormSerializer(BaseSerializer):
             "submit_message",
             "require_auth",
             "theme",
+            "form_scope",
             "public_url",
             "created_at",
             "updated_at",
@@ -54,12 +55,21 @@ class BoardIntakeFormWriteSerializer(BaseSerializer):
             "submit_message",
             "require_auth",
             "theme",
+            "form_scope",
         ]
 
     def validate_fields(self, value):
         fields = value or []
-        if not any(field.get("field_type") == "client" for field in fields):
-            raise serializers.ValidationError("O campo Cliente é obrigatório em formulários do board.")
+        form_scope = self.initial_data.get("form_scope") or (
+            self.instance.form_scope if self.instance else "support"
+        )
+        if form_scope == "demand":
+            routing_types = {"circle"}
+        else:
+            routing_types = {"client"}
+        if not any(field.get("field_type") in routing_types for field in fields):
+            label = "Círculo" if form_scope == "demand" else "Cliente"
+            raise serializers.ValidationError(f"O campo {label} é obrigatório em formulários do board.")
         if not any(field.get("field_type") == "name" for field in fields):
             raise serializers.ValidationError("O campo Resumo é obrigatório.")
         return fields
