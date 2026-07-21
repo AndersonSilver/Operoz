@@ -28,74 +28,100 @@
       @media only screen and (max-width: 600px) {
         .email-container {
           width: 100% !important;
+          border-radius: 0 !important;
         }
 
         .email-content {
-          padding: 24px 20px !important;
+          padding: 32px 24px !important;
         }
 
         .email-footer {
-          padding: 0 20px 16px 20px !important;
+          padding: 24px !important;
         }
       }
     </style>
   </head>
 
-  <body bgcolor="#f9f9f9" style="margin: 0; padding: 0; font-family: system-ui, sans-serif; color: #474747; background-color: #f9f9f9;">
-    <span class="preheader" style="display: none; visibility: hidden;">
+  <body
+    bgcolor="#eef0f4"
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        sans-serif;
+      font-weight: 400;
+      color: #474747;
+      background-color: #eef0f4;
+    "
+  >
+    <span
+      class="preheader"
+      style="display: none; font-size: 1px; line-height: 1px; color: transparent; visibility: hidden; max-height: 0; max-width: 0; opacity: 0; overflow: hidden;"
+    >
       A exportação de dados de análises solicitada está anexada como arquivo CSV.
     </span>
 
-    <center style="width: 100%; padding: 40px 0;">
+    <center class="email-body" style="width: 100%; background-color: #eef0f4; padding: 48px 16px;">
       <table role="presentation" width="100%">
         <tr>
           <td></td>
-          <td class="email-container" width="620" style="width: 620px; max-width: 620px; margin: 0 auto;">
+          <td
+            class="email-container"
+            width="560"
+            style="
+              width: 560px;
+              max-width: 560px;
+              margin: 0 auto;
+              border-radius: 16px;
+              overflow: hidden;
+              box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 12px 28px rgba(16, 24, 40, 0.08);
+            "
+          >
+            <!-- Header -->
             <table role="presentation" width="100%" style="background-color: #000000;">
               <tr>
-                <td style="padding: 24px 40px; text-align: center;">
+                <td style="padding: 32px 56px; text-align: center;">
                   {% include "emails/partials/logo_on_dark.html" %}
                 </td>
               </tr>
             </table>
-          </td>
-          <td></td>
-        </tr>
-      </table>
 
-      <table role="presentation" width="100%">
-        <tr>
-          <td></td>
-          <td class="email-container" width="620" style="width: 620px; max-width: 620px; margin: 0 auto;">
-            <table role="presentation" width="100%" style="background-color: #ffffff; padding: 32px 40px;">
+            <!-- Body -->
+            <table role="presentation" width="100%" style="background-color: #ffffff;">
               <tr>
-                <td style="padding: 24px; font-size: 16px; line-height: 1.5;">
-                  <h1 style="margin: 0 0 12px; font-size: 22px; font-weight: 600; color: #111111;">
+                <td class="email-content" style="padding: 48px 56px; font-size: 16px; line-height: 1.5; color: #474747;">
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px;">
+                    <tr>
+                      <td style="width: 40px; height: 40px; background-color: #e9f6e9; border-radius: 50%; text-align: center; vertical-align: middle; font-size: 18px; line-height: 40px;">
+                        &#10003;
+                      </td>
+                    </tr>
+                  </table>
+
+                  <h1 style="margin: 0 0 16px; font-size: 24px; font-weight: 700; color: #111111; letter-spacing: -0.01em;">
                     Sua exportação de análises está pronta
                   </h1>
 
-                  <p style="margin: 0 0 16px;">
+                  <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.7; color: #5f5e5e;">
                     A exportação de dados de análises que você solicitou no Operoz está pronta. Enviamos o arquivo em anexo no formato CSV.
                   </p>
 
-                  <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #5f5e5e;">
+                  <!-- Divider -->
+                  <table role="presentation" width="100%" style="border-top: 1px solid #ececec; margin: 0 0 20px;">
+                    <tr><td style="line-height: 1px; font-size: 1px;">&nbsp;</td></tr>
+                  </table>
+
+                  <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #8a8a8a;">
                     Você pode abrir o CSV em qualquer planilha ou ferramenta de BI para analisar os dados, montar relatórios ou compartilhar insights com a equipe.
                   </p>
                 </td>
               </tr>
             </table>
-          </td>
-          <td></td>
-        </tr>
-      </table>
 
-      <table role="presentation" width="100%">
-        <tr>
-          <td></td>
-          <td class="email-container" width="620" style="width: 620px; max-width: 620px; margin: 0 auto;">
-            <table role="presentation" width="100%" style="background-color: #ffffff; padding: 0 40px 16px;">
+            <!-- Footer -->
+            <table role="presentation" width="100%" style="background-color: #fafafa; border-top: 1px solid #ececec;">
               <tr>
-                <td style="border-top: 1px solid #e9e9e9; padding: 24px; font-size: 12px; color: #979797;">
+                <td class="email-footer" align="center" style="padding: 28px 56px;">
                   {% include "emails/partials/footer.html" %}
                 </td>
               </tr>

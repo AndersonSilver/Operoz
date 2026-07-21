@@ -1,109 +1,213 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html lang="pt-BR">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
     <title>{{ headline }}</title>
+
+    <style>
+      body,
+      table,
+      td,
+      p {
+        margin: 0;
+        padding: 0;
+      }
+
+      table {
+        border-collapse: collapse;
+      }
+
+      @media only screen and (max-width: 600px) {
+        .email-container {
+          width: 100% !important;
+          border-radius: 0 !important;
+        }
+
+        .email-content {
+          padding: 32px 24px !important;
+        }
+
+        .email-footer {
+          padding: 24px !important;
+        }
+      }
+    </style>
   </head>
-  <body bgcolor="#f7f9ff" style="margin: 0; padding: 24px 16px; background-color: #f7f9ff; font-family: system-ui, -apple-system, 'Segoe UI', sans-serif; color: #1f2d5c;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto;">
-      <tr>
-        <td style="padding-bottom: 20px;">{% include "emails/partials/logo_on_light.html" %}</td>
-      </tr>
-      <tr>
-        <td style="background-color: #fcfcfd; border: 1px solid #e4e7ef; border-radius: 8px; padding: 28px 24px;">
-          <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5c6580;">Operoz · Alertas</p>
-          <h1 style="margin: 0 0 10px; font-size: 20px; font-weight: 700; line-height: 1.35; color: #121a26;">{{ headline }}</h1>
-          {% if content_intro %}
-          <p style="margin: 0 0 16px; font-size: 14px; line-height: 1.6; color: #3b4563;">{{ content_intro }}</p>
-          {% endif %}
 
-          <p style="margin: 0 0 18px; font-size: 13px; color: #5c6580;">
-            {{ workspace_slug }} / {{ project_name }} /
-            <a href="{{ issue_url }}" style="color: #3358d4; text-decoration: none; font-weight: 600;">{{ issue_identifier }}</a>
-          </p>
+  <body
+    bgcolor="#eef0f4"
+    style="
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI',
+        sans-serif;
+      font-weight: 400;
+      color: #474747;
+      background-color: #eef0f4;
+    "
+  >
+    <center class="email-body" style="width: 100%; background-color: #eef0f4; padding: 48px 16px;">
+      <table role="presentation" width="100%">
+        <tr>
+          <td></td>
+          <td
+            class="email-container"
+            width="560"
+            style="
+              width: 560px;
+              max-width: 560px;
+              margin: 0 auto;
+              border-radius: 16px;
+              overflow: hidden;
+              box-shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 12px 28px rgba(16, 24, 40, 0.08);
+            "
+          >
+            <!-- Header -->
+            <table role="presentation" width="100%" style="background-color: #000000;">
+              <tr>
+                <td style="padding: 32px 56px; text-align: center;">
+                  {% include "emails/partials/logo_on_dark.html" %}
+                </td>
+              </tr>
+            </table>
 
-          {% if is_support_alert and support_details %}
-          <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 18px; background-color: #f7f9ff; border: 1px solid #c1d0ff; border-radius: 8px;">
-            <tr>
-              <td style="padding: 16px 18px;">
-                <p style="margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #525252;">Detalhes do chamado</p>
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                  {% if support_details.client %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; width: 38%; vertical-align: top;">Cliente</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #1f2d5c;">{{ support_details.client }}</td>
-                  </tr>
+            <!-- Body -->
+            <table role="presentation" width="100%" style="background-color: #ffffff;">
+              <tr>
+                <td class="email-content" style="padding: 48px 56px; font-size: 16px; line-height: 1.5; color: #474747;">
+                  <p style="margin: 0 0 6px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #8a8a8a;">Operoz · Alertas</p>
+                  <h1 style="margin: 0 0 16px; font-size: 24px; font-weight: 700; color: #111111; letter-spacing: -0.01em;">{{ headline }}</h1>
+                  {% if content_intro %}
+                  <p style="margin: 0 0 20px; font-size: 15px; line-height: 1.7; color: #5f5e5e;">{{ content_intro }}</p>
                   {% endif %}
-                  {% if support_details.criticality_label %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Criticidade</td>
-                    <td style="padding: 6px 0;">
-                      <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; {% if support_details.criticality == 'p0' or support_details.criticality == 'p1' %}background-color: #feebec; color: #ce2c31;{% elif support_details.criticality == 'p2' %}background-color: #fefbe9; color: #b8860b;{% else %}background-color: #eef1f8; color: #3b4563;{% endif %}">{{ support_details.criticality_label }}</span>
-                    </td>
-                  </tr>
-                  {% endif %}
-                  {% if support_details.reporter %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Relator</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.reporter }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if support_details.ticket_number %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Nº do chamado</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.ticket_number }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if support_details.sla_due_at %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">SLA</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #1f2d5c;">{{ support_details.sla_due_at }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if support_details.queue %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Fila</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.queue }}</td>
-                  </tr>
-                  {% endif %}
-                  {% if support_details.assignee %}
-                  <tr>
-                    <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Responsável</td>
-                    <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #1f2d5c;">{{ support_details.assignee }}</td>
-                  </tr>
-                  {% endif %}
-                </table>
-              </td>
-            </tr>
-          </table>
-          {% endif %}
 
-          <div style="margin-bottom: 16px; padding: 14px 16px; background-color: #ffffff; border: 1px solid #e4e7ef; border-radius: 6px;">
-            <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #80838d;">Resumo</p>
-            <p style="margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; color: #121a26;">{{ issue_name }}</p>
-          </div>
+                  <p style="margin: 0 0 24px; font-size: 13px; color: #8a8a8a;">
+                    {{ workspace_slug }} / {{ project_name }} /
+                    <a href="{{ issue_url }}" style="color: #3358d4; text-decoration: none; font-weight: 600;">{{ issue_identifier }}</a>
+                  </p>
 
-          {% if detail_lines %}
-          <ul style="margin: 0 0 18px; padding-left: 18px; font-size: 13px; line-height: 1.6; color: #3b4563;">
-            {% for line in detail_lines %}
-            <li style="margin-bottom: 4px;">{{ line }}</li>
-            {% endfor %}
-          </ul>
-          {% elif assignee_label and not is_support_alert %}
-          <p style="margin: 0 0 18px; font-size: 13px; color: #3b4563;"><strong>Responsável:</strong> {{ assignee_label }}</p>
-          {% endif %}
+                  {% if is_support_alert and support_details %}
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="margin-bottom: 20px; background-color: #f7f9ff; border: 1px solid #c1d0ff; border-radius: 8px;">
+                    <tr>
+                      <td style="padding: 16px 18px;">
+                        <p style="margin: 0 0 12px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #5c6580;">Detalhes do chamado</p>
+                        <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                          {% if support_details.client %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; width: 38%; vertical-align: top;">Cliente</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #111111;">{{ support_details.client }}</td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.criticality_label %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Criticidade</td>
+                            <td style="padding: 6px 0;">
+                              <span style="display: inline-block; padding: 2px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; {% if support_details.criticality == 'p0' or support_details.criticality == 'p1' %}background-color: #feebec; color: #ce2c31;{% elif support_details.criticality == 'p2' %}background-color: #fefbe9; color: #b8860b;{% else %}background-color: #eef1f8; color: #3b4563;{% endif %}">{{ support_details.criticality_label }}</span>
+                            </td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.reporter %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Relator</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #111111;">{{ support_details.reporter }}</td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.ticket_number %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Nº do chamado</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #111111;">{{ support_details.ticket_number }}</td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.sla_due_at %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">SLA</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 600; color: #111111;">{{ support_details.sla_due_at }}</td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.queue %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Fila</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #111111;">{{ support_details.queue }}</td>
+                          </tr>
+                          {% endif %}
+                          {% if support_details.assignee %}
+                          <tr>
+                            <td style="padding: 6px 0; font-size: 13px; color: #5c6580; vertical-align: top;">Responsável</td>
+                            <td style="padding: 6px 0; font-size: 13px; font-weight: 500; color: #111111;">{{ support_details.assignee }}</td>
+                          </tr>
+                          {% endif %}
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+                  {% endif %}
 
-          <a href="{{ issue_url }}" style="display: inline-block; margin-top: 4px; padding: 11px 18px; background-color: #3e63dd; border: 1px solid #2f4ba8; border-radius: 6px; color: #ffffff !important; font-size: 14px; font-weight: 600; text-decoration: none;">Abrir no Operoz</a>
-        </td>
-      </tr>
-      <tr>
-        <td style="padding: 20px 4px 0; font-size: 12px; line-height: 1.6; color: #80838d;">
-          Você recebeu este e-mail porque tem alertas ativos no Operoz.
-          <br />
-          <span style="color: #979797;">Operoz OS</span>
-        </td>
-      </tr>
-    </table>
+                  <div style="margin-bottom: 20px; padding: 14px 16px; background-color: #f7f8fa; border: 1px solid #ececec; border-radius: 8px;">
+                    <p style="margin: 0 0 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: #8a8a8a;">Resumo</p>
+                    <p style="margin: 0; font-size: 15px; font-weight: 600; line-height: 1.5; color: #111111;">{{ issue_name }}</p>
+                  </div>
+
+                  {% if detail_lines %}
+                  <ul style="margin: 0 0 24px; padding-left: 18px; font-size: 13px; line-height: 1.7; color: #5f5e5e;">
+                    {% for line in detail_lines %}
+                    <li style="margin-bottom: 4px;">{{ line }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% elif assignee_label and not is_support_alert %}
+                  <p style="margin: 0 0 24px; font-size: 13px; color: #5f5e5e;"><strong style="color: #111111;">Responsável:</strong> {{ assignee_label }}</p>
+                  {% endif %}
+
+                  <!-- CTA Button -->
+                  <table role="presentation" cellspacing="0" cellpadding="0" border="0" style="margin: 0 0 20px;">
+                    <tr>
+                      <td style="border-radius: 8px; background-color: #3358d4;">
+                        <a
+                          href="{{ issue_url }}"
+                          target="_blank"
+                          style="
+                            background-color: #3358d4;
+                            border-radius: 8px;
+                            color: #ffffff;
+                            padding: 14px 32px;
+                            text-decoration: none;
+                            display: inline-block;
+                            font-size: 16px;
+                            font-weight: 600;
+                          "
+                        >
+                          Abrir no Operoz
+                        </a>
+                      </td>
+                    </tr>
+                  </table>
+
+                  <!-- Divider -->
+                  <table role="presentation" width="100%" style="border-top: 1px solid #ececec; margin: 0 0 20px;">
+                    <tr><td style="line-height: 1px; font-size: 1px;">&nbsp;</td></tr>
+                  </table>
+
+                  <p style="margin: 0; font-size: 13px; line-height: 1.7; color: #a0a0a0;">
+                    Você recebeu este e-mail porque tem alertas ativos no Operoz.
+                  </p>
+                </td>
+              </tr>
+            </table>
+
+            <!-- Footer -->
+            <table role="presentation" width="100%" style="background-color: #fafafa; border-top: 1px solid #ececec;">
+              <tr>
+                <td class="email-footer" align="center" style="padding: 28px 56px;">
+                  {% include "emails/partials/footer.html" %}
+                </td>
+              </tr>
+            </table>
+          </td>
+          <td></td>
+        </tr>
+      </table>
+    </center>
+
+    <base target="_blank" />
   </body>
 </html>
