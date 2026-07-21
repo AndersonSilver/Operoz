@@ -9,6 +9,10 @@ set -euo pipefail
 : "${LOCAL_RELEASE_TAG:=stable}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+# shellcheck source=vps-compose-utils.sh
+source "${SCRIPT_DIR}/vps-compose-utils.sh"
+
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
