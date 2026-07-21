@@ -13,9 +13,14 @@ SIGNATURE=$(echo "$HOSTNAME$MAC_ADDRESS$CPU_INFO$MEMORY_INFO$DISK_INFO" | sha256
 
 export MACHINE_SIGNATURE=$SIGNATURE
 
-python manage.py register_instance "$MACHINE_SIGNATURE"
-python manage.py configure_instance
-python manage.py clear_cache
+echo "==> register_instance"
+timeout 30 python manage.py register_instance "$MACHINE_SIGNATURE" || echo "WARN: register_instance failed or timed out, continuing"
+
+echo "==> configure_instance"
+timeout 30 python manage.py configure_instance || echo "WARN: configure_instance failed or timed out, continuing"
+
+echo "==> clear_cache"
+timeout 30 python manage.py clear_cache || echo "WARN: clear_cache failed or timed out, continuing"
 
 WORKERS="${GUNICORN_CHAT_WORKERS:-${GUNICORN_WORKERS:-8}}"
 TIMEOUT="${GUNICORN_CHAT_TIMEOUT:-120}"

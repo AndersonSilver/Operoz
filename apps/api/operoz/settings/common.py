@@ -311,6 +311,14 @@ CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 
+# Bound how long any `.delay()`/`.apply_async()` call can block establishing a
+# broker connection. Without this, a slow/unreachable RabbitMQ on boot can hang
+# a management command (e.g. register_instance) indefinitely, which in turn
+# blocks the API/gunicorn from ever starting since it never gets to `exec`.
+CELERY_BROKER_CONNECTION_TIMEOUT = int(os.environ.get("CELERY_BROKER_CONNECTION_TIMEOUT", "5"))
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+CELERY_BROKER_CONNECTION_MAX_RETRIES = 2
+
 # Board automation — fila dedicada e limites operacionais
 AUTOMATION_CELERY_QUEUE = os.environ.get("AUTOMATION_CELERY_QUEUE", "automation")
 AUTOMATION_EMAIL_CELERY_QUEUE = os.environ.get("AUTOMATION_EMAIL_CELERY_QUEUE", "automation_email")

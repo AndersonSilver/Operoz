@@ -21,19 +21,24 @@ SIGNATURE=$(echo "$HOSTNAME$MAC_ADDRESS$CPU_INFO$MEMORY_INFO$DISK_INFO" | sha256
 # Export the variables
 export MACHINE_SIGNATURE=$SIGNATURE
 
-# Register instance
-python manage.py register_instance "$MACHINE_SIGNATURE"
+# Register instance, configure and warm up caches/storage. These are
+# best-effort bookkeeping steps — a slow/unreachable broker, MinIO or Redis
+# must never be able to hang the container forever and keep gunicorn from
+# ever starting. `timeout` turns a silent indefinite hang into a fast,
+# visible failure that still lets startup continue.
+echo "==> register_instance"
+timeout 30 python manage.py register_instance "$MACHINE_SIGNATURE" || echo "WARN: register_instance failed or timed out, continuing"
 
-# Load the configuration variable
-python manage.py configure_instance
+echo "==> configure_instance"
+timeout 30 python manage.py configure_instance || echo "WARN: configure_instance failed or timed out, continuing"
 
-# Create the default bucket
-python manage.py create_bucket
+echo "==> create_bucket"
+timeout 30 python manage.py create_bucket || echo "WARN: create_bucket failed or timed out, continuing"
 
-# Clear Cache before starting to remove stale values
-python manage.py clear_cache
+echo "==> clear_cache"
+timeout 30 python manage.py clear_cache || echo "WARN: clear_cache failed or timed out, continuing"
 
-# Collect static files
+echo "==> collectstatic"
 python manage.py collectstatic --noinput
 
 exec gunicorn -w "$GUNICORN_WORKERS" -k uvicorn.workers.UvicornWorker operoz.asgi:application --bind 0.0.0.0:"${PORT:-8000}" --max-requests 1200 --max-requests-jitter 1000 --access-logfile -

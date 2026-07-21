@@ -82,7 +82,12 @@ class Command(BaseCommand):
             instance.edition = InstanceEdition.PLANE_COMMUNITY.value
             instance.save()
 
-        # Call the instance traces task
-        instance_traces.delay()
+        # Call the instance traces task — best-effort only, must never block
+        # instance registration (and therefore API startup) if the broker
+        # is slow/unreachable during boot.
+        try:
+            instance_traces.delay()
+        except Exception as exc:
+            self.stdout.write(self.style.WARNING(f"Skipping instance_traces enqueue: {exc}"))
 
         return
