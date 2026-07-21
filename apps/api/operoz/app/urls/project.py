@@ -25,6 +25,7 @@ from operoz.app.views import (
     UserProjectRolesEndpoint,
     ProjectArchiveUnarchiveEndpoint,
     ProjectMemberPreferenceEndpoint,
+    ProjectContactViewSet,
 )
 
 
@@ -115,6 +116,16 @@ urlpatterns = [
         "workspaces/<str:slug>/projects/<uuid:project_id>/members/leave/",
         ProjectMemberViewSet.as_view({"post": "leave"}),
         name="project-member",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/contacts/",
+        ProjectContactViewSet.as_view({"get": "list", "post": "create"}),
+        name="project-contact",
+    ),
+    path(
+        "workspaces/<str:slug>/projects/<uuid:project_id>/contacts/<uuid:pk>/",
+        ProjectContactViewSet.as_view({"patch": "partial_update", "delete": "destroy"}),
+        name="project-contact",
     ),
     path(
         "workspaces/<str:slug>/projects/<uuid:project_id>/project-views/",

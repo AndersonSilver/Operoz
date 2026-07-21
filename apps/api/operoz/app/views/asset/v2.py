@@ -35,6 +35,15 @@ ALLOWED_LOGO_COVER_IMAGE_TYPES = frozenset(
 
 LOGO_COVER_TYPE_ERROR = "Invalid file type. Only JPEG, PNG, WebP, JPG, GIF and SVG files are allowed."
 
+# HTML page embeds (iframe). Kept out of global ATTACHMENT_MIME_TYPES (XSS on issue
+# attachments) but required for html-document-embed on pages.
+HTML_DOCUMENT_MIME_TYPES = frozenset(
+    {
+        "text/html",
+        "application/xhtml+xml",
+    }
+)
+
 # Use string values so membership checks match JSON payload strings reliably (TextChoices quirks across Django versions).
 EDITOR_ASSET_ENTITY_TYPES = frozenset(
     {
@@ -72,9 +81,15 @@ def validate_scoped_asset_upload(entity_type: str, file_type: str) -> tuple[bool
             return False, LOGO_COVER_TYPE_ERROR
         return True, ""
     if entity_type in EDITOR_ASSET_ENTITY_TYPES:
-        if file_type not in settings.ATTACHMENT_MIME_TYPES:
-            return False, "Invalid file type."
-        return True, ""
+        if file_type in settings.ATTACHMENT_MIME_TYPES:
+            return True, ""
+        # Page HTML iframe embeds only — not issue attachments.
+        if (
+            entity_type == FileAsset.EntityTypeContext.PAGE_DESCRIPTION.value
+            and file_type in HTML_DOCUMENT_MIME_TYPES
+        ):
+            return True, ""
+        return False, "Invalid file type."
     if file_type not in ALLOWED_LOGO_COVER_IMAGE_TYPES:
         return False, LOGO_COVER_TYPE_ERROR
     return True, ""

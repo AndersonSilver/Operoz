@@ -3,7 +3,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import { NETWORK_CHOICES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { IBoardProjectFieldLayout, IProject, TProjectStandardFieldKey } from "@operoz/types";
-import { CustomSelect, Input, TextArea } from "@operoz/ui";
+import { CustomSelect, TextArea } from "@operoz/ui";
 import { cn, projectIdentifierSanitizer } from "@operoz/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";
@@ -153,62 +153,12 @@ export function BoardProjectDynamicFields(props: Props) {
           </div>
         );
       case "project_lead":
-        return (
-          <div key={item.id} className={spanClass}>
-            <IssueFormField label={label} controlWidth="medium" required={required}>
-              <Controller
-                control={control}
-                name="project_lead"
-                rules={requiredRules}
-                render={({ field: { value, onChange }, fieldState }) => (
-                  <>
-                    <MemberDropdown
-                      value={(value as unknown as string | null) ?? null}
-                      onChange={onChange as (val: string | null) => void}
-                      placeholder={t("lead")}
-                      disabled={disabled}
-                      buttonVariant="border-with-text"
-                      buttonClassName={withProjectFormControlError(
-                        Boolean(fieldState.error),
-                        issueFormControlBaseClass,
-                        "w-full"
-                      )}
-                      buttonContainerClassName="w-full"
-                      multiple={false}
-                      showUserDetails
-                    />
-                    <ProjectFormFieldError message={fieldState.error?.message} />
-                  </>
-                )}
-              />
-            </IssueFormField>
-          </div>
-        );
       case "responsible_stakeholder":
-        return (
-          <div key={item.id} className={spanClass}>
-            <IssueFormField label={label} controlWidth="medium" required={required}>
-              <Controller
-                control={control}
-                name="responsible_stakeholder"
-                rules={requiredRules}
-                render={({ field: { value, onChange }, fieldState }) => (
-                  <>
-                    <Input
-                      value={value ?? ""}
-                      onChange={onChange}
-                      hasError={Boolean(fieldState.error)}
-                      className={cn(getIssueFormControlClass("medium"), "w-full")}
-                      placeholder={t("project.responsible_stakeholder_placeholder")}
-                      disabled={disabled}
-                    />
-                    <ProjectFormFieldError message={fieldState.error?.message} />
-                  </>
-                )}
-              />
-            </IssueFormField>
-          </div>
-        );
+        /**
+         * Substituído pela seção unificada de contatos do projeto (Equipe responsável / Stakeholders),
+         * sempre visível abaixo deste formulário — evita ter dois lugares para a mesma informação.
+         */
+        return null;
       case "default_assignee":
         return (
           <div key={item.id} className={spanClass}>

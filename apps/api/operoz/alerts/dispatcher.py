@@ -24,6 +24,7 @@ if TYPE_CHECKING:
 
 SUPPORT_ALERT_TYPES = frozenset(
     {
+        AlertRule.AlertType.INTAKE_CREATED,
         AlertRule.AlertType.SUPPORT_TICKET_CREATED,
         AlertRule.AlertType.SUPPORT_TICKET_ACCEPTED,
         AlertRule.AlertType.SUPPORT_SLA_APPROACHING,

@@ -11,6 +11,7 @@ import {
   ListTree,
   Shield,
   UserPlus,
+  Users,
   Workflow,
   Wrench,
 } from "lucide-react";
@@ -31,6 +32,7 @@ export const BOARD_SETTINGS_ICONS: Record<string, LucideIcon> = {
   issue_types_list: ListTree,
   project_schema: LayoutGrid,
   roles: Shield,
+  circles: Users,
   board_view: Columns3,
   client_360_health: HeartPulse,
   timeline: GanttChart,

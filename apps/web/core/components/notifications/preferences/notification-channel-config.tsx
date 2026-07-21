@@ -27,6 +27,7 @@ import "../alerts-settings.css";
 const DEFAULT_TYPES: TAlertType[] = [
   "issue_created",
   "due_date_approaching",
+  "intake_created",
   "support_ticket_created",
   "support_sla_approaching",
   "support_sla_breached",
@@ -45,6 +46,7 @@ const ALERT_TYPE_ICONS: Record<TAlertType, LucideIcon> = {
   missing_due_date: Calendar,
   state_change: Bell,
   assignee_change: Bell,
+  intake_created: Inbox,
   support_ticket_created: Ticket,
   support_ticket_accepted: CheckCircle,
   support_sla_approaching: Timer,

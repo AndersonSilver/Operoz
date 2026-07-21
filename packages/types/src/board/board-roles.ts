@@ -55,3 +55,39 @@ export type TBoardMemberAssignData = {
   user_id: string;
   role_ids: string[];
 };
+
+export interface IBoardCircle {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  role_id: string | null;
+  role_name: string | null;
+  member_count: number;
+  sort_order: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export type TBoardCircleFormData = {
+  name: string;
+  description?: string;
+  color?: string;
+  role_id?: string | null;
+};
+
+export interface IBoardCircleMember {
+  id: string;
+  user_id: string;
+  member: IUserLite;
+  email: string;
+  created_at?: string;
+}
+
+export interface IBoardCircleLookup {
+  id: string;
+  name: string;
+  color: string;
+  member_count: number;
+  board_slug: string;
+}

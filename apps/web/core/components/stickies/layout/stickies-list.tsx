@@ -188,14 +188,13 @@ export function StickiesLayout(props: TStickiesLayout) {
     return () => resizeObserver.disconnect();
   }, []);
 
+  const IDEAL_STICKY_WIDTH = 300;
+
   const getColumnCount = (width: number | null): number => {
     if (width === null) return 4;
-
     if (width < 640) return 2; // sm
-    if (width < 850) return 3; // md
-    if (width < 1024) return 4; // lg
-    if (width < 1280) return 5; // xl
-    return 6; // 2xl and above
+
+    return Math.max(2, Math.round(width / IDEAL_STICKY_WIDTH));
   };
   const columnCount = getColumnCount(containerWidth);
 

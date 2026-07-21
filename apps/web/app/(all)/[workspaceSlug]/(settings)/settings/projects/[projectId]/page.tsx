@@ -27,9 +27,9 @@ function ProjectSettingsPage({ params }: Route.ComponentProps) {
   const pageTitle = projectDetails?.name ? `${projectDetails.name} - General Settings` : undefined;
 
   return (
-    <SettingsContentWrapper header={<GeneralProjectSettingsHeader />}>
+    <SettingsContentWrapper header={<GeneralProjectSettingsHeader />} hugging>
       <PageHead title={pageTitle} />
-      <div className={`w-full ${isAdmin ? "" : "opacity-60"}`}>
+      <div className={`mx-auto w-full max-w-[75rem] ${isAdmin ? "" : "opacity-60"}`}>
         {projectDetails ? (
           <ProjectDetailsForm
             project={projectDetails}

@@ -1,8 +1,11 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
 import type {
+  IBoardCircle,
+  IBoardCircleMember,
   IBoardMember,
   IBoardPermissionCatalog,
   IBoardRole,
+  TBoardCircleFormData,
   TBoardMemberAssignData,
   TBoardRoleFormData,
   TBoardRolePermissionsMap,
@@ -13,6 +16,8 @@ export interface IBoardAccessStore {
   rolesByKey: Record<string, IBoardRole[]>;
   membersByKey: Record<string, IBoardMember[]>;
   catalogByKey: Record<string, IBoardPermissionCatalog>;
+  circlesByKey: Record<string, IBoardCircle[]>;
+  circleMembersByKey: Record<string, IBoardCircleMember[]>;
   fetchBoardRoles: (workspaceSlug: string, boardSlug: string) => Promise<IBoardRole[]>;
   fetchPermissionCatalog: (workspaceSlug: string, boardSlug: string) => Promise<IBoardPermissionCatalog>;
   createBoardRole: (workspaceSlug: string, boardSlug: string, data: TBoardRoleFormData) => Promise<IBoardRole>;
@@ -36,14 +41,46 @@ export interface IBoardAccessStore {
   getBoardRoles: (workspaceSlug: string, boardSlug: string) => IBoardRole[];
   getBoardMembers: (workspaceSlug: string, boardSlug: string) => IBoardMember[];
   getPermissionCatalog: (workspaceSlug: string, boardSlug: string) => IBoardPermissionCatalog | undefined;
+  fetchBoardCircles: (workspaceSlug: string, boardSlug: string) => Promise<IBoardCircle[]>;
+  createBoardCircle: (workspaceSlug: string, boardSlug: string, data: TBoardCircleFormData) => Promise<IBoardCircle>;
+  updateBoardCircle: (
+    workspaceSlug: string,
+    boardSlug: string,
+    circleId: string,
+    data: Partial<TBoardCircleFormData>
+  ) => Promise<IBoardCircle>;
+  deleteBoardCircle: (workspaceSlug: string, boardSlug: string, circleId: string) => Promise<void>;
+  fetchBoardCircleMembers: (
+    workspaceSlug: string,
+    boardSlug: string,
+    circleId: string
+  ) => Promise<IBoardCircleMember[]>;
+  addBoardCircleMembers: (
+    workspaceSlug: string,
+    boardSlug: string,
+    circleId: string,
+    userIds: string[]
+  ) => Promise<IBoardCircleMember[]>;
+  removeBoardCircleMember: (
+    workspaceSlug: string,
+    boardSlug: string,
+    circleId: string,
+    userId: string
+  ) => Promise<void>;
+  getBoardCircles: (workspaceSlug: string, boardSlug: string) => IBoardCircle[];
+  getBoardCircleMembers: (workspaceSlug: string, boardSlug: string, circleId: string) => IBoardCircleMember[];
 }
 
 const boardKey = (workspaceSlug: string, boardSlug: string) => `${workspaceSlug}::${boardSlug}`;
+const circleKey = (workspaceSlug: string, boardSlug: string, circleId: string) =>
+  `${workspaceSlug}::${boardSlug}::${circleId}`;
 
 export class BoardAccessStore implements IBoardAccessStore {
   rolesByKey: Record<string, IBoardRole[]> = {};
   membersByKey: Record<string, IBoardMember[]> = {};
   catalogByKey: Record<string, IBoardPermissionCatalog> = {};
+  circlesByKey: Record<string, IBoardCircle[]> = {};
+  circleMembersByKey: Record<string, IBoardCircleMember[]> = {};
   private service = new BoardAccessService();
 
   constructor() {
@@ -51,6 +88,8 @@ export class BoardAccessStore implements IBoardAccessStore {
       rolesByKey: observable,
       membersByKey: observable,
       catalogByKey: observable,
+      circlesByKey: observable,
+      circleMembersByKey: observable,
       fetchBoardRoles: action,
       fetchPermissionCatalog: action,
       createBoardRole: action,
@@ -61,6 +100,13 @@ export class BoardAccessStore implements IBoardAccessStore {
       assignBoardMember: action,
       updateBoardMemberRoles: action,
       removeBoardMember: action,
+      fetchBoardCircles: action,
+      createBoardCircle: action,
+      updateBoardCircle: action,
+      deleteBoardCircle: action,
+      fetchBoardCircleMembers: action,
+      addBoardCircleMembers: action,
+      removeBoardCircleMember: action,
     });
   }
 
@@ -72,6 +118,12 @@ export class BoardAccessStore implements IBoardAccessStore {
 
   getPermissionCatalog = (workspaceSlug: string, boardSlug: string) =>
     this.catalogByKey[boardKey(workspaceSlug, boardSlug)];
+
+  getBoardCircles = (workspaceSlug: string, boardSlug: string) =>
+    this.circlesByKey[boardKey(workspaceSlug, boardSlug)] ?? [];
+
+  getBoardCircleMembers = (workspaceSlug: string, boardSlug: string, circleId: string) =>
+    this.circleMembersByKey[circleKey(workspaceSlug, boardSlug, circleId)] ?? [];
 
   private upsertMember = (key: string, member: IBoardMember) => {
     const list = [...(this.membersByKey[key] ?? [])];
@@ -168,6 +220,80 @@ export class BoardAccessStore implements IBoardAccessStore {
     runInAction(() => {
       const key = boardKey(workspaceSlug, boardSlug);
       this.membersByKey[key] = (this.membersByKey[key] ?? []).filter((m) => m.user_id !== userId);
+    });
+  };
+
+  fetchBoardCircles = async (workspaceSlug: string, boardSlug: string) => {
+    const circles = await this.service.getBoardCircles(workspaceSlug, boardSlug);
+    runInAction(() => {
+      this.circlesByKey[boardKey(workspaceSlug, boardSlug)] = circles;
+    });
+    return circles;
+  };
+
+  createBoardCircle = async (workspaceSlug: string, boardSlug: string, data: TBoardCircleFormData) => {
+    const created = await this.service.createBoardCircle(workspaceSlug, boardSlug, data);
+    runInAction(() => {
+      const key = boardKey(workspaceSlug, boardSlug);
+      this.circlesByKey[key] = [...(this.circlesByKey[key] ?? []), created].sort(
+        (a, b) => a.sort_order - b.sort_order
+      );
+    });
+    return created;
+  };
+
+  updateBoardCircle = async (
+    workspaceSlug: string,
+    boardSlug: string,
+    circleId: string,
+    data: Partial<TBoardCircleFormData>
+  ) => {
+    const updated = await this.service.updateBoardCircle(workspaceSlug, boardSlug, circleId, data);
+    runInAction(() => {
+      const key = boardKey(workspaceSlug, boardSlug);
+      this.circlesByKey[key] = (this.circlesByKey[key] ?? []).map((item) => (item.id === circleId ? updated : item));
+    });
+    return updated;
+  };
+
+  deleteBoardCircle = async (workspaceSlug: string, boardSlug: string, circleId: string) => {
+    await this.service.deleteBoardCircle(workspaceSlug, boardSlug, circleId);
+    runInAction(() => {
+      const key = boardKey(workspaceSlug, boardSlug);
+      this.circlesByKey[key] = (this.circlesByKey[key] ?? []).filter((item) => item.id !== circleId);
+      delete this.circleMembersByKey[circleKey(workspaceSlug, boardSlug, circleId)];
+    });
+  };
+
+  fetchBoardCircleMembers = async (workspaceSlug: string, boardSlug: string, circleId: string) => {
+    const members = await this.service.getBoardCircleMembers(workspaceSlug, boardSlug, circleId);
+    runInAction(() => {
+      this.circleMembersByKey[circleKey(workspaceSlug, boardSlug, circleId)] = members;
+    });
+    return members;
+  };
+
+  addBoardCircleMembers = async (workspaceSlug: string, boardSlug: string, circleId: string, userIds: string[]) => {
+    const members = await this.service.addBoardCircleMembers(workspaceSlug, boardSlug, circleId, userIds);
+    runInAction(() => {
+      this.circleMembersByKey[circleKey(workspaceSlug, boardSlug, circleId)] = members;
+      const key = boardKey(workspaceSlug, boardSlug);
+      this.circlesByKey[key] = (this.circlesByKey[key] ?? []).map((item) =>
+        item.id === circleId ? { ...item, member_count: members.length } : item
+      );
+    });
+    return members;
+  };
+
+  removeBoardCircleMember = async (workspaceSlug: string, boardSlug: string, circleId: string, userId: string) => {
+    await this.service.removeBoardCircleMember(workspaceSlug, boardSlug, circleId, userId);
+    runInAction(() => {
+      const mKey = circleKey(workspaceSlug, boardSlug, circleId);
+      this.circleMembersByKey[mKey] = (this.circleMembersByKey[mKey] ?? []).filter((m) => m.user_id !== userId);
+      const key = boardKey(workspaceSlug, boardSlug);
+      this.circlesByKey[key] = (this.circlesByKey[key] ?? []).map((item) =>
+        item.id === circleId ? { ...item, member_count: Math.max(0, item.member_count - 1) } : item
+      );
     });
   };
 }

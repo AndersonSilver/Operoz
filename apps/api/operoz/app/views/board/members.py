@@ -13,7 +13,7 @@ from operoz.app.serializers.board_role import (
 )
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import Board, BoardMemberRole, BoardRole, User, WorkspaceMember
-from operoz.utils.board_roles import seed_board_roles
+from operoz.utils.board_roles import assign_board_role, seed_board_roles
 
 
 class _BoardMemberRow:
@@ -71,22 +71,7 @@ class BoardMemberEndpoint(BaseAPIView):
             return Response({"error": "INVALID_ROLE"}, status=status.HTTP_400_BAD_REQUEST)
 
         for role in valid_roles:
-            existing = (
-                BoardMemberRole.objects.filter(board=board, user_id=user_id, role=role).order_by("-created_at").first()
-            )
-            if existing and existing.deleted_at is None:
-                continue
-            if existing:
-                existing.deleted_at = None
-                existing.save(update_fields=["deleted_at", "updated_at"])
-            else:
-                BoardMemberRole.objects.create(
-                    board=board,
-                    workspace_id=board.workspace_id,
-                    user_id=user_id,
-                    role=role,
-                    created_by=request.user,
-                )
+            assign_board_role(board, user_id, role, created_by=request.user)
 
         rows = self._member_rows(board)
         match = next((r for r in rows if str(r.user_id) == str(user_id)), None)

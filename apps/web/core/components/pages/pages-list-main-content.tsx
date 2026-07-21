@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { FileText } from "lucide-react";
 import { observer } from "mobx-react";
 // plane imports
 import { useParams, useRouter } from "next/navigation";
@@ -14,6 +15,12 @@ import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 // plane web hooks
 import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+
+const pagesEmptyStateIcon = (
+  <div className="flex size-14 items-center justify-center rounded-full bg-accent-subtle">
+    <FileText className="size-6 text-accent-primary" strokeWidth={1.5} />
+  </div>
+);
 
 type Props = {
   children: React.ReactNode;
@@ -73,7 +80,8 @@ export const PagesListMainContent = observer(function PagesListMainContent(props
     if (!isAnyPageAvailable) {
       return (
         <EmptyStateDetailed
-          assetKey="page"
+          asset={pagesEmptyStateIcon}
+          align="center"
           title={t("project_empty_state.pages.title")}
           description={t("project_empty_state.pages.description")}
           actions={[
@@ -92,7 +100,8 @@ export const PagesListMainContent = observer(function PagesListMainContent(props
     if (pageType === "public")
       return (
         <EmptyStateDetailed
-          assetKey="page"
+          asset={pagesEmptyStateIcon}
+          align="center"
           title={t("project_empty_state.pages.title")}
           description={t("project_empty_state.pages.description")}
           actions={[
@@ -110,7 +119,8 @@ export const PagesListMainContent = observer(function PagesListMainContent(props
     if (pageType === "private")
       return (
         <EmptyStateDetailed
-          assetKey="page"
+          asset={pagesEmptyStateIcon}
+          align="center"
           title={t("project_empty_state.pages.title")}
           description={t("project_empty_state.pages.description")}
           actions={[
@@ -128,7 +138,8 @@ export const PagesListMainContent = observer(function PagesListMainContent(props
     if (pageType === "archived")
       return (
         <EmptyStateDetailed
-          assetKey="page"
+          asset={pagesEmptyStateIcon}
+          align="center"
           title={t("project_empty_state.archive_pages.title")}
           description={t("project_empty_state.archive_pages.description")}
         />
@@ -138,6 +149,8 @@ export const PagesListMainContent = observer(function PagesListMainContent(props
   if (filteredPageIds?.length === 0)
     return (
       <EmptyStateDetailed
+        asset={pagesEmptyStateIcon}
+        align="center"
         assetKey="search"
         title={t("common_empty_state.search.title")}
         description={t("common_empty_state.search.description")}

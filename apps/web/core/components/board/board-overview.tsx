@@ -89,10 +89,17 @@ export function BoardOverview(props: Props) {
           </section>
 
           <section className="shadow-sm overflow-hidden rounded-lg border border-subtle bg-layer-1">
-            <button
-              type="button"
+            <div
+              role="button"
+              tabIndex={0}
               className="flex w-full items-center justify-between gap-3 px-4 py-3 text-left hover:bg-layer-transparent-hover"
               onClick={() => setProjectsExpanded((v) => !v)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  setProjectsExpanded((v) => !v);
+                }
+              }}
               aria-expanded={projectsExpanded}
             >
               <div>
@@ -121,7 +128,7 @@ export function BoardOverview(props: Props) {
                   <ChevronRight className="size-4 text-tertiary" />
                 )}
               </div>
-            </button>
+            </div>
 
             {projectsExpanded ? (
               <>

@@ -151,6 +151,7 @@ class ProjectListSerializer(DynamicBaseSerializer):
     members = serializers.SerializerMethodField()
     cover_image_url = serializers.CharField(read_only=True)
     inbox_view = serializers.BooleanField(read_only=True, source="intake_view")
+    intake_count = serializers.IntegerField(read_only=True, required=False)
     support_count = serializers.IntegerField(read_only=True, required=False)
     next_work_item_sequence = serializers.SerializerMethodField()
 

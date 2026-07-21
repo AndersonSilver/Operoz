@@ -55,6 +55,14 @@ DEFAULT_RULES: list[dict] = [
         "config": {"grace_period_days": 3, "notify_assignees": True, "notify_creator": True},
     },
     {
+        "alert_type": AlertRule.AlertType.INTAKE_CREATED,
+        "name": "Pedido de intake criado",
+        "channels": ["email", "in_app", "discord_dm"],
+        "config": {
+            **SUPPORT_RECIPIENT_CONFIG,
+        },
+    },
+    {
         "alert_type": AlertRule.AlertType.SUPPORT_TICKET_CREATED,
         "name": "Ticket de sustentação criado",
         "channels": ["email", "in_app"],

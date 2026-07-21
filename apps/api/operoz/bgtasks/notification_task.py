@@ -6,6 +6,7 @@ from uuid import UUID
 
 # Module imports
 from operoz.db.models import (
+    BoardCircleMember,
     IssueMention,
     IssueSubscriber,
     Project,
@@ -112,20 +113,32 @@ def extract_mentions_as_subscribers(project_id, issue_id, mentions):
     return bulk_mention_subscribers
 
 
+# Expande uma menção de círculo (board_circle) na lista de IDs de usuário dos seus membros.
+def _expand_circle_mention(circle_id):
+    return list(
+        BoardCircleMember.objects.filter(circle_id=circle_id, deleted_at__isnull=True).values_list(
+            "user_id", flat=True
+        )
+    )
+
+
+def _extract_mention_ids_from_soup(soup):
+    mentions = [tag["entity_identifier"] for tag in soup.find_all("mention-component", attrs={"entity_name": "user_mention"})]
+    circle_tags = soup.find_all("mention-component", attrs={"entity_name": "board_circle"})
+    for circle_tag in circle_tags:
+        mentions.extend(_expand_circle_mention(circle_tag["entity_identifier"]))
+    return list(set(str(mention_id) for mention_id in mentions))
+
+
 # Parse Issue Description & extracts mentions
 def extract_mentions(issue_instance):
     try:
         # issue_instance has to be a dictionary passed, containing the description_html and other set of activity data. # noqa: E501
-        mentions = []
         # Convert string to dictionary
         data = json.loads(issue_instance)
         html = data.get("description_html")
         soup = BeautifulSoup(html, "html.parser")
-        mention_tags = soup.find_all("mention-component", attrs={"entity_name": "user_mention"})
-
-        mentions = [mention_tag["entity_identifier"] for mention_tag in mention_tags]
-
-        return list(set(mentions))
+        return _extract_mention_ids_from_soup(soup)
     except Exception:
         return []
 
@@ -133,12 +146,8 @@ def extract_mentions(issue_instance):
 # =========== Comment Parsing and notification Functions ======================
 def extract_comment_mentions(comment_value):
     try:
-        mentions = []
         soup = BeautifulSoup(comment_value, "html.parser")
-        mentions_tags = soup.find_all("mention-component", attrs={"entity_name": "user_mention"})
-        for mention_tag in mentions_tags:
-            mentions.append(mention_tag["entity_identifier"])
-        return list(set(mentions))
+        return _extract_mention_ids_from_soup(soup)
     except Exception:
         return []
 

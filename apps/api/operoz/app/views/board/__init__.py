@@ -14,6 +14,13 @@ from .issue_types import BoardIssueTypeDetailEndpoint, BoardIssueTypeEndpoint
 from .module_stages import BoardModuleStageDetailEndpoint, BoardModuleStageEndpoint
 from .issues import BoardIssuesViewSet
 from .members import BoardMemberDetailEndpoint, BoardMemberEndpoint
+from .circles import (
+    BoardCircleDetailEndpoint,
+    BoardCircleEndpoint,
+    BoardCircleMemberDetailEndpoint,
+    BoardCircleMemberEndpoint,
+    WorkspaceCircleLookupEndpoint,
+)
 from .client_360 import BoardClient360ViewSet
 from .client_360_health_settings import BoardClient360HealthSettingsEndpoint
 from .meta import BoardMetaViewSet

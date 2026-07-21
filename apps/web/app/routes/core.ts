@@ -490,6 +490,10 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/funcoes/page.tsx"
             ),
             route(
+              ":workspaceSlug/settings/boards/:boardSlug/circulos",
+              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/circulos/page.tsx"
+            ),
+            route(
               ":workspaceSlug/settings/boards/:boardSlug/quadro",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/quadro/page.tsx"
             ),

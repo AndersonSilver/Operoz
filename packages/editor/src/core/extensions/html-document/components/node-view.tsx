@@ -25,7 +25,7 @@ import { hasImageDuplicationFailed } from "@/extensions/custom-image/utils";
 import { useUploader } from "@/hooks/use-file-upload";
 // types
 import type { HtmlDocumentEmbedExtensionOptions, THtmlDocumentFrameLayout } from "../types";
-import { getHtmlDocumentFileMap, isLikelyHtmlFile, isSafeCssMinHeight, parseFrameLayoutAttr } from "../utils";
+import { getHtmlDocumentFileMap, isLikelyHtmlFile, isSafeCssMinHeight, normalizeHtmlUploadFile, parseFrameLayoutAttr } from "../utils";
 
 const HTML_DOCUMENT_FRAME_LAYOUT_OPTIONS: Array<{ value: THtmlDocumentFrameLayout; label: string }> = [
   { value: "standard", label: "Padrão" },
@@ -304,7 +304,7 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
     if (!meta) return;
     if (meta.event === "drop" && "file" in meta) {
       hasTriedUploadingOnMountRef.current = true;
-      void uploadFile(meta.file);
+      void uploadFile(normalizeHtmlUploadFile(meta.file));
     } else if (meta.event === "insert" && fileInputRef.current && !hasTriggeredFilePickerRef.current) {
       if (meta.hasOpenedFileInputOnce) return;
       if (!isTouchDevice) {
@@ -322,7 +322,7 @@ export function HtmlDocumentNodeView(props: NodeViewProps) {
       window.alert("Tipo de arquivo inválido. Escolha um arquivo HTML (.html).");
       return;
     }
-    void uploadFile(file);
+    void uploadFile(normalizeHtmlUploadFile(file));
   };
 
   const openInNewTab = () => {

@@ -386,6 +386,12 @@ class IntakeIssueViewSet(BaseViewSet):
                     alert_type="support_ticket_created",
                     actor_id=str(request.user.id),
                 )
+            elif ticket_kind == IntakeTicketKind.INTAKE:
+                schedule_support_alert(
+                    intake_issue_id=str(intake_issue.id),
+                    alert_type="intake_created",
+                    actor_id=str(request.user.id),
+                )
             serializer = IntakeIssueDetailSerializer(intake_issue)
             return Response(serializer.data, status=status.HTTP_200_OK)
         else:

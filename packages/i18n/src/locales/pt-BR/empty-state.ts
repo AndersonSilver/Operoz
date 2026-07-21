@@ -87,7 +87,7 @@ export default {
       cta_primary: "Adicionar item de trabalho",
     },
     pages: {
-      title: "Documente tudo — de notas a PRDs",
+      title: "Crie sua primeira documentação",
       description:
         "A documentação permite capturar e organizar informações em um só lugar. Escreva notas de reuniões, docs de projeto e PRDs, incorpore itens de trabalho e estruture com componentes prontos para uso.",
       cta_primary: "Criar primeira documentação",
@@ -103,7 +103,7 @@ export default {
       cta_primary: "Criar chamado de sustentação",
     },
     intake_main: {
-      title: "Selecione um item de intake para ver os detalhes",
+      title: "Selecione um item de solicitação para ver os detalhes",
     },
     support_main: {
       title: "Selecione um chamado de sustentação para ver os detalhes",

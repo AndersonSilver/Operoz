@@ -91,6 +91,7 @@ export const BOARD_SETTINGS_NAV: TBoardSettingsNavItem[] = [
     ],
   },
   { key: "roles", href: "/funcoes", i18n_label: "boards.settings.nav.roles" },
+  { key: "circles", href: "/circulos", i18n_label: "boards.settings.nav.circles" },
   { key: "board_view", href: "/quadro", i18n_label: "boards.settings.nav.board_view" },
   { key: "client_360_health", href: "/visao-360/saude", i18n_label: "boards.settings.nav.client_360_health" },
   { key: "timeline", href: "/cronograma", i18n_label: "boards.settings.nav.timeline" },

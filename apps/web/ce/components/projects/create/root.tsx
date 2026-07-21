@@ -101,7 +101,7 @@ export const CreateProjectForm = observer(function CreateProjectForm(props: TCre
         layout: formLayoutData.layout,
         formData,
         customFieldValues,
-        skipSystemKeys: ["name", "identifier"],
+        skipSystemKeys: ["name", "identifier", "project_lead", "responsible_stakeholder"],
         requiredMessage: t("field_is_required"),
       });
       if (!validation.ok) {

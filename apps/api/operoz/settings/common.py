@@ -609,8 +609,9 @@ ATTACHMENT_MIME_TYPES = [
     "font/woff2",
     # Other
     "text/css",
-    # text/javascript, text/html and application/xhtml+xml are intentionally excluded:
-    # browsers execute them directly, making them XSS vectors via upload.
+    # text/javascript is excluded (XSS if served as attachment).
+    # text/html and application/xhtml+xml are allowed only for PAGE_DESCRIPTION
+    # assets (html-document-embed iframe) via validate_scoped_asset_upload — not here.
     "application/json",
     "text/xml",
     "text/csv",

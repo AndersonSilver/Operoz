@@ -25,6 +25,7 @@ export type TAlertType =
   | "missing_due_date"
   | "state_change"
   | "assignee_change"
+  | "intake_created"
   | "support_ticket_created"
   | "support_ticket_accepted"
   | "support_sla_approaching"

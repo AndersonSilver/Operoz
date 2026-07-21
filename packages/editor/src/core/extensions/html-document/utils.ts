@@ -32,3 +32,12 @@ export const isLikelyHtmlFile = (file: File): boolean =>
   file.type === "text/html" ||
   file.type === "application/xhtml+xml" ||
   /\.html?$/i.test(file.name);
+
+/** Some browsers send empty MIME for .html — API requires text/html. */
+export const normalizeHtmlUploadFile = (file: File): File => {
+  if (file.type === "text/html" || file.type === "application/xhtml+xml") return file;
+  if (/\.html?$/i.test(file.name)) {
+    return new File([file], file.name, { type: "text/html", lastModified: file.lastModified });
+  }
+  return file;
+};

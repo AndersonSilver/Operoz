@@ -228,3 +228,23 @@ def user_has_board_permission(board_id, user_id, permission_key: str) -> bool:
 
 def user_can_administer_board(board_id, user_id) -> bool:
     return user_has_board_permission(board_id, user_id, "board.administer")
+
+
+def assign_board_role(board: Board, user_id, role: BoardRole, created_by=None) -> None:
+    """Concede (idempotente) uma função de board a um utilizador, restaurando a atribuição se estava soft-deleted."""
+    existing = (
+        BoardMemberRole.objects.filter(board=board, user_id=user_id, role=role).order_by("-created_at").first()
+    )
+    if existing and existing.deleted_at is None:
+        return
+    if existing:
+        existing.deleted_at = None
+        existing.save(update_fields=["deleted_at", "updated_at"])
+    else:
+        BoardMemberRole.objects.create(
+            board=board,
+            workspace_id=board.workspace_id,
+            user_id=user_id,
+            role=role,
+            created_by=created_by,
+        )

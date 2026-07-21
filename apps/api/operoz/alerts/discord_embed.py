@@ -18,6 +18,7 @@ ALERT_TITLE_LABELS: dict[str, str] = {
     "missing_due_date": "Sem data de vencimento",
     "state_change": "Estado alterado",
     "assignee_change": "Responsável alterado",
+    "intake_created": "Novo pedido de intake",
     "support_ticket_created": "Novo chamado de suporte",
     "support_ticket_accepted": "Chamado aceito",
     "support_sla_approaching": "SLA a expirar",
@@ -32,6 +33,7 @@ CONTENT_INTROS: dict[str, str] = {
     "missing_due_date": "Um card está sem data de vencimento.",
     "state_change": "O estado de um card foi alterado.",
     "assignee_change": "A responsabilidade de um card foi atualizada.",
+    "intake_created": "",
     "support_ticket_created": ("Novo chamado de suporte criado, será validado junto com as demandas do time."),
     "support_ticket_accepted": "Chamado de suporte aceito e em tratamento.",
     "support_sla_approaching": "O SLA de um chamado de suporte está próximo do limite.",
@@ -65,6 +67,8 @@ def build_discord_alert_message(context: AlertContext) -> tuple[str, dict]:
 
 
 def build_discord_alert_embed(context: AlertContext) -> dict:
+    if context.alert_type == "intake_created" and context.subject.intake_issue is not None:
+        return _build_intake_embed(context)
     if context.alert_type in SUPPORT_ALERT_TYPES and context.subject.intake_issue is not None:
         return _build_support_embed(context)
 
@@ -88,6 +92,41 @@ def _build_issue_embed(context: AlertContext) -> dict:
         footer_extra=_footer_workspace(context),
     )
     embed["author"] = {"name": "Operoz OS"}
+    return embed
+
+
+def _build_intake_embed(context: AlertContext) -> dict:
+    intake = context.subject.intake_issue
+    issue = context.subject.issue
+    identifier = _issue_identifier(issue)
+    priority = PRIORITY_LABELS.get(str(issue.priority or "none"), "Nenhuma")
+    title = f"[{identifier}] {issue.name}"
+    if priority != "Nenhuma":
+        title = f"{title} · {priority}"
+
+    reporter = None
+    if intake.created_by_id and getattr(intake, "created_by", None):
+        reporter = user_display_label(intake.created_by)
+    elif intake.source_email:
+        reporter = intake.source_email.strip()
+
+    rows: list[tuple[str, str]] = [
+        ("Projeto", _project_name(issue) or "—"),
+        ("Prioridade", priority),
+        ("Origem", str(intake.source or "IN_APP")),
+    ]
+    if reporter:
+        rows.append(("Solicitante", reporter))
+
+    embed = build_branded_embed(
+        subtitle="Intake",
+        title=title[:256],
+        description="\n".join(f"**{label}:** {value}" for label, value in rows),
+        color=OPEROZ_EMBED_COLOR,
+        url=context.issue_url,
+        footer_extra=_footer_workspace(context),
+    )
+    embed["author"] = {"name": (reporter or "Operoz OS")[:256]}
     return embed
 
 

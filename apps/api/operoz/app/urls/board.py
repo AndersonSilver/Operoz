@@ -52,6 +52,11 @@ from operoz.app.views import (
     BoardIssuesViewSet,
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,
+    BoardCircleDetailEndpoint,
+    BoardCircleEndpoint,
+    BoardCircleMemberDetailEndpoint,
+    BoardCircleMemberEndpoint,
+    WorkspaceCircleLookupEndpoint,
     BoardClient360ViewSet,
     BoardClient360HealthSettingsEndpoint,
     BoardMetaViewSet,
@@ -246,6 +251,31 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/members/<uuid:user_id>/",
         BoardMemberDetailEndpoint.as_view(),
         name="workspace-board-member",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/circles/",
+        BoardCircleEndpoint.as_view(),
+        name="workspace-board-circles",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/circles/<uuid:pk>/",
+        BoardCircleDetailEndpoint.as_view(),
+        name="workspace-board-circle",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/circles/<uuid:circle_id>/members/",
+        BoardCircleMemberEndpoint.as_view(),
+        name="workspace-board-circle-members",
+    ),
+    path(
+        "workspaces/<str:slug>/boards/<str:board_slug>/circles/<uuid:circle_id>/members/<uuid:user_id>/",
+        BoardCircleMemberDetailEndpoint.as_view(),
+        name="workspace-board-circle-member",
+    ),
+    path(
+        "workspaces/<str:slug>/circles/<uuid:circle_id>/lookup/",
+        WorkspaceCircleLookupEndpoint.as_view(),
+        name="workspace-circle-lookup",
     ),
     path(
         "workspaces/<str:slug>/boards/<str:board_slug>/status-reports/",

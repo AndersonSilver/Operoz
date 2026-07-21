@@ -569,6 +569,14 @@ def create_intake_submission(
             alert_type="support_ticket_created",
             actor_id=str(actor_id) if actor_id else None,
         )
+    elif ticket_kind == IntakeTicketKind.INTAKE:
+        from operoz.alerts.enqueue import schedule_support_alert
+
+        schedule_support_alert(
+            intake_issue_id=str(intake_issue.id),
+            alert_type="intake_created",
+            actor_id=str(actor_id) if actor_id else None,
+        )
 
     return intake_issue
 

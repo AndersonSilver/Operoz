@@ -65,6 +65,25 @@ export interface IProject extends IPartialProject {
   target_date?: string;
 }
 
+export type TProjectContactCategory = "responsible" | "stakeholder";
+
+export interface IProjectContact {
+  id: string;
+  project: string;
+  workspace: string;
+  category: TProjectContactCategory;
+  full_name: string;
+  email?: string;
+  role?: string;
+  whatsapp?: string;
+  is_lead?: boolean;
+  sort_order?: number;
+  created_at?: string;
+  updated_at?: string;
+}
+
+export type TProjectContactFormData = Pick<IProjectContact, "full_name" | "email" | "role" | "whatsapp" | "is_lead">;
+
 export type TProjectAnalyticsCountParams = {
   project_ids?: string;
   fields?: string;

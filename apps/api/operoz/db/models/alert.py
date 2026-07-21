@@ -18,6 +18,7 @@ class AlertRule(BaseModel):
         MISSING_DUE_DATE = "missing_due_date", "Missing Due Date"
         STATE_CHANGE = "state_change", "State Change"
         ASSIGNEE_CHANGE = "assignee_change", "Assignee Change"
+        INTAKE_CREATED = "intake_created", "Intake Created"
         SUPPORT_TICKET_CREATED = "support_ticket_created", "Support Ticket Created"
         SUPPORT_TICKET_ACCEPTED = "support_ticket_accepted", "Support Ticket Accepted"
         SUPPORT_SLA_APPROACHING = "support_sla_approaching", "Support SLA Approaching"

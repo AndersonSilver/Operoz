@@ -29,6 +29,7 @@ import {
   ProjectBoardLayoutSection,
   type TProjectLayoutHandlers,
 } from "@/components/project/project-board-layout-section";
+import { ProjectContactsSection } from "@/components/project/project-contacts-section";
 import { validateProjectLayoutRequired } from "@/components/project/project-layout-validation";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useBoard } from "@/hooks/store/use-board";
@@ -163,7 +164,7 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
         layout,
         formData,
         customFieldValues: layoutHandlersRef.current?.getCustomFieldValues() ?? {},
-        skipSystemKeys: ["name", "identifier"],
+        skipSystemKeys: ["name", "identifier", "project_lead", "responsible_stakeholder"],
         requiredMessage: t("field_is_required"),
       });
       if (!validation.ok) {
@@ -339,25 +340,6 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
                 />
                 <span className="text-11 text-danger-primary">{errors?.name?.message}</span>
               </div>
-              <div className="flex flex-col gap-1">
-                <h4 className="text-13">{t("project.responsible_stakeholder")}</h4>
-                <Controller
-                  control={control}
-                  name="responsible_stakeholder"
-                  render={({ field: { value, onChange } }) => (
-                    <Input
-                      id="responsible_stakeholder"
-                      name="responsible_stakeholder"
-                      type="text"
-                      value={value ?? ""}
-                      onChange={onChange}
-                      className="rounded-md !p-3 font-medium"
-                      placeholder={t("project.responsible_stakeholder_placeholder")}
-                      disabled={!isAdmin}
-                    />
-                  )}
-                />
-              </div>
             </>
           )}
           {ENABLE_WORKSPACE_BOARDS && isAdmin && <BoardSelectField required={Boolean(project.board_id)} />}
@@ -372,6 +354,7 @@ export function ProjectDetailsForm(props: IProjectDetailsForm) {
               }}
             />
           )}
+          <ProjectContactsSection workspaceSlug={workspaceSlug} project={project} isAdmin={isAdmin} />
           {!useLayoutForm && (
             <>
               <div className="flex flex-col gap-1">

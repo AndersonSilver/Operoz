@@ -31,6 +31,7 @@ from .board_support_sla_policy import BoardSupportSlaPolicy
 from .board_module_stage import BoardModuleStage
 from .board_status_report import BoardStatusReport, BoardStatusReportModule
 from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
+from .board_circle import BoardCircle, BoardCircleMember
 from .cycle import Cycle, CycleIssue, CycleUserProperties
 from .client_360_health_snapshot import Client360HealthSnapshot
 from .client_360_narrative import Client360Narrative
@@ -106,6 +107,7 @@ from .project import (
     ProjectPublicMember,
     ProjectUserProperty,
 )
+from .project_contact import ProjectContact, ProjectContactCategory
 from .session import Session
 from .social_connection import SocialLoginConnection
 from .state import State, StateGroup, DEFAULT_STATES

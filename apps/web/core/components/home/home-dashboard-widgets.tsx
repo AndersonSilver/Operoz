@@ -102,8 +102,10 @@ export const HOME_WIDGETS_LIST: {
 function renderWidgetGrid(widgetNodes: ReactNode[], gridKey: string) {
   if (widgetNodes.length === 0) return null;
 
+  const colsClass = widgetNodes.length >= 3 ? "md:grid-cols-3" : widgetNodes.length === 2 ? "md:grid-cols-2" : "md:grid-cols-1";
+
   return (
-    <div key={gridKey} className="grid grid-cols-1 gap-4 py-4 md:grid-cols-2">
+    <div key={gridKey} className={`grid grid-cols-1 gap-4 py-4 ${colsClass}`}>
       {widgetNodes}
     </div>
   );

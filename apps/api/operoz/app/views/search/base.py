@@ -25,6 +25,7 @@ from rest_framework.response import Response
 # Module imports
 from operoz.app.views.base import BaseAPIView
 from operoz.db.models import (
+    BoardCircle,
     Workspace,
     Project,
     Issue,
@@ -357,6 +358,32 @@ class SearchEndpoint(BaseAPIView):
                     )
 
                     response_data["user_mention"] = list(users[:count])
+
+                elif query_type == "board_circle":
+                    project = Project.objects.filter(pk=project_id, workspace__slug=slug).first()
+                    board_id = project.board_id if project else None
+
+                    if board_id:
+                        circles = BoardCircle.objects.filter(board_id=board_id, deleted_at__isnull=True)
+                        if query:
+                            circles = circles.filter(name__icontains=query)
+                        circles = circles.annotate(
+                            live_member_count=models.Count(
+                                "members", filter=Q(members__deleted_at__isnull=True), distinct=True
+                            )
+                        ).order_by("name")
+
+                        response_data["board_circle"] = [
+                            {
+                                "id": circle.id,
+                                "name": circle.name,
+                                "color": circle.color,
+                                "member_count": circle.live_member_count,
+                            }
+                            for circle in circles[:count]
+                        ]
+                    else:
+                        response_data["board_circle"] = []
 
                 elif query_type == "project":
                     fields = ["name", "identifier"]

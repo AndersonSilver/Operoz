@@ -27,6 +27,8 @@ from .project.member import (
     ProjectMemberPreferenceEndpoint,
 )
 
+from .project.contact import ProjectContactViewSet
+
 from .user.base import (
     UserEndpoint,
     UpdateUserOnBoardedEndpoint,
@@ -107,6 +109,11 @@ from .board import (
     BoardIssuesViewSet,
     BoardMemberDetailEndpoint,
     BoardMemberEndpoint,
+    BoardCircleDetailEndpoint,
+    BoardCircleEndpoint,
+    BoardCircleMemberDetailEndpoint,
+    BoardCircleMemberEndpoint,
+    WorkspaceCircleLookupEndpoint,
     BoardClient360ViewSet,
     BoardClient360HealthSettingsEndpoint,
     BoardMetaViewSet,

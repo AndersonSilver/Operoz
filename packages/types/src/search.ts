@@ -6,12 +6,19 @@ import type { IProject } from "./project";
 import type { IUser } from "./users";
 import type { IWorkspace } from "./workspace";
 
-export type TSearchEntities = "user_mention" | "issue" | "project" | "cycle" | "module" | "page";
+export type TSearchEntities = "user_mention" | "board_circle" | "issue" | "project" | "cycle" | "module" | "page";
 
 export type TUserSearchResponse = {
   member__avatar_url: IUser["avatar_url"];
   member__display_name: IUser["display_name"];
   member__id: IUser["id"];
+};
+
+export type TBoardCircleSearchResponse = {
+  id: string;
+  name: string;
+  color: string;
+  member_count: number;
 };
 
 export type TProjectSearchResponse = {
@@ -66,6 +73,7 @@ export type TSearchResponse = {
   page?: TPageSearchResponse[];
   project?: TProjectSearchResponse[];
   user_mention?: TUserSearchResponse[];
+  board_circle?: TBoardCircleSearchResponse[];
 };
 
 export type TSearchEntityRequestPayload = {

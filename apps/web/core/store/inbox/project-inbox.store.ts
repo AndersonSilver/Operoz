@@ -436,6 +436,7 @@ export class ProjectInboxStore implements IProjectInboxStore {
           set(this, ["inboxIssueIds"], issueIds);
           this.createOrUpdateInboxIssue(results, workspaceSlug, projectId);
         }
+        this.syncPendingSidebarCount(projectId, paginationInfo?.total_results);
       });
     } catch (error) {
       console.error("Error fetching the intake issues", error);
@@ -448,6 +449,38 @@ export class ProjectInboxStore implements IProjectInboxStore {
       });
       throw error;
     }
+  };
+
+  /**
+   * Keep project sidebar Intake/Sustentação badge in sync after list fetch.
+   * Public-form creates do not go through createInboxIssue, so the cached
+   * intake_count / support_count can stay stale until the next projects refetch.
+   */
+  private syncPendingSidebarCount = (projectId: string, totalResults: number | undefined) => {
+    if (this.currentTab !== EInboxIssueCurrentTab.OPEN || totalResults == null) return;
+
+    const statusFilters = this.inboxFilters?.status ?? [];
+    const onlyPendingOrDefault =
+      statusFilters.length === 0 ||
+      (statusFilters.length === 1 && statusFilters[0] === EInboxIssueStatus.PENDING);
+    if (!onlyPendingOrDefault) return;
+
+    const hasExtraFilters = Boolean(
+      this.inboxFilters?.queue_id?.length ||
+        this.inboxFilters?.created_at?.length ||
+        this.inboxFilters?.updated_at?.length ||
+        this.inboxFilters?.priority?.length ||
+        this.inboxFilters?.labels?.length ||
+        this.inboxFilters?.assignees?.length ||
+        this.inboxFilters?.created_by?.length ||
+        this.inboxFilters?.source?.length ||
+        this.inboxFilters?.sla_breached?.length ||
+        this.inboxFilters?.has_attachment?.length
+    );
+    if (hasExtraFilters) return;
+
+    const countKey = getPendingCountKey(this.hubMode);
+    set(this.store.projectRoot.project.projectMap, [projectId, countKey], totalResults);
   };
 
   /**

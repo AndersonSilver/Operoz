@@ -38,6 +38,7 @@ def _build_title(alert_type: str, issue_name: str) -> str:
         "missing_due_date": "Card sem data de vencimento",
         "state_change": "Estado alterado",
         "assignee_change": "Responsável alterado",
+        "intake_created": "Novo pedido de intake",
         "support_ticket_created": "Novo chamado de suporte",
         "support_ticket_accepted": "Chamado aceito",
         "support_sla_approaching": "SLA do chamado a expirar",
