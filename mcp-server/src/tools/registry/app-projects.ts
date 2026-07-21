@@ -201,6 +201,42 @@ export const APP_PROJECT_OPERATIONS = [
   ),
   op(
     "projects",
+    "operoz_project_contact_list_get",
+    "Lista contactos do projeto (stakeholders do cliente)",
+    "app",
+    "GET",
+    "/workspaces/{workspace_slug}/projects/{project_id}/contacts/",
+    ["workspace_slug","project_id"]
+  ),
+  op(
+    "projects",
+    "operoz_project_contact_create_post",
+    "Cria contacto do projeto (stakeholder do cliente)",
+    "app",
+    "POST",
+    "/workspaces/{workspace_slug}/projects/{project_id}/contacts/",
+    ["workspace_slug","project_id"], { body: true }
+  ),
+  op(
+    "projects",
+    "operoz_project_contact_update_patch",
+    "Atualiza contacto do projeto",
+    "app",
+    "PATCH",
+    "/workspaces/{workspace_slug}/projects/{project_id}/contacts/{pk}/",
+    ["workspace_slug","project_id","pk"], { body: true }
+  ),
+  op(
+    "projects",
+    "operoz_project_contact_delete",
+    "Remove contacto do projeto",
+    "app",
+    "DELETE",
+    "/workspaces/{workspace_slug}/projects/{project_id}/contacts/{pk}/",
+    ["workspace_slug","project_id","pk"]
+  ),
+  op(
+    "projects",
     "operoz_project_favorites_create_post",
     "Project Favorites — create (Executa)",
     "app",
