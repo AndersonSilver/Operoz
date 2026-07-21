@@ -24,19 +24,20 @@ export MACHINE_SIGNATURE=$SIGNATURE
 # Register instance, configure and warm up caches/storage. These are
 # best-effort bookkeeping steps — a slow/unreachable broker, MinIO or Redis
 # must never be able to hang the container forever and keep gunicorn from
-# ever starting. `timeout` turns a silent indefinite hang into a fast,
-# visible failure that still lets startup continue.
+# ever starting. `-k 10 20` sends TERM at 20s and escalates to a KILL 10s
+# later if the process is stuck in an uninterruptible call (e.g. blocked
+# inside a C extension on a DB/socket read) that ignores TERM.
 echo "==> register_instance"
-timeout 30 python manage.py register_instance "$MACHINE_SIGNATURE" || echo "WARN: register_instance failed or timed out, continuing"
+timeout -k 10 20 python manage.py register_instance "$MACHINE_SIGNATURE" || echo "WARN: register_instance failed or timed out, continuing"
 
 echo "==> configure_instance"
-timeout 30 python manage.py configure_instance || echo "WARN: configure_instance failed or timed out, continuing"
+timeout -k 10 20 python manage.py configure_instance || echo "WARN: configure_instance failed or timed out, continuing"
 
 echo "==> create_bucket"
-timeout 30 python manage.py create_bucket || echo "WARN: create_bucket failed or timed out, continuing"
+timeout -k 10 20 python manage.py create_bucket || echo "WARN: create_bucket failed or timed out, continuing"
 
 echo "==> clear_cache"
-timeout 30 python manage.py clear_cache || echo "WARN: clear_cache failed or timed out, continuing"
+timeout -k 10 20 python manage.py clear_cache || echo "WARN: clear_cache failed or timed out, continuing"
 
 echo "==> collectstatic"
 python manage.py collectstatic --noinput

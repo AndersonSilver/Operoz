@@ -243,7 +243,10 @@ operoz_health_check() {
 
   echo "==> Health check (http://127.0.0.1:${port}/api/instances/)"
   local attempt
-  for attempt in $(seq 1 45); do
+  # Up to 4 best-effort startup steps in docker-entrypoint-api.sh can each
+  # take up to ~30s (20s timeout + 10s kill-after) before giving up, so the
+  # window here must comfortably exceed that worst case.
+  for attempt in $(seq 1 75); do
     if curl -sf "http://127.0.0.1:${port}/api/instances/" -o /dev/null 2>/dev/null; then
       echo "==> Health check OK"
       return 0
@@ -251,7 +254,7 @@ operoz_health_check() {
     sleep 2
   done
 
-  echo "WARN: health check falhou após 90s — status dos containers:" >&2
+  echo "WARN: health check falhou após 150s — status dos containers:" >&2
   operoz_dc "${app_path}" "${repo_path}" ps 2>/dev/null || true
 
   echo "WARN: logs do container api:" >&2
