@@ -1,0 +1,758 @@
+x-db-env:
+  PGHOST: ${PGHOST:-hml-db}
+  PGDATABASE: ${PGDATABASE:-operis_hml}
+  POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+  POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+  PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+x-redis-env:
+  REDIS_HOST: ${REDIS_HOST:-hml-redis}
+  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+x-minio-env:
+  MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+  MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+x-aws-s3-env:
+  AWS_REGION: ${AWS_REGION:-}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+  AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+x-proxy-env:
+  APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+  FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+  CERT_EMAIL: ${CERT_EMAIL:-}
+  CERT_ACME_CA: ${CERT_ACME_CA:-}
+  CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+  LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+  LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+  BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+  SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+x-mq-env:
+  RABBITMQ_HOST: ${RABBITMQ_HOST:-hml-mq}
+  RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+  RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-operis_hml}
+  RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+  RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-operis_hml}
+  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis_hml}
+x-live-env:
+  API_BASE_URL: ${API_BASE_URL:-http://hml-api:8000}
+  LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+  DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+  DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+  DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+  DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+  DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+  DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+  GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+  GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+  GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+x-app-env:
+  WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+  DEBUG: ${DEBUG:-1}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+  GUNICORN_WORKERS: 1
+  USE_MINIO: ${USE_MINIO:-1}
+  DATABASE_URL: ${DATABASE_URL}
+  SECRET_KEY: ${SECRET_KEY}
+  AMQP_URL: ${AMQP_URL}
+  API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+  MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+  LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+  DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+  DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+  DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+  DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+  DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+  DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+  GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+  GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+  GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+  SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+services:
+  web:
+    container_name: hml-web
+    image: myoperoz/plane-frontend:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    depends_on:
+    - hml-api
+    - hml-worker
+  hml-api:
+    container_name: hml-api
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-api.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_api:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-db
+    - hml-redis
+    - hml-mq
+    networks:
+      default:
+        aliases:
+        - api
+  hml-worker:
+    container_name: hml-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-worker.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_worker:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-api
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-beat-worker:
+    container_name: hml-beat-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-beat.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_beat:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-api
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-migrator:
+    container_name: hml-migrator
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-migrator.sh
+    restart: on-failure
+    volumes:
+    - hml_logs_migrator:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-db
+    - hml-redis
+
+  hml-api-chat:
+    container_name: hml-api-chat
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-api-chat.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_api:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
+      GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
+    depends_on:
+    - hml-db
+    - hml-redis
+  hml-assistant-worker:
+    container_name: hml-assistant-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-assistant-worker.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_worker:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-api
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-assistant-chat-worker:
+    container_name: hml-assistant-chat-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-assistant-chat-worker.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_worker:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+      ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
+      ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
+    depends_on:
+    - hml-api
+    - hml-api-chat
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-automation-worker:
+    container_name: hml-automation-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-automation-worker.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_automation_worker:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-api
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-automation-email-worker:
+    container_name: hml-automation-email-worker
+    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    command: ./bin/docker-entrypoint-automation-email-worker.sh
+    restart: unless-stopped
+    volumes:
+    - hml_logs_automation_email_worker:/code/operis/logs
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      AWS_REGION: ${AWS_REGION:-}
+      AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+      AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+      AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+      AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+      WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+      DEBUG: ${DEBUG:-1}
+      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+      GUNICORN_WORKERS: 1
+      USE_MINIO: ${USE_MINIO:-1}
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      AMQP_URL: ${AMQP_URL}
+      API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+      MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+      DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+      DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+      DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+      DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+      GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+      GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+      GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+      SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+    depends_on:
+    - hml-api
+    - hml-db
+    - hml-redis
+    - hml-mq
+  hml-space:
+    container_name: hml-space
+    image: myoperoz/plane-space:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    depends_on:
+    - hml-api
+    - hml-worker
+    - web
+    networks:
+      default:
+        aliases:
+        - space
+  hml-live:
+    container_name: hml-live
+    image: myoperoz/plane-live:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    environment:
+      API_BASE_URL: ${API_BASE_URL:-http://hml-api:8000}
+      LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+      REDIS_HOST: ${REDIS_HOST:-hml-redis}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+    depends_on:
+    - hml-api
+    - web
+    networks:
+      default:
+        aliases:
+        - live
+
+  hml-admin:
+    container_name: hml-admin
+    image: myoperoz/plane-admin:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    depends_on:
+    - web
+    - hml-api
+    networks:
+      default:
+        aliases:
+        - admin
+  hml-proxy:
+    container_name: hml-proxy
+    image: myoperoz/plane-proxy:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    environment:
+      APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}
+      FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+      CERT_EMAIL: ${CERT_EMAIL:-}
+      CERT_ACME_CA: ${CERT_ACME_CA:-}
+      CERT_ACME_DNS: ${CERT_ACME_DNS:-}
+      LISTEN_HTTP_PORT: ${LISTEN_HTTP_PORT:-8081}
+      LISTEN_HTTPS_PORT: ${LISTEN_HTTPS_PORT:-8444}
+      BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    ports:
+    - 8081:80
+    depends_on:
+    - hml-admin
+    - web
+    - hml-api
+    - hml-space
+    - hml-live
+  hml-db:
+    container_name: hml-db
+    image: pgvector/pgvector:pg15
+    command: postgres -c 'max_connections=200'
+    restart: unless-stopped
+    environment:
+      PGHOST: ${PGHOST:-hml-db}
+      PGDATABASE: ${PGDATABASE:-operis_hml}
+      POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+      POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+      PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+    volumes:
+    - hml_pgdata:/var/lib/postgresql/data
+  hml-redis:
+    container_name: hml-redis
+    image: valkey/valkey:7.2.11-alpine
+    restart: unless-stopped
+    volumes:
+    - hml_redisdata:/data
+  hml-mq:
+    container_name: hml-mq
+    image: rabbitmq:3.13.6-management-alpine
+    restart: unless-stopped
+    environment:
+      RABBITMQ_HOST: ${RABBITMQ_HOST:-hml-mq}
+      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-operis_hml}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-operis_hml}
+      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis_hml}
+    volumes:
+    - hml_rabbitmq:/var/lib/rabbitmq
+  hml-minio:
+    container_name: hml-minio
+    image: minio/minio:latest
+    command: server /export --console-address ":9090"
+    restart: unless-stopped
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    volumes:
+    - hml_uploads:/export
+    networks:
+      default:
+        aliases:
+        - hml-minio
+        - operis-minio
+volumes:
+  hml_logs_automation_worker: null
+  hml_logs_automation_email_worker: null
+  hml_pgdata: null
+  hml_redisdata: null
+  hml_uploads: null
+  hml_logs_api: null
+  hml_logs_worker: null
+  hml_logs_beat: null
+  hml_logs_migrator: null
+  hml_rabbitmq: null

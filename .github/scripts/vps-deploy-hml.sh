@@ -29,11 +29,25 @@ echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdi
 echo "==> Atualizar código (${GIT_REF}) em ${OPEROZ_REPO_PATH}"
 operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 
+# The HML docker-compose.yaml is tracked in the repo (deployments/hml/) so it
+# stays in sync with production's service list instead of drifting via ad-hoc
+# manual edits on the VPS.
+COMPOSE_SOURCE="${OPEROZ_REPO_PATH}/deployments/hml/docker-compose.yaml"
+if [[ -f "${COMPOSE_SOURCE}" ]]; then
+  echo "==> Sincronizar docker-compose.yaml a partir do repositório"
+  cp "${HML_APP_PATH}/docker-compose.yaml" "${HML_APP_PATH}/docker-compose.yaml.bak.$(date +%Y%m%d%H%M%S)" 2>/dev/null || true
+  cp "${COMPOSE_SOURCE}" "${HML_APP_PATH}/docker-compose.yaml"
+else
+  echo "WARN: ${COMPOSE_SOURCE} não encontrado, usando docker-compose.yaml já existente na VPS" >&2
+fi
+
 SERVICES=(
   "plane-frontend:myoperoz/plane-frontend"
   "plane-backend:myoperoz/plane-backend"
   "plane-proxy:myoperoz/plane-proxy"
   "plane-admin:myoperoz/plane-admin"
+  "plane-space:myoperoz/plane-space"
+  "plane-live:myoperoz/plane-live"
 )
 
 for entry in "${SERVICES[@]}"; do
@@ -61,7 +75,9 @@ docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 echo "==> Recriar API e workers HML"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  hml-api hml-worker hml-beat-worker
+  hml-api hml-api-chat hml-worker hml-beat-worker \
+  hml-assistant-worker hml-assistant-chat-worker \
+  hml-automation-worker hml-automation-email-worker
 
 echo "==> Aguardar hml-api responder (collectstatic + gunicorn podem levar ~2 min)"
 api_ready=false
@@ -80,10 +96,10 @@ if [[ "${api_ready}" != "true" ]]; then
   exit 1
 fi
 
-echo "==> Recriar web, admin e proxy HML"
+echo "==> Recriar web, admin, space, live e proxy HML"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  web hml-admin hml-proxy
+  web hml-admin hml-space hml-live hml-proxy
 
 echo "==> Estado HML"
 docker compose --env-file hml.env -p plane-app-hml ps
