@@ -28,6 +28,8 @@ ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
 echo "==> Login GHCR"
 echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdin
 
+PREV_SHA="$(git -C "${OPEROZ_REPO_PATH}" rev-parse HEAD 2>/dev/null || true)"
+
 echo "==> Atualizar código"
 operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 
@@ -76,8 +78,6 @@ else
 fi
 
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps
-
-PREV_SHA="$(git -C "${OPEROZ_REPO_PATH}" rev-parse HEAD 2>/dev/null || true)"
 
 if ! operoz_health_check "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
   echo "::error::Health check falhou após deploy full. Stack pode estar quebrada." >&2

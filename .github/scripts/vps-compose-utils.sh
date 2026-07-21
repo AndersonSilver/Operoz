@@ -243,7 +243,7 @@ operoz_health_check() {
 
   echo "==> Health check (http://127.0.0.1:${port}/api/instances/)"
   local attempt
-  for attempt in $(seq 1 30); do
+  for attempt in $(seq 1 45); do
     if curl -sf "http://127.0.0.1:${port}/api/instances/" -o /dev/null 2>/dev/null; then
       echo "==> Health check OK"
       return 0
@@ -251,7 +251,16 @@ operoz_health_check() {
     sleep 2
   done
 
-  echo "WARN: health check falhou após 60s — logs do proxy:" >&2
+  echo "WARN: health check falhou após 90s — status dos containers:" >&2
+  operoz_dc "${app_path}" "${repo_path}" ps 2>/dev/null || true
+
+  echo "WARN: logs do container api:" >&2
+  operoz_dc "${app_path}" "${repo_path}" logs --tail=150 api 2>/dev/null || true
+
+  echo "WARN: logs do container migrator:" >&2
+  operoz_dc "${app_path}" "${repo_path}" logs --tail=80 migrator 2>/dev/null || true
+
+  echo "WARN: logs do container proxy:" >&2
   operoz_dc "${app_path}" "${repo_path}" logs --tail=40 proxy 2>/dev/null || true
   return 1
 }
