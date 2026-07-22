@@ -243,10 +243,15 @@ operoz_health_check() {
 
   echo "==> Health check (http://127.0.0.1:${port}/api/instances/)"
   local attempt
-  # Up to 4 best-effort startup steps in docker-entrypoint-api.sh can each
-  # take up to ~30s (20s timeout + 10s kill-after) before giving up, so the
-  # window here must comfortably exceed that worst case.
-  for attempt in $(seq 1 75); do
+  # api boots alongside 8+ other backend containers (worker, beat, api-chat,
+  # assistant-*, automation-*) that all hit DB/broker/redis at once, so the
+  # 4 best-effort startup steps in docker-entrypoint-api.sh — each bounded to
+  # ~30s (20s timeout + 10s kill-after) — can be slow rather than instant
+  # under that contention. Observed in production: ~5m41s from container
+  # start to gunicorn ready under load. 240 attempts (~8min) gives headroom
+  # above that without masking a genuine hang (which is now impossible —
+  # every step is time-bounded).
+  for attempt in $(seq 1 240); do
     if curl -sf "http://127.0.0.1:${port}/api/instances/" -o /dev/null 2>/dev/null; then
       echo "==> Health check OK"
       return 0
@@ -254,7 +259,7 @@ operoz_health_check() {
     sleep 2
   done
 
-  echo "WARN: health check falhou após 150s — status dos containers:" >&2
+  echo "WARN: health check falhou após 480s — status dos containers:" >&2
   operoz_dc "${app_path}" "${repo_path}" ps 2>/dev/null || true
 
   echo "WARN: logs do container api:" >&2
