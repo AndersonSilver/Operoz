@@ -1,16 +1,16 @@
-# Deploy de HOMOLOGAÇÃO — disparado SOMENTE por push na branch main.
-# Outras branches não publicam em hml.operoz.io.
+# Deploy de HOMOLOGAÇÃO — manual apenas (Actions → Deploy Operoz HML → Run workflow).
 #
-# Fluxo:
-#   git push origin main  →  build imagens :hml  →  hml.operoz.io
+# O ambiente de HML foi desativado em 2026-07-21 (containers e volumes
+# removidos da VPS) por falta de memória na máquina compartilhada com
+# produção. O gatilho automático em push foi removido de propósito para
+# não recriar o HML sozinho no próximo commit em main — dispare manualmente
+# quando o HML voltar a existir (nova VPS, etc.).
 #
 # Produção: tag v* (workflow deploy-operoz.yml).
 
 name: Deploy Operoz HML
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       skip_build:
