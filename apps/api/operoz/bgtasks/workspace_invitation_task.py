@@ -42,7 +42,7 @@ def workspace_invitation(email, workspace_id, token, current_site, inviter):
         ) = get_email_configuration()
 
         # Subject of the email
-        subject = f"{user.first_name or user.display_name or user.email} convidou você para {workspace.name} no Operoz"  # noqa: E501
+        subject = f"{user.first_name or user.display_name or user.email} convidou você para o espaço de trabalho {workspace.name} no Operoz"  # noqa: E501
 
         context = {
             "email": email,

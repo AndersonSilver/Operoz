@@ -51,7 +51,7 @@ def project_add_user_email(current_site, project_member_id, invitor_id):
         ) = get_email_configuration()
 
         # Set the subject
-        subject = "Você foi convidado para um projeto no Operoz"
+        subject = f"{inviter_first_name} convidou você para o projeto {project_name} no Operoz"
 
         # Render the email template
         html_content = render_to_string("emails/notifications/project_addition.html", context)
