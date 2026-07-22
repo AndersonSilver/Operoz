@@ -5,12 +5,12 @@ import logging
 from celery import shared_task
 
 # Third party imports
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 
 # Module imports
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.utils.email import generate_plain_text_from_html
 from operoz.utils.exception_logger import log_exception
 from operoz.db.models import ProjectMember
@@ -40,15 +40,7 @@ def project_add_user_email(current_site, project_member_id, invitor_id):
         }
 
         # Get the email configuration
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, EMAIL_FROM = get_instance_smtp_connection()
 
         # Set the subject
         subject = f"{inviter_first_name} convidou você para o projeto {project_name} no Operoz"
@@ -56,15 +48,6 @@ def project_add_user_email(current_site, project_member_id, invitor_id):
         # Render the email template
         html_content = render_to_string("emails/notifications/project_addition.html", context)
         text_content = generate_plain_text_from_html(html_content)
-        # Initialize the connection
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
         # Send the email
         msg = EmailMultiAlternatives(
             subject=subject,

@@ -13,7 +13,7 @@ from celery import shared_task
 # Django imports
 from django.conf import settings
 from django.db.models import Prefetch
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.core.serializers.json import DjangoJSONEncoder
 from django.template.loader import render_to_string
 from django.core.exceptions import ObjectDoesNotExist
@@ -45,7 +45,7 @@ from operoz.db.models import (
     IssueLabel,
     IssueAssignee,
 )
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.utils.email import generate_plain_text_from_html
 from operoz.utils.exception_logger import log_exception
 from operoz.utils.ip_address import validate_url
@@ -195,22 +195,14 @@ def send_webhook_deactivation_email(webhook_id: str, receiver_id: str, current_s
         reason (str): Reason for webhook deactivation
     """
     try:
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, EMAIL_FROM = get_instance_smtp_connection()
 
         receiver = User.objects.get(pk=receiver_id)
         webhook = Webhook.objects.get(pk=webhook_id)
 
         # Get the webhook payload
-        subject = "Webhook Deactivated"
-        message = f"Webhook {webhook.url} has been deactivated due to failed requests."
+        subject = "Webhook desativado no Operoz"
+        message = f"O webhook {webhook.url} foi desativado após falhas repetidas de entrega."
 
         # Send the mail
         context = {
@@ -222,14 +214,6 @@ def send_webhook_deactivation_email(webhook_id: str, receiver_id: str, current_s
         text_content = generate_plain_text_from_html(html_content)
 
         # Set the email connection
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
 
         # Create the email message
         msg = EmailMultiAlternatives(

@@ -5,11 +5,11 @@ import logging
 from celery import shared_task
 
 # Django imports
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 # Module imports
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.utils.email import generate_plain_text_from_html
 from operoz.utils.exception_logger import log_exception
 
@@ -17,31 +17,15 @@ from operoz.utils.exception_logger import log_exception
 @shared_task
 def send_email_update_magic_code(email, token):
     try:
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, EMAIL_FROM = get_instance_smtp_connection()
 
         # Send the mail
-        subject = "Verify your new email address"
+        subject = f"Confirme seu novo e-mail no Operoz: {token}"
         context = {"code": token, "email": email}
 
         html_content = render_to_string("emails/auth/magic_signin.html", context)
         text_content = generate_plain_text_from_html(html_content)
 
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
 
         msg = EmailMultiAlternatives(
             subject=subject,
@@ -68,31 +52,15 @@ def send_email_update_confirmation(email):
         email: The new email address that was successfully updated
     """
     try:
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, EMAIL_FROM = get_instance_smtp_connection()
 
         # Send the confirmation email
-        subject = "Endereço de e-mail Operoz atualizado com sucesso"
+        subject = "Seu endereço de e-mail no Operoz foi atualizado com sucesso"
         context = {"email": email}
 
         html_content = render_to_string("emails/user/email_updated.html", context)
         text_content = generate_plain_text_from_html(html_content)
 
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
 
         msg = EmailMultiAlternatives(
             subject=subject,

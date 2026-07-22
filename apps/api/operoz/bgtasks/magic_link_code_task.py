@@ -6,11 +6,11 @@ from celery import shared_task
 
 # Django imports
 # Third party imports
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 
 # Module imports
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.utils.email import generate_plain_text_from_html
 from operoz.utils.exception_logger import log_exception
 
@@ -18,31 +18,15 @@ from operoz.utils.exception_logger import log_exception
 @shared_task
 def magic_link(email, key, token):
     try:
-        (
-            EMAIL_HOST,
-            EMAIL_HOST_USER,
-            EMAIL_HOST_PASSWORD,
-            EMAIL_PORT,
-            EMAIL_USE_TLS,
-            EMAIL_USE_SSL,
-            EMAIL_FROM,
-        ) = get_email_configuration()
+        connection, EMAIL_FROM = get_instance_smtp_connection()
 
         # Send the mail
-        subject = f"Seu código de acesso Operoz: {token}"
+        subject = f"Seu código de acesso ao Operoz: {token}"
         context = {"code": token, "email": email}
 
         html_content = render_to_string("emails/auth/magic_signin.html", context)
         text_content = generate_plain_text_from_html(html_content)
 
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
 
         msg = EmailMultiAlternatives(
             subject=subject,

@@ -5,11 +5,11 @@ from collections import defaultdict
 from datetime import date, timedelta
 
 from celery import shared_task
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.utils import timezone
 
 from operoz.alerts.email_renderer import render_digest_email
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.settings.redis import redis_instance
 
 
@@ -63,23 +63,7 @@ def send_daily_alert_digests() -> None:
                 items=items,
                 workspace_slug=workspace.slug,
             )
-            (
-                EMAIL_HOST,
-                EMAIL_HOST_USER,
-                EMAIL_HOST_PASSWORD,
-                EMAIL_PORT,
-                EMAIL_USE_TLS,
-                EMAIL_USE_SSL,
-                EMAIL_FROM,
-            ) = get_email_configuration()
-            connection = get_connection(
-                host=EMAIL_HOST,
-                port=int(EMAIL_PORT),
-                username=EMAIL_HOST_USER,
-                password=EMAIL_HOST_PASSWORD,
-                use_tls=EMAIL_USE_TLS == "1",
-                use_ssl=EMAIL_USE_SSL == "1",
-            )
+            connection, EMAIL_FROM = get_instance_smtp_connection()
             msg = EmailMultiAlternatives(subject, text, EMAIL_FROM, [user.email], connection=connection)
             msg.attach_alternative(html, "text/html")
             msg.send()
@@ -94,15 +78,7 @@ def send_weekly_stale_card_digest() -> None:
     now = timezone.now()
     stale_cutoff = now - timedelta(days=3)
 
-    (
-        EMAIL_HOST,
-        EMAIL_HOST_USER,
-        EMAIL_HOST_PASSWORD,
-        EMAIL_PORT,
-        EMAIL_USE_TLS,
-        EMAIL_USE_SSL,
-        EMAIL_FROM,
-    ) = get_email_configuration()
+    connection, EMAIL_FROM = get_instance_smtp_connection()
 
     for workspace in Workspace.objects.filter(deleted_at__isnull=True).iterator(chunk_size=100):
         stale_issues = list(
@@ -129,16 +105,16 @@ def send_weekly_stale_card_digest() -> None:
                 user=user,
                 issues=issues,
                 workspace=workspace,
-                email_config=(EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL, EMAIL_FROM),
+                connection=connection,
+                email_from=EMAIL_FROM,
             )
 
 
-def _send_stale_card_email(*, user, issues, workspace, email_config) -> None:
+def _send_stale_card_email(*, user, issues, workspace, connection, email_from) -> None:
     import html
     import logging
 
     logger = logging.getLogger("operoz.alerts.digest")
-    (EMAIL_HOST, EMAIL_HOST_USER, EMAIL_HOST_PASSWORD, EMAIL_PORT, EMAIL_USE_TLS, EMAIL_USE_SSL, EMAIL_FROM) = email_config
     name = user.display_name or user.email
     workspace_name = workspace.name or ""
     subject = f"[{workspace_name}] Seus cards parados esta semana"
@@ -166,15 +142,7 @@ def _send_stale_card_email(*, user, issues, workspace, email_config) -> None:
         f"Acesse o Operoz para atualizar o status de cada card."
     )
     try:
-        connection = get_connection(
-            host=EMAIL_HOST,
-            port=int(EMAIL_PORT),
-            username=EMAIL_HOST_USER,
-            password=EMAIL_HOST_PASSWORD,
-            use_tls=EMAIL_USE_TLS == "1",
-            use_ssl=EMAIL_USE_SSL == "1",
-        )
-        msg = EmailMultiAlternatives(subject, text, EMAIL_FROM, [user.email], connection=connection)
+        msg = EmailMultiAlternatives(subject, text, email_from, [user.email], connection=connection)
         msg.attach_alternative(html_body, "text/html")
         msg.send()
     except Exception:

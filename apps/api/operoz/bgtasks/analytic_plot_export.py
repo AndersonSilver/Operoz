@@ -7,7 +7,7 @@ import logging
 from celery import shared_task
 
 # Django imports
-from django.core.mail import EmailMultiAlternatives, get_connection
+from django.core.mail import EmailMultiAlternatives
 from django.template.loader import render_to_string
 from django.db.models import Q, Case, Value, When
 from django.db import models
@@ -15,7 +15,7 @@ from django.db.models.functions import Concat
 
 # Module imports
 from operoz.db.models import Issue
-from operoz.license.utils.instance_value import get_email_configuration
+from operoz.license.utils.instance_value import get_instance_smtp_connection
 from operoz.utils.analytics_plot import build_graph_plot
 from operoz.utils.email import generate_plain_text_from_html
 from operoz.utils.exception_logger import log_exception
@@ -47,30 +47,14 @@ MODULE_ID = "issue_module__module_id"
 
 def send_export_email(email, slug, csv_buffer, rows):
     """Helper function to send export email."""
-    subject = "Sua exportação Operoz está pronta"
+    subject = "Sua exportação de análises do Operoz está pronta"
     html_content = render_to_string("emails/exports/analytics.html", {})
     text_content = generate_plain_text_from_html(html_content)
 
     csv_buffer.seek(0)
 
-    (
-        EMAIL_HOST,
-        EMAIL_HOST_USER,
-        EMAIL_HOST_PASSWORD,
-        EMAIL_PORT,
-        EMAIL_USE_TLS,
-        EMAIL_USE_SSL,
-        EMAIL_FROM,
-    ) = get_email_configuration()
+    connection, EMAIL_FROM = get_instance_smtp_connection()
 
-    connection = get_connection(
-        host=EMAIL_HOST,
-        port=int(EMAIL_PORT),
-        username=EMAIL_HOST_USER,
-        password=EMAIL_HOST_PASSWORD,
-        use_tls=EMAIL_USE_TLS == "1",
-        use_ssl=EMAIL_USE_SSL == "1",
-    )
 
     msg = EmailMultiAlternatives(
         subject=subject,
