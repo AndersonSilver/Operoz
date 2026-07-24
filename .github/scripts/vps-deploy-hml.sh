@@ -14,7 +14,7 @@ set -euo pipefail
 HML_ENV_FILE="${HML_APP_PATH}/hml.env"
 OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operis-selfhost/Operis}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="${OPEROZ_REPO_PATH}/.github/scripts"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 

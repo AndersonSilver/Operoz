@@ -10,7 +10,7 @@ set -euo pipefail
 : "${LOCAL_RELEASE_TAG:=stable}"
 : "${GITHUB_ACTOR:?GITHUB_ACTOR is required}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="${OPEROZ_REPO_PATH}/.github/scripts"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
