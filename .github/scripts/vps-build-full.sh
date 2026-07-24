@@ -7,7 +7,7 @@ OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operis-selfhost/Operis}"
 OPEROZ_APP_PATH="${OPEROZ_APP_PATH:-/root/operis-selfhost/plane-app}"
 GIT_BRANCH="${GIT_BRANCH:-preview}"
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_DIR="${OPEROZ_REPO_PATH}/.github/scripts"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
