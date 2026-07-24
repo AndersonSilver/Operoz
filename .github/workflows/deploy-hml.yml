@@ -152,6 +152,18 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Build e push operoz-mcp:hml
+        uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: mcp-server
+          file: mcp-server/Dockerfile
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/operoz-mcp:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-mcp:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
     needs: [meta, build]
     if: >-
@@ -170,6 +182,7 @@ jobs:
       HML_APP_PATH: ${{ vars.HML_APP_PATH || '/root/operis-selfhost/plane-app-hml' }}
       HML_WEB_URL: https://hml.operoz.io
       OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
+      MCP_HML_IMAGE: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp:hml
       IMAGE_TAG: hml
       LOCAL_RELEASE_TAG: hml
       GIT_REF: main
@@ -183,6 +196,10 @@ jobs:
       - name: Deploy HML (runner self-hosted)
         if: ${{ needs.meta.outputs.use_self_hosted == 'true' }}
         run: bash .github/scripts/vps-deploy-hml.sh
+
+      - name: Deploy MCP-HML (runner self-hosted)
+        if: ${{ needs.meta.outputs.use_self_hosted == 'true' }}
+        run: bash .github/scripts/vps-deploy-mcp-hml.sh
 
       - name: Preflight SSH (modo remoto)
         if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
@@ -216,3 +233,23 @@ jobs:
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
           envs: GHCR_TOKEN,HML_IMAGE_PREFIX,HML_APP_PATH,HML_WEB_URL,OPEROZ_REPO_PATH,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-hml.sh
+
+      - name: Deploy MCP-HML via SSH
+        if: ${{ needs.meta.outputs.use_self_hosted != 'true' }}
+        uses: appleboy/ssh-action@7eaf76671a0d7eec5d98ee897acda4f968735a17 # v1.2.0
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          MCP_HML_IMAGE: ${{ env.MCP_HML_IMAGE }}
+          OPEROZ_REPO_PATH: ${{ env.OPEROZ_REPO_PATH }}
+          LOCAL_RELEASE_TAG: hml
+          GIT_REF: main
+          GITHUB_ACTOR: ${{ github.actor }}
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USER }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: ${{ env.SSH_TIMEOUT }}
+          command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
+          envs: GHCR_TOKEN,MCP_HML_IMAGE,OPEROZ_REPO_PATH,LOCAL_RELEASE_TAG,GIT_REF,GITHUB_ACTOR
+          script_path: .github/scripts/vps-deploy-mcp-hml.sh
