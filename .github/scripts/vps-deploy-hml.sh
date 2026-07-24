@@ -106,8 +106,10 @@ docker compose --env-file hml.env -p plane-app-hml ps
 
 echo "==> Health check HML (via proxy)"
 HML_PORT=$(grep -E '^LISTEN_HTTP_PORT=' "${HML_ENV_FILE}" | cut -d= -f2 | tr -d '"' || echo "8081")
+HML_HOST_HEADER=$(grep -E '^ALLOWED_HOSTS=' "${HML_ENV_FILE}" | tail -1 | cut -d= -f2- | cut -d, -f1)
+HML_HOST_HEADER="${HML_HOST_HEADER:-localhost}"
 for attempt in $(seq 1 30); do
-  if curl -sf "http://127.0.0.1:${HML_PORT}/api/instances/" -o /dev/null 2>/dev/null; then
+  if curl -sf -H "Host: ${HML_HOST_HEADER}" "http://127.0.0.1:${HML_PORT}/api/instances/" -o /dev/null 2>/dev/null; then
     echo "==> Health check HML OK"
     break
   fi

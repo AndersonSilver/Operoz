@@ -237,11 +237,17 @@ operoz_listen_http_port() {
 operoz_health_check() {
   local app_path="${1:?app_path required}"
   local repo_path="${2:?repo_path required}"
-  local env_file port
+  local env_file port host_header
   env_file="$(operoz_app_env_file "${app_path}")"
   port="$(operoz_listen_http_port "${env_file}")"
+  # ALLOWED_HOSTS rejects a bare "127.0.0.1" Host header with a 400 — curl -f
+  # treats that as failure, so without this the check always times out even
+  # when the app is healthy (masked for years by the self-hosted runner path,
+  # never actually verified true end-to-end here until this comment existed).
+  host_header="$(grep -E '^ALLOWED_HOSTS=' "${env_file}" 2>/dev/null | tail -1 | cut -d= -f2- | cut -d, -f1)"
+  host_header="${host_header:-localhost}"
 
-  echo "==> Health check (http://127.0.0.1:${port}/api/instances/)"
+  echo "==> Health check (http://127.0.0.1:${port}/api/instances/, Host: ${host_header})"
   local attempt
   # api boots alongside 8+ other backend containers (worker, beat, api-chat,
   # assistant-*, automation-*) that all hit DB/broker/redis at once, so the
@@ -252,7 +258,7 @@ operoz_health_check() {
   # above that without masking a genuine hang (which is now impossible —
   # every step is time-bounded).
   for attempt in $(seq 1 240); do
-    if curl -sf "http://127.0.0.1:${port}/api/instances/" -o /dev/null 2>/dev/null; then
+    if curl -sf -H "Host: ${host_header}" "http://127.0.0.1:${port}/api/instances/" -o /dev/null 2>/dev/null; then
       echo "==> Health check OK"
       return 0
     fi
