@@ -1,3 +1,4 @@
+import logging
 from dataclasses import replace
 
 from rest_framework import status
@@ -17,6 +18,8 @@ from operoz.utils.jira_ops.workspace_config import (
     workspace_jira_configured,
 )
 from operoz.utils.jira_ops.jira_dates import set_active_jira_cloud
+
+logger = logging.getLogger(__name__)
 
 
 class WorkspaceJiraOpsSyncEndpoint(BaseAPIView):
@@ -106,6 +109,7 @@ class WorkspaceJiraOpsSyncPreviewEndpoint(BaseAPIView):
             )
             return Response(preview.to_dict(), status=status.HTTP_200_OK)
         except Exception as exc:
+            logger.exception("Jira OPS preview failed for workspace %s", slug)
             return Response(
                 {"error": str(exc)[:500]},
                 status=status.HTTP_502_BAD_GATEWAY,

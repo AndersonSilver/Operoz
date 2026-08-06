@@ -1,11 +1,12 @@
 from __future__ import annotations
 
 import base64
-import json
 import logging
-import urllib.error
-import urllib.request
 from typing import Any
+
+import requests
+from requests.adapters import HTTPAdapter
+from urllib3.util.retry import Retry
 
 from .jira_custom_fields import jira_custom_field_search_ids, resolve_jira_custom_field_ids
 from .jira_dates import jira_search_date_fields_for_client, register_jira_date_fields, score_start_date_field_name
@@ -54,6 +55,10 @@ class JiraOpsClient:
             "Accept": "application/json",
         }
         self._base_url = f"https://api.atlassian.com/ex/jira/{self.cloud_id}/rest/api/3"
+
+        self._session = requests.Session()
+        retries = Retry(total=3, connect=3, read=3, backoff_factor=0.5, status_forcelist=[502, 503, 504])
+        self._session.mount("https://", HTTPAdapter(max_retries=retries))
 
         self._field_metadata = self._load_field_metadata()
         self._start_date_field, self._due_date_field, self._all_date_field_ids = self._resolve_date_field_ids(
@@ -116,25 +121,23 @@ class JiraOpsClient:
         if not content_url:
             raise ValueError("Attachment content URL missing")
         mime = (attachment.get("mimeType") or "application/octet-stream").strip()
-        req = urllib.request.Request(content_url, headers=self._headers, method="GET")
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
-                return resp.read(), mime
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Jira attachment download failed -> {exc.code}: {detail}") from exc
+            resp = self._session.get(content_url, headers=self._headers, timeout=180)
+            resp.raise_for_status()
+            return resp.content, mime
+        except requests.HTTPError as exc:
+            detail = exc.response.text if exc.response is not None else ""
+            raise RuntimeError(f"Jira attachment download failed -> {exc.response.status_code}: {detail}") from exc
 
     def _request(self, method: str, path: str, body: dict | None = None) -> Any:
         url = f"{self._base_url}{path}"
-        data = json.dumps(body).encode("utf-8") if body is not None else None
-        req = urllib.request.Request(url, data=data, headers=self._headers, method=method)
         try:
-            with urllib.request.urlopen(req, timeout=180) as resp:
-                raw = resp.read().decode("utf-8")
-                return json.loads(raw) if raw else {}
-        except urllib.error.HTTPError as exc:
-            detail = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Jira API {method} {path} -> {exc.code}: {detail}") from exc
+            resp = self._session.request(method, url, json=body, headers=self._headers, timeout=180)
+            resp.raise_for_status()
+            return resp.json() if resp.content else {}
+        except requests.HTTPError as exc:
+            detail = exc.response.text if exc.response is not None else ""
+            raise RuntimeError(f"Jira API {method} {path} -> {exc.response.status_code}: {detail}") from exc
 
     def search_all(self, jql: str, fields: list[str] | None = None, page_size: int = 100) -> list[dict]:
         fields = fields or self._search_fields
