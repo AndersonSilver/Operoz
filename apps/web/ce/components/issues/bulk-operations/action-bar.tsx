@@ -396,7 +396,7 @@ export const BulkOperationsActionBar = observer(function BulkOperationsActionBar
                 onChange={(val) => setField("module_ids", val)}
                 projectId={pid}
                 multiple
-                placeholder="Módulos"
+                placeholder="Projetos"
               />
             </BulkFieldSlot>
           )}
