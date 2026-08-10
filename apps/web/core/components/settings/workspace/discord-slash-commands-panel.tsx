@@ -111,7 +111,7 @@ function CommandForm(props: {
             <Input
               value={form.name}
               onChange={(event) => onChange({ ...form, name: event.target.value.toLowerCase() })}
-              placeholder="status-projeto"
+              placeholder="status-cliente"
               disabled={submitting}
             />
           </div>
@@ -169,7 +169,7 @@ function CommandForm(props: {
             <Input
               value={form.default_project}
               onChange={(event) => onChange({ ...form, default_project: event.target.value })}
-              placeholder="uuid do projeto"
+              placeholder="uuid do cliente"
               disabled={submitting}
             />
           </div>

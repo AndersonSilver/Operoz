@@ -64,7 +64,7 @@ export const BoardModuleSidebarBlock = observer(function BoardModuleSidebarBlock
           type="button"
           className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded text-secondary hover:bg-layer-1 hover:text-primary"
           aria-expanded={!collapsed}
-          aria-label={collapsed ? "Expandir módulo" : "Colapsar módulo"}
+          aria-label={collapsed ? "Expandir projeto" : "Colapsar projeto"}
           onClick={handleToggleCollapse}
         >
           {collapsed ? <ChevronRight className="h-3.5 w-3.5" /> : <ChevronDown className="h-3.5 w-3.5" />}

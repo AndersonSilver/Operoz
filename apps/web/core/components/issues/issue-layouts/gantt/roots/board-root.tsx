@@ -470,7 +470,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                     : "border-subtle bg-layer-1 text-secondary hover:bg-layer-2"
                 )}
               >
-                Projeto
+                Cliente
                 {selectedProjectIds.size > 0 && (
                   <span className="rounded-full bg-accent-primary px-1.5 py-0.5 text-10 text-on-color">
                     {selectedProjectIds.size}
@@ -487,7 +487,7 @@ export const BoardGanttRoot = observer(function BoardGanttRoot(props: Props) {
                       type="text"
                       value={projectSearch}
                       onChange={(e) => setProjectSearch(e.target.value)}
-                      placeholder="Pesquisar filtros Projeto..."
+                      placeholder="Pesquisar filtros Cliente..."
                       className="focus:ring-accent-primary w-full rounded-md border border-subtle bg-layer-1 px-3 py-1.5 text-12 text-primary placeholder:text-tertiary focus:ring-1 focus:outline-none"
                     />
                   </div>

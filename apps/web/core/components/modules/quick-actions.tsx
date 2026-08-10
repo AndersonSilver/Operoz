@@ -131,7 +131,7 @@ export const ModuleQuickActions = observer(function ModuleQuickActions(props: Pr
         placement="bottom-end"
         closeOnSelect
         buttonClassName={cn("size-[26px] rounded-sm", customClassName)}
-        ariaLabel="Ações do módulo"
+        ariaLabel="Ações do projeto"
       >
         {MENU_ITEMS.map((item) => {
           if (item.shouldRender === false) return null;
