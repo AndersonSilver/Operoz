@@ -120,13 +120,13 @@ export function Client360BentoMetric({
         className
       )}
     >
-      <span className={cn("flex items-center gap-2", centered && "justify-center")}>
+      <span className={cn("flex w-full min-w-0 items-center gap-2", centered && "justify-center")}>
         {Icon ? (
           <span className={cn("grid size-7 shrink-0 place-items-center rounded-md border border-subtle/60", t.iconBg)}>
             <Icon className={cn("size-3.5", t.icon)} strokeWidth={1.75} />
           </span>
         ) : null}
-        <span className="tracking-wider truncate text-10 font-semibold text-tertiary uppercase">{label}</span>
+        <span className="tracking-wider min-w-0 truncate text-10 font-semibold text-tertiary uppercase">{label}</span>
       </span>
       <span
         className={cn(

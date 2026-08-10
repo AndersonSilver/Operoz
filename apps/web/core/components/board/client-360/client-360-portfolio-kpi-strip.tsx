@@ -17,13 +17,13 @@ export function Client360PortfolioKpiStrip({ summary, onFilterChange }: Props) {
     onFilterChange && count > 0 ? () => onFilterChange(key) : undefined;
 
   return (
-    <section className="client-360-workspace-kpi-panel workspace-exports-history-panel overflow-hidden rounded-xl border border-subtle bg-layer-1">
+    <section className="client-360-workspace-kpi-panel workspace-exports-history-panel @container overflow-hidden rounded-xl border border-subtle bg-layer-1">
       <div className="border-b border-subtle bg-gradient-to-r from-layer-1 via-layer-1 to-accent-subtle/10 px-5 py-3 lg:px-6">
         <h2 className="text-13 font-semibold text-primary">{t("boards.client_360.kpi_strip_title")}</h2>
         <p className="mt-0.5 text-12 text-tertiary">{t("boards.client_360.kpi_strip_hint")}</p>
       </div>
       <div
-        className="grid grid-cols-2 divide-x divide-y divide-subtle sm:grid-cols-3 sm:divide-y-0 lg:grid-cols-4 xl:grid-cols-7"
+        className="grid grid-cols-2 divide-x divide-y divide-subtle @sm:grid-cols-3 @sm:divide-y-0 @3xl:grid-cols-4 @6xl:grid-cols-7"
         role="list"
       >
         <Client360BentoMetric
