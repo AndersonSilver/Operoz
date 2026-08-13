@@ -180,13 +180,21 @@ export function loadOAuthConfig(env: Env = process.env): OAuthConfig | undefined
   };
 }
 
-/** Hop count do `trust proxy` do Express (atrás do Nginx Proxy Manager). */
+/**
+ * Hop count do `trust proxy` do Express (atrás do Nginx Proxy Manager).
+ *
+ * "1"/"0" são simultaneamente hop count válido e string truthy/falsy — por
+ * isso o número tem prioridade sobre a palavra. Sem isso, o default
+ * MCP_TRUST_PROXY=1 do docker-compose resolvia para `true` (confiar em
+ * QUALQUER proxy), não hop count 1, e o express-rate-limit recusa-se a
+ * correr nesse modo (ERR_ERL_PERMISSIVE_TRUST_PROXY).
+ */
 export function loadTrustProxy(env: Env = process.env): number | boolean {
   const raw = readString(env, "MCP_TRUST_PROXY");
   if (raw === undefined) return 1;
-  const asBoolean = truthy(raw);
-  if (asBoolean !== undefined) return asBoolean;
   const parsed = Number(raw);
   if (Number.isInteger(parsed) && parsed >= 0) return parsed;
+  const asBoolean = truthy(raw);
+  if (asBoolean !== undefined) return asBoolean;
   return 1;
 }
