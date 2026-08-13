@@ -69,6 +69,11 @@ ENV VITE_WEB_BASE_URL=$VITE_WEB_BASE_URL
 ARG VITE_ENABLE_BOARDS="true"
 ENV VITE_ENABLE_BOARDS=$VITE_ENABLE_BOARDS
 
+# Operoz MCP (conectores OAuth). Build-time: mudar o host do MCP exige REBUILD do
+# frontend, não só restart. Vazio = /mcp-authorize mostra "conector indisponível".
+ARG VITE_MCP_BASE_URL=""
+ENV VITE_MCP_BASE_URL=$VITE_MCP_BASE_URL
+
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV TURBO_TELEMETRY_DISABLED=1
 

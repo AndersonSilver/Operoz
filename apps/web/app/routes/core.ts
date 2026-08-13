@@ -23,6 +23,14 @@ export const coreRoutes: RouteConfigEntry[] = [
     route("accounts/set-password", "./(all)/accounts/set-password/page.tsx"),
   ]),
 
+  // Conectores MCP (OAuth) — consentimento do Claude Desktop / claude.ai.
+  // Fica AQUI de propósito, no bloco de páginas de conta: dentro de
+  // `layout("./(all)/layout.tsx", …)` herdaria o shell de workspace e poderia
+  // redirecionar para /create-workspace. O ticket é segmento de path, nunca query.
+  layout("./(all)/mcp-authorize/layout.tsx", [
+    route("mcp-authorize/:ticket", "./(all)/mcp-authorize/[ticket]/page.tsx"),
+  ]),
+
   // Create Workspace
   layout("./(all)/create-workspace/layout.tsx", [route("create-workspace", "./(all)/create-workspace/page.tsx")]),
 

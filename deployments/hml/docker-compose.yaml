@@ -71,6 +71,10 @@ x-app-env:
   GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
   ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
   SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+  # Conectores MCP (OAuth do operoz-mcp). Segredo partilhado com o mcp-server;
+  # aceita CSV para rotação em duas etapas. Vazio = endpoint responde 503.
+  MCP_WEB_CALLBACK_SECRET: ${MCP_WEB_CALLBACK_SECRET:-}
+  MCP_WEB_CALLBACK_BASE_URL: ${MCP_WEB_CALLBACK_BASE_URL:-https://mcp-hml.operoz.io}
 services:
   web:
     container_name: hml-web
@@ -135,6 +139,10 @@ services:
       GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
       ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
       SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+      # Conectores MCP (OAuth do operoz-mcp). Segredo partilhado com o mcp-server;
+      # aceita CSV para rotação em duas etapas. Vazio = endpoint responde 503.
+      MCP_WEB_CALLBACK_SECRET: ${MCP_WEB_CALLBACK_SECRET:-}
+      MCP_WEB_CALLBACK_BASE_URL: ${MCP_WEB_CALLBACK_BASE_URL:-https://mcp-hml.operoz.io}
     depends_on:
     - hml-db
     - hml-redis

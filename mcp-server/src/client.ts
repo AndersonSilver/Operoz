@@ -1,3 +1,4 @@
+import { signIn as signInWithCsrf } from "./auth/operoz-credentials.js";
 import type { OperozConfig } from "./config.js";
 
 export type ApiSurface = "v1" | "app" | "public" | "instances" | "auth";
@@ -211,16 +212,17 @@ export class OperozClient {
     return fetch(location, { method: "GET" });
   }
 
+  /**
+   * Login por sessão Django (tool `operoz_sign_in`).
+   *
+   * Delegado a `auth/operoz-credentials.ts`, que faz o handshake de CSRF completo:
+   * `GET /auth/get-csrf-token/` → `csrfmiddlewaretoken` no corpo + cookie `csrftoken`
+   * + header `Origin`. A versão anterior fazia o `POST /auth/sign-in/` cru e levava
+   * `403` contra qualquer deploy real com CSRF ativo.
+   */
   async signIn(email: string, password: string): Promise<{ sessionCookie: string }> {
-    await this.request({
-      surface: "auth",
-      method: "POST",
-      path: "/sign-in/",
-      form: { email, password },
-    });
-    if (!this.sessionCookie) {
-      throw new Error("Login não devolveu cookie de sessão. Verifique credenciais e God mode.");
-    }
-    return { sessionCookie: this.sessionCookie };
+    const { sessionCookie } = await signInWithCsrf(this.config.baseUrl, email, password);
+    this.sessionCookie = sessionCookie;
+    return { sessionCookie };
   }
 }
