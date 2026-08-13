@@ -26,9 +26,11 @@ describe("OperozClient", () => {
     expect(fetch).not.toHaveBeenCalled();
   });
 
-  it("exige sessão para a surface app", async () => {
-    const client = new OperozClient({ baseUrl: "http://localhost:8000", apiKey: "token" });
-    await expect(client.request({ surface: "app", method: "GET", path: "/workspaces/" })).rejects.toThrow(/Sessão/);
+  it("exige auth (API key ou sessão) para a surface app", async () => {
+    const client = new OperozClient({ baseUrl: "http://localhost:8000" });
+    await expect(client.request({ surface: "app", method: "GET", path: "/workspaces/" })).rejects.toThrow(
+      /Auth necessária/
+    );
   });
 
   it("envia X-Api-Key na surface v1", async () => {
@@ -88,21 +90,40 @@ describe("OperozClient", () => {
     expect(result).toBeUndefined();
   });
 
-  it("signIn captura sessionid do Set-Cookie e devolve no resultado", async () => {
-    const headers = new Headers();
-    headers.append("Set-Cookie", "sessionid=xyz; Path=/; HttpOnly");
-    headers.append("Set-Cookie", "csrftoken=abc; Path=/");
-    vi.mocked(fetch).mockResolvedValue(new Response("", { status: 200, headers }));
+  it("signIn faz o handshake de CSRF antes do POST e captura o sessionid", async () => {
+    const csrfHeaders = new Headers();
+    csrfHeaders.append("Set-Cookie", "csrftoken=abc; Path=/");
+    const signInHeaders = new Headers();
+    signInHeaders.append("Set-Cookie", "sessionid=xyz; Path=/; HttpOnly");
+    signInHeaders.append("Set-Cookie", "csrftoken=abc; Path=/");
+
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ csrf_token: "tok-csrf" }), { status: 200, headers: csrfHeaders })
+      )
+      .mockResolvedValueOnce(new Response("", { status: 200, headers: signInHeaders }));
 
     const client = new OperozClient({ baseUrl: "http://localhost:8000" });
     const result = await client.signIn("user@example.com", "senha123");
+
+    expect(vi.mocked(fetch).mock.calls[0][0]).toBe("http://localhost:8000/auth/get-csrf-token/");
+    expect(vi.mocked(fetch).mock.calls[1][0]).toBe("http://localhost:8000/auth/sign-in/");
+    const body = new URLSearchParams(vi.mocked(fetch).mock.calls[1][1]!.body as string);
+    expect(body.get("csrfmiddlewaretoken")).toBe("tok-csrf");
 
     expect(result.sessionCookie).toContain("sessionid=xyz");
     expect(client.getSessionCookie()).toBe(result.sessionCookie);
   });
 
   it("signIn lança erro se nenhum cookie de sessão vier na resposta", async () => {
-    vi.mocked(fetch).mockResolvedValue(new Response("", { status: 200 }));
+    const csrfHeaders = new Headers();
+    csrfHeaders.append("Set-Cookie", "csrftoken=abc; Path=/");
+    vi.mocked(fetch)
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ csrf_token: "tok-csrf" }), { status: 200, headers: csrfHeaders })
+      )
+      .mockResolvedValueOnce(new Response("", { status: 200 }));
+
     const client = new OperozClient({ baseUrl: "http://localhost:8000" });
 
     await expect(client.signIn("user@example.com", "senha")).rejects.toThrow(/sessão/i);

@@ -1,4 +1,8 @@
 export const API_BASE_URL = process.env.VITE_API_BASE_URL || "";
+// Operoz MCP server (conectores OAuth do Claude Desktop / claude.ai).
+// Build-time: trocar o host do MCP exige REBUILD do frontend, não só restart.
+// Vazio = tela de consentimento indisponível (`/mcp-authorize/:ticket` mostra erro).
+export const MCP_BASE_URL = process.env.VITE_MCP_BASE_URL || "";
 export const API_BASE_PATH = process.env.VITE_API_BASE_PATH || "";
 export const API_URL = encodeURI(`${API_BASE_URL}${API_BASE_PATH}`);
 // God Mode Admin App Base Url

@@ -2,6 +2,10 @@
 # Uso: docker compose --env-file operoz-mcp.env up -d
 #
 # Reverse proxy (Nginx Proxy Manager): mcp.seudominio.com → http://<IP-VPS>:3100/mcp
+#
+# ATENÇÃO — com OAuth ligado o proxy tem de encaminhar a RAIZ (`/`), não só `/mcp`:
+# `/.well-known/*`, `/authorize`, `/token`, `/register`, `/revoke` e `/oauth/*`
+# vivem fora de `/mcp`. Validar em hml (deployments/mcp-hml/) ANTES de ligar aqui.
 
 services:
   operoz-mcp:
@@ -10,11 +14,37 @@ services:
     restart: unless-stopped
     ports:
       - "${MCP_PUBLISH:-127.0.0.1:3100}:3100"
+    volumes:
+      # Store OAuth (clientes DCR, grants, tokens). Volume NOMEADO: sobrevive a
+      # `--force-recreate`, senão todo conector precisaria ser reautorizado a cada
+      # deploy. A imagem cria /data com dono `node` (uid 1000) antes do USER node.
+      - operoz_mcp_data:/data
     environment:
       OPEROZ_API_BASE_URL: ${OPEROZ_API_BASE_URL:?defina OPEROZ_API_BASE_URL no operoz-mcp.env}
       MCP_HTTP_HOST: "0.0.0.0"
       MCP_HTTP_PORT: "3100"
       MCP_ALLOWED_HOSTS: ${MCP_ALLOWED_HOSTS:-mcp.operoz.io,127.0.0.1,localhost}
+      # --- OAuth 2.1 (conectores Claude Desktop / claude.ai) ---
+      # A presença de MCP_OAUTH_ISSUER_URL liga o OAuth. Vazio = OAuth desligado,
+      # e o servidor continua a servir só o caminho de token estático.
+      MCP_OAUTH_ISSUER_URL: ${MCP_OAUTH_ISSUER_URL:-}
+      MCP_OAUTH_ENABLED: ${MCP_OAUTH_ENABLED:-}
+      MCP_OAUTH_RESOURCE_URL: ${MCP_OAUTH_RESOURCE_URL:-}
+      MCP_OAUTH_STORE_PATH: ${MCP_OAUTH_STORE_PATH:-/data/oauth-store.json}
+      MCP_OAUTH_WEB_BASE_URL: ${MCP_OAUTH_WEB_BASE_URL:-}
+      MCP_OAUTH_WEB_ORIGINS: ${MCP_OAUTH_WEB_ORIGINS:-}
+      MCP_OAUTH_ACCESS_TOKEN_TTL: ${MCP_OAUTH_ACCESS_TOKEN_TTL:-3600}
+      MCP_OAUTH_REFRESH_TOKEN_TTL: ${MCP_OAUTH_REFRESH_TOKEN_TTL:-2592000}
+      MCP_OAUTH_CODE_TTL: ${MCP_OAUTH_CODE_TTL:-120}
+      MCP_OAUTH_PENDING_TTL: ${MCP_OAUTH_PENDING_TTL:-600}
+      MCP_OAUTH_SCOPES: ${MCP_OAUTH_SCOPES:-mcp:tools}
+      MCP_OAUTH_MAX_CLIENTS: ${MCP_OAUTH_MAX_CLIENTS:-500}
+      MCP_OAUTH_REVALIDATE_INTERVAL: ${MCP_OAUTH_REVALIDATE_INTERVAL:-300}
+      MCP_OAUTH_TOKEN_LABEL_PREFIX: ${MCP_OAUTH_TOKEN_LABEL_PREFIX:-MCP OAuth}
+      # Segredo partilhado com o apps/api. CSV para rotação em duas etapas.
+      MCP_WEB_CALLBACK_SECRET: ${MCP_WEB_CALLBACK_SECRET:-}
+      # Hop count do trust proxy do Express (atrás do Nginx Proxy Manager).
+      MCP_TRUST_PROXY: ${MCP_TRUST_PROXY:-1}
     healthcheck:
       test:
         [
@@ -27,3 +57,6 @@ services:
       timeout: 5s
       retries: 3
       start_period: 15s
+
+volumes:
+  operoz_mcp_data:

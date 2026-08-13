@@ -96,7 +96,8 @@ docker compose --env-file operoz-mcp.env up -d
 curl -sS http://127.0.0.1:3100/health
 ```
 
-Guia completo (NPM, GitHub Actions, Cursor): **[docs/deploy-mcp-vps.md](../docs/deploy-mcp-vps.md)**
+Compose e variáveis: **[deployments/mcp/](../deployments/mcp/)** (produção) e
+**[deployments/mcp-hml/](../deployments/mcp-hml/)** (homologação — validar aqui primeiro).
 
 ### Local (desenvolvimento)
 
@@ -125,7 +126,62 @@ Cada utilizador no `~/.cursor/mcp.json`:
 }
 ```
 
-Guia completo: [docs/operoz-mcp-empresa.md](../docs/operoz-mcp-empresa.md)
+Modelo de config: [.cursor/mcp.json.enterprise.example](../.cursor/mcp.json.enterprise.example)
+
+## Conectores (Claude Desktop / claude.ai)
+
+A tela de **Conectores** do Claude Desktop e do claude.ai só sabe adicionar servidores
+MCP remotos por **OAuth 2.1** — não existe campo para colar um token estático. Para
+isso o servidor HTTP suporta OAuth 2.1 completo (descoberta RFC 9728, PKCE, Dynamic
+Client Registration RFC 7591), com o login e o consentimento hospedados no **próprio
+Operoz** (`apps/web`), reaproveitando senha, código único e todos os SSO
+("Continuar com Google" incluído). **Nenhuma senha passa pelo `mcp-server`.**
+
+### Como funciona
+
+```
+Claude  → GET /authorize          → 302 https://<web>/mcp-authorize/<ticket>
+browser → login normal do Operoz (se preciso) → tela de consentimento
+        → [Aceitar] → POST <api>/api/users/mcp-connectors/authorize/ (sessão)
+                      Django minta o APIToken e entrega ao MCP num POST assinado (HMAC)
+        → volta para o Claude com ?code=…&state=…
+Claude  → POST /token             → access/refresh token (`ozmcp_at_…` / `ozmcp_rt_…`)
+```
+
+O `APIToken` mintado aparece em **Definições → API tokens** com o label
+`MCP OAuth · <nome da aplicação>` e pode ser revogado ali a qualquer momento (o
+conector para de funcionar em até `MCP_OAUTH_REVALIDATE_INTERVAL` segundos).
+O token é **account-wide** — não há seleção de workspace nesta versão.
+
+### Ligar
+
+1. **Confirmar que o reverse proxy encaminha a raiz (`/`)**, não só `/mcp`. É o
+   pré-requisito que mais trava rollout: `/.well-known/*`, `/authorize`, `/token`,
+   `/register`, `/revoke` e `/oauth/*` vivem fora de `/mcp`.
+2. Preencher as variáveis `MCP_OAUTH_*` e `MCP_WEB_CALLBACK_SECRET` no
+   `operoz-mcp.env` (ver `deployments/mcp/operoz-mcp.env.example`).
+3. Pôr o **mesmo** `MCP_WEB_CALLBACK_SECRET` e o `MCP_WEB_CALLBACK_BASE_URL` do lado
+   da API. Em HML é `deployments/hml/docker-compose.yaml`; em **produção é o
+   `operoz.env` residente NA VPS** (`OPEROZ_APP_PATH`, default
+   `/root/operis-selfhost/plane-app`) — fora deste repositório, edição manual.
+4. Buildar o frontend com `VITE_MCP_BASE_URL` apontando para este MCP (é build-time:
+   trocar o host depois exige **rebuild**, não só restart).
+5. No Claude, adicionar `https://mcp.operoz.io/mcp` como conector personalizado.
+
+Ordem de rollout: **`apps/api` e `apps/web` antes do `mcp-server`**. A página no ar
+apontando para um MCP sem `/oauth/pending` degrada para uma tela de erro — o modo de
+falha mais barato; o inverso deixa o `/authorize` a redirecionar para uma página 404.
+
+### Compatibilidade
+
+Configs existentes com **token estático continuam a funcionar sem qualquer
+alteração**, com ou sem OAuth ligado: `X-Api-Key`, `Authorization: Bearer <token
+Operoz>` (incluindo `plane_api_…` pré-rebrand) e `X-Operoz-Session` seguem o caminho
+legado intacto. O discriminador é o prefixo dos tokens que **nós** emitimos
+(`ozmcp_at_`), por isso nenhum token de terceiros colide com ele.
+
+Sem `MCP_OAUTH_ISSUER_URL`, o OAuth fica desligado e o servidor comporta-se
+exatamente como antes.
 
 ## Desenvolvimento
 
@@ -149,13 +205,11 @@ params consistentes, nenhum domínio virando gaveta de miscelânea).
 
 ## Empresa (~150 utilizadores Cursor, sem clone)
 
-Para equipas que **só** usam Operoz hospedado + Cursor (cards, boards, PRD, status report), lê o guia completo:
-
-**[docs/operoz-mcp-empresa.md](../docs/operoz-mcp-empresa.md)**
-
-Resumo: hospeda **Operoz** + **MCP centralizado** (`https://mcp.sua-empresa.com`); cada pessoa põe o **token pessoal** no `~/.cursor/mcp.json`. O monorepo fica só na infra — não nos portáteis.
+Para equipas que **só** usam Operoz hospedado + Cursor (cards, boards, PRD, status report):
+hospeda **Operoz** + **MCP centralizado** (`https://mcp.sua-empresa.com`); cada pessoa põe o **token pessoal** no `~/.cursor/mcp.json`. O monorepo fica só na infra — não nos portáteis.
 
 Modelo de config: [.cursor/mcp.json.enterprise.example](../.cursor/mcp.json.enterprise.example)
+Compose de referência: [deployments/mcp/](../deployments/mcp/)
 
 ## Mesmo repositório quando o Operoz estiver hospedado?
 

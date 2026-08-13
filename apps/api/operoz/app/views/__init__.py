@@ -254,6 +254,8 @@ from .module.archive import ModuleArchiveUnarchiveEndpoint
 
 from .api import ApiTokenEndpoint
 
+from .mcp_connector import McpConnectorAuthorizeEndpoint, McpConnectorDenyEndpoint
+
 from .page.base import (
     PageViewSet,
     PageFavoriteViewSet,

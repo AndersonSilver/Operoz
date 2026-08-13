@@ -645,3 +645,22 @@ if ENABLE_DRF_SPECTACULAR:
 # MongoDB Settings
 MONGO_DB_URL = os.environ.get("MONGO_DB_URL", False)
 MONGO_DB_DATABASE = os.environ.get("MONGO_DB_DATABASE", False)
+
+# ---------------------------------------------------------------------------
+# Conectores MCP (OAuth 2.1 do operoz-mcp)
+# ---------------------------------------------------------------------------
+# Segredo partilhado com o `mcp-server` para assinar (HMAC-SHA256) o handoff
+# `POST /oauth/web-callback`. Aceita CSV para rotação em duas etapas: assinamos
+# sempre com o PRIMEIRO da lista; o `mcp-server` aceita qualquer um.
+MCP_WEB_CALLBACK_SECRET = os.environ.get("MCP_WEB_CALLBACK_SECRET", "")
+
+# Base do `mcp-server` chamada servidor-a-servidor (`GET /oauth/pending/<ticket>`
+# e `POST /oauth/web-callback`). Pode ser interna (http://operoz-mcp:3100).
+MCP_WEB_CALLBACK_BASE_URL = os.environ.get("MCP_WEB_CALLBACK_BASE_URL", "")
+
+# Prefixo do label do APIToken mintado para o conector (visível em Definições).
+MCP_TOKEN_LABEL_PREFIX = os.environ.get("MCP_OAUTH_TOKEN_LABEL_PREFIX", "MCP OAuth")
+
+# Timeout (s) das chamadas ao `mcp-server`. Curto de propósito: o utilizador está
+# à espera no browser e o ticket é single-use (sem retry cego).
+MCP_WEB_CALLBACK_TIMEOUT = int(os.environ.get("MCP_WEB_CALLBACK_TIMEOUT", 5))

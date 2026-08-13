@@ -129,6 +129,7 @@ jobs:
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
+            VITE_MCP_BASE_URL=${{ vars.OPEROZ_MCP_URL || 'https://mcp.operoz.io' }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

@@ -1,5 +1,9 @@
 from django.urls import path
-from operoz.app.views import ApiTokenEndpoint
+from operoz.app.views import (
+    ApiTokenEndpoint,
+    McpConnectorAuthorizeEndpoint,
+    McpConnectorDenyEndpoint,
+)
 
 urlpatterns = [
     # API Tokens
@@ -14,4 +18,16 @@ urlpatterns = [
         name="api-tokens-details",
     ),
     ## End API Tokens
+    # Conectores MCP (OAuth 2.1 do operoz-mcp)
+    path(
+        "users/mcp-connectors/authorize/",
+        McpConnectorAuthorizeEndpoint.as_view(),
+        name="mcp-connector-authorize",
+    ),
+    path(
+        "users/mcp-connectors/deny/",
+        McpConnectorDenyEndpoint.as_view(),
+        name="mcp-connector-deny",
+    ),
+    ## End Conectores MCP
 ]

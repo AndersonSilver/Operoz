@@ -85,6 +85,7 @@ jobs:
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=https://hml.operoz.io
+            VITE_MCP_BASE_URL=https://mcp-hml.operoz.io
           cache-from: type=gha
           cache-to: type=gha,mode=max
 

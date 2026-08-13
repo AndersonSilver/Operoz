@@ -16,12 +16,19 @@ WORKDIR /app
 
 ENV NODE_ENV=production \
   MCP_HTTP_HOST=0.0.0.0 \
-  MCP_HTTP_PORT=3100
+  MCP_HTTP_PORT=3100 \
+  MCP_OAUTH_STORE_PATH=/data/oauth-store.json
 
 COPY package.json package-lock.json ./
 RUN npm ci --omit=dev && chown -R node:node /app
 
 COPY --from=builder /app/dist ./dist
+
+# /data guarda o store OAuth (clientes DCR, grants, tokens). Precisa existir na
+# imagem E pertencer ao uid 1000 (node) ANTES do `USER node`: um volume nomeado
+# herda o dono do diretório da imagem no mountpoint. Se o diretório não existir,
+# o Docker cria o mountpoint como root:root e toda escrita falha com EACCES.
+RUN mkdir -p /data && chown node:node /data && chmod 700 /data
 
 USER node
 
