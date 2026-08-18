@@ -157,7 +157,11 @@ export function CreateBoardForm(props: Props) {
           render={({ field }) => (
             <div className="space-y-1">
               <p className="text-11 font-medium text-secondary">{t("description")}</p>
-              <TextArea {...field} placeholder={t("boards.description_placeholder")} rows={3} className="w-full" />
+              <TextArea
+                {...field}
+                placeholder={t("boards.description_placeholder")}
+                className="min-h-24 w-full resize-none"
+              />
             </div>
           )}
         />

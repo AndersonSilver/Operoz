@@ -1,0 +1,54 @@
+# Teste local da imagem "backend-all-in-one" (api+api-chat+worker+beat+
+# migrator+admin+space+live+proxy num container so) contra o db/redis do
+# docker-compose-local.yml, que precisa estar de pe (`pnpm` raiz ->
+# ./scripts/docker-local.sh up, ou docker compose -f docker-compose-local.yml
+# up -d operoz-db operoz-redis operoz-minio).
+#
+# Uso:
+#   cd deployments/aio/operoz
+#   docker build -t operoz-aio-api:test .
+#   docker compose -f docker-compose.test.yml up -d
+#   abrir http://localhost
+#
+# Derrubar:
+#   docker compose -f docker-compose.test.yml down
+
+name: operoz-aio-test
+
+services:
+  web:
+    image: operoz-full-web:latest
+    networks:
+      dev_env:
+        aliases:
+          - web
+
+  api:
+    image: operoz-aio-api:test
+    env_file:
+      - ../../../apps/api/.env
+    environment:
+      DATABASE_URL: postgresql://operoz:operoz@operoz-db:5432/operoz
+      REDIS_URL: redis://operoz-redis:6379/
+      GUNICORN_WORKERS: "1"
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CORS_ALLOWED_ORIGINS: http://localhost
+      WEB_URL: http://localhost
+      SECRET_KEY: lqbs60or52px1psgfcnejsrqbvuzks33kmhq9p66css7x1s582
+      LIVE_SERVER_SECRET_KEY: secret-key
+      API_BASE_URL: http://localhost:8000
+      SECURE_SSL_REDIRECT: "0"
+    ports:
+      - "80:8080"
+    depends_on:
+      - web
+    networks:
+      - dev_env
+
+networks:
+  dev_env:
+    name: operoz_dev_env
+    external: true

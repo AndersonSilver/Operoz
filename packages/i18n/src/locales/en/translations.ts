@@ -1255,7 +1255,8 @@ export default {
         delete_success_message: "«{name}» was removed.",
         empty: "No circles created yet.",
         members_modal_title: "Circle members",
-        members_hint: "Adding someone to this circle automatically grants the associated role, if any. Removing from the list takes the person out of the circle, but does not revoke a role already granted.",
+        members_hint:
+          "Adding someone to this circle automatically grants the associated role, if any. Removing from the list takes the person out of the circle, but does not revoke a role already granted.",
         add_member_placeholder: "Select workspace member…",
         add_member: "Add",
         members_empty: "No one in this circle yet.",
@@ -6150,6 +6151,11 @@ export default {
     description: "We couldn't fetch the instance details. This may be a temporary connectivity issue.",
     status_badge: "Instance unavailable",
     retry: "Try again",
+  },
+  instance_not_ready: {
+    title: "Welcome to Operoz",
+    description: "Set up your instance and create your first workspace to begin managing projects and work.",
+    cta: "Get started",
   },
   error_page: {
     title: "Oops! Something went wrong.",

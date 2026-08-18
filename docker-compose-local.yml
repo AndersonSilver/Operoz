@@ -153,6 +153,10 @@ services:
     ports:
       - "6432:5432"
 
+  # Fila unica: celery (default) + automation + automation_email + assistant +
+  # assistant-chat. Substitui os antigos worker/automation-worker/
+  # automation-email-worker/assistant-worker/assistant-chat-worker (Tier 1 do
+  # plano de reducao de containers). beat-worker fica de fora por ser singleton.
   # Celery workers default to operoz.settings.production via manage.py — force local
   # settings so ALLOWED_HOSTS / debug SMTP match the API container in this stack.
   worker:
@@ -169,11 +173,12 @@ services:
       - dev_env
     volumes:
       - ./apps/api:/code
-    command: ./bin/docker-entrypoint-worker.sh
+    command: ./bin/docker-entrypoint-worker-general.sh
     env_file:
       - ./apps/api/.env
     depends_on:
       - api
+      - api-chat
       - operoz-db
       - operoz-redis
       - operoz-mq
@@ -184,6 +189,7 @@ services:
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
+      GENERAL_WORKER_CONCURRENCY: ${GENERAL_WORKER_CONCURRENCY:-8}
 
   beat-worker:
     build:
@@ -213,128 +219,6 @@ services:
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
-
-  automation-worker:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.dev
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: unless-stopped
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    networks:
-      - dev_env
-    volumes:
-      - ./apps/api:/code
-    command: ./bin/docker-entrypoint-automation-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-    environment:
-      SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operoz.settings.local
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
-      USE_MINIO: "1"
-      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
-
-  automation-email-worker:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.dev
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: unless-stopped
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    networks:
-      - dev_env
-    volumes:
-      - ./apps/api:/code
-    command: ./bin/docker-entrypoint-automation-email-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-    environment:
-      SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operoz.settings.local
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
-      USE_MINIO: "1"
-      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
-
-  assistant-worker:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.dev
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: unless-stopped
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    networks:
-      - dev_env
-    volumes:
-      - ./apps/api:/code
-    command: ./bin/docker-entrypoint-assistant-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-    environment:
-      SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operoz.settings.local
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
-      USE_MINIO: "1"
-      MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
-
-  assistant-chat-worker:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.dev
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: unless-stopped
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    networks:
-      - dev_env
-    volumes:
-      - ./apps/api:/code
-    command: ./bin/docker-entrypoint-assistant-chat-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - api-chat
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-    environment:
-      SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operoz.settings.local
-      ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
-      ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
-      ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
-      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
-      USE_MINIO: "1"
 
   migrator:
     build:

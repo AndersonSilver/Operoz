@@ -1,0 +1,105 @@
+# Dev local no MESMO formato de produção: web + api (mega: api+api-chat+
+# worker+beat+migrator+admin+space+live+proxy) + redis. db/minio ficam
+# locais porque a Azure (Postgres/Blob) ainda nao existe — assim que
+# existir, troca as envs do serviço `api` e sai db/minio de vez daqui tambem.
+#
+# Sem hot-reload de front nem watch automatico de backend — igual produção.
+# Mudou codigo: `docker compose -f docker-compose-local-aio.yml up -d --build`
+# (front) ou `docker exec operoz-aio-api supervisorctl restart api worker beat api-chat`
+# depois de editar apps/api (backend, via bind-mount, sem rebuild de imagem).
+name: operoz-aio
+
+services:
+  operoz-db:
+    image: pgvector/pgvector:pg15
+    restart: unless-stopped
+    command: postgres -c 'max_connections=200'
+    networks:
+      - aio_net
+    volumes:
+      - aio_pgdata:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  operoz-redis:
+    image: valkey/valkey:7.2.11-alpine
+    restart: unless-stopped
+    networks:
+      - aio_net
+    volumes:
+      - aio_redisdata:/data
+
+  operoz-minio:
+    image: minio/minio
+    restart: unless-stopped
+    networks:
+      - aio_net
+    command: server /export --console-address ":9090"
+    volumes:
+      - aio_uploads:/export
+    env_file:
+      - .env
+    environment:
+      MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-access-key}
+      MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+
+  web:
+    build:
+      context: .
+      dockerfile: ./apps/web/Dockerfile.web
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: unless-stopped
+    networks:
+      aio_net:
+        aliases:
+          - web
+
+  api:
+    container_name: operoz-aio-api
+    build:
+      context: ./deployments/aio/operoz
+      args:
+        BACKEND_IMAGE: operoz-full-api:latest
+        SPACE_IMAGE: operoz-full-space:latest
+        ADMIN_IMAGE: operoz-full-admin:latest
+        LIVE_IMAGE: operoz-full-live:latest
+        PROXY_IMAGE: operoz-full-proxy:latest
+    restart: unless-stopped
+    networks:
+      - aio_net
+    volumes:
+      # Backend em bind-mount: edita apps/api, reinicia o processo dentro do
+      # supervisor (nao a imagem toda) pra ver o efeito. Space/live/admin/web
+      # continuam do build (imagem), igual produção — sem live-reload deles.
+      - ./apps/api:/app/backend
+    env_file:
+      - ./apps/api/.env
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER:-operoz}:${POSTGRES_PASSWORD:-operoz}@operoz-db:5432/${POSTGRES_DB:-operoz}
+      REDIS_URL: redis://operoz-redis:6379/
+      GUNICORN_WORKERS: "1"
+      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
+      USE_MINIO: "1"
+      MINIO_PUBLIC_ENDPOINT_URL: http://localhost
+      ALLOWED_HOSTS: localhost,127.0.0.1
+      CORS_ALLOWED_ORIGINS: http://localhost
+      WEB_URL: http://localhost
+      API_BASE_URL: http://localhost:8000
+      SECURE_SSL_REDIRECT: "0"
+    ports:
+      - "80:8080"
+    depends_on:
+      - web
+      - operoz-db
+      - operoz-redis
+      - operoz-minio
+
+networks:
+  aio_net:
+    driver: bridge
+
+volumes:
+  aio_pgdata:
+  aio_redisdata:
+  aio_uploads:

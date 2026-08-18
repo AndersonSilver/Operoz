@@ -6385,6 +6385,11 @@ export default {
     status_badge: "Instância indisponível",
     retry: "Tentar novamente",
   },
+  instance_not_ready: {
+    title: "Bem-vindo ao Operoz",
+    description: "Configure sua instância e crie seu primeiro workspace para começar a gerenciar projetos e tarefas.",
+    cta: "Começar",
+  },
   error_page: {
     title: "Ops! Algo deu errado.",
     description:

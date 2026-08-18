@@ -54,6 +54,7 @@ venv
 .venv
 *.pyc
 staticfiles
+apps/api/operoz/static-assets/
 mediafiles
 .env
 .DS_Store
