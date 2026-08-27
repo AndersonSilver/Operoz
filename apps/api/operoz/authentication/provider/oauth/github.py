@@ -13,6 +13,7 @@ from operoz.authentication.adapter.error import (
 
 # Module imports
 from operoz.authentication.adapter.oauth import OauthAdapter
+from operoz.authentication.utils.redirect_uri import oauth_redirect_uri
 from operoz.license.utils.instance_value import get_configuration_value
 
 
@@ -57,7 +58,7 @@ class GitHubOAuthProvider(OauthAdapter):
         if self.organization_id:
             self.scope += f" {self.organization_scope}"
 
-        redirect_uri = f"""{"https" if request.is_secure() else "http"}://{request.get_host()}/auth/github/callback/"""
+        redirect_uri = oauth_redirect_uri(request, "github")
         url_params = {
             "client_id": client_id,
             "redirect_uri": redirect_uri,
