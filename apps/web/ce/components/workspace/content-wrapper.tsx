@@ -7,7 +7,6 @@ import { useWorkspaceImmersiveChrome } from "@/components/board/project-board-ba
 import { AppRailRoot } from "@/components/navigation";
 import { useAppRailVisibility } from "@/lib/app-rail";
 // local imports
-import { OperozAssistantShell } from "@/components/assistant/operoz-assistant-shell";
 import { TopNavigationRoot } from "../navigations";
 
 export const WorkspaceContentWrapper = observer(function WorkspaceContentWrapper({
@@ -42,7 +41,6 @@ export const WorkspaceContentWrapper = observer(function WorkspaceContentWrapper
           {children}
         </div>
       </div>
-      <OperozAssistantShell />
     </div>
   );
 });

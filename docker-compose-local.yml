@@ -104,39 +104,6 @@ services:
       - "8000:8000"
     mem_limit: 1536m
 
-  api-chat:
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.dev
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: unless-stopped
-    dns:
-      - 8.8.8.8
-      - 1.1.1.1
-    networks:
-      - dev_env
-    volumes:
-      - ./apps/api:/code
-    command: ./bin/docker-entrypoint-api-chat-local.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-    environment:
-      SKIP_ENV_VAR: "1"
-      DJANGO_SETTINGS_MODULE: operoz.settings.local
-      PORT: "8001"
-      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-4}
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
-      AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
-      USE_MINIO: "1"
-    ports:
-      - "8001:8001"
-    mem_limit: 2g
-
   operoz-pgbouncer:
     image: edoburu/pgbouncer:1.22.1-p0
     restart: unless-stopped
@@ -153,9 +120,9 @@ services:
     ports:
       - "6432:5432"
 
-  # Fila unica: celery (default) + automation + automation_email + assistant +
-  # assistant-chat. Substitui os antigos worker/automation-worker/
-  # automation-email-worker/assistant-worker/assistant-chat-worker (Tier 1 do
+  # Fila unica: celery (default) + automation + automation_email + assistant.
+  # Substitui os antigos worker/automation-worker/automation-email-worker/
+  # assistant-worker (Tier 1 do
   # plano de reducao de containers). beat-worker fica de fora por ser singleton.
   # Celery workers default to operoz.settings.production via manage.py — force local
   # settings so ALLOWED_HOSTS / debug SMTP match the API container in this stack.
@@ -178,7 +145,6 @@ services:
       - ./apps/api/.env
     depends_on:
       - api
-      - api-chat
       - operoz-db
       - operoz-redis
       - operoz-mq

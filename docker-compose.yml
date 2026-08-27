@@ -61,28 +61,6 @@ services:
     mem_limit: 1536m
     cpus: 1.0
 
-  api-chat:
-    container_name: api-chat
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-api-chat.sh
-    env_file:
-      - ./apps/api/.env
-    environment:
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
-      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
-      GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
-    depends_on:
-      - operoz-db
-      - operoz-redis
-      - operoz-pgbouncer
-    mem_limit: 2g
-    cpus: 2.0
-
   operoz-pgbouncer:
     container_name: operoz-pgbouncer
     image: edoburu/pgbouncer:1.22.1-p0
@@ -99,8 +77,8 @@ services:
     cpus: 0.25
 
   # Fila unica: celery (default) + automation + automation_email + assistant +
-  # assistant-chat. Substitui os antigos worker/automation-worker/
-  # automation-email-worker/assistant-worker/assistant-chat-worker (Tier 1 do
+  # Substitui os antigos worker/automation-worker/automation-email-worker/
+  # assistant-worker (Tier 1 do
   # plano de reducao de containers). beat-worker fica de fora por ser singleton.
   worker:
     container_name: bgworker
@@ -117,7 +95,6 @@ services:
       GENERAL_WORKER_CONCURRENCY: ${GENERAL_WORKER_CONCURRENCY:-8}
     depends_on:
       - api
-      - api-chat
       - operoz-db
       - operoz-redis
       - operoz-mq
@@ -241,7 +218,6 @@ services:
     depends_on:
       - web
       - api
-      - api-chat
       - space
       - admin
     mem_limit: 256m

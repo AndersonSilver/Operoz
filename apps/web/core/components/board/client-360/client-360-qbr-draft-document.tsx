@@ -5,7 +5,7 @@ import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { TextArea } from "@operoz/ui";
 import { cn, renderFormattedDate } from "@operoz/utils";
-import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
+import { MarkdownContent } from "@/components/common/markdown-content";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import {
@@ -127,7 +127,7 @@ function NarrativeBlock({ content, emptyLabel }: { content: string; emptyLabel: 
     return <p className="text-13 leading-relaxed text-tertiary italic">{emptyLabel}</p>;
   }
 
-  return <AssistantMarkdownContent content={trimmed} className="text-13 leading-relaxed" inheritColor />;
+  return <MarkdownContent content={trimmed} className="text-13 leading-relaxed" inheritColor />;
 }
 
 type DocumentProps = {

@@ -202,7 +202,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-  # Builda e publica a imagem "backend-all-in-one" (api+api-chat+worker+beat+
+  # Builda e publica a imagem "backend-all-in-one" (api+worker+beat+
   # migrator+admin+space+live+proxy num container so, ver deployments/aio/operoz/).
   # So publica no GHCR — NAO substitui o deploy full atual (job `deploy` abaixo
   # continua usando plane-backend/space/admin/live/proxy separados). Troca de

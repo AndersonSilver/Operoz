@@ -30,13 +30,6 @@
 		reverse_proxy localhost:3005
 	}
 
-	@assistant_chat path /api/workspaces/*/assistant/sessions/*/chat* /api/workspaces/*/assistant/chat/jobs/*/stream*
-	handle @assistant_chat {
-		reverse_proxy localhost:8001 {
-			flush_interval -1
-		}
-	}
-
 	handle /api/* {
 		reverse_proxy localhost:8000 {
 			flush_interval -1

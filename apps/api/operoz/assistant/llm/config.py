@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 from typing import List, Tuple
 
-from operoz.assistant.llm.degraded_mode import get_fallback_model, should_use_degraded_mode
 from operoz.assistant.llm.key_pool import get_api_key, list_api_keys
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.utils.exception_logger import log_exception
@@ -128,12 +127,12 @@ def _model_is_allowed(provider_cls: type[LLMProvider], model: str) -> bool:
     return model in provider_cls.models
 
 
-def get_llm_config(
-    *,
-    workspace=None,
-    degraded: bool | None = None,
-) -> Tuple[str | None, str | None, str | None, bool]:
-    """Returns (api_key, model, provider_key, degraded_mode_active)."""
+def get_llm_config(*, workspace=None) -> Tuple[str | None, str | None, str | None]:
+    """Returns (api_key, model, provider_key).
+
+    `workspace` é aceito e ignorado: sobrou da época em que o modo degradado
+    escolhia um modelo mais barato conforme o orçamento diário do chat.
+    """
     api_key = get_api_key()
     if not api_key and list_api_keys():
         api_key = list_api_keys()[0]
@@ -154,11 +153,11 @@ def get_llm_config(
     provider_cls = SUPPORTED_PROVIDERS.get((provider_key or "").lower())
     if not provider_cls:
         log_exception(ValueError(f"Unsupported provider: {provider_key}"))
-        return None, None, None, False
+        return None, None, None
 
     if not api_key:
         log_exception(ValueError(f"Missing API key for provider: {provider_cls.name}"))
-        return None, None, None, False
+        return None, None, None
 
     if not model:
         model = provider_cls.default_model
@@ -166,17 +165,8 @@ def get_llm_config(
     if (provider_key or "").lower() == "gemini":
         model = _GEMINI_MODEL_ALIASES.get(model, model)
 
-    degraded_active = False
-    if degraded is None and workspace is not None:
-        degraded = should_use_degraded_mode(workspace)
-    if degraded:
-        fallback = get_fallback_model(provider_key or "", model)
-        if fallback:
-            model = fallback
-            degraded_active = True
-
     if not _model_is_allowed(provider_cls, model):
         log_exception(ValueError(f"Model {model} not supported by {provider_cls.name}"))
-        return None, None, None, False
+        return None, None, None
 
-    return api_key, model, provider_key, degraded_active
+    return api_key, model, provider_key

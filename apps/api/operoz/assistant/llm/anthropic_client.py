@@ -4,7 +4,6 @@ import json
 from typing import Any, Iterator
 
 from operoz.assistant.llm.http_client import classify_llm_exception, ensure_ipv4_friendly_dns
-from operoz.assistant.tools.registry import list_openai_tools
 from operoz.utils.exception_logger import log_exception
 
 
@@ -137,7 +136,7 @@ def anthropic_chat_completion(
         return LLMChatResult(error="llm_not_configured")
 
     system, api_messages = to_anthropic_messages(messages)
-    anthropic_tools = _openai_tools_to_anthropic(tools or list_openai_tools())
+    anthropic_tools = _openai_tools_to_anthropic(tools)
 
     try:
         ensure_ipv4_friendly_dns()
@@ -171,7 +170,7 @@ def anthropic_stream_chat_completion(
         return
 
     system, api_messages = to_anthropic_messages(messages)
-    anthropic_tools = _openai_tools_to_anthropic(tools or list_openai_tools())
+    anthropic_tools = _openai_tools_to_anthropic(tools)
 
     try:
         ensure_ipv4_friendly_dns()

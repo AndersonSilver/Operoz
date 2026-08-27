@@ -4,7 +4,7 @@ from dataclasses import dataclass, field
 from datetime import UTC, datetime
 from typing import Any
 
-from operoz.discord_integration.services.text_utils import (
+from operoz.alerts.text_utils import (
     DISCORD_EMBED_DESCRIPTION_MAX_LENGTH,
     truncate_for_discord,
 )

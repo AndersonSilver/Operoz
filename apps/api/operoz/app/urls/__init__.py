@@ -1,9 +1,7 @@
 from .analytic import urlpatterns as analytic_urls
-from .assistant import urlpatterns as assistant_urls
 from .board import urlpatterns as board_urls
 from .api import urlpatterns as api_urls
 from .asset import urlpatterns as asset_urls
-from .discord import urlpatterns as discord_urls
 from .cycle import urlpatterns as cycle_urls
 from .estimate import urlpatterns as estimate_urls
 from .external import urlpatterns as external_urls
@@ -28,11 +26,9 @@ from .workflow import urlpatterns as workflow_urls
 
 urlpatterns = [
     *analytic_urls,
-    *assistant_urls,
     *board_urls,
     *asset_urls,
     *cycle_urls,
-    *discord_urls,
     *estimate_urls,
     *external_urls,
     *intake_urls,

@@ -23,7 +23,6 @@ import {
   Client360QbrDraftBody,
   Client360QbrDraftGenerateButton,
 } from "@/components/board/client-360/client-360-qbr-draft-section";
-import { useClient360DetailAssistantActions } from "@/components/board/client-360/client-360-detail-assistant";
 import type { TClient360DetailResponse } from "@operoz/types";
 import { renderFormattedDate } from "@operoz/utils";
 import { WorkspaceService } from "@/services/workspace.service";
@@ -52,7 +51,6 @@ export function Client360DetailPulse({ workspaceSlug, projectId, period, data, s
   const [playbooks, setPlaybooks] = useState<TClient360ScenarioPlaybook[]>([]);
   const [openPlaybook, setOpenPlaybook] = useState<TClient360ScenarioPlaybook | null>(null);
   const [actionsLoading, setActionsLoading] = useState(true);
-  const { openChat } = useClient360DetailAssistantActions(projectId);
 
   const loadActions = useCallback(async () => {
     setActionsLoading(true);
@@ -114,10 +112,6 @@ export function Client360DetailPulse({ workspaceSlug, projectId, period, data, s
   const periodLabel = `${renderFormattedDate(period.start)} — ${renderFormattedDate(period.end)}`;
 
   const handleIntelOpen = (kind: Client360IntelligencePanelKind) => {
-    if (kind === "assistant") {
-      openChat();
-      return;
-    }
     setPanel(kind);
   };
 

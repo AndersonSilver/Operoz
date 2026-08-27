@@ -101,7 +101,7 @@ function MarkdownTable(props: MarkdownTableProps) {
   );
 }
 
-export function AssistantMarkdownContent({ content, className, inheritColor = false }: Props) {
+export function MarkdownContent({ content, className, inheritColor = false }: Props) {
   const textClass = inheritColor ? "text-inherit" : "text-secondary";
   const headingClass = inheritColor ? "text-inherit" : "text-primary";
   const strongClass = inheritColor ? "font-semibold text-inherit" : "font-semibold text-primary";
