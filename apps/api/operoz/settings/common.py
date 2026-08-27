@@ -401,6 +401,13 @@ CELERY_IMPORTS = (
     "operoz.bgtasks.automation_email_task",
     "operoz.bgtasks.assistant_index_task",
     "operoz.bgtasks.issue_automation_task",
+    # Tasks de alerta agendadas no beat. alert_scan_task nao e importado por
+    # nenhum outro modulo, entao sem esta linha o worker recusa a task com
+    # "Received unregistered task". alert_digest_task so funcionava por ser
+    # importado de alerts/channels/email.py — explicitado aqui para nao
+    # depender desse acaso.
+    "operoz.bgtasks.alert_scan_task",
+    "operoz.bgtasks.alert_digest_task",
     "operoz.bgtasks.jira_ops_sync_task",
     "operoz.bgtasks.exporter_expired_task",
     "operoz.bgtasks.file_asset_task",
