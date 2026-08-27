@@ -343,6 +343,10 @@ AUTOMATION_EMAIL_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_EMAIL_WORKE
 CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT = os.environ.get("CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT", "0")
 
 ASSISTANT_RAG_ENABLED = os.environ.get("ASSISTANT_RAG_ENABLED", "1")
+# Gate separado para a escrita do indice. ASSISTANT_RAG_ENABLED so desliga a
+# leitura (retrieval); sem isto a indexacao continua gastando embedding mesmo
+# com o RAG "desligado".
+ASSISTANT_RAG_INDEXING_ENABLED = os.environ.get("ASSISTANT_RAG_INDEXING_ENABLED", "1")
 ASSISTANT_HISTORY_SUMMARIZE_AFTER = int(os.environ.get("ASSISTANT_HISTORY_SUMMARIZE_AFTER", "14"))
 ASSISTANT_HISTORY_KEEP_RECENT = int(os.environ.get("ASSISTANT_HISTORY_KEEP_RECENT", "8"))
 ASSISTANT_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_EMBEDDING_CACHE_TTL", str(60 * 60 * 24 * 7)))

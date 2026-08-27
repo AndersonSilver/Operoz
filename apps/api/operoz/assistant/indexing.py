@@ -8,6 +8,7 @@ from django.db import transaction
 from operoz.assistant.embeddings import content_hash, embed_texts
 from operoz.assistant.index_status import compute_page_fingerprint, persist_index_outcome
 from operoz.assistant.page_content import build_page_indexable_text
+from operoz.assistant.rag_flags import is_rag_indexing_enabled
 from operoz.db.models import (
     BoardPlaybook,
     Client360HealthSnapshot,
@@ -197,6 +198,12 @@ def _entity_index_fingerprint(entity_type: str, entity_id: str) -> str | None:
 
 @transaction.atomic
 def index_entity(entity_type: str, entity_id: str, *, workspace_id: str | None = None) -> dict[str, Any]:
+    if not is_rag_indexing_enabled():
+        # Não persiste outcome: com a indexação desligada o estado anterior da
+        # entidade continua valendo, e marcar como processada esconderia o
+        # backlog na hora de religar.
+        return {"ok": True, "indexed": 0, "skipped": "indexing_disabled"}
+
     fingerprint = _entity_index_fingerprint(entity_type, entity_id)
     resolved_workspace_id, chunks = _load_entity_chunks(entity_type, entity_id)
     if not resolved_workspace_id:
