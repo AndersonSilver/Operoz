@@ -1,5 +1,5 @@
-# Testes do Assistente Operoz — unit + contract API.
-# Dispara em PR/push que tocam backend assistant ou este workflow.
+# Testes do indice RAG do Operoz — unit + contract da busca semantica.
+# Dispara em PR/push que tocam a indexacao/retrieval ou este workflow.
 
 name: CI Assistant Operoz
 
@@ -11,7 +11,8 @@ on:
       - "apps/api/operoz/bgtasks/assistant_index_task.py"
       - "apps/api/operoz/app/views/assistant/**"
       - "apps/api/operoz/tests/unit/assistant/**"
-      - "apps/api/operoz/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operoz/tests/contract/api/test_search.py"
+      - "apps/api/operoz/api/views/search.py"
       - "apps/api/operoz/devops/**"
       - "apps/api/operoz/db/management/commands/check_celery_queues.py"
       - ".github/workflows/ci-assistant.yml"
@@ -21,7 +22,8 @@ on:
       - "apps/api/operoz/bgtasks/assistant_index_task.py"
       - "apps/api/operoz/app/views/assistant/**"
       - "apps/api/operoz/tests/unit/assistant/**"
-      - "apps/api/operoz/tests/contract/app/test_assistant_app.py"
+      - "apps/api/operoz/tests/contract/api/test_search.py"
+      - "apps/api/operoz/api/views/search.py"
       - "apps/api/operoz/devops/**"
       - "apps/api/operoz/db/management/commands/check_celery_queues.py"
       - ".github/workflows/ci-assistant.yml"
@@ -68,7 +70,6 @@ jobs:
       REDIS_URL: redis://localhost:6379/0
       SECRET_KEY: ci-assistant-secret
       LLM_API_KEY: sk-ci-mock
-      ASSISTANT_ENABLED: "1"
       WEB_URL: http://localhost:3000
       APP_BASE_URL: http://localhost:3000
       ALLOWED_HOSTS: localhost,127.0.0.1
@@ -91,5 +92,5 @@ jobs:
           python -m pytest \
             operoz/tests/unit/assistant/ \
             operoz/tests/unit/devops/test_celery_queue_monitor.py \
-            operoz/tests/contract/app/test_assistant_app.py \
+            operoz/tests/contract/api/test_search.py \
             -q --tb=short
