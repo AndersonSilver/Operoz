@@ -1,8 +1,4 @@
 from .analytic import AnalyticView
-from .assistant import AssistantMessage, AssistantSession
-from .assistant_chat_job import AssistantChatJob
-from .assistant_quality import AssistantQualityDaily, AssistantQualityReview
-from .assistant_security import AssistantActionAudit, AssistantUsageDaily
 from .search_embedding import EMBEDDING_DIMENSIONS, SearchEmbedding
 from .api import APIActivityLog, APIToken
 from .asset import FileAsset

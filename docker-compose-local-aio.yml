@@ -1,11 +1,11 @@
-# Dev local no MESMO formato de produção: web + api (mega: api+api-chat+
+# Dev local no MESMO formato de produção: web + api (mega: api+
 # worker+beat+migrator+admin+space+live+proxy) + redis. db/minio ficam
 # locais porque a Azure (Postgres/Blob) ainda nao existe — assim que
 # existir, troca as envs do serviço `api` e sai db/minio de vez daqui tambem.
 #
 # Sem hot-reload de front nem watch automatico de backend — igual produção.
 # Mudou codigo: `docker compose -f docker-compose-local-aio.yml up -d --build`
-# (front) ou `docker exec operoz-aio-api supervisorctl restart api worker beat api-chat`
+# (front) ou `docker exec operoz-aio-api supervisorctl restart api worker beat`
 # depois de editar apps/api (backend, via bind-mount, sem rebuild de imagem).
 name: operoz-aio
 

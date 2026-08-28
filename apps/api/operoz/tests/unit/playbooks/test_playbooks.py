@@ -9,8 +9,6 @@ from datetime import datetime
 from operoz.assistant.indexing import build_playbook_chunks, split_markdown_sections
 from operoz.automation.domain import DomainEvent
 from operoz.automation.executor import build_execution_context
-from operoz.assistant.prompts import resolve_playbook_snippet
-from operoz.assistant.types import AssistantActorContext
 from operoz.db.models import BoardPlaybook
 from operoz.playbooks.lifecycle import publish_playbook
 from operoz.playbooks.resolver import (
@@ -132,23 +130,3 @@ class TestBoardPlaybookInjection:
         )
         ctx = build_execution_context(event, rule_id="rule-1", automation_actor=None)
         assert "48 horas" in ctx["playbook_snippets"]
-
-    def test_assistant_snippet_by_intent(self, workspace, workspace_board, create_user):
-        BoardPlaybook.objects.create(
-            workspace=workspace,
-            board=workspace_board,
-            title="Docs",
-            slug="docs",
-            published_markdown="## Guia\nConteúdo",
-            published_version=1,
-            metadata={"intents": ["documentation"]},
-        )
-        actor_ctx = AssistantActorContext(
-            workspace=workspace,
-            user=create_user,
-            board_slug=workspace_board.slug,
-            project_id=None,
-        )
-        snippet = resolve_playbook_snippet(actor_ctx, intent="documentation")
-        assert "Guia" in snippet
-        assert resolve_playbook_snippet(actor_ctx, intent="metrics") == ""

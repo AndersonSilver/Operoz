@@ -1,5 +1,12 @@
 {
 	auto_https off
+	# TLS termina no proxy de borda (Nginx Proxy Manager); sem isto o Caddy
+	# descarta o X-Forwarded-Proto recebido e o Django ve a requisicao como HTTP,
+	# gerando redirect_uri OAuth em http:// (redirect_uri_mismatch).
+	servers {
+		trusted_proxies static {$TRUSTED_PROXIES:private_ranges}
+		client_ip_headers X-Forwarded-For X-Real-IP
+	}
 }
 
 :8080 {
@@ -21,13 +28,6 @@
 
 	handle /live/* {
 		reverse_proxy localhost:3005
-	}
-
-	@assistant_chat path /api/workspaces/*/assistant/sessions/*/chat* /api/workspaces/*/assistant/chat/jobs/*/stream*
-	handle @assistant_chat {
-		reverse_proxy localhost:8001 {
-			flush_interval -1
-		}
 	}
 
 	handle /api/* {

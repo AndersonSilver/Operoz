@@ -72,9 +72,8 @@ operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never --force-
 
 OVERLAY="$(operoz_assistant_overlay "${OPEROZ_REPO_PATH}")"
 if [[ -f "${OVERLAY}" ]]; then
-  echo "==> Subir workers do assistente (overlay)"
-  operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never \
-    assistant-worker api-chat assistant-chat-worker
+  echo "==> Subir worker de indexação RAG (overlay)"
+  operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never assistant-worker
 fi
 
 operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" ps

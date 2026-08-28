@@ -4,7 +4,7 @@ import { AlertTriangle, FileWarning, Sparkles, Users } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import type { TClient360Summary } from "@operoz/types";
 import { cn } from "@operoz/utils";
-import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
+import { MarkdownContent } from "@/components/common/markdown-content";
 import { CLIENT_360_TONE, type Client360Tone } from "@/components/board/client-360/client-360-tokens";
 
 export type PortfolioBriefExecutive = {
@@ -194,7 +194,7 @@ export function Client360PortfolioBriefDocument({ content, summary, className }:
   if (!parsed.isStructured) {
     return (
       <div className={cn("rounded-xl border border-subtle bg-layer-2/30 px-4 py-4", className)}>
-        <AssistantMarkdownContent content={content} className="text-13" />
+        <MarkdownContent content={content} className="text-13" />
       </div>
     );
   }

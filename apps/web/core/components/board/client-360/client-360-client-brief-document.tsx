@@ -6,7 +6,7 @@ import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import type { TClient360DetailResponse } from "@operoz/types";
 import { cn, renderFormattedDate } from "@operoz/utils";
-import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
+import { MarkdownContent } from "@/components/common/markdown-content";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import {
   buildClient360ClientBriefActions,
@@ -94,7 +94,7 @@ export function Client360ClientBriefDocument({ data, period, markdown, className
   if (markdown && !gapModules.length && !data.overdue_issues.length && !data.support_issues.length) {
     return (
       <div className={cn("rounded-xl border border-subtle bg-layer-1 px-5 py-4", className)}>
-        <AssistantMarkdownContent content={markdown} className="text-13 leading-relaxed" />
+        <MarkdownContent content={markdown} className="text-13 leading-relaxed" />
       </div>
     );
   }

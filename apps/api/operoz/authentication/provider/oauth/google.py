@@ -7,6 +7,7 @@ import pytz
 
 # Module imports
 from operoz.authentication.adapter.oauth import OauthAdapter
+from operoz.authentication.utils.redirect_uri import oauth_redirect_uri
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.authentication.adapter.error import (
     AUTHENTICATION_ERROR_CODES,
@@ -47,7 +48,7 @@ class GoogleOAuthProvider(OauthAdapter):
         client_id = GOOGLE_CLIENT_ID
         client_secret = GOOGLE_CLIENT_SECRET
 
-        redirect_uri = f"""{"https" if request.is_secure() else "http"}://{request.get_host()}/auth/google/callback/"""
+        redirect_uri = oauth_redirect_uri(request, "google")
         url_params = {
             "client_id": client_id,
             "scope": self.scope,

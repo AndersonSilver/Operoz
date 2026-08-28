@@ -41,6 +41,6 @@ def test_gemini_model_alias_maps_deprecated_ids():
             ],
         ),
     ):
-        _api_key, model, provider, _ = get_llm_config()
+        _api_key, model, provider = get_llm_config()
         assert provider == "gemini"
         assert model == "gemini-2.5-flash"

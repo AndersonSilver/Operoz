@@ -4,7 +4,7 @@ import { Activity, HeartPulse, Lightbulb } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import type { TClient360DetailResponse } from "@operoz/types";
 import { cn } from "@operoz/utils";
-import { AssistantMarkdownContent } from "@/components/assistant/assistant-markdown-content";
+import { MarkdownContent } from "@/components/common/markdown-content";
 import { Client360BentoTile } from "@/components/board/client-360/client-360-bento";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 import { Client360HealthBreakdownBar } from "@/components/board/client-360/client-360-health-breakdown";
@@ -64,7 +64,7 @@ export function Client360HealthExplainerDocument({ data, fallbackMarkdown }: Pro
           </div>
         </article>
         <div className="rounded-xl border border-subtle bg-layer-1 px-5 py-4">
-          <AssistantMarkdownContent content={fallbackMarkdown} className="text-13 leading-relaxed" />
+          <MarkdownContent content={fallbackMarkdown} className="text-13 leading-relaxed" />
         </div>
         <p className="text-11 leading-relaxed text-tertiary">
           {t("boards.client_360.intelligence_explainer_disclaimer")}
@@ -183,7 +183,7 @@ export function Client360HealthExplainerDocument({ data, fallbackMarkdown }: Pro
           icon={HeartPulse}
           iconTone="info"
         >
-          <AssistantMarkdownContent content={fallbackMarkdown} className="text-13 leading-relaxed" inheritColor />
+          <MarkdownContent content={fallbackMarkdown} className="text-13 leading-relaxed" inheritColor />
         </Client360BentoTile>
       ) : null}
 

@@ -232,49 +232,6 @@ def _action_mcp_call(
         return {"ok": False, "message": str(exc)}
 
 
-def _action_operoz_tool(
-    event: DomainEvent,
-    config: dict[str, Any],
-    context: dict[str, Any],
-    *,
-    dry_run: bool,
-) -> dict[str, Any]:
-    from operoz.assistant.tools.registry import execute_tool
-    from operoz.assistant.types import AssistantActorContext
-    from operoz.db.models import Board, User, Workspace
-
-    config = _resolved_config(config, context)
-    tool_name = str(config.get("tool_name") or "")
-    arguments = dict(config.get("arguments") or {})
-    if not tool_name:
-        return {"ok": False, "message": "tool_name obrigatório"}
-
-    if dry_run:
-        return {"ok": True, "message": f"[dry-run] Tool {tool_name}", "arguments": arguments}
-
-    actor = context.get("automation_actor")
-    workspace_id = context.get("workspace_id") or event.workspace_id
-    board_id = event.board_id
-    if not isinstance(actor, User):
-        return {"ok": False, "message": "automation_actor ausente"}
-
-    workspace = Workspace.objects.filter(pk=workspace_id).first()
-    board_slug = None
-    if board_id:
-        board = Board.objects.filter(pk=board_id).only("slug").first()
-        board_slug = board.slug if board else None
-    if not workspace:
-        return {"ok": False, "message": "workspace não encontrado"}
-
-    ctx = AssistantActorContext(user=actor, workspace=workspace, board_slug=board_slug)
-    result = execute_tool(ctx, tool_name, arguments)
-    return {
-        "ok": result.ok,
-        "message": result.error or "tool_executed",
-        "data": result.data,
-    }
-
-
 def _action_ask_assistant(
     event: DomainEvent,
     config: dict[str, Any],
@@ -441,24 +398,6 @@ def register_actions() -> None:
                 "required": ["integration", "url"],
             },
             handler=_action_mcp_call,
-        )
-    )
-    catalog.register(
-        CatalogEntry(
-            key="action.operoz_tool",
-            kind="action",
-            label="Tool Operoz",
-            description="Executa uma tool interna do Assistente com permissões do utilizador da automação.",
-            icon="bot",
-            config_schema={
-                "type": "object",
-                "properties": {
-                    "tool_name": {"type": "string"},
-                    "arguments": {"type": "object"},
-                },
-                "required": ["tool_name"],
-            },
-            handler=_action_operoz_tool,
         )
     )
     catalog.register(

@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, FileText, HeartPulse, Sparkles, X } from "lucide-react";
+import { FileText, HeartPulse, Sparkles, X } from "lucide-react";
 import type { ReactNode } from "react";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
@@ -9,7 +9,7 @@ import { cn } from "@operoz/utils";
 import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
 import { Client360HealthBadge } from "@/components/board/client-360/client-360-health-badge";
 
-export type Client360IntelligencePanelKind = "explainer" | "brief" | "portfolio_brief" | "qbr" | "assistant";
+export type Client360IntelligencePanelKind = "explainer" | "brief" | "portfolio_brief" | "qbr";
 
 const PANEL_META: Record<
   Client360IntelligencePanelKind,
@@ -38,12 +38,6 @@ const PANEL_META: Record<
     titleKey: "boards.client_360.intelligence_qbr_draft_title",
     subtitleKey: "boards.client_360.intelligence_qbr_draft_subtitle",
     tone: "warning",
-  },
-  assistant: {
-    icon: Bot,
-    titleKey: "boards.client_360.intelligence_chat_title",
-    subtitleKey: "boards.client_360.intelligence_chat_subtitle",
-    tone: "accent",
   },
 };
 
@@ -135,11 +129,7 @@ export function Client360IntelligencePanel({
                 </span>
                 <div className="min-w-0">
                   <h2 className="text-15 font-semibold tracking-tight text-primary">{t(meta.titleKey)}</h2>
-                  <p className="mt-1 text-12 leading-relaxed text-tertiary">
-                    {kind === "assistant" && projectName
-                      ? t(meta.subtitleKey, { name: projectName })
-                      : t(meta.subtitleKey, subtitleParams)}
-                  </p>
+                  <p className="mt-1 text-12 leading-relaxed text-tertiary">{t(meta.subtitleKey, subtitleParams)}</p>
                 </div>
               </div>
               <div className="flex shrink-0 items-center gap-1">
@@ -171,7 +161,6 @@ const RAIL_ITEM_TONE: Record<Client360IntelligencePanelKind, keyof typeof CLIENT
   brief: "accent",
   portfolio_brief: "accent",
   qbr: "warning",
-  assistant: "accent",
 };
 
 export type Client360IntelligenceRailContext = {
@@ -252,12 +241,6 @@ export function Client360IntelligenceRail({
           },
         ]
       : []),
-    {
-      kind: "assistant",
-      label: t("boards.client_360.intelligence_chat_open"),
-      descriptionKey: "boards.client_360.detail_intel_rail_action_chat_desc",
-      icon: Bot,
-    },
   ];
 
   const header = (

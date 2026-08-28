@@ -249,7 +249,7 @@ operoz_health_check() {
 
   echo "==> Health check (http://127.0.0.1:${port}/api/instances/, Host: ${host_header})"
   local attempt
-  # api boots alongside 8+ other backend containers (worker, beat, api-chat,
+  # api boots alongside 8+ other backend containers (worker, beat,
   # assistant-*, automation-*) that all hit DB/broker/redis at once, so the
   # 4 best-effort startup steps in docker-entrypoint-api.sh — each bounded to
   # ~30s (20s timeout + 10s kill-after) — can be slow rather than instant

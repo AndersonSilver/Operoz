@@ -1,6 +1,6 @@
 "use client";
 
-import { Bot, FileText, HeartPulse, Sparkles } from "lucide-react";
+import { FileText, HeartPulse, Sparkles } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 import {
@@ -16,7 +16,6 @@ const RAIL_ITEM_TONE: Record<Client360IntelligencePanelKind, keyof typeof CLIENT
   brief: "accent",
   portfolio_brief: "accent",
   qbr: "warning",
-  assistant: "accent",
 };
 
 type Props = {
@@ -57,12 +56,6 @@ export function Client360DetailSidebar({ context, onOpen, persona = "management"
           },
         ]
       : []),
-    {
-      kind: "assistant",
-      label: t("boards.client_360.intelligence_chat_open"),
-      descriptionKey: "boards.client_360.detail_intel_rail_action_chat_desc",
-      icon: Bot,
-    },
   ];
 
   const hint = buildIntelRailHint(context, t);

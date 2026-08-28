@@ -76,7 +76,6 @@ INSTALLED_APPS = [
     "operoz.license",
     "operoz.api",
     "operoz.authentication",
-    "operoz.discord_integration",
     # Third-party things
     "rest_framework",
     "corsheaders",
@@ -337,43 +336,24 @@ CELERY_BROKER_CONNECTION_MAX_RETRIES = 2
 AUTOMATION_CELERY_QUEUE = os.environ.get("AUTOMATION_CELERY_QUEUE", "automation")
 AUTOMATION_EMAIL_CELERY_QUEUE = os.environ.get("AUTOMATION_EMAIL_CELERY_QUEUE", "automation_email")
 ASSISTANT_CELERY_QUEUE = os.environ.get("ASSISTANT_CELERY_QUEUE", "assistant")
-ASSISTANT_CHAT_CELERY_QUEUE = os.environ.get("ASSISTANT_CHAT_CELERY_QUEUE", "assistant-chat")
 AUTOMATION_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_WORKER_CONCURRENCY", "4"))
 AUTOMATION_EMAIL_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_EMAIL_WORKER_CONCURRENCY", "2"))
 CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT = os.environ.get("CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT", "0")
 
 ASSISTANT_RAG_ENABLED = os.environ.get("ASSISTANT_RAG_ENABLED", "1")
-ASSISTANT_HISTORY_SUMMARIZE_AFTER = int(os.environ.get("ASSISTANT_HISTORY_SUMMARIZE_AFTER", "14"))
-ASSISTANT_HISTORY_KEEP_RECENT = int(os.environ.get("ASSISTANT_HISTORY_KEEP_RECENT", "8"))
+# Gate separado para a escrita do indice. ASSISTANT_RAG_ENABLED so desliga a
+# leitura (retrieval); sem isto a indexacao continua gastando embedding mesmo
+# com o RAG "desligado".
+ASSISTANT_RAG_INDEXING_ENABLED = os.environ.get("ASSISTANT_RAG_INDEXING_ENABLED", "1")
 ASSISTANT_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_EMBEDDING_CACHE_TTL", str(60 * 60 * 24 * 7)))
-ASSISTANT_ORCHESTRATOR_ENABLED = os.environ.get("ASSISTANT_ORCHESTRATOR_ENABLED", "0")
-ASSISTANT_DAILY_TOKEN_BUDGET = int(os.environ.get("ASSISTANT_DAILY_TOKEN_BUDGET", "200000"))
-ASSISTANT_BUDGET_ALERT_RATIO = float(os.environ.get("ASSISTANT_BUDGET_ALERT_RATIO", "0.8"))
 ASSISTANT_RAG_TOP_K = int(os.environ.get("ASSISTANT_RAG_TOP_K", "5"))
 ASSISTANT_RAG_CANDIDATE_LIMIT = int(os.environ.get("ASSISTANT_RAG_CANDIDATE_LIMIT", "30"))
 ASSISTANT_RAG_RRF_K = int(os.environ.get("ASSISTANT_RAG_RRF_K", "60"))
 ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL", str(60 * 10)))
 ASSISTANT_RAG_RESULTS_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_RESULTS_CACHE_TTL", str(60 * 3)))
 ASSISTANT_RAG_HNSW_EF_SEARCH = int(os.environ.get("ASSISTANT_RAG_HNSW_EF_SEARCH", "40"))
-ASSISTANT_SUMMARY_SYNC = os.environ.get("ASSISTANT_SUMMARY_SYNC", "0")
-ASSISTANT_DEFER_NONCRITICAL = os.environ.get("ASSISTANT_DEFER_NONCRITICAL", "1")
-ASSISTANT_MAX_CONCURRENT_LLM = int(os.environ.get("ASSISTANT_MAX_CONCURRENT_LLM", "40"))
-ASSISTANT_MAX_ACTIVE_CHATS_PER_USER = int(os.environ.get("ASSISTANT_MAX_ACTIVE_CHATS_PER_USER", "2"))
-ASSISTANT_FAIR_QUEUE_AVG_SECONDS = int(os.environ.get("ASSISTANT_FAIR_QUEUE_AVG_SECONDS", "15"))
-ASSISTANT_LLM_WAIT_TIMEOUT_SECONDS = int(os.environ.get("ASSISTANT_LLM_WAIT_TIMEOUT_SECONDS", "600"))
 ASSISTANT_LLM_KEY_FAILURE_THRESHOLD = int(os.environ.get("ASSISTANT_LLM_KEY_FAILURE_THRESHOLD", "3"))
 ASSISTANT_LLM_KEY_OPEN_SECONDS = int(os.environ.get("ASSISTANT_LLM_KEY_OPEN_SECONDS", "120"))
-ASSISTANT_DEGRADED_QUEUE_THRESHOLD = int(os.environ.get("ASSISTANT_DEGRADED_QUEUE_THRESHOLD", "10"))
-ASSISTANT_DEGRADED_BUDGET_RATIO = float(os.environ.get("ASSISTANT_DEGRADED_BUDGET_RATIO", "0.9"))
-ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD = int(os.environ.get("ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD", "100"))
-ASSISTANT_CHAT_STREAM_IDLE_SECONDS = int(os.environ.get("ASSISTANT_CHAT_STREAM_IDLE_SECONDS", "90"))
-ASSISTANT_CHAT_JOB_STALE_SECONDS = int(os.environ.get("ASSISTANT_CHAT_JOB_STALE_SECONDS", "900"))
-ASSISTANT_ALERT_STALE_JOBS = int(os.environ.get("ASSISTANT_ALERT_STALE_JOBS", "1"))
-ASSISTANT_METRICS_TOKEN = os.environ.get("ASSISTANT_METRICS_TOKEN", "")
-ASSISTANT_ALERT_P95_FIRST_TOKEN_MS = int(os.environ.get("ASSISTANT_ALERT_P95_FIRST_TOKEN_MS", "3000"))
-ASSISTANT_ALERT_ERROR_RATE = float(os.environ.get("ASSISTANT_ALERT_ERROR_RATE", "0.05"))
-ASSISTANT_REQUIRE_SESSION_SCOPE = os.environ.get("ASSISTANT_REQUIRE_SESSION_SCOPE", "1")
-LLM_MODEL_FALLBACK = os.environ.get("LLM_MODEL_FALLBACK", "")
 AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", "500"))
 AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000"))
 _AUTOMATION_WORKSPACE_OVERRIDES_RAW = os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES", "{}")
@@ -400,11 +380,6 @@ try:
             routing_key=AUTOMATION_EMAIL_CELERY_QUEUE,
         ),
         Queue(ASSISTANT_CELERY_QUEUE, Exchange(ASSISTANT_CELERY_QUEUE), routing_key=ASSISTANT_CELERY_QUEUE),
-        Queue(
-            ASSISTANT_CHAT_CELERY_QUEUE,
-            Exchange(ASSISTANT_CHAT_CELERY_QUEUE),
-            routing_key=ASSISTANT_CHAT_CELERY_QUEUE,
-        ),
     )
 except ImportError:
     CELERY_TASK_QUEUES = None
@@ -417,10 +392,6 @@ CELERY_TASK_ROUTES = {
         "queue": AUTOMATION_EMAIL_CELERY_QUEUE,
     },
     "operoz.bgtasks.assistant_index_task.index_entity_task": {"queue": ASSISTANT_CELERY_QUEUE},
-    "operoz.bgtasks.assistant_chat_task.run_assistant_chat_job_task": {"queue": ASSISTANT_CHAT_CELERY_QUEUE},
-    "operoz.bgtasks.assistant_deferred_task.log_assistant_action_task": {"queue": ASSISTANT_CELERY_QUEUE},
-    "operoz.bgtasks.assistant_deferred_task.record_assistant_response_task": {"queue": ASSISTANT_CELERY_QUEUE},
-    "operoz.bgtasks.assistant_deferred_task.summarize_session_task": {"queue": ASSISTANT_CELERY_QUEUE},
 }
 
 
@@ -429,9 +400,14 @@ CELERY_IMPORTS = (
     "operoz.bgtasks.automation_task",
     "operoz.bgtasks.automation_email_task",
     "operoz.bgtasks.assistant_index_task",
-    "operoz.bgtasks.assistant_chat_task",
-    "operoz.bgtasks.assistant_deferred_task",
     "operoz.bgtasks.issue_automation_task",
+    # Tasks de alerta agendadas no beat. alert_scan_task nao e importado por
+    # nenhum outro modulo, entao sem esta linha o worker recusa a task com
+    # "Received unregistered task". alert_digest_task so funcionava por ser
+    # importado de alerts/channels/email.py — explicitado aqui para nao
+    # depender desse acaso.
+    "operoz.bgtasks.alert_scan_task",
+    "operoz.bgtasks.alert_digest_task",
     "operoz.bgtasks.jira_ops_sync_task",
     "operoz.bgtasks.exporter_expired_task",
     "operoz.bgtasks.file_asset_task",
@@ -455,10 +431,8 @@ UNSPLASH_ACCESS_KEY = os.environ.get("UNSPLASH_ACCESS_KEY")
 # Github Access Token
 GITHUB_ACCESS_TOKEN = os.environ.get("GITHUB_ACCESS_TOKEN", False)
 
-# Discord Bot (slash commands dinâmicos — operoz.discord_integration)
-DISCORD_APPLICATION_ID = os.environ.get("DISCORD_APPLICATION_ID", "")
+# Discord bot token — usado pelo canal de alerta por DM (alerts/channels/discord_dm.py)
 DISCORD_BOT_TOKEN = os.environ.get("DISCORD_BOT_TOKEN", "")
-DISCORD_PUBLIC_KEY = os.environ.get("DISCORD_PUBLIC_KEY", "")
 
 # Discord OAuth2 (user DM alerts — identify scope to capture user ID)
 DISCORD_OAUTH_CLIENT_ID = os.environ.get("DISCORD_OAUTH_CLIENT_ID", "")

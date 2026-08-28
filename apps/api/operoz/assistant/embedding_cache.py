@@ -110,15 +110,9 @@ def embed_query_cached(query: str) -> list[float] | None:
     digest = content_hash(normalized)
     cached = _load_cached_vector(QUERY_CACHE_PREFIX, cache_scope, digest)
     if cached is not None:
-        from operoz.assistant.observability import record_rag_cache_access
-
-        record_rag_cache_access(hit=True)
         logger.debug("assistant query embedding cache hit scope=%s digest=%s", cache_scope, digest[:12])
         return cached
 
-    from operoz.assistant.observability import record_rag_cache_access
-
-    record_rag_cache_access(hit=False)
     fetched = _embed_texts_uncached([normalized], purpose="query")
     if not fetched or not fetched[0]:
         return None

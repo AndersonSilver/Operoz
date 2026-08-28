@@ -17,13 +17,6 @@
 		reverse_proxy live:3000
 	}
 
-	@assistant_chat path /api/workspaces/*/assistant/sessions/*/chat* /api/workspaces/*/assistant/chat/jobs/*/stream*
-	handle @assistant_chat {
-		reverse_proxy api-chat:8000 {
-			flush_interval -1
-		}
-	}
-
 	handle /api/* {
 		reverse_proxy api:8000 {
 			flush_interval -1

@@ -75,8 +75,8 @@ docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 echo "==> Recriar API e workers HML"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  hml-api hml-api-chat hml-worker hml-beat-worker \
-  hml-assistant-worker hml-assistant-chat-worker \
+  hml-api hml-worker hml-beat-worker \
+  hml-assistant-worker \
   hml-automation-worker hml-automation-email-worker
 
 echo "==> Aguardar hml-api responder (collectstatic + gunicorn podem levar ~2 min)"

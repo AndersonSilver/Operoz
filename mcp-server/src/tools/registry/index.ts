@@ -1,6 +1,5 @@
 import { APP_ANALYTICS_OPERATIONS } from "./app-analytics.js";
 import { APP_ASSET_OPERATIONS } from "./app-assets.js";
-import { APP_ASSISTANT_OPERATIONS } from "./app-assistant.js";
 import { APP_AUTOMATION_OPERATIONS } from "./app-automation.js";
 import { APP_BOARD_OPERATIONS } from "./app-boards.js";
 import { APP_CYCLE_OPERATIONS } from "./app-cycles.js";
@@ -43,7 +42,6 @@ export const ALL_OPERATIONS: ToolOperation[] = dedupeByName([
   ...APP_PAGE_OPERATIONS,
   ...APP_INTEGRATION_OPERATIONS,
   ...APP_AUTOMATION_OPERATIONS,
-  ...APP_ASSISTANT_OPERATIONS,
   ...APP_PLAYBOOK_OPERATIONS,
   ...APP_ASSET_OPERATIONS,
   ...APP_USER_OPERATIONS,

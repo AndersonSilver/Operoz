@@ -241,36 +241,6 @@ llm_config_variables = [
         "category": "AI",
         "is_encrypted": False,
     },
-    {
-        "key": "ASSISTANT_ENABLED",
-        "value": os.environ.get("ASSISTANT_ENABLED", "1"),
-        "category": "AI",
-        "is_encrypted": False,
-    },
-    {
-        "key": "ASSISTANT_MAX_MESSAGES_PER_USER_PER_HOUR",
-        "value": os.environ.get("ASSISTANT_MAX_MESSAGES_PER_USER_PER_HOUR", "60"),
-        "category": "AI",
-        "is_encrypted": False,
-    },
-    {
-        "key": "ASSISTANT_MAX_MESSAGES_PER_WORKSPACE_PER_HOUR",
-        "value": os.environ.get("ASSISTANT_MAX_MESSAGES_PER_WORKSPACE_PER_HOUR", "500"),
-        "category": "AI",
-        "is_encrypted": False,
-    },
-    {
-        "key": "ASSISTANT_MAX_TOOL_ROUNDS",
-        "value": os.environ.get("ASSISTANT_MAX_TOOL_ROUNDS", "5"),
-        "category": "AI",
-        "is_encrypted": False,
-    },
-    {
-        "key": "VITE_ENABLE_OPEROZ_ASSISTANT",
-        "value": os.environ.get("VITE_ENABLE_OPEROZ_ASSISTANT", "1"),
-        "category": "AI",
-        "is_encrypted": False,
-    },
 ]
 
 unsplash_config_variables = [
