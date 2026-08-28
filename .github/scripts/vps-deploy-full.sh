@@ -67,7 +67,11 @@ else
 fi
 
 echo "==> Recriar stack completa (todas as imagens novas, inclui space/proxy/api)"
-operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never --force-recreate
+# --remove-orphans: sem isto, container de servico removido do compose
+# (ex. api-chat) sobrevive ao deploy consumindo recurso e rodando codigo
+# que nao existe mais. operoz_dc ja inclui o overlay, entao assistant-worker
+# e servico declarado e nao e tratado como orfao.
+operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" up -d --pull never --force-recreate --remove-orphans
 
 if operoz_should_use_assistant_overlay "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}"; then
   echo "==> Subir worker de indexação RAG (overlay)"
