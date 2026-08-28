@@ -14,20 +14,6 @@ services:
       # Use 16379 on host if another process already binds 6379 (containers still use 6379 internally).
       - "16379:6379"
 
-  operoz-mq:
-    image: rabbitmq:3.13.6-management-alpine
-    restart: unless-stopped
-    networks:
-      - dev_env
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    env_file:
-      - .env
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
-
   operoz-minio:
     image: minio/minio
     restart: unless-stopped
@@ -92,7 +78,6 @@ services:
     depends_on:
       - operoz-db
       - operoz-redis
-      - operoz-mq
       - operoz-minio
     environment:
       SKIP_ENV_VAR: "1"
@@ -130,7 +115,6 @@ services:
       - api
       - operoz-db
       - operoz-redis
-      - operoz-mq
     environment:
       SKIP_ENV_VAR: "1"
       DJANGO_SETTINGS_MODULE: operoz.settings.local
@@ -200,7 +184,6 @@ volumes:
   redisdata:
   uploads:
   pgdata:
-  rabbitmq_data:
 
 networks:
   dev_env:

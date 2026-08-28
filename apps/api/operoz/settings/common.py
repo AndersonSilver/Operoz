@@ -291,38 +291,27 @@ if AWS_S3_ENDPOINT_URL and USE_MINIO:
     AWS_S3_CUSTOM_DOMAIN = f"{parsed_url.netloc}/{AWS_STORAGE_BUCKET_NAME}"
     AWS_S3_URL_PROTOCOL = f"{parsed_url.scheme}:"
 
-# RabbitMQ connection settings
-RABBITMQ_HOST = os.environ.get("RABBITMQ_HOST", "localhost")
-RABBITMQ_PORT = os.environ.get("RABBITMQ_PORT", "5672")
-RABBITMQ_USER = os.environ.get("RABBITMQ_USER", "guest")
-RABBITMQ_PASSWORD = os.environ.get("RABBITMQ_PASSWORD", "guest")
-RABBITMQ_VHOST = os.environ.get("RABBITMQ_VHOST", "/")
-AMQP_URL = os.environ.get("AMQP_URL")
-
 # Celery Configuration
-# Broker: prefer explicit AMQP_URL (RabbitMQ) when set, so envs that still run
-# RabbitMQ (e.g. hml) keep working untouched. Otherwise fall back to REDIS_URL
-# (no RabbitMQ container needed) and only then to the legacy RABBITMQ_* vars.
-if AMQP_URL:
-    CELERY_BROKER_URL = AMQP_URL
-elif REDIS_URL:
-    CELERY_BROKER_URL = REDIS_URL
-else:
-    CELERY_BROKER_URL = f"amqp://{RABBITMQ_USER}:{RABBITMQ_PASSWORD}@{RABBITMQ_HOST}:{RABBITMQ_PORT}/{RABBITMQ_VHOST}"
+# Broker unico: Redis. O RabbitMQ foi removido de todos os ambientes — producao
+# ja rodava sem ele e o HML migrou junto.
+if not REDIS_URL:
+    from django.core.exceptions import ImproperlyConfigured
+
+    raise ImproperlyConfigured("REDIS_URL e obrigatorio: e o broker do Celery e o cache do Django.")
+
+CELERY_BROKER_URL = REDIS_URL
 
 CELERY_TIMEZONE = TIME_ZONE
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 
-# Redis broker redelivers a task if it's not acked within this window — long
-# RAG/indexing tasks (operoz.bgtasks.assistant_index_task) can run well past
-# Celery's 1h default, which would duplicate-execute them. No-op when the
-# broker is RabbitMQ (AMQP doesn't use this transport option).
-if CELERY_BROKER_URL.startswith("redis"):
-    CELERY_BROKER_TRANSPORT_OPTIONS = {
-        "visibility_timeout": int(os.environ.get("CELERY_BROKER_VISIBILITY_TIMEOUT", str(6 * 60 * 60)))
-    }
+# O Redis reentrega task nao confirmada dentro desta janela. A indexacao RAG
+# (operoz.bgtasks.assistant_index_task) pode passar do default de 1h do Celery,
+# o que causaria execucao duplicada.
+CELERY_BROKER_TRANSPORT_OPTIONS = {
+    "visibility_timeout": int(os.environ.get("CELERY_BROKER_VISIBILITY_TIMEOUT", str(6 * 60 * 60)))
+}
 
 # Bound how long any `.delay()`/`.apply_async()` call can block establishing a
 # broker connection. Without this, a slow/unreachable RabbitMQ on boot can hang

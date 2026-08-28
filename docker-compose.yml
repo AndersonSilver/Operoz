@@ -80,7 +80,6 @@ services:
       - api
       - operoz-db
       - operoz-redis
-      - operoz-mq
     mem_limit: 2g
     cpus: 2.0
 
@@ -157,21 +156,6 @@ services:
     mem_limit: 256m
     cpus: 0.25
 
-  operoz-mq:
-    container_name: operoz-mq
-    image: rabbitmq:3.13.6-management-alpine
-    restart: always
-    env_file:
-      - .env
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
-    mem_limit: 512m
-    cpus: 0.5
-
   operoz-minio:
     container_name: operoz-minio
     image: minio/minio
@@ -210,4 +194,3 @@ volumes:
   pgdata:
   redisdata:
   uploads:
-  rabbitmq_data:
