@@ -1,10 +1,5 @@
 from django.urls import path
 
-from operoz.app.views.workspace.client_360_narrative import BoardClient360ReminderLogsEndpoint
-from operoz.app.views.workspace.client_360_operational import (
-    BoardClient360IntakeTypeDetailEndpoint,
-    BoardClient360IntakeTypesEndpoint,
-)
 
 from operoz.app.views import (
     BoardAutomationCatalogEndpoint,
@@ -57,8 +52,6 @@ from operoz.app.views import (
     BoardCircleMemberDetailEndpoint,
     BoardCircleMemberEndpoint,
     WorkspaceCircleLookupEndpoint,
-    BoardClient360ViewSet,
-    BoardClient360HealthSettingsEndpoint,
     BoardMetaViewSet,
     BoardModulesViewSet,
     BoardPermissionCatalogEndpoint,
@@ -106,56 +99,6 @@ urlpatterns = [
         "workspaces/<str:slug>/boards/<str:board_slug>/meta/",
         BoardMetaViewSet.as_view({"get": "retrieve"}),
         name="workspace-board-meta",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/",
-        BoardClient360ViewSet.as_view({"get": "list"}),
-        name="workspace-board-client-360",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/matrix/",
-        BoardClient360ViewSet.as_view({"get": "matrix"}),
-        name="workspace-board-client-360-matrix",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/qbr/",
-        BoardClient360ViewSet.as_view({"get": "qbr_portfolio"}),
-        name="workspace-board-client-360-qbr",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/qbr/",
-        BoardClient360ViewSet.as_view({"get": "qbr_client"}),
-        name="workspace-board-client-360-client-qbr",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/",
-        BoardClient360ViewSet.as_view({"get": "retrieve"}),
-        name="workspace-board-client-360-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/<uuid:project_id>/health-history/",
-        BoardClient360ViewSet.as_view({"get": "health_history"}),
-        name="workspace-board-client-360-health-history",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/reminder-logs/",
-        BoardClient360ReminderLogsEndpoint.as_view(),
-        name="workspace-board-client-360-reminder-logs",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/intake-types/",
-        BoardClient360IntakeTypesEndpoint.as_view(),
-        name="workspace-board-client-360-intake-types",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/intake-types/<uuid:intake_type_id>/",
-        BoardClient360IntakeTypeDetailEndpoint.as_view(),
-        name="workspace-board-client-360-intake-type-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/boards/<str:board_slug>/client-360/health-settings/",
-        BoardClient360HealthSettingsEndpoint.as_view(),
-        name="workspace-board-client-360-health-settings",
     ),
     path(
         "workspaces/<str:slug>/boards/<str:board_slug>/modules/",

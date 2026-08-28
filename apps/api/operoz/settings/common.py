@@ -338,7 +338,6 @@ AUTOMATION_EMAIL_CELERY_QUEUE = os.environ.get("AUTOMATION_EMAIL_CELERY_QUEUE", 
 ASSISTANT_CELERY_QUEUE = os.environ.get("ASSISTANT_CELERY_QUEUE", "assistant")
 AUTOMATION_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_WORKER_CONCURRENCY", "4"))
 AUTOMATION_EMAIL_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_EMAIL_WORKER_CONCURRENCY", "2"))
-CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT = os.environ.get("CLIENT_360_HEALTH_SCORE_DISPLAY_DEFAULT", "0")
 
 ASSISTANT_RAG_ENABLED = os.environ.get("ASSISTANT_RAG_ENABLED", "1")
 # Gate separado para a escrita do indice. ASSISTANT_RAG_ENABLED so desliga a
@@ -413,9 +412,6 @@ CELERY_IMPORTS = (
     "operoz.bgtasks.file_asset_task",
     "operoz.bgtasks.email_notification_task",
     "operoz.bgtasks.cleanup_task",
-    "operoz.bgtasks.client_360_health_snapshot_task",
-    "operoz.bgtasks.client_360_weekly_briefing_task",
-    "operoz.bgtasks.client_360_status_report_reminder_task",
     "operoz.license.bgtasks.tracer",
     # management tasks
     "operoz.bgtasks.dummy_data_task",

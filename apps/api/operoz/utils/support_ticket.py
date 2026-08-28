@@ -60,15 +60,15 @@ def format_queue_age(created_at) -> str:
 def get_board_support_sla_days(board_id) -> int:
     if not board_id:
         return DEFAULT_SUPPORT_SLA_DAYS
-    from operoz.db.models import BoardClient360HealthSettings
+    from operoz.db.models import BoardSupportSlaPolicy
 
-    settings = (
-        BoardClient360HealthSettings.objects.filter(board_id=board_id, deleted_at__isnull=True)
+    policy = (
+        BoardSupportSlaPolicy.objects.filter(board_id=board_id, deleted_at__isnull=True)
         .only("support_sla_days")
         .first()
     )
-    if settings and settings.support_sla_days:
-        return int(settings.support_sla_days)
+    if policy and policy.support_sla_days:
+        return int(policy.support_sla_days)
     return DEFAULT_SUPPORT_SLA_DAYS
 
 

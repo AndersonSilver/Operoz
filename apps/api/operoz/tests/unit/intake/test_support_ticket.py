@@ -209,14 +209,14 @@ class TestAcceptWithoutBoardPromotion:
 
 @pytest.mark.unit
 class TestGetBoardSupportSlaDays:
-    @patch("operoz.db.models.BoardClient360HealthSettings.objects")
+    @patch("operoz.db.models.BoardSupportSlaPolicy.objects")
     def test_defaults_when_missing(self, mock_qs):
         from operoz.utils.support_ticket import get_board_support_sla_days
 
         mock_qs.filter.return_value.only.return_value.first.return_value = None
         assert get_board_support_sla_days("board-id") == 7
 
-    @patch("operoz.db.models.BoardClient360HealthSettings.objects")
+    @patch("operoz.db.models.BoardSupportSlaPolicy.objects")
     def test_reads_board_setting(self, mock_qs):
         from operoz.utils.support_ticket import get_board_support_sla_days
 

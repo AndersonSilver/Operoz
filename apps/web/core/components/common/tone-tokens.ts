@@ -1,7 +1,8 @@
-/** Cores só em pontos / barras de dados — UI neutra, acentos discretos. */
-export type Client360Tone = "accent" | "neutral" | "success" | "warning" | "danger" | "info";
+/** Tokens de tom para pontos e barras de dados. Vieram do Cliente 360, que foi
+ * removido; sao genericos e seguem em uso pelo overview de board. */
+export type ToneKey = "accent" | "neutral" | "success" | "warning" | "danger" | "info";
 
-export const CLIENT_360_TONE: Record<Client360Tone, { icon: string; iconBg: string; bar: string; dot: string }> = {
+export const TONE_TOKENS: Record<ToneKey, { icon: string; iconBg: string; bar: string; dot: string }> = {
   accent: {
     icon: "text-secondary",
     iconBg: "bg-layer-2",

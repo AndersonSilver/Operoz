@@ -1,52 +1,11 @@
 from django.urls import path
 
 
-from operoz.app.views.workspace.client_360_qbr_guest_link import (
-    WorkspaceClient360QbrGuestLinkViewSet,
-)
 from operoz.app.views.workspace.prd_review import (
     WorkspacePrdReviewInboxEndpoint,
     WorkspacePrdReviewMetricsEndpoint,
 )
 
-from operoz.app.views.workspace.client_360_narrative import (
-    WorkspaceClient360NarrativeEndpoint,
-)
-from operoz.app.views.workspace.client_360_operational import (
-    WorkspaceClient360SharedViewDetailEndpoint,
-    WorkspaceClient360SharedViewsEndpoint,
-)
-from operoz.app.views.workspace.client_360_finops import (
-    WorkspaceClient360FinopsConsultantHeatmapEndpoint,
-    WorkspaceClient360FinopsExportEndpoint,
-    WorkspaceClient360FinopsHarnessSyncEndpoint,
-    WorkspaceClient360FinopsSettingsEndpoint,
-    WorkspaceClient360ProjectFinopsProfileEndpoint,
-)
-from operoz.app.views.workspace.client_360_intelligence import (
-    WorkspaceClient360IntelligenceRagReindexEndpoint,
-    WorkspaceClient360ProjectHealthExplainerEndpoint,
-    WorkspaceClient360ProjectQbrDraftEndpoint,
-    WorkspaceClient360ProjectSuggestedActionsEndpoint,
-    WorkspaceClient360ScenarioPlaybookDetailEndpoint,
-    WorkspaceClient360ScenarioPlaybooksEndpoint,
-    WorkspaceClient360SuggestedActionFeedbackEndpoint,
-    WorkspaceClient360WeeklyBriefingEndpoint,
-)
-from operoz.app.views.workspace.client_360_enterprise import (
-    InstanceClient360RollupEndpoint,
-    WorkspaceClient360AuditExportEndpoint,
-    WorkspaceClient360AuditLogEndpoint,
-    WorkspaceClient360BiExportEndpoint,
-    WorkspaceClient360CrmSyncEndpoint,
-    WorkspaceClient360CustomerDetailEndpoint,
-    WorkspaceClient360CustomersEndpoint,
-    WorkspaceClient360EnterpriseSettingsEndpoint,
-    WorkspaceClient360ProjectCustomerAssignEndpoint,
-    WorkspaceClient360RetentionPurgeEndpoint,
-    WorkspaceClient360WebhookTestEndpoint,
-    WorkspaceClient360WebhooksEndpoint,
-)
 
 from operoz.app.views import (
     UserWorkspaceInvitationsViewSet,
@@ -79,8 +38,6 @@ from operoz.app.views import (
     WorkspaceHomePreferenceViewSet,
     WorkspaceStickyViewSet,
     WorkspaceUserPreferenceViewSet,
-    WorkspaceClient360ViewSet,
-    WorkspaceClient360DisplaySettingsEndpoint,
     WorkspaceJiraOpsSyncEndpoint,
     WorkspaceJiraOpsSyncPreviewEndpoint,
     WorkspaceJiraOpsOAuthStartEndpoint,
@@ -307,191 +264,6 @@ urlpatterns = [
         "workspaces/<str:slug>/stickies/<uuid:pk>/",
         WorkspaceStickyViewSet.as_view({"get": "retrieve", "patch": "partial_update", "delete": "destroy"}),
         name="workspace-sticky",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/",
-        WorkspaceClient360ViewSet.as_view({"get": "list"}),
-        name="workspace-client-360",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/matrix/",
-        WorkspaceClient360ViewSet.as_view({"get": "matrix"}),
-        name="workspace-client-360-matrix",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/qbr/",
-        WorkspaceClient360ViewSet.as_view({"get": "qbr_portfolio"}),
-        name="workspace-client-360-qbr",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/qbr-guest-links/",
-        WorkspaceClient360QbrGuestLinkViewSet.as_view({"get": "list", "post": "create"}),
-        name="workspace-client-360-qbr-guest-links",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/qbr-guest-links/<uuid:pk>/",
-        WorkspaceClient360QbrGuestLinkViewSet.as_view({"delete": "destroy"}),
-        name="workspace-client-360-qbr-guest-link-revoke",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/qbr/",
-        WorkspaceClient360ViewSet.as_view({"get": "qbr_client"}),
-        name="workspace-client-360-client-qbr",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/narrative/",
-        WorkspaceClient360NarrativeEndpoint.as_view(),
-        name="workspace-client-360-narrative",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/shared-views/",
-        WorkspaceClient360SharedViewsEndpoint.as_view(),
-        name="workspace-client-360-shared-views",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/shared-views/<uuid:view_id>/",
-        WorkspaceClient360SharedViewDetailEndpoint.as_view(),
-        name="workspace-client-360-shared-view-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/finops/settings/",
-        WorkspaceClient360FinopsSettingsEndpoint.as_view(),
-        name="workspace-client-360-finops-settings",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/finops/consultant-heatmap/",
-        WorkspaceClient360FinopsConsultantHeatmapEndpoint.as_view(),
-        name="workspace-client-360-finops-heatmap",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/finops/export/",
-        WorkspaceClient360FinopsExportEndpoint.as_view(),
-        name="workspace-client-360-finops-export",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/finops/harness-sync/",
-        WorkspaceClient360FinopsHarnessSyncEndpoint.as_view(),
-        name="workspace-client-360-finops-harness-sync",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/finops/",
-        WorkspaceClient360ProjectFinopsProfileEndpoint.as_view(),
-        name="workspace-client-360-project-finops",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/intelligence/weekly-briefing/",
-        WorkspaceClient360WeeklyBriefingEndpoint.as_view(),
-        name="workspace-client-360-weekly-briefing",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/intelligence/scenario-playbooks/",
-        WorkspaceClient360ScenarioPlaybooksEndpoint.as_view(),
-        name="workspace-client-360-scenario-playbooks",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/intelligence/scenario-playbooks/<uuid:playbook_id>/",
-        WorkspaceClient360ScenarioPlaybookDetailEndpoint.as_view(),
-        name="workspace-client-360-scenario-playbook-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/intelligence/rag-reindex/",
-        WorkspaceClient360IntelligenceRagReindexEndpoint.as_view(),
-        name="workspace-client-360-rag-reindex",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/qbr-draft/",
-        WorkspaceClient360ProjectQbrDraftEndpoint.as_view(),
-        name="workspace-client-360-qbr-draft",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/health-explainer/",
-        WorkspaceClient360ProjectHealthExplainerEndpoint.as_view(),
-        name="workspace-client-360-health-explainer",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/suggested-actions/",
-        WorkspaceClient360ProjectSuggestedActionsEndpoint.as_view(),
-        name="workspace-client-360-suggested-actions",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/suggested-actions/feedback/",
-        WorkspaceClient360SuggestedActionFeedbackEndpoint.as_view(),
-        name="workspace-client-360-suggested-actions-feedback",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/",
-        WorkspaceClient360ViewSet.as_view({"get": "retrieve"}),
-        name="workspace-client-360-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/health-history/",
-        WorkspaceClient360ViewSet.as_view({"get": "health_history"}),
-        name="workspace-client-360-health-history",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/display-settings/",
-        WorkspaceClient360DisplaySettingsEndpoint.as_view(),
-        name="workspace-client-360-display-settings",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/settings/",
-        WorkspaceClient360EnterpriseSettingsEndpoint.as_view(),
-        name="workspace-client-360-enterprise-settings",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/customers/",
-        WorkspaceClient360CustomersEndpoint.as_view(),
-        name="workspace-client-360-customers",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/customers/<uuid:customer_id>/",
-        WorkspaceClient360CustomerDetailEndpoint.as_view(),
-        name="workspace-client-360-customer-detail",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/<uuid:project_id>/customer/",
-        WorkspaceClient360ProjectCustomerAssignEndpoint.as_view(),
-        name="workspace-client-360-project-customer",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/webhooks/",
-        WorkspaceClient360WebhooksEndpoint.as_view(),
-        name="workspace-client-360-webhooks",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/webhooks/<uuid:subscription_id>/test/",
-        WorkspaceClient360WebhookTestEndpoint.as_view(),
-        name="workspace-client-360-webhook-test",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/audit/",
-        WorkspaceClient360AuditLogEndpoint.as_view(),
-        name="workspace-client-360-audit",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/audit/export/",
-        WorkspaceClient360AuditExportEndpoint.as_view(),
-        name="workspace-client-360-audit-export",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/bi-export/",
-        WorkspaceClient360BiExportEndpoint.as_view(),
-        name="workspace-client-360-bi-export",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/crm-sync/",
-        WorkspaceClient360CrmSyncEndpoint.as_view(),
-        name="workspace-client-360-crm-sync",
-    ),
-    path(
-        "workspaces/<str:slug>/client-360/enterprise/retention/purge/",
-        WorkspaceClient360RetentionPurgeEndpoint.as_view(),
-        name="workspace-client-360-retention-purge",
-    ),
-    path(
-        "instances/client-360-rollup/",
-        InstanceClient360RollupEndpoint.as_view(),
-        name="instance-client-360-rollup",
     ),
     # User Preference
     path(

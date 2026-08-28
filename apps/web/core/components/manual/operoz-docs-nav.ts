@@ -47,7 +47,6 @@ export const OPEROZ_DOCS_CATEGORIES: DocsCategory[] = [
     articles: [
       { slug: "overview", articleKey: "boards_overview", paragraphCount: 2, stepCount: 12, tipCount: 6 },
       { slug: "views", articleKey: "boards_views", paragraphCount: 2, stepCount: 14, tipCount: 6 },
-      { slug: "client-360", articleKey: "boards_client_360", paragraphCount: 2, stepCount: 12, tipCount: 6 },
       { slug: "settings", articleKey: "boards_settings", paragraphCount: 2, stepCount: 14, tipCount: 6 },
     ],
   },

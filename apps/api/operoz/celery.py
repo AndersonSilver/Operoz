@@ -81,18 +81,6 @@ app.conf.beat_schedule = {
         "task": "operoz.bgtasks.exporter_expired_task.delete_old_s3_link",
         "schedule": crontab(hour=3, minute=45),  # UTC 03:45
     },
-    "snapshot-weekly-client360-health": {
-        "task": "operoz.bgtasks.client_360_health_snapshot_task.snapshot_weekly_client360_health",
-        "schedule": crontab(hour=6, minute=0, day_of_week=1),  # Monday 06:00 UTC
-    },
-    "monday-client360-weekly-briefing": {
-        "task": "operoz.bgtasks.client_360_weekly_briefing_task.generate_weekly_client360_briefings",
-        "schedule": crontab(hour=8, minute=0, day_of_week=1),  # Monday 08:00 UTC
-    },
-    "friday-client360-status-report-reminder": {
-        "task": "operoz.bgtasks.client_360_status_report_reminder_task.friday_status_report_reminder",
-        "schedule": crontab(hour="*", minute=0, day_of_week=5),  # hourly on Fridays
-    },
     "check-due-date-alerts-hourly": {
         "task": "operoz.bgtasks.alert_scan_task.check_due_date_alerts",
         "schedule": crontab(minute=0),  # every hour
