@@ -412,7 +412,6 @@ CELERY_IMPORTS = (
     "operoz.bgtasks.file_asset_task",
     "operoz.bgtasks.email_notification_task",
     "operoz.bgtasks.cleanup_task",
-    "operoz.license.bgtasks.tracer",
     # management tasks
     "operoz.bgtasks.dummy_data_task",
     # issue version tasks
