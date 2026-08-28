@@ -52,29 +52,12 @@ services:
     env_file:
       - ./apps/api/.env
     environment:
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
     depends_on:
       - operoz-db
       - operoz-redis
-      - operoz-pgbouncer
     mem_limit: 1536m
     cpus: 1.0
-
-  operoz-pgbouncer:
-    container_name: operoz-pgbouncer
-    image: edoburu/pgbouncer:1.22.1-p0
-    restart: always
-    environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@operoz-db:5432/${POSTGRES_DB}
-      POOL_MODE: transaction
-      MAX_CLIENT_CONN: 500
-      DEFAULT_POOL_SIZE: 25
-      AUTH_TYPE: scram-sha-256
-    depends_on:
-      - operoz-db
-    mem_limit: 128m
-    cpus: 0.25
 
   # Fila unica: celery (default) + automation + automation_email + assistant +
   # Substitui os antigos worker/automation-worker/automation-email-worker/

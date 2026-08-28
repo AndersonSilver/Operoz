@@ -99,26 +99,9 @@ services:
       AWS_S3_ENDPOINT_URL: http://operoz-minio:9000
       USE_MINIO: "1"
       MINIO_PUBLIC_ENDPOINT_URL: http://localhost:9000
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
     ports:
       - "8000:8000"
     mem_limit: 1536m
-
-  operoz-pgbouncer:
-    image: edoburu/pgbouncer:1.22.1-p0
-    restart: unless-stopped
-    networks:
-      - dev_env
-    environment:
-      DATABASE_URL: postgres://${POSTGRES_USER:-operoz}:${POSTGRES_PASSWORD:-operoz}@operoz-db:5432/${POSTGRES_DB:-operoz}
-      POOL_MODE: transaction
-      MAX_CLIENT_CONN: 500
-      DEFAULT_POOL_SIZE: 25
-      AUTH_TYPE: scram-sha-256
-    depends_on:
-      - operoz-db
-    ports:
-      - "6432:5432"
 
   # Fila unica: celery (default) + automation + automation_email + assistant.
   # Substitui os antigos worker/automation-worker/automation-email-worker/
