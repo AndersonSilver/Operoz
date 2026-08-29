@@ -131,8 +131,13 @@ def test_resolve_jira_custom_field_ids_by_name():
 def test_jira_custom_field_values_from_issue():
     from operoz.utils.jira_ops.jira_custom_fields import JiraCustomFieldImportContext
 
+    # jira_custom_field_values_from_issue ignora nome que nao exista em
+    # operoz_fields — so a chave importa, o valor nao e lido.
     ctx = JiraCustomFieldImportContext(
-        operoz_fields={},
+        operoz_fields={
+            "Data de início do problema": object(),
+            "SLA do chamado": object(),
+        },
         jira_field_ids={
             "Data de início do problema": "customfield_10100",
             "SLA do chamado": "customfield_10101",

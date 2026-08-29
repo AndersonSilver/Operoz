@@ -142,6 +142,9 @@ class TestApplyTriageExtraUpdates:
     def test_close_persists_resolution(self):
         instance = Mock()
         instance.extra = {"accepted_at": "2026-01-01"}
+        # status=3 dispara finalize_support_metrics, que calcula a diferenca entre
+        # accepted_at e created_at — precisa de datetime real, nao de Mock.
+        instance.created_at = timezone.now() - timedelta(days=2)
         apply_triage_extra_updates(instance, status=3, actor_id="user-1", resolution_note="Resolvido no cliente")
         assert instance.extra["closed_at"]
         assert instance.extra["closed_by"] == "user-1"
