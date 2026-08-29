@@ -62,7 +62,9 @@ def test_content_to_html_preserves_full_module_name_in_item_cell():
     )
     html = content_to_html(ctx)
     assert '<h1 class="sr-page__hero-title">ALLIANZ</h1>' in html
-    assert "Sprint · 1 módulo ·" in html
+    # _resolve_sprint_label usa ctx.title como rotulo do sprint; aqui o title
+    # e o proprio nome do modulo.
+    assert f"{module_name} · 1 módulo · 22/06/2026 a 28/06/2026" in html
     assert "Resumo executivo" in html
     assert module_name in html
     assert "white-space: nowrap" in html
@@ -208,7 +210,9 @@ def test_content_to_html_multi_module_has_no_sprint_column():
         },
     )
     html = content_to_html(ctx)
-    assert "sr-head-cell--sprint" not in html
+    # A classe sempre aparece na folha de estilo embutida; o que o teste quer
+    # garantir e que a celula nao foi renderizada.
+    assert 'class="sr-head-cell sr-head-cell--sprint"' not in html
     assert "Módulos no período" in html
     assert "Evolução dos módulos" in html
     assert "2 módulos ·" in html
@@ -250,6 +254,6 @@ def test_content_to_html_sprint_subtitle_module_count():
         },
     )
     html = content_to_html(ctx)
-    assert "Sprint · 2 módulos · 22/06/2026 a 28/06/2026" in html
+    assert "ALLIANZ · 2 módulos · 22/06/2026 a 28/06/2026" in html
     assert module_a in html
     assert module_b in html

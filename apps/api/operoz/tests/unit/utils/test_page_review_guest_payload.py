@@ -144,7 +144,7 @@ class TestBuildGuestPrdReviewPayload:
                     "content": [
                         {
                             "type": "htmlDocumentEmbed",
-                            "attrs": {"src": "asset-uuid-prd", "title": "PRD Magalu"},
+                            "attrs": {"src": "11111111-1111-4111-8111-111111111111", "title": "PRD Magalu"},
                         }
                     ],
                 },
@@ -160,7 +160,7 @@ class TestBuildGuestPrdReviewPayload:
         assert "Full PRD body" in render_html
         assert "function renderDoc" in render_html
         assert "initPrdReview" in render_html
-        mock_read_html.assert_called_once_with("asset-uuid-prd")
+        mock_read_html.assert_called_once_with("11111111-1111-4111-8111-111111111111")
 
     @patch("operoz.assistant.page_content.read_html_document_asset_html")
     def test_inject_guest_sdk_preserves_substantive_prd_body(
@@ -172,7 +172,7 @@ class TestBuildGuestPrdReviewPayload:
             workspace_board,
             create_user,
             page_kwargs={
-                "description_html": '<html-document-embed src="asset-1" title="PRD"></html-document-embed>',
+                "description_html": '<html-document-embed src="22222222-2222-4222-8222-222222222222" title="PRD"></html-document-embed>',
             },
         )
         payload = build_guest_prd_review_payload(invite)
