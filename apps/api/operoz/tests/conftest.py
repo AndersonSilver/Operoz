@@ -87,6 +87,21 @@ def api_client():
 
 
 @pytest.fixture(autouse=True)
+def clear_cache_between_tests():
+    """Isola o cache entre testes.
+
+    Os throttles do DRF (authentication/rate_limit.py) contam tentativas no cache
+    do Django, que nos testes e o Redis. Sem limpar, o contador vaza de um teste
+    para o outro e os ultimos da classe recebem 429 em vez do status esperado.
+    """
+    from django.core.cache import cache
+
+    cache.clear()
+    yield
+    cache.clear()
+
+
+@pytest.fixture(autouse=True)
 def stub_assistant_embeddings(monkeypatch, request):
     """Evita chamadas OpenAI reais quando indexação eager dispara durante setup de testes."""
     if "no_stub_embeddings" in request.keywords:
