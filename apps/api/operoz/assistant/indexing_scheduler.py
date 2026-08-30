@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from operoz.assistant.index_status import DEBOUNCE_SECONDS, mark_index_pending
+from operoz.assistant.rag_flags import is_rag_indexing_enabled
 from operoz.bgtasks.assistant_index_task import index_entity_task
 from operoz.settings.redis import redis_instance
 
 
 def schedule_entity_index(entity_type: str, entity_id: str, workspace_id: str) -> None:
+    if not is_rag_indexing_enabled():
+        return
     mark_index_pending(entity_type, entity_id)
     cache_key = f"assistant:index:debounce:{entity_type}:{entity_id}"
     try:
@@ -37,6 +40,9 @@ def ensure_page_index_queued(page) -> bool:
     entity_type = SearchEmbedding.ENTITY_PAGE
     entity_id = str(page.id)
     workspace_id = str(page.workspace_id)
+
+    if not is_rag_indexing_enabled():
+        return False
 
     if not build_page_indexable_text(page).strip():
         return False

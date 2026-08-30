@@ -1,13 +1,13 @@
 from __future__ import annotations
 
 from operoz.alerts.types import AlertContext
-from operoz.discord_integration.services.discord_formatting import (
+from operoz.alerts.discord_formatting import (
     OPEROZ_EMBED_COLOR,
     OPEROZ_EMBED_COLOR_DANGER,
     OPEROZ_EMBED_COLOR_WARNING,
     build_branded_embed,
 )
-from operoz.discord_integration.services.text_utils import truncate_for_discord
+from operoz.alerts.text_utils import truncate_for_discord
 from operoz.utils.support_criticality import criticality_label
 from operoz.utils.user_display import user_display_label
 

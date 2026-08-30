@@ -7,6 +7,7 @@ import pytz
 
 # Module imports
 from operoz.authentication.adapter.oauth import OauthAdapter
+from operoz.authentication.utils.redirect_uri import oauth_redirect_uri
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.authentication.adapter.error import (
     AuthenticationException,
@@ -49,7 +50,7 @@ class GitLabOAuthProvider(OauthAdapter):
         client_id = GITLAB_CLIENT_ID
         client_secret = GITLAB_CLIENT_SECRET
 
-        redirect_uri = f"""{"https" if request.is_secure() else "http"}://{request.get_host()}/auth/gitlab/callback/"""
+        redirect_uri = oauth_redirect_uri(request, "gitlab")
         url_params = {
             "client_id": client_id,
             "redirect_uri": redirect_uri,

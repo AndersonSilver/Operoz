@@ -75,5 +75,7 @@ def test_resolve_support_recipients_includes_support_team(mock_user, mock_worksp
     mock_workspace_member.objects.filter.return_value.values_list.return_value = []
     mock_user.objects.filter.return_value = [team_member]
 
-    recipients = resolve_support_recipients(subject, {"notify_support_team": True})
+    # resolve_support_recipients liga notify_project_lead por padrao, o que
+    # consulta Project — nao mockado aqui. Desliga para isolar o time de suporte.
+    recipients = resolve_support_recipients(subject, {"notify_support_team": True, "notify_project_lead": False})
     assert [str(user.id) for user in recipients] == ["team-1"]

@@ -12,7 +12,6 @@ handler404 = "operoz.app.views.error_404.custom_404_view"
 
 urlpatterns = [
     path("api/", include("operoz.app.urls")),
-    path("api/discord/", include("operoz.discord_integration.urls")),
     path("api/public/", include("operoz.space.urls")),
     path("api/instances/", include("operoz.license.urls")),
     path("api/v1/", include("operoz.api.urls")),

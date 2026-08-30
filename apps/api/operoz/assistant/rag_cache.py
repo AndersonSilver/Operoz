@@ -43,19 +43,14 @@ def _cache_key(ctx: AssistantActorContext, digest: str) -> str:
 
 
 def get_cached_rag_results(ctx: AssistantActorContext, query: str) -> list[dict[str, Any]] | None:
-    from operoz.assistant.observability import record_rag_cache_access
-
     digest = query_hash(query)
     raw = cache.get(_cache_key(ctx, digest))
     if raw is None:
-        record_rag_cache_access(hit=False)
         return None
     try:
         payload = json.loads(raw)
         if not isinstance(payload, list):
-            record_rag_cache_access(hit=False)
             return None
-        record_rag_cache_access(hit=True)
         logger.debug(
             "assistant rag cache hit workspace=%s query_hash=%s chunks=%s",
             ctx.workspace.id,

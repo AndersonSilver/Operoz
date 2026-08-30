@@ -11,14 +11,12 @@ class SearchEmbedding(BaseModel):
     ENTITY_PAGE = "page"
     ENTITY_COMMENT = "comment"
     ENTITY_PLAYBOOK = "playbook"
-    ENTITY_CLIENT360_SNAPSHOT = "client360_snapshot"
 
     ENTITY_TYPE_CHOICES = (
         (ENTITY_ISSUE, "Issue"),
         (ENTITY_PAGE, "Page"),
         (ENTITY_COMMENT, "Comment"),
         (ENTITY_PLAYBOOK, "Playbook"),
-        (ENTITY_CLIENT360_SNAPSHOT, "Client360 snapshot"),
     )
 
     workspace = models.ForeignKey(

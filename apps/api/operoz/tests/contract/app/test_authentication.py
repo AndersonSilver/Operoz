@@ -300,7 +300,9 @@ class TestMagicSignIn:
 
         # Use Django client to test the redirect flow without following redirects
         url = reverse("magic-sign-in")
-        next_path = "workspaces"
+        # validate_next_path exige barra inicial (protecao contra open redirect):
+        # sem ela o caminho e descartado e o redirect volta so a base.
+        next_path = "/workspaces"
         response = django_client.post(
             url,
             {"email": "user@plane.so", "code": token, "next_path": next_path},

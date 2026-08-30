@@ -202,6 +202,52 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+  # Builda e publica a imagem "backend-all-in-one" (api+worker+beat+
+  # migrator+admin+space+live+proxy num container so, ver deployments/aio/operoz/).
+  # So publica no GHCR — NAO substitui o deploy full atual (job `deploy` abaixo
+  # continua usando plane-backend/space/admin/live/proxy separados). Troca de
+  # verdade na VPS e passo manual, feito depois de validar a imagem publicada.
+  build-aio:
+    needs: [meta, build-full]
+    if: ${{ !inputs.skip_build && needs.meta.outputs.build_stack == 'true' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    permissions:
+      contents: read
+      packages: write
+    env:
+      RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
+      IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+        with:
+          ref: refs/tags/${{ needs.meta.outputs.release_tag }}
+          fetch-depth: 0
+
+      - uses: docker/setup-buildx-action@8d2750c68a42422c14e847fe6c8ac0403b4cbd6f # v3
+      - uses: docker/login-action@c94ce9fb468520275223c153574b00df6fe4bcc9 # v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
+        with:
+          context: deployments/aio/operoz
+          push: true
+          tags: |
+            ${{ env.IMAGE_PREFIX }}/operoz-aio-api:${{ env.RELEASE_TAG }}
+            ${{ env.IMAGE_PREFIX }}/operoz-aio-api:stable
+            ${{ env.IMAGE_PREFIX }}/operoz-aio-api:${{ github.sha }}
+          build-args: |
+            BACKEND_IMAGE=${{ env.IMAGE_PREFIX }}/plane-backend:${{ env.RELEASE_TAG }}
+            SPACE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-space:${{ env.RELEASE_TAG }}
+            ADMIN_IMAGE=${{ env.IMAGE_PREFIX }}/plane-admin:${{ env.RELEASE_TAG }}
+            LIVE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-live:${{ env.RELEASE_TAG }}
+            PROXY_IMAGE=${{ env.IMAGE_PREFIX }}/plane-proxy:${{ env.RELEASE_TAG }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
   deploy:
     needs: [meta, build-web, build-full]
     if: ${{ !cancelled() && !contains(needs.*.result, 'failure') }}

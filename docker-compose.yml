@@ -9,6 +9,8 @@ services:
     restart: always
     depends_on:
       - api
+    mem_limit: 512m
+    cpus: 0.5
 
   admin:
     container_name: admin
@@ -21,6 +23,8 @@ services:
     depends_on:
       - api
       - web
+    mem_limit: 512m
+    cpus: 0.5
 
   space:
     container_name: space
@@ -33,6 +37,8 @@ services:
     depends_on:
       - api
       - web
+    mem_limit: 512m
+    cpus: 0.5
 
   api:
     container_name: api
@@ -46,50 +52,17 @@ services:
     env_file:
       - ./apps/api/.env
     environment:
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
       GUNICORN_WORKERS: ${GUNICORN_WORKERS:-2}
     depends_on:
       - operoz-db
       - operoz-redis
-      - operoz-pgbouncer
     mem_limit: 1536m
     cpus: 1.0
 
-  api-chat:
-    container_name: api-chat
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-api-chat.sh
-    env_file:
-      - ./apps/api/.env
-    environment:
-      USE_PGBOUNCER: ${USE_PGBOUNCER:-0}
-      GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
-      GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
-    depends_on:
-      - operoz-db
-      - operoz-redis
-      - operoz-pgbouncer
-    mem_limit: 2g
-    cpus: 2.0
-
-  operoz-pgbouncer:
-    container_name: operoz-pgbouncer
-    image: edoburu/pgbouncer:1.22.1-p0
-    restart: always
-    environment:
-      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@operoz-db:5432/${POSTGRES_DB}
-      POOL_MODE: transaction
-      MAX_CLIENT_CONN: 500
-      DEFAULT_POOL_SIZE: 25
-      AUTH_TYPE: scram-sha-256
-    depends_on:
-      - operoz-db
-
+  # Fila unica: celery (default) + automation + automation_email + assistant +
+  # Substitui os antigos worker/automation-worker/automation-email-worker/
+  # assistant-worker (Tier 1 do
+  # plano de reducao de containers). beat-worker fica de fora por ser singleton.
   worker:
     container_name: bgworker
     build:
@@ -98,86 +71,15 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: always
-    command: ./bin/docker-entrypoint-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-
-  automation-worker:
-    container_name: automationworker
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-automation-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-
-  automation-email-worker:
-    container_name: automationemailworker
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-automation-email-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-
-  assistant-worker:
-    container_name: assistantworker
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-assistant-worker.sh
-    env_file:
-      - ./apps/api/.env
-    depends_on:
-      - api
-      - operoz-db
-      - operoz-redis
-      - operoz-mq
-
-  assistant-chat-worker:
-    container_name: assistantchatworker
-    build:
-      context: ./apps/api
-      dockerfile: Dockerfile.api
-      args:
-        DOCKER_BUILDKIT: 1
-    restart: always
-    command: ./bin/docker-entrypoint-assistant-chat-worker.sh
+    command: ./bin/docker-entrypoint-worker-general.sh
     env_file:
       - ./apps/api/.env
     environment:
-      ASSISTANT_CHAT_CELERY_QUEUE: ${ASSISTANT_CHAT_CELERY_QUEUE:-assistant-chat}
-      ASSISTANT_CHAT_WORKER_CONCURRENCY: ${ASSISTANT_CHAT_WORKER_CONCURRENCY:-8}
+      GENERAL_WORKER_CONCURRENCY: ${GENERAL_WORKER_CONCURRENCY:-8}
     depends_on:
       - api
-      - api-chat
       - operoz-db
       - operoz-redis
-      - operoz-mq
     mem_limit: 2g
     cpus: 2.0
 
@@ -196,6 +98,8 @@ services:
       - api
       - operoz-db
       - operoz-redis
+    mem_limit: 256m
+    cpus: 0.25
 
   migrator:
     container_name: operoz-migrator
@@ -211,6 +115,8 @@ services:
     depends_on:
       - operoz-db
       - operoz-redis
+    mem_limit: 512m
+    cpus: 0.5
 
   live:
     container_name: operoz-live
@@ -220,6 +126,8 @@ services:
       args:
         DOCKER_BUILDKIT: 1
     restart: always
+    mem_limit: 512m
+    cpus: 0.5
 
   operoz-db:
     container_name: operoz-db
@@ -236,6 +144,8 @@ services:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       PGDATA: /var/lib/postgresql/data
+    mem_limit: 2g
+    cpus: 2.0
 
   operoz-redis:
     container_name: operoz-redis
@@ -243,19 +153,8 @@ services:
     restart: always
     volumes:
       - redisdata:/data
-
-  operoz-mq:
-    container_name: operoz-mq
-    image: rabbitmq:3.13.6-management-alpine
-    restart: always
-    env_file:
-      - .env
-    environment:
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST}
-    volumes:
-      - rabbitmq_data:/var/lib/rabbitmq
+    mem_limit: 256m
+    cpus: 0.25
 
   operoz-minio:
     container_name: operoz-minio
@@ -267,6 +166,8 @@ services:
     environment:
       MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
       MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+    mem_limit: 512m
+    cpus: 0.5
 
   # Comment this if you already have a reverse proxy running
   proxy:
@@ -284,12 +185,12 @@ services:
     depends_on:
       - web
       - api
-      - api-chat
       - space
       - admin
+    mem_limit: 256m
+    cpus: 0.25
 
 volumes:
   pgdata:
   redisdata:
   uploads:
-  rabbitmq_data:

@@ -4,7 +4,7 @@ import pytest
 
 from operoz.alerts.discord_embed import build_discord_alert_message
 from operoz.alerts.types import AlertContext, AlertSubject
-from operoz.discord_integration.services.discord_formatting import (
+from operoz.alerts.discord_formatting import (
     OPEROZ_EMBED_COLOR_DANGER,
     OPEROZ_EMBED_COLOR_WARNING,
 )
@@ -90,7 +90,7 @@ def test_build_discord_alert_message_issue_created():
 
     content, embed = build_discord_alert_message(context)
 
-    assert content == "Novo card criado no Operoz."
+    assert content == "Novo card criado, por favor, verifique."
     assert embed["title"] == "[CLIEN-29] Implementar login · Alta"
     assert "• **Projeto:** Cliente XYZ" in embed["description"]
     assert "• **Responsáveis:** Dev User" in embed["description"]

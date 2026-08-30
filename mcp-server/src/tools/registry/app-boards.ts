@@ -8,7 +8,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/members/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -17,25 +18,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/archive/",
-    ["workspace_slug","board_slug"], { body: true }
-  ),
-  op(
-    "boards",
-    "operoz_board_client_360_detail",
-    "Cliente 360 detalhe",
-    "app",
-    "GET",
-    "/workspaces/{workspace_slug}/boards/{board_slug}/client-360/{project_id}/",
-    ["workspace_slug","board_slug","project_id"]
-  ),
-  op(
-    "boards",
-    "operoz_board_client_360_list",
-    "Cliente 360 lista",
-    "app",
-    "GET",
-    "/workspaces/{workspace_slug}/boards/{board_slug}/client-360/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -44,7 +28,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/email-notification-logs/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -53,7 +37,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/custom-fields/bulk-add/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -62,7 +47,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -71,7 +57,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/custom-fields/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -80,7 +67,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/issue-types/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -89,7 +77,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/project-field-layout/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -98,7 +87,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/roles/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -107,7 +97,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -116,7 +107,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/custom-fields/",
-    ["workspace_slug"], { body: true }
+    ["workspace_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -125,7 +117,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -134,7 +126,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/custom-fields/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -143,7 +135,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/issue-types/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -152,7 +144,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/project-field-layout/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -161,7 +153,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/roles/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -170,7 +162,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -179,7 +171,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/custom-fields/{pk}/",
-    ["workspace_slug","pk"]
+    ["workspace_slug", "pk"]
   ),
   op(
     "boards",
@@ -188,7 +180,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/roles/{pk}/duplicate/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -197,17 +190,12 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/{pk}/export/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
-  op(
-    "boards",
-    "operoz_get_board",
-    "Detalhe board",
-    "app",
-    "GET",
-    "/workspaces/{workspace_slug}/boards/{board_slug}/",
-    ["workspace_slug","board_slug"]
-  ),
+  op("boards", "operoz_get_board", "Detalhe board", "app", "GET", "/workspaces/{workspace_slug}/boards/{board_slug}/", [
+    "workspace_slug",
+    "board_slug",
+  ]),
   op(
     "boards",
     "operoz_get_board_meta",
@@ -215,7 +203,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/meta/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -224,7 +212,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/permission-catalog/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -233,7 +221,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/project-form-layout/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -242,7 +230,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/{pk}/",
-    ["workspace_slug","board_slug","pk"]
+    ["workspace_slug", "board_slug", "pk"]
   ),
   op(
     "boards",
@@ -251,7 +239,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/custom-fields/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -260,7 +248,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/issue-types/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -269,7 +257,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/issues/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -278,7 +266,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/members/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -287,7 +275,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/modules/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -296,7 +284,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/project-field-layout/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -305,7 +293,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/roles/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
   op(
     "boards",
@@ -314,17 +302,11 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "GET",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/",
-    ["workspace_slug","board_slug"]
+    ["workspace_slug", "board_slug"]
   ),
-  op(
-    "boards",
-    "operoz_list_boards",
-    "Lista boards",
-    "app",
-    "GET",
-    "/workspaces/{workspace_slug}/boards/",
-    ["workspace_slug"]
-  ),
+  op("boards", "operoz_list_boards", "Lista boards", "app", "GET", "/workspaces/{workspace_slug}/boards/", [
+    "workspace_slug",
+  ]),
   op(
     "boards",
     "operoz_list_workspace_custom_fields",
@@ -341,7 +323,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "DELETE",
     "/workspaces/{workspace_slug}/boards/{board_slug}/members/{user_id}/",
-    ["workspace_slug","board_slug","user_id"]
+    ["workspace_slug", "board_slug", "user_id"]
   ),
   op(
     "boards",
@@ -350,7 +332,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "POST",
     "/workspaces/{workspace_slug}/boards/{board_slug}/unarchive/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -359,7 +342,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/",
-    ["workspace_slug","board_slug"], { body: true }
+    ["workspace_slug", "board_slug"],
+    { body: true }
   ),
   op(
     "boards",
@@ -368,7 +352,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/custom-fields/{pk}/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -377,7 +362,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/issue-types/{pk}/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -386,7 +372,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/members/{user_id}/",
-    ["workspace_slug","board_slug","user_id"], { body: true }
+    ["workspace_slug", "board_slug", "user_id"],
+    { body: true }
   ),
   op(
     "boards",
@@ -395,7 +382,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/project-field-layout/{pk}/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -404,7 +392,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/roles/{pk}/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -413,7 +402,8 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/boards/{board_slug}/status-reports/{pk}/",
-    ["workspace_slug","board_slug","pk"], { body: true }
+    ["workspace_slug", "board_slug", "pk"],
+    { body: true }
   ),
   op(
     "boards",
@@ -422,6 +412,7 @@ export const APP_BOARD_OPERATIONS = [
     "app",
     "PATCH",
     "/workspaces/{workspace_slug}/custom-fields/{pk}/",
-    ["workspace_slug","pk"], { body: true }
+    ["workspace_slug", "pk"],
+    { body: true }
   ),
 ];

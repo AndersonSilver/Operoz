@@ -4,7 +4,6 @@ import pytest
 
 from operoz.app.permissions import ROLE
 from operoz.assistant.indexing import index_entity
-from operoz.assistant.intent import classify_chat_intent
 from operoz.assistant.retrieval import (
     build_rag_context_block,
     can_access_embedding,
@@ -29,18 +28,6 @@ def _unit_vector(dim: int, index: int = 0, value: float = 1.0) -> list[float]:
     vec = [0.0] * dim
     vec[index % dim] = value
     return vec
-
-
-@pytest.mark.unit
-class TestIntentClassification:
-    def test_documentation_intent(self):
-        assert classify_chat_intent("O que diz a documentação do PRD?") == "documentation"
-
-    def test_metrics_intent(self):
-        assert classify_chat_intent("Quantos cards pendentes no intake?") == "metrics"
-
-    def test_general_intent(self):
-        assert classify_chat_intent("Resumo do projeto") == "general"
 
 
 @pytest.mark.unit

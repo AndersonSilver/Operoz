@@ -1,0 +1,52 @@
+{
+	auto_https off
+	# TLS termina no proxy de borda (Nginx Proxy Manager); sem isto o Caddy
+	# descarta o X-Forwarded-Proto recebido e o Django ve a requisicao como HTTP,
+	# gerando redirect_uri OAuth em http:// (redirect_uri_mismatch).
+	servers {
+		trusted_proxies static {$TRUSTED_PROXIES:private_ranges}
+		client_ip_headers X-Forwarded-For X-Real-IP
+	}
+}
+
+:8080 {
+	request_body {
+		max_size {$FILE_SIZE_LIMIT:5242880}
+	}
+
+	redir /spaces /spaces/ permanent
+	handle /spaces/* {
+		reverse_proxy localhost:3002
+	}
+
+	redir /god-mode /god-mode/ permanent
+	handle_path /god-mode/* {
+		root * /app/admin
+		try_files {path} {path}/ /index.html
+		file_server
+	}
+
+	handle /live/* {
+		reverse_proxy localhost:3005
+	}
+
+	handle /api/* {
+		reverse_proxy localhost:8000 {
+			flush_interval -1
+		}
+	}
+
+	handle /auth/* {
+		reverse_proxy localhost:8000
+	}
+
+	handle /static/* {
+		reverse_proxy localhost:8000
+	}
+
+	# Web fica em container separado — alcancado pelo hostname de rede
+	# (docker-compose service name / Azure Container Apps internal DNS).
+	handle {
+		reverse_proxy {$WEB_UPSTREAM:web}:3000
+	}
+}

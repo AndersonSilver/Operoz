@@ -93,13 +93,12 @@ jobs:
       - name: Django check
         run: python manage.py check
 
-      - name: Pytest (PRD Review + Assistant smoke)
+      - name: Pytest (PRD Review + RAG smoke)
         run: |
           python -m pytest \
             operoz/tests/contract/app/test_prd_review.py \
-            operoz/tests/unit/assistant/test_prd_review_summary_tool.py \
             operoz/tests/unit/assistant/ \
-            operoz/tests/contract/app/test_assistant_app.py \
+            operoz/tests/contract/api/test_search.py \
             -q --tb=short
 
   mcp-build:

@@ -1,1 +1,1 @@
-"""Assistente Operoz — chat com tools, segurança e RAG (futuro)."""
+"""Índice RAG do Operoz — indexação, embeddings e busca semântica."""

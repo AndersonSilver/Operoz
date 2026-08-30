@@ -35,12 +35,6 @@ export const SupportTicketMetadataPanel = observer(function SupportTicketMetadat
   const project = issue.project_id ? getProjectById(issue.project_id) : undefined;
 
   const resolvedWorkspaceSlug = workspaceSlug || params.workspaceSlug?.toString() || "";
-  const boardSlug = project?.board?.slug;
-  const client360Href =
-    resolvedWorkspaceSlug && boardSlug && project?.id
-      ? `/${resolvedWorkspaceSlug}/boards/${boardSlug}/client-360?project=${project.id}`
-      : null;
-
   const contactEmail = meta?.source_email;
   const theme = meta?.form_theme ?? "support";
 
@@ -158,16 +152,6 @@ export const SupportTicketMetadataPanel = observer(function SupportTicketMetadat
             </Tooltip>
           </ControlLink>
         </div>
-      ) : null}
-
-      {client360Href ? (
-        <a
-          href={client360Href}
-          className="mt-4 inline-flex items-center gap-1 text-12 font-medium text-accent-primary hover:underline"
-        >
-          {t("inbox_issue.support_ticket.open_client_360")}
-          <ExternalLink className="size-3.5" />
-        </a>
       ) : null}
     </section>
   );

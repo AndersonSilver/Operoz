@@ -12,8 +12,6 @@ import { SwitcherIcon, SwitcherLabel } from "@/components/common/switcher-label"
 import { PageHeaderActions } from "@/components/pages/header/actions";
 import { PageAssistantIndexBadge } from "@/components/pages/header/assistant-index-badge";
 import { PageSyncingBadge } from "@/components/pages/header/syncing-badge";
-import { isOperozAssistantEnabled } from "@/constants/enable-assistant";
-import { useInstance } from "@/hooks/store/use-instance";
 import {
   ProjectFeaturePageActions,
   ProjectFeaturePageHeader,
@@ -38,8 +36,6 @@ export const PageDetailsHeader = observer(function PageDetailsHeader() {
   const router = useAppRouter();
   const { workspaceSlug, pageId, projectId } = useParams();
   const { loader } = useProject();
-  const { config: instanceConfig } = useInstance();
-  const assistantEnabled = isOperozAssistantEnabled(instanceConfig);
   const { getPageById, getCurrentProjectPageIds } = usePageStore(storeType);
   const page = usePage({
     pageId: pageId?.toString() ?? "",
@@ -94,7 +90,7 @@ export const PageDetailsHeader = observer(function PageDetailsHeader() {
       <Header.RightItem>
         <ProjectFeaturePageActions>
           <PageSyncingBadge syncStatus={page.isSyncingWithServer} />
-          {assistantEnabled && workspaceSlug && projectId && pageId ? (
+          {workspaceSlug && projectId && pageId ? (
             <PageAssistantIndexBadge
               workspaceSlug={workspaceSlug.toString()}
               projectId={projectId.toString()}

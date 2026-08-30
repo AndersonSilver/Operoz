@@ -9,12 +9,13 @@ from operoz.utils.support_criticality import CRITICALITY_VALUES
 class BoardSupportSlaPolicySerializer(BaseSerializer):
     class Meta:
         model = BoardSupportSlaPolicy
-        fields = ["id", "board", "policies", "created_at", "updated_at"]
+        fields = ["id", "board", "policies", "support_sla_days", "created_at", "updated_at"]
         read_only_fields = ["board", "created_at", "updated_at"]
 
 
 class BoardSupportSlaPolicyWriteSerializer(serializers.Serializer):
-    policies = serializers.DictField()
+    policies = serializers.DictField(required=False)
+    support_sla_days = serializers.IntegerField(min_value=1, max_value=90, required=False)
 
     def validate_policies(self, value):
         normalized = normalize_policies(value)

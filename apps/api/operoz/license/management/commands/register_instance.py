@@ -11,7 +11,6 @@ from django.utils import timezone
 
 # Module imports
 from operoz.license.models import Instance, InstanceEdition
-from operoz.license.bgtasks.tracer import instance_traces
 
 
 class Command(BaseCommand):
@@ -81,13 +80,5 @@ class Command(BaseCommand):
             instance.is_test = os.environ.get("IS_TEST", "0") == "1"
             instance.edition = InstanceEdition.PLANE_COMMUNITY.value
             instance.save()
-
-        # Call the instance traces task — best-effort only, must never block
-        # instance registration (and therefore API startup) if the broker
-        # is slow/unreachable during boot.
-        try:
-            instance_traces.delay()
-        except Exception as exc:
-            self.stdout.write(self.style.WARNING(f"Skipping instance_traces enqueue: {exc}"))
 
         return

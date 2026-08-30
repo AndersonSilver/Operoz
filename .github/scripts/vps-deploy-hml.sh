@@ -75,8 +75,8 @@ docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 echo "==> Recriar API e workers HML"
 docker compose --env-file hml.env -p plane-app-hml up -d \
   --no-deps --pull never --force-recreate \
-  hml-api hml-api-chat hml-worker hml-beat-worker \
-  hml-assistant-worker hml-assistant-chat-worker \
+  hml-api hml-worker hml-beat-worker \
+  hml-assistant-worker \
   hml-automation-worker hml-automation-email-worker
 
 echo "==> Aguardar hml-api responder (collectstatic + gunicorn podem levar ~2 min)"
@@ -97,8 +97,11 @@ if [[ "${api_ready}" != "true" ]]; then
 fi
 
 echo "==> Recriar web, admin, space, live e proxy HML"
+# --remove-orphans no ultimo up: remove container de servico que saiu do compose
+# (ex. hml-api-chat) so depois da API ja ter respondido, para nao mexer na stack
+# antes de validar. Servicos declarados mas fora da lista acima nao sao orfaos.
 docker compose --env-file hml.env -p plane-app-hml up -d \
-  --no-deps --pull never --force-recreate \
+  --no-deps --pull never --force-recreate --remove-orphans \
   web hml-admin hml-space hml-live hml-proxy
 
 echo "==> Estado HML"

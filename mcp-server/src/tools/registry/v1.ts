@@ -874,4 +874,27 @@ export const V1_OPERATIONS = [
     `/workspaces/{${ws}}/invitations/{pk}/`,
     [ws, "pk"]
   ),
+  // Busca semântica (índice RAG)
+  op(
+    "search",
+    "operoz_search_semantic",
+    "Busca semântica no índice RAG do workspace (páginas, work items, comentários, playbooks, snapshots Cliente 360). Retorna trechos rankeados com citações, já filtrados pelas permissões de projeto do chamador. Não invoca modelo generativo.",
+    "v1",
+    "POST",
+    `/workspaces/{${ws}}/search/semantic/`,
+    [ws],
+    {
+      body: true,
+      bodySchema: {
+        type: "object",
+        required: ["query"],
+        properties: {
+          query: { type: "string", description: "Pergunta em linguagem natural ou termos de busca" },
+          limit: { type: "integer", minimum: 1, maximum: 20, default: 5, description: "Máximo de trechos" },
+          board_slug: { type: "string", description: "Restringe a busca a um board" },
+          project_id: { type: "string", description: "Restringe a busca a um projeto" },
+        },
+      },
+    }
+  ),
 ];

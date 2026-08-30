@@ -55,6 +55,9 @@ def test_create_computes_sla_due_at_from_criticality(_mock_duration):
 
 
 @pytest.mark.unit
+# apply_support_field_updates agenda o sync de calendario com
+# transaction.on_commit, que precisa de conexao com o banco.
+@pytest.mark.django_db
 def test_manual_sla_override_is_preserved_on_criticality_change():
     opened_at = timezone.now() - timedelta(hours=2)
     manual_due = (timezone.now() + timedelta(hours=3)).isoformat()
@@ -107,6 +110,9 @@ def test_sla_breach_uses_criticality_due_date(_mock_sla_days):
     intake_issue.board_intake_form_id = "board-form-1"
     intake_issue.board_intake_form = SimpleNamespace(name="Form", fields=[], theme="support")
     intake_issue.support_queue_id = None
+    # serialize_support_ticket_metadata resolve o rotulo de quem abriu o ticket
+    # consultando User. Sem stub, o Mock e truthy e a consulta recebe UUID invalido.
+    intake_issue.created_by_id = None
     intake_issue.project = Mock(name="Cliente A", identifier="CLI-A", board_id="board-1")
     intake_issue.extra = {
         "support": {

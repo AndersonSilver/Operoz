@@ -1,13 +1,12 @@
 """Unit tests for cross-project intake conversion (E1) and typed outcomes (E2/E5)."""
 
-from unittest.mock import MagicMock, Mock, patch, call
+from unittest.mock import Mock, patch
 
 import pytest
 
 from operoz.utils.intake_workflow import (
     IntakeConvertError,
     convert_intake_to_project,
-    promote_issue_to_backlog,
 )
 
 
@@ -27,8 +26,9 @@ class TestConvertIntakeToProject:
 
         dest_project = Mock(id="dest-proj", workspace_id="ws-1")
         # Mock.name is special (sets internal mock name, not .name attribute)
-        source_issue = Mock(id="src-issue", description_html="<p>desc</p>", priority="high",
-                            project_id="src-proj", workspace_id="ws-1")
+        source_issue = Mock(
+            id="src-issue", description_html="<p>desc</p>", priority="high", project_id="src-proj", workspace_id="ws-1"
+        )
         source_issue.name = "Feature X"
         intake_issue = Mock(issue=source_issue)
 
@@ -58,8 +58,9 @@ class TestConvertIntakeToProject:
         backlog_state = Mock(id="bs-id")
         mock_resolve.return_value = backlog_state
 
-        source_issue = Mock(id="src-issue", description_html="<p></p>", priority="none",
-                            project_id="src-proj", workspace_id="ws-1")
+        source_issue = Mock(
+            id="src-issue", description_html="<p></p>", priority="none", project_id="src-proj", workspace_id="ws-1"
+        )
         source_issue.name = "X"
         dest_project = Mock(id="dest-proj", workspace_id="ws-1")
         intake_issue = Mock(issue=source_issue)
@@ -94,8 +95,7 @@ class TestConvertIntakeToProject:
         backlog_state = Mock(id="bs-id")
         mock_resolve.return_value = backlog_state
 
-        source_issue = Mock(id="src", description_html=None, priority="none",
-                            project_id="p1", workspace_id="w1")
+        source_issue = Mock(id="src", description_html=None, priority="none", project_id="p1", workspace_id="w1")
         source_issue.name = "T"
         dest_project = Mock(id="p2", workspace_id="w1")
         intake_issue = Mock(issue=source_issue)

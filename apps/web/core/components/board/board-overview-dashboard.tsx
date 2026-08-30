@@ -8,9 +8,9 @@ import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import type { IBoardMeta } from "@operoz/types";
 import { Avatar } from "@operoz/ui";
 import { calculateTimeAgo, cn, getFileURL } from "@operoz/utils";
-import { Client360BreakdownRow } from "@/components/board/client-360/client-360-ui";
-import type { Client360Tone } from "@/components/board/client-360/client-360-tokens";
-import { CLIENT_360_TONE } from "@/components/board/client-360/client-360-tokens";
+import { BreakdownRow } from "@/components/common/breakdown-row";
+import type { ToneKey } from "@/components/common/tone-tokens";
+import { TONE_TOKENS } from "@/components/common/tone-tokens";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { aggregateBoardStateDistributionByGroup } from "./board-overview-state.utils";
 
@@ -36,11 +36,11 @@ function BoardOverviewWidget({
 }: {
   title: string;
   icon: LucideIcon;
-  iconTone?: Client360Tone;
+  iconTone?: ToneKey;
   children: React.ReactNode;
   className?: string;
 }) {
-  const tone = CLIENT_360_TONE[iconTone];
+  const tone = TONE_TOKENS[iconTone];
 
   return (
     <section className={cn(OVERVIEW_CARD, className)}>
@@ -247,7 +247,7 @@ export function BoardOverviewTypeChart({ meta }: { meta: IBoardMeta }) {
   return (
     <div className="flex flex-col gap-3">
       {meta.type_distribution.slice(0, 8).map((row, index) => (
-        <Client360BreakdownRow
+        <BreakdownRow
           key={row.type_id ?? row.type_name}
           label={row.type_name}
           value={row.count}

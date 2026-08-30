@@ -126,11 +126,6 @@ export const coreRoutes: RouteConfigEntry[] = [
         ]),
 
         // Visão 360 (workspace — todos os boards e projetos)
-        route(":workspaceSlug/visao-360", "./(all)/[workspaceSlug]/(projects)/visao-360/page.tsx"),
-        route(
-          ":workspaceSlug/visao-360/:projectId",
-          "./(all)/[workspaceSlug]/(projects)/visao-360/[projectId]/page.tsx"
-        ),
 
         route(":workspaceSlug/prd-review-inbox", "./(all)/[workspaceSlug]/(projects)/prd-review-inbox/page.tsx"),
 
@@ -161,14 +156,6 @@ export const coreRoutes: RouteConfigEntry[] = [
           route(
             ":workspaceSlug/boards/:boardSlug/calendar",
             "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/calendar/page.tsx"
-          ),
-          route(
-            ":workspaceSlug/boards/:boardSlug/clientes",
-            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/clientes/page.tsx"
-          ),
-          route(
-            ":workspaceSlug/boards/:boardSlug/clientes/:projectId",
-            "./(all)/[workspaceSlug]/(projects)/boards/[boardSlug]/clientes/[projectId]/page.tsx"
           ),
         ]),
 
@@ -353,10 +340,6 @@ export const coreRoutes: RouteConfigEntry[] = [
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/boards/page.tsx"
           ),
           route(
-            ":workspaceSlug/settings/assistant",
-            "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/assistant/page.tsx"
-          ),
-          route(
             ":workspaceSlug/settings/jira",
             "./(all)/[workspaceSlug]/(settings)/settings/(workspace)/jira/page.tsx"
           ),
@@ -506,10 +489,6 @@ export const coreRoutes: RouteConfigEntry[] = [
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/quadro/page.tsx"
             ),
             route(
-              ":workspaceSlug/settings/boards/:boardSlug/visao-360/saude",
-              "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/visao-360/saude/page.tsx"
-            ),
-            route(
               ":workspaceSlug/settings/boards/:boardSlug/cronograma",
               "./(all)/[workspaceSlug]/(settings)/settings/boards/[boardSlug]/cronograma/page.tsx"
             ),
@@ -603,7 +582,6 @@ export const coreRoutes: RouteConfigEntry[] = [
 
     // Guest public pages (token-based, no auth)
     route("guest/prd-review/:token", "./(all)/guest/prd-review/[token]/page.tsx"),
-    route("guest/qbr/:token", "./(all)/guest/qbr/[token]/page.tsx"),
 
     // --------------------------------------------------------------------
     // PROFILE SETTINGS

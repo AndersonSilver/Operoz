@@ -1,12 +1,16 @@
-import operoz.db.models.client_360_qbr_guest_link
 import uuid
 
 import django.db.models.deletion
 from django.db import migrations, models
 
 
-class Migration(migrations.Migration):
+# operoz.db.models.client_360_qbr_guest_link foi removido junto com o Cliente 360 (migration 0202). O default
+# abaixo so precisa ser resolvivel para o Django montar o state historico.
+def generate_qbr_guest_token():
+    return ""
 
+
+class Migration(migrations.Migration):
     dependencies = [
         ("db", "0167_workspace_client360_settings"),
     ]
@@ -60,7 +64,7 @@ class Migration(migrations.Migration):
                     "token",
                     models.CharField(
                         db_index=True,
-                        default=operoz.db.models.client_360_qbr_guest_link.generate_qbr_guest_token,
+                        default=generate_qbr_guest_token,
                         max_length=128,
                         unique=True,
                     ),
