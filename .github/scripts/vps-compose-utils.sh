@@ -14,9 +14,26 @@ operoz_app_env_file() {
   fi
 }
 
+# Produção migrou para a topologia all-in-one: um único container "api" reúne
+# api/api-chat/worker/beat/migrator/admin/space/live/proxy, e o broker passa a
+# ser o Redis (sem RabbitMQ).
+operoz_compose_is_aio() {
+  local app_path="${1:?app_path required}"
+  [[ -f "${app_path}/docker-compose-aio.yaml" ]]
+}
+
+# O compose antigo continua no diretório como backup do cutover para AIO, e era
+# escolhido só por ordem de teste de arquivo. No deploy da v1.2.0 isso recriou o
+# container AIO a partir da imagem antiga de backend, ressuscitou o RabbitMQ e
+# derrubou produção ao tentar subir api-chat, serviço que não existe mais. Se o
+# compose AIO está presente, ele manda.
 operoz_compose_base() {
   local app_path="${1:?app_path required}"
-  if [[ -f "${app_path}/docker-compose.yaml" ]]; then
+  if [[ -n "${OPEROZ_COMPOSE_FILE:-}" ]]; then
+    echo "${OPEROZ_COMPOSE_FILE}"
+  elif [[ -f "${app_path}/docker-compose-aio.yaml" ]]; then
+    echo "${app_path}/docker-compose-aio.yaml"
+  elif [[ -f "${app_path}/docker-compose.yaml" ]]; then
     echo "${app_path}/docker-compose.yaml"
   elif [[ -f "${app_path}/docker-compose.yml" ]]; then
     echo "${app_path}/docker-compose.yml"
@@ -24,6 +41,24 @@ operoz_compose_base() {
     echo "ERRO: docker-compose não encontrado em ${app_path}" >&2
     return 1
   fi
+}
+
+# Fixa a imagem AIO da release no compose. A referência era escrita à mão a cada
+# cutover, então o deploy publicava a imagem nova no GHCR e o compose seguia
+# apontando para a anterior.
+operoz_set_aio_image() {
+  local app_path="${1:?app_path required}"
+  local image="${2:?image required}"
+  local base="${app_path}/docker-compose-aio.yaml"
+
+  cp "${base}" "${base}.bak-$(date +%Y%m%d%H%M%S)"
+  sed -i -E "s|^([[:space:]]*image:[[:space:]]*).*operoz-aio-api:.*$|\1${image}|" "${base}"
+
+  if ! grep -qF "${image}" "${base}"; then
+    echo "ERRO: não consegui fixar ${image} em ${base}" >&2
+    return 1
+  fi
+  echo "==> Imagem AIO fixada: $(grep -m1 'operoz-aio-api' "${base}" | tr -d ' ')"
 }
 
 # VPS instalada antes do rebrand: serviços operis-db, imagens myoperis/plane-*.
@@ -164,11 +199,18 @@ operoz_dc() {
   env_file="$(operoz_app_env_file "${app_path}")"
 
   local -a args=(-f "${base}")
-  if operoz_compose_uses_legacy_operis_names "${app_path}" && [[ -f "${legacy}" ]]; then
-    args+=(-f "${legacy}")
-  fi
-  if operoz_should_use_assistant_overlay "${app_path}" "${repo_path}"; then
-    args+=(-f "${overlay}")
+  # O AIO é autocontido: os overlays declaram serviços (worker de indexação,
+  # nomes legados operis-*) que lá vivem dentro do container único. Aplicá-los
+  # faria o Compose criar containers soltos ao lado do AIO.
+  if operoz_compose_is_aio "${app_path}"; then
+    :
+  else
+    if operoz_compose_uses_legacy_operis_names "${app_path}" && [[ -f "${legacy}" ]]; then
+      args+=(-f "${legacy}")
+    fi
+    if operoz_should_use_assistant_overlay "${app_path}" "${repo_path}"; then
+      args+=(-f "${overlay}")
+    fi
   fi
   args+=(--env-file "${env_file}")
 
