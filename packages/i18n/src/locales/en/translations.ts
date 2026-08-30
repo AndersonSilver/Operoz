@@ -6358,4 +6358,31 @@ export default {
     subtitle: "Your workspace requires you to connect the following integrations before you can continue.",
     required_note: "These integrations are required by your workspace administrator.",
   },
+  // Badge de indexacao RAG nas paginas. O chat foi removido, mas o badge
+  // sobreviveu e referencia operoz_assistant.assistant_index.*
+  operoz_assistant: {
+    assistant_index: {
+      loading_label: "Loading status…",
+      status_error_label: "Status unavailable",
+      status_error_tooltip: "Could not load indexing status. Refresh the page or try again in a moment.",
+      pending_label: "Index queued",
+      pending_tooltip: "The page was saved and will enter the Operoz Assistant knowledge base shortly (usually ~30s).",
+      processing_label: "Indexing…",
+      processing_tooltip:
+        "We are processing content (text, markdown, or embedded HTML) so the assistant can search this page.",
+      indexed_label: "In assistant",
+      indexed_tooltip:
+        "This page is in the assistant knowledge base ({count, plural, one {# chunk} other {# chunks}} indexed).",
+      failed_label: "Index failed",
+      failed_tooltip: "Could not index for the assistant. Check LLM_API_KEY and the assistant queue worker.",
+      stale_label: "Updating index",
+      stale_tooltip: "Content changed since the last index. A new index run will apply soon.",
+      not_indexed_label: "Awaiting index",
+      not_indexed_tooltip:
+        "This page is not in the assistant knowledge base yet. Save the document or wait for automatic indexing.",
+      countdown_remaining: "Estimated time remaining: {time}",
+      countdown_finishing: "Finishing indexing…",
+      indexed_duration: "Indexed in {time} · {count, plural, one {# chunk} other {# chunks}}",
+    },
+  },
 } as const;

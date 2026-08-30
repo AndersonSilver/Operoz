@@ -6574,4 +6574,32 @@ export default {
     subtitle: "Seu workspace exige que você conecte as seguintes integrações antes de continuar.",
     required_note: "Essas integrações são obrigatórias e foram configuradas pelo administrador do workspace.",
   },
+  // Badge de indexacao RAG nas paginas. O chat foi removido, mas o badge
+  // sobreviveu e referencia operoz_assistant.assistant_index.*
+  operoz_assistant: {
+    assistant_index: {
+      loading_label: "Carregando status…",
+      status_error_label: "Status indisponível",
+      status_error_tooltip:
+        "Não foi possível consultar o status de indexação. Recarregue a página ou tente novamente em instantes.",
+      pending_label: "Fila de indexação",
+      pending_tooltip: "O documento foi salvo e entrará na base de conhecimento do Assistente Operoz em instantes.",
+      processing_label: "Indexando…",
+      processing_tooltip:
+        "Estamos processando o conteúdo (texto, markdown ou HTML embutido) para o assistente poder buscar nesta página.",
+      indexed_label: "No assistente",
+      indexed_tooltip:
+        "Esta página está na base de conhecimento do assistente ({count, plural, one {# trecho indexado} other {# trechos indexados}}).",
+      failed_label: "Falha na indexação",
+      failed_tooltip: "Não foi possível indexar para o assistente. Verifique LLM_API_KEY e o worker da fila assistant.",
+      stale_label: "Atualizando índice",
+      stale_tooltip: "O conteúdo mudou após a última indexação. Uma nova indexação será aplicada em breve.",
+      not_indexed_label: "Aguardando índice",
+      not_indexed_tooltip:
+        "O documento ainda não entrou na base do assistente. Aguarde alguns segundos — a indexação será iniciada automaticamente após o salvamento.",
+      countdown_remaining: "Tempo estimado restante: {time}",
+      countdown_finishing: "Finalizando indexação…",
+      indexed_duration: "Indexado em {time} · {count, plural, one {# trecho} other {# trechos}}",
+    },
+  },
 } as const;
