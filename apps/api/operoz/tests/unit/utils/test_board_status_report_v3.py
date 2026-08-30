@@ -265,8 +265,12 @@ def test_sprint_report_row_fim_uses_max_module_target_date(
         period_end=date(2026, 6, 28),
     )
 
+    # fim agrega todos os modulos (max target_date).
     assert content["sections"]["report_row"]["fim"] == "24/08/2026"
-    assert content["sections"]["report_row"]["inicio"] == "27/04/2026"
+    # inicio vem do modulo primario, nao de um agregado. Module.save() ignora o
+    # sort_order informado e atribui `menor - 10000`, entao o modulo criado por
+    # ultimo fica em primeiro — aqui, o Modulo B (08/06).
+    assert content["sections"]["report_row"]["inicio"] == "08/06/2026"
 
 
 def test_max_module_target_date_returns_latest():

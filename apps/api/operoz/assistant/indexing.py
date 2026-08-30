@@ -11,7 +11,6 @@ from operoz.assistant.page_content import build_page_indexable_text
 from operoz.assistant.rag_flags import is_rag_indexing_enabled
 from operoz.db.models import (
     BoardPlaybook,
-    Client360HealthSnapshot,
     Issue,
     IssueComment,
     Page,
@@ -171,14 +170,6 @@ def _load_entity_chunks(entity_type: str, entity_id: str) -> tuple[str | None, l
         if not playbook:
             return None, []
         return str(playbook.workspace_id), build_playbook_chunks(playbook)
-
-    if entity_type == SearchEmbedding.ENTITY_CLIENT360_SNAPSHOT:
-        from operoz.utils.client_360_intelligence_rag import build_health_snapshot_chunks
-
-        snapshot = Client360HealthSnapshot.objects.filter(pk=entity_id).select_related("project").first()
-        if not snapshot:
-            return None, []
-        return str(snapshot.workspace_id), build_health_snapshot_chunks(snapshot)
 
     return None, []
 

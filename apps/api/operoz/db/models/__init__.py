@@ -4,9 +4,6 @@ from .api import APIActivityLog, APIToken
 from .asset import FileAsset
 from .base import BaseModel
 from .board import Board
-from .board_client_360 import BoardClient360HealthSettings
-from .board_client_360_intake_type import BoardClient360IntakeType
-from .workspace_client_360 import WorkspaceClient360Settings
 from .board_automation import (
     BoardAutomationDeadLetter,
     BoardAutomationHook,
@@ -29,24 +26,6 @@ from .board_status_report import BoardStatusReport, BoardStatusReportModule
 from .board_role import BoardMemberRole, BoardRole, BoardRolePermission
 from .board_circle import BoardCircle, BoardCircleMember
 from .cycle import Cycle, CycleIssue, CycleUserProperties
-from .client_360_health_snapshot import Client360HealthSnapshot
-from .client_360_narrative import Client360Narrative
-from .client_360_workspace_shared_view import Client360WorkspaceSharedView
-from .client_360_project_finops_profile import Client360ProjectFinopsProfile
-from .client_360_consultant_allocation import Client360ConsultantAllocation
-from .client_360_harness_cost_line_item import Client360HarnessCostLineItem
-from .workspace_client_360_finops_settings import WorkspaceClient360FinopsSettings
-from .client_360_weekly_briefing import WorkspaceClient360WeeklyBriefing
-from .client_360_qbr_draft import Client360QbrDraft
-from .client_360_suggested_action_dismissal import Client360SuggestedActionDismissal
-from .workspace_client_360_scenario_playbook import WorkspaceClient360ScenarioPlaybook
-from .client_360_crm_sync_run import Client360CrmSyncRun
-from .client_360_audit_entry import Client360AuditEntry
-from .client_360_webhook_subscription import Client360WebhookDeliveryLog, Client360WebhookSubscription
-from .client_360_customer import Client360Customer
-from .workspace_client_360_enterprise_settings import WorkspaceClient360EnterpriseSettings
-from .client_360_qbr_guest_link import Client360QbrGuestAccessLog, Client360QbrGuestLink
-from .client_360_status_report_reminder_log import Client360StatusReportReminderLog
 from .deploy_board import DeployBoard
 from .draft import (
     DraftIssue,

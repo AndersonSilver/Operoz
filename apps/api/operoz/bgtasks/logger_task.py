@@ -75,9 +75,15 @@ def log_to_mongo(log_document: Dict[str, Any]) -> bool:
 def log_to_postgres(log_data: Dict[str, Any]) -> bool:
     """
     Fallback to logging to PostgreSQL if MongoDB is unavailable.
+
+    O middleware monta o payload no formato do Mongo, que aceita campo novo sem
+    schema. O Postgres nao: `response_size` foi acrescentado la e o
+    APIActivityLog nunca ganhou a coluna, entao todo log de /api/v1/ morria em
+    TypeError. Filtra pelos campos concretos do model.
     """
     try:
-        APIActivityLog.objects.create(**log_data)
+        allowed = {f.name for f in APIActivityLog._meta.get_fields() if getattr(f, "concrete", False)}
+        APIActivityLog.objects.create(**{k: v for k, v in log_data.items() if k in allowed})
         return True
     except Exception as e:
         log_exception(e)

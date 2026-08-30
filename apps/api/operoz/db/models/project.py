@@ -129,13 +129,6 @@ class Project(BaseModel):
     # external_id for imports
     external_source = models.CharField(max_length=255, null=True, blank=True)
     external_id = models.CharField(max_length=255, blank=True, null=True)
-    client360_customer = models.ForeignKey(
-        "db.Client360Customer",
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name="projects",
-    )
     workflow_scheme = models.ForeignKey(
         "db.WorkflowScheme",
         on_delete=models.SET_NULL,

@@ -1,4 +1,5 @@
 import { Links, Meta, Outlet, Scripts } from "react-router";
+import { SPACE_SITE_KEYWORDS, SPACE_SITE_URL } from "@operoz/constants";
 import { DEFAULT_LOCALE } from "@operoz/i18n";
 // assets
 import appleTouchIcon from "@/app/assets/favicon/apple-touch-icon.png?url";
@@ -6,6 +7,7 @@ import favicon16 from "@/app/assets/favicon/favicon-16x16.png?url";
 import favicon32 from "@/app/assets/favicon/favicon-32x32.png?url";
 import faviconIco from "@/app/assets/favicon/favicon.ico?url";
 import siteWebmanifest from "@/app/assets/favicon/site.webmanifest?url";
+import ogImage from "@/app/assets/og-image.png?url";
 import { LogoSpinner } from "@/components/common/logo-spinner";
 import globalStyles from "@/styles/globals.css?url";
 // types
@@ -19,9 +21,10 @@ import interVariableWoff2 from "@fontsource-variable/inter/files/inter-latin-wgh
 import "@fontsource/material-symbols-rounded";
 import "@fontsource/ibm-plex-mono";
 
-const APP_TITLE = "Operoz OS | Torne seus fóruns do Operoz OS públicos com um clique";
-const APP_DESCRIPTION =
-  "Operoz OS Publish é uma ferramenta de gerenciamento de feedback do cliente construída sobre o operoz.com";
+const APP_TITLE = "Operoz | Quadros e formulários públicos";
+const APP_DESCRIPTION = "Acompanhe um quadro publicado ou envie uma demanda pelo formulário público do Operoz.";
+const OG_IMAGE_ALT = "Operoz — gestão de projetos, squads e entregas";
+const OG_IMAGE_URL = new URL(ogImage, SPACE_SITE_URL).toString();
 
 export const links: Route.LinksFunction = () => [
   { rel: "apple-touch-icon", sizes: "180x180", href: appleTouchIcon },
@@ -69,15 +72,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
 export const meta: Route.MetaFunction = () => [
   { title: APP_TITLE },
   { name: "description", content: APP_DESCRIPTION },
+  { property: "og:type", content: "website" },
+  { property: "og:site_name", content: "Operoz" },
+  { property: "og:locale", content: "pt_BR" },
   { property: "og:title", content: APP_TITLE },
   { property: "og:description", content: APP_DESCRIPTION },
-  { property: "og:url", content: "https://sites.plane.so/" },
-  {
-    name: "keywords",
-    content:
-      "software development, customer feedback, software, accelerate, code management, release management, project management, work item tracking, agile, scrum, kanban, collaboration",
-  },
-  { name: "twitter:site", content: "@planepowers" },
+  { property: "og:url", content: SPACE_SITE_URL },
+  { property: "og:image", content: OG_IMAGE_URL },
+  { property: "og:image:width", content: "1200" },
+  { property: "og:image:height", content: "630" },
+  { property: "og:image:alt", content: OG_IMAGE_ALT },
+  { name: "keywords", content: SPACE_SITE_KEYWORDS },
+  { name: "twitter:card", content: "summary_large_image" },
+  { name: "twitter:title", content: APP_TITLE },
+  { name: "twitter:description", content: APP_DESCRIPTION },
+  { name: "twitter:image", content: OG_IMAGE_URL },
+  { name: "twitter:image:alt", content: OG_IMAGE_ALT },
 ];
 
 export default function Root() {

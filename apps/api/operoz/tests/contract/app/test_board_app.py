@@ -191,6 +191,18 @@ class TestBoardAutomationAPI(TestBoardBase):
         assert validate_resp.status_code == status.HTTP_200_OK
         assert validate_resp.data["valid"] is True
 
+        # Habilitar exige fluxo publicado (save_rule_draft ->
+        # publish_required_before_enable). Sem publicar antes, o PATCH e recusado.
+        enable_before_publish = session_client.patch(
+            base + f"rules/{rule_id}/",
+            {"enabled": True},
+            format="json",
+        )
+        assert enable_before_publish.status_code == status.HTTP_400_BAD_REQUEST
+
+        publish_resp = session_client.post(base + f"rules/{rule_id}/publish/", {}, format="json")
+        assert publish_resp.status_code == status.HTTP_200_OK
+
         patch_resp = session_client.patch(
             base + f"rules/{rule_id}/",
             {"enabled": True},

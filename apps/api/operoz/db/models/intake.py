@@ -138,6 +138,11 @@ class IntakeIssue(ProjectBaseModel):
         verbose_name_plural = "IntakeIssues"
         db_table = "intake_issues"
         ordering = ("-created_at",)
+        indexes = [
+            # Criado na migration 0177 mas nunca declarado aqui, o que fazia o
+            # makemigrations querer dropa-lo. Esta em uso (fila de suporte).
+            models.Index(fields=["project", "ticket_kind", "status"], name="intake_issue_kind_status_idx"),
+        ]
 
     def __str__(self):
         """Return name of the Issue"""

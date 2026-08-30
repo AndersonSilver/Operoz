@@ -35,7 +35,7 @@ class WorkspaceSemanticSearchAPIEndpoint(BaseAPIView):
         summary="Semantic search over indexed workspace content",
         description=(
             "Hybrid (full-text + vector) search over the workspace RAG index: pages, "
-            "work items, comments, playbooks and Client 360 snapshots. Results are "
+            "work items, comments and playbooks. Results are "
             "filtered by the caller's project permissions. Does not invoke a "
             "generative model."
         ),
@@ -89,7 +89,6 @@ class WorkspaceSemanticSearchAPIEndpoint(BaseAPIView):
                                             "page",
                                             "comment",
                                             "playbook",
-                                            "client360_snapshot",
                                         ],
                                     },
                                     "entity_id": {"type": "string", "format": "uuid"},

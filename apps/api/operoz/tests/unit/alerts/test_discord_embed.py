@@ -90,7 +90,7 @@ def test_build_discord_alert_message_issue_created():
 
     content, embed = build_discord_alert_message(context)
 
-    assert content == "Novo card criado no Operoz."
+    assert content == "Novo card criado, por favor, verifique."
     assert embed["title"] == "[CLIEN-29] Implementar login · Alta"
     assert "• **Projeto:** Cliente XYZ" in embed["description"]
     assert "• **Responsáveis:** Dev User" in embed["description"]

@@ -21,8 +21,6 @@ from .circles import (
     BoardCircleMemberEndpoint,
     WorkspaceCircleLookupEndpoint,
 )
-from .client_360 import BoardClient360ViewSet
-from .client_360_health_settings import BoardClient360HealthSettingsEndpoint
 from .meta import BoardMetaViewSet
 from .modules import BoardModulesViewSet
 from .project_permissions import ProjectBoardPermissionsEndpoint

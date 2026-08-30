@@ -28,10 +28,6 @@ app.conf.beat_schedule = {
         "task": "operoz.bgtasks.email_notification_task.stack_email_notification",
         "schedule": crontab(minute="*/5"),  # Every 5 minutes
     },
-    "run-every-6-hours-for-instance-trace": {
-        "task": "operoz.license.bgtasks.tracer.instance_traces",
-        "schedule": crontab(hour="*/6", minute=0),  # Every 6 hours
-    },
     # Occurs once every day
     "check-every-day-to-delete-hard-delete": {
         "task": "operoz.bgtasks.deletion_task.hard_delete",
@@ -69,29 +65,17 @@ app.conf.beat_schedule = {
         "task": "operoz.bgtasks.cleanup_task.delete_webhook_logs",
         "schedule": crontab(hour=3, minute=30),  # UTC 03:30
     },
-    "flush-stale-automation-outbox-every-two-minutes": {
+    # Caminho de recuperacao (falha entre persistir e enfileirar). A cada 5 min
+    # em vez de 2: pior caso de atraso vai de 4 para 7 min, com 60% menos varredura.
+    "flush-stale-automation-outbox": {
         "task": "operoz.bgtasks.automation_task.flush_stale_automation_outbox",
-        "schedule": crontab(minute="*/2"),
+        "schedule": crontab(minute="*/5"),
     },
-    "dispatch-scheduled-automation-rules-every-minute": {
+    # A cada 5 min: is_slot_due tem janela de recuperacao de 15 min e
+    # schedule_last_slot impede disparo duplo, entao nenhum slot e perdido.
+    "dispatch-scheduled-automation-rules": {
         "task": "operoz.bgtasks.automation_task.dispatch_scheduled_automation_rules",
-        "schedule": crontab(minute="*"),
-    },
-    "check-every-day-to-delete-exporter-history": {
-        "task": "operoz.bgtasks.exporter_expired_task.delete_old_s3_link",
-        "schedule": crontab(hour=3, minute=45),  # UTC 03:45
-    },
-    "snapshot-weekly-client360-health": {
-        "task": "operoz.bgtasks.client_360_health_snapshot_task.snapshot_weekly_client360_health",
-        "schedule": crontab(hour=6, minute=0, day_of_week=1),  # Monday 06:00 UTC
-    },
-    "monday-client360-weekly-briefing": {
-        "task": "operoz.bgtasks.client_360_weekly_briefing_task.generate_weekly_client360_briefings",
-        "schedule": crontab(hour=8, minute=0, day_of_week=1),  # Monday 08:00 UTC
-    },
-    "friday-client360-status-report-reminder": {
-        "task": "operoz.bgtasks.client_360_status_report_reminder_task.friday_status_report_reminder",
-        "schedule": crontab(hour="*", minute=0, day_of_week=5),  # hourly on Fridays
+        "schedule": crontab(minute="*/5"),
     },
     "check-due-date-alerts-hourly": {
         "task": "operoz.bgtasks.alert_scan_task.check_due_date_alerts",

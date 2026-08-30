@@ -33,7 +33,21 @@ class BoardSupportSlaPolicyEndpoint(BaseAPIView):
         serializer = BoardSupportSlaPolicyWriteSerializer(data=request.data, partial=True)
         if not serializer.is_valid():
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-        policy.policies = serializer.validated_data["policies"]
+        data = serializer.validated_data
+        if not data:
+            return Response(
+                {"error": "informe policies e/ou support_sla_days"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        update_fields = ["updated_at", "updated_by"]
+        if "policies" in data:
+            policy.policies = data["policies"]
+            update_fields.append("policies")
+        if "support_sla_days" in data:
+            policy.support_sla_days = data["support_sla_days"]
+            update_fields.append("support_sla_days")
+
         policy.updated_by = request.user
-        policy.save(update_fields=["policies", "updated_at", "updated_by"])
+        policy.save(update_fields=update_fields)
         return Response(BoardSupportSlaPolicySerializer(policy).data)

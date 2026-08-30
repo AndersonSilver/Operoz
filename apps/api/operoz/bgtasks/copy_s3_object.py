@@ -141,8 +141,14 @@ def copy_s3_objects_of_description_and_assets(entity_name, entity_identifier, pr
         external_data = sync_with_external_service(entity_name, updated_html)
 
         if external_data:
-            entity.description_json = external_data.get("description_json")
-            entity.description_binary = base64.b64decode(external_data.get("description_binary"))
+            # Atribui so o que voltou. description_json e NOT NULL com default
+            # dict: gravar o retorno de .get() direto virava IntegrityError
+            # quando o servico omitia a chave — e, com conteudo valido no banco,
+            # apagaria a descricao existente.
+            if external_data.get("description_json") is not None:
+                entity.description_json = external_data["description_json"]
+            if external_data.get("description_binary") is not None:
+                entity.description_binary = base64.b64decode(external_data["description_binary"])
             entity.save()
 
         return

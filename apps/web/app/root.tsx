@@ -4,7 +4,7 @@ import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
 import { ThemeProvider } from "next-themes";
 // plane imports
-import { SITE_DESCRIPTION, SITE_NAME } from "@operoz/constants";
+import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@operoz/constants";
 import { DEFAULT_LOCALE } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 // types
@@ -90,30 +90,32 @@ export function Layout({ children }: { children: ReactNode }) {
   );
 }
 
+const OG_IMAGE_ALT = "Operoz — gestão de projetos, squads e entregas";
+// Crawler de unfurl (WhatsApp, parte do Slack) exige URL absoluta em og:image;
+// o bundler entrega caminho relativo com hash.
+const OG_IMAGE_URL = new URL(ogImage, SITE_URL).toString();
+
 export const meta: Route.MetaFunction = () => [
   { title: APP_TITLE },
   { name: "description", content: SITE_DESCRIPTION },
+  { property: "og:type", content: "website" },
+  { property: "og:site_name", content: SITE_NAME },
+  { property: "og:locale", content: "pt_BR" },
   { property: "og:title", content: APP_TITLE },
-  {
-    property: "og:description",
-    content: "Open-source project management tool to manage work items, cycles, and product roadmaps easily",
-  },
-  { property: "og:url", content: "https://app.plane.so/" },
-  { property: "og:image", content: ogImage },
+  { property: "og:description", content: SITE_DESCRIPTION },
+  { property: "og:url", content: SITE_URL },
+  { property: "og:image", content: OG_IMAGE_URL },
   { property: "og:image:width", content: "1200" },
   { property: "og:image:height", content: "630" },
-  { property: "og:image:alt", content: "Plane - Modern project management" },
-  {
-    name: "keywords",
-    content:
-      "software development, plan, ship, software, accelerate, code management, release management, project management, work item tracking, agile, scrum, kanban, collaboration",
-  },
-  { name: "twitter:site", content: "@planepowers" },
+  { property: "og:image:alt", content: OG_IMAGE_ALT },
+  { name: "keywords", content: SITE_KEYWORDS },
   { name: "twitter:card", content: "summary_large_image" },
-  { name: "twitter:image", content: ogImage },
+  { name: "twitter:title", content: APP_TITLE },
+  { name: "twitter:description", content: SITE_DESCRIPTION },
+  { name: "twitter:image", content: OG_IMAGE_URL },
   { name: "twitter:image:width", content: "1200" },
   { name: "twitter:image:height", content: "630" },
-  { name: "twitter:image:alt", content: "Plane - Modern project management" },
+  { name: "twitter:image:alt", content: OG_IMAGE_ALT },
 ];
 
 export default function Root() {

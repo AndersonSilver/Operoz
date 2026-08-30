@@ -19,14 +19,18 @@ URL_PATTERN = re.compile(
 )
 
 
+MAX_SCAN_LENGTH = 1000
+
+
 def contains_url(value: str) -> bool:
     """
     Check if the value contains a URL.
 
-    This function is protected against ReDoS attacks by:
-    1. Using a pre-compiled regex pattern
-    2. Limiting input length to prevent excessive processing
-    3. Using atomic groups and specific quantifiers to avoid backtracking
+    Usado como guarda anti-spam em nome de usuario e de workspace
+    (app/serializers/{user,workspace}.py).
+
+    Protegido contra ReDoS pelo padrao pre-compilado — que e linear, sem
+    quantificador aninhado — e pelo limite de tamanho da entrada.
 
     Args:
         value (str): The input string to check for URLs
@@ -34,19 +38,14 @@ def contains_url(value: str) -> bool:
     Returns:
         bool: True if the string contains a URL, False otherwise
     """
-    # Prevent ReDoS by limiting input length
-    if len(value) > 1000:  # Reasonable limit for URL detection
+    # Limite de entrada: acima disto nao vale o custo de varrer.
+    if len(value) > MAX_SCAN_LENGTH:
         return False
 
-    # Additional safety: truncate very long lines that might contain URLs
-    lines = value.split("\n")
-    for line in lines:
-        if len(line) > 500:  # Process only reasonable length lines
-            line = line[:500]
-        if URL_PATTERN.search(line):
-            return True
-
-    return False
+    # Varre a entrada inteira. Truncar linha em 500 caracteres, como era feito
+    # antes, criava um bypass: bastava prefixar a URL com lixo suficiente para
+    # empurra-la alem do corte e o guarda deixava passar.
+    return URL_PATTERN.search(value) is not None
 
 
 def is_valid_url(url: str) -> bool:

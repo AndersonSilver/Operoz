@@ -53,6 +53,10 @@ def _issue_instance(*, with_prefetch: bool):
 
     if with_prefetch:
         issue._prefetched_objects_cache = {"issue_relation": True, "issue_related": True}
+    else:
+        # getattr num Mock devolve outro Mock, nunca o default do serializer —
+        # sem isto o `in` do serializer estoura TypeError.
+        issue._prefetched_objects_cache = {}
 
     return issue
 

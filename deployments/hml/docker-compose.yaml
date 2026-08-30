@@ -30,12 +30,6 @@ x-proxy-env:
   BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
   SITE_ADDRESS: ${SITE_ADDRESS:-:80}
 x-mq-env:
-  RABBITMQ_HOST: ${RABBITMQ_HOST:-hml-mq}
-  RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
-  RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-operis_hml}
-  RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-  RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-operis_hml}
-  RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis_hml}
 x-live-env:
   API_BASE_URL: ${API_BASE_URL:-http://hml-api:8000}
   LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -56,7 +50,6 @@ x-app-env:
   USE_MINIO: ${USE_MINIO:-1}
   DATABASE_URL: ${DATABASE_URL}
   SECRET_KEY: ${SECRET_KEY}
-  AMQP_URL: ${AMQP_URL}
   API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
   MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
   LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -124,7 +117,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -146,7 +138,6 @@ services:
     depends_on:
     - hml-db
     - hml-redis
-    - hml-mq
     networks:
       default:
         aliases:
@@ -192,7 +183,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -211,7 +201,6 @@ services:
     - hml-api
     - hml-db
     - hml-redis
-    - hml-mq
   hml-beat-worker:
     container_name: hml-beat-worker
     image: myoperoz/plane-backend:${APP_RELEASE:-hml}
@@ -253,7 +242,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -272,7 +260,6 @@ services:
     - hml-api
     - hml-db
     - hml-redis
-    - hml-mq
   hml-migrator:
     container_name: hml-migrator
     image: myoperoz/plane-backend:${APP_RELEASE:-hml}
@@ -314,7 +301,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -374,7 +360,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -393,7 +378,6 @@ services:
     - hml-api
     - hml-db
     - hml-redis
-    - hml-mq
   hml-automation-worker:
     container_name: hml-automation-worker
     image: myoperoz/plane-backend:${APP_RELEASE:-hml}
@@ -435,7 +419,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -454,7 +437,6 @@ services:
     - hml-api
     - hml-db
     - hml-redis
-    - hml-mq
   hml-automation-email-worker:
     container_name: hml-automation-email-worker
     image: myoperoz/plane-backend:${APP_RELEASE:-hml}
@@ -496,7 +478,6 @@ services:
       USE_MINIO: ${USE_MINIO:-1}
       DATABASE_URL: ${DATABASE_URL}
       SECRET_KEY: ${SECRET_KEY}
-      AMQP_URL: ${AMQP_URL}
       API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
       MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
       LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
@@ -515,7 +496,6 @@ services:
     - hml-api
     - hml-db
     - hml-redis
-    - hml-mq
   hml-space:
     container_name: hml-space
     image: myoperoz/plane-space:${APP_RELEASE:-hml}
@@ -600,19 +580,6 @@ services:
     restart: unless-stopped
     volumes:
     - hml_redisdata:/data
-  hml-mq:
-    container_name: hml-mq
-    image: rabbitmq:3.13.6-management-alpine
-    restart: unless-stopped
-    environment:
-      RABBITMQ_HOST: ${RABBITMQ_HOST:-hml-mq}
-      RABBITMQ_PORT: ${RABBITMQ_PORT:-5672}
-      RABBITMQ_DEFAULT_USER: ${RABBITMQ_USER:-operis_hml}
-      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_PASSWORD}
-      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_VHOST:-operis_hml}
-      RABBITMQ_VHOST: ${RABBITMQ_VHOST:-operis_hml}
-    volumes:
-    - hml_rabbitmq:/var/lib/rabbitmq
   hml-minio:
     container_name: hml-minio
     image: minio/minio:latest
@@ -638,4 +605,3 @@ volumes:
   hml_logs_worker: null
   hml_logs_beat: null
   hml_logs_migrator: null
-  hml_rabbitmq: null

@@ -265,9 +265,9 @@ def webhook_send_task(
 
         headers = {
             "Content-Type": "application/json",
-            "User-Agent": "Autopilot",
-            "X-Plane-Delivery": str(uuid.uuid4()),
-            "X-Plane-Event": event,
+            "User-Agent": "Operoz",
+            "X-Operoz-Delivery": str(uuid.uuid4()),
+            "X-Operoz-Event": event,
         }
 
         # # Your secret key
@@ -299,7 +299,7 @@ def webhook_send_task(
                 hashlib.sha256,
             )
             signature = hmac_signature.hexdigest()
-            headers["X-Plane-Signature"] = signature
+            headers["X-Operoz-Signature"] = signature
     except Exception as e:
         log_exception(e)
         logger.error(f"Failed to send webhook: {e}")
