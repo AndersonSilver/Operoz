@@ -6575,9 +6575,9 @@ export default {
     required_note: "Essas integrações são obrigatórias e foram configuradas pelo administrador do workspace.",
   },
   // Badge de indexacao RAG nas paginas. O chat foi removido, mas o badge
-  // sobreviveu e referencia operoz_assistant.assistant_index.*
-  operoz_assistant: {
-    assistant_index: {
+  // sobreviveu e referencia rag.index.*
+  rag: {
+    index: {
       loading_label: "Carregando status…",
       status_error_label: "Status indisponível",
       status_error_tooltip:

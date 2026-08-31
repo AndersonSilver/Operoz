@@ -26,7 +26,7 @@ def resolve_session_document_html(session: PageReviewSession) -> str:
         description_json = page_version.description_json or description_json
 
     try:
-        from operoz.assistant.page_content import (
+        from operoz.rag.page_content import (
             collect_html_document_embeds_from_content,
             read_html_document_asset_html,
         )

@@ -6,7 +6,7 @@ import pytest
 
 from datetime import datetime
 
-from operoz.assistant.indexing import build_playbook_chunks, split_markdown_sections
+from operoz.rag.indexing import build_playbook_chunks, split_markdown_sections
 from operoz.automation.domain import DomainEvent
 from operoz.automation.executor import build_execution_context
 from operoz.db.models import BoardPlaybook

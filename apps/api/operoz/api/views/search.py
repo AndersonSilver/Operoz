@@ -5,8 +5,8 @@ from rest_framework.response import Response
 
 # Module imports
 from .base import BaseAPIView
-from operoz.assistant.retrieval import hybrid_retrieve, is_rag_enabled
-from operoz.assistant.types import AssistantActorContext
+from operoz.rag.retrieval import hybrid_retrieve, is_rag_enabled
+from operoz.rag.types import AssistantActorContext
 from operoz.db.models import Workspace
 from operoz.utils.openapi import (
     FORBIDDEN_RESPONSE,

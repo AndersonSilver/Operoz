@@ -254,3 +254,41 @@ jobs:
           command_timeout: ${{ env.SSH_COMMAND_TIMEOUT }}
           envs: GHCR_TOKEN,MCP_HML_IMAGE,OPEROZ_REPO_PATH,LOCAL_RELEASE_TAG,GIT_REF,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-mcp-hml.sh
+
+  # Veio do deploy de producao. O smoke cria usuario, workspace, board, projeto e
+  # issue via API e nao limpa nada — em HML esse dado e descartavel, em producao
+  # ficaria para sempre numa base com 1 workspace real.
+  e2e-smoke:
+    needs: [meta, deploy]
+    if: ${{ success() && github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      E2E_WEB_URL: https://hml.operoz.io
+      E2E_API_URL: https://hml.operoz.io
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile --filter=e2e
+
+      - name: Install Playwright browsers
+        run: pnpm --filter=e2e exec playwright install --with-deps chromium
+
+      - name: E2E smoke (f0)
+        run: pnpm --filter=e2e exec playwright test src/f0-smoke.spec.ts --reporter=list
+
+      - name: Upload Playwright report
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: playwright-report-hml-${{ github.sha }}
+          path: apps/e2e/playwright-report/
+          retention-days: 7

@@ -17,6 +17,30 @@ operoz_app_env_file() {
 # Produção migrou para a topologia all-in-one: um único container "api" reúne
 # api/api-chat/worker/beat/migrator/admin/space/live/proxy, e o broker passa a
 # ser o Redis (sem RabbitMQ).
+# O CDN de blobs do GHCR derruba a conexão no meio de imagens grandes: a AIO tem
+# 3,2 GB e dois deploys da v1.2.1 morreram no mesmo ponto, com
+# "failed to copy: ... read: connection reset by peer". As camadas já baixadas
+# ficam em cache, então cada tentativa recomeça mais perto do fim.
+operoz_docker_pull() {
+  local image="${1:?image required}"
+  local attempts="${OPEROZ_PULL_ATTEMPTS:-4}"
+  local delay="${OPEROZ_PULL_BASE_DELAY:-10}"
+  local attempt
+
+  for attempt in $(seq 1 "${attempts}"); do
+    if docker pull "${image}"; then
+      return 0
+    fi
+    if [[ "${attempt}" -eq "${attempts}" ]]; then
+      echo "ERRO: pull de ${image} falhou em ${attempts} tentativas" >&2
+      return 1
+    fi
+    echo "WARN: pull de ${image} falhou (tentativa ${attempt}/${attempts}); nova tentativa em ${delay}s" >&2
+    sleep "${delay}"
+    delay=$(( delay * 2 ))
+  done
+}
+
 operoz_compose_is_aio() {
   local app_path="${1:?app_path required}"
   [[ -f "${app_path}/docker-compose-aio.yaml" ]]

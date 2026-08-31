@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from django.utils import timezone
 
-from operoz.assistant.indexing import index_playbook
+from operoz.rag.indexing import index_playbook
 from operoz.db.models import BoardPlaybook
 
 

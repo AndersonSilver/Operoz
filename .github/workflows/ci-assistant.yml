@@ -7,10 +7,10 @@ on:
   push:
     branches: [preview, main, develop]
     paths:
-      - "apps/api/operoz/assistant/**"
-      - "apps/api/operoz/bgtasks/assistant_index_task.py"
-      - "apps/api/operoz/app/views/assistant/**"
-      - "apps/api/operoz/tests/unit/assistant/**"
+      - "apps/api/operoz/rag/**"
+      - "apps/api/operoz/bgtasks/rag_index_task.py"
+      - "apps/api/operoz/app/views/rag/**"
+      - "apps/api/operoz/tests/unit/rag/**"
       - "apps/api/operoz/tests/contract/api/test_search.py"
       - "apps/api/operoz/api/views/search.py"
       - "apps/api/operoz/devops/**"
@@ -18,10 +18,10 @@ on:
       - ".github/workflows/ci-assistant.yml"
   pull_request:
     paths:
-      - "apps/api/operoz/assistant/**"
-      - "apps/api/operoz/bgtasks/assistant_index_task.py"
-      - "apps/api/operoz/app/views/assistant/**"
-      - "apps/api/operoz/tests/unit/assistant/**"
+      - "apps/api/operoz/rag/**"
+      - "apps/api/operoz/bgtasks/rag_index_task.py"
+      - "apps/api/operoz/app/views/rag/**"
+      - "apps/api/operoz/tests/unit/rag/**"
       - "apps/api/operoz/tests/contract/api/test_search.py"
       - "apps/api/operoz/api/views/search.py"
       - "apps/api/operoz/devops/**"
@@ -90,7 +90,7 @@ jobs:
       - name: Pytest assistant (unit + contract)
         run: |
           python -m pytest \
-            operoz/tests/unit/assistant/ \
+            operoz/tests/unit/rag/ \
             operoz/tests/unit/devops/test_celery_queue_monitor.py \
             operoz/tests/contract/api/test_search.py \
             -q --tb=short
