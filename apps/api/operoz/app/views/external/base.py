@@ -11,8 +11,8 @@ from rest_framework.response import Response
 # Module import
 from operoz.app.permissions import ROLE, allow_permission
 from operoz.app.serializers import ProjectLiteSerializer, WorkspaceLiteSerializer
-from operoz.assistant.llm.config import get_configured_llm_base_url, get_llm_base_url, get_llm_config
-from operoz.assistant.llm.http_client import create_openai_client
+from operoz.rag.llm.config import get_configured_llm_base_url, get_llm_base_url, get_llm_config
+from operoz.rag.llm.http_client import create_openai_client
 from operoz.db.models import Project, Workspace
 from operoz.license.utils.instance_value import get_configuration_value
 from operoz.utils.exception_logger import log_exception

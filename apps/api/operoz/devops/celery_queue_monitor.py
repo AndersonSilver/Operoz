@@ -11,9 +11,8 @@ from operoz.celery import app
 def default_monitored_queues() -> list[str]:
     automation = getattr(settings, "AUTOMATION_CELERY_QUEUE", "automation")
     automation_email = getattr(settings, "AUTOMATION_EMAIL_CELERY_QUEUE", "automation_email")
-    assistant = getattr(settings, "ASSISTANT_CELERY_QUEUE", "assistant")
-    assistant_chat = getattr(settings, "ASSISTANT_CHAT_CELERY_QUEUE", "assistant-chat")
-    return [automation, automation_email, assistant, assistant_chat, "celery"]
+    rag = getattr(settings, "RAG_CELERY_QUEUE", getattr(settings, "ASSISTANT_CELERY_QUEUE", "assistant"))
+    return [automation, automation_email, rag, "celery"]
 
 
 def get_queue_depths(queue_names: list[str] | None = None) -> dict[str, int | None]:
@@ -43,18 +42,8 @@ def default_alert_threshold() -> int:
 
 
 def queue_alert_threshold(queue_name: str, *, global_threshold: int | None = None) -> int:
-    """Per-queue alert threshold; assistant-chat defaults to 100."""
-    fallback = global_threshold if global_threshold is not None else default_alert_threshold()
-    if queue_name == getattr(settings, "ASSISTANT_CHAT_CELERY_QUEUE", "assistant-chat"):
-        raw = os.environ.get(
-            "ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD",
-            str(getattr(settings, "ASSISTANT_CHAT_QUEUE_ALERT_THRESHOLD", 100)),
-        )
-        try:
-            return max(1, int(raw))
-        except ValueError:
-            return 100
-    return fallback
+    """Limite de alerta por fila. O caso especial da assistant-chat saiu junto com o chat."""
+    return global_threshold if global_threshold is not None else default_alert_threshold()
 
 
 def queues_exceeding_threshold(

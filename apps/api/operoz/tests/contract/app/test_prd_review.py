@@ -194,7 +194,7 @@ class TestPrdReviewGuestAPI:
         assert invite.token in render_html
         assert "OperozPrdStorageApi" in render_html
 
-    @patch("operoz.assistant.page_content.read_html_document_asset_html")
+    @patch("operoz.rag.page_content.read_html_document_asset_html")
     def test_guest_render_html_embed_from_json_has_substantive_content(
         self, mock_read_html, api_client, workspace, workspace_board, create_user, setup_instance
     ):

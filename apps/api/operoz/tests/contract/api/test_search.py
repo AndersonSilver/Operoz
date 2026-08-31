@@ -2,7 +2,7 @@ import pytest
 from django.test import override_settings
 from rest_framework import status
 
-from operoz.assistant.retrieval import RetrievedChunk
+from operoz.rag.retrieval import RetrievedChunk
 
 
 def semantic_search_url(workspace_slug):
@@ -115,7 +115,7 @@ class TestSemanticSearch:
         api_key_client.post(semantic_search_url(workspace.slug), payload, format="json")
         assert captured["top_k"] == expected
 
-    @override_settings(ASSISTANT_RAG_ENABLED="0")
+    @override_settings(RAG_ENABLED="0")
     def test_returns_503_when_rag_is_disabled(self, api_key_client, workspace):
         response = api_key_client.post(semantic_search_url(workspace.slug), {"query": "prd"}, format="json")
         assert response.status_code == status.HTTP_503_SERVICE_UNAVAILABLE

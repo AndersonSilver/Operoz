@@ -307,7 +307,7 @@ CELERY_RESULT_SERIALIZER = "json"
 CELERY_ACCEPT_CONTENT = ["application/json"]
 
 # O Redis reentrega task nao confirmada dentro desta janela. A indexacao RAG
-# (operoz.bgtasks.assistant_index_task) pode passar do default de 1h do Celery,
+# (operoz.bgtasks.rag_index_task) pode passar do default de 1h do Celery,
 # o que causaria execucao duplicada.
 CELERY_BROKER_TRANSPORT_OPTIONS = {
     "visibility_timeout": int(os.environ.get("CELERY_BROKER_VISIBILITY_TIMEOUT", str(6 * 60 * 60)))
@@ -321,27 +321,53 @@ CELERY_BROKER_CONNECTION_TIMEOUT = int(os.environ.get("CELERY_BROKER_CONNECTION_
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 CELERY_BROKER_CONNECTION_MAX_RETRIES = 2
 
+
+def _rag_env(suffix: str, default: str) -> str:
+    """Le RAG_<suffix>, caindo para o nome antigo ASSISTANT_*.
+
+    O rename do pacote assistant -> rag nao pode exigir que o .env de producao
+    mude no mesmo instante do deploy: se o codigo pedisse so RAG_* e o servidor
+    ainda tivesse ASSISTANT_*, a indexacao voltaria aos defaults sem avisar.
+    O fallback sai quando os .env estiverem migrados.
+    """
+    legacy = "ASSISTANT_RAG_" if suffix in _RAG_LEGACY_DOUBLE_PREFIX else "ASSISTANT_"
+    return os.environ.get(f"RAG_{suffix}") or os.environ.get(f"{legacy}{suffix}", default)
+
+
+# Nomes que no esquema antigo carregavam ASSISTANT_RAG_ (prefixo duplicado).
+_RAG_LEGACY_DOUBLE_PREFIX = {
+    "ENABLED",
+    "INDEXING_ENABLED",
+    "TOP_K",
+    "CANDIDATE_LIMIT",
+    "RRF_K",
+    "QUERY_EMBEDDING_CACHE_TTL",
+    "RESULTS_CACHE_TTL",
+    "HNSW_EF_SEARCH",
+}
+
+
 # Board automation — fila dedicada e limites operacionais
 AUTOMATION_CELERY_QUEUE = os.environ.get("AUTOMATION_CELERY_QUEUE", "automation")
 AUTOMATION_EMAIL_CELERY_QUEUE = os.environ.get("AUTOMATION_EMAIL_CELERY_QUEUE", "automation_email")
-ASSISTANT_CELERY_QUEUE = os.environ.get("ASSISTANT_CELERY_QUEUE", "assistant")
+RAG_CELERY_QUEUE = _rag_env("CELERY_QUEUE", "assistant")
 AUTOMATION_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_WORKER_CONCURRENCY", "4"))
 AUTOMATION_EMAIL_WORKER_CONCURRENCY = int(os.environ.get("AUTOMATION_EMAIL_WORKER_CONCURRENCY", "2"))
 
-ASSISTANT_RAG_ENABLED = os.environ.get("ASSISTANT_RAG_ENABLED", "1")
-# Gate separado para a escrita do indice. ASSISTANT_RAG_ENABLED so desliga a
-# leitura (retrieval); sem isto a indexacao continua gastando embedding mesmo
-# com o RAG "desligado".
-ASSISTANT_RAG_INDEXING_ENABLED = os.environ.get("ASSISTANT_RAG_INDEXING_ENABLED", "1")
-ASSISTANT_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_EMBEDDING_CACHE_TTL", str(60 * 60 * 24 * 7)))
-ASSISTANT_RAG_TOP_K = int(os.environ.get("ASSISTANT_RAG_TOP_K", "5"))
-ASSISTANT_RAG_CANDIDATE_LIMIT = int(os.environ.get("ASSISTANT_RAG_CANDIDATE_LIMIT", "30"))
-ASSISTANT_RAG_RRF_K = int(os.environ.get("ASSISTANT_RAG_RRF_K", "60"))
-ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_QUERY_EMBEDDING_CACHE_TTL", str(60 * 10)))
-ASSISTANT_RAG_RESULTS_CACHE_TTL = int(os.environ.get("ASSISTANT_RAG_RESULTS_CACHE_TTL", str(60 * 3)))
-ASSISTANT_RAG_HNSW_EF_SEARCH = int(os.environ.get("ASSISTANT_RAG_HNSW_EF_SEARCH", "40"))
-ASSISTANT_LLM_KEY_FAILURE_THRESHOLD = int(os.environ.get("ASSISTANT_LLM_KEY_FAILURE_THRESHOLD", "3"))
-ASSISTANT_LLM_KEY_OPEN_SECONDS = int(os.environ.get("ASSISTANT_LLM_KEY_OPEN_SECONDS", "120"))
+RAG_ENABLED = _rag_env("ENABLED", "1")
+# Gate separado para a escrita do indice. RAG_ENABLED so desliga a leitura
+# (retrieval); sem isto a indexacao continua gastando embedding mesmo com o
+# RAG "desligado".
+RAG_INDEXING_ENABLED = _rag_env("INDEXING_ENABLED", "1")
+RAG_EMBEDDING_CACHE_TTL = int(_rag_env("EMBEDDING_CACHE_TTL", str(60 * 60 * 24 * 7)))
+RAG_TOP_K = int(_rag_env("TOP_K", "5"))
+RAG_CANDIDATE_LIMIT = int(_rag_env("CANDIDATE_LIMIT", "30"))
+RAG_RRF_K = int(_rag_env("RRF_K", "60"))
+RAG_QUERY_EMBEDDING_CACHE_TTL = int(_rag_env("QUERY_EMBEDDING_CACHE_TTL", str(60 * 10)))
+RAG_RESULTS_CACHE_TTL = int(_rag_env("RESULTS_CACHE_TTL", str(60 * 3)))
+RAG_HNSW_EF_SEARCH = int(_rag_env("HNSW_EF_SEARCH", "40"))
+RAG_LLM_KEY_FAILURE_THRESHOLD = int(_rag_env("LLM_KEY_FAILURE_THRESHOLD", "3"))
+RAG_LLM_KEY_OPEN_SECONDS = int(_rag_env("LLM_KEY_OPEN_SECONDS", "120"))
 AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_BOARD_PER_HOUR", "500"))
 AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR = int(os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_PER_HOUR", "5000"))
 _AUTOMATION_WORKSPACE_OVERRIDES_RAW = os.environ.get("AUTOMATION_MAX_RUNS_PER_WORKSPACE_OVERRIDES", "{}")
@@ -367,7 +393,7 @@ try:
             Exchange(AUTOMATION_EMAIL_CELERY_QUEUE),
             routing_key=AUTOMATION_EMAIL_CELERY_QUEUE,
         ),
-        Queue(ASSISTANT_CELERY_QUEUE, Exchange(ASSISTANT_CELERY_QUEUE), routing_key=ASSISTANT_CELERY_QUEUE),
+        Queue(RAG_CELERY_QUEUE, Exchange(RAG_CELERY_QUEUE), routing_key=RAG_CELERY_QUEUE),
     )
 except ImportError:
     CELERY_TASK_QUEUES = None
@@ -379,7 +405,9 @@ CELERY_TASK_ROUTES = {
     "operoz.bgtasks.automation_email_task.send_automation_email_task": {
         "queue": AUTOMATION_EMAIL_CELERY_QUEUE,
     },
-    "operoz.bgtasks.assistant_index_task.index_entity_task": {"queue": ASSISTANT_CELERY_QUEUE},
+    # Casa com INDEX_TASK_NAME em bgtasks/rag_index_task.py, que segue fixado no
+    # caminho antigo para nao invalidar mensagens enfileiradas antes do deploy.
+    "operoz.bgtasks.assistant_index_task.index_entity_task": {"queue": RAG_CELERY_QUEUE},
 }
 
 
@@ -387,7 +415,7 @@ CELERY_IMPORTS = (
     # scheduled tasks
     "operoz.bgtasks.automation_task",
     "operoz.bgtasks.automation_email_task",
-    "operoz.bgtasks.assistant_index_task",
+    "operoz.bgtasks.rag_index_task",
     "operoz.bgtasks.issue_automation_task",
     # Tasks de alerta agendadas no beat. alert_scan_task nao e importado por
     # nenhum outro modulo, entao sem esta linha o worker recusa a task com

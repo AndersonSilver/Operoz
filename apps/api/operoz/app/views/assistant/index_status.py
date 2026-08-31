@@ -3,9 +3,9 @@ from rest_framework.response import Response
 
 from operoz.app.permissions import ROLE, allow_permission
 from operoz.app.views.base import BaseAPIView
-from operoz.assistant.index_status import resolve_page_index_status
-from operoz.assistant.security.access import can_access_page
-from operoz.assistant.types import AssistantActorContext
+from operoz.rag.index_status import resolve_page_index_status
+from operoz.rag.security.access import can_access_page
+from operoz.rag.types import AssistantActorContext
 from operoz.db.models import Page, Workspace
 
 

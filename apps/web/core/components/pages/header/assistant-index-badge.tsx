@@ -116,16 +116,16 @@ function AssistantIndexTooltipBody(props: TooltipBodyProps) {
 
   const metaLine = useMemo(() => {
     if (status === "indexed" && lastIndexDurationSeconds != null && lastIndexDurationSeconds > 0) {
-      return t("operoz_assistant.assistant_index.indexed_duration", {
+      return t("rag.index.indexed_duration", {
         time: formatDuration(lastIndexDurationSeconds),
         count: chunkCount,
       });
     }
     if (!showCountdown || remainingSeconds === null) return null;
     if (remainingSeconds <= 0) {
-      return t("operoz_assistant.assistant_index.countdown_finishing");
+      return t("rag.index.countdown_finishing");
     }
-    return t("operoz_assistant.assistant_index.countdown_remaining", {
+    return t("rag.index.countdown_remaining", {
       time: formatCountdown(remainingSeconds),
     });
   }, [chunkCount, lastIndexDurationSeconds, remainingSeconds, showCountdown, status, t]);
@@ -191,33 +191,33 @@ export function PageAssistantIndexBadge(props: Props) {
     > = {
       pending: {
         icon: <Clock className="size-3.5 shrink-0" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.pending_label"),
-        description: t("operoz_assistant.assistant_index.pending_tooltip"),
+        label: t("rag.index.pending_label"),
+        description: t("rag.index.pending_tooltip"),
       },
       processing: {
         icon: <Loader2 className="size-3.5 shrink-0 animate-spin" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.processing_label"),
-        description: t("operoz_assistant.assistant_index.processing_tooltip"),
+        label: t("rag.index.processing_label"),
+        description: t("rag.index.processing_tooltip"),
       },
       indexed: {
         icon: <CheckCircle2 className="size-3.5 shrink-0" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.indexed_label"),
-        description: t("operoz_assistant.assistant_index.indexed_tooltip", { count: chunkCount }),
+        label: t("rag.index.indexed_label"),
+        description: t("rag.index.indexed_tooltip", { count: chunkCount }),
       },
       failed: {
         icon: <AlertCircle className="size-3.5 shrink-0" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.failed_label"),
-        description: t("operoz_assistant.assistant_index.failed_tooltip"),
+        label: t("rag.index.failed_label"),
+        description: t("rag.index.failed_tooltip"),
       },
       stale: {
         icon: <Clock className="size-3.5 shrink-0" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.stale_label"),
-        description: t("operoz_assistant.assistant_index.stale_tooltip"),
+        label: t("rag.index.stale_label"),
+        description: t("rag.index.stale_tooltip"),
       },
       not_indexed: {
         icon: <Bot className="size-3.5 shrink-0" strokeWidth={2} />,
-        label: t("operoz_assistant.assistant_index.not_indexed_label"),
-        description: t("operoz_assistant.assistant_index.not_indexed_tooltip"),
+        label: t("rag.index.not_indexed_label"),
+        description: t("rag.index.not_indexed_tooltip"),
       },
     };
 
@@ -229,16 +229,16 @@ export function PageAssistantIndexBadge(props: Props) {
       return (
         <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-subtle bg-layer-2 px-2.5 text-12 font-semibold text-tertiary">
           <Loader2 className="size-3.5 shrink-0 animate-spin" strokeWidth={2} />
-          <span className="whitespace-nowrap">{t("operoz_assistant.assistant_index.loading_label")}</span>
+          <span className="whitespace-nowrap">{t("rag.index.loading_label")}</span>
         </span>
       );
     }
     if (error) {
       return (
-        <Tooltip tooltipContent={t("operoz_assistant.assistant_index.status_error_tooltip")}>
+        <Tooltip tooltipContent={t("rag.index.status_error_tooltip")}>
           <span className="inline-flex h-7 shrink-0 items-center gap-1.5 rounded-md border border-danger-subtle bg-danger-subtle px-2.5 text-12 font-semibold text-danger-primary">
             <AlertCircle className="size-3.5 shrink-0" strokeWidth={2} />
-            <span className="whitespace-nowrap">{t("operoz_assistant.assistant_index.status_error_label")}</span>
+            <span className="whitespace-nowrap">{t("rag.index.status_error_label")}</span>
           </span>
         </Tooltip>
       );

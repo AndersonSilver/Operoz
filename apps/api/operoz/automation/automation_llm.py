@@ -5,7 +5,7 @@ import logging
 import re
 from typing import Any
 
-from operoz.assistant.llm.client import chat_completion
+from operoz.rag.llm.client import chat_completion
 
 logger = logging.getLogger(__name__)
 
