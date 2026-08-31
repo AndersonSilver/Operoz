@@ -1,0 +1,130 @@
+# Topologia all-in-one de produção, espelhada de
+# /root/operis-selfhost/plane-app/docker-compose-aio.yaml na VPS.
+#
+# A cópia da VPS é a que roda — este arquivo existe para que a topologia seja
+# revisável em PR em vez de viver só no servidor, como aconteceu entre o cutover
+# para AIO e o deploy da v1.2.0. Toda mudança feita lá deve ser refletida aqui.
+#
+# A linha `image:` do serviço api é reescrita a cada deploy por
+# operoz_set_aio_image (.github/scripts/vps-compose-utils.sh); o valor abaixo é
+# só o da última release.
+x-db-env: &db-env
+  PGHOST: ${PGHOST:-operis-db}
+  PGDATABASE: ${PGDATABASE:-operis}
+  POSTGRES_USER: ${POSTGRES_USER:-operis}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-operis}
+  POSTGRES_DB: ${POSTGRES_DB:-operis}
+  POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+  PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+
+x-redis-env: &redis-env
+  REDIS_HOST: ${REDIS_HOST:-operis-redis}
+  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_URL: ${REDIS_URL:-redis://operis-redis:6379/}
+
+x-minio-env: &minio-env
+  MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID:-access-key}
+  MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+
+x-aws-s3-env: &aws-s3-env
+  AWS_REGION: ${AWS_REGION:-}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-access-key}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-secret-key}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://operis-minio:9000}
+  AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads}
+
+x-app-env: &app-env
+  WEB_URL: ${WEB_URL:-http://localhost}
+  DEBUG: ${DEBUG:-0}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+  GUNICORN_WORKERS: 1
+  USE_MINIO: ${USE_MINIO:-1}
+  DATABASE_URL: ${DATABASE_URL:-postgresql://operis:operis@operis-db/operis}
+  SECRET_KEY: ${SECRET_KEY:-60gp0byfz2dvffa45cxl20p1scy9xbpf6d8c5y0geejgkyp1b5}
+  # Broker: forcado vazio para o backend cair no fallback Redis (settings/common.py).
+  # RabbitMQ sai da stack neste corte — filas confirmadas vazias antes da troca.
+  AMQP_URL: ""
+  API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+  MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+  LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY:-2FiJk1U2aiVPEQtzLehYGlTSnTnrs7LW}
+  DISCORD_APPLICATION_ID: ${DISCORD_APPLICATION_ID:-}
+  DISCORD_BOT_TOKEN: ${DISCORD_BOT_TOKEN:-}
+  DISCORD_PUBLIC_KEY: ${DISCORD_PUBLIC_KEY:-}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-localhost,127.0.0.1}
+  TRUSTED_PROXY_IPS: ${TRUSTED_PROXY_IPS:-}
+  SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+  FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+  GENERAL_WORKER_CONCURRENCY: ${GENERAL_WORKER_CONCURRENCY:-8}
+  API_BASE_URL: http://localhost:8000
+  GUNICORN_CHAT_WORKERS: ${GUNICORN_CHAT_WORKERS:-8}
+  GUNICORN_CHAT_TIMEOUT: ${GUNICORN_CHAT_TIMEOUT:-120}
+
+services:
+  web:
+    image: myoperis/plane-frontend:${APP_RELEASE:-stable}
+    deploy:
+      replicas: ${WEB_REPLICAS:-1}
+      restart_policy:
+        condition: any
+    depends_on:
+      - api
+
+  # backend-all-in-one: api+api-chat+worker (5 filas fundidas)+beat+migrator+
+  # admin(estatico)+space+live+proxy interno, tudo num container so. Substitui
+  # api/api-chat/worker/beat-worker/migrator/admin/space/live/proxy (9 servicos)
+  # + operis-mq (RabbitMQ sai, broker vira Redis).
+  api:
+    image: ghcr.io/andersonsilver/operoz/operoz-aio-api:v1.2.0
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    environment:
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env]
+    ports:
+      - target: 8080
+        published: ${LISTEN_HTTP_PORT:-8080}
+        protocol: tcp
+        mode: host
+    depends_on:
+      - operis-db
+      - operis-redis
+      - operis-minio
+
+  operis-db:
+    image: pgvector/pgvector:pg15
+    command: postgres -c 'max_connections=1000'
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    environment:
+      <<: *db-env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  operis-redis:
+    image: valkey/valkey:7.2.11-alpine
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    volumes:
+      - redisdata:/data
+
+  operis-minio:
+    image: minio/minio:latest
+    command: server /export --console-address ":9090"
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+    environment:
+      <<: *minio-env
+    volumes:
+      - uploads:/export
+
+volumes:
+  pgdata:
+  redisdata:
+  uploads:

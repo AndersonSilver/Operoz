@@ -375,8 +375,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 20
     env:
-      E2E_WEB_URL: ${{ vars.OPEROZ_WEB_URL || 'https://operoz.io' }}
-      E2E_API_URL: ${{ vars.OPEROZ_WEB_URL || 'https://operoz.io' }}
+      # Mesma cadeia de fallback dos jobs de deploy. O apex (operoz.io) responde
+      # 301 para www: o Playwright nao repete o POST no destino e o sign-up do
+      # smoke falha com "sign-up failed: 301", mesmo com o deploy saudavel.
+      E2E_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
+      E2E_API_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
