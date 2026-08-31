@@ -75,6 +75,12 @@ export async function signUp(request: APIRequestContext, apiUrl: string, email: 
       password,
       csrfmiddlewaretoken: csrf,
     },
+    // Django exige Referer em POST sobre HTTPS: sem ele o CsrfViewMiddleware
+    // recusa a requisição e renderiza csrf_failure.html — com status 200, não
+    // 403. O helper aceitava esse 200 como sucesso e só quebrava depois, no
+    // /api/users/me/ com 401. apiJson() sempre mandou o header; o sign-up era o
+    // único ponto que não mandava, e por isso o único passo que falhava.
+    headers: { Referer: apiUrl },
     maxRedirects: 0,
   });
   // Redirect para a web após signup é esperado (mesmo que o dev server responda 405 no POST).
@@ -88,6 +94,14 @@ export async function signUp(request: APIRequestContext, apiUrl: string, email: 
   const signUpError = authErrorFromRedirect(response.headers()["location"]);
   if (signUpError) {
     throw new Error(`sign-up rejected: ${signUpError}`);
+  }
+  // Rede de segurança para o mesmo padrão em outra rota: uma página de erro
+  // servida com 200 não pode passar por sucesso de novo.
+  if (response.status() === 200) {
+    const body = await response.text();
+    if (body.includes("csrf_failure")) {
+      throw new Error("sign-up rejected: CSRF failure (Referer ausente ou token inválido)");
+    }
   }
   const me = await apiJson<{ email: string }>(request, apiUrl, "GET", "/api/users/me/");
   if (me.email !== email) {
