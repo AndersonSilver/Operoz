@@ -89,27 +89,27 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build e push plane-backend:hml
+      - name: Build e push operoz-backend:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: apps/api
           file: apps/api/Dockerfile.api
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-backend:hml
-            ${{ env.IMAGE_PREFIX }}/plane-backend:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-backend:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-backend:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build e push plane-admin:hml
+      - name: Build e push operoz-admin:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           file: apps/admin/Dockerfile.admin
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-admin:hml
-            ${{ env.IMAGE_PREFIX }}/plane-admin:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-admin:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-admin:${{ github.sha }}
           build-args: |
             VITE_API_BASE_URL=https://hml.operoz.io
             VITE_WEB_BASE_URL=https://hml.operoz.io
@@ -117,39 +117,39 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build e push plane-proxy:hml
+      - name: Build e push operoz-proxy:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: apps/proxy
           file: apps/proxy/Dockerfile.ce
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-proxy:hml
-            ${{ env.IMAGE_PREFIX }}/plane-proxy:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-proxy:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-proxy:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build e push plane-space:hml
+      - name: Build e push operoz-space:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           file: apps/space/Dockerfile.space
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-space:hml
-            ${{ env.IMAGE_PREFIX }}/plane-space:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-space:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-space:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Build e push plane-live:hml
+      - name: Build e push operoz-live:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           file: apps/live/Dockerfile.live
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-live:hml
-            ${{ env.IMAGE_PREFIX }}/plane-live:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-live:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-live:${{ github.sha }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -174,11 +174,11 @@ jobs:
             ${{ env.IMAGE_PREFIX }}/operoz-aio-api:hml
             ${{ env.IMAGE_PREFIX }}/operoz-aio-api:hml-${{ github.sha }}
           build-args: |
-            BACKEND_IMAGE=${{ env.IMAGE_PREFIX }}/plane-backend:hml
-            SPACE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-space:hml
-            ADMIN_IMAGE=${{ env.IMAGE_PREFIX }}/plane-admin:hml
-            LIVE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-live:hml
-            PROXY_IMAGE=${{ env.IMAGE_PREFIX }}/plane-proxy:hml
+            BACKEND_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-backend:hml
+            SPACE_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-space:hml
+            ADMIN_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-admin:hml
+            LIVE_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-live:hml
+            PROXY_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-proxy:hml
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
