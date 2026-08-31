@@ -369,43 +369,47 @@ jobs:
           envs: GHCR_TOKEN,IMAGE_PREFIX,IMAGE_TAG,LOCAL_RELEASE_TAG,GIT_REF,OPEROZ_WEB_URL,OPEROZ_REPO_PATH,OPEROZ_APP_PATH,GITHUB_ACTOR
           script_path: .github/scripts/vps-deploy-full.sh
 
-  e2e-smoke:
+  # O smoke com Playwright saiu daqui para o deploy-hml: ele cria usuario,
+  # workspace, board, projeto e issue via API, e nao apaga nada depois. Rodando
+  # contra producao — que tem 1 workspace real — cada tag deixaria lixo
+  # permanente na base. Em HML o mesmo dado e descartavel.
+  #
+  # Fica no lugar uma checagem externa somente leitura. O health check do script
+  # de deploy consulta 127.0.0.1 de dentro da VPS, entao nao enxerga o proxy de
+  # borda: um 502 no NPM passaria despercebido.
+  post-deploy-check:
     needs: [meta, deploy]
     if: ${{ success() && github.event_name == 'push' }}
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 10
     env:
-      # Mesma cadeia de fallback dos jobs de deploy. O apex (operoz.io) responde
-      # 301 para www: o Playwright nao repete o POST no destino e o sign-up do
-      # smoke falha com "sign-up failed: 301", mesmo com o deploy saudavel.
-      E2E_WEB_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
-      E2E_API_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
+      BASE_URL: ${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
     steps:
-      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
-        with:
-          ref: refs/tags/${{ needs.meta.outputs.release_tag }}
-          fetch-depth: 0
+      - name: Verificar rotas publicas (somente leitura)
+        run: |
+          set -euo pipefail
 
-      - uses: pnpm/action-setup@b906affcce14559ad1aafd4ab0e942779e9f58b1 # v4
+          # Producao sobe varios processos sob supervisord; da folga para o
+          # gunicorn ficar pronto antes de considerar a rota quebrada.
+          tentar() {
+            local url="$1" padrao="$2" corpo="" codigo=""
+            for _ in $(seq 1 10); do
+              corpo="$(curl -s -m 20 -w '\n%{http_code}' "${url}" || true)"
+              codigo="$(printf '%s' "${corpo}" | tail -n1)"
+              if [[ "${codigo}" == "200" ]] && printf '%s' "${corpo}" | grep -q "${padrao}"; then
+                echo "OK   ${url} -> 200, casa com '${padrao}'"
+                return 0
+              fi
+              sleep 15
+            done
+            echo "::error::${url} respondeu '${codigo}' sem casar com '${padrao}'"
+            return 1
+          }
 
-      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
-        with:
-          node-version: "22"
-          cache: pnpm
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile --filter=e2e
-
-      - name: Install Playwright browsers
-        run: pnpm --filter=e2e exec playwright install --with-deps chromium
-
-      - name: E2E smoke (f0)
-        run: pnpm --filter=e2e exec playwright test src/f0-smoke.spec.ts --reporter=list
-
-      - name: Upload Playwright report
-        if: always()
-        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
-        with:
-          name: playwright-report-${{ github.sha }}
-          path: apps/e2e/playwright-report/
-          retention-days: 7
+          falhou=0
+          # Status 200 sozinho nao prova nada: o SPA serve index.html com 200 para
+          # qualquer caminho, inclusive com a API fora. Por isso cada rota exige
+          # um trecho do corpo que so aparece quando ela responde de verdade.
+          tentar "${BASE_URL}/api/instances/" '"instance"' || falhou=1
+          tentar "${BASE_URL}/" 'application-name" content="Operoz"' || falhou=1
+          exit "${falhou}"
