@@ -6,7 +6,7 @@ from unittest.mock import patch
 import pytest
 from django.utils import timezone
 
-from operoz.assistant.page_content import collect_html_document_embeds_from_content
+from operoz.rag.page_content import collect_html_document_embeds_from_content
 from operoz.db.models import Page, PageReviewInvite, PageReviewSession, Project, ProjectMember, ProjectPage
 from operoz.utils.page_review_guest import (
     build_guest_prd_review_payload,
@@ -119,7 +119,7 @@ class TestBuildGuestPrdReviewPayload:
         )
         return invite
 
-    @patch("operoz.assistant.page_content.read_html_document_asset_html")
+    @patch("operoz.rag.page_content.read_html_document_asset_html")
     def test_render_html_uses_embed_from_description_json(
         self, mock_read_html, workspace, workspace_board, create_user
     ):
@@ -162,7 +162,7 @@ class TestBuildGuestPrdReviewPayload:
         assert "initPrdReview" in render_html
         mock_read_html.assert_called_once_with("11111111-1111-4111-8111-111111111111")
 
-    @patch("operoz.assistant.page_content.read_html_document_asset_html")
+    @patch("operoz.rag.page_content.read_html_document_asset_html")
     def test_inject_guest_sdk_preserves_substantive_prd_body(
         self, mock_read_html, workspace, workspace_board, create_user
     ):

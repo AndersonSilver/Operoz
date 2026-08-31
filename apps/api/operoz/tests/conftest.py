@@ -113,14 +113,14 @@ def stub_assistant_embeddings(monkeypatch, request):
             return [[] for _ in normalized]
         return [[0.0] * 1536 for _ in normalized]
 
-    monkeypatch.setattr("operoz.assistant.embeddings.embed_texts", _fake_embed)
-    monkeypatch.setattr("operoz.assistant.indexing.embed_texts", _fake_embed)
+    monkeypatch.setattr("operoz.rag.embeddings.embed_texts", _fake_embed)
+    monkeypatch.setattr("operoz.rag.indexing.embed_texts", _fake_embed)
 
 
 @pytest.fixture
 def mute_assistant_auto_index(monkeypatch):
     """Silencia fila/indexação automática do assistant durante setup de unit tests."""
-    monkeypatch.setattr("operoz.assistant.signals.schedule_entity_index", lambda *args, **kwargs: None)
+    monkeypatch.setattr("operoz.rag.signals.schedule_entity_index", lambda *args, **kwargs: None)
 
 
 @pytest.fixture

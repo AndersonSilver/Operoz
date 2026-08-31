@@ -293,7 +293,7 @@ def build_guest_prd_review_payload(invite: PageReviewInvite) -> dict:
 
     embed_html = None
     try:
-        from operoz.assistant.page_content import (
+        from operoz.rag.page_content import (
             collect_html_document_embeds_from_content,
             read_html_document_asset_html,
         )

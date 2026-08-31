@@ -97,7 +97,7 @@ jobs:
         run: |
           python -m pytest \
             operoz/tests/contract/app/test_prd_review.py \
-            operoz/tests/unit/assistant/ \
+            operoz/tests/unit/rag/ \
             operoz/tests/contract/api/test_search.py \
             -q --tb=short
 

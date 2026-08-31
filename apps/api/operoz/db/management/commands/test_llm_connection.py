@@ -2,9 +2,9 @@ from __future__ import annotations
 
 from django.core.management.base import BaseCommand
 
-from operoz.assistant.llm.client import chat_completion
-from operoz.assistant.llm.config import get_llm_base_url, get_llm_config
-from operoz.assistant.llm.http_client import llm_user_message
+from operoz.rag.llm.client import chat_completion
+from operoz.rag.llm.config import get_llm_base_url, get_llm_config
+from operoz.rag.llm.http_client import llm_user_message
 
 
 class Command(BaseCommand):

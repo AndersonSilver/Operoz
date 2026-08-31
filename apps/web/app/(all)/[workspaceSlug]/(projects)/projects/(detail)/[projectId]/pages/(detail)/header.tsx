@@ -10,7 +10,7 @@ import { getPageName } from "@operoz/utils";
 import { PageAccessIcon } from "@/components/common/page-access-icon";
 import { SwitcherIcon, SwitcherLabel } from "@/components/common/switcher-label";
 import { PageHeaderActions } from "@/components/pages/header/actions";
-import { PageAssistantIndexBadge } from "@/components/pages/header/assistant-index-badge";
+import { PageRagIndexBadge } from "@/components/pages/header/rag-index-badge";
 import { PageSyncingBadge } from "@/components/pages/header/syncing-badge";
 import {
   ProjectFeaturePageActions,
@@ -91,7 +91,7 @@ export const PageDetailsHeader = observer(function PageDetailsHeader() {
         <ProjectFeaturePageActions>
           <PageSyncingBadge syncStatus={page.isSyncingWithServer} />
           {workspaceSlug && projectId && pageId ? (
-            <PageAssistantIndexBadge
+            <PageRagIndexBadge
               workspaceSlug={workspaceSlug.toString()}
               projectId={projectId.toString()}
               pageId={pageId.toString()}
