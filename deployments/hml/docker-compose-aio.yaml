@@ -1,0 +1,129 @@
+# HML na topologia all-in-one, espelhando produção.
+#
+# Substitui 10 serviços — hml-api, hml-worker, hml-beat-worker,
+# hml-assistant-worker, hml-automation-worker, hml-automation-email-worker,
+# hml-migrator, hml-admin, hml-space, hml-live e hml-proxy — por um único
+# container que roda tudo sob supervisord, com Caddy interno.
+#
+# Os nomes de volume são idênticos aos do compose anterior (hml_pgdata,
+# hml_redisdata, hml_uploads) e o projeto continua sendo plane-app-hml: os dados
+# de homologação sobrevivem ao cutover. Os volumes de log por serviço somem
+# junto com os serviços — o supervisord escreve em /app/logs dentro do container.
+#
+# A porta 8081 do host é mantida: é para lá que o Nginx Proxy Manager encaminha
+# hml.operoz.io (proxy_host/3.conf, `set $server 127.0.0.1; set $port 8081`).
+
+x-db-env: &db-env
+  PGHOST: ${PGHOST:-hml-db}
+  PGDATABASE: ${PGDATABASE:-operis_hml}
+  POSTGRES_USER: ${POSTGRES_USER:-operis_hml}
+  POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+  POSTGRES_DB: ${POSTGRES_DB:-operis_hml}
+  POSTGRES_PORT: ${POSTGRES_PORT:-5432}
+  PGDATA: ${PGDATA:-/var/lib/postgresql/data}
+
+x-redis-env: &redis-env
+  REDIS_HOST: ${REDIS_HOST:-hml-redis}
+  REDIS_PORT: ${REDIS_PORT:-6379}
+  REDIS_URL: ${REDIS_URL:-redis://hml-redis:6379/}
+
+x-minio-env: &minio-env
+  MINIO_ROOT_USER: ${AWS_ACCESS_KEY_ID}
+  MINIO_ROOT_PASSWORD: ${AWS_SECRET_ACCESS_KEY}
+
+x-aws-s3-env: &aws-s3-env
+  AWS_REGION: ${AWS_REGION:-}
+  AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID}
+  AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY}
+  AWS_S3_ENDPOINT_URL: ${AWS_S3_ENDPOINT_URL:-http://hml-minio:9000}
+  AWS_S3_BUCKET_NAME: ${AWS_S3_BUCKET_NAME:-uploads-hml}
+
+x-app-env: &app-env
+  WEB_URL: ${WEB_URL:-https://hml.operoz.io}
+  DEBUG: ${DEBUG:-1}
+  CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS}
+  GUNICORN_WORKERS: 1
+  USE_MINIO: ${USE_MINIO:-1}
+  DATABASE_URL: ${DATABASE_URL}
+  SECRET_KEY: ${SECRET_KEY}
+  API_KEY_RATE_LIMIT: ${API_KEY_RATE_LIMIT:-60/minute}
+  MINIO_ENDPOINT_SSL: ${MINIO_ENDPOINT_SSL:-0}
+  LIVE_SERVER_SECRET_KEY: ${LIVE_SERVER_SECRET_KEY}
+  API_BASE_URL: ${API_BASE_URL:-http://hml-api:8000}
+  DISCORD_OAUTH_CLIENT_ID: ${DISCORD_OAUTH_CLIENT_ID:-}
+  DISCORD_OAUTH_CLIENT_SECRET: ${DISCORD_OAUTH_CLIENT_SECRET:-}
+  DISCORD_OAUTH_REDIRECT_URI: ${DISCORD_OAUTH_REDIRECT_URI:-}
+  GOOGLE_CALENDAR_CLIENT_ID: ${GOOGLE_CALENDAR_CLIENT_ID:-}
+  GOOGLE_CALENDAR_CLIENT_SECRET: ${GOOGLE_CALENDAR_CLIENT_SECRET:-}
+  GOOGLE_CALENDAR_OAUTH_REDIRECT_URI: ${GOOGLE_CALENDAR_OAUTH_REDIRECT_URI:-}
+  ALLOWED_HOSTS: ${ALLOWED_HOSTS:-hml.operoz.io,hml-api}
+  SECURE_SSL_REDIRECT: ${SECURE_SSL_REDIRECT:-0}
+  # O Caddy interno usa isto no request_body; sem a variável cai no default dele.
+  FILE_SIZE_LIMIT: ${FILE_SIZE_LIMIT:-5242880}
+  # Conectores MCP (OAuth do operoz-mcp). Segredo partilhado com o mcp-server;
+  # aceita CSV para rotação em duas etapas. Vazio = endpoint responde 503.
+  MCP_WEB_CALLBACK_SECRET: ${MCP_WEB_CALLBACK_SECRET:-}
+  MCP_WEB_CALLBACK_BASE_URL: ${MCP_WEB_CALLBACK_BASE_URL:-https://mcp-hml.operoz.io}
+
+services:
+  web:
+    container_name: hml-web
+    image: myoperoz/plane-frontend:${APP_RELEASE:-hml}
+    restart: unless-stopped
+    depends_on:
+    - hml-api
+
+  # backend-all-in-one: api + worker (filas fundidas) + beat + migrator +
+  # admin (estático) + space + live + proxy interno, tudo num container.
+  hml-api:
+    container_name: hml-api
+    image: ${AIO_IMAGE:-ghcr.io/andersonsilver/operoz/operoz-aio-api:hml}
+    restart: unless-stopped
+    environment:
+      <<: [*app-env, *db-env, *redis-env, *minio-env, *aws-s3-env]
+    ports:
+    - target: 8080
+      published: ${LISTEN_HTTP_PORT:-8081}
+      protocol: tcp
+      mode: host
+    depends_on:
+    - hml-db
+    - hml-redis
+    - hml-minio
+
+  hml-db:
+    container_name: hml-db
+    image: pgvector/pgvector:pg15
+    command: postgres -c 'max_connections=200'
+    restart: unless-stopped
+    environment:
+      <<: *db-env
+    volumes:
+    - hml_pgdata:/var/lib/postgresql/data
+
+  hml-redis:
+    container_name: hml-redis
+    image: valkey/valkey:7.2.11-alpine
+    restart: unless-stopped
+    volumes:
+    - hml_redisdata:/data
+
+  hml-minio:
+    container_name: hml-minio
+    image: minio/minio:latest
+    command: server /export --console-address ":9090"
+    restart: unless-stopped
+    environment:
+      <<: *minio-env
+    volumes:
+    - hml_uploads:/export
+    networks:
+      default:
+        aliases:
+        - hml-minio
+        - operis-minio
+
+volumes:
+  hml_pgdata: null
+  hml_redisdata: null
+  hml_uploads: null

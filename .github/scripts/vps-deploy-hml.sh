@@ -36,25 +36,25 @@ operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 # AIO-aware voltaria ao caminho antigo e repetiria a queda da v1.2.0.
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
-# The HML docker-compose.yaml is tracked in the repo (deployments/hml/) so it
-# stays in sync with production's service list instead of drifting via ad-hoc
-# manual edits on the VPS.
-COMPOSE_SOURCE="${OPEROZ_REPO_PATH}/deployments/hml/docker-compose.yaml"
-if [[ -f "${COMPOSE_SOURCE}" ]]; then
-  echo "==> Sincronizar docker-compose.yaml a partir do repositório"
-  cp "${HML_APP_PATH}/docker-compose.yaml" "${HML_APP_PATH}/docker-compose.yaml.bak.$(date +%Y%m%d%H%M%S)" 2>/dev/null || true
-  cp "${COMPOSE_SOURCE}" "${HML_APP_PATH}/docker-compose.yaml"
-else
-  echo "WARN: ${COMPOSE_SOURCE} não encontrado, usando docker-compose.yaml já existente na VPS" >&2
+# O compose do HML e versionado no repo (deployments/hml/) e copiado a cada
+# deploy, em vez de ser editado a mao na VPS. Desde a migracao para all-in-one o
+# arquivo de referencia e o docker-compose-aio.yaml: mesma topologia de producao,
+# um container fazendo api, workers, beat, migrator, admin, space, live e proxy.
+COMPOSE_SOURCE="${OPEROZ_REPO_PATH}/deployments/hml/docker-compose-aio.yaml"
+if [[ ! -f "${COMPOSE_SOURCE}" ]]; then
+  echo "ERRO: ${COMPOSE_SOURCE} nao encontrado no clone da VPS." >&2
+  exit 1
 fi
 
+echo "==> Sincronizar compose (all-in-one) a partir do repositorio"
+cp "${HML_APP_PATH}/docker-compose.yaml" \
+   "${HML_APP_PATH}/docker-compose.yaml.bak.$(date +%Y%m%d%H%M%S)" 2>/dev/null || true
+cp "${COMPOSE_SOURCE}" "${HML_APP_PATH}/docker-compose.yaml"
+
+# No all-in-one so o front ainda consome imagem separada; o resto vive dentro do
+# container unico.
 SERVICES=(
   "plane-frontend:myoperoz/plane-frontend"
-  "plane-backend:myoperoz/plane-backend"
-  "plane-proxy:myoperoz/plane-proxy"
-  "plane-admin:myoperoz/plane-admin"
-  "plane-space:myoperoz/plane-space"
-  "plane-live:myoperoz/plane-live"
 )
 
 for entry in "${SERVICES[@]}"; do
@@ -66,6 +66,11 @@ for entry in "${SERVICES[@]}"; do
   operoz_tag_pulled_image "${remote}" "${local_name}" "${LOCAL_RELEASE_TAG}"
 done
 
+AIO_IMAGE="${HML_IMAGE_PREFIX}/operoz-aio-api:${IMAGE_TAG}"
+echo "==> Pull ${AIO_IMAGE}"
+operoz_docker_pull "${AIO_IMAGE}"
+export AIO_IMAGE
+
 echo "==> Sincronizar WEB_URL no hml.env"
 if [[ -n "${HML_WEB_URL:-}" ]]; then
   if grep -qE '^WEB_URL=' "${HML_ENV_FILE}"; then
@@ -75,60 +80,38 @@ if [[ -n "${HML_WEB_URL:-}" ]]; then
   fi
 fi
 
-echo "==> Rodar migrações HML"
 cd "${HML_APP_PATH}"
-docker compose --env-file hml.env -p plane-app-hml run --rm hml-migrator
 
-echo "==> Recriar API e workers HML"
+# As migracoes rodam dentro do container (programa migrator do supervisord), sem
+# passo `run --rm migrator`. --remove-orphans faz o cutover: derruba os 10
+# servicos que o all-in-one substituiu. Os volumes nomeados (hml_pgdata,
+# hml_redisdata, hml_uploads) nao sao tocados — os dados de homologacao ficam.
+echo "==> Recriar stack HML (all-in-one)"
 docker compose --env-file hml.env -p plane-app-hml up -d \
-  --no-deps --pull never --force-recreate \
-  hml-api hml-worker hml-beat-worker \
-  hml-assistant-worker \
-  hml-automation-worker hml-automation-email-worker
-
-echo "==> Aguardar hml-api responder (collectstatic + gunicorn podem levar ~2 min)"
-api_ready=false
-for attempt in $(seq 1 90); do
-  if docker compose --env-file hml.env -p plane-app-hml exec -T hml-api \
-    wget -q -O /dev/null http://127.0.0.1:8000/api/instances/ 2>/dev/null; then
-    echo "==> hml-api pronta (tentativa ${attempt})"
-    api_ready=true
-    break
-  fi
-  sleep 3
-done
-if [[ "${api_ready}" != "true" ]]; then
-  echo "::error::hml-api não ficou pronta em 4,5 min" >&2
-  docker compose --env-file hml.env -p plane-app-hml logs --tail=60 hml-api 2>/dev/null || true
-  exit 1
-fi
-
-echo "==> Recriar web, admin, space, live e proxy HML"
-# --remove-orphans no ultimo up: remove container de servico que saiu do compose
-# (ex. hml-api-chat) so depois da API ja ter respondido, para nao mexer na stack
-# antes de validar. Servicos declarados mas fora da lista acima nao sao orfaos.
-docker compose --env-file hml.env -p plane-app-hml up -d \
-  --no-deps --pull never --force-recreate --remove-orphans \
-  web hml-admin hml-space hml-live hml-proxy
+  --pull never --force-recreate --remove-orphans
 
 echo "==> Estado HML"
 docker compose --env-file hml.env -p plane-app-hml ps
 
-echo "==> Health check HML (via proxy)"
+echo "==> Health check HML (via Caddy interno do all-in-one)"
 HML_PORT=$(grep -E '^LISTEN_HTTP_PORT=' "${HML_ENV_FILE}" | cut -d= -f2 | tr -d '"' || echo "8081")
 HML_HOST_HEADER=$(grep -E '^ALLOWED_HOSTS=' "${HML_ENV_FILE}" | tail -1 | cut -d= -f2- | cut -d, -f1)
 HML_HOST_HEADER="${HML_HOST_HEADER:-localhost}"
-for attempt in $(seq 1 30); do
-  if curl -sf -H "Host: ${HML_HOST_HEADER}" "http://127.0.0.1:${HML_PORT}/api/instances/" -o /dev/null 2>/dev/null; then
-    echo "==> Health check HML OK"
+
+# O container sobe 7 processos sob supervisord; o gunicorn e o ultimo a
+# responder. 90 tentativas x 4s = 6 min, folga sobre os ~2 min observados.
+for attempt in $(seq 1 90); do
+  if curl -sf -H "Host: ${HML_HOST_HEADER}" \
+      "http://127.0.0.1:${HML_PORT}/api/instances/" -o /dev/null 2>/dev/null; then
+    echo "==> Health check HML OK (tentativa ${attempt})"
     break
   fi
-  if [[ "${attempt}" -eq 30 ]]; then
-    echo "::error::Health check HML falhou após 60s (proxy)" >&2
-    docker compose --env-file hml.env -p plane-app-hml logs --tail=40 hml-proxy 2>/dev/null || true
+  if [[ "${attempt}" -eq 90 ]]; then
+    echo "::error::Health check HML falhou apos 6 min" >&2
+    docker compose --env-file hml.env -p plane-app-hml logs --tail=60 hml-api 2>/dev/null || true
     exit 1
   fi
-  sleep 2
+  sleep 4
 done
 
-echo "==> Deploy HML concluído"
+echo "==> Deploy HML concluido"
