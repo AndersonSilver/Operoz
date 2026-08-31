@@ -9,7 +9,7 @@ from operoz.rag.types import AssistantActorContext
 from operoz.db.models import Page, Workspace
 
 
-class AssistantPageIndexStatusEndpoint(BaseAPIView):
+class RagPageIndexStatusEndpoint(BaseAPIView):
     """Status de indexação RAG de uma página para o Assistente Operoz."""
 
     @allow_permission(allowed_roles=[ROLE.ADMIN, ROLE.MEMBER, ROLE.GUEST], level="WORKSPACE")

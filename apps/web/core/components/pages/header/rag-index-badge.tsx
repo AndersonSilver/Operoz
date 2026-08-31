@@ -4,8 +4,8 @@ import { Bot, CheckCircle2, AlertCircle, Loader2, Clock } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 import { Tooltip } from "@operoz/propel/tooltip";
-import type { TAssistantPageIndexStatus } from "@/services/assistant.service";
-import { AssistantService } from "@/services/assistant.service";
+import type { TRagPageIndexStatus } from "@/services/rag.service";
+import { RagService } from "@/services/rag.service";
 
 type Props = {
   workspaceSlug: string;
@@ -14,18 +14,13 @@ type Props = {
   contentRevision?: number;
 };
 
-const assistantService = new AssistantService();
+const assistantService = new RagService();
 
-const ACTIVE_STATUSES = new Set<TAssistantPageIndexStatus["status"]>(["pending", "processing", "stale", "not_indexed"]);
+const ACTIVE_STATUSES = new Set<TRagPageIndexStatus["status"]>(["pending", "processing", "stale", "not_indexed"]);
 
-const COUNTDOWN_STATUSES = new Set<TAssistantPageIndexStatus["status"]>([
-  "pending",
-  "processing",
-  "stale",
-  "not_indexed",
-]);
+const COUNTDOWN_STATUSES = new Set<TRagPageIndexStatus["status"]>(["pending", "processing", "stale", "not_indexed"]);
 
-const VISIBLE_STATUSES = new Set<TAssistantPageIndexStatus["status"]>([
+const VISIBLE_STATUSES = new Set<TRagPageIndexStatus["status"]>([
   "pending",
   "processing",
   "indexed",
@@ -34,7 +29,7 @@ const VISIBLE_STATUSES = new Set<TAssistantPageIndexStatus["status"]>([
   "not_indexed",
 ]);
 
-type IndexStatusKey = Exclude<TAssistantPageIndexStatus["status"], "disabled" | "empty">;
+type IndexStatusKey = Exclude<TRagPageIndexStatus["status"], "disabled" | "empty">;
 
 const STATUS_PILL_CLASS: Record<IndexStatusKey, string> = {
   pending: "border-accent-primary/50 bg-accent-primary/20 text-accent-primary",
@@ -45,7 +40,7 @@ const STATUS_PILL_CLASS: Record<IndexStatusKey, string> = {
   not_indexed: "border-warning-subtle bg-warning-subtle text-warning-primary",
 };
 
-function pollInterval(status: TAssistantPageIndexStatus["status"] | undefined): number {
+function pollInterval(status: TRagPageIndexStatus["status"] | undefined): number {
   if (!status) return 3000;
   if (status === "not_indexed") return 3000;
   if (ACTIVE_STATUSES.has(status)) return 5000;
@@ -78,7 +73,7 @@ function formatDuration(totalSeconds: number): string {
 type TooltipBodyProps = {
   heading: string;
   description: string;
-  status: TAssistantPageIndexStatus["status"];
+  status: TRagPageIndexStatus["status"];
   etaAt: string | null | undefined;
   fallbackSeconds: number | null | undefined;
   lastIndexDurationSeconds: number | null | undefined;
@@ -142,8 +137,8 @@ function AssistantIndexTooltipBody(props: TooltipBodyProps) {
   );
 }
 
-function useStableIndexStatus(data: TAssistantPageIndexStatus | undefined) {
-  const stableRef = useRef<TAssistantPageIndexStatus | null>(null);
+function useStableIndexStatus(data: TRagPageIndexStatus | undefined) {
+  const stableRef = useRef<TRagPageIndexStatus | null>(null);
 
   if (data?.status && VISIBLE_STATUSES.has(data.status)) {
     stableRef.current = data;
@@ -152,7 +147,7 @@ function useStableIndexStatus(data: TAssistantPageIndexStatus | undefined) {
   return data ?? stableRef.current;
 }
 
-export function PageAssistantIndexBadge(props: Props) {
+export function PageRagIndexBadge(props: Props) {
   const { workspaceSlug, projectId, pageId, contentRevision = 0 } = props;
   const { t } = useTranslation();
 

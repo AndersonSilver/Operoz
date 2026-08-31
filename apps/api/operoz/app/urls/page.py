@@ -8,7 +8,7 @@ from operoz.app.views import (
     PageVersionEndpoint,
     PageDuplicateEndpoint,
 )
-from operoz.app.views.assistant.index_status import AssistantPageIndexStatusEndpoint
+from operoz.app.views.rag.index_status import RagPageIndexStatusEndpoint
 from operoz.app.views.page.review import (
     PageReviewInviteCreateEndpoint,
     PageReviewSessionDetailEndpoint,
@@ -64,7 +64,7 @@ urlpatterns = [
     ),
     path(
         "workspaces/<str:slug>/projects/<uuid:project_id>/pages/<uuid:page_id>/assistant-index-status/",
-        AssistantPageIndexStatusEndpoint.as_view(),
+        RagPageIndexStatusEndpoint.as_view(),
         name="page-assistant-index-status",
     ),
     path(
