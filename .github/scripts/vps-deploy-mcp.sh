@@ -19,6 +19,13 @@ echo "${GHCR_TOKEN}" | docker login ghcr.io -u "${GITHUB_ACTOR}" --password-stdi
 echo "==> Atualizar código (${GIT_REF}) em ${OPEROZ_REPO_PATH}"
 operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 
+# O `source` acima leu a cópia do clone da VPS, que ainda está na release
+# anterior. Sem reler depois do sync, toda função adicionada nesta release some:
+# dentro de um `if`, uma função inexistente vira 127 e o ramo é simplesmente
+# falso — sem erro, sem log, sob `set -euo pipefail`. Foi assim que o deploy
+# AIO-aware voltaria ao caminho antigo e repetiria a queda da v1.2.0.
+source "${SCRIPT_DIR}/vps-compose-utils.sh"
+
 echo "==> Pull imagem MCP: ${MCP_IMAGE}"
 docker pull "${MCP_IMAGE}"
 
