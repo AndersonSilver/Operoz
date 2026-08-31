@@ -16,7 +16,7 @@
 
 	redir /spaces /spaces/ permanent
 	handle /spaces/* {
-		reverse_proxy localhost:3002
+		reverse_proxy 127.0.0.1:3002
 	}
 
 	redir /god-mode /god-mode/ permanent
@@ -27,21 +27,24 @@
 	}
 
 	handle /live/* {
-		reverse_proxy localhost:3005
+		reverse_proxy 127.0.0.1:3005
 	}
 
+	# Upstreams por 127.0.0.1, nunca localhost: o gunicorn escuta so em IPv4
+	# e o Caddy, ao resolver localhost, pode tentar ::1 e devolver 502
+	# (dial tcp [::1]:8000: connect: connection refused).
 	handle /api/* {
-		reverse_proxy localhost:8000 {
+		reverse_proxy 127.0.0.1:8000 {
 			flush_interval -1
 		}
 	}
 
 	handle /auth/* {
-		reverse_proxy localhost:8000
+		reverse_proxy 127.0.0.1:8000
 	}
 
 	handle /static/* {
-		reverse_proxy localhost:8000
+		reverse_proxy 127.0.0.1:8000
 	}
 
 	# Web fica em container separado — alcancado pelo hostname de rede

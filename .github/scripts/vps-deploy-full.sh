@@ -33,6 +33,13 @@ PREV_SHA="$(git -C "${OPEROZ_REPO_PATH}" rev-parse HEAD 2>/dev/null || true)"
 echo "==> Atualizar código"
 operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 
+# No AIO o único serviço que ainda consome imagem do stack antigo é o web; o
+# resto vive dentro do container all-in-one.
+if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
+  echo "==> Topologia all-in-one detectada"
+  SERVICES=("plane-frontend:myoperoz/plane-frontend")
+fi
+
 for entry in "${SERVICES[@]}"; do
   ghcr_name="${entry%%:*}"
   local_name="${entry##*:}"
@@ -43,6 +50,13 @@ for entry in "${SERVICES[@]}"; do
   operoz_tag_pulled_image "${remote}" "${local_name}" "${LOCAL_RELEASE_TAG}"
   operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "${image_name}"
 done
+
+if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
+  AIO_REMOTE="${IMAGE_PREFIX}/operoz-aio-api:${IMAGE_TAG}"
+  echo "==> Pull ${AIO_REMOTE}"
+  docker pull "${AIO_REMOTE}"
+  operoz_set_aio_image "${OPEROZ_APP_PATH}" "${AIO_REMOTE}"
+fi
 
 legacy_hub="$(operoz_compose_image_hub "${OPEROZ_APP_PATH}")"
 if [[ "${legacy_hub}" == "myoperis" ]]; then
@@ -58,9 +72,11 @@ operoz_sync_web_url_env "${ENV_FILE}"
 
 operoz_sync_legacy_minio_host_env "${OPEROZ_APP_PATH}"
 
-echo "==> Migrações Django (nova imagem plane-backend)"
 cd "${OPEROZ_APP_PATH}"
-if operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then
+if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
+  echo "==> Migrações rodam dentro do container AIO (programa migrator do supervisord)"
+elif operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then
+  echo "==> Migrações Django (nova imagem plane-backend)"
   operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" run --rm --no-deps migrator
 else
   echo "WARN: serviço migrator não encontrado — aplique migrações manualmente se necessário."
