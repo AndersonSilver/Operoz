@@ -52,6 +52,21 @@ async function apiJson<T>(
   return (await response.json()) as T;
 }
 
+/** Extrai error_code/error_message do redirect de erro da autenticação. */
+function authErrorFromRedirect(location: string | undefined): string | null {
+  if (!location) return null;
+  let params: URLSearchParams;
+  try {
+    params = new URL(location, "http://localhost").searchParams;
+  } catch {
+    return null;
+  }
+  const code = params.get("error_code");
+  if (!code) return null;
+  const message = params.get("error_message");
+  return message ? `${code} ${message}` : code;
+}
+
 export async function signUp(request: APIRequestContext, apiUrl: string, email: string, password: string) {
   const csrf = await fetchCsrf(request, apiUrl);
   const response = await request.post(`${apiUrl}/auth/sign-up/`, {
@@ -65,6 +80,14 @@ export async function signUp(request: APIRequestContext, apiUrl: string, email: 
   // Redirect para a web após signup é esperado (mesmo que o dev server responda 405 no POST).
   if (![302, 303, 200].includes(response.status())) {
     throw new Error(`sign-up failed: ${response.status()} ${await response.text()}`);
+  }
+  // O backend sinaliza erro de signup redirecionando para /?error_code=...&error_message=...
+  // em vez de responder 4xx. Sem ler o destino, um signup recusado passava pela
+  // checagem de status acima e só estourava depois, no /api/users/me/ com 401 —
+  // escondendo a causa real atrás de "credenciais não fornecidas".
+  const signUpError = authErrorFromRedirect(response.headers()["location"]);
+  if (signUpError) {
+    throw new Error(`sign-up rejected: ${signUpError}`);
   }
   const me = await apiJson<{ email: string }>(request, apiUrl, "GET", "/api/users/me/");
   if (me.email !== email) {
