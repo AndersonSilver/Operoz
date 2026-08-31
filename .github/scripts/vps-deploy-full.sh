@@ -53,7 +53,7 @@ for entry in "${SERVICES[@]}"; do
   image_name="${local_name#myoperoz/}"
   remote="${IMAGE_PREFIX}/${ghcr_name}:${IMAGE_TAG}"
   echo "==> Pull ${remote}"
-  docker pull "${remote}"
+  operoz_docker_pull "${remote}"
   operoz_tag_pulled_image "${remote}" "${local_name}" "${LOCAL_RELEASE_TAG}"
   operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "${image_name}"
 done
@@ -61,7 +61,7 @@ done
 if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
   AIO_REMOTE="${IMAGE_PREFIX}/operoz-aio-api:${IMAGE_TAG}"
   echo "==> Pull ${AIO_REMOTE}"
-  docker pull "${AIO_REMOTE}"
+  operoz_docker_pull "${AIO_REMOTE}"
   operoz_set_aio_image "${OPEROZ_APP_PATH}" "${AIO_REMOTE}"
 fi
 

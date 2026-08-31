@@ -32,7 +32,7 @@ operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
 echo "==> Pull imagem web: ${WEB_IMAGE}"
-docker pull "${WEB_IMAGE}"
+operoz_docker_pull "${WEB_IMAGE}"
 
 echo "==> Tags locais (compose plane-app)"
 operoz_tag_pulled_image "${WEB_IMAGE}" "myoperoz/plane-frontend" "${LOCAL_RELEASE_TAG}"

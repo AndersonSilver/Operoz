@@ -62,7 +62,7 @@ for entry in "${SERVICES[@]}"; do
   local_name="${entry##*:}"
   remote="${HML_IMAGE_PREFIX}/${ghcr_name}:${IMAGE_TAG}"
   echo "==> Pull ${remote}"
-  docker pull "${remote}"
+  operoz_docker_pull "${remote}"
   operoz_tag_pulled_image "${remote}" "${local_name}" "${LOCAL_RELEASE_TAG}"
 done
 

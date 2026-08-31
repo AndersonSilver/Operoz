@@ -27,7 +27,7 @@ operoz_sync_git_ref "${OPEROZ_REPO_PATH}" "${GIT_REF}"
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
 echo "==> Pull imagem MCP: ${MCP_IMAGE}"
-docker pull "${MCP_IMAGE}"
+operoz_docker_pull "${MCP_IMAGE}"
 
 echo "==> Tags locais"
 operoz_tag_pulled_image "${MCP_IMAGE}" "myoperoz/operoz-mcp" "${LOCAL_RELEASE_TAG}"
