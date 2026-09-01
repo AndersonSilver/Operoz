@@ -122,7 +122,14 @@ services:
     volumes:
       - uploads:/export
 
+# `name:` fixa o nome real do volume. Sem ele o Compose prefixa com o nome do
+# projeto, e o volume herda o "plane-app" do diretorio. Com o nome explicito os
+# dados deixam de depender do nome do projeto: da para renomear projeto e
+# containers depois sem orfanar banco nenhum.
 volumes:
   pgdata:
+    name: operoz_pgdata
   redisdata:
+    name: operoz_redisdata
   uploads:
+    name: operoz_uploads

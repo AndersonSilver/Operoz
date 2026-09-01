@@ -123,7 +123,14 @@ services:
         - hml-minio
         - operis-minio
 
+# `name:` fixa o nome real do volume. Sem ele o Compose prefixa com o nome do
+# projeto, e o volume herda o "plane-app" do diretorio/-p. Com o nome explicito
+# os dados deixam de depender do nome do projeto: da para renomear projeto e
+# containers depois sem orfanar banco nenhum.
 volumes:
-  hml_pgdata: null
-  hml_redisdata: null
-  hml_uploads: null
+  hml_pgdata:
+    name: operoz_hml_pgdata
+  hml_redisdata:
+    name: operoz_hml_redisdata
+  hml_uploads:
+    name: operoz_hml_uploads
