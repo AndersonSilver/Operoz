@@ -85,11 +85,17 @@ services:
         protocol: tcp
         mode: host
     depends_on:
-      - operis-db
-      - operis-redis
-      - operis-minio
+      - db
+      - redis
+      - minio
 
-  operis-db:
+  db:
+    # O operoz.env ainda aponta para o hostname antigo; o alias mantem
+    # o DNS interno resolvendo sem precisar reescrever o .env.
+    networks:
+      default:
+        aliases:
+          - operis-db
     image: pgvector/pgvector:pg15
     command: postgres -c 'max_connections=1000'
     deploy:
@@ -101,7 +107,13 @@ services:
     volumes:
       - pgdata:/var/lib/postgresql/data
 
-  operis-redis:
+  redis:
+    # O operoz.env ainda aponta para o hostname antigo; o alias mantem
+    # o DNS interno resolvendo sem precisar reescrever o .env.
+    networks:
+      default:
+        aliases:
+          - operis-redis
     image: valkey/valkey:7.2.11-alpine
     deploy:
       replicas: 1
@@ -110,7 +122,13 @@ services:
     volumes:
       - redisdata:/data
 
-  operis-minio:
+  minio:
+    # O operoz.env ainda aponta para o hostname antigo; o alias mantem
+    # o DNS interno resolvendo sem precisar reescrever o .env.
+    networks:
+      default:
+        aliases:
+          - operis-minio
     image: minio/minio:latest
     command: server /export --console-address ":9090"
     deploy:

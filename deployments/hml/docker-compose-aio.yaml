@@ -67,7 +67,7 @@ x-app-env: &app-env
 
 services:
   web:
-    container_name: hml-web
+    container_name: operoz-hml-web
     image: myoperoz/plane-frontend:${APP_RELEASE:-hml}
     restart: unless-stopped
     depends_on:
@@ -76,7 +76,7 @@ services:
   # backend-all-in-one: api + worker (filas fundidas) + beat + migrator +
   # admin (estático) + space + live + proxy interno, tudo num container.
   hml-api:
-    container_name: hml-api
+    container_name: operoz-hml-api
     image: ${AIO_IMAGE:-ghcr.io/andersonsilver/operoz/operoz-aio-api:hml}
     restart: unless-stopped
     environment:
@@ -92,7 +92,7 @@ services:
     - hml-minio
 
   hml-db:
-    container_name: hml-db
+    container_name: operoz-hml-db
     image: pgvector/pgvector:pg15
     command: postgres -c 'max_connections=200'
     restart: unless-stopped
@@ -102,14 +102,14 @@ services:
     - hml_pgdata:/var/lib/postgresql/data
 
   hml-redis:
-    container_name: hml-redis
+    container_name: operoz-hml-redis
     image: valkey/valkey:7.2.11-alpine
     restart: unless-stopped
     volumes:
     - hml_redisdata:/data
 
   hml-minio:
-    container_name: hml-minio
+    container_name: operoz-hml-minio
     image: minio/minio:latest
     command: server /export --console-address ":9090"
     restart: unless-stopped

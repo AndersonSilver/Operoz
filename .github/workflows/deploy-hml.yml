@@ -82,6 +82,8 @@ jobs:
           tags: |
             ${{ env.IMAGE_PREFIX }}/plane-frontend:hml
             ${{ env.IMAGE_PREFIX }}/plane-frontend:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-web:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-web:hml-${{ github.sha }}
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=https://hml.operoz.io
