@@ -100,6 +100,10 @@ jobs:
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
+      # trocam depois, quando a imagem nova existir em todas as tags que eles
+      # referenciam — senao abre uma janela pedindo imagem inexistente.
+      WEB_IMAGE_NAME_NOVO: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-web
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -126,6 +130,9 @@ jobs:
             ${{ env.WEB_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
             ${{ env.WEB_IMAGE_NAME }}:stable
             ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:${{ env.RELEASE_TAG }}
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:stable
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:${{ github.sha }}
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
@@ -260,6 +267,10 @@ jobs:
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
       WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
+      # trocam depois, quando a imagem nova existir em todas as tags que eles
+      # referenciam — senao abre uma janela pedindo imagem inexistente.
+      WEB_IMAGE_NAME_NOVO: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-web
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
       IMAGE_TAG: ${{ needs.meta.outputs.release_tag }}
