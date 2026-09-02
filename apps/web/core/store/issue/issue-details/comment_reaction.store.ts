@@ -1,6 +1,6 @@
 import { pull, find, concat, update, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
-// Plane Imports
+// Operoz Imports
 import type { TIssueCommentReaction, TIssueCommentReactionIdMap, TIssueCommentReactionMap } from "@operoz/types";
 import { groupReactions } from "@operoz/utils";
 // services

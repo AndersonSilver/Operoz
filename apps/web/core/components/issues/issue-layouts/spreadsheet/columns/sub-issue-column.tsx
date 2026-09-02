@@ -8,7 +8,7 @@ import { Row } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
-import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
+import { IssueStats } from "@/operoz-web/components/issues/issue-layouts/issue-stats";
 
 type Props = {
   issue: TIssue;

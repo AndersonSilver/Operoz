@@ -1,6 +1,6 @@
 import type { RefObject } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 import type { EditorRefApi } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";

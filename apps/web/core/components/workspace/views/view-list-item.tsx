@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EditIcon, TrashIcon } from "@operoz/propel/icons";
 import { CustomMenu } from "@operoz/ui";
 import { truncateText } from "@operoz/utils";

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import { USE_CASES } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { CheckIcon } from "@operoz/propel/icons";
@@ -80,7 +80,7 @@ export const UseCaseSetupStep = observer(function UseCaseSetupStep({ handleStepC
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-10">
       {/* Header */}
-      <CommonOnboardingHeader title="What brings you to Plane?" description="Tell us your goals and team size." />
+      <CommonOnboardingHeader title="What brings you to Operoz?" description="Tell us your goals and team size." />
 
       {/* Use Case Selection */}
       <div className="flex flex-col gap-3">

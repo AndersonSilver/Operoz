@@ -1,5 +1,5 @@
 import { X } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // local imports
 import type { TPowerKContextType } from "../../core/types";

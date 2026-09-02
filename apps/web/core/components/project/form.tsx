@@ -3,7 +3,7 @@ import { Controller, FormProvider, useForm } from "react-hook-form";
 import { Info } from "lucide-react";
 import { NETWORK_CHOICES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
 import { LockIcon } from "@operoz/propel/icons";

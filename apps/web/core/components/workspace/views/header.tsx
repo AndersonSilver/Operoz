@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
-// plane imports
+// operoz imports
 import { DEFAULT_GLOBAL_VIEWS_LIST, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { PlusIcon } from "@operoz/propel/icons";
 import type { TStaticViewTypes } from "@operoz/types";

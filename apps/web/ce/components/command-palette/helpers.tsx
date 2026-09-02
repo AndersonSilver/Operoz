@@ -1,5 +1,5 @@
 import { LayoutGrid } from "lucide-react";
-// plane imports
+// operoz imports
 import { CycleIcon, ModuleIcon, PageIcon, ProjectIcon, ViewsIcon } from "@operoz/propel/icons";
 import type {
   IWorkspaceDefaultSearchResult,
@@ -9,8 +9,8 @@ import type {
   IWorkspaceSearchResult,
 } from "@operoz/types";
 import { generateWorkItemLink } from "@operoz/utils";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 
 export type TCommandGroups = {
   [key: string]: {

@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { ENotificationLoader, ENotificationQueryParamType } from "@operoz/constants";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { cn } from "@operoz/utils";
@@ -12,8 +12,8 @@ import { useWorkspaceNotifications } from "@/hooks/store/notifications";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useWorkspaceIssueProperties } from "@/hooks/use-workspace-issue-properties";
-// plane web imports
-import { useNotificationPreview } from "@/plane-web/hooks/use-notification-preview";
+// operoz web imports
+import { useNotificationPreview } from "@/operoz-web/hooks/use-notification-preview";
 // local imports
 import { EHubMode } from "@operoz/types";
 import { InboxContentRoot } from "../inbox/content";

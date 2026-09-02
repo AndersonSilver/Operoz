@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
@@ -16,7 +16,7 @@ export const ProjectArchivedEmptyState = observer(function ProjectArchivedEmptyS
   const { workspaceSlug: routerWorkspaceSlug, projectId: routerProjectId } = useParams();
   const workspaceSlug = routerWorkspaceSlug ? routerWorkspaceSlug.toString() : undefined;
   const projectId = routerProjectId ? routerProjectId.toString() : undefined;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { allowPermissions } = useUserPermissions();

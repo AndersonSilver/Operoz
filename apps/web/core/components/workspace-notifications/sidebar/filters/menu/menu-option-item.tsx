@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 
 import type { ENotificationFilterType } from "@operoz/constants";
 import { CheckIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 // helpers
 import { cn } from "@operoz/utils";
 // hooks

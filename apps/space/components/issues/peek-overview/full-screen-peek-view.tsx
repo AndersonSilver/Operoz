@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Loader } from "@operoz/ui";
 // types
 import type { IIssue } from "@/types/issue";

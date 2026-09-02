@@ -3,11 +3,11 @@ import { useParams } from "next/navigation";
 import { EEstimateSystem } from "@operoz/constants";
 import { ProjectIcon } from "@operoz/propel/icons";
 import type { ChartYAxisMetric } from "@operoz/types";
-// plane package imports
+// operoz package imports
 import { CustomSelect } from "@operoz/ui";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
-// plane web constants
+// operoz web constants
 type Props = {
   value: ChartYAxisMetric;
   onChange: (val: ChartYAxisMetric | null) => void;

@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { MessageSquare, MoreVertical } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
 import type { TIssuePublicComment } from "@operoz/types";

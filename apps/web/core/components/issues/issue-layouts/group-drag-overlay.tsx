@@ -1,13 +1,13 @@
 import { useRef } from "react";
 import { AlertCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { ISSUE_ORDER_BY_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { TIssueOrderByOptions } from "@operoz/types";
 // helpers
 import { cn } from "@operoz/utils";
-// plane web imports
-import { WorkFlowDisabledOverlay } from "@/plane-web/components/workflow";
+// operoz web imports
+import { WorkFlowDisabledOverlay } from "@/operoz-web/components/workflow";
 
 type Props = {
   dragColumnOrientation: "justify-start" | "justify-center" | "justify-end";

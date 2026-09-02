@@ -1,8 +1,8 @@
 import { API_BASE_URL } from "@operoz/constants";
 import type { TIssueRelation, TIssue } from "@operoz/types";
 // helpers
-// Plane-web
-import type { TIssueRelationTypes } from "@/plane-web/types";
+// Operoz-web
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 // services
 import { APIService } from "@/services/api.service";
 

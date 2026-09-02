@@ -1,6 +1,6 @@
-# Testing Guide for Plane
+# Testing Guide for Operoz
 
-This guide explains how to write tests for Plane using our pytest-based testing strategy.
+This guide explains how to write tests for Operoz using our pytest-based testing strategy.
 
 ## Test Categories
 
@@ -69,7 +69,7 @@ class TestMyEndpoint:
 
 ## Writing Smoke Tests
 
-Smoke tests should be placed in `tests/smoke/` directory and use the `plane_server` fixture to test against a real HTTP server.
+Smoke tests should be placed in `tests/smoke/` directory and use the `operoz_server` fixture to test against a real HTTP server.
 
 ### Example Smoke Test:
 
@@ -80,9 +80,9 @@ import requests
 @pytest.mark.smoke
 class TestCriticalFlow:
     @pytest.mark.django_db
-    def test_login_flow(self, plane_server, create_user, user_data):
+    def test_login_flow(self, operoz_server, create_user, user_data):
         # Get login URL
-        url = f"{plane_server.url}/api/auth/signin/"
+        url = f"{operoz_server.url}/api/auth/signin/"
 
         # Test login
         response = requests.post(
@@ -137,7 +137,7 @@ Use pytest to run tests:
 python -m pytest
 
 # Run only unit tests with coverage
-python -m pytest -m unit --cov=plane
+python -m pytest -m unit --cov=operoz
 ```
 
 ## Best Practices

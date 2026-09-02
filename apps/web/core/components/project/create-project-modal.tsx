@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 import { getAssetIdFromUrl, checkURLValidity } from "@operoz/utils";
-// plane ui
+// operoz ui
 // helpers
 // hooks
 import useKeypress from "@/hooks/use-keypress";
-// plane web components
-import { CreateProjectForm } from "@/plane-web/components/projects/create/root";
-// plane web types
-import type { TProject } from "@/plane-web/types/projects";
+// operoz web components
+import { CreateProjectForm } from "@/operoz-web/components/projects/create/root";
+// operoz web types
+import type { TProject } from "@/operoz-web/types/projects";
 // services
 import { FileService } from "@/services/file.service";
 const fileService = new FileService();

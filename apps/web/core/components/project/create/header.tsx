@@ -1,19 +1,19 @@
 import { useState } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane types
+// operoz types
 import type { IProject } from "@operoz/types";
-// plane ui
+// operoz ui
 import { getTabIndex } from "@operoz/utils";
 // components
 import { CoverImage } from "@/components/common/cover-image";
 import { ImagePickerPopover } from "@/components/core/image-picker-popover";
-// plane web imports
-import { ProjectTemplateSelect } from "@/plane-web/components/projects/create/template-select";
+// operoz web imports
+import { ProjectTemplateSelect } from "@/operoz-web/components/projects/create/template-select";
 
 type Props = {
   handleClose: () => void;

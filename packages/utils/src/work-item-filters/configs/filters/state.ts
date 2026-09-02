@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { STATE_GROUPS } from "@operoz/constants";
 import type { IState, TFilterProperty, TStateGroups, TSupportedOperators } from "@operoz/types";
 import { COLLECTION_OPERATOR, EQUALITY_OPERATOR } from "@operoz/types";

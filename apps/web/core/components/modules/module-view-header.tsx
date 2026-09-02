@@ -3,7 +3,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ListFilter } from "lucide-react";
-// plane helpers
+// operoz helpers
 import { MODULE_VIEW_LAYOUTS } from "@operoz/constants";
 import { useOutsideClickDetector } from "@operoz/hooks";
 // types
@@ -13,7 +13,7 @@ import { Tooltip } from "@operoz/propel/tooltip";
 import type { TModuleFilters } from "@operoz/types";
 // ui
 import { cn, calculateTotalFilters } from "@operoz/utils";
-// plane utils
+// operoz utils
 // components
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { ModuleFiltersSelection, ModuleOrderByDropdown } from "@/components/modules/dropdowns";

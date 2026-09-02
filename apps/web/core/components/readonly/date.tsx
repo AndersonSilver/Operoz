@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CalendarLayoutIcon } from "@operoz/propel/icons";
 import { cn, renderFormattedDate, getDate } from "@operoz/utils";

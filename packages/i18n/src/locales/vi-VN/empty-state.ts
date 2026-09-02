@@ -14,7 +14,7 @@ export default {
     },
     not_found: {
       title: "Rất tiếc! Có vẻ như có gì đó không ổn",
-      description: "Chúng tôi không thể tải tài khoản Plane của bạn hiện tại. Đây có thể là lỗi mạng.",
+      description: "Chúng tôi không thể tải tài khoản Operoz của bạn hiện tại. Đây có thể là lỗi mạng.",
       cta_primary: "Thử tải lại",
     },
     server_error: {

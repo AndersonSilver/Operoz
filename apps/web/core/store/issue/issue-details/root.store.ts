@@ -10,14 +10,14 @@ import type {
   TIssueServiceType,
   TWorkItemWidgets,
 } from "@operoz/types";
-// plane web store
-import { IssueActivityStore } from "@/plane-web/store/issue/issue-details/activity.store";
+// operoz web store
+import { IssueActivityStore } from "@/operoz-web/store/issue/issue-details/activity.store";
 import type {
   IIssueActivityStore,
   IIssueActivityStoreActions,
   TActivityLoader,
-} from "@/plane-web/store/issue/issue-details/activity.store";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+} from "@/operoz-web/store/issue/issue-details/activity.store";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 import type { IIssueRootStore } from "../root.store";
 import { IssueAttachmentStore } from "./attachment.store";
 import type { IIssueAttachmentStore, IIssueAttachmentStoreActions } from "./attachment.store";

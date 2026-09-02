@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { PageIcon } from "@operoz/propel/icons";
 import type { ICustomSearchSelectOption } from "@operoz/types";
@@ -21,9 +21,9 @@ import { ProjectHubEntitySwitcher } from "@/components/project/project-hub-entit
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { PageDetailsHeaderExtraActions } from "@/plane-web/components/pages";
-import { EPageStoreType, usePage, usePageStore } from "@/plane-web/hooks/store";
+// operoz web imports
+import { PageDetailsHeaderExtraActions } from "@/operoz-web/components/pages";
+import { EPageStoreType, usePage, usePageStore } from "@/operoz-web/hooks/store";
 
 export interface IPagesHeaderProps {
   showButton?: boolean;

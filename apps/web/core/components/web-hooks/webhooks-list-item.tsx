@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useParams } from "next/navigation";
-// Plane imports
+// Operoz imports
 import type { IWebhook } from "@operoz/types";
 import { ToggleSwitch } from "@operoz/ui";
 // hooks

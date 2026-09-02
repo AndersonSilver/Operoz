@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { ALL_ISSUES, EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import type { IIssueDisplayFilterOptions } from "@operoz/types";
 import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";

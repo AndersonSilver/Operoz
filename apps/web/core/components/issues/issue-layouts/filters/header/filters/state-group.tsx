@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { STATE_GROUPS } from "@operoz/constants";
 import { StateGroupIcon } from "@operoz/propel/icons";
 // components

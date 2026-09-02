@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import type { IFilterInstance } from "@operoz/shared-state";

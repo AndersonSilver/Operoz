@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { Layers } from "lucide-react";
-// plane imports
+// operoz imports
 import type { IProjectView } from "@operoz/types";
 // local imports
 import { PowerKMenuBuilder } from "./builder";

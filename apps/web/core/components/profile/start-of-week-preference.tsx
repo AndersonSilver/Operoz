@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { START_OF_THE_WEEK_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";

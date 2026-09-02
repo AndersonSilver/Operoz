@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { PROGRESS_STATE_GROUPS_DETAILS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { TWorkItemFilterCondition } from "@operoz/shared-state";
@@ -27,7 +27,7 @@ export const ActiveCycleProgress = observer(function ActiveCycleProgress(props: 
   const { handleFiltersUpdate, cycle } = props;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // derived values
   const progressIndicatorData = PROGRESS_STATE_GROUPS_DETAILS.map((group, index) => ({

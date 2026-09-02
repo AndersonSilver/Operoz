@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { isEmpty } from "lodash-es";
 import type {
   SingleOrArray,

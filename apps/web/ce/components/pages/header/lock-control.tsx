@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { LockKeyhole, LockKeyholeOpen } from "lucide-react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 // hooks
 import { usePageOperations } from "@/hooks/use-page-operations";

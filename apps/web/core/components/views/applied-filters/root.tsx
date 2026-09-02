@@ -1,6 +1,6 @@
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { EViewAccess, TViewFilterProps } from "@operoz/types";
 import { EHeaderVariant, Header, Tag } from "@operoz/ui";
 import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";

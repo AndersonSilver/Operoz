@@ -34,7 +34,7 @@ import {
   StatePropertyIcon,
 } from "@operoz/propel/icons";
 import { store } from "@/lib/store-context";
-import type { TProjectActivity } from "@/plane-web/types";
+import type { TProjectActivity } from "@/operoz-web/types";
 
 type ActivityIconMap = {
   [key: string]: FC<{ className?: string }>;
@@ -98,7 +98,7 @@ export const messages = (activity: TProjectActivity): { message: string | ReactN
     case "archived_at":
       return {
         message: newValue === "restore" ? "restored the project" : "archived the project",
-        customUserName: newValue === "archive" ? "Plane" : undefined,
+        customUserName: newValue === "archive" ? "Operoz" : undefined,
       };
     case "name":
       return {

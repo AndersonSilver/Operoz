@@ -1,6 +1,6 @@
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import { SitesModuleService } from "@operoz/services";
 // types
 import type { TPublicModule } from "@/types/modules";

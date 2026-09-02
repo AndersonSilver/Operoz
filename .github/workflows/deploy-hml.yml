@@ -73,15 +73,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build e push plane-frontend:hml
+      - name: Build e push operoz-frontend:hml
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
           context: .
           file: apps/web/Dockerfile.web
           push: true
           tags: |
-            ${{ env.IMAGE_PREFIX }}/plane-frontend:hml
-            ${{ env.IMAGE_PREFIX }}/plane-frontend:${{ github.sha }}
+            ${{ env.IMAGE_PREFIX }}/operoz-frontend:hml
+            ${{ env.IMAGE_PREFIX }}/operoz-frontend:${{ github.sha }}
             ${{ env.IMAGE_PREFIX }}/operoz-web:hml
             ${{ env.IMAGE_PREFIX }}/operoz-web:hml-${{ github.sha }}
           build-args: |
@@ -199,7 +199,7 @@ jobs:
       packages: read
     env:
       HML_IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
-      HML_APP_PATH: ${{ vars.HML_APP_PATH || '/root/operis-selfhost/plane-app-hml' }}
+      HML_APP_PATH: ${{ vars.HML_APP_PATH || '/root/operis-selfhost/operoz-app-hml' }}
       HML_WEB_URL: https://hml.operoz.io
       OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
       MCP_HML_IMAGE: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp:hml

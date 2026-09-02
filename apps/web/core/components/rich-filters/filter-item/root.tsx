@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { IFilterInstance } from "@operoz/shared-state";
 import type {
   SingleOrArray,

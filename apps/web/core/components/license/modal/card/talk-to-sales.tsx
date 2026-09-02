@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // types
-// plane imports
+// operoz imports
 import { getButtonStyling } from "@operoz/propel/button";
 import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operoz/types";
 import { Loader } from "@operoz/ui";

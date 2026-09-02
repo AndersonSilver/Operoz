@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane utils
+// operoz utils
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 // hooks

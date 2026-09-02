@@ -4,7 +4,7 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
-// plane constants
+// operoz constants
 import { DRAG_ALLOWED_GROUPS } from "@operoz/constants";
 // i18n
 import { useTranslation } from "@operoz/i18n";
@@ -33,8 +33,8 @@ import { KanbanIssueBlockLoader } from "@/components/ui/loader/layouts/kanban-la
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
-// Plane-web
-import { useWorkFlowFDragNDrop } from "@/plane-web/components/workflow";
+// Operoz-web
+import { useWorkFlowFDragNDrop } from "@/operoz-web/components/workflow";
 //
 import { GroupDragOverlay } from "../group-drag-overlay";
 import type { TRenderQuickActions } from "../list/list-view-types";

@@ -1,6 +1,6 @@
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
-// plane hooks
+// operoz hooks
 import { useOutsideClickDetector } from "@operoz/hooks";
 // i18n
 import { useTranslation } from "@operoz/i18n";

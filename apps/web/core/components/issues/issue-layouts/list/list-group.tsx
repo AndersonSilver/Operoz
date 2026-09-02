@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { dropTargetForElements } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { DRAG_ALLOWED_GROUPS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
@@ -26,8 +26,8 @@ import { useProjectState } from "@/hooks/store/use-project-state";
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";
 import { useIssuesStore } from "@/hooks/use-issue-layout-store";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
-// Plane-web
-import { useWorkFlowFDragNDrop } from "@/plane-web/components/workflow";
+// Operoz-web
+import { useWorkFlowFDragNDrop } from "@/operoz-web/components/workflow";
 //
 import { GroupDragOverlay } from "../group-drag-overlay";
 import { ListQuickAddIssueButton, QuickAddIssueRoot } from "../quick-add";

@@ -11,8 +11,8 @@ import { cn } from "@operoz/utils";
 import { AppSidebarItem } from "@/components/sidebar/sidebar-item";
 // hooks
 import { usePowerK } from "@/hooks/store/use-power-k";
-// plane web components
-import { PlaneVersionNumber } from "@/plane-web/components/global";
+// operoz web components
+import { OperozVersionNumber } from "@/operoz-web/components/global";
 
 export const HelpMenuRoot = observer(function HelpMenuRoot() {
   const { workspaceSlug } = useParams();
@@ -60,7 +60,7 @@ export const HelpMenuRoot = observer(function HelpMenuRoot() {
         </button>
       </CustomMenu.MenuItem>
       <div className="mt-1 border-t border-subtle px-1 pt-2 text-11 text-secondary">
-        <PlaneVersionNumber />
+        <OperozVersionNumber />
       </div>
     </CustomMenu>
   );

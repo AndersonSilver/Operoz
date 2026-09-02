@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Area, Legend, ResponsiveContainer, Tooltip, XAxis, YAxis, Line, ComposedChart, CartesianGrid } from "recharts";
-// plane imports
+// operoz imports
 import { AXIS_LABEL_CLASSNAME } from "@operoz/constants";
 import type { TAreaChartProps } from "@operoz/types";
 // local components

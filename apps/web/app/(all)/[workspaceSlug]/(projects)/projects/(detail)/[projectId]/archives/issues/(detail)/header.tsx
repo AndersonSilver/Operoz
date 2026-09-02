@@ -11,8 +11,8 @@ import { IssueDetailQuickActions } from "@/components/issues/issue-detail/issue-
 import { ISSUE_DETAILS } from "@/constants/fetch-keys";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
-// plane web
-import { ProjectBreadcrumb } from "@/plane-web/components/breadcrumbs/project";
+// operoz web
+import { ProjectBreadcrumb } from "@/operoz-web/components/breadcrumbs/project";
 // services
 import { IssueService } from "@/services/issue";
 

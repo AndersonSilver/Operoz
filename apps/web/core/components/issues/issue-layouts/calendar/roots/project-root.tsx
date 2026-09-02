@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 // hooks
 import { useUserPermissions } from "@/hooks/store/user";

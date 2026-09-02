@@ -1,7 +1,7 @@
 import { pull, concat, uniq, set, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// Plane Imports
+// Operoz Imports
 import type {
   TIssue,
   TIssueSubIssues,

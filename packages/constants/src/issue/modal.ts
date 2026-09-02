@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TIssue } from "@operoz/types";
 
 export const DEFAULT_WORK_ITEM_FORM_VALUES: Partial<TIssue> = {

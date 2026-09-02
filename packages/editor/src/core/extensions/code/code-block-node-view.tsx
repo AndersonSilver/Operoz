@@ -7,7 +7,7 @@ import { useState } from "react";
 import { CopyIcon } from "@operoz/propel/icons";
 // ui
 import { Tooltip } from "@operoz/propel/tooltip";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // types
 import type { TCodeBlockAttributes } from "./types";

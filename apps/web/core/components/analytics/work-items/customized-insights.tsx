@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useForm } from "react-hook-form";
-// plane package imports
+// operoz package imports
 import { useTranslation } from "@operoz/i18n";
 import type { IAnalyticsParams } from "@operoz/types";
 import { ChartXAxisProperty, ChartYAxisMetric } from "@operoz/types";
 import { cn } from "@operoz/utils";
-// plane web components
+// operoz web components
 import AnalyticsSectionWrapper from "../analytics-section-wrapper";
 import { AnalyticsSelectParams } from "../select/analytics-params";
 import PriorityChart from "./priority-chart";

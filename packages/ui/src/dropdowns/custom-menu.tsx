@@ -4,7 +4,7 @@ import * as React from "react";
 import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { ChevronDownIcon, ChevronRightIcon } from "@operoz/propel/icons";
-// plane helpers
+// operoz helpers
 // helpers
 import { cn } from "../utils";
 // hooks

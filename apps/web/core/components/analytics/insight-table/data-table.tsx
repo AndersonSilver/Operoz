@@ -19,10 +19,10 @@ import {
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
-// plane package imports
+// operoz package imports
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@operoz/propel/table";
 import { cn } from "@operoz/utils";
-// plane web components
+// operoz web components
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];

@@ -1,7 +1,7 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { EIconSize } from "@operoz/constants";
-// plane imports
+// operoz imports
 import { CheckIcon, StateGroupIcon } from "@operoz/propel/icons";
 import { Spinner } from "@operoz/ui";
 // store hooks

@@ -1,5 +1,5 @@
 import { useState } from "react";
-// plane imports
+// operoz imports
 import { ROLE } from "@operoz/constants";
 // types
 import { Button } from "@operoz/propel/button";

@@ -35,7 +35,7 @@ export function invertPalette(palette: ColorPalette): ColorPalette {
 
 /**
  * Get CSS variable mapping for a theme mode
- * Maps 14-shade palette to Plane's CSS variable system
+ * Maps 14-shade palette to Operoz's CSS variable system
  *
  * For light mode:
  * - Uses lighter shades for backgrounds (50-100-200)

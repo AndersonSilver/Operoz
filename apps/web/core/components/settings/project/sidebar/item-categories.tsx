@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, GROUPED_PROJECT_SETTINGS, PROJECT_SETTINGS_CATEGORIES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components

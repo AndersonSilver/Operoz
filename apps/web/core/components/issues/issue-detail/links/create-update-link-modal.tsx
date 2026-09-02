@@ -2,10 +2,10 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { useTranslation } from "@operoz/i18n";
-// plane types
+// operoz types
 import { Button } from "@operoz/propel/button";
 import type { TIssueLinkEditableFields, TIssueServiceType } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Input, ModalCore } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

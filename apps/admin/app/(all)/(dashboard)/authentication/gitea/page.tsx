@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane internal packages
+// operoz internal packages
 import { setPromiseToast } from "@operoz/propel/toast";
 import { Loader, ToggleSwitch } from "@operoz/ui";
 // assets
@@ -64,7 +64,7 @@ const InstanceGiteaAuthenticationPage = observer(function InstanceGiteaAuthentic
       customHeader={
         <AuthenticationMethodCard
           name="Gitea"
-          description="Allow members to login or sign up to plane with their Gitea accounts."
+          description="Allow members to login or sign up to operoz with their Gitea accounts."
           icon={<img src={giteaLogo} height={24} width={24} alt="Gitea Logo" />}
           config={
             <ToggleSwitch

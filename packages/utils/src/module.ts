@@ -1,5 +1,5 @@
 import { sortBy } from "lodash-es";
-// plane imports
+// operoz imports
 import type { IModule, TModuleDisplayFilters, TModuleFilters, TModuleOrderByOptions } from "@operoz/types";
 // local imports
 import { getDate } from "./datetime";

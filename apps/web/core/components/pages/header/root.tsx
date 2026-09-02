@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TPageFilterProps, TPageNavigationTabs } from "@operoz/types";
 import { Header, EHeaderVariant } from "@operoz/ui";
@@ -12,9 +12,9 @@ import { ProjectFeaturePageActions } from "@/components/project/project-feature-
 import { FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 // local imports
 import { PageAppliedFiltersList } from "../list/applied-filters";
 import { PageFiltersSelection } from "../list/filters";

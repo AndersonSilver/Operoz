@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { ArchiveRestore } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { ArchiveIcon } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";

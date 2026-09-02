@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { ALL_ISSUES, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
@@ -20,8 +20,8 @@ import { useUserPermissions } from "@/hooks/store/user";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
 import { useTimeLineChart } from "@/hooks/use-timeline-chart";
-// plane web hooks
-import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-status";
+// operoz web hooks
+import { useBulkOperationStatus } from "@/operoz-web/hooks/use-bulk-operation-status";
 
 import { IssueLayoutHOC } from "../issue-layout-HOC";
 import { GanttQuickAddIssueButton, QuickAddIssueRoot } from "../quick-add";
@@ -140,7 +140,7 @@ export const BaseGanttRoot = observer(function BaseGanttRoot(props: IBaseGanttRo
   const appliedDisplayFilters = issuesFilter.issueFilters?.displayFilters;
   const boardGanttReady =
     storeType !== EIssuesStoreType.BOARD || appliedDisplayFilters?.layout === EIssueLayoutTypes.GANTT;
-  // plane web hooks
+  // operoz web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
   // derived values
   const targetDate = new Date();

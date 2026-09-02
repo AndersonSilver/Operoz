@@ -1,10 +1,10 @@
 import { Command } from "cmdk";
 import { useTranslation } from "@operoz/i18n";
 import { SearchIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 // components
 import type { TPowerKContext } from "@/components/power-k/core/types";
-// plane web imports
+// operoz web imports
 import { PowerKModalCommandItem } from "@/components/power-k/ui/modal/command-item";
 
 export type TPowerKModalNoSearchResultsCommandProps = {

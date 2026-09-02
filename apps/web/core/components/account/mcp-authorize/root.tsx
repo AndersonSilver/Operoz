@@ -1,9 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { AlertTriangle, Loader2, ShieldCheck } from "lucide-react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
-import { PlaneLogo } from "@operoz/propel/icons";
+import { OperozLogo } from "@operoz/propel/icons";
 // hooks
 import { useUser } from "@/hooks/store/user";
 // services
@@ -36,7 +36,7 @@ function ScreenShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative z-10 flex h-screen w-screen items-center justify-center overflow-y-auto px-6 py-10">
       <div className="shadow-sm w-full max-w-md space-y-6 rounded-lg border border-subtle bg-surface-1 p-8">
-        <PlaneLogo className="h-8 w-auto text-primary" />
+        <OperozLogo className="h-8 w-auto text-primary" />
         {children}
       </div>
     </div>

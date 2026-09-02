@@ -1,7 +1,7 @@
 import { set, cloneDeep, isEqual } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { IWorkspaceView } from "@operoz/types";
 // services
 import { WorkspaceService } from "@/services/workspace.service";

@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { TConfigOptions } from "@operoz/constants";
 import { DEFAULT_FILTER_CONFIG_OPTIONS } from "@operoz/constants";
 import type { TExternalFilter, TFilterConfig, TFilterProperty } from "@operoz/types";

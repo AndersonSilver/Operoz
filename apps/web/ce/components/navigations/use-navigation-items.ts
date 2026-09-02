@@ -1,5 +1,5 @@
 import { useMemo, useCallback } from "react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { FileText, LifeBuoy } from "lucide-react";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operoz/propel/icons";

@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { FormProvider, useForm } from "react-hook-form";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { EFileAssetType } from "@operoz/types";
@@ -22,8 +22,8 @@ import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useProject } from "@/hooks/store/use-project";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
-// plane web types
-import type { TProject } from "@/plane-web/types/projects";
+// operoz web types
+import type { TProject } from "@/operoz-web/types/projects";
 import { ProjectAttributes } from "./attributes";
 import { getProjectFormValues } from "./utils";
 

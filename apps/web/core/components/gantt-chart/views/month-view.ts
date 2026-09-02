@@ -1,5 +1,5 @@
 import { cloneDeep, uniqBy } from "lodash-es";
-// plane imports
+// operoz imports
 import type { ChartDataType } from "@operoz/types";
 // local imports
 import { months } from "../data";

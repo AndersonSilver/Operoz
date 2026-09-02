@@ -2,7 +2,7 @@ import { useContext } from "react";
 // mobx store
 import { StoreContext } from "@/lib/store-context";
 // types
-import type { IPowerKStore } from "@/plane-web/store/power-k.store";
+import type { IPowerKStore } from "@/operoz-web/store/power-k.store";
 
 export const usePowerK = (): IPowerKStore => {
   const context = useContext(StoreContext);

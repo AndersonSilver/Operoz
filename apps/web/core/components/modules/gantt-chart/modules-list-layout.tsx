@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// PLane
+// Operoz
 import { GANTT_TIMELINE_TYPE } from "@operoz/types";
 import type { IBlockUpdateData, IBlockUpdateDependencyData, IModule } from "@operoz/types";
 // components

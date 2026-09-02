@@ -1,6 +1,6 @@
 import React from "react";
 import { Command } from "cmdk";
-// plane imports
+// operoz imports
 import { START_OF_THE_WEEK_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EStartOfTheWeek } from "@operoz/types";

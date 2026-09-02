@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { AUTH_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
-import { PlaneLockup } from "@operoz/propel/icons";
+import { OperozLockup } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";
 import { PageHead } from "@/components/core/page-title";
 import { EAuthModes } from "@/helpers/authentication.helper";
@@ -12,7 +12,7 @@ import { useInstance } from "@/hooks/store/use-instance";
 const authContentMap = {
   [EAuthModes.SIGN_IN]: {
     pageTitle: "Entrar",
-    text: "auth.common.new_to_plane",
+    text: "auth.common.new_to_operoz",
     linkText: "Sign up",
     linkHref: "/sign-up",
   },
@@ -36,7 +36,7 @@ export const AuthHeader = observer(function AuthHeader({ type, compactOnDesktop 
   // derived values
   const enableSignUpConfig = config?.enable_signup ?? false;
 
-  // Por agora: sem link "Inscrever-se" / "New to Plane? Sign up" no sign-in (fork interno).
+  // Por agora: sem link "Inscrever-se" / "New to Operoz? Sign up" no sign-in (fork interno).
   const additionalAction =
     type === EAuthModes.SIGN_UP && enableSignUpConfig ? (
       <div className="flex flex-col items-end text-center text-13 font-medium text-tertiary sm:flex-row sm:items-center sm:gap-2">
@@ -84,7 +84,7 @@ export function AuthHeaderBase(props: TAuthHeaderBase) {
             compactOnDesktop && "lg:hidden"
           )}
         >
-          <PlaneLockup height={44} className="w-auto max-w-[min(88vw,300px)] sm:max-w-[340px]" />
+          <OperozLockup height={44} className="w-auto max-w-[min(88vw,300px)] sm:max-w-[340px]" />
         </Link>
         <div className="ml-auto flex items-center gap-3">{additionalAction}</div>
       </div>

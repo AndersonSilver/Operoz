@@ -1,5 +1,5 @@
 import { useContext } from "react";
-// plane imports
+// operoz imports
 import type { IWorkItemFilterStore } from "@operoz/shared-state";
 // context
 import { StoreContext } from "@/lib/store-context";

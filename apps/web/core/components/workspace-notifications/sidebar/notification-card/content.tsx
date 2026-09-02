@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-// plane imports
+// operoz imports
 import type { TNotification } from "@operoz/types";
 import {
   convertMinutesToHoursMinutesString,
@@ -14,7 +14,7 @@ import {
   renderAdditionalAction,
   renderAdditionalValue,
   shouldShowConnector,
-} from "@/plane-web/components/workspace-notifications/notification-card/content";
+} from "@/operoz-web/components/workspace-notifications/notification-card/content";
 
 // Types
 export type TNotificationFieldData = {
@@ -131,7 +131,7 @@ const getNotificationContentDetails = (
     return baseHandler(fieldData);
   }
 
-  // Check additional map from plane-web (EE extensions)
+  // Check additional map from operoz-web (EE extensions)
   const additionalHandler = ADDITIONAL_NOTIFICATION_CONTENT_MAP[field];
   if (additionalHandler) {
     return additionalHandler(fieldData);

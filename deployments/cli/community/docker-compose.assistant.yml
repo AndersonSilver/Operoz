@@ -1,7 +1,7 @@
-# Overlay para plane-app: worker de indexação RAG (busca semântica do Operoz).
+# Overlay para operoz-app: worker de indexação RAG (busca semântica do Operoz).
 #
-# Uso (na VPS, pasta plane-app):
-#   cd ~/operoz-selfhost/plane-app
+# Uso (na VPS, pasta operoz-app):
+#   cd ~/operoz-selfhost/operoz-app
 #   docker compose \
 #     -f docker-compose.yaml \
 #     -f ~/operoz-selfhost/Operoz/deployments/cli/community/docker-compose.assistant.yml \
@@ -49,7 +49,7 @@ x-assistant-app-env: &assistant-app-env
 
 services:
   assistant-worker:
-    image: ${DOCKERHUB_USER:-myoperoz}/plane-backend:${APP_RELEASE:-stable}
+    image: ${DOCKERHUB_USER:-myoperoz}/operoz-backend:${APP_RELEASE:-stable}
     command: ./bin/docker-entrypoint-assistant-worker.sh
     restart: always
     volumes:

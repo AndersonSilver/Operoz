@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane ui
+// operoz ui
 import { Avatar } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";

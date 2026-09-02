@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Loader } from "@operoz/ui";
 // local imports
 import useCyclesDetails from "../active-cycle/use-cycles-details";

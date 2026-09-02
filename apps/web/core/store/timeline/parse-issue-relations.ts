@@ -1,6 +1,6 @@
 import type { TIssue, TIssueRelationMap } from "@operoz/types";
 import { REVERSE_RELATIONS } from "@/constants/gantt-chart";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 
 export type TIssueRelationIdsByType = { [key in TIssueRelationTypes]?: string[] };
 

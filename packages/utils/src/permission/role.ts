@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EUserPermissions } from "@operoz/constants";
 import type { EUserProjectRoles, EUserWorkspaceRoles } from "@operoz/types";
 

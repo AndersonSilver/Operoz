@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TContextMenuItem } from "@operoz/ui";
@@ -74,7 +74,7 @@ export const ModuleQuickActions = observer(function ModuleQuickActions(props: Pr
     }
   };
 
-  // Use unified menu hook from plane-web (resolves to CE or EE)
+  // Use unified menu hook from operoz-web (resolves to CE or EE)
   const menuResult = useModuleMenuItems({
     moduleDetails: moduleDetails ?? undefined,
     workspaceSlug,

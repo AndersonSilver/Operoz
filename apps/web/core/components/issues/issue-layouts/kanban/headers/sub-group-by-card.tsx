@@ -2,10 +2,10 @@ import React from "react";
 import { observer } from "mobx-react";
 import { Circle } from "lucide-react";
 import { ChevronDownIcon, ChevronUpIcon } from "@operoz/propel/icons";
-// Plane
+// Operoz
 import type { TIssueGroupByOptions, TIssueKanbanFilters } from "@operoz/types";
-// Plane-web
-import { WorkFlowGroupTree } from "@/plane-web/components/workflow";
+// Operoz-web
+import { WorkFlowGroupTree } from "@/operoz-web/components/workflow";
 // mobx
 
 interface IHeaderSubGroupByCard {

@@ -16,7 +16,7 @@ import {
   FilterStateGroup,
 } from "@/components/issues/issue-layouts/filters";
 import { isFiltersApplied } from "@/components/issues/issue-layouts/utils";
-import { FilterIssueTypes } from "@/plane-web/components/issues/filters/issue-types";
+import { FilterIssueTypes } from "@/operoz-web/components/issues/filters/issue-types";
 type TSubIssueFiltersProps = {
   handleFiltersUpdate: (key: keyof IIssueFilterOptions, value: string | string[]) => void;
   filters: IIssueFilterOptions;
@@ -28,7 +28,7 @@ type TSubIssueFiltersProps = {
 
 export const SubIssueFilters = observer(function SubIssueFilters(props: TSubIssueFiltersProps) {
   const { handleFiltersUpdate, filters, memberIds, states, availableFilters, projectId } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // states
   const [filtersSearchQuery, setFiltersSearchQuery] = useState("");

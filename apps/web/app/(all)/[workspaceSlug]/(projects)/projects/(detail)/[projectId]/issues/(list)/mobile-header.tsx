@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { ChevronDownIcon } from "@operoz/propel/icons";

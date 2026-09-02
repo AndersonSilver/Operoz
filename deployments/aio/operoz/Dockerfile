@@ -2,11 +2,11 @@
 # ver apps/api/bin/docker-entrypoint-worker-general.sh) + beat + migrator +
 # space + live + admin (estatico) + proxy interno, tudo num container so.
 # `web` fica de fora de proposito — roda como container separado (imagem
-# myoperoz/plane-frontend, sem mudanca), igual hoje.
+# myoperoz/operoz-frontend, sem mudanca), igual hoje.
 #
 # Local: build com as imagens ja construidas por docker-compose.yml (ARGs
 # abaixo apontam pros tags locais operoz-full-*). CI/producao: sobrescrever
-# os ARGs com ghcr.io/.../plane-*:${RELEASE_TAG}.
+# os ARGs com ghcr.io/.../operoz-*:${RELEASE_TAG}.
 ARG BACKEND_IMAGE=operoz-full-api:latest
 ARG SPACE_IMAGE=operoz-full-space:latest
 ARG ADMIN_IMAGE=operoz-full-admin:latest

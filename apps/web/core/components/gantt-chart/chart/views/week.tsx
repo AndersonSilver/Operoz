@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";

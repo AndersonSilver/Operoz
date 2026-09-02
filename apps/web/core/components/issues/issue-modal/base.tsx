@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { isEqual, xor } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// Plane imports
+// Operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TBaseIssue, TIssue } from "@operoz/types";

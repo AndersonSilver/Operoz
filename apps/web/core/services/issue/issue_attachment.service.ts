@@ -1,6 +1,6 @@
 import type { AxiosRequestConfig } from "axios";
 import { API_BASE_URL } from "@operoz/constants";
-// plane types
+// operoz types
 import { getFileMetaDataForUpload, generateFileUploadPayload } from "@operoz/services";
 import type { TIssueAttachment, TIssueAttachmentUploadResponse, TIssueServiceType } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";

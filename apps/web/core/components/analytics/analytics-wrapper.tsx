@@ -1,5 +1,5 @@
 import React from "react";
-// plane package imports
+// operoz package imports
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 

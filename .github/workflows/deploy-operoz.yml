@@ -99,7 +99,7 @@ jobs:
       packages: write
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
-      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-frontend
       # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
       # trocam depois, quando a imagem nova existir em todas as tags que eles
       # referenciam — senao abre uma janela pedindo imagem inexistente.
@@ -119,7 +119,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build e push plane-frontend
+      - name: Build e push operoz-frontend
         if: ${{ github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
@@ -266,7 +266,7 @@ jobs:
       packages: read
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
-      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-frontend
       # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
       # trocam depois, quando a imagem nova existir em todas as tags que eles
       # referenciam — senao abre uma janela pedindo imagem inexistente.
@@ -278,7 +278,7 @@ jobs:
       GIT_REF: ${{ needs.meta.outputs.release_tag }}
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
-      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/plane-app' }}
+      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/operoz-app' }}
       GITHUB_ACTOR: ${{ github.actor }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

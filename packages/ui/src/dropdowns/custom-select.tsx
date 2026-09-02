@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
-// plane helpers
+// operoz helpers
 // hooks
 import { useDropdownKeyDown } from "../hooks/use-dropdown-key-down";
 // helpers

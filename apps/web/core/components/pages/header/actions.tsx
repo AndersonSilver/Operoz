@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane web components
+// operoz web components
 import { PageReviewShareButton } from "@/components/pages/review/page-review-share-modal";
-import { PageLockControl } from "@/plane-web/components/pages/header/lock-control";
-import { PageMoveControl } from "@/plane-web/components/pages/header/move-control";
-import { PageShareControl } from "@/plane-web/components/pages/header/share-control";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+import { PageLockControl } from "@/operoz-web/components/pages/header/lock-control";
+import { PageMoveControl } from "@/operoz-web/components/pages/header/move-control";
+import { PageShareControl } from "@/operoz-web/components/pages/header/share-control";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

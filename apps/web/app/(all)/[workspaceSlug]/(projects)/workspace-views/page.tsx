@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { DEFAULT_GLOBAL_VIEWS_LIST } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { SearchIcon } from "@operoz/propel/icons";

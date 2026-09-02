@@ -1,6 +1,6 @@
 import { WEBSITE_URL } from "@operoz/constants";
 // assets
-import { PlaneLogo } from "@operoz/propel/icons";
+import { OperozLogo } from "@operoz/propel/icons";
 
 type TPoweredBy = {
   disabled?: boolean;
@@ -19,7 +19,7 @@ export function PoweredBy(props: TPoweredBy) {
       target="_blank"
       rel="noreferrer noopener"
     >
-      <PlaneLogo className="h-3 w-auto text-primary" />
+      <OperozLogo className="h-3 w-auto text-primary" />
       <div className="text-11">
         Powered by <span className="font-semibold">Operoz OS Publish</span>
       </div>

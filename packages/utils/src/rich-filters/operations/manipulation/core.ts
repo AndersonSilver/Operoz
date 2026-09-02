@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type {
   TFilterConditionPayload,
   TFilterExpression,

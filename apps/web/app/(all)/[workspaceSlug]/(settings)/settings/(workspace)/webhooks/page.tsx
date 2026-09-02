@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
@@ -25,7 +25,7 @@ function WebhooksListPage({ params }: Route.ComponentProps) {
   const [showCreateWebhookModal, setShowCreateWebhookModal] = useState(false);
   // router
   const { workspaceSlug } = params;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // mobx store
   const { workspaceUserInfo, allowPermissions } = useUserPermissions();

@@ -2,7 +2,7 @@ import { useState } from "react";
 import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { ARCHIVABLE_STATE_GROUPS } from "@operoz/constants";
 import type { TIssue } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";
@@ -12,8 +12,8 @@ import { cn } from "@operoz/utils";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
 import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
-// plane-web components
-import { DuplicateWorkItemModal } from "@/plane-web/components/issues/issue-layouts/quick-action-dropdowns";
+// operoz-web components
+import { DuplicateWorkItemModal } from "@/operoz-web/components/issues/issue-layouts/quick-action-dropdowns";
 // helper
 import { ArchiveIssueModal } from "../../archive-issue-modal";
 import { DeleteIssueModal } from "../../delete-issue-modal";

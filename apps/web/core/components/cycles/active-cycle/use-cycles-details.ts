@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import type { TWorkItemFilterCondition } from "@operoz/shared-state";
 import { EIssuesStoreType } from "@operoz/types";
 // constants

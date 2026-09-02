@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EAuthModes } from "@operoz/constants";
 // components
 import { ResetPasswordForm } from "@/components/account/auth-forms/reset-password";

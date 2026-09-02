@@ -1,6 +1,6 @@
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IWorkspaceMember } from "@operoz/types";
@@ -14,8 +14,8 @@ import { useMember } from "@/hooks/store/use-member";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser, useUserPermissions, useUserSettings } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { useMemberColumns } from "@/plane-web/components/workspace/settings/useMemberColumns";
+// operoz web imports
+import { useMemberColumns } from "@/operoz-web/components/workspace/settings/useMemberColumns";
 
 type Props = {
   memberDetails: (IWorkspaceMember | null)[];

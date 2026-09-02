@@ -1,5 +1,5 @@
 import { lazy } from "react";
-// plane imports
+// operoz imports
 import type { TProfileSettingsTabs } from "@operoz/types";
 
 export const PROFILE_SETTINGS_PAGES_MAP: Record<TProfileSettingsTabs, React.LazyExoticComponent<React.FC>> = {

@@ -1,5 +1,5 @@
 import type { LucideIcon } from "lucide-react";
-// plane imports
+// operoz imports
 import type { ISvgIcons } from "@operoz/propel/icons";
 import { CycleIcon, FavoriteFolderIcon, ModuleIcon, PageIcon, ProjectIcon, ViewsIcon } from "@operoz/propel/icons";
 import type { IFavorite } from "@operoz/types";

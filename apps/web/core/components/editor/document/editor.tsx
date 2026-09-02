@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-// plane imports
+// operoz imports
 import { DocumentEditorWithRef } from "@operoz/editor";
 import type { IEditorPropsExtended, EditorRefApi, IDocumentEditorProps, TFileHandler } from "@operoz/editor";
 import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
@@ -8,8 +8,8 @@ import { cn } from "@operoz/utils";
 import { useEditorConfig, useEditorMention } from "@/hooks/editor";
 import { useMember } from "@/hooks/store/use-member";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web hooks
-import { useEditorFlagging } from "@/plane-web/hooks/use-editor-flagging";
+// operoz web hooks
+import { useEditorFlagging } from "@/operoz-web/hooks/use-editor-flagging";
 // local imports
 import { EditorMentionsRoot } from "../embeds/mentions";
 

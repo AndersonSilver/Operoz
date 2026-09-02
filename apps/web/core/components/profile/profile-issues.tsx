@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 import { EIssuesStoreType } from "@operoz/types";
 // components

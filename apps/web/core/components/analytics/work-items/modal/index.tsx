@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-// plane package imports
+// operoz package imports
 import { ModalPortal, EPortalWidth, EPortalPosition } from "@operoz/propel/portal";
 import type { ICycle, IModule, IProject } from "@operoz/types";
 import { useAnalytics } from "@/hooks/store/use-analytics";
-// plane web components
+// operoz web components
 import { WorkItemsModalMainContent } from "./content";
 import { WorkItemsModalHeader } from "./header";
 

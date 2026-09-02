@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Link } from "react-router";
-// plane imports
+// operoz imports
 import { ROLE } from "@operoz/constants";
 import { Popover } from "@operoz/propel/popover";
 import { Avatar } from "@operoz/ui";

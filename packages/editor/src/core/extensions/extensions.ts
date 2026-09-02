@@ -27,8 +27,8 @@ import {
   TableRow,
   UtilityExtension,
 } from "@/extensions";
-// plane editor extensions
-import { CoreEditorAdditionalExtensions } from "@/plane-editor/extensions";
+// operoz editor extensions
+import { CoreEditorAdditionalExtensions } from "@/operoz-editor/extensions";
 // types
 import type { IEditorProps } from "@/types";
 // local imports

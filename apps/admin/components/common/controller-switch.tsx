@@ -1,6 +1,6 @@
 import type { Control, FieldPath, FieldValues } from "react-hook-form";
 import { Controller } from "react-hook-form";
-// plane internal packages
+// operoz internal packages
 import { ToggleSwitch } from "@operoz/ui";
 
 type Props<T extends FieldValues = FieldValues> = {

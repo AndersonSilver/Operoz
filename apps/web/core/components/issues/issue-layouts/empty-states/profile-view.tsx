@@ -6,7 +6,7 @@ import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 
 // TODO: If projectViewId changes, everything breaks. Figure out a better way to handle this.
 export const ProfileViewEmptyState = observer(function ProfileViewEmptyState() {
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { profileViewId } = useParams();

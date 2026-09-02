@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { Link as Loader } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, EditIcon, TrashIcon, CloseIcon, ChevronRightIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TIssue, TIssueServiceType, TSubIssueOperations } from "@operoz/types";
 import { EIssueServiceType, EIssuesStoreType } from "@operoz/types";
@@ -16,8 +16,8 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier, IssueTypeIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier, IssueTypeIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // local components
 import { SubIssuesListItemAssigneeCell, SubIssuesListItemPriorityCell, SubIssuesListItemStateCell } from "./properties";
 import { SubIssuesListRoot } from "./root";

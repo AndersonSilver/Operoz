@@ -2,7 +2,7 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { observer } from "mobx-react";
 
 import { LinkIcon, CheckIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import { IconButton } from "@operoz/propel/icon-button";
 import { cn } from "@operoz/utils";

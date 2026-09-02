@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { MoveLeft } from "lucide-react";
-// plane internal packages
+// operoz internal packages
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";
 // hooks

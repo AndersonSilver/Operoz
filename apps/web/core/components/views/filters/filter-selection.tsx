@@ -11,8 +11,8 @@ import { FilterOption } from "@/components/issues/issue-layouts/filters";
 // constants
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { FilterByAccess } from "@/plane-web/components/views/filters/access-filter";
+// operoz web components
+import { FilterByAccess } from "@/operoz-web/components/views/filters/access-filter";
 
 type Props = {
   filters: TViewFilters;

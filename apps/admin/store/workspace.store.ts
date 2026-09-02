@@ -1,6 +1,6 @@
 import { set } from "lodash-es";
 import { action, observable, runInAction, makeObservable, computed } from "mobx";
-// plane imports
+// operoz imports
 import { InstanceWorkspaceService } from "@operoz/services";
 import type { IWorkspace, TLoader, TPaginationInfo } from "@operoz/types";
 // root store

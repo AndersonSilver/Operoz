@@ -185,18 +185,18 @@ CATALOG: list[tuple[str, list[tuple[str, str]]]] = [
         ],
     ),
     (
-        "Documentação e planeamento (referência)",
+        "Documentação e operozamento (referência)",
         [
             (
                 "Pacote docs@ operoz/tech4humans-* e operoz-*",
-                """<p>Planos MVP-2, MVP-3 (board config), roadmap MV3–MV6, automação Operoz, Cliente 360, comparativo Jira vs Plane, arquitetura Azure.<@ operoz/p>""",
+                """<p>Planos MVP-2, MVP-3 (board config), roadmap MV3–MV6, automação Operoz, Cliente 360, comparativo Jira vs Operoz, arquitetura Azure.<@ operoz/p>""",
             ),
             (
                 "Import Jira OPS",
                 """<p>Comando <code>import_jira_ops<@ operoz/code> — cliente=projeto, épico=módulo, card=issue para migração Squad as a Service.<@ operoz/p>""",
             ),
             (
-                "Fases MVP-3 pendentes (planeadas)",
+                "Fases MVP-3 pendentes (operozadas)",
                 """<p>Notificações (Fase 6), Automação nativa (Fase 7), Config Quadro (8), Config Cronograma (9), modelos dinâmicos de report (10b+), Rebranding Kortex (Fase 11).<@ operoz/p>""",
             ),
         ],

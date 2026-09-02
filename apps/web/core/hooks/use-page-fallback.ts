@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { EditorRefApi, CollaborationState } from "@operoz/editor";
-// plane editor
+// operoz editor
 import { convertBinaryDataToBase64String, getBinaryDataFromDocumentEditorHTMLString } from "@operoz/editor";
-// plane types
+// operoz types
 import type { TDocumentPayload } from "@operoz/types";
 // hooks
 import useAutoSave from "@/hooks/use-auto-save";

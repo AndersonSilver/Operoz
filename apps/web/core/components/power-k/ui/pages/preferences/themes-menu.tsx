@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { THEME_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // local imports

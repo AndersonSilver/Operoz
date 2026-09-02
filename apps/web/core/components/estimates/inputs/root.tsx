@@ -1,8 +1,8 @@
-// plane imports
+// operoz imports
 import type { TEstimateSystemKeys } from "@operoz/types";
 import { EEstimateSystem } from "@operoz/types";
-// plane web imports
-import { EstimateTimeInput } from "@/plane-web/components/estimates/inputs";
+// operoz web imports
+import { EstimateTimeInput } from "@/operoz-web/components/estimates/inputs";
 // local imports
 import { EstimateNumberInput } from "./number-input";
 import { EstimateTextInput } from "./text-input";

@@ -2,7 +2,7 @@ import { lazy, Suspense } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane package imports
+// operoz package imports
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import type { TChartData } from "@operoz/types";
@@ -11,7 +11,7 @@ import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 // services
 import { AnalyticsService } from "@/services/analytics.service";
-// plane web components
+// operoz web components
 import AnalyticsSectionWrapper from "../analytics-section-wrapper";
 import { ProjectInsightsLoader } from "../loaders";
 

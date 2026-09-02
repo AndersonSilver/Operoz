@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Avatar } from "@operoz/ui";
 // hooks
 import { useUser } from "@/hooks/store/user";

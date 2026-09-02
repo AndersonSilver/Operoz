@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { ETabIndices } from "@operoz/constants";
 import { TAB_INDEX_MAP } from "@operoz/constants";
 

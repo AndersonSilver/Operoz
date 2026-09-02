@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { createPortal } from "react-dom";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import type { TNameDescriptionLoader } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";

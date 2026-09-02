@@ -56,7 +56,7 @@ export class TranslationStore {
 
     const savedLocale = localStorage.getItem(LANGUAGE_STORAGE_KEY) as TLanguage;
 
-    // One-time: legacy Plane installs persisted English as the default locale
+    // One-time: legacy Operoz installs persisted English as the default locale
     if (savedLocale === "en" && !localStorage.getItem(LEGACY_LOCALE_MIGRATION_KEY)) {
       localStorage.setItem(LEGACY_LOCALE_MIGRATION_KEY, "1");
       localStorage.setItem(LANGUAGE_STORAGE_KEY, DEFAULT_LOCALE);

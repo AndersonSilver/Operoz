@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import type { Placement } from "@popperjs/core";
 import { observer } from "mobx-react";
-// plane helpers
+// operoz helpers
 import { useOutsideClickDetector } from "@operoz/hooks";
 // i18n
 import { useTranslation } from "@operoz/i18n";

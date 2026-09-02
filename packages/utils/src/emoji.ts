@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { RANDOM_EMOJI_CODES } from "@operoz/constants";
 
 /**

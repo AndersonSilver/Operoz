@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane types
+// operoz types
 import type { IWorkspace } from "@operoz/types";
 import { Spinner } from "@operoz/ui";
 // components

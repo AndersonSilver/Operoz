@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // components
 import { PageHead } from "@/components/core/page-title";
@@ -10,7 +10,7 @@ import type { Route } from "./+types/page";
 
 function WorkspaceDashboardPage({ params }: Route.ComponentProps) {
   const { workspaceSlug } = params;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { currentWorkspace } = useWorkspace();

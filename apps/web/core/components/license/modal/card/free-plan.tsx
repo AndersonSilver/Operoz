@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { CircleX } from "lucide-react";
-// plane constants
+// operoz constants
 import { FREE_PLAN_UPGRADE_FEATURES } from "@operoz/constants";
 // helpers
 import { cn } from "@operoz/utils";

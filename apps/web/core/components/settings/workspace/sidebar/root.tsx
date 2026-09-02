@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { ScrollArea } from "@operoz/propel/scrollarea";
 import { cn } from "@operoz/utils";
 // local imports

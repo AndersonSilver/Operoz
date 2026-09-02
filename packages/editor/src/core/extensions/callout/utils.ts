@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TLogoProps } from "@operoz/types";
 import { sanitizeHTML } from "@operoz/utils";
 // types

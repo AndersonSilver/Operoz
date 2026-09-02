@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane constants
+// operoz constants
 import { ALL_ISSUES, EIssueFilterType, EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import type { IIssueDisplayFilterOptions } from "@operoz/types";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";

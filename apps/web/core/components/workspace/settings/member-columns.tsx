@@ -3,14 +3,14 @@ import Link from "next/link";
 import { Controller, useForm } from "react-hook-form";
 
 import { Disclosure } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { ROLE, EUserPermissions, EUserPermissionsLevel, MEMBER_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TrashIcon, SuspendedUserIcon } from "@operoz/propel/icons";
 import { Pill, EPillVariant, EPillSize } from "@operoz/propel/pill";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IUser, IWorkspaceMember } from "@operoz/types";
-// plane ui
+// operoz ui
 import { CustomSelect, PopoverMenu } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";

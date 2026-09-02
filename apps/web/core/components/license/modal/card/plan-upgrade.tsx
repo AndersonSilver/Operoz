@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { TALK_TO_SALES_URL } from "@operoz/constants";
 import type { EProductSubscriptionEnum, IPaymentProduct, TSubscriptionPrice } from "@operoz/types";
 import { calculateYearlyDiscount, getSubscriptionName, getSubscriptionPriceDetails } from "@operoz/utils";
@@ -40,7 +40,7 @@ export const PlanUpgradeCard = observer(function PlanUpgradeCard(props: PlanUpgr
     isTrialAllowed,
   } = props;
   // price details
-  const planeName = getSubscriptionName(planVariant);
+  const operozName = getSubscriptionName(planVariant);
   const { monthlyPriceDetails, yearlyPriceDetails } = getSubscriptionPriceDetails(product);
   const yearlyDiscount = calculateYearlyDiscount(monthlyPriceDetails.price, yearlyPriceDetails.price);
   const prices = [monthlyPriceDetails, yearlyPriceDetails];
@@ -91,7 +91,7 @@ export const PlanUpgradeCard = observer(function PlanUpgradeCard(props: PlanUpgr
       renderPriceContent={renderPriceContent}
       renderActionButton={(price) => (
         <PlanCheckoutButton
-          planeName={planeName}
+          operozName={operozName}
           planVariant={planVariant}
           isLoading={isLoading}
           product={product}

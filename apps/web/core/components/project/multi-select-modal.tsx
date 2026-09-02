@@ -3,7 +3,7 @@ import { xor } from "lodash-es";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Combobox } from "@headlessui/react";
-// plane ui
+// operoz ui
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
@@ -36,7 +36,7 @@ export const ProjectMultiSelectModal = observer(function ProjectMultiSelectModal
   const moveButtonRef = useRef<HTMLButtonElement>(null);
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { getProjectById } = useProject();

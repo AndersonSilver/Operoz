@@ -1,5 +1,5 @@
-import type { TPartialProject } from "@/plane-web/types";
-// plane propel imports
+import type { TPartialProject } from "@/operoz-web/types";
+// operoz propel imports
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { ChevronDownIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";

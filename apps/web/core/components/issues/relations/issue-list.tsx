@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TIssue, TIssueServiceType } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
-// Plane-web imports
-import type { TIssueRelationTypes } from "@/plane-web/types";
+// Operoz-web imports
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 // local imports
 import { RelationIssueListItem } from "./issue-list-item";
 

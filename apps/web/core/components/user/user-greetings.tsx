@@ -1,4 +1,4 @@
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import type { IUser } from "@operoz/types";
 // hooks

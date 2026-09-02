@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TWorkItemFilterCondition } from "@operoz/shared-state";
 import type { TCycleDistribution, TCycleEstimateDistribution, TCyclePlotType } from "@operoz/types";
@@ -46,7 +46,7 @@ export const CycleProgressStats = observer(function CycleProgressStats(props: TC
     size = "sm",
     totalIssuesCount,
   } = props;
-  // plane imports
+  // operoz imports
   const { t } = useTranslation();
   // store imports
   const { storedValue: currentTab, setValue: setCycleTab } = useLocalStorage(

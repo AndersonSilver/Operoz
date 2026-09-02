@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-// plane imports
+// operoz imports
 import { RichTextEditorWithRef } from "@operoz/editor";
 import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operoz/editor";
 import type { MakeOptional, TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
@@ -10,8 +10,8 @@ import { EditorMentionsRoot } from "@/components/editor/embeds/mentions";
 import { useEditorConfig, useEditorMention } from "@/hooks/editor";
 import { useMember } from "@/hooks/store/use-member";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web hooks
-import { useEditorFlagging } from "@/plane-web/hooks/use-editor-flagging";
+// operoz web hooks
+import { useEditorFlagging } from "@/operoz-web/hooks/use-editor-flagging";
 
 type RichTextEditorWrapperProps = MakeOptional<
   Omit<IRichTextEditorProps, "fileHandler" | "mentionHandler" | "extendedEditorProps">,

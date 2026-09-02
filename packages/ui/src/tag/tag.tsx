@@ -21,6 +21,6 @@ const Tag = React.forwardRef(function Tag(props: TagProps, ref: React.ForwardedR
   );
 });
 
-Tag.displayName = "plane-ui-container";
+Tag.displayName = "operoz-ui-container";
 
 export { Tag, ETagVariant, ETagSize };

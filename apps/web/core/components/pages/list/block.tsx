@@ -2,16 +2,16 @@ import { useRef } from "react";
 import { observer } from "mobx-react";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { PageIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { getPageName } from "@operoz/utils";
 // components
 import { ListItem } from "@/components/core/list";
 import { BlockItemAction } from "@/components/pages/list/block-item-action";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePage } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePage } from "@/operoz-web/hooks/store";
 
 type TPageListBlock = {
   pageId: string;

@@ -1,5 +1,5 @@
 import { v4 as uuidv4 } from "uuid";
-// plane imports
+// operoz imports
 import type {
   TFilterAndGroupNode,
   TFilterConditionNode,

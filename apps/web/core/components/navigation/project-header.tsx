@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ProjectIcon } from "@operoz/propel/icons";
 import type { ICustomSearchSelectOption } from "@operoz/types";
 import { CustomSearchSelect } from "@operoz/ui";
@@ -8,8 +8,8 @@ import { CustomSearchSelect } from "@operoz/ui";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { useNavigationItems } from "@/plane-web/components/navigations";
+// operoz web imports
+import { useNavigationItems } from "@/operoz-web/components/navigations";
 // local imports
 import { SwitcherLabel } from "../common/switcher-label";
 import { ProjectHeaderButton } from "./project-header-button";

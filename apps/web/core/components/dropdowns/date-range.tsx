@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import { Combobox } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // ui
 import type { DateRange, Matcher } from "@operoz/propel/calendar";

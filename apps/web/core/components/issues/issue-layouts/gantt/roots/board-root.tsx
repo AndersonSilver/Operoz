@@ -27,7 +27,7 @@ import { useBoardGroupedTimelineStore } from "@/hooks/store/use-board-grouped-ti
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { useIssuesActions } from "@/hooks/use-issues-actions";
 import { useTimeLineChart } from "@/hooks/use-timeline-chart";
-import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-status";
+import { useBulkOperationStatus } from "@/operoz-web/hooks/use-bulk-operation-status";
 import { IssueLayoutHOC } from "../../issue-layout-HOC";
 import { GanttQuickAddIssueButton, QuickAddIssueRoot } from "../../quick-add";
 import { IssueGanttBlock } from "../blocks";

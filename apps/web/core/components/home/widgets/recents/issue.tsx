@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
-// plane types
+// operoz types
 import { PriorityIcon, StateGroupIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TActivityEntityData, TIssueEntityData } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
-// plane ui
+// operoz ui
 import { calculateTimeAgo, generateWorkItemLink } from "@operoz/utils";
 // components
 import { ListItem } from "@/components/core/list";
@@ -14,8 +14,8 @@ import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 
 type BlockProps = {
   activity: TActivityEntityData;

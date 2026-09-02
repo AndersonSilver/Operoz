@@ -4,6 +4,5 @@ export * from "./sony-logo";
 export * from "./zerodha-logo";
 export * from "./operoz-lockup";
 export * from "./operoz-mark";
-export * from "./plane-lockup";
-export * from "./plane-logo";
-export * from "./plane-wordmark";
+export * from "./operoz-logo";
+export * from "./operoz-wordmark";

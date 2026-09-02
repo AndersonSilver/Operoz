@@ -1,6 +1,6 @@
 import { useEffect, useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 import { InstanceService } from "@operoz/services";
 // ui

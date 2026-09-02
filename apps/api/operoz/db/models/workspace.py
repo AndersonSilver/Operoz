@@ -141,7 +141,7 @@ class Workspace(BaseModel):
     )
     issue_notify_email_include_extended_activities = models.BooleanField(
         default=False,
-        help_text="Emit issue notifications for module/cycle/reactions/votes/drafts (Plane skips these by default).",
+        help_text="Emit issue notifications for module/cycle/reactions/votes/drafts (Operoz skips these by default).",
     )
     issue_notify_email_include_description_changes = models.BooleanField(
         default=False,
@@ -409,7 +409,7 @@ class WorkspaceHomePreference(BaseModel):
         NOTIFICATIONS = "notifications", "Notifications"
         DRAFTS = "drafts", "Drafts"
         MY_STICKIES = "my_stickies", "My Stickies"
-        NEW_AT_PLANE = "new_at_plane", "New at Plane"
+        NEW_AT_OPEROZ = "new_at_operoz", "New at Operoz"
         QUICK_TUTORIAL = "quick_tutorial", "Quick Tutorial"
 
     workspace = models.ForeignKey(

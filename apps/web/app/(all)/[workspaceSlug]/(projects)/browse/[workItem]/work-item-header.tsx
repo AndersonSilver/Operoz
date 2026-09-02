@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane ui
+// operoz ui
 import { WorkItemsIcon } from "@operoz/propel/icons";
 import { Breadcrumbs, Header } from "@operoz/ui";
 // components
@@ -11,8 +11,8 @@ import { IssueDetailQuickActions } from "@/components/issues/issue-detail/issue-
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
+// operoz web imports
+import { CommonProjectBreadcrumbs } from "@/operoz-web/components/breadcrumbs/common";
 
 export const WorkItemDetailsHeader = observer(function WorkItemDetailsHeader() {
   // router

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
-// plane helpers
+// operoz helpers
 // helpers
 import { cn } from "@operoz/utils";
 // hooks

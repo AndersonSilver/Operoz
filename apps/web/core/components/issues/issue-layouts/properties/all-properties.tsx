@@ -43,8 +43,8 @@ import {
   readIssueLayoutCustomValue,
 } from "../custom-fields/board-custom-field-layout-cell";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { WorkItemLayoutAdditionalProperties } from "@/plane-web/components/issues/issue-layouts/additional-properties";
+// operoz web components
+import { WorkItemLayoutAdditionalProperties } from "@/operoz-web/components/issues/issue-layouts/additional-properties";
 // local components
 import { IssuePropertyLabels } from "./labels";
 import {

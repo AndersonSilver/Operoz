@@ -1,7 +1,7 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type { IWorkspaceSearchResults } from "@operoz/types";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";

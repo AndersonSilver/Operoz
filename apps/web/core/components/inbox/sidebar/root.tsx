@@ -5,7 +5,7 @@ import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 import type { TInboxIssueCurrentTab, THubMode } from "@operoz/types";
 import { EInboxIssueCurrentTab, EHubMode } from "@operoz/types";
 import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
-// plane imports
+// operoz imports
 import { Header, Loader, EHeaderVariant } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 import { BOARD_HUB_GLASS_HEADER, useBoardHubHasBackground } from "@/components/board/board-hub-background";
@@ -49,7 +49,7 @@ export const InboxSidebar = observer(function InboxSidebar(props: IInboxSidebarP
   // ref
   const containerRef = useRef<HTMLDivElement>(null);
   const [elementRef, setElementRef] = useState<HTMLDivElement | null>(null);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store
   const { currentProjectDetails } = useProject();

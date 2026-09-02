@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { IIssueDisplayProperties } from "@operoz/types";
 
 interface IWithDisplayPropertiesHOC {

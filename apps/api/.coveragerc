@@ -1,5 +1,5 @@
 [run]
-source = plane
+source = operoz
 omit =
     */tests/*
     */migrations/*

@@ -1,8 +1,8 @@
 import { Outlet } from "react-router";
 import useSWR from "swr";
 import { ProjectViewShell } from "@/components/project/project-view-shell";
-// plane web hooks
-import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import { EPageStoreType, usePageStore } from "@/operoz-web/hooks/store";
 // local components
 import type { Route } from "./+types/layout";
 import { PageDetailsHeader } from "./header";

@@ -1,7 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel, PROJECT_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
@@ -16,7 +16,7 @@ import { SidebarProjectsListItem } from "@/components/workspace/sidebar/projects
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-import type { TProject } from "@/plane-web/types";
+import type { TProject } from "@/operoz-web/types";
 import { ExtendedSidebarWrapper } from "./extended-sidebar-wrapper";
 
 export const ExtendedProjectSidebar = observer(function ExtendedProjectSidebar() {

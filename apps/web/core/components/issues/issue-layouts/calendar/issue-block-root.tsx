@@ -3,7 +3,7 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { draggable } from "@atlaskit/pragmatic-drag-and-drop/element/adapter";
 import { preventUnhandled } from "@atlaskit/pragmatic-drag-and-drop/prevent-unhandled";
 import { observer } from "mobx-react";
-// plane helpers
+// operoz helpers
 import { useOutsideClickDetector } from "@operoz/hooks";
 // components
 import { cn, renderFormattedPayloadDate } from "@operoz/utils";

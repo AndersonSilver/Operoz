@@ -1,5 +1,5 @@
 import { FileText, FolderPlus, Layers, SquarePlus } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { ContrastIcon, DiceIcon, LayersIcon } from "@operoz/propel/icons";
 // components

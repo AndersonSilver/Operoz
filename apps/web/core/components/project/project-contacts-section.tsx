@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import { Briefcase, Mail, Phone, Plus, Star, Trash2 } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IProject, IProjectContact, TProjectContactCategory } from "@operoz/types";
@@ -29,15 +29,7 @@ const rowShellClass =
 const primaryInputClass = "!p-0 text-13 font-medium";
 const secondaryInputClass = "!p-0 text-11 text-tertiary";
 
-function LeadRow({
-  workspaceSlug,
-  project,
-  isAdmin,
-}: {
-  workspaceSlug: string;
-  project: IProject;
-  isAdmin: boolean;
-}) {
+function LeadRow({ workspaceSlug, project, isAdmin }: { workspaceSlug: string; project: IProject; isAdmin: boolean }) {
   const { t } = useTranslation();
   const { updateProject } = useProject();
 
@@ -50,9 +42,7 @@ function LeadRow({
   };
 
   const leadValue =
-    project.project_lead && typeof project.project_lead === "object"
-      ? project.project_lead.id
-      : project.project_lead;
+    project.project_lead && typeof project.project_lead === "object" ? project.project_lead.id : project.project_lead;
 
   return (
     <div className={rowShellClass}>

@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useLocation } from "react-router";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 import { useWorkspaceImmersiveChrome } from "@/components/board/project-board-background-root";
 import { AppRailRoot } from "@/components/navigation";

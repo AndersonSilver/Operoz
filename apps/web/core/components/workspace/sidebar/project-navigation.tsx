@@ -7,7 +7,7 @@ import { useTranslation } from "@operoz/i18n";
 import { FileText, LifeBuoy } from "lucide-react";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import type { EUserProjectRoles } from "@operoz/types";
-// plane ui
+// operoz ui
 // components
 import { SidebarNavItem } from "@/components/sidebar/sidebar-navigation";
 // hooks

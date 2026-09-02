@@ -1,7 +1,7 @@
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import type { IUser } from "@operoz/types";
-// plane ui
+// operoz ui
 // hooks
 import { useCurrentTime } from "@/hooks/use-current-time";
 

@@ -1,6 +1,6 @@
 /**
  * Theme System Public API
- * Exports all theme-related utilities for use across Plane apps
+ * Exports all theme-related utilities for use across Operoz apps
  */
 
 // Palette generation

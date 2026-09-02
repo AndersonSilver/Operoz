@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { InboxIcon } from "@operoz/propel/icons";
 import { Breadcrumbs, Header } from "@operoz/ui";

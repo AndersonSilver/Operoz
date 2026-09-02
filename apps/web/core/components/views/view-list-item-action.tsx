@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Earth } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
 import { useLocalStorage } from "@operoz/hooks";
 import { LockIcon } from "@operoz/propel/icons";
@@ -15,8 +15,8 @@ import { getPublishViewLink } from "@operoz/utils";
 import { useMember } from "@/hooks/store/use-member";
 import { useProjectView } from "@/hooks/store/use-project-view";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web imports
-import { PublishViewModal } from "@/plane-web/components/views/publish";
+// operoz web imports
+import { PublishViewModal } from "@/operoz-web/components/views/publish";
 // local imports
 import { ButtonAvatars } from "../dropdowns/member/avatar";
 import { DeleteProjectViewModal } from "./delete-view-modal";

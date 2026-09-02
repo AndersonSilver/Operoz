@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { isNil } from "lodash-es";
 import { observer } from "mobx-react";
 import { Bell, BellOff } from "lucide-react";
-// plane-i18n
+// operoz-i18n
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // UI

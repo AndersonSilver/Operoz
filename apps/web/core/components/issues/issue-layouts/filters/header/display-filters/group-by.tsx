@@ -4,7 +4,7 @@ import { useTranslation } from "@operoz/i18n";
 import type { IIssueDisplayFilterOptions, TIssueGroupByOptions } from "@operoz/types";
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
-import { useGroupByOptions } from "@/plane-web/components/issues/issue-layouts/utils";
+import { useGroupByOptions } from "@/operoz-web/components/issues/issue-layouts/utils";
 
 type Props = {
   displayFilters: IIssueDisplayFilterOptions | undefined;

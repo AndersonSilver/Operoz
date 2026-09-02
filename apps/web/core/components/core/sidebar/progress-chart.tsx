@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-// plane imports
+// operoz imports
 import { AreaChart } from "@operoz/propel/charts/area-chart";
 import { useTranslation } from "@operoz/i18n";
 import type { TChartData, TModuleCompletionChartDistribution } from "@operoz/types";

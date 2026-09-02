@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
 import { AnalyticsIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Breadcrumbs, Header } from "@operoz/ui";
 // components
 import { BreadcrumbLink } from "@/components/common/breadcrumb-link";

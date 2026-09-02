@@ -1,14 +1,14 @@
 import { uniq, get, isEqual } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { TIssueRelationIdMap, TIssueRelationMap, TIssueRelation, TIssue } from "@operoz/types";
 // components
 import type { TRelationObject } from "@/components/issues/issue-detail-widgets/relations";
-// Plane-web
+// Operoz-web
 import { REVERSE_RELATIONS } from "@/constants/gantt-chart";
 import { issuePayloadIncludesRelations, parseIssueRelationsFromPayload } from "@/store/timeline/parse-issue-relations";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 // services
 import { IssueRelationService } from "@/services/issue";
 // types

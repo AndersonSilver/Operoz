@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import type { UseFormGetValues } from "react-hook-form";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
@@ -30,7 +30,7 @@ export const CustomThemeDownloadConfigButton = observer(function CustomThemeDown
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
       link.href = url;
-      link.download = `plane-theme-${Date.now()}.json`;
+      link.download = `operoz-theme-${Date.now()}.json`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { InstructionType, TSticky } from "@operoz/types";
-// plane utils
+// operoz utils
 import { isCommentEmpty } from "@operoz/utils";
 // components
 import { STICKY_COLORS_LIST } from "@/components/editor/sticky-editor/color-palette";

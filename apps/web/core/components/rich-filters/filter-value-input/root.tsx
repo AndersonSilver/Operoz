@@ -1,7 +1,7 @@
 import React from "react";
 
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type {
   TFilterConditionNode,
   TFilterValue,
@@ -15,7 +15,7 @@ import type {
 } from "@operoz/types";
 import { FILTER_FIELD_TYPE } from "@operoz/types";
 // local imports
-import { AdditionalFilterValueInput } from "@/plane-web/components/rich-filters/filter-value-input/root";
+import { AdditionalFilterValueInput } from "@/operoz-web/components/rich-filters/filter-value-input/root";
 import type { TFilterValueInputProps } from "../shared";
 import { DateRangeFilterValueInput } from "./date/range";
 import { SingleDateFilterValueInput } from "./date/single";

@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { Sparkle } from "lucide-react";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 import type { EditorRefApi } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
@@ -19,7 +19,7 @@ import { IssueModalEditorToolbar } from "@/components/issues/issue-modal/compone
 import {
   issueFormControlBorderClass,
   issueFormControlFocusWithinClass,
-} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+} from "@/operoz-web/components/issues/issue-modal/issue-form-field";
 // helpers
 // hooks
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
@@ -27,7 +27,7 @@ import { useInstance } from "@/hooks/store/use-instance";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import useKeypress from "@/hooks/use-keypress";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web services
+// operoz web services
 import { WorkspaceService } from "@/services/workspace.service";
 // services
 import { AIService } from "@/services/ai.service";

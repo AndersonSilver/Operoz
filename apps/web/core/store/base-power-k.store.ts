@@ -1,5 +1,5 @@
 import { observable, action, makeObservable } from "mobx";
-// plane imports
+// operoz imports
 import type { EIssuesStoreType } from "@operoz/types";
 // components
 import type { IPowerKCommandRegistry } from "@/components/power-k/core/registry";

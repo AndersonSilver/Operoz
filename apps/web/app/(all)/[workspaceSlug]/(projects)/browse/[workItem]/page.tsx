@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TIssue } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
@@ -22,9 +22,9 @@ import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 // layouts
 import { ProjectAuthWrapper } from "@/layouts/auth-layout/project-wrapper";
-// plane web imports
-import { useWorkItemProperties } from "@/plane-web/hooks/use-issue-properties";
-import { WorkItemDetailRoot } from "@/plane-web/components/browse/workItem-detail";
+// operoz web imports
+import { useWorkItemProperties } from "@/operoz-web/hooks/use-issue-properties";
+import { WorkItemDetailRoot } from "@/operoz-web/components/browse/workItem-detail";
 
 import type { Route } from "./+types/page";
 

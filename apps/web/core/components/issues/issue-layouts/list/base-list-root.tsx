@@ -2,7 +2,7 @@ import type { FC } from "react";
 import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane constants
+// operoz constants
 import { EIssueFilterType } from "@operoz/constants";
 // types
 import type { GroupByColumnTypes, TGroupedIssues, TIssueKanbanFilters } from "@operoz/types";

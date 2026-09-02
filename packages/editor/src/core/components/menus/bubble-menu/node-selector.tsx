@@ -1,7 +1,7 @@
 import type { Editor } from "@tiptap/react";
 
 import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // components
 import type { EditorMenuItem } from "@/components/menus";

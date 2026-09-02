@@ -3,9 +3,9 @@ import { observer } from "mobx-react";
 import type { TPageNavigationTabs } from "@operoz/types";
 // components
 import { ListLayout } from "@/components/core/list";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 // local imports
 import { PageListBlock } from "./block";
 

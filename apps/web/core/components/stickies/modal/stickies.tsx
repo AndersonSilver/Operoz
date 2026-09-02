@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
-// plane ui
+// operoz ui
 import { RecentStickyIcon, PlusIcon, CloseIcon } from "@operoz/propel/icons";
 // hooks
 import { useSticky } from "@/hooks/use-stickies";

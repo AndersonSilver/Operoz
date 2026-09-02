@@ -10,7 +10,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 # Widgets disabled by default for new users
-DEFAULT_DISABLED_WIDGET_KEYS = frozenset({"new_at_plane", "quick_tutorial"})
+DEFAULT_DISABLED_WIDGET_KEYS = frozenset({"new_at_operoz", "quick_tutorial"})
 
 
 class WorkspaceHomePreferenceViewSet(BaseAPIView):

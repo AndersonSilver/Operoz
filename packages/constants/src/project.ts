@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TProjectAppliedDisplayFilterKeys, TProjectOrderByOptions } from "@operoz/types";
 // local imports
 

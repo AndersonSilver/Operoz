@@ -1,14 +1,14 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import type { IState } from "@operoz/types";
 // api service
 import { APIService } from "../api.service";
 
 /**
- * Service class for managing states within plane sites application.
+ * Service class for managing states within operoz sites application.
  * Extends APIService to handle HTTP requests to the state-related endpoints.
  * @extends {APIService}
- * @remarks This service is only available for plane sites
+ * @remarks This service is only available for operoz sites
  */
 export class SitesStateService extends APIService {
   constructor(BASE_URL?: string) {

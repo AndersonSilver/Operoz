@@ -1,6 +1,6 @@
 import { useParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
-// plane imports
+// operoz imports
 import { allTimeIn30MinutesInterval12HoursFormat } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { CloseIcon } from "@operoz/propel/icons";

@@ -12,8 +12,8 @@ import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { CommonProjectBreadcrumbs } from "@/plane-web/components/breadcrumbs/common";
+// operoz web imports
+import { CommonProjectBreadcrumbs } from "@/operoz-web/components/breadcrumbs/common";
 
 type TProps = {
   activeTab: "issues" | "cycles" | "modules";

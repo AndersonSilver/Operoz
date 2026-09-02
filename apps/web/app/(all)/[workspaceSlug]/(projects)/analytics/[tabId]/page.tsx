@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useRouter } from "next/navigation";
-// plane package imports
+// operoz package imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
@@ -15,7 +15,7 @@ import { useCommandPalette } from "@/hooks/store/use-command-palette";
 import { useProject } from "@/hooks/store/use-project";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
-import { useAnalyticsTabs } from "@/plane-web/components/analytics/use-analytics-tabs";
+import { useAnalyticsTabs } from "@/operoz-web/components/analytics/use-analytics-tabs";
 import type { Route } from "./+types/page";
 
 function AnalyticsPage({ params }: Route.ComponentProps) {
@@ -24,7 +24,7 @@ function AnalyticsPage({ params }: Route.ComponentProps) {
   // hooks
   const router = useRouter();
 
-  // plane imports
+  // operoz imports
   const { t } = useTranslation();
 
   // store hooks

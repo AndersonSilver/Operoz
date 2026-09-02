@@ -11,7 +11,7 @@ import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
-import { BoardCustomFieldFormField } from "@/plane-web/components/issues/issue-modal/board-custom-field-form-field";
+import { BoardCustomFieldFormField } from "@/operoz-web/components/issues/issue-modal/board-custom-field-form-field";
 
 const service = new BoardCustomFieldService();
 

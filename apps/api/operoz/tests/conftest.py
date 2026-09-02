@@ -127,7 +127,7 @@ def mute_assistant_auto_index(monkeypatch):
 def user_data():
     """Return standard user data for tests"""
     return {
-        "email": "test@plane.so",
+        "email": "test@operoz.so",
         "password": "test-password",
         "first_name": "Test",
         "last_name": "User",
@@ -179,7 +179,7 @@ def create_bot_user(db):
 
     unique_id = uuid4().hex[:8]
     user = User.objects.create(
-        email=f"bot-{unique_id}@plane.so",
+        email=f"bot-{unique_id}@operoz.so",
         username=f"bot_user_{unique_id}",
         first_name="Bot",
         last_name="User",
@@ -215,7 +215,7 @@ def create_api_token_for_user(db, create_user):
 
 
 @pytest.fixture
-def plane_server(live_server):
+def operoz_server(live_server):
     """
     Renamed version of live_server fixture to avoid name clashes.
     Returns a live Django server for testing HTTP requests.

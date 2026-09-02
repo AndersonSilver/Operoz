@@ -1,7 +1,7 @@
 import { lazy, Suspense } from "react";
 import { useTheme } from "next-themes";
 import { SWRConfig } from "swr";
-// Plane Imports
+// Operoz Imports
 import { WEB_SWR_CONFIG } from "@operoz/constants";
 import { TranslationProvider } from "@operoz/i18n";
 import { Toast } from "@operoz/propel/toast";

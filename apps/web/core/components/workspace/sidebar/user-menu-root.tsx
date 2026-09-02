@@ -5,7 +5,7 @@ import ReactDOM from "react-dom";
 import { usePopper } from "react-popper";
 import { LogOut, Settings, Settings2 } from "lucide-react";
 import { Menu, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { GOD_MODE_URL } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";

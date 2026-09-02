@@ -16,8 +16,8 @@ import { generateWorkItemLink, getTabIndex } from "@operoz/utils";
 // hooks
 import useDebounce from "@/hooks/use-debounce";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // services
 import { ProjectService } from "@/services/project";
 // components

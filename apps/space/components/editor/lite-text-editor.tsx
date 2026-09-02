@@ -1,5 +1,5 @@
 import React from "react";
-// plane imports
+// operoz imports
 import { LiteTextEditorWithRef } from "@operoz/editor";
 import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operoz/editor";
 import type { MakeOptional } from "@operoz/types";
@@ -8,7 +8,7 @@ import { cn, isCommentEmpty } from "@operoz/utils";
 import { getEditorFileHandlers } from "@/helpers/editor.helper";
 // hooks
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web imports
+// operoz web imports
 import { useEditorFlagging } from "@/hooks/use-editor-flagging";
 // local imports
 import { EditorMentionsRoot } from "./embeds/mentions";

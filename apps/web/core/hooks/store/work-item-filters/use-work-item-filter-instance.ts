@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IWorkItemFilterInstance } from "@operoz/shared-state";
 import type { EIssuesStoreType } from "@operoz/types";
 // local imports

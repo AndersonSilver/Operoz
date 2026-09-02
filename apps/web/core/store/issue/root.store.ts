@@ -3,23 +3,23 @@ import { autorun, makeObservable, observable, runInAction } from "mobx";
 // types
 import type { ICycle, IIssueLabel, IModule, IProject, IState, IUserLite, TIssueServiceType } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
-// plane web store
-import type { IProjectEpics, IProjectEpicsFilter } from "@/plane-web/store/issue/epic";
-import { ProjectEpics, ProjectEpicsFilter } from "@/plane-web/store/issue/epic";
-import type { IIssueDetail } from "@/plane-web/store/issue/issue-details/root.store";
-import { IssueDetail } from "@/plane-web/store/issue/issue-details/root.store";
-import type { ITeamIssuesFilter, ITeamIssues } from "@/plane-web/store/issue/team";
-import { TeamIssues, TeamIssuesFilter } from "@/plane-web/store/issue/team";
-import type { ITeamProjectWorkItemsFilter } from "@/plane-web/store/issue/team-project/filter.store";
-import { TeamProjectWorkItemsFilter } from "@/plane-web/store/issue/team-project/filter.store";
-import type { ITeamProjectWorkItems } from "@/plane-web/store/issue/team-project/issue.store";
-import { TeamProjectWorkItems } from "@/plane-web/store/issue/team-project/issue.store";
-import type { ITeamViewIssues, ITeamViewIssuesFilter } from "@/plane-web/store/issue/team-views";
-import { TeamViewIssues, TeamViewIssuesFilter } from "@/plane-web/store/issue/team-views";
+// operoz web store
+import type { IProjectEpics, IProjectEpicsFilter } from "@/operoz-web/store/issue/epic";
+import { ProjectEpics, ProjectEpicsFilter } from "@/operoz-web/store/issue/epic";
+import type { IIssueDetail } from "@/operoz-web/store/issue/issue-details/root.store";
+import { IssueDetail } from "@/operoz-web/store/issue/issue-details/root.store";
+import type { ITeamIssuesFilter, ITeamIssues } from "@/operoz-web/store/issue/team";
+import { TeamIssues, TeamIssuesFilter } from "@/operoz-web/store/issue/team";
+import type { ITeamProjectWorkItemsFilter } from "@/operoz-web/store/issue/team-project/filter.store";
+import { TeamProjectWorkItemsFilter } from "@/operoz-web/store/issue/team-project/filter.store";
+import type { ITeamProjectWorkItems } from "@/operoz-web/store/issue/team-project/issue.store";
+import { TeamProjectWorkItems } from "@/operoz-web/store/issue/team-project/issue.store";
+import type { ITeamViewIssues, ITeamViewIssuesFilter } from "@/operoz-web/store/issue/team-views";
+import { TeamViewIssues, TeamViewIssuesFilter } from "@/operoz-web/store/issue/team-views";
 // root store
-import type { IWorkspaceIssues } from "@/plane-web/store/issue/workspace/issue.store";
-import { WorkspaceIssues } from "@/plane-web/store/issue/workspace/issue.store";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { IWorkspaceIssues } from "@/operoz-web/store/issue/workspace/issue.store";
+import { WorkspaceIssues } from "@/operoz-web/store/issue/workspace/issue.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 import type { IWorkspaceMembership } from "@/store/member/workspace/workspace-member.store";
 // issues data store
 import type { IArchivedIssuesFilter, IArchivedIssues } from "./archived";

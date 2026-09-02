@@ -10,7 +10,7 @@
 
     "paths": {
       "@/*": ["./src/*"],
-      "@/plane-live/*": ["./src/ce/*"]
+      "@/operoz-live/*": ["./src/ce/*"]
     },
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true

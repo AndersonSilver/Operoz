@@ -5,7 +5,7 @@ import sys
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Run Plane tests")
+    parser = argparse.ArgumentParser(description="Run Operoz tests")
     parser.add_argument("-u", "--unit", action="store_true", help="Run unit tests only")
     parser.add_argument("-c", "--contract", action="store_true", help="Run contract tests only")
     parser.add_argument("-s", "--smoke", action="store_true", help="Run smoke tests only")
@@ -32,7 +32,7 @@ def main():
 
     # Add coverage
     if args.coverage:
-        cmd.extend(["--cov=plane", "--cov-report=term", "--cov-report=html"])
+        cmd.extend(["--cov=operoz", "--cov-report=term", "--cov-report=html"])
 
     # Add parallel
     if args.parallel:

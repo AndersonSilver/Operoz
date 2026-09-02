@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IFavorite } from "@operoz/types";
 // components
 import { getPageName } from "@operoz/utils";
@@ -12,9 +12,9 @@ import { useCycle } from "@/hooks/store/use-cycle";
 import { useModule } from "@/hooks/store/use-module";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectView } from "@/hooks/store/use-project-view";
-// plane web hooks
-import { EPageStoreType, usePage } from "@/plane-web/hooks/store";
-import { useAdditionalFavoriteItemDetails } from "@/plane-web/hooks/use-additional-favorite-item-details";
+// operoz web hooks
+import { EPageStoreType, usePage } from "@/operoz-web/hooks/store";
+import { useAdditionalFavoriteItemDetails } from "@/operoz-web/hooks/use-additional-favorite-item-details";
 
 export const useFavoriteItemDetails = (workspaceSlug: string, favorite: IFavorite) => {
   const {

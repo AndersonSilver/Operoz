@@ -1,5 +1,5 @@
 import { Download } from "lucide-react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 
 type Props = {

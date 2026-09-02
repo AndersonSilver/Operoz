@@ -1,6 +1,6 @@
 import type { MutableRefObject } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TIssue, IIssueDisplayProperties, IIssueMap } from "@operoz/types";
 // local imports
 import type { TRenderQuickActions } from "../list/list-view-types";

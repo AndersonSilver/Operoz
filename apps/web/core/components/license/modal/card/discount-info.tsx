@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import type { TBillingFrequency } from "@operoz/types";
 import { EProductSubscriptionEnum } from "@operoz/types";
 import { cn } from "@operoz/utils";

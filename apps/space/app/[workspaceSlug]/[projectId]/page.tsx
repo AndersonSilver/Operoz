@@ -1,5 +1,5 @@
 import { redirect } from "react-router";
-// plane imports
+// operoz imports
 import { SitesProjectPublishService } from "@operoz/services";
 import type { TProjectPublishSettings } from "@operoz/types";
 // components

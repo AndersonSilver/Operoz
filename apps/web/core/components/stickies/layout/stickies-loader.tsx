@@ -1,4 +1,4 @@
-// plane ui
+// operoz ui
 import { Loader } from "@operoz/ui";
 
 export function StickiesLoader() {

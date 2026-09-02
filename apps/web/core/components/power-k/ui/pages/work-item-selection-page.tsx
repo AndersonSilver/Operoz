@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-// plane imports
+// operoz imports
 // import { useTranslation } from "@operoz/i18n";
 import type { TIssueEntityData, TIssueSearchResponse, TActivityEntityData } from "@operoz/types";
 // import { generateWorkItemLink } from "@operoz/utils";
@@ -10,8 +10,8 @@ import type { TIssueEntityData, TIssueSearchResponse, TActivityEntityData } from
 // import { useCommandPalette } from "@/hooks/store/use-command-palette";
 // import { usePowerK } from "@/hooks/store/use-power-k";
 // import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-// import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web imports
+// import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 import { WorkspaceService } from "@/services/workspace.service";
 
 const workspaceService = new WorkspaceService();
@@ -31,7 +31,7 @@ export function WorkItemSelectionPage(props: Props) {
   const { workspaceSlug, projectId, debouncedSearchTerm, isWorkspaceLevel = false } = props;
   // router
   // const router = useAppRouter();
-  // plane hooks
+  // operoz hooks
   // const { t } = useTranslation();
   // store hooks
   // const { togglePowerKModal } = usePowerK();

@@ -2,7 +2,7 @@ import type { Editor } from "@tiptap/core";
 
 import { useCallback, useRef, useState } from "react";
 import { LinkIcon, TrashIcon, CheckIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // constants
 import { CORE_EXTENSIONS } from "@/constants/extension";

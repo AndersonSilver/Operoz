@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-// plane imports
+// operoz imports
 import type { TBottomSectionConfig, TContentVisibility, TTopSectionConfig } from "@operoz/types";
 import { cn } from "../../utils/classname";
 

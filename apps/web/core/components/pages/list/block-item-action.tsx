@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Earth, Info, Minus } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { LockIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { Avatar, FavoriteStar } from "@operoz/ui";
@@ -9,8 +9,8 @@ import { renderFormattedDate, getFileURL } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { usePageOperations } from "@/hooks/use-page-operations";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

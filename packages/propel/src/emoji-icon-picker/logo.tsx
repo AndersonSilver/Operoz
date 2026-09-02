@@ -2,7 +2,7 @@
 // should be after the imported here rather than some below helper functions as it is in the original file
 
 import useFontFaceObserver from "use-font-face-observer";
-// plane imports
+// operoz imports
 import type { TLogoProps } from "@operoz/types";
 // local imports
 import { getEmojiSize, stringToEmoji } from "./helper";

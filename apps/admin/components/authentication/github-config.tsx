@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 // icons
 import { Settings2 } from "lucide-react";
-// plane internal packages
+// operoz internal packages
 import { getButtonStyling } from "@operoz/propel/button";
 import type { TInstanceAuthenticationMethodKeys } from "@operoz/types";
 import { ToggleSwitch } from "@operoz/ui";

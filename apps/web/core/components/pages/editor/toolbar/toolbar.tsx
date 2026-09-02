@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { FileCode2 } from "lucide-react";
 import type { EditorRefApi } from "@operoz/editor";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CheckIcon, ChevronDownIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";

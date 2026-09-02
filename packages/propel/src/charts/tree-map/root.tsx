@@ -1,6 +1,6 @@
 import React from "react";
 import { Treemap, ResponsiveContainer, Tooltip } from "recharts";
-// plane imports
+// operoz imports
 import type { TreeMapChartProps } from "@operoz/types";
 // local imports
 import { cn } from "../../utils/classname";

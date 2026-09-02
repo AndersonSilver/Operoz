@@ -1,4 +1,4 @@
-// plane package imports
+// operoz package imports
 import type { ChartXAxisProperty } from "@operoz/types";
 import { CustomSelect } from "@operoz/ui";
 

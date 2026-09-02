@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { SyntheticEvent } from "react";
 import { useMemo } from "react";
 import { observer } from "mobx-react";

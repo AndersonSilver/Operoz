@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TCycleFilters, TCycleGroups } from "@operoz/types";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";

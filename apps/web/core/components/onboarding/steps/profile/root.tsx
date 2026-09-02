@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import { E_PASSWORD_STRENGTH } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";

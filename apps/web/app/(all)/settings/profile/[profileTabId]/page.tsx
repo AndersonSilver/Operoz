@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { PROFILE_SETTINGS_TABS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { TProfileSettingsTabs } from "@operoz/types";

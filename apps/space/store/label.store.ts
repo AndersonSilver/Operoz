@@ -1,6 +1,6 @@
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import { SitesLabelService } from "@operoz/services";
 import type { IIssueLabel } from "@operoz/types";
 // store

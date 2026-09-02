@@ -3,9 +3,9 @@ import type { PageProps } from "@react-pdf/renderer";
 import { pdf } from "@react-pdf/renderer";
 import { Controller, useForm } from "react-hook-form";
 import { useParams } from "react-router";
-// plane editor
+// operoz editor
 import type { EditorRefApi } from "@operoz/editor";
-// plane ui
+// operoz ui
 import { Button } from "@operoz/propel/button";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { CustomSelect, EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";

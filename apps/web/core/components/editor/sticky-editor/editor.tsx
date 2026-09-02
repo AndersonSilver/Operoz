@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-// plane constants
+// operoz constants
 import type { EIssueCommentAccessSpecifier } from "@operoz/constants";
-// plane editor
+// operoz editor
 import { LiteTextEditorWithRef } from "@operoz/editor";
 import type { EditorRefApi, ILiteTextEditorProps, TFileHandler } from "@operoz/editor";
 // components
@@ -11,8 +11,8 @@ import { cn } from "@operoz/utils";
 // hooks
 import { useEditorConfig } from "@/hooks/editor";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web hooks
-import { useEditorFlagging } from "@/plane-web/hooks/use-editor-flagging";
+// operoz web hooks
+import { useEditorFlagging } from "@/operoz-web/hooks/use-editor-flagging";
 import { StickyEditorToolbar } from "./toolbar";
 
 interface StickyEditorWrapperProps extends Omit<

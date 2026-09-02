@@ -6,7 +6,7 @@ import type { Express, Request, Response, Router } from "express";
 import express from "express";
 import expressWs from "express-ws";
 import helmet from "helmet";
-// plane imports
+// operoz imports
 import { registerController } from "@operoz/decorators";
 import { logger, loggerMiddleware } from "@operoz/logger";
 // controllers

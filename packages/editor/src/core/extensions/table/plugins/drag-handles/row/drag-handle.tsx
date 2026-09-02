@@ -13,7 +13,7 @@ import {
 import type { Editor } from "@tiptap/core";
 import { Ellipsis } from "lucide-react";
 import { useCallback, useEffect, useRef, useState } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // constants
 import { CORE_EXTENSIONS } from "@/constants/extension";

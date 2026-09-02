@@ -2,12 +2,12 @@ import { useCallback, useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import useSWR from "swr";
-// plane types
+// operoz types
 import { getButtonStyling } from "@operoz/propel/button";
 import type { TSearchEntityRequestPayload, TWebhookConnectionQueryParams } from "@operoz/types";
 import { EFileAssetType } from "@operoz/types";
-// plane ui
-// plane utils
+// operoz ui
+// operoz utils
 import { cn } from "@operoz/utils";
 // components
 import { BOARD_HUB_PROJECT_WORK_SURFACE_INNER } from "@/components/board/board-hub-background";
@@ -22,9 +22,9 @@ import { useEditorConfig } from "@/hooks/editor";
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web hooks
-import { EPageStoreType, usePage, usePageStore } from "@/plane-web/hooks/store";
-// plane web services
+// operoz web hooks
+import { EPageStoreType, usePage, usePageStore } from "@/operoz-web/hooks/store";
+// operoz web services
 import { WorkspaceService } from "@/services/workspace.service";
 // services
 import { ProjectPageService, ProjectPageVersionService } from "@/services/page";

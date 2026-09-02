@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";

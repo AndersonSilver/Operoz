@@ -8,7 +8,7 @@ import { useBoardCustomField } from "@/hooks/store/use-board-custom-field";
 import { useBoardIssueType } from "@/hooks/store/use-board-issue-type";
 import { useUser } from "@/hooks/store/user/user-user";
 import { BoardCustomFieldService } from "@/services/board/board-custom-field.service";
-import type { TIssuePropertyValues } from "@/plane-web/types/issue-types";
+import type { TIssuePropertyValues } from "@/operoz-web/types/issue-types";
 
 export type TIssueModalProviderProps = {
   templateId?: string;

@@ -14,7 +14,7 @@ export default {
     },
     not_found: {
       title: "糟糕!似乎出了點問題",
-      description: "我們目前無法取得您的 Plane 帳戶。這可能是網路錯誤。",
+      description: "我們目前無法取得您的 Operoz 帳戶。這可能是網路錯誤。",
       cta_primary: "嘗試重新載入",
     },
     server_error: {

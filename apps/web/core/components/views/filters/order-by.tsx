@@ -1,5 +1,5 @@
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
-// plane imports
+// operoz imports
 import { VIEW_SORT_BY_OPTIONS, VIEW_SORTING_KEY_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { getButtonStyling } from "@operoz/propel/button";

@@ -53,7 +53,7 @@ const workSpaceService = new WorkspaceService();
 
 export const AuthHeader = observer(function AuthHeader(props: TAuthHeader) {
   const { workspaceSlug, invitationId, invitationEmail, authMode, currentAuthStep } = props;
-  // plane imports
+  // operoz imports
   const { t } = useTranslation();
 
   const { data: invitation, isLoading } = useSWR(

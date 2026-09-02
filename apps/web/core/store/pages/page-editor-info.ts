@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import type { EditorRefApi, TEditorAsset } from "@operoz/editor";
 
 export type TPageEditorInstance = {

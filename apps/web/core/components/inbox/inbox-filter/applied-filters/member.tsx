@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
 
-// plane types
+// operoz types
 import { CloseIcon } from "@operoz/propel/icons";
 import type { TInboxIssueFilterMemberKeys } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Avatar, Tag } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";

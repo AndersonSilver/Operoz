@@ -3,8 +3,8 @@ import { AlertTriangle } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import type { IWorkspace } from "@operoz/types";
 import { useUser } from "@/hooks/store/user";
-import { DeleteWorkspaceSection } from "@/plane-web/components/workspace/delete-workspace-section";
-import { TransferOwnershipSection } from "@/plane-web/components/workspace/transfer-ownership-section";
+import { DeleteWorkspaceSection } from "@/operoz-web/components/workspace/delete-workspace-section";
+import { TransferOwnershipSection } from "@/operoz-web/components/workspace/transfer-ownership-section";
 import "./workspace-general-settings.css";
 
 type Props = {

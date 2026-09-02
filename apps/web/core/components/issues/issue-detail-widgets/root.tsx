@@ -1,5 +1,5 @@
 import React from "react";
-// plane imports
+// operoz imports
 import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 // local imports
 import { IssueDetailWidgetActionButtons } from "./action-buttons";

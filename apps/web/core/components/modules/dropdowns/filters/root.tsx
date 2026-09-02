@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
 import type { TModuleStatus } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { CloseIcon, SearchIcon } from "@operoz/propel/icons";
 import type { TModuleDisplayFilters, TModuleFilters } from "@operoz/types";
 // components

@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useForm, Controller } from "react-hook-form";
-// plane imports
+// operoz imports
 import { EIssueCommentAccessSpecifier } from "@operoz/constants";
 import type { EditorRefApi } from "@operoz/editor";
 import type { TIssueComment, TCommentsOperations } from "@operoz/types";

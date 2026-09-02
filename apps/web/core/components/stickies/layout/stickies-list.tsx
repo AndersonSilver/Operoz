@@ -9,7 +9,7 @@ import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import Masonry from "react-masonry-component";
 
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PlusIcon } from "@operoz/propel/icons";
@@ -47,7 +47,7 @@ export const StickiesList = observer(function StickiesList(props: TProps) {
   const pathname = usePathname();
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { getWorkspaceStickyIds, toggleShowNewSticky, searchQuery, loader } = useSticky();

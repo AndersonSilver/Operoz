@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 // api service
 import type { TDuplicateAssetData, TDuplicateAssetResponse } from "@operoz/types";
@@ -7,7 +7,7 @@ import { APIService } from "../api.service";
 import { getAssetIdFromUrl } from "./helper";
 
 /**
- * Service class for managing file operations within plane applications.
+ * Service class for managing file operations within operoz applications.
  * Extends APIService to handle HTTP requests to the file-related endpoints.
  * @extends {APIService}
  */

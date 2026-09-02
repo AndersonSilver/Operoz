@@ -3,7 +3,7 @@ import { useRef } from "react";
 import { observer } from "mobx-react";
 import { usePathname, useSearchParams } from "next/navigation";
 import { CheckIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TCycleGroups } from "@operoz/types";
 import { CircularProgressIndicator } from "@operoz/ui";
 // components

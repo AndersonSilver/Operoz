@@ -1,7 +1,7 @@
-// plane imports
+// operoz imports
 import { ScrollArea } from "@operoz/propel/scrollarea";
-// plane web imports
-import { PageNavigationPaneOutlineTabEmptyState } from "@/plane-web/components/pages/navigation-pane/tab-panels/empty-states/outline";
+// operoz web imports
+import { PageNavigationPaneOutlineTabEmptyState } from "@/operoz-web/components/pages/navigation-pane/tab-panels/empty-states/outline";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

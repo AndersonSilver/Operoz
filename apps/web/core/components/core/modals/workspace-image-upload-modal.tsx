@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useDropzone } from "react-dropzone";
-// plane imports
+// operoz imports
 import { ACCEPTED_AVATAR_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { UserCirclePropertyIcon } from "@operoz/propel/icons";

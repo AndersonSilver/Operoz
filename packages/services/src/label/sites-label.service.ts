@@ -1,14 +1,14 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import type { IIssueLabel } from "@operoz/types";
 // api service
 import { APIService } from "../api.service";
 
 /**
- * Service class for managing labels within plane sites application.
+ * Service class for managing labels within operoz sites application.
  * Extends APIService to handle HTTP requests to the label-related endpoints.
  * @extends {APIService}
- * @remarks This service is only available for plane sites
+ * @remarks This service is only available for operoz sites
  */
 export class SitesLabelService extends APIService {
   constructor(BASE_URL?: string) {

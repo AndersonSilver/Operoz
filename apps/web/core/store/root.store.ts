@@ -1,19 +1,19 @@
 import { enableStaticRendering } from "mobx-react";
-// plane imports
+// operoz imports
 import { DEFAULT_LOCALE, LANGUAGE_STORAGE_KEY } from "@operoz/i18n";
 import type { IWorkItemFilterStore } from "@operoz/shared-state";
 import { WorkItemFilterStore } from "@operoz/shared-state";
-// plane web store
-import type { IAnalyticsStore } from "@/plane-web/store/analytics.store";
-import { AnalyticsStore } from "@/plane-web/store/analytics.store";
-import type { ICommandPaletteStore } from "@/plane-web/store/command-palette.store";
-import { CommandPaletteStore } from "@/plane-web/store/command-palette.store";
-import { PowerKStore } from "@/plane-web/store/power-k.store";
-import type { IPowerKStore } from "@/plane-web/store/power-k.store";
-import type { RootStore } from "@/plane-web/store/root.store";
-import type { IStateStore } from "@/plane-web/store/state.store";
-import { StateStore } from "@/plane-web/store/state.store";
-import { WorkspaceRootStore } from "@/plane-web/store/workspace";
+// operoz web store
+import type { IAnalyticsStore } from "@/operoz-web/store/analytics.store";
+import { AnalyticsStore } from "@/operoz-web/store/analytics.store";
+import type { ICommandPaletteStore } from "@/operoz-web/store/command-palette.store";
+import { CommandPaletteStore } from "@/operoz-web/store/command-palette.store";
+import { PowerKStore } from "@/operoz-web/store/power-k.store";
+import type { IPowerKStore } from "@/operoz-web/store/power-k.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
+import type { IStateStore } from "@/operoz-web/store/state.store";
+import { StateStore } from "@/operoz-web/store/state.store";
+import { WorkspaceRootStore } from "@/operoz-web/store/workspace";
 // stores
 import type { ICycleStore } from "./cycle.store";
 import { CycleStore } from "./cycle.store";

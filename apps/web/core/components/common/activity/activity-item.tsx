@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 
-import type { TProjectActivity } from "@/plane-web/types";
+import type { TProjectActivity } from "@/operoz-web/types";
 import { ActivityBlockComponent } from "./activity-block";
 import { iconsMap, messages } from "./helper";
 

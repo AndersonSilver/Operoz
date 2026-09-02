@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Avatar } from "@operoz/ui";
 import { calculateTimeAgoShort, getFileURL, renderFormattedDate } from "@operoz/utils";

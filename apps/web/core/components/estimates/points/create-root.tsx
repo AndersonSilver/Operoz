@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { estimateCount } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { PlusIcon } from "@operoz/propel/icons";

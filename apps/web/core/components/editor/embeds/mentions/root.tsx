@@ -1,6 +1,6 @@
-// plane web imports
-import type { TEditorMentionComponentProps } from "@/plane-web/components/editor/embeds/mentions";
-import { EditorAdditionalMentionsRoot } from "@/plane-web/components/editor/embeds/mentions";
+// operoz web imports
+import type { TEditorMentionComponentProps } from "@/operoz-web/components/editor/embeds/mentions";
+import { EditorAdditionalMentionsRoot } from "@/operoz-web/components/editor/embeds/mentions";
 // local imports
 import { EditorCircleMention } from "./circle";
 import { EditorUserMention } from "./user";

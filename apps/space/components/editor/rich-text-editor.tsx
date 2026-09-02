@@ -1,5 +1,5 @@
 import { forwardRef } from "react";
-// plane imports
+// operoz imports
 import { RichTextEditorWithRef } from "@operoz/editor";
 import type { EditorRefApi, IRichTextEditorProps, TFileHandler } from "@operoz/editor";
 import type { MakeOptional } from "@operoz/types";
@@ -8,7 +8,7 @@ import { getEditorFileHandlers } from "@/helpers/editor.helper";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web imports
+// operoz web imports
 import { useEditorFlagging } from "@/hooks/use-editor-flagging";
 // local imports
 import { EditorMentionsRoot } from "./embeds/mentions";

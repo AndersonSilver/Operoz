@@ -2,7 +2,7 @@ import type { CSSProperties } from "react";
 import { extractInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree-item";
 import { clone, isNil, pull, uniq, concat } from "lodash-es";
 import scrollIntoView from "smooth-scroll-into-view-if-needed";
-// plane types
+// operoz types
 import { EIconSize, ISSUE_PRIORITIES, STATE_GROUPS } from "@operoz/constants";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import type { ISvgIcons } from "@operoz/propel/icons";
@@ -22,18 +22,18 @@ import type {
   TGetColumns,
 } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Avatar } from "@operoz/ui";
 import { renderFormattedDate, getFileURL } from "@operoz/utils";
 // helpers
 // store
 import { store } from "@/lib/store-context";
-// plane web store
+// operoz web store
 import {
   getScopeMemberIds,
   getTeamProjectColumns,
   SpreadSheetPropertyIconMap,
-} from "@/plane-web/components/issues/issue-layouts/utils";
+} from "@/operoz-web/components/issues/issue-layouts/utils";
 // store
 import { ISSUE_FILTER_DEFAULT_DATA } from "@/store/issue/helpers/base-issues.store";
 import { DEFAULT_DISPLAY_PROPERTIES } from "@/store/issue/issue-details/sub_issues_filter.store";

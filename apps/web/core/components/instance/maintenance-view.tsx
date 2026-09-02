@@ -2,7 +2,7 @@ import { OperozLockup } from "@operoz/propel/icons";
 // layouts
 import DefaultLayout from "@/layouts/default-layout";
 // components
-import { MaintenanceMessage } from "@/plane-web/components/instance";
+import { MaintenanceMessage } from "@/operoz-web/components/instance";
 import { MaintenanceStatusIllustration } from "./maintenance-status-illustration";
 
 export function MaintenanceView() {

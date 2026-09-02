@@ -1,6 +1,6 @@
 import { useRef } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CopyLinkIcon } from "@operoz/propel/icons";
 import { IconButton } from "@operoz/propel/icon-button";

@@ -2,7 +2,7 @@ import type { FormEvent } from "react";
 import { useState } from "react";
 import type { LucideIcon } from "lucide-react";
 
-// plane imports
+// operoz imports
 import { ETabIndices, EPageAccess } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";

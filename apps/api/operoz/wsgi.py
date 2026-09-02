@@ -1,5 +1,5 @@
 """
-WSGI config for plane project.
+WSGI config for operoz project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IWorkspaceView } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";

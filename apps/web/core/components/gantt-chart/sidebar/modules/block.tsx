@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// Plane
+// Operoz
 import { Row } from "@operoz/ui";
 // components
 import { cn } from "@operoz/utils";

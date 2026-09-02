@@ -5,7 +5,7 @@ import { Controller, useForm } from "react-hook-form";
 import { Info, SquareUser } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
 import { MODULE_STATUS, EUserPermissions, EUserPermissionsLevel, EEstimateSystem } from "@operoz/constants";
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import {
   PlusIcon,
@@ -18,7 +18,7 @@ import {
 } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { ILinkDetails, IModule, ModuleLink } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Loader, CustomSelect, TextArea } from "@operoz/ui";
 // components
 // helpers
@@ -30,7 +30,7 @@ import { CreateUpdateModuleLinkModal, ModuleAnalyticsProgress, ModuleLinksList }
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useModule } from "@/hooks/store/use-module";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web constants
+// operoz web constants
 const defaultValues: Partial<IModule> = {
   lead_id: "",
   member_ids: [],

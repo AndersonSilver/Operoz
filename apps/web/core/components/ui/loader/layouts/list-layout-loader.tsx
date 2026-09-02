@@ -1,8 +1,8 @@
 import { Fragment, forwardRef } from "react";
 import { range } from "lodash-es";
-// plane ui
+// operoz ui
 import { Row } from "@operoz/ui";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 import { getRandomInt, getRandomLength } from "../utils";
 

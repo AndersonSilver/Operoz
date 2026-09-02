@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 // icons
 import { Eye, EyeOff } from "lucide-react";
-// plane internal packages
+// operoz internal packages
 import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { AuthService } from "@operoz/services";

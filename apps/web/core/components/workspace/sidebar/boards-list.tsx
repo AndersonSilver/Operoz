@@ -12,7 +12,7 @@ import { IconButton } from "@operoz/propel/icon-button";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { Loader } from "@operoz/ui";
 import { cn, copyUrlToClipboard, orderJoinedProjects } from "@operoz/utils";
-import type { TProject } from "@/plane-web/types";
+import type { TProject } from "@/operoz-web/types";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { CreateBoardModal } from "@/components/board/create-board-modal";
 import { useBoard } from "@/hooks/store/use-board";

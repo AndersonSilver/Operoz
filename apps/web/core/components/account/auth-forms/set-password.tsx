@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 // icons
 import { Eye, EyeOff } from "lucide-react";
-// plane imports
+// operoz imports
 import { E_PASSWORD_STRENGTH } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
@@ -53,7 +53,7 @@ export const SetPasswordForm = observer(function SetPasswordForm() {
   const [csrfToken, setCsrfToken] = useState<string | undefined>(undefined);
   const [isPasswordInputFocused, setIsPasswordInputFocused] = useState(false);
   const [isRetryPasswordInputFocused, setIsRetryPasswordInputFocused] = useState(false);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { data: user, handleSetPassword } = useUser();

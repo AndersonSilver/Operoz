@@ -2,19 +2,19 @@ import React from "react";
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareUser } from "lucide-react";
-// plane types
+// operoz types
 import { EEstimateSystem } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { MembersPropertyIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import type { ICycle } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Avatar, AvatarGroup, TextArea } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useMember } from "@/hooks/store/use-member";
-// plane web constants
+// operoz web constants
 
 type Props = {
   projectId: string;

@@ -1,5 +1,5 @@
 import React from "react";
-// plane imports
+// operoz imports
 import { CheckIcon } from "@operoz/propel/icons";
 
 type Props = {

@@ -29,7 +29,7 @@ from bs4 import BeautifulSoup
 
 from operoz.bgtasks.email_notification_task import stack_email_notification
 
-# Activity fields Plane historically skipped for subscriber issue notifications (unless workspace enables extended).
+# Activity fields Operoz historically skipped for subscriber issue notifications (unless workspace enables extended).
 SKIP_EXTENDED_ISSUE_ACTIVITY_FIELDS = frozenset(("cycles", "modules", "reaction", "vote", "draft", "intake"))
 
 
@@ -116,14 +116,14 @@ def extract_mentions_as_subscribers(project_id, issue_id, mentions):
 # Expande uma menção de círculo (board_circle) na lista de IDs de usuário dos seus membros.
 def _expand_circle_mention(circle_id):
     return list(
-        BoardCircleMember.objects.filter(circle_id=circle_id, deleted_at__isnull=True).values_list(
-            "user_id", flat=True
-        )
+        BoardCircleMember.objects.filter(circle_id=circle_id, deleted_at__isnull=True).values_list("user_id", flat=True)
     )
 
 
 def _extract_mention_ids_from_soup(soup):
-    mentions = [tag["entity_identifier"] for tag in soup.find_all("mention-component", attrs={"entity_name": "user_mention"})]
+    mentions = [
+        tag["entity_identifier"] for tag in soup.find_all("mention-component", attrs={"entity_name": "user_mention"})
+    ]
     circle_tags = soup.find_all("mention-component", attrs={"entity_name": "board_circle"})
     for circle_tag in circle_tags:
         mentions.extend(_expand_circle_mention(circle_tag["entity_identifier"]))

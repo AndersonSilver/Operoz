@@ -1,6 +1,6 @@
 import { useCallback, useRef } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";

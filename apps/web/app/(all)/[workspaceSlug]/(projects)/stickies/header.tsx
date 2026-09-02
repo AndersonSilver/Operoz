@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 import { RecentStickyIcon } from "@operoz/propel/icons";
 import { Breadcrumbs, Header } from "@operoz/ui";

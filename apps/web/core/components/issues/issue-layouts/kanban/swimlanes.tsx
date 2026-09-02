@@ -1,7 +1,7 @@
 import type { MutableRefObject } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type {
   GroupByColumnTypes,
   IGroupByColumn,
@@ -17,8 +17,8 @@ import type {
 import { Row } from "@operoz/ui";
 // hooks
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-// plane web imports
-import { useWorkFlowFDragNDrop } from "@/plane-web/components/workflow";
+// operoz web imports
+import { useWorkFlowFDragNDrop } from "@/operoz-web/components/workflow";
 // local imports
 import type { TRenderQuickActions } from "../list/list-view-types";
 import type { GroupDropLocation } from "../utils";

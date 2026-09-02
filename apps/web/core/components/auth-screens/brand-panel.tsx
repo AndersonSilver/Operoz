@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { BarChart3, Layers, Zap } from "lucide-react";
-import { PlaneLockup } from "@operoz/propel/icons";
+import { OperozLockup } from "@operoz/propel/icons";
 
 const features = [
   {
@@ -45,7 +45,7 @@ export function AuthBrandPanel() {
           href="/"
           className="focus-visible:ring-accent-primary focus-visible:ring-offset-surface-1 inline-flex rounded-lg transition-opacity outline-none hover:opacity-90 focus-visible:ring-2 focus-visible:ring-offset-2"
         >
-          <PlaneLockup height={48} className="w-auto max-w-[300px]" />
+          <OperozLockup height={48} className="w-auto max-w-[300px]" />
         </Link>
       </div>
 

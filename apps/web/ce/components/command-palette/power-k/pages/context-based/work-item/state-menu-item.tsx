@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane types
+// operoz types
 import { StateGroupIcon } from "@operoz/propel/icons";
 import type { IState } from "@operoz/types";
 // components

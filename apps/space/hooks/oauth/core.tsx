@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import { API_BASE_URL } from "@operoz/constants";

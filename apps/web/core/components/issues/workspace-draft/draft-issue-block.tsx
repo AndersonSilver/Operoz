@@ -3,7 +3,7 @@ import { omit } from "lodash-es";
 import { observer } from "mobx-react";
 import { SquareStackIcon } from "lucide-react";
 import { CopyIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
-// plane utils
+// operoz utils
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TWorkspaceDraftIssue } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";
@@ -14,8 +14,8 @@ import { cn } from "@operoz/utils";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useProject } from "@/hooks/store/use-project";
 import { useWorkspaceDraftIssues } from "@/hooks/store/workspace-draft";
-// plane-web imports
-import { IssueTypeIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz-web imports
+import { IssueTypeIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // local imports
 import { IdentifierText } from "../issue-detail/identifier-text";
 import { CreateUpdateIssueModal } from "../issue-modal/modal";

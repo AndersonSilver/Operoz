@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { substringMatch } from "@operoz/utils";
 // components

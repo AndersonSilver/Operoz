@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ENotificationFilterType, FILTER_TYPE_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";

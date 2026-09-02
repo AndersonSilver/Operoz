@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type {
   IFilterOption,
   TFilterProperty,

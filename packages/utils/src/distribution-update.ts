@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { get, set } from "lodash-es";
-// plane imports
+// operoz imports
 import { COMPLETED_STATE_GROUPS, STATE_DISTRIBUTION } from "@operoz/constants";
 import type { ICycle, IEstimatePoint, IModule, IState, TIssue } from "@operoz/types";
 // helper

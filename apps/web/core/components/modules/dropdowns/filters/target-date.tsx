@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane constants
+// operoz constants
 import { DATE_AFTER_FILTER_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components

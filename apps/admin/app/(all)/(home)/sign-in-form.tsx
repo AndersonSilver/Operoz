@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Eye, EyeOff } from "lucide-react";
-// plane internal packages
+// operoz internal packages
 import type { EAdminAuthErrorCodes, TAdminAuthErrorInfo } from "@operoz/constants";
 import { API_BASE_URL } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";

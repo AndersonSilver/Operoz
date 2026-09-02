@@ -6,22 +6,22 @@ import { WidgetSection } from "../shared/widget-section";
 
 const RELEASE_LINKS = [
   {
-    titleKey: "home.new_at_plane.items.boards.title",
-    descriptionKey: "home.new_at_plane.items.boards.description",
+    titleKey: "home.new_at_operoz.items.boards.title",
+    descriptionKey: "home.new_at_operoz.items.boards.description",
     href: "https://github.com/makeplane/plane/releases",
   },
   {
-    titleKey: "home.new_at_plane.items.home.title",
-    descriptionKey: "home.new_at_plane.items.home.description",
+    titleKey: "home.new_at_operoz.items.home.title",
+    descriptionKey: "home.new_at_operoz.items.home.description",
     href: "https://docs.plane.so",
   },
 ];
 
-export const NewAtPlaneWidget = observer(function NewAtPlaneWidget(_props: THomeWidgetProps) {
+export const NewAtOperozWidget = observer(function NewAtOperozWidget(_props: THomeWidgetProps) {
   const { t } = useTranslation();
 
   return (
-    <WidgetSection title={t("home.new_at_plane.title")}>
+    <WidgetSection title={t("home.new_at_operoz.title")}>
       <div className="flex flex-col gap-2">
         {RELEASE_LINKS.map((item) => (
           <Link

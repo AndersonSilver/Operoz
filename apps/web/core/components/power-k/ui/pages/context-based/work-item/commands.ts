@@ -12,7 +12,7 @@ import {
   UserPlus2,
   Users,
 } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, TrashIcon, ContrastIcon, DiceIcon, DoubleCircleIcon } from "@operoz/propel/icons";

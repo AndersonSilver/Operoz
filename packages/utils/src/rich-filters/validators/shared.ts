@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TFilterGroupNode, TFilterProperty } from "@operoz/types";
 // local imports
 import { getGroupChildren } from "../types/shared";

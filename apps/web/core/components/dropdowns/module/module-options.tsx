@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { createPortal } from "react-dom";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CheckIcon, SearchIcon, ModuleIcon } from "@operoz/propel/icons";
 import type { IModule } from "@operoz/types";
@@ -39,7 +39,7 @@ export const ModuleOptions = observer(function ModuleOptions(props: Props) {
   // states
   const [query, setQuery] = useState("");
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { isMobile } = usePlatformOS();

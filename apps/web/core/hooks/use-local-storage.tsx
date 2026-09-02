@@ -21,7 +21,7 @@ export const setValueIntoLocalStorage = (key: string, value: any) => {
   }
 };
 
-// TODO: Remove this once we migrate to the new hooks from plane/helpers
+// TODO: Remove this once we migrate to the new hooks from operoz/helpers
 const useLocalStorage = <T,>(key: string, initialValue: T) => {
   const [storedValue, setStoredValue] = useState<T | null>(() => getValueFromLocalStorage(key, initialValue));
 
