@@ -1,14 +1,14 @@
 import { useCallback } from "react";
-// plane editor
+// operoz editor
 import type { TMentionSection, TMentionSuggestion } from "@operoz/editor";
-// plane types
+// operoz types
 import type { TSearchEntities, TSearchEntityRequestPayload, TSearchResponse, TUserSearchResponse } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Avatar } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";
-// plane web hooks
-import { useAdditionalEditorMention } from "@/plane-web/hooks/use-additional-editor-mention";
+// operoz web hooks
+import { useAdditionalEditorMention } from "@/operoz-web/hooks/use-additional-editor-mention";
 
 type TArgs = {
   enableAdvancedMentions?: boolean;

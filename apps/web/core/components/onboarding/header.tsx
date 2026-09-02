@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { PlaneLockup, ChevronLeftIcon } from "@operoz/propel/icons";
+import { OperozLockup, ChevronLeftIcon } from "@operoz/propel/icons";
 import { EOnboardingSteps } from "@operoz/types";
 import { cn } from "@operoz/utils";
 import { useUser } from "@/hooks/store/user";
@@ -50,7 +50,7 @@ export const OnboardingHeader = observer(function OnboardingHeader(props: Onboar
             </button>
           )}
           <div className="flex flex-col gap-0.5 lg:hidden">
-            <PlaneLockup height={28} className="w-auto text-primary" />
+            <OperozLockup height={28} className="w-auto text-primary" />
             <span className="text-12 text-tertiary">
               Passo {currentStepNumber} de {totalSteps}
             </span>

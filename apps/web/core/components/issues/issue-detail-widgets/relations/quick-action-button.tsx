@@ -3,14 +3,14 @@ import { observer } from "mobx-react";
 
 import { useTranslation } from "@operoz/i18n";
 import { PlusIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TIssueServiceType } from "@operoz/types";
 import { CustomMenu } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// Plane-web
-import { useTimeLineRelationOptions } from "@/plane-web/components/relations";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+// Operoz-web
+import { useTimeLineRelationOptions } from "@/operoz-web/components/relations";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 
 type Props = {
   issueId: string;

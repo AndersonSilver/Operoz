@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TFilterProperty } from "@operoz/types";
 // local imports
 import type { TCreateDateFilterParams, TCreateFilterConfig } from "../shared";

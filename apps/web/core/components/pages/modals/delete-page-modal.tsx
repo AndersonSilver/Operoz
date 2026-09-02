@@ -6,10 +6,10 @@ import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { AlertModalCore } from "@operoz/ui";
 import { getPageName } from "@operoz/utils";
 // constants
-// plane web hooks
+// operoz web hooks
 import { useAppRouter } from "@/hooks/use-app-router";
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

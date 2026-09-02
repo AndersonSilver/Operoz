@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { LIVE_BASE_PATH, LIVE_BASE_URL } from "@operoz/constants";
 import { CollaborativeDocumentEditorWithRef } from "@operoz/editor";
 import type {
@@ -26,13 +26,13 @@ import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUser } from "@/hooks/store/user";
 import { usePageFilters } from "@/hooks/use-page-filters";
 import { useParseEditorContent } from "@/hooks/use-parse-editor-content";
-// plane web imports
+// operoz web imports
 import type { TCustomEventHandlers } from "@/hooks/use-realtime-page-events";
 import { useRealtimePageEvents } from "@/hooks/use-realtime-page-events";
-import { EditorAIMenu } from "@/plane-web/components/pages";
-import type { TExtendedEditorExtensionsConfig } from "@/plane-web/hooks/pages";
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { useEditorFlagging } from "@/plane-web/hooks/use-editor-flagging";
+import { EditorAIMenu } from "@/operoz-web/components/pages";
+import type { TExtendedEditorExtensionsConfig } from "@/operoz-web/hooks/pages";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { useEditorFlagging } from "@/operoz-web/hooks/use-editor-flagging";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

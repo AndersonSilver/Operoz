@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane constants
+// operoz constants
 import { PROJECT_CREATED_AT_FILTER_OPTIONS } from "@operoz/constants";
 // components
 import { isInDateFormat } from "@operoz/utils";

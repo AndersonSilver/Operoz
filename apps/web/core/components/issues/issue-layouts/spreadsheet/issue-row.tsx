@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { MoreHorizontal } from "lucide-react";
 import { SPREADSHEET_SELECT_GROUP } from "@operoz/constants";
-// plane helpers
+// operoz helpers
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { ChevronRightIcon } from "@operoz/propel/icons";
 // types
@@ -26,8 +26,8 @@ import { store } from "@/lib/store-context";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // local components
 import type { TRenderQuickActions } from "../list/list-view-types";
 import { isIssueNew } from "../utils";

@@ -7,9 +7,9 @@ import type { TPage, TPageFilters, TPageNavigationTabs } from "@operoz/types";
 import { EUserProjectRoles } from "@operoz/types";
 // helpers
 import { filterPagesByPageType, getPageName, orderPages, shouldFilterPage } from "@operoz/utils";
-// plane web constants
-// plane web store
-import type { RootStore } from "@/plane-web/store/root.store";
+// operoz web constants
+// operoz web store
+import type { RootStore } from "@/operoz-web/store/root.store";
 // services
 import { ProjectPageService } from "@/services/page";
 // store

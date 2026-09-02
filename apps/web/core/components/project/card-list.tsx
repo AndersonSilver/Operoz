@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, EUserPermissions } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
@@ -22,7 +22,7 @@ type TProjectCardListProps = {
 
 export const ProjectCardList = observer(function ProjectCardList(props: TProjectCardListProps) {
   const { totalProjectIds: totalProjectIdsProps, filteredProjectIds: filteredProjectIdsProps } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { toggleCreateProjectModal } = useCommandPalette();

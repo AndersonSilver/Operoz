@@ -28,7 +28,7 @@ import { useUserPermissions } from "@/hooks/store/user";
 import {
   issueFormControlBaseClass,
   issueFormControlBorderClass,
-} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+} from "@/operoz-web/components/issues/issue-modal/issue-form-field";
 import "./board-informations-settings.css";
 
 type Props = {

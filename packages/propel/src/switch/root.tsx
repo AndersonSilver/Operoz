@@ -54,6 +54,6 @@ function Switch({ value, onChange, label, size = "sm", disabled, className }: IT
   );
 }
 
-Switch.displayName = "plane-ui-switch";
+Switch.displayName = "operoz-ui-switch";
 
 export { Switch };

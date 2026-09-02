@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-// plane types
+// operoz types
 import { Button } from "@operoz/propel/button";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { ILinkDetails, ModuleLink } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Input, ModalCore } from "@operoz/ui";
 
 type Props = {

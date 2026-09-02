@@ -1,14 +1,14 @@
 import { useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { GripVertical } from "lucide-react";
-// plane imports
+// operoz imports
 import { EEstimateSystem, estimateCount } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EditIcon, TrashIcon } from "@operoz/propel/icons";
 import type { TEstimatePointsObject, TEstimateSystemKeys, TEstimateTypeErrorObject } from "@operoz/types";
 import { convertMinutesToHoursMinutesString } from "@operoz/utils";
-// plane web imports
-import { EstimatePointDelete } from "@/plane-web/components/estimates";
+// operoz web imports
+import { EstimatePointDelete } from "@/operoz-web/components/estimates";
 // local imports
 import { EstimatePointUpdate } from "./update";
 

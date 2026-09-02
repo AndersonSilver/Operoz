@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import type { Control, FormState } from "react-hook-form";
 import { Controller } from "react-hook-form";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 // types
 import { useTranslation } from "@operoz/i18n";
@@ -13,7 +13,7 @@ import { Input } from "@operoz/ui";
 import { cn, getTabIndex } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
-import { getIssueFormControlClass, IssueFormField } from "@/plane-web/components/issues/issue-modal/issue-form-field";
+import { getIssueFormControlClass, IssueFormField } from "@/operoz-web/components/issues/issue-modal/issue-form-field";
 
 type TIssueTitleInputProps = {
   control: Control<TIssue>;

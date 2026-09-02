@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-// plane imports
+// operoz imports
 import type { IWorkspaceMemberInvitation } from "@operoz/types";
 import { EOnboardingSteps } from "@operoz/types";
 // local components

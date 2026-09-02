@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane constants
+// operoz constants
 import { EIssueFilterType, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 // i18n
 import { useTranslation } from "@operoz/i18n";

@@ -14,7 +14,7 @@ import type { NodeViewProps } from "@tiptap/react";
 import { ExternalLink, FileCode2, SlidersHorizontal } from "lucide-react";
 import type { ChangeEvent, CSSProperties, MouseEvent, PointerEvent } from "react";
 import { useCallback, useEffect, useId, useRef, useState } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // constants
 import { ACCEPTED_HTML_DOCUMENT_MIME_TYPES } from "@/constants/config";
@@ -25,7 +25,13 @@ import { hasImageDuplicationFailed } from "@/extensions/custom-image/utils";
 import { useUploader } from "@/hooks/use-file-upload";
 // types
 import type { HtmlDocumentEmbedExtensionOptions, THtmlDocumentFrameLayout } from "../types";
-import { getHtmlDocumentFileMap, isLikelyHtmlFile, isSafeCssMinHeight, normalizeHtmlUploadFile, parseFrameLayoutAttr } from "../utils";
+import {
+  getHtmlDocumentFileMap,
+  isLikelyHtmlFile,
+  isSafeCssMinHeight,
+  normalizeHtmlUploadFile,
+  parseFrameLayoutAttr,
+} from "../utils";
 
 const HTML_DOCUMENT_FRAME_LAYOUT_OPTIONS: Array<{ value: THtmlDocumentFrameLayout; label: string }> = [
   { value: "standard", label: "Padrão" },

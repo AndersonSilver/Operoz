@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { STATE_GROUPS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PieChart } from "@operoz/propel/charts/pie-chart";

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { XCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { PROFILE_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { IApiToken } from "@operoz/types";

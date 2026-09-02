@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import type { Control, FieldArrayWithId, FormState, UseFormWatch } from "react-hook-form";
 import { useFieldArray, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import { EUserPermissions } from "@operoz/constants";
 
 type EmailRole = {

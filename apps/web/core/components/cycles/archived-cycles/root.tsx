@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 import type { TCycleFilters } from "@operoz/types";
@@ -19,7 +19,7 @@ import { ArchivedCyclesView } from "./view";
 export const ArchivedCycleLayoutRoot = observer(function ArchivedCycleLayoutRoot() {
   // router
   const { workspaceSlug, projectId } = useParams();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { fetchArchivedCycles, currentProjectArchivedCycleIds, loader } = useCycle();

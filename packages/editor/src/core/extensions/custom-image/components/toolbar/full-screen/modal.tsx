@@ -2,7 +2,7 @@ import { Download, Minus } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import ReactDOM from "react-dom";
 import { NewTabIcon, PlusIcon, CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 
 const MIN_ZOOM = 0.5;

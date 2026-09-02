@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TGroupedIssues, TIssue, TIssueMap, TPaginationData, ICalendarDate, ICalendarWeek } from "@operoz/types";
 import { cn, getOrderedDays, renderFormattedPayloadDate } from "@operoz/utils";
 // hooks

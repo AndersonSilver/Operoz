@@ -4,15 +4,15 @@ import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { ETabIndices } from "@operoz/constants";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 // types
 import type { ISearchIssueResponse, TIssue } from "@operoz/types";
 // helpers
 import { getTabIndex } from "@operoz/utils";
 // hooks
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 
 type TIssueParentTagProps = {
   control: Control<TIssue>;

@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import { ListFilter } from "lucide-react";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
-// plane helpers
+// operoz helpers
 // types
 import type { TCycleFilters } from "@operoz/types";
 import { cn, calculateTotalFilters } from "@operoz/utils";

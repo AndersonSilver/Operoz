@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-// plane imports
+// operoz imports
 import { SUPPORT_EMAIL } from "@operoz/constants";
 
 export enum EPageTypes {

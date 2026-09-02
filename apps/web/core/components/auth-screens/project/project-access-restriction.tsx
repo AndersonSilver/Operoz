@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
 
@@ -12,7 +12,7 @@ type TProps = {
 
 export const ProjectAccessRestriction = observer(function ProjectAccessRestriction(props: TProps) {
   const { isWorkspaceAdmin, handleJoinProject, isJoinButtonDisabled, errorStatusCode } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
 
   // Show join project screen if:

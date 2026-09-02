@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-// plane imports
+// operoz imports
 import type { TActivityFilters, TActivityFilterOption } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { IconButton } from "@operoz/propel/icon-button";

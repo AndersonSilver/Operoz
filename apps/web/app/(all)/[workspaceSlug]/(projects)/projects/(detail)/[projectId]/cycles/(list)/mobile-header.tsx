@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 // ui
 import type { ISvgIcons } from "@operoz/propel/icons";
 import { TimelineLayoutIcon, GridLayoutIcon, ListLayoutIcon } from "@operoz/propel/icons";
-// plane package imports
+// operoz package imports
 import type { TCycleLayoutOptions } from "@operoz/types";
 import { CustomMenu } from "@operoz/ui";
 // hooks

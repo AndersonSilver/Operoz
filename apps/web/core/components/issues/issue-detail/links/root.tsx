@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import { PlusIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TIssueLink } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";

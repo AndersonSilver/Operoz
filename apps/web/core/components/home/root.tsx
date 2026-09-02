@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { ContentWrapper } from "@operoz/ui";
 // hooks
 import { useHome } from "@/hooks/store/use-home";
 import { useUserProfile, useUser } from "@/hooks/store/user";
-// plane web imports
-import { HomePeekOverviewsRoot } from "@/plane-web/components/home";
-import { TourRoot } from "@/plane-web/components/onboarding/tour/root";
+// operoz web imports
+import { HomePeekOverviewsRoot } from "@/operoz-web/components/home";
+import { TourRoot } from "@/operoz-web/components/onboarding/tour/root";
 // local imports
 import { DashboardWidgets } from "./home-dashboard-widgets";
 import { UserGreetingsView } from "./user-greetings";

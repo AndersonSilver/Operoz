@@ -1,6 +1,6 @@
 import { CirclePlus, Mails } from "lucide-react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // components
 import { SettingsSidebarItem } from "@/components/settings/sidebar/item";

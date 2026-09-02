@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // icons
-// plane imports
+// operoz imports
 import { EIconSize } from "@operoz/constants";
 import { CloseIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type { IState } from "@operoz/types";

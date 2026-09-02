@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EIssueServiceType } from "@operoz/types";
 // components
 import type { TPowerKPageType } from "@/components/power-k/core/types";

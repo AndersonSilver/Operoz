@@ -1,6 +1,6 @@
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TPageFilterProps } from "@operoz/types";
 import { Tag } from "@operoz/ui";
 import { replaceUnderscoreIfSnakeCase } from "@operoz/utils";

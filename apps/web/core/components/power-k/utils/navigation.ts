@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { joinUrlPath } from "@operoz/utils";
 // local imports
 import type { TPowerKContext } from "../core/types";

@@ -8,11 +8,11 @@ class TestAuthSmoke:
     """Smoke tests for authentication endpoints"""
 
     @pytest.mark.django_db
-    def test_login_endpoint_available(self, plane_server, create_user, user_data):
+    def test_login_endpoint_available(self, operoz_server, create_user, user_data):
         """Test that the login endpoint is available and responds correctly"""
         # Get the sign-in URL
         relative_url = reverse("sign-in")
-        url = f"{plane_server.url}{relative_url}"
+        url = f"{operoz_server.url}{relative_url}"
 
         # 1. Test bad login - test with wrong password
         response = requests.post(url, data={"email": user_data["email"], "password": "wrong-password"})
@@ -88,10 +88,10 @@ class TestAuthSmoke:
 class TestHealthCheckSmoke:
     """Smoke test for health check endpoint"""
 
-    def test_healthcheck_endpoint(self, plane_server):
+    def test_healthcheck_endpoint(self, operoz_server):
         """Test that the health check endpoint is available and responds correctly"""
         # Make a request to the health check endpoint
-        response = requests.get(f"{plane_server.url}/")
+        response = requests.get(f"{operoz_server.url}/")
 
         # Should be OK
         assert response.status_code == 200, "Health check endpoint should return 200 OK"

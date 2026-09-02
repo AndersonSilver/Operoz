@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 // components
-import { ThemeSwitcher } from "@/plane-web/components/preferences/theme-switcher";
+import { ThemeSwitcher } from "@/operoz-web/components/preferences/theme-switcher";
 
 export const ProfileSettingsDefaultPreferencesList = observer(function ProfileSettingsDefaultPreferencesList() {
   return (

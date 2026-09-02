@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CycleIcon } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";

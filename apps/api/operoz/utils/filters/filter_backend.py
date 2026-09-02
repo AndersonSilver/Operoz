@@ -18,7 +18,7 @@ class ComplexFilterBackend(filters.BaseFilterBackend):
     Filter backend that supports complex JSON filtering.
 
     For full, up-to-date examples and usage, see the package README
-    at `plane/utils/filters/README.md`.
+    at `operoz/utils/filters/README.md`.
     """
 
     filter_param = "filters"

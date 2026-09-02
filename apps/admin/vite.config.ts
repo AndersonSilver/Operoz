@@ -5,7 +5,7 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { joinUrlPath } from "@operoz/utils";
 
 const envDir = path.resolve(__dirname);
-// Monorepo root (…/plane) — required so Vite can read workspace packages (e.g. @operoz/propel/dist) outside apps/admin
+// Monorepo root (…/operoz) — required so Vite can read workspace packages (e.g. @operoz/propel/dist) outside apps/admin
 const workspaceRoot = path.resolve(__dirname, "../..");
 
 /**

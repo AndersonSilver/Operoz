@@ -1,7 +1,7 @@
 import type { Hocuspocus } from "@hocuspocus/server";
 import type { Request } from "express";
 import type WebSocket from "ws";
-// plane imports
+// operoz imports
 import { Controller, WebSocket as WSDecorator } from "@operoz/decorators";
 import { logger } from "@operoz/logger";
 

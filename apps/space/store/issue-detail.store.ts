@@ -2,7 +2,7 @@ import { isEmpty, set } from "lodash-es";
 import { makeObservable, observable, action, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
 import { v4 as uuidv4 } from "uuid";
-// plane imports
+// operoz imports
 import { SitesFileService, SitesIssueService } from "@operoz/services";
 import type { TFileSignedURLResponse, TIssuePublicComment } from "@operoz/types";
 import { EFileAssetType } from "@operoz/types";

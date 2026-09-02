@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-// plane imports
+// operoz imports
 import { PROFILE_VIEWER_TAB, PROFILE_ADMINS_TAB } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Header, EHeaderVariant } from "@operoz/ui";

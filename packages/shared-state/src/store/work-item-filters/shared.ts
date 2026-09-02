@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { EIssuesStoreType, TWorkItemFilterExpression, TWorkItemFilterProperty } from "@operoz/types";
 // local imports
 import type { IFilterInstance } from "../rich-filters";

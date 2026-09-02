@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ISSUE_PRIORITY_FILTERS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PriorityIcon } from "@operoz/propel/icons";

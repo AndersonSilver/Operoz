@@ -37,8 +37,8 @@ import {
   setText,
   openEmojiPicker,
 } from "@/helpers/editor-commands";
-// plane editor extensions
-import { coreEditorAdditionalSlashCommandOptions } from "@/plane-editor/extensions";
+// operoz editor extensions
+import { coreEditorAdditionalSlashCommandOptions } from "@/operoz-editor/extensions";
 // types
 import type { CommandProps, ISlashCommandItem, TSlashCommandSectionKeys } from "@/types";
 // local types

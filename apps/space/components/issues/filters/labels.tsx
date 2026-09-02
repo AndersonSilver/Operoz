@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// plane imports
+// operoz imports
 import { Loader } from "@operoz/ui";
 // types
 import type { IIssueLabel } from "@/types/issue";

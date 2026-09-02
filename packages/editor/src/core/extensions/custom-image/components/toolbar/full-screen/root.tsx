@@ -1,6 +1,6 @@
 import { Maximize } from "lucide-react";
 import { useEffect, useState } from "react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 // local imports
 import { ImageFullScreenModal } from "./modal";

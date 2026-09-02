@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
 import type { TLogoProps } from "@operoz/types";
 import { cn } from "@operoz/utils";

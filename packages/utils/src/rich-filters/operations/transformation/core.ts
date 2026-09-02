@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TFilterExpression, TFilterGroupNode, TFilterProperty } from "@operoz/types";
 // local imports
 import { isConditionNode, isGroupNode } from "../../types/core";

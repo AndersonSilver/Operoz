@@ -25,7 +25,7 @@ import {
   TextQuote,
   Underline,
 } from "lucide-react";
-// plane imports
+// operoz imports
 import type { TCommandExtraProps, TEditorCommands, TEditorFontStyle } from "@operoz/editor";
 import { MonospaceIcon, SansSerifIcon, SerifIcon } from "@operoz/propel/icons";
 import { convertRemToPixel } from "@operoz/utils";

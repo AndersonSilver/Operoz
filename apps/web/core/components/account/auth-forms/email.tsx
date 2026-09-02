@@ -3,7 +3,7 @@ import { useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 // icons
 import { CircleAlert, XCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import type { IEmailCheckData } from "@operoz/types";
@@ -20,7 +20,7 @@ export const AuthEmailForm = observer(function AuthEmailForm(props: TAuthEmailFo
   // states
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [email, setEmail] = useState(defaultEmail);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   const emailError = useMemo(
     () => (email && !checkEmailValidity(email) ? { email: "auth.common.email.errors.invalid" } : undefined),

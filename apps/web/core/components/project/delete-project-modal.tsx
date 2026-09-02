@@ -1,7 +1,7 @@
 import { useParams } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
 import { AlertTriangle } from "lucide-react";
-// Plane imports
+// Operoz imports
 import { Button } from "@operoz/propel/button";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IProject } from "@operoz/types";

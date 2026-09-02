@@ -2,11 +2,11 @@ import { observer } from "mobx-react";
 
 import { MODULE_TRACKER_ELEMENTS } from "@operoz/constants";
 import { CopyIcon, EditIcon, TrashIcon } from "@operoz/propel/icons";
-// plane types
+// operoz types
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { ILinkDetails } from "@operoz/types";
-// plane ui
+// operoz ui
 import { getIconForLink, copyTextToClipboard, calculateTimeAgo } from "@operoz/utils";
 // helpers
 //

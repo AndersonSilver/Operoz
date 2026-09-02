@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
-// plane internal packages
+// operoz internal packages
 import { setPromiseToast } from "@operoz/propel/toast";
 import { Loader, ToggleSwitch } from "@operoz/ui";
 import { resolveGeneralTheme } from "@operoz/utils";
@@ -72,7 +72,7 @@ const InstanceGithubAuthenticationPage = observer(function InstanceGithubAuthent
       customHeader={
         <AuthenticationMethodCard
           name="GitHub"
-          description="Allow members to login or sign up to plane with their GitHub accounts."
+          description="Allow members to login or sign up to operoz with their GitHub accounts."
           icon={
             <img
               src={resolveGeneralTheme(resolvedTheme) === "dark" ? githubDarkModeImage : githubLightModeImage}

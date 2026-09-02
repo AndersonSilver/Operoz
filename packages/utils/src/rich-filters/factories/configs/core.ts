@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TFilterValue, TSupportedOperators, TBaseFilterFieldConfig } from "@operoz/types";
 import { FILTER_FIELD_TYPE } from "@operoz/types";
 // local imports

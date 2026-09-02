@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // assets
 import emptyLabel from "@/app/assets/empty-state/empty_label.svg?url";

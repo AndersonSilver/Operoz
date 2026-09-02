@@ -1,12 +1,12 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { PriorityIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type { TIssue, TStateGroups } from "@operoz/types";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-// plane web imports
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web imports
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // local imports
 import { WorkItemPreviewCardDate } from "./date";
 

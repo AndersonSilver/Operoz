@@ -1,7 +1,7 @@
 // constants
 import type { CORE_EXTENSIONS } from "@/constants/extension";
-// plane editor imports
-import type { TAdditionalEditorAsset } from "@/plane-editor/types/asset";
+// operoz editor imports
+import type { TAdditionalEditorAsset } from "@/operoz-editor/types/asset";
 
 export type TEditorImageAsset = {
   href: string;

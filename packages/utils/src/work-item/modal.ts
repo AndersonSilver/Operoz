@@ -1,5 +1,5 @@
 import { set } from "lodash-es";
-// plane imports
+// operoz imports
 import { DEFAULT_WORK_ITEM_FORM_VALUES } from "@operoz/constants";
 import type { IPartialProject, ISearchIssueResponse, IState, TIssue } from "@operoz/types";
 

@@ -11,7 +11,7 @@ import {
   Users,
   Webhook,
 } from "lucide-react";
-// plane imports
+// operoz imports
 import type { ISvgIcons } from "@operoz/propel/icons";
 import type { TWorkspaceSettingsTabs } from "@operoz/types";
 

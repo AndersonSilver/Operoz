@@ -1,6 +1,6 @@
 import type { TGanttViews } from "@operoz/types";
 
-const STORAGE_KEY = "plane_gantt_chart_view_preferences";
+const STORAGE_KEY = "operoz_gantt_chart_view_preferences";
 
 const VALID_VIEWS: TGanttViews[] = ["week", "month", "quarter"];
 

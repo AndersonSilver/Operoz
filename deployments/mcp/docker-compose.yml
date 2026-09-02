@@ -1,4 +1,4 @@
-# Operoz MCP — serviço HTTP separado do stack plane-app.
+# Operoz MCP — serviço HTTP separado do stack operoz-app.
 # Uso: docker compose --env-file operoz-mcp.env up -d
 #
 # Reverse proxy (Nginx Proxy Manager): mcp.seudominio.com → http://<IP-VPS>:3100/mcp

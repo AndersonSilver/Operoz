@@ -1,4 +1,4 @@
-// plane types
+// operoz types
 import type { TSearchEntities } from "@operoz/types";
 
 export type TMentionSuggestion = {

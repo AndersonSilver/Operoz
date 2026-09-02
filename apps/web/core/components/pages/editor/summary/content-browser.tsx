@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-// plane imports
+// operoz imports
 import type { EditorRefApi, IMarking } from "@operoz/editor";
 import { cn } from "@operoz/utils";
 // components

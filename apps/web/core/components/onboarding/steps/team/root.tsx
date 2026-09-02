@@ -12,7 +12,7 @@ import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { usePopper } from "react-popper";
 import { XCircle } from "lucide-react";
 import { Listbox } from "@headlessui/react";
-// plane imports
+// operoz imports
 import type { EUserPermissions } from "@operoz/constants";
 import { ROLE, ROLE_DETAILS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -337,7 +337,7 @@ export const InviteTeamStep = observer(function InviteTeamStep(props: Props) {
     >
       <CommonOnboardingHeader
         title="Invite your teammates"
-        description="Work in plane happens best with your team. Invite them now to use Plane to its potential."
+        description="Work in operoz happens best with your team. Invite them now to use Operoz to its potential."
       />
       <div className="w-full py-4 text-13">
         <div className="group relative mx-8 grid grid-cols-10 gap-4 py-2">

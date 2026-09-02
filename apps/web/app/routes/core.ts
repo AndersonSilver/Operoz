@@ -107,7 +107,7 @@ export const coreRoutes: RouteConfigEntry[] = [
           route(":workspaceSlug/stickies", "./(all)/[workspaceSlug]/(projects)/stickies/page.tsx"),
         ]),
 
-        // Manual Operoz (documentação estilo docs.plane.so)
+        // Manual Operoz (documentação estilo docs.operoz.so)
         layout("./(all)/[workspaceSlug]/(projects)/manual/layout.tsx", [
           route(":workspaceSlug/manual", "./(all)/[workspaceSlug]/(projects)/manual/page.tsx"),
           route(

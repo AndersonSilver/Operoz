@@ -3,13 +3,13 @@ import { observer } from "mobx-react";
 import type { Control, UseFormSetValue } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import { SlidersHorizontal } from "lucide-react";
-// plane package imports
+// operoz package imports
 import { ANALYTICS_X_AXIS_VALUES, ANALYTICS_Y_AXIS_VALUES } from "@operoz/constants";
 import { CalendarLayoutIcon } from "@operoz/propel/icons";
 import type { IAnalyticsParams } from "@operoz/types";
 import { ChartYAxisMetric } from "@operoz/types";
 import { cn } from "@operoz/utils";
-// plane web components
+// operoz web components
 import { SelectXAxis } from "./select-x-axis";
 import { SelectYAxis } from "./select-y-axis";
 

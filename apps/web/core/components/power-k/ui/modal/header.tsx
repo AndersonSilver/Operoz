@@ -2,7 +2,7 @@ import React from "react";
 import { Command } from "cmdk";
 import { X } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { SearchIcon } from "@operoz/propel/icons";
 // local imports
 import type { TPowerKContext, TPowerKPageType } from "../../core/types";

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import {
   EIssueFilterType,
   ISSUE_DISPLAY_FILTERS_BY_PAGE,
@@ -26,7 +26,7 @@ import { WorkspaceViewQuickActions } from "@/components/workspace/views/quick-ac
 import { useGlobalView } from "@/hooks/store/use-global-view";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useAppRouter } from "@/hooks/use-app-router";
-import { GlobalViewLayoutSelection } from "@/plane-web/components/views/helper";
+import { GlobalViewLayoutSelection } from "@/operoz-web/components/views/helper";
 
 export const GlobalIssuesHeader = observer(function GlobalIssuesHeader() {
   // states

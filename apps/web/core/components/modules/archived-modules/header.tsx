@@ -6,7 +6,7 @@ import { ListFilter } from "lucide-react";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";
-// plane helpers
+// operoz helpers
 // types
 import type { TModuleFilters } from "@operoz/types";
 import { cn, calculateTotalFilters } from "@operoz/utils";

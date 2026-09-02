@@ -1,5 +1,5 @@
 import type { TPage, TPageExtended } from "@operoz/types";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 import type { TBasePageServices } from "@/store/pages/base-page";
 
 export type TExtendedPageInstance = TPageExtended & {

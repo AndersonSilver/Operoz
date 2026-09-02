@@ -1,8 +1,8 @@
-// plane imports
+// operoz imports
 import type { ADDITIONAL_EXTENSIONS } from "@operoz/utils";
 import { CORE_EXTENSIONS } from "@operoz/utils";
-// plane editor imports
-import type { ExtensionFileSetStorageKey } from "@/plane-editor/types/storage";
+// operoz editor imports
+import type { ExtensionFileSetStorageKey } from "@/operoz-editor/types/storage";
 
 export type NodeFileMapType = Partial<
   Record<

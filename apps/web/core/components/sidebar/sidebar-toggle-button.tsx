@@ -7,7 +7,7 @@ import { getAuxiliarySidebarStorageKey } from "@/components/settings/helper";
 import { useAppTheme } from "@/hooks/store/use-app-theme";
 import { useAppSidebarPeek } from "@/hooks/use-app-sidebar-peek";
 import { useCollapsibleSidebarPeek } from "@/hooks/use-collapsible-sidebar-peek";
-import { isSidebarToggleVisible } from "@/plane-web/components/desktop";
+import { isSidebarToggleVisible } from "@/operoz-web/components/desktop";
 import { IconButton } from "@operoz/propel/icon-button";
 
 export const AppSidebarToggleButton = observer(function AppSidebarToggleButton() {

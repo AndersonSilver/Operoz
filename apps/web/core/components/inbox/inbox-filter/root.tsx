@@ -1,7 +1,7 @@
 import { ListFilter } from "lucide-react";
 import { getButtonStyling } from "@operoz/propel/button";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { ChevronDownIcon } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";
 // components

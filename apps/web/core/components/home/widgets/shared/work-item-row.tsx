@@ -8,7 +8,7 @@ import { ListItem } from "@/components/core/list";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 
 type WorkItemRowProps = {
   issue: TIssue;

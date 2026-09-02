@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TIssueServiceType, TSubIssueOperations } from "@operoz/types";

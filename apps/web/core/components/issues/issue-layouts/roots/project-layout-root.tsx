@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane constants
+// operoz constants
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
 import { EIssueLayoutTypes, EIssuesStoreType } from "@operoz/types";
 import { Spinner } from "@operoz/ui";

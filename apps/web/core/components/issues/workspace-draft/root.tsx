@@ -1,7 +1,7 @@
 import { Fragment } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, EDraftIssuePaginationType } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
@@ -25,7 +25,7 @@ type TWorkspaceDraftIssuesRoot = {
 
 export const WorkspaceDraftIssuesRoot = observer(function WorkspaceDraftIssuesRoot(props: TWorkspaceDraftIssuesRoot) {
   const { workspaceSlug } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { loader, paginationInfo, fetchIssues, issueIds } = useWorkspaceDraftIssues();

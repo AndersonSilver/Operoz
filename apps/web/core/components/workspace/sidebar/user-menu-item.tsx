@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useParams, usePathname } from "next/navigation";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { EUserWorkspaceRoles } from "@operoz/types";

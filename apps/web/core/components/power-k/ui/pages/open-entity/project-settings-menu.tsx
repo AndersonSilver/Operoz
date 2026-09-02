@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, PROJECT_SETTINGS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components
@@ -16,7 +16,7 @@ type Props = {
 
 export const PowerKOpenProjectSettingsMenu = observer(function PowerKOpenProjectSettingsMenu(props: Props) {
   const { context, handleSelect } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { allowPermissions } = useUserPermissions();

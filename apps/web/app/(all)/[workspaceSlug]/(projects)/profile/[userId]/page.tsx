@@ -1,5 +1,5 @@
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { GROUP_CHOICES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { IUserStateDistribution, TStateGroups } from "@operoz/types";

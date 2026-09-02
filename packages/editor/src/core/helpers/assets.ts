@@ -1,12 +1,12 @@
 import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
-// plane imports
+// operoz imports
 import type { ADDITIONAL_EXTENSIONS } from "@operoz/utils";
 import { CORE_EXTENSIONS } from "@operoz/utils";
 // extensions
 import { getImageBlockId } from "@/extensions/custom-image/utils";
 import { getHtmlDocumentBlockId } from "@/extensions/html-document/utils";
-// plane editor imports
-import { ADDITIONAL_ASSETS_META_DATA_RECORD } from "@/plane-editor/constants/assets";
+// operoz editor imports
+import { ADDITIONAL_ASSETS_META_DATA_RECORD } from "@/operoz-editor/constants/assets";
 // types
 import type { TEditorAsset } from "@/types";
 

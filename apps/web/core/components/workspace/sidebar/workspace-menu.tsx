@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { AnalyticsIcon, CycleIcon, ProjectIcon, ViewsIcon } from "@operoz/propel/icons";
 import { EUserWorkspaceRoles } from "@operoz/types";
 // hooks

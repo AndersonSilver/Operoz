@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { EViewAccess, TViewFilterProps } from "@operoz/types";
@@ -29,7 +29,7 @@ function ProjectViewsPage({ params }: Route.ComponentProps) {
   const { workspaceSlug, projectId } = params;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store
   const { getProjectById, currentProjectDetails } = useProject();

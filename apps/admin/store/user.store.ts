@@ -1,5 +1,5 @@
 import { action, observable, runInAction, makeObservable } from "mobx";
-// plane internal packages
+// operoz internal packages
 import type { TUserStatus } from "@operoz/constants";
 import { EUserStatus } from "@operoz/constants";
 import { AuthService, UserService } from "@operoz/services";

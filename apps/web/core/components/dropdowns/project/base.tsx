@@ -3,7 +3,7 @@ import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { CheckIcon, SearchIcon, ProjectIcon, ChevronDownIcon } from "@operoz/propel/icons";
@@ -12,8 +12,8 @@ import { cn, sortBySelectedFirst } from "@operoz/utils";
 // components
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
-// plane web imports
-import type { TProject } from "@/plane-web/types";
+// operoz web imports
+import type { TProject } from "@/operoz-web/types";
 // local imports
 import { DropdownButton } from "../buttons";
 import { BUTTON_VARIANTS_WITH_TEXT } from "../constants";
@@ -76,7 +76,7 @@ export const ProjectDropdownBase = observer(function ProjectDropdownBase(props: 
   // states
   const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // popper-js init
   const { styles, attributes } = usePopper(referenceElement, popperElement, {

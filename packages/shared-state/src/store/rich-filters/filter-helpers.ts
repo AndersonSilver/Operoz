@@ -1,6 +1,6 @@
 import { cloneDeep } from "lodash-es";
 import { action, makeObservable, observable, toJS } from "mobx";
-// plane imports
+// operoz imports
 import type { TAutoVisibilityOptions, TExpressionOptions } from "@operoz/constants";
 import { DEFAULT_FILTER_EXPRESSION_OPTIONS } from "@operoz/constants";
 import type {

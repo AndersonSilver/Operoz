@@ -2,7 +2,7 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import { Loader } from "lucide-react";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { IState, TStateOperationsCallbacks } from "@operoz/types";

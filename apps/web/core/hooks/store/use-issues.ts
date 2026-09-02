@@ -3,14 +3,14 @@ import { merge } from "lodash-es";
 import type { TIssueMap } from "@operoz/types";
 import { EIssuesStoreType } from "@operoz/types";
 import { StoreContext } from "@/lib/store-context";
-// plane web types
-import type { IProjectEpics, IProjectEpicsFilter } from "@/plane-web/store/issue/epic";
+// operoz web types
+import type { IProjectEpics, IProjectEpicsFilter } from "@/operoz-web/store/issue/epic";
 // types
-import type { ITeamIssues, ITeamIssuesFilter } from "@/plane-web/store/issue/team";
-import type { ITeamProjectWorkItemsFilter, ITeamProjectWorkItems } from "@/plane-web/store/issue/team-project";
-import type { ITeamViewIssues, ITeamViewIssuesFilter } from "@/plane-web/store/issue/team-views";
+import type { ITeamIssues, ITeamIssuesFilter } from "@/operoz-web/store/issue/team";
+import type { ITeamProjectWorkItemsFilter, ITeamProjectWorkItems } from "@/operoz-web/store/issue/team-project";
+import type { ITeamViewIssues, ITeamViewIssuesFilter } from "@/operoz-web/store/issue/team-views";
 import type { IBoardIssues } from "@/store/issue/board/issue.store";
-import type { IWorkspaceIssues } from "@/plane-web/store/issue/workspace/issue.store";
+import type { IWorkspaceIssues } from "@/operoz-web/store/issue/workspace/issue.store";
 import type { IBoardIssuesFilter } from "@/store/issue/board/filter.store";
 import type { IArchivedIssues, IArchivedIssuesFilter } from "@/store/issue/archived";
 import type { ICycleIssues, ICycleIssuesFilter } from "@/store/issue/cycle";

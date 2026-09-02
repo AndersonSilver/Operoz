@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-import { PlaneLockup } from "@operoz/propel/icons";
+import { OperozLockup } from "@operoz/propel/icons";
 // assets
 import UserLoggedInImage from "@/app/assets/user-logged-in.svg?url";
 // components
@@ -17,7 +17,7 @@ export const UserLoggedIn = observer(function UserLoggedIn() {
   return (
     <div className="flex h-screen w-screen flex-col">
       <div className="relative flex w-full items-center justify-between gap-4 border-b border-subtle px-6 py-5">
-        <PlaneLockup className="h-6 w-auto text-primary" />
+        <OperozLockup className="h-6 w-auto text-primary" />
         <UserAvatar />
       </div>
 

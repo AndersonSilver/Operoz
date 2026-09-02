@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TBuildFilterExpressionParams, TExternalFilter, TFilterProperty, TFilterValue } from "@operoz/types";
 import { LOGICAL_OPERATOR } from "@operoz/types";
 import { getOperatorForPayload } from "@operoz/utils";

@@ -53,7 +53,7 @@ class TestHybridRetrieval:
         workspace_board,
     ):
         member = create_user
-        outsider = User.objects.create(email="outsider@plane.so", username="outsider-user")
+        outsider = User.objects.create(email="outsider@operoz.so", username="outsider-user")
         WorkspaceMember.objects.get_or_create(
             workspace=workspace,
             member=member,

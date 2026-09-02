@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "react-router";
-import { PlaneLockup } from "@operoz/propel/icons";
+import { OperozLockup } from "@operoz/propel/icons";
 
 export function AuthHeader() {
   return (
     <div className="sticky top-0 flex w-full flex-shrink-0 items-center justify-between gap-6">
       <Link to="/">
-        <PlaneLockup height={20} width={95} className="text-primary" />
+        <OperozLockup height={20} width={95} className="text-primary" />
       </Link>
     </div>
   );

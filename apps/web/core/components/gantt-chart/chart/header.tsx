@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Expand, Shrink } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane
+// operoz
 import type { TGanttViews } from "@operoz/types";
 import { Row } from "@operoz/ui";
 // components

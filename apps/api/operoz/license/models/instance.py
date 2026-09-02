@@ -12,7 +12,7 @@ ROLE_CHOICES = ((20, "Admin"),)
 
 
 class InstanceEdition(Enum):
-    PLANE_COMMUNITY = "PLANE_COMMUNITY"
+    OPEROZ_COMMUNITY = "OPEROZ_COMMUNITY"
 
 
 class Instance(BaseModel):
@@ -22,7 +22,7 @@ class Instance(BaseModel):
     instance_id = models.CharField(max_length=255, unique=True)
     current_version = models.CharField(max_length=255)
     latest_version = models.CharField(max_length=255, null=True, blank=True)
-    edition = models.CharField(max_length=255, default=InstanceEdition.PLANE_COMMUNITY.value)
+    edition = models.CharField(max_length=255, default=InstanceEdition.OPEROZ_COMMUNITY.value)
     domain = models.TextField(blank=True)
     # Instance specifics
     last_checked_at = models.DateTimeField()

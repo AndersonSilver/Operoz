@@ -1,6 +1,6 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Avatar } from "@operoz/ui";
 import { getFileURL } from "@operoz/utils";
 // hooks

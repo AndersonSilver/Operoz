@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-// plane helpers
+// operoz helpers
 import { useOutsideClickDetector } from "@operoz/hooks";
 // hooks
 import { useDropdownKeyDown } from "@/hooks/use-dropdown-key-down";

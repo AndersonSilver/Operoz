@@ -2,7 +2,7 @@ import { useMemo } from "react";
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { SlidersHorizontal } from "lucide-react";
-// plane imports
+// operoz imports
 import type { IIssueDisplayFilterOptions, ILayoutDisplayFiltersOptions, IIssueDisplayProperties } from "@operoz/types";
 import { cn } from "@operoz/utils";
 // components

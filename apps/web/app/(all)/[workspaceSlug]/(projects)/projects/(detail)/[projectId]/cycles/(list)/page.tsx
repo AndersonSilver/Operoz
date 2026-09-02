@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTheme } from "next-themes";
 import { EUserPermissionsLevel, CYCLE_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -39,7 +39,7 @@ function ProjectCyclesPage({ params }: Route.ComponentProps) {
   const { workspaceSlug, projectId } = params;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // cycle filters hook
   const { clearAllFilters, currentProjectFilters, updateFilters } = useCycleFilter();

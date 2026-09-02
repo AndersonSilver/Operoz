@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams, useRouter } from "next/navigation";
-// plane imports
+// operoz imports
 import { isValidNextPath } from "@operoz/utils";
 // components
 import { UserLoggedIn } from "@/components/account/user-logged-in";

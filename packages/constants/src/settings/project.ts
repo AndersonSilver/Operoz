@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EUserProjectRoles } from "@operoz/types";
 import type { TProjectSettingsItem, TProjectSettingsTabs } from "@operoz/types";
 

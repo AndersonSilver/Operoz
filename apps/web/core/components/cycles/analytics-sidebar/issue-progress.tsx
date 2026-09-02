@@ -3,7 +3,7 @@ import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { ChevronUpIcon, ChevronDownIcon } from "@operoz/propel/icons";
 import type { ICycle, TCyclePlotType, TProgressSnapshot } from "@operoz/types";
@@ -11,9 +11,9 @@ import { EIssuesStoreType } from "@operoz/types";
 import { getDate } from "@operoz/utils";
 // hooks
 import { useCycle } from "@/hooks/store/use-cycle";
-// plane web components
+// operoz web components
 import { useWorkItemFilters } from "@/hooks/store/work-item-filters/use-work-item-filters";
-import { SidebarChartRoot } from "@/plane-web/components/cycles";
+import { SidebarChartRoot } from "@/operoz-web/components/cycles";
 // local imports
 import { CycleProgressStats } from "./progress-stats";
 
@@ -57,7 +57,7 @@ export const CycleAnalyticsProgress = observer(function CycleAnalyticsProgress(p
   // router
   const searchParams = useSearchParams();
   const peekCycle = searchParams.get("peekCycle") || undefined;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { getPlotTypeByCycleId, getEstimateTypeByCycleId, getCycleById } = useCycle();

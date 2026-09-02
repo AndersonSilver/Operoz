@@ -6,10 +6,10 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { usePowerK } from "@/hooks/store/use-power-k";
 import { useUser } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { ProjectLevelModals } from "@/plane-web/components/command-palette/modals/project-level";
-import { WorkItemLevelModals } from "@/plane-web/components/command-palette/modals/work-item-level";
-import { WorkspaceLevelModals } from "@/plane-web/components/command-palette/modals/workspace-level";
+// operoz web imports
+import { ProjectLevelModals } from "@/operoz-web/components/command-palette/modals/project-level";
+import { WorkItemLevelModals } from "@/operoz-web/components/command-palette/modals/work-item-level";
+import { WorkspaceLevelModals } from "@/operoz-web/components/command-palette/modals/workspace-level";
 // local imports
 import { useProjectsAppPowerKCommands } from "./config/commands";
 import type { TPowerKCommandConfig, TPowerKContext } from "./core/types";

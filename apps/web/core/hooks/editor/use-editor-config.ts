@@ -1,12 +1,12 @@
 import { useCallback } from "react";
-// plane imports
+// operoz imports
 import type { TFileHandler } from "@operoz/editor";
 import { getEditorAssetDownloadSrc, getEditorAssetSrc } from "@operoz/utils";
 // hooks
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
-// plane web hooks
-import { useExtendedEditorConfig } from "@/plane-web/hooks/editor/use-extended-editor-config";
-import { useFileSize } from "@/plane-web/hooks/use-file-size";
+// operoz web hooks
+import { useExtendedEditorConfig } from "@/operoz-web/hooks/editor/use-extended-editor-config";
+import { useFileSize } from "@/operoz-web/hooks/use-file-size";
 // services
 import { FileService } from "@/services/file.service";
 const fileService = new FileService();

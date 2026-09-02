@@ -1,7 +1,7 @@
 import { differenceInCalendarDays } from "date-fns/differenceInCalendarDays";
 import { isEmpty } from "lodash-es";
 import { v4 as uuidv4 } from "uuid";
-// plane imports
+// operoz imports
 import type { TIssueFilterPriorityObject, TIssuePriorities } from "@operoz/constants";
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, ISSUE_PRIORITY_FILTERS, STATE_GROUPS } from "@operoz/constants";
 import type {

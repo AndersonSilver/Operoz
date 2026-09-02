@@ -1,4 +1,4 @@
-// plane types
+// operoz types
 import { API_BASE_URL } from "@operoz/constants";
 import type { TPageVersion } from "@operoz/types";
 // helpers

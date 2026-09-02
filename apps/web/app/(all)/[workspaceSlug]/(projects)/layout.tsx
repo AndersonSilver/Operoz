@@ -3,7 +3,7 @@ import { Outlet } from "react-router";
 import { cn } from "@operoz/utils";
 import { useWorkspaceImmersiveChrome } from "@/components/board/project-board-background-root";
 import { ProjectsAppPowerKProvider } from "@/components/power-k/projects-app-provider";
-// plane web components
+// operoz web components
 import { ProjectAppSidebar } from "./_sidebar";
 import { ExtendedProjectSidebar } from "./extended-project-sidebar";
 

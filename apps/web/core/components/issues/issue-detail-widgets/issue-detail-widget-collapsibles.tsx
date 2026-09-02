@@ -1,12 +1,12 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// Plane-web
-import { WorkItemAdditionalWidgetCollapsibles } from "@/plane-web/components/issues/issue-detail-widgets/collapsibles";
-import { useTimeLineRelationOptions } from "@/plane-web/components/relations";
+// Operoz-web
+import { WorkItemAdditionalWidgetCollapsibles } from "@/operoz-web/components/issues/issue-detail-widgets/collapsibles";
+import { useTimeLineRelationOptions } from "@/operoz-web/components/relations";
 // local imports
 import { AttachmentsCollapsible } from "./attachments";
 import { LinksCollapsible } from "./links";

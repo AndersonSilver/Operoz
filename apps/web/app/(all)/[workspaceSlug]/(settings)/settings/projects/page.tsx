@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { PROJECT_TRACKER_ELEMENTS } from "@operoz/constants";
 import { Button, getButtonStyling } from "@operoz/propel/button";
 import { cn } from "@operoz/utils";

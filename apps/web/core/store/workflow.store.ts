@@ -1,6 +1,6 @@
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type {
   IWorkflow,
   IWorkflowScheme,
@@ -9,9 +9,9 @@ import type {
   IIssueTransition,
   TTransitionExecutePayload,
 } from "@operoz/types";
-// plane web
+// operoz web
 import { WorkflowService } from "@operoz/services";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 
 export interface IWorkflowStore {
   // Loaders

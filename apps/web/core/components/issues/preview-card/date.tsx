@@ -1,5 +1,5 @@
 import { CalendarDays } from "lucide-react";
-// plane imports
+// operoz imports
 import { DueDatePropertyIcon, StartDatePropertyIcon } from "@operoz/propel/icons";
 import type { TStateGroups } from "@operoz/types";
 import { cn, renderFormattedDate, shouldHighlightIssueDueDate } from "@operoz/utils";

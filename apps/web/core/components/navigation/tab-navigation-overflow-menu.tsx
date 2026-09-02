@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router";
 import { MoreHorizontal, Pin } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { SetAsDefaultIcon } from "@operoz/propel/icons";
 import { Menu } from "@operoz/propel/menu";

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { RichTextEditor } from "@/components/editor/rich-text-editor";
 import { usePublish } from "@/hooks/store/publish";
 // types

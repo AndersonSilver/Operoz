@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { LinkIcon, NewTabIcon } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 // ui

@@ -1,4 +1,4 @@
-(plane_proxy) {
+(operoz_proxy) {
 	request_body {
 		max_size {$FILE_SIZE_LIMIT}
 	}
@@ -56,5 +56,5 @@
 }
 
 {$SITE_ADDRESS} {
-	import plane_proxy
+	import operoz_proxy
 }

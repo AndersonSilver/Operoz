@@ -2,7 +2,7 @@ import { useCallback, useMemo, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { GripVertical, X } from "lucide-react";
-// plane imports
+// operoz imports
 import { WORKSPACE_SIDEBAR_DYNAMIC_NAVIGATION_ITEMS_LINKS, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Checkbox, EModalPosition, EModalWidth, ModalCore, Sortable } from "@operoz/ui";
@@ -15,7 +15,7 @@ import {
   useWorkspaceNavigationPreferences,
 } from "@/hooks/use-navigation-preferences";
 // helpers
-import { getSidebarNavigationItemIcon } from "@/plane-web/components/workspace/sidebar/helper";
+import { getSidebarNavigationItemIcon } from "@/operoz-web/components/workspace/sidebar/helper";
 // types
 import type { TPersonalNavigationItemKey } from "@/types/navigation-preferences";
 

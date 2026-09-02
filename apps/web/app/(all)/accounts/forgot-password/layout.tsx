@@ -5,4 +5,4 @@ export default function ForgotPasswordLayout() {
   return <Outlet />;
 }
 
-export const meta: Route.MetaFunction = () => [{ title: "Forgot Password - Plane" }];
+export const meta: Route.MetaFunction = () => [{ title: "Forgot Password - Operoz" }];

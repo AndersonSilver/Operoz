@@ -1,5 +1,5 @@
 import { useState } from "react";
-// plane imports
+// operoz imports
 import type { THubMode } from "@operoz/types";
 import { EHubMode } from "@operoz/types";
 import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";

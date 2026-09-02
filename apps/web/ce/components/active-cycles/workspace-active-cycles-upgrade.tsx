@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { AlertOctagon, BarChart4, CircleDashed, Folder, Microscope } from "lucide-react";
-// plane imports
+// operoz imports
 import { MARKETING_PRICING_PAGE_LINK } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { getButtonStyling } from "@operoz/propel/button";

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { getNumberCount } from "@operoz/utils";
 // components
 import { CountChip } from "@/components/common/count-chip";

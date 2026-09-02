@@ -1,14 +1,14 @@
 import { Info } from "lucide-react";
-// plane imports
+// operoz imports
 import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TEstimateSystemKeys } from "@operoz/types";
 // components
 import { convertMinutesToHoursMinutesString } from "@operoz/utils";
-// plane web imports
-import { isEstimateSystemEnabled } from "@/plane-web/components/estimates/helper";
-import { UpgradeBadge } from "@/plane-web/components/workspace/upgrade-badge";
+// operoz web imports
+import { isEstimateSystemEnabled } from "@/operoz-web/components/estimates/helper";
+import { UpgradeBadge } from "@/operoz-web/components/workspace/upgrade-badge";
 import { RadioInput } from "../radio-select";
 // local imports
 

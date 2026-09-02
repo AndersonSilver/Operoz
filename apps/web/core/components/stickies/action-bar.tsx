@@ -3,12 +3,12 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { StickyNote as StickyIcon } from "lucide-react";
-// plane hooks
+// operoz hooks
 import { useOutsideClickDetector } from "@operoz/hooks";
-// plane ui
+// operoz ui
 import { RecentStickyIcon, StickyNoteIcon, PlusIcon, CloseIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";

@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from "react";
 import { isEqual, cloneDeep } from "lodash-es";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import type { IProjectView, TWorkItemFilterExpression } from "@operoz/types";

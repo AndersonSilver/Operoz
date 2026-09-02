@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EmojiPicker, EmojiIconPickerTypes, Logo } from "@operoz/propel/emoji-icon-picker";
 import { cn } from "@operoz/utils";
 // store

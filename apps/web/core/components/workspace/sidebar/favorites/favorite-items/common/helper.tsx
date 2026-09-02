@@ -1,9 +1,9 @@
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { PageIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { IFavorite, TLogoProps } from "@operoz/types";
 // components
-// plane web constants
+// operoz web constants
 import { FAVORITE_ITEM_ICONS, FAVORITE_ITEM_LINKS } from "@/constants/sidebar-favorites";
 
 export const getFavoriteItemIcon = (type: string, logo?: TLogoProps) => {

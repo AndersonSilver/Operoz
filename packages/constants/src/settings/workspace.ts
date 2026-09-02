@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TWorkspaceSettingsItem, TWorkspaceSettingsTabs } from "@operoz/types";
 import { EUserWorkspaceRoles } from "@operoz/types";
 

@@ -5,10 +5,10 @@ import type { IEmailCheckData, IEmailCheckResponse } from "@operoz/types";
 import { APIService } from "../api.service";
 
 /**
- * Service class for handling authentication-related operations for Plane space application
+ * Service class for handling authentication-related operations for Operoz space application
  * Provides methods for user authentication, password management, and session handling
  * @extends {APIService}
- * @remarks This service is only available for plane sites
+ * @remarks This service is only available for operoz sites
  */
 export class SitesAuthService extends APIService {
   /**

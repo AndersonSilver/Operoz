@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState, useRef } from "react";
 import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import type { EditorRefApi, TExtensions } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
 import type { EFileAssetType, TNameDescriptionLoader } from "@operoz/types";
@@ -12,7 +12,7 @@ import { RichTextEditor } from "@/components/editor/rich-text";
 // hooks
 import { useEditorAsset } from "@/hooks/store/use-editor-asset";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-// plane web services
+// operoz web services
 import { WorkspaceService } from "@/services/workspace.service";
 // local imports
 import { DescriptionInputLoader } from "./loader";

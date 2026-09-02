@@ -1,7 +1,7 @@
 import { isEmpty, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
 import { EIssueFilterType } from "@operoz/constants";
 import type {

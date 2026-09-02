@@ -1,4 +1,4 @@
-import { MARKETING_PLANE_ONE_PAGE_LINK } from "@operoz/constants";
+import { MARKETING_OPEROZ_ONE_PAGE_LINK } from "@operoz/constants";
 import { getButtonStyling } from "@operoz/propel/button";
 import { cn } from "@operoz/utils";
 
@@ -17,7 +17,7 @@ export function BulkOperationsUpgradeBanner(props: Props) {
           operation.
         </p>
         <a
-          href={MARKETING_PLANE_ONE_PAGE_LINK}
+          href={MARKETING_OPEROZ_ONE_PAGE_LINK}
           target="_blank"
           rel="noopener noreferrer"
           className={cn(getButtonStyling("primary", "base"), "flex-shrink-0")}

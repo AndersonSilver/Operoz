@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
@@ -11,9 +11,9 @@ import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operoz
 // components
 import { DisplayFiltersSelection, FiltersDropdown } from "@/components/issues/issue-layouts/filters";
 import { WorkspaceLevelWorkItemFiltersHOC } from "@/components/work-item-filters/filters-hoc/workspace-level";
-// plane web imports
+// operoz web imports
 import { WorkItemFiltersRow } from "@/components/work-item-filters/filters-row";
-import { AccessController } from "@/plane-web/components/views/access-controller";
+import { AccessController } from "@/operoz-web/components/views/access-controller";
 
 type Props = {
   handleFormSubmit: (values: Partial<IWorkspaceView>) => Promise<void>;

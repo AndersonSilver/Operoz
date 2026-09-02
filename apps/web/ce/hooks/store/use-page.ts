@@ -1,9 +1,9 @@
 import { useContext } from "react";
 // mobx store
 import { StoreContext } from "@/lib/store-context";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 
 export type TArgs = {
   pageId: string;

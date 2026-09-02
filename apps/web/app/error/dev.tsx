@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { isRouteErrorResponse } from "react-router";
 import { Banner } from "@operoz/propel/banner";
 import { Button } from "@operoz/propel/button";

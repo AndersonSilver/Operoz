@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { PanelLeft } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, SearchIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import { copyTextToClipboard } from "@operoz/utils";
 // components

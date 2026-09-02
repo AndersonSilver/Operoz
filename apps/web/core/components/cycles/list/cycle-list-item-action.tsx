@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams, usePathname, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Eye, ArrowRight, CalendarDays } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel, IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
 import { useLocalStorage } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
@@ -25,8 +25,8 @@ import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { useTimeZoneConverter } from "@/hooks/use-timezone-converter";
-// plane web components
-import { CycleAdditionalActions } from "@/plane-web/components/cycles";
+// operoz web components
+import { CycleAdditionalActions } from "@/operoz-web/components/cycles";
 // local imports
 import { CycleQuickActions } from "../quick-actions";
 import { TransferIssuesModal } from "../transfer-issues-modal";

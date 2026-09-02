@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ArrowDown, ArrowUp } from "lucide-react";
 import { observer } from "mobx-react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";
 // helpers

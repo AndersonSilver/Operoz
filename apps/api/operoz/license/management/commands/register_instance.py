@@ -60,13 +60,13 @@ class Command(BaseCommand):
                 raise CommandError("Machine signature is required")
 
             instance = Instance.objects.create(
-                instance_name="Plane Community Edition",
+                instance_name="Operoz Community Edition",
                 instance_id=secrets.token_hex(12),
                 current_version=current_version,
                 latest_version=latest_version,
                 last_checked_at=timezone.now(),
                 is_test=os.environ.get("IS_TEST", "0") == "1",
-                edition=InstanceEdition.PLANE_COMMUNITY.value,
+                edition=InstanceEdition.OPEROZ_COMMUNITY.value,
             )
 
             self.stdout.write(self.style.SUCCESS("Instance registered"))
@@ -78,7 +78,7 @@ class Command(BaseCommand):
             instance.current_version = current_version
             instance.latest_version = latest_version
             instance.is_test = os.environ.get("IS_TEST", "0") == "1"
-            instance.edition = InstanceEdition.PLANE_COMMUNITY.value
+            instance.edition = InstanceEdition.OPEROZ_COMMUNITY.value
             instance.save()
 
         return

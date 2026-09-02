@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TFilterAndGroupNode, TFilterExpression, TFilterGroupNode, TFilterProperty } from "@operoz/types";
 // local imports
 import { getAndGroupChildren, isAndGroupNode } from "./core";

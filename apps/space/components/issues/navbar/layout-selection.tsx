@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
 // ui
 import { SITES_ISSUE_LAYOUTS } from "@operoz/constants";
-// plane i18n
+// operoz i18n
 import { useTranslation } from "@operoz/i18n";
 import { Tooltip } from "@operoz/propel/tooltip";
 // helpers

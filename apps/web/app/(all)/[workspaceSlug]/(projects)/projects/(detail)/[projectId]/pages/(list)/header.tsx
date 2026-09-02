@@ -4,10 +4,10 @@ import { useParams, useRouter, useSearchParams } from "next/navigation";
 // constants
 import { EPageAccess, EProjectFeatureKey } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
-// plane types
+// operoz types
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TPage } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Header } from "@operoz/ui";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
@@ -17,8 +17,8 @@ import {
   ProjectFeaturePageTitle,
 } from "@/components/project/project-feature-page-header";
 import { ProjectHubPrimaryAction } from "@/components/project/project-hub-toolbar";
-// plane web imports
-import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+// operoz web imports
+import { EPageStoreType, usePageStore } from "@/operoz-web/hooks/store";
 
 export const PagesListHeader = observer(function PagesListHeader() {
   const { t } = useTranslation();

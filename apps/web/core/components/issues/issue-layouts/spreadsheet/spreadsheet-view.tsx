@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane constants
+// operoz constants
 import { SPREADSHEET_SELECT_GROUP, SPREADSHEET_PROPERTY_LIST } from "@operoz/constants";
 // types
 import type { TIssue, IIssueDisplayFilterOptions, IIssueDisplayProperties } from "@operoz/types";
@@ -12,10 +12,10 @@ import { MultipleSelectGroup } from "@/components/core/multiple-select";
 import { useProject } from "@/hooks/store/use-project";
 import { useBoardLayoutCustomFields } from "@/hooks/use-board-layout-custom-fields";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-// plane web components
-import { IssueBulkOperationsRoot } from "@/plane-web/components/issues/bulk-operations";
-// plane web hooks
-import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-status";
+// operoz web components
+import { IssueBulkOperationsRoot } from "@/operoz-web/components/issues/bulk-operations";
+// operoz web hooks
+import { useBulkOperationStatus } from "@/operoz-web/hooks/use-bulk-operation-status";
 // local imports
 import type { TRenderQuickActions } from "../list/list-view-types";
 import { QuickAddIssueRoot, SpreadsheetAddIssueButton } from "../quick-add";
@@ -73,7 +73,7 @@ export const SpreadsheetView = observer(function SpreadsheetView(props: Props) {
     boardSlug,
     displayProperties,
   });
-  // plane web hooks
+  // operoz web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
   const isEstimateEnabled: boolean = currentProjectDetails?.estimate !== null;

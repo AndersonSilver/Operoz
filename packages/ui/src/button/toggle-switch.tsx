@@ -51,6 +51,6 @@ function ToggleSwitch(props: IToggleSwitchProps) {
   );
 }
 
-ToggleSwitch.displayName = "plane-ui-toggle-switch";
+ToggleSwitch.displayName = "operoz-ui-toggle-switch";
 
 export { ToggleSwitch };

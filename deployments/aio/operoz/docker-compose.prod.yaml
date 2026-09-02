@@ -1,5 +1,5 @@
 # Topologia all-in-one de produção, espelhada de
-# /root/operis-selfhost/plane-app/docker-compose-aio.yaml na VPS.
+# /root/operis-selfhost/operoz-app/docker-compose-aio.yaml na VPS.
 #
 # A cópia da VPS é a que roda — este arquivo existe para que a topologia seja
 # revisável em PR em vez de viver só no servidor, como aconteceu entre o cutover
@@ -59,7 +59,7 @@ x-app-env: &app-env
 
 services:
   web:
-    image: myoperis/plane-frontend:${APP_RELEASE:-stable}
+    image: myoperis/operoz-frontend:${APP_RELEASE:-stable}
     deploy:
       replicas: ${WEB_REPLICAS:-1}
       restart_policy:
@@ -141,7 +141,7 @@ services:
       - uploads:/export
 
 # `name:` fixa o nome real do volume. Sem ele o Compose prefixa com o nome do
-# projeto, e o volume herda o "plane-app" do diretorio. Com o nome explicito os
+# projeto, e o volume herda o "operoz-app" do diretorio. Com o nome explicito os
 # dados deixam de depender do nome do projeto: da para renomear projeto e
 # containers depois sem orfanar banco nenhum.
 volumes:

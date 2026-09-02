@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { ICalendarDate, ICalendarPayload } from "@operoz/types";
 import { EStartOfTheWeek } from "@operoz/types";
 // local imports

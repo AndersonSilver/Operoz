@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-// plane imports
+// operoz imports
 import type { TAuthErrorInfo } from "@operoz/constants";
 import { E_PASSWORD_STRENGTH, EErrorAlertType, EAuthErrorCodes } from "@operoz/constants";
 

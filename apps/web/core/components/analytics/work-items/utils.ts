@@ -1,4 +1,4 @@
-// plane package imports
+// operoz package imports
 import type { ChartYAxisMetric, IState } from "@operoz/types";
 import { ChartXAxisProperty } from "@operoz/types";
 

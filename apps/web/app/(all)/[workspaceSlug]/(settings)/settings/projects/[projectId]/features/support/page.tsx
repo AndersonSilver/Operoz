@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Link } from "react-router";
 import { ExternalLink } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 // components

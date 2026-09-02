@@ -12,7 +12,7 @@ import type {
 } from "@operoz/types";
 // services
 import { DashboardService } from "@/services/dashboard.service";
-// plane web store
+// operoz web store
 import type { CoreRootStore } from "./root.store";
 
 export interface IDashboardStore {

@@ -6,8 +6,8 @@ import { EIssueServiceType } from "@operoz/types";
 import { CollapsibleButton } from "@operoz/ui";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// Plane-web
-import { useTimeLineRelationOptions } from "@/plane-web/components/relations";
+// Operoz-web
+import { useTimeLineRelationOptions } from "@/operoz-web/components/relations";
 // local imports
 import { RelationActionButton } from "./quick-action-button";
 

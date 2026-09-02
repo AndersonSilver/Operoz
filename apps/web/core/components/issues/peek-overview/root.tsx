@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
-// Plane imports
+// Operoz imports
 import useSWR from "swr";
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -13,7 +13,7 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-import { useWorkItemProperties } from "@/plane-web/hooks/use-issue-properties";
+import { useWorkItemProperties } from "@/operoz-web/hooks/use-issue-properties";
 // local imports
 import type { TIssueOperations } from "../issue-detail";
 import { IssueView } from "./view";

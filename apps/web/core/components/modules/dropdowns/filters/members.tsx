@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { sortBy } from "lodash-es";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
-// plane ui
+// operoz ui
 import { Avatar, Loader } from "@operoz/ui";
 // components
 import { getFileURL } from "@operoz/utils";

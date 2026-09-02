@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import { EIssueServiceType } from "@operoz/types";
 import type { TDescriptionVersionsListResponse, TDescriptionVersionDetails, TIssueServiceType } from "@operoz/types";

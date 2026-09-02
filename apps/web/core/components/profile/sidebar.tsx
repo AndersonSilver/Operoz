@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Disclosure, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
 import { Logo } from "@operoz/propel/emoji-icon-picker";

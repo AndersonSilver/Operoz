@@ -54,7 +54,7 @@ cp "${COMPOSE_SOURCE}" "${HML_APP_PATH}/docker-compose.yaml"
 # No all-in-one so o front ainda consome imagem separada; o resto vive dentro do
 # container unico.
 SERVICES=(
-  "plane-frontend:myoperoz/plane-frontend"
+  "operoz-frontend:myoperoz/operoz-frontend"
 )
 
 for entry in "${SERVICES[@]}"; do

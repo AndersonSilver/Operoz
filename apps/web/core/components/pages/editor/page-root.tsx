@@ -1,15 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { CollaborationState, EditorRefApi } from "@operoz/editor";
 import type { TDocumentPayload, TPage, TPageVersion, TWebhookConnectionQueryParams } from "@operoz/types";
 // hooks
 import { usePageFallback } from "@/hooks/use-page-fallback";
-// plane web import
+// operoz web import
 import type { PageUpdateHandler, TCustomEventHandlers } from "@/hooks/use-realtime-page-events";
-import { PageModals } from "@/plane-web/components/pages";
-import { usePagesPaneExtensions, useExtendedEditorProps } from "@/plane-web/hooks/pages";
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+import { PageModals } from "@/operoz-web/components/pages";
+import { usePagesPaneExtensions, useExtendedEditorProps } from "@/operoz-web/hooks/pages";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports

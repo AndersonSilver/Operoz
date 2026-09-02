@@ -1,6 +1,6 @@
 import React from "react";
 import { Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import type { SingleOrArray, IFilterOption, TFilterValue } from "@operoz/types";
 import { cn, toFilterArray } from "@operoz/utils";
 import { EMPTY_FILTER_PLACEHOLDER_TEXT } from "../../shared";

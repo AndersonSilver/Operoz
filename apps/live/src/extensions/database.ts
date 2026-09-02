@@ -1,5 +1,5 @@
 import { Database as HocuspocusDatabase } from "@hocuspocus/extension-database";
-// plane imports
+// operoz imports
 import {
   getAllDocumentFormatsFromDocumentEditorBinaryData,
   getBinaryDataFromDocumentEditorHTMLString,

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TStateOperationsCallbacks } from "@operoz/types";
 import { cn } from "@operoz/utils";
 

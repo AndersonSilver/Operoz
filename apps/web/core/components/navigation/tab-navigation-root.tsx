@@ -9,8 +9,8 @@ import type { EUserProjectRoles } from "@operoz/types";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web imports
-import { useNavigationItems } from "@/plane-web/components/navigations";
+// operoz web imports
+import { useNavigationItems } from "@/operoz-web/components/navigations";
 // local imports
 import { LeaveProjectModal } from "../project/leave-project-modal";
 import { PublishProjectModal } from "../project/publish-project/modal";

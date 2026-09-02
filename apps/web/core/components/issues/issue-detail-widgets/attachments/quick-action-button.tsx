@@ -7,7 +7,7 @@ import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TIssueServiceType } from "@operoz/types";
 import { mergeTriggerElementProps, resolveCustomButtonTrigger } from "@operoz/ui";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-import { useFileSize } from "@/plane-web/hooks/use-file-size";
+import { useFileSize } from "@/operoz-web/hooks/use-file-size";
 import { useAttachmentOperations } from "./helper";
 
 type Props = {

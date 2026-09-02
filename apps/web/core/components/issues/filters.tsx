@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { ChartNoAxesColumn, SlidersHorizontal } from "lucide-react";
-// plane imports
+// operoz imports
 import { EIssueFilterType, ISSUE_STORE_TO_FILTERS_MAP } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
@@ -17,8 +17,8 @@ import {
 } from "@/components/project/project-hub-toolbar";
 // hooks
 import { useIssues } from "@/hooks/store/use-issues";
-// plane web imports
-import type { TProject } from "@/plane-web/types";
+// operoz web imports
+import type { TProject } from "@/operoz-web/types";
 // local imports
 import { WorkItemsModal } from "../analytics/work-items/modal";
 import { WorkItemFiltersToggle } from "../work-item-filters/filters-toggle";

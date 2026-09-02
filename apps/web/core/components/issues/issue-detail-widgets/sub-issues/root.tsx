@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TIssueServiceType } from "@operoz/types";
 import { Collapsible } from "@operoz/ui";
 // hooks

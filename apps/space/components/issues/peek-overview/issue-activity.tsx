@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { Link } from "react-router";
 import { usePathname } from "next/navigation";
 import { Lock } from "lucide-react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 // components
 import { AddComment } from "@/components/issues/peek-overview/comment/add-comment";

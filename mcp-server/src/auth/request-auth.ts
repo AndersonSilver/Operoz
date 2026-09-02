@@ -51,7 +51,7 @@ function bearerToken(req: IncomingMessage): string | undefined {
  * ```
  *
  * O prefixo discriminante é o **nosso** (`ozmcp_at_`), nunca `operoz_api_`: tokens
- * anteriores ao rebrand Plane→Operoz podem ser `plane_api_…`, e qualquer config
+ * anteriores ao rebrand Operoz→Operoz podem ser `operoz_api_…`, e qualquer config
  * existente tem de continuar a funcionar byte a byte.
  */
 export async function resolveRequestAuth(

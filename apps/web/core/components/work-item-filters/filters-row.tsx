@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { IWorkItemFilterInstance } from "@operoz/shared-state";
 import type { TWorkItemFilterExpression, TWorkItemFilterProperty } from "@operoz/types";
 // components

@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
 import { useParams } from "react-router";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, GROUPED_WORKSPACE_SETTINGS, WORKSPACE_SETTINGS_CATEGORIES } from "@operoz/constants";
 import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 import { useTranslation } from "@operoz/i18n";

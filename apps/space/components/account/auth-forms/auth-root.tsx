@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { SitesAuthService } from "@operoz/services";
 import type { IEmailCheckData } from "@operoz/types";
 import { OAuthOptions } from "@operoz/ui";

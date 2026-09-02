@@ -1,6 +1,6 @@
-# Plane Tests
+# Operoz Tests
 
-This directory contains tests for the Plane application. The tests are organized using pytest.
+This directory contains tests for the Operoz application. The tests are organized using pytest.
 
 ## Test Structure
 
@@ -14,7 +14,7 @@ Tests are organized into the following categories:
 
 ## API vs App Endpoints
 
-Plane has two types of API endpoints:
+Operoz has two types of API endpoints:
 
 1. **External API** (`operoz.api`):
    - Available at `/api/v1/` endpoint
@@ -42,16 +42,16 @@ To run specific test categories:
 
 ```bash
 # Run unit tests
-python -m pytest plane/tests/unit/
+python -m pytest operoz/tests/unit/
 
 # Run API contract tests
-python -m pytest plane/tests/contract/api/
+python -m pytest operoz/tests/contract/api/
 
 # Run App contract tests
-python -m pytest plane/tests/contract/app/
+python -m pytest operoz/tests/contract/app/
 
 # Run smoke tests
-python -m pytest plane/tests/smoke/
+python -m pytest operoz/tests/smoke/
 ```
 
 For convenience, we also provide a helper script:
@@ -79,7 +79,7 @@ The following fixtures are available for testing:
 - `api_token`: API token for the test user
 - `api_key_client`: API client with API key authentication (for external API tests)
 - `session_client`: API client with session authentication (for app API tests)
-- `plane_server`: Live Django test server for HTTP-based smoke tests
+- `operoz_server`: Live Django test server for HTTP-based smoke tests
 
 ## Writing Tests
 
@@ -89,7 +89,7 @@ When writing tests, follow these guidelines:
 2. Use the correct client fixture based on the API being tested:
    - For external API (`/api/v1/`), use `api_key_client`
    - For web app API (`/api/`), use `session_client`
-   - For smoke tests with real HTTP, use `plane_server`
+   - For smoke tests with real HTTP, use `operoz_server`
 3. Use the correct URL namespace when reverse-resolving URLs:
    - For external API, use `reverse("api:endpoint_name")`
    - For web app API, use `reverse("endpoint_name")`
@@ -133,7 +133,7 @@ Tests for components that interact with external services should:
 Generate a coverage report with:
 
 ```bash
-python -m pytest --cov=plane --cov-report=term --cov-report=html
+python -m pytest --cov=operoz --cov-report=term --cov-report=html
 ```
 
 This creates an HTML report in the `htmlcov/` directory.

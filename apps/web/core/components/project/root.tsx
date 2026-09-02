@@ -1,7 +1,7 @@
 import { useCallback, useEffect } from "react";
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TProjectAppliedDisplayFilterKeys, TProjectFilters } from "@operoz/types";
 import { calculateTotalFilters } from "@operoz/utils";

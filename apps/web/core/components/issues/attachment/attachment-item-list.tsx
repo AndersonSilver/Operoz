@@ -9,8 +9,8 @@ import type { TIssueServiceType } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// plane web hooks
-import { useFileSize } from "@/plane-web/hooks/use-file-size";
+// operoz web hooks
+import { useFileSize } from "@/operoz-web/hooks/use-file-size";
 // types
 import type { TAttachmentHelpers } from "../issue-detail-widgets/attachments/helper";
 // components

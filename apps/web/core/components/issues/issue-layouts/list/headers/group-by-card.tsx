@@ -16,10 +16,10 @@ import { CreateUpdateIssueModal } from "@/components/issues/issue-modal/modal";
 // constants
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
-// plane-web
-import { CreateUpdateEpicModal } from "@/plane-web/components/epics/epic-modal";
-// Plane-web
-import { WorkFlowGroupTree } from "@/plane-web/components/workflow";
+// operoz-web
+import { CreateUpdateEpicModal } from "@/operoz-web/components/epics/epic-modal";
+// Operoz-web
+import { WorkFlowGroupTree } from "@/operoz-web/components/workflow";
 import { LIST_BULK_SELECT_CHECKBOX_CELL_CLASS } from "../list-grid-columns-context";
 
 interface IHeaderGroupByCard {

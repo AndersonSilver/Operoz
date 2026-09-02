@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { Tab } from "@headlessui/react";
-// plane package imports
+// operoz package imports
 import type { ICycle, IModule, IProject } from "@operoz/types";
 import { Spinner } from "@operoz/ui";
 // hooks
 import { useAnalytics } from "@/hooks/store/use-analytics";
-// plane web components
+// operoz web components
 import TotalInsights from "../../total-insights";
 import CreatedVsResolved from "../created-vs-resolved";
 import CustomizedInsights from "../customized-insights";

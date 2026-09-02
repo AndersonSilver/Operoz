@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { ListFilterPlus } from "lucide-react";
 import { Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 import type { IFilterInstance } from "@operoz/shared-state";
 import type { TExternalFilter, TFilterProperty } from "@operoz/types";

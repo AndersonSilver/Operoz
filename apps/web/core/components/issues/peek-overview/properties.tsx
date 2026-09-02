@@ -32,12 +32,12 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { useProjectState } from "@/hooks/store/use-project-state";
-// plane web components
-import { WorkItemAdditionalSidebarProperties } from "@/plane-web/components/issues/issue-details/additional-properties";
-import { IssueParentSelectRoot } from "@/plane-web/components/issues/issue-details/parent-select-root";
-import { DateAlert } from "@/plane-web/components/issues/issue-details/sidebar/date-alert";
-import { TransferHopInfo } from "@/plane-web/components/issues/issue-details/sidebar/transfer-hop-info";
-import { IssueWorklogProperty } from "@/plane-web/components/issues/worklog/property";
+// operoz web components
+import { WorkItemAdditionalSidebarProperties } from "@/operoz-web/components/issues/issue-details/additional-properties";
+import { IssueParentSelectRoot } from "@/operoz-web/components/issues/issue-details/parent-select-root";
+import { DateAlert } from "@/operoz-web/components/issues/issue-details/sidebar/date-alert";
+import { TransferHopInfo } from "@/operoz-web/components/issues/issue-details/sidebar/transfer-hop-info";
+import { IssueWorklogProperty } from "@/operoz-web/components/issues/worklog/property";
 import type { TIssueOperations } from "../issue-detail";
 import { IssueCycleSelect } from "../issue-detail/cycle-select";
 import { IssueLabel } from "../issue-detail/label";
@@ -164,7 +164,7 @@ export const PeekOverviewProperties = observer(function PeekOverviewProperties(p
                 userIds={createdByDetails?.display_name.includes("-intake") ? null : createdByDetails?.id}
               />
               <span className="grow truncate text-13 text-primary">
-                {createdByDetails?.display_name.includes("-intake") ? "Plane" : createdByDetails?.display_name}
+                {createdByDetails?.display_name.includes("-intake") ? "Operoz" : createdByDetails?.display_name}
               </span>
             </div>
           </SidebarPropertyListItem>

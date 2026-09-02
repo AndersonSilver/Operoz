@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane package imports
+// operoz package imports
 import { getButtonStyling } from "@operoz/propel/button";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { ChevronDownIcon, ProjectIcon } from "@operoz/propel/icons";

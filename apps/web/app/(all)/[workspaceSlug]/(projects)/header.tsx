@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Shapes } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { HomeIcon } from "@operoz/propel/icons";
@@ -11,7 +11,7 @@ import { BreadcrumbLink } from "@/components/common/breadcrumb-link";
 import { useHome } from "@/hooks/store/use-home";
 
 export const WorkspaceDashboardHeader = observer(function WorkspaceDashboardHeader() {
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { toggleWidgetSettings } = useHome();

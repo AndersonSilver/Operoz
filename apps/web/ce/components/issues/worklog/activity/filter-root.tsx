@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TActivityFilters, TActivityFilterOption } from "@operoz/constants";
 import { ACTIVITY_FILTER_TYPE_OPTIONS } from "@operoz/constants";
 // components

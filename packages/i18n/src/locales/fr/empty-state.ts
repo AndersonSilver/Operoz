@@ -16,7 +16,7 @@ export default {
     not_found: {
       title: "Oups ! Quelque chose semble incorrect",
       description:
-        "Nous ne sommes actuellement pas en mesure de récupérer votre compte plane. Il pourrait s’agir d'une erreur réseau.",
+        "Nous ne sommes actuellement pas en mesure de récupérer votre compte operoz. Il pourrait s’agir d'une erreur réseau.",
       cta_primary: "Essayer de recharger",
     },
     server_error: {

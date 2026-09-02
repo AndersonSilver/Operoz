@@ -2,10 +2,10 @@ import React from "react";
 import { Paperclip } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, ViewsIcon, RelationPropertyIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
-// plane web imports
-import { WorkItemAdditionalWidgetActionButtons } from "@/plane-web/components/issues/issue-detail-widgets/action-buttons";
+// operoz web imports
+import { WorkItemAdditionalWidgetActionButtons } from "@/operoz-web/components/issues/issue-detail-widgets/action-buttons";
 // local imports
 import { IssueAttachmentActionButton } from "./attachments";
 import { IssueLinksActionButton } from "./links";

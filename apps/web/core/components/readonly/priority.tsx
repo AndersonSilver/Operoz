@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ISSUE_PRIORITIES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PriorityIcon } from "@operoz/propel/icons";

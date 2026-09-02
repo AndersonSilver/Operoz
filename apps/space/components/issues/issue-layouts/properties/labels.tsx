@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { LabelPropertyIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 // hooks
 import { useLabel } from "@/hooks/store/use-label";

@@ -1,5 +1,5 @@
 import { sortBy } from "lodash-es";
-// plane imports
+// operoz imports
 import type { TProject, TProjectDisplayFilters, TProjectFilters, TProjectOrderByOptions } from "@operoz/types";
 // local imports
 import { getDate } from "./datetime";

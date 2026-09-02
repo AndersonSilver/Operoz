@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IFavorite } from "@operoz/types";
 // components
 import { getFavoriteItemIcon } from "@/components/workspace/sidebar/favorites/favorite-items/common";

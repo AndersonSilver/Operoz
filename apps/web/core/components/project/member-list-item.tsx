@@ -1,13 +1,13 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Table } from "@operoz/ui";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web imports
-import { useProjectColumns } from "@/plane-web/components/projects/settings/useProjectColumns";
+// operoz web imports
+import { useProjectColumns } from "@/operoz-web/components/projects/settings/useProjectColumns";
 // store
 import type { IProjectMemberDetails } from "@/store/member/project/base-project-member.store";
 // local imports

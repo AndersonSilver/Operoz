@@ -1,9 +1,9 @@
 import { useCallback, useMemo } from "react";
 import { Users } from "lucide-react";
-// plane editor
+// operoz editor
 import type { TMentionSection } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
-// plane types
+// operoz types
 import type { TBoardCircleSearchResponse, TSearchEntities, TSearchResponse } from "@operoz/types";
 
 export type TUseAdditionalEditorMentionArgs = {

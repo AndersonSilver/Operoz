@@ -3,7 +3,7 @@ import Script from "next/script";
 import { Links, Meta, Outlet, Scripts } from "react-router";
 import type { LinksFunction } from "react-router";
 import { ThemeProvider } from "next-themes";
-// plane imports
+// operoz imports
 import { SITE_DESCRIPTION, SITE_KEYWORDS, SITE_NAME, SITE_URL } from "@operoz/constants";
 import { DEFAULT_LOCALE } from "@operoz/i18n";
 import { cn } from "@operoz/utils";

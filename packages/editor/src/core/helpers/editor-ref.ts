@@ -2,7 +2,7 @@ import type { HocuspocusProvider } from "@hocuspocus/provider";
 import type { Editor } from "@tiptap/core";
 import { DOMSerializer } from "@tiptap/pm/model";
 import * as Y from "yjs";
-// plane imports
+// operoz imports
 import { convertHTMLToMarkdown } from "@operoz/utils";
 // components
 import { getEditorMenuItems } from "@/components/menus";
@@ -104,7 +104,7 @@ export const getEditorRefHelpers = (args: TArgs): EditorRefApi => {
         event.preventDefault();
         event.clipboardData?.setData("text/plain", markdown);
         event.clipboardData?.setData("text/html", html);
-        event.clipboardData?.setData("text/plane-editor-html", html);
+        event.clipboardData?.setData("text/operoz-editor-html", html);
         document.removeEventListener("copy", copyHandler);
       };
 

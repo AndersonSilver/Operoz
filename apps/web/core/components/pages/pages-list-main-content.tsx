@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { FileText } from "lucide-react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useParams, useRouter } from "next/navigation";
 import { EUserPermissionsLevel, EPageAccess } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
@@ -13,8 +13,8 @@ import { EUserProjectRoles } from "@operoz/types";
 import { PageLoader } from "@/components/pages/loaders/page-loader";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web hooks
-import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import { EPageStoreType, usePageStore } from "@/operoz-web/hooks/store";
 
 const pagesEmptyStateIcon = (
   <div className="flex size-14 items-center justify-center rounded-full bg-accent-subtle">
@@ -30,7 +30,7 @@ type Props = {
 
 export const PagesListMainContent = observer(function PagesListMainContent(props: Props) {
   const { children, pageType, storeType } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { currentProjectDetails } = useProject();

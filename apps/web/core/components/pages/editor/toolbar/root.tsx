@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { PanelRight } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";
@@ -9,8 +9,8 @@ import { PageToolbar } from "@/components/pages/editor/toolbar";
 import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 // hooks
 import { usePageFilters } from "@/hooks/use-page-filters";
-// plane web components
-import { PageCollaboratorsList } from "@/plane-web/components/pages/header/collaborators-list";
+// operoz web components
+import { PageCollaboratorsList } from "@/operoz-web/components/pages/header/collaborators-list";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

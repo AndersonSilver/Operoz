@@ -5,9 +5,9 @@ import { ArchiveRestoreIcon, FileOutput, LockKeyhole, LockKeyholeOpen } from "lu
 // constants
 import { EPageAccess } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
-// plane editor
+// operoz editor
 import { LinkIcon, CopyIcon, LockIcon, NewTabIcon, ArchiveIcon, TrashIcon, GlobeIcon } from "@operoz/propel/icons";
-// plane ui
+// operoz ui
 import type { TContextMenuItem } from "@operoz/ui";
 import { ContextMenu, CustomMenu } from "@operoz/ui";
 // components
@@ -15,11 +15,11 @@ import { cn } from "@operoz/utils";
 import { DeletePageModal } from "@/components/pages/modals/delete-page-modal";
 // hooks
 import { usePageOperations } from "@/hooks/use-page-operations";
-// plane web components
-import { MovePageModal } from "@/plane-web/components/pages";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageFlag } from "@/plane-web/hooks/use-page-flag";
+// operoz web components
+import { MovePageModal } from "@/operoz-web/components/pages";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageFlag } from "@/operoz-web/hooks/use-page-flag";
 // store types
 import type { TPageInstance } from "@/store/pages/base-page";
 

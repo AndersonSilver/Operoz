@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EEstimateSystem } from "@operoz/constants";
 import { convertMinutesToHoursMinutesString } from "@operoz/utils";
 // components
@@ -7,8 +7,8 @@ import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-it
 // hooks
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useEstimate } from "@/hooks/store/estimates/use-estimate";
-// plane web imports
-import { EstimateListItemButtons } from "@/plane-web/components/estimates";
+// operoz web imports
+import { EstimateListItemButtons } from "@/operoz-web/components/estimates";
 
 type TEstimateListItem = {
   estimateId: string;

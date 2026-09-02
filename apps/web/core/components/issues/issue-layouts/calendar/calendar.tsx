@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
-// plane constants
+// operoz constants
 import type { TSupportedFilterTypeForUpdate } from "@operoz/constants";
 // types
 import type {

@@ -7,7 +7,7 @@ import { BOARD_HUB_CYCLE_SECTION_HEADER } from "@/components/board/board-hub-bac
 import { ContentWrapper, ERowVariant } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 import { ListLayout } from "@/components/core/list";
-import { ActiveCycleRoot } from "@/plane-web/components/cycles";
+import { ActiveCycleRoot } from "@/operoz-web/components/cycles";
 // local imports
 import { CyclePeekOverview } from "../cycle-peek-overview";
 import { CycleListGroupHeader } from "./cycle-list-group-header";

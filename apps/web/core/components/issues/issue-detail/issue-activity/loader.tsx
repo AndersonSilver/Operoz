@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { Loader } from "@operoz/ui";
 
 export function IssueActivityLoader() {

@@ -1,7 +1,7 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
 import { Triangle } from "lucide-react";
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import { EEstimateSystem } from "@operoz/types";
 import type { TIssue } from "@operoz/types";

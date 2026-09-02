@@ -1,7 +1,7 @@
 import { clone, update, unset, orderBy, set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import { EDraftIssuePaginationType } from "@operoz/constants";
 import type {
   TWorkspaceDraftIssue,

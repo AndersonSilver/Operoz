@@ -9,7 +9,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-// plane imports
+// operoz imports
 import { AXIS_LABEL_CLASSNAME } from "@operoz/constants";
 import type { TScatterChartProps } from "@operoz/types";
 // local components

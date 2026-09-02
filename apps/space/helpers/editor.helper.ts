@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { MAX_FILE_SIZE } from "@operoz/constants";
 import type { TFileHandler } from "@operoz/editor";
 import { SitesFileService } from "@operoz/services";

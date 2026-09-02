@@ -1,7 +1,7 @@
 import type { Extensions } from "@tiptap/core";
 import type { MutableRefObject } from "react";
 import { forwardRef, useMemo } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // components
 import { PageRenderer } from "@/components/editors";
@@ -13,8 +13,8 @@ import { HeadingListExtension, SideMenuExtension } from "@/extensions";
 import { getEditorClassNames } from "@/helpers/common";
 // hooks
 import { useEditor } from "@/hooks/use-editor";
-// plane editor extensions
-import { DocumentEditorAdditionalExtensions } from "@/plane-editor/extensions";
+// operoz editor extensions
+import { DocumentEditorAdditionalExtensions } from "@/operoz-editor/extensions";
 // types
 import type { EditorRefApi, IDocumentEditorProps } from "@/types";
 

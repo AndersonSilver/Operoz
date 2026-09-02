@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EIssueLayoutTypes } from "@operoz/types";
 // components
 import { CalendarLayoutLoader } from "@/components/ui/loader/layouts/calendar-layout-loader";

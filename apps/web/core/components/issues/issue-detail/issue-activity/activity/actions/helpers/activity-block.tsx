@@ -1,12 +1,12 @@
 import type { ReactNode } from "react";
 import { Network } from "lucide-react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import { renderFormattedTime, renderFormattedDate, calculateTimeAgo } from "@operoz/utils";
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { IssueCreatorDisplay } from "@/plane-web/components/issues/issue-details/issue-creator";
+// operoz web imports
+import { IssueCreatorDisplay } from "@/operoz-web/components/issues/issue-details/issue-creator";
 // local imports
 import { IssueUser } from "../";
 

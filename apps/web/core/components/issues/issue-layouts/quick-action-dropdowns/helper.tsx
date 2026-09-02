@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { XCircle, ArchiveRestoreIcon } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, CopyIcon, NewTabIcon, EditIcon, ArchiveIcon, TrashIcon } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
@@ -8,7 +8,7 @@ import type { EIssuesStoreType, TIssue } from "@operoz/types";
 import type { TContextMenuItem } from "@operoz/ui";
 import { copyUrlToClipboard, generateWorkItemLink } from "@operoz/utils";
 // types
-import { createCopyMenuWithDuplication } from "@/plane-web/components/issues/issue-layouts/quick-action-dropdowns";
+import { createCopyMenuWithDuplication } from "@/operoz-web/components/issues/issue-layouts/quick-action-dropdowns";
 
 // Generic helper function to handle optional function calls gracefully
 // Overload for functions without parameters

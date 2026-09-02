@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TLoader } from "@operoz/types";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";

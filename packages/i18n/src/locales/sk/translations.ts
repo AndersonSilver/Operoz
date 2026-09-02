@@ -83,7 +83,7 @@ export default {
       already_have_an_account: "Už máte účet?",
       login: "Prihlásiť sa",
       create_account: "Vytvoriť účet",
-      new_to_plane: "Nový v Plane?",
+      new_to_operoz: "Nový v Operoz?",
       back_to_sign_in: "Späť na prihlásenie",
       resend_in: "Znova odoslať za {seconds} sekúnd",
       sign_in_with_unique_code: "Prihlásiť sa pomocou jedinečného kódu",
@@ -402,7 +402,7 @@ export default {
   full_changelog: "Úplný zmenový protokol",
   support: "Podpora",
   forum: "Forum",
-  powered_by_plane_pages: "Poháňa Plane Pages",
+  powered_by_operoz_pages: "Poháňa Operoz Pages",
   please_select_at_least_one_invitation: "Vyberte aspoň jednu pozvánku.",
   please_select_at_least_one_invitation_description:
     "Vyberte aspoň jednu pozvánku na pripojenie do pracovného priestoru.",
@@ -565,7 +565,7 @@ export default {
       not_right_now: "Teraz nie",
       create_project: {
         title: "Vytvoriť projekt",
-        description: "Väčšina vecí začína projektom v Plane.",
+        description: "Väčšina vecí začína projektom v Operoz.",
         cta: "Začať",
       },
       invite_team: {
@@ -579,7 +579,7 @@ export default {
         cta: "Konfigurovať tento priestor",
       },
       personalize_account: {
-        title: "Prispôsobte si Plane.",
+        title: "Prispôsobte si Operoz.",
         description: "Vyberte si obrázok, farby a ďalšie.",
         cta: "Prispôsobiť teraz",
       },
@@ -612,8 +612,8 @@ export default {
         issues: "Pracovné položky",
       },
     },
-    new_at_plane: {
-      title: "Novinky v Plane",
+    new_at_operoz: {
+      title: "Novinky v Operoz",
     },
     quick_tutorial: {
       title: "Rýchly tutoriál",
@@ -1269,7 +1269,7 @@ export default {
   },
   workspace_creation: {
     heading: "Vytvorte si pracovný priestor",
-    subheading: "Na používanie Plane musíte vytvoriť alebo sa pripojiť k pracovnému priestoru.",
+    subheading: "Na používanie Operoz musíte vytvoriť alebo sa pripojiť k pracovnému priestoru.",
     form: {
       name: {
         label: "Pomenujte svoj pracovný priestor",
@@ -1323,11 +1323,11 @@ export default {
       general: {
         title: "Prehľad projektov, aktivít a metrík",
         description:
-          "Vitajte v Plane, teší nás, že ste tu. Vytvorte prvý projekt, sledujte pracovné položky a táto stránka sa zmení na priestor pre váš pokrok. Správcovia tu uvidia aj položky pomáhajúce tímu.",
+          "Vitajte v Operoz, teší nás, že ste tu. Vytvorte prvý projekt, sledujte pracovné položky a táto stránka sa zmení na priestor pre váš pokrok. Správcovia tu uvidia aj položky pomáhajúce tímu.",
         primary_button: {
           text: "Vytvorte prvý projekt",
           comic: {
-            title: "Všetko začína projektom v Plane",
+            title: "Všetko začína projektom v Operoz",
             description: "Projektom môže byť roadmapa produktu, marketingová kampaň alebo uvedenie nového auta.",
           },
         },
@@ -1461,7 +1461,7 @@ export default {
         primary_button: {
           text: "Začnite prvý projekt",
           comic: {
-            title: "Všetko začína projektom v Plane",
+            title: "Všetko začína projektom v Operoz",
             description: "Projektom môže byť roadmapa produktu, marketingová kampaň alebo uvedenie nového auta.",
           },
         },
@@ -1472,7 +1472,7 @@ export default {
         primary_button: {
           text: "Začnite prvý projekt",
           comic: {
-            title: "Všetko začína projektom v Plane",
+            title: "Všetko začína projektom v Operoz",
             description: "Projektom môže byť roadmapa produktu, marketingová kampaň alebo uvedenie nového auta.",
           },
         },
@@ -1571,7 +1571,7 @@ export default {
     page_label: "{workspace} - Všeobecné nastavenia",
     key_created: "Kľúč vytvorený",
     copy_key:
-      "Skopírujte a uložte tento kľúč do Plane Pages. Po zatvorení ho neuvidíte. CSV súbor s kľúčom bol stiahnutý.",
+      "Skopírujte a uložte tento kľúč do Operoz Pages. Po zatvorení ho neuvidíte. CSV súbor s kľúčom bol stiahnutý.",
     token_copied: "Token skopírovaný do schránky.",
     settings: {
       general: {
@@ -1733,7 +1733,7 @@ export default {
     empty_state: {
       api_tokens: {
         title: "Žiadne API tokeny",
-        description: "Používajte API na integráciu Plane s externými systémami.",
+        description: "Používajte API na integráciu Operoz s externými systémami.",
       },
       webhooks: {
         title: "Žiadne webhooky",
@@ -1946,12 +1946,12 @@ export default {
       label: "Automatizácie",
       "auto-archive": {
         title: "Automaticky archivovať uzavreté položky",
-        description: "Plane bude archivovať dokončené alebo zrušené položky.",
+        description: "Operoz bude archivovať dokončené alebo zrušené položky.",
         duration: "Archivovať položky uzavreté dlhšie ako",
       },
       "auto-close": {
         title: "Automaticky uzatvárať položky",
-        description: "Plane uzavrie neaktívne položky.",
+        description: "Operoz uzavrie neaktívne položky.",
         duration: "Uzatvoriť položky neaktívne dlhšie ako",
         auto_close_status: "Stav pre automatické uzatvorenie",
       },
@@ -2608,8 +2608,8 @@ export default {
     edited_by: "Upravené používateľom",
   },
   self_hosted_maintenance_message: {
-    plane_didnt_start_up_this_could_be_because_one_or_more_plane_services_failed_to_start:
-      "Plane sa nespustil. Toto môže byť spôsobené tým, že sa jedna alebo viac služieb Plane nepodarilo spustiť.",
+    operoz_didnt_start_up_this_could_be_because_one_or_more_operoz_services_failed_to_start:
+      "Operoz sa nespustil. Toto môže byť spôsobené tým, že sa jedna alebo viac služieb Operoz nepodarilo spustiť.",
     choose_view_logs_from_setup_sh_and_docker_logs_to_be_sure:
       "Vyberte View Logs z setup.sh a Docker logov, aby ste si boli istí.",
   },

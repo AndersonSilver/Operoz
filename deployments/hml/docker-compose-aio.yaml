@@ -6,7 +6,7 @@
 # container que roda tudo sob supervisord, com Caddy interno.
 #
 # Os nomes de volume são idênticos aos do compose anterior (hml_pgdata,
-# hml_redisdata, hml_uploads) e o projeto continua sendo plane-app-hml: os dados
+# hml_redisdata, hml_uploads) e o projeto continua sendo operoz-app-hml: os dados
 # de homologação sobrevivem ao cutover. Os volumes de log por serviço somem
 # junto com os serviços — o supervisord escreve em /app/logs dentro do container.
 #
@@ -68,7 +68,7 @@ x-app-env: &app-env
 services:
   web:
     container_name: operoz-hml-web
-    image: myoperoz/plane-frontend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-frontend:${APP_RELEASE:-hml}
     restart: unless-stopped
     depends_on:
     - hml-api
@@ -124,7 +124,7 @@ services:
         - operis-minio
 
 # `name:` fixa o nome real do volume. Sem ele o Compose prefixa com o nome do
-# projeto, e o volume herda o "plane-app" do diretorio/-p. Com o nome explicito
+# projeto, e o volume herda o "operoz-app" do diretorio/-p. Com o nome explicito
 # os dados deixam de depender do nome do projeto: da para renomear projeto e
 # containers depois sem orfanar banco nenhum.
 volumes:

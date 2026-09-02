@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 // types
 import { useTranslation } from "@operoz/i18n";
@@ -34,7 +34,7 @@ const defaultValues: Partial<ICycle> = {
 
 export function CycleForm(props: Props) {
   const { handleFormSubmit, handleClose, status, projectId, setActiveProject, data, isMobile = false } = props;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { projectsWithCreatePermissions } = useUser();

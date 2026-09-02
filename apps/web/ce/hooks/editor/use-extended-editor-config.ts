@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-// plane imports
+// operoz imports
 import type { TExtendedFileHandler } from "@operoz/editor";
 
 export type TExtendedEditorFileHandlersArgs = {

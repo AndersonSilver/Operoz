@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { SPACE_BASE_PATH } from "@operoz/constants";
 // components
 import { LogoSpinner } from "@/components/common/logo-spinner";

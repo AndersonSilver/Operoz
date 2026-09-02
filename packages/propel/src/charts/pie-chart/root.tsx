@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { Cell, PieChart as CorePieChart, Label, Legend, Pie, ResponsiveContainer, Tooltip } from "recharts";
-// plane imports
+// operoz imports
 import type { TPieChartProps } from "@operoz/types";
 // local components
 import { getLegendProps } from "../components/legend";

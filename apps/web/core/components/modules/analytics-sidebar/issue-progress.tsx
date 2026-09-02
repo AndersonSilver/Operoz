@@ -19,7 +19,7 @@ import { ModuleProgressStats } from "@/components/modules";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useModule } from "@/hooks/store/use-module";
 import { useWorkItemFilters } from "@/hooks/store/work-item-filters/use-work-item-filters";
-// plane web constants
+// operoz web constants
 type TModuleAnalyticsProgress = {
   workspaceSlug: string;
   projectId: string;
@@ -37,7 +37,7 @@ export const ModuleAnalyticsProgress = observer(function ModuleAnalyticsProgress
   // router
   const searchParams = useSearchParams();
   const peekModule = searchParams.get("peekModule") || undefined;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { areEstimateEnabledByProjectId, currentActiveEstimateId, estimateById } = useProjectEstimates();

@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { PlusIcon } from "@operoz/propel/icons";
 import { setPromiseToast } from "@operoz/propel/toast";
 import type { ISearchIssueResponse, TIssue } from "@operoz/types";

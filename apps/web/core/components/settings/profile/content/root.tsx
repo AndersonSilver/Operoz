@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ScrollArea } from "@operoz/propel/scrollarea";
 import type { TProfileSettingsTabs } from "@operoz/types";
 import { cn } from "@operoz/utils";

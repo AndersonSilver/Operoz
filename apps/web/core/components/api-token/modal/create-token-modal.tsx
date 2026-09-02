@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { mutate } from "swr";
-// plane imports
+// operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { APITokenService } from "@operoz/services";
 import type { IApiToken } from "@operoz/types";

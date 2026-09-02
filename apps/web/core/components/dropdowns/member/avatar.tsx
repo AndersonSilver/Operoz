@@ -1,10 +1,10 @@
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
 import { MembersPropertyIcon } from "@operoz/propel/icons";
-// plane ui
+// operoz ui
 import { Avatar, AvatarGroup } from "@operoz/ui";
 import { cn, getFileURL } from "@operoz/utils";
-// plane utils
+// operoz utils
 // helpers
 // hooks
 import { useMember } from "@/hooks/store/use-member";

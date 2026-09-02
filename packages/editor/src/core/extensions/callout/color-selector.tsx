@@ -1,6 +1,6 @@
 import { Ban } from "lucide-react";
 import { ChevronDownIcon } from "@operoz/propel/icons";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // constants
 import { COLORS_LIST } from "@/constants/common";

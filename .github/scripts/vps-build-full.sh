@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Build local de todas as imagens Operoz na VPS (sem GHCR).
-# Uso: OPEROZ_REPO_PATH=/root/operoz-selfhost/Operoz OPEROZ_APP_PATH=/root/operoz-selfhost/plane-app bash vps-build-full.sh
+# Uso: OPEROZ_REPO_PATH=/root/operoz-selfhost/Operoz OPEROZ_APP_PATH=/root/operoz-selfhost/operoz-app bash vps-build-full.sh
 set -euo pipefail
 
 OPEROZ_REPO_PATH="${OPEROZ_REPO_PATH:-/root/operis-selfhost/Operis}"
-OPEROZ_APP_PATH="${OPEROZ_APP_PATH:-/root/operis-selfhost/plane-app}"
+OPEROZ_APP_PATH="${OPEROZ_APP_PATH:-/root/operis-selfhost/operoz-app}"
 GIT_BRANCH="${GIT_BRANCH:-preview}"
 
 SCRIPT_DIR="${OPEROZ_REPO_PATH}/.github/scripts"
@@ -42,14 +42,14 @@ tag_image() {
 }
 
 echo "==> Build imagens (pode levar 40–90 min na VPS)"
-tag_image "plane-frontend" "apps/web/Dockerfile.web" "." \
+tag_image "operoz-frontend" "apps/web/Dockerfile.web" "." \
   --build-arg "VITE_ENABLE_BOARDS=true" \
   --build-arg "VITE_API_BASE_URL=${WEB_URL}"
-tag_image "plane-space" "apps/space/Dockerfile.space" "."
-tag_image "plane-admin" "apps/admin/Dockerfile.admin" "."
-tag_image "plane-live" "apps/live/Dockerfile.live" "."
-tag_image "plane-backend" "apps/api/Dockerfile.api" "apps/api"
-tag_image "plane-proxy" "apps/proxy/Dockerfile.ce" "apps/proxy"
+tag_image "operoz-space" "apps/space/Dockerfile.space" "."
+tag_image "operoz-admin" "apps/admin/Dockerfile.admin" "."
+tag_image "operoz-live" "apps/live/Dockerfile.live" "."
+tag_image "operoz-backend" "apps/api/Dockerfile.api" "apps/api"
+tag_image "operoz-proxy" "apps/proxy/Dockerfile.ce" "apps/proxy"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"

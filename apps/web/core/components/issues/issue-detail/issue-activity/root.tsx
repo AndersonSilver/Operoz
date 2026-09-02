@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
-// plane package imports
+// operoz package imports
 import { E_SORT_ORDER, EUserPermissions } from "@operoz/constants";
 import { useLocalStorage } from "@operoz/hooks";
 // i18n
@@ -12,8 +12,8 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
 import { useBoardIssueCapabilities } from "@/hooks/use-board-issue-capabilities";
-// plane web components
-import { IssueActivityWorklogCreateButton } from "@/plane-web/components/issues/worklog/activity/worklog-create-button";
+// operoz web components
+import { IssueActivityWorklogCreateButton } from "@/operoz-web/components/issues/worklog/activity/worklog-create-button";
 import { ActivityCommentCompose } from "./activity-comment-compose";
 import { IssueActivityCommentRoot } from "./activity-comment-root";
 import { useWorkItemCommentOperations } from "./helper";

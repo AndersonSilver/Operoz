@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/propel/utils";
 import type { IFilterInstance } from "@operoz/shared-state";

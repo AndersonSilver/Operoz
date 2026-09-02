@@ -14,7 +14,7 @@ export default {
     },
     not_found: {
       title: "おっと!何か問題があるようです",
-      description: "現在、Planeアカウントを取得できません。ネットワークエラーの可能性があります。",
+      description: "現在、Operozアカウントを取得できません。ネットワークエラーの可能性があります。",
       cta_primary: "再読み込みを試す",
     },
     server_error: {

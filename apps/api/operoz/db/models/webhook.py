@@ -11,7 +11,7 @@ from operoz.db.models import BaseModel, ProjectBaseModel
 
 
 def generate_token():
-    return "plane_wh_" + uuid4().hex
+    return "operoz_wh_" + uuid4().hex
 
 
 def validate_schema(value):

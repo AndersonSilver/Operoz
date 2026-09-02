@@ -1,6 +1,6 @@
 import { computedFn } from "mobx-utils";
 import type { EUserPermissions } from "@operoz/constants";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 import { BaseUserPermissionStore } from "@/store/user/base-permissions.store";
 import type { IBaseUserPermissionStore } from "@/store/user/base-permissions.store";
 

@@ -21,7 +21,7 @@ urlpatterns = [
     path(
         "workspaces/<str:slug>/analytics/",
         AnalyticsEndpoint.as_view(),
-        name="plane-analytics",
+        name="operoz-analytics",
     ),
     path(
         "workspaces/<str:slug>/analytic-view/",

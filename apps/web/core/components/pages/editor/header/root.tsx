@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { SmilePlus } from "lucide-react";
-// plane imports
+// operoz imports
 import { EmojiPicker, EmojiIconPickerTypes } from "@operoz/propel/emoji-icon-picker";
 import { cn } from "@operoz/utils";
 // store

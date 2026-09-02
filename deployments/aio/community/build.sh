@@ -94,19 +94,19 @@ update_env_file(){
 }
 
 build_dist_files(){
-    cp ./variables.env $DIST_DIR/plane.env
+    cp ./variables.env $DIST_DIR/operoz.env
     cp ../../../apps/proxy/Caddyfile.aio.ce $DIST_DIR/Caddyfile
 
-    echo "" >> $DIST_DIR/plane.env
-    echo "" >> $DIST_DIR/plane.env
+    echo "" >> $DIST_DIR/operoz.env
+    echo "" >> $DIST_DIR/operoz.env
 
-    # update the plane.env file with the APP_RELEASE_VERSION
-    update_env_file $DIST_DIR/plane.env "APP_RELEASE_VERSION" "$APP_RELEASE_VERSION"
-    update_env_file $DIST_DIR/plane.env "APP_RELEASE" "$APP_RELEASE_VERSION"
-    update_env_file $DIST_DIR/plane.env "APP_VERSION" "$APP_RELEASE_VERSION"
+    # update the operoz.env file with the APP_RELEASE_VERSION
+    update_env_file $DIST_DIR/operoz.env "APP_RELEASE_VERSION" "$APP_RELEASE_VERSION"
+    update_env_file $DIST_DIR/operoz.env "APP_RELEASE" "$APP_RELEASE_VERSION"
+    update_env_file $DIST_DIR/operoz.env "APP_VERSION" "$APP_RELEASE_VERSION"
     
-    update_env_file $DIST_DIR/plane.env "API_BASE_URL" "http://localhost:3004"
-    update_env_file $DIST_DIR/plane.env "SITE_ADDRESS" ":80"
+    update_env_file $DIST_DIR/operoz.env "API_BASE_URL" "http://localhost:3004"
+    update_env_file $DIST_DIR/operoz.env "SITE_ADDRESS" ":80"
 
 
     # print docker build command
@@ -116,7 +116,7 @@ build_dist_files(){
     echo ""
     echo "docker build -t $IMAGE_NAME \\"
     echo "  -f $(pwd)/Dockerfile \\"
-    echo "  --build-arg PLANE_VERSION=$APP_RELEASE_VERSION \\"
+    echo "  --build-arg OPEROZ_VERSION=$APP_RELEASE_VERSION \\"
     echo "  $(pwd)"
     echo ""
     echo "------------------------------------------------"

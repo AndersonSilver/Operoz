@@ -8,7 +8,7 @@ export function sidebarNavItemClass(isActive?: boolean) {
   );
 }
 
-/** Barra de destaque do item ativo (estilo Operoz, não pill cinza do Plane). */
+/** Barra de destaque do item ativo (estilo Operoz, não pill cinza do Operoz). */
 export const SIDEBAR_NAV_ACTIVE_INDICATOR_CLASS =
   "pointer-events-none absolute top-1/2 left-1 h-4 w-0.5 -translate-y-1/2 rounded-full bg-accent-primary";
 

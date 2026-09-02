@@ -44,9 +44,9 @@ After installation, you can verify the installation by opening a terminal (Comma
 
 ---
 
-## Installing Plane
+## Installing Operoz
 
-Installing plane is a very easy and minimal step process.
+Installing operoz is a very easy and minimal step process.
 
 ### Prerequisite
 
@@ -58,12 +58,12 @@ Installing plane is a very easy and minimal step process.
 ### Downloading Latest Release
 
 ```
-mkdir plane-selfhost
+mkdir operoz-selfhost
 
-cd plane-selfhost
+cd operoz-selfhost
 ```
 
-#### For *Docker Compose* based setup
+#### For _Docker Compose_ based setup
 
 ```
 curl -fsSL -o setup.sh https://github.com/makeplane/plane/releases/latest/download/setup.sh
@@ -71,7 +71,7 @@ curl -fsSL -o setup.sh https://github.com/makeplane/plane/releases/latest/downlo
 chmod +x setup.sh
 ```
 
-#### For *Docker Swarm* based setup
+#### For _Docker Swarm_ based setup
 
 ```
 curl -fsSL -o setup.sh https://github.com/makeplane/plane/releases/latest/download/swarm.sh
@@ -83,13 +83,14 @@ chmod +x setup.sh
 
 ### Proceed with setup
 
-Above steps will set you ready to install and start plane services.
+Above steps will set you ready to install and start operoz services.
 
 Lets get started by running the `./setup.sh` command.
 
 This will prompt you with the below options.
 
-#### Docker Compose 
+#### Docker Compose
+
 ```bash
 Select an Action you want to perform:
    1) Install (x86_64)
@@ -106,10 +107,10 @@ Action [2]: 1
 
 For the 1st time setup, type "1" as action input.
 
-This will create a folder `plane-app` and will download 2 files inside that
+This will create a folder `operoz-app` and will download 2 files inside that
 
 - `docker-compose.yaml`
-- `plane.env`
+- `operoz.env`
 
 Again the `options [1-8]` will be popped up, and this time hit `8` to exit.
 
@@ -130,10 +131,10 @@ Action [3]: 1
 
 For the 1st time setup, type "1" as action input.
 
-This will create a create a folder `plane-app` and will download 2 files inside that
+This will create a create a folder `operoz-app` and will download 2 files inside that
 
 - `docker-compose.yaml`
-- `plane.env`
+- `operoz.env`
 
 Again the `options [1-7]` will be popped up, and this time hit `7` to exit.
 
@@ -146,9 +147,9 @@ Below are the most import keys you must refer to. _<span style="color: #fcba03">
 
 > `LISTEN_HTTP_PORT` - This is default set to `80`. Make sure the port you choose to use is not preoccupied. (e.g `LISTEN_HTTP_PORT=8080`)
 
-> `WEB_URL` - This is default set to `http://localhost`. Change this to the FQDN you plan to use along with LISTEN_HTTP_PORT (eg. `https://plane.example.com:8080` or `http://[IP-ADDRESS]:8080`)
+> `WEB_URL` - This is default set to `http://localhost`. Change this to the FQDN you plan to use along with LISTEN_HTTP_PORT (eg. `https://operoz.example.com:8080` or `http://[IP-ADDRESS]:8080`)
 
-> `CORS_ALLOWED_ORIGINS` - This is default set to `http://localhost`. Change this to the FQDN you plan to use along with LISTEN_HTTP_PORT (eg. `https://plane.example.com:8080` or `http://[IP-ADDRESS]:8080`)
+> `CORS_ALLOWED_ORIGINS` - This is default set to `http://localhost`. Change this to the FQDN you plan to use along with LISTEN_HTTP_PORT (eg. `https://operoz.example.com:8080` or `http://[IP-ADDRESS]:8080`)
 
 There are many other settings you can play with, but we suggest you configure `EMAIL SETTINGS` as it will enable you to invite your teammates onto the platform.
 
@@ -181,15 +182,15 @@ Be patient as it might take sometime based on download speed and system configur
 
 This is the confirmation that all images were downloaded and the services are up & running.
 
-You have successfully self hosted `Plane` instance. Access the application by going to IP or domain you have configured it (e.g `https://plane.example.com:8080` or `http://[IP-ADDRESS]:8080`)
+You have successfully self hosted `Operoz` instance. Access the application by going to IP or domain you have configured it (e.g `https://operoz.example.com:8080` or `http://[IP-ADDRESS]:8080`)
 
 ---
 
 ### Stopping the Server / Remove Stack
 
-In case you want to make changes to `plane.env` variables, we suggest you to stop the services before doing that.
+In case you want to make changes to `operoz.env` variables, we suggest you to stop the services before doing that.
 
-#### Docker Compose 
+#### Docker Compose
 
 Lets again run the `./setup.sh` command. You will again be prompted with the below options. This time select `3` to stop the services
 
@@ -234,11 +235,12 @@ If all goes well, you will see the confirmation from docker cli
 
 ### Restarting the Server / Redeploy Stack
 
-In case you want to make changes to `plane.env` variables, without stopping the server or you noticed some abnormalies in services, you can restart the services with `RESTART` / `REDEPLOY` option.
+In case you want to make changes to `operoz.env` variables, without stopping the server or you noticed some abnormalies in services, you can restart the services with `RESTART` / `REDEPLOY` option.
 
 Lets again run the `./setup.sh` command. You will again be prompted with the below options. This time select `4` to restart the services
 
 #### Docker Compose
+
 ```bash
 Select a Action you want to perform:
    1) Install (x86_64)
@@ -275,9 +277,9 @@ If all goes well, you will see the confirmation from docker cli
 
 ---
 
-### Upgrading Plane Version 
+### Upgrading Operoz Version
 
-It is always advised to keep Plane up to date with the latest release.
+It is always advised to keep Operoz up to date with the latest release.
 
 Lets again run the `./setup.sh` command. You will again be prompted with the below options. This time select `5` to upgrade the release.
 
@@ -297,7 +299,7 @@ Select a Action you want to perform:
 Action [2]: 5
 ```
 
-By choosing this, it will stop the services and then will download the latest `docker-compose.yaml` and `plane.env`.
+By choosing this, it will stop the services and then will download the latest `docker-compose.yaml` and `operoz.env`.
 
 You must expect the below message
 
@@ -305,9 +307,9 @@ You must expect the below message
 
 Once done, choose `8` to exit from prompt.
 
-> It is very important for you to validate the `plane.env` for the new changes.
+> It is very important for you to validate the `operoz.env` for the new changes.
 
-Once done with making changes in `plane.env` file, jump on to `Start Server`
+Once done with making changes in `operoz.env` file, jump on to `Start Server`
 
 #### Docker Swarm
 
@@ -325,21 +327,21 @@ Lets again run the `./setup.sh` command. You will again be prompted with the bel
 Action [3]: 5
 ```
 
-By choosing this, it will stop the services and then will download the latest `docker-compose.yaml` and `plane.env`.
+By choosing this, it will stop the services and then will download the latest `docker-compose.yaml` and `operoz.env`.
 
 Once done, choose `7` to exit from prompt.
 
-> It is very important for you to validate the `plane.env` for the new changes.
+> It is very important for you to validate the `operoz.env` for the new changes.
 
-Once done with making changes in `plane.env` file, jump on to `Redeploy Stack`
+Once done with making changes in `operoz.env` file, jump on to `Redeploy Stack`
 
 ---
 
 ### View Logs
 
-There would a time when you might want to check what is happening inside the API, Worker or any other container.  
+There would a time when you might want to check what is happening inside the API, Worker or any other container.
 
-Lets again run the `./setup.sh` command. You will again be prompted with the below options. 
+Lets again run the `./setup.sh` command. You will again be prompted with the below options.
 
 This time select `6` to view logs.
 
@@ -361,7 +363,6 @@ Action [2]: 6
 
 #### Docker Swarm
 
-
 ```bash
    1) Deploy Stack
    2) Remove Stack
@@ -375,7 +376,9 @@ Action [3]: 6
 ```
 
 #### Service Menu Options for Logs
+
 This will further open sub-menu with list of services
+
 ```bash
 Select a Service you want to view the logs for:
    1) Web
@@ -395,6 +398,7 @@ Service: 3
 ```
 
 Select any of the service to view the logs e.g. `3`. Expect something similar to this
+
 ```bash
 api-1  | Waiting for database...
 api-1  | Database available!
@@ -439,9 +443,9 @@ api-1  | [2024-05-02 03:56:03 +0000] [25] [INFO] Application startup complete.
 
 ```
 
-To exit this, use `CTRL+C` and then you will land on to the main-menu with the list of actions. 
+To exit this, use `CTRL+C` and then you will land on to the main-menu with the list of actions.
 
-Similarly, you can view the logs of other services. 
+Similarly, you can view the logs of other services.
 
 ---
 
@@ -468,11 +472,11 @@ Action [2]: 7
 In response, you can find the backup folder
 
 ```bash
-Backing Up plane-app_pgdata
-Backing Up plane-app_redisdata
-Backing Up plane-app_uploads
+Backing Up operoz-app_pgdata
+Backing Up operoz-app_redisdata
+Backing Up operoz-app_uploads
 
-Backup completed successfully. Backup files are stored in /....../plane-app/backup/20240502-1120
+Backup completed successfully. Backup files are stored in /....../operoz-app/backup/20240502-1120
 ```
 
 ---
@@ -481,7 +485,7 @@ Backup completed successfully. Backup files are stored in /....../plane-app/back
 
 When you want to restore the previously backed-up data, follow the instructions below.
 
-1. Make sure that Plane-CE is installed, started, and then stopped. This ensures that the Docker volumes are created.
+1. Make sure that Operoz-CE is installed, started, and then stopped. This ensures that the Docker volumes are created.
 
 1. Download the restore script using the command below. We suggest downloading it in the same folder as `setup.sh`.
 
@@ -496,42 +500,42 @@ When you want to restore the previously backed-up data, follow the instructions 
    ./restore.sh <path to backup folder containing *.tar.gz files>
    ```
 
-   As an example, for a backup folder `/opt/plane-selfhost/plane-app/backup/20240722-0914`, expect the response below:
+   As an example, for a backup folder `/opt/operoz-selfhost/operoz-app/backup/20240722-0914`, expect the response below:
 
    ```bash
    --------------------------------------------
-    ____  _                          ///////// 
-   |  _ \| | __ _ _ __   ___         ///////// 
-   | |_) | |/ _` | '_ \ / _ \   /////    ///// 
-   |  __/| | (_| | | | |  __/   /////    ///// 
-   |_|   |_|\__,_|_| |_|\___|        ////      
-                                    ////      
+    ____  _                          /////////
+   |  _ \| | __ _ _ __   ___         /////////
+   | |_) | |/ _` | '_ \ / _ \   /////    /////
+   |  __/| | (_| | | | |  __/   /////    /////
+   |_|   |_|\__,_|_| |_|\___|        ////
+                                    ////
    --------------------------------------------
    Project management tool from the future
    --------------------------------------------
-   Found /opt/plane-selfhost/plane-app/backup/20240722-0914/pgdata.tar.gz
-   .....Restoring plane-app_pgdata
-   .....Successfully restored volume plane-app_pgdata from pgdata.tar.gz
+   Found /opt/operoz-selfhost/operoz-app/backup/20240722-0914/pgdata.tar.gz
+   .....Restoring operoz-app_pgdata
+   .....Successfully restored volume operoz-app_pgdata from pgdata.tar.gz
 
-   Found /opt/plane-selfhost/plane-app/backup/20240722-0914/redisdata.tar.gz
-   .....Restoring plane-app_redisdata
-   .....Successfully restored volume plane-app_redisdata from redisdata.tar.gz
+   Found /opt/operoz-selfhost/operoz-app/backup/20240722-0914/redisdata.tar.gz
+   .....Restoring operoz-app_redisdata
+   .....Successfully restored volume operoz-app_redisdata from redisdata.tar.gz
 
-   Found /opt/plane-selfhost/plane-app/backup/20240722-0914/uploads.tar.gz
-   .....Restoring plane-app_uploads
-   .....Successfully restored volume plane-app_uploads from uploads.tar.gz
+   Found /opt/operoz-selfhost/operoz-app/backup/20240722-0914/uploads.tar.gz
+   .....Restoring operoz-app_uploads
+   .....Successfully restored volume operoz-app_uploads from uploads.tar.gz
 
 
    Restore completed successfully.
    ```
 
-1. Start the Plane instance using `./setup.sh start`.
+1. Start the Operoz instance using `./setup.sh start`.
 
 ---
 
 ### Restore for Commercial Air-Gapped (Docker Compose)
 
-When you want to restore the previously backed-up data on Plane Commercial Air-Gapped version, follow the instructions below.
+When you want to restore the previously backed-up data on Operoz Commercial Air-Gapped version, follow the instructions below.
 
 1. Download the restore script using the command below
 
@@ -542,7 +546,7 @@ When you want to restore the previously backed-up data on Plane Commercial Air-G
 
 1. Copy the backup folder and the `restore-airgapped.sh` to `Commercial Airgapped Edition` server
 
-1. Make sure that Plane Commercial (Airgapped) is extracted and ready to get started. In case it is running, you would need to stop that.
+1. Make sure that Operoz Commercial (Airgapped) is extracted and ready to get started. In case it is running, you would need to stop that.
 
 1. Execute the command below to restore your data.
 
@@ -550,7 +554,7 @@ When you want to restore the previously backed-up data on Plane Commercial Air-G
    ./restore-airgapped.sh <path to backup folder containing *.tar.gz files>
    ```
 
-1. After restoration, you are ready to start Plane Commercial (Airgapped) will all your previously saved data. 
+1. After restoration, you are ready to start Operoz Commercial (Airgapped) will all your previously saved data.
 
 ---
 
@@ -599,7 +603,7 @@ docker volume ls -q | grep -i "_redisdata"
 
 Given below list of REDIS volumes, identify the prefix of source and destination volumes leaving "_redisdata"
 ---------------------
-plane-app_redisdata
+operoz-app_redisdata
 v0132_redisdata
 
 Provide the Source Volume Prefix :
@@ -609,7 +613,7 @@ Provide the Source Volume Prefix :
 
 For every command you must see 2 records something like shown in above example of `redisdata`
 
-To move forward, you would need PREFIX of old setup and new setup. As per above example, `v0132` is the prefix of v0.13.2 and `plane-app` is the prefix of v0.14.0 setup
+To move forward, you would need PREFIX of old setup and new setup. As per above example, `v0132` is the prefix of v0.13.2 and `operoz-app` is the prefix of v0.14.0 setup
 
 **Back to original terminal window**, _Provide the Source Volume Prefix_ and hit ENTER.
 
@@ -617,7 +621,7 @@ Now you will be prompted to _Provide Destination Volume Prefix_. Provide the val
 
 ```
 Provide the Source Volume Prefix : v0132
-Provide the Destination Volume Prefix : plane-app
+Provide the Destination Volume Prefix : operoz-app
 ```
 
 In case the suffixes are wrong or the mentioned volumes are not found, you will receive the error shown below. The image below displays an error for source volumes.
@@ -627,4 +631,5 @@ In case the suffixes are wrong or the mentioned volumes are not found, you will 
 In case of successful migration, it will be a silent exit without error.
 
 Now its time to restart v0.14.0 setup.
+
 </details>

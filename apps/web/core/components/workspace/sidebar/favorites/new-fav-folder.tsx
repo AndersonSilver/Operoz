@@ -5,8 +5,8 @@ import type { SubmitHandler } from "react-hook-form";
 import { Controller, useForm } from "react-hook-form";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
-// plane helpers
-// plane ui
+// operoz helpers
+// operoz ui
 import { FavoriteFolderIcon } from "@operoz/propel/icons";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Input } from "@operoz/ui";

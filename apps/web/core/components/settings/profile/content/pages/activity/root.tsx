@@ -2,7 +2,7 @@ import { useState } from "react";
 import { ChevronDown } from "lucide-react";
 import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 // assets
@@ -24,7 +24,7 @@ export const ActivityProfileSettings = observer(function ActivityProfileSettings
   const [isEmpty, setIsEmpty] = useState(false);
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // derived values
   const resolvedPath = resolvedTheme === "light" ? lightActivityAsset : darkActivityAsset;

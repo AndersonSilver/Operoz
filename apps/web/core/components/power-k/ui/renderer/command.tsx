@@ -1,6 +1,6 @@
 import React from "react";
 import { Command } from "cmdk";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // local imports
 import type { TPowerKCommandConfig, TPowerKCommandGroup, TPowerKContext } from "../../core/types";

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane package imports
+// operoz package imports
 import { Expand, Shrink } from "lucide-react";
 import { CloseIcon } from "@operoz/propel/icons";
 import type { ICycle, IModule } from "@operoz/types";

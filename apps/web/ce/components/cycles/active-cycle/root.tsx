@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 import { useTheme } from "next-themes";
 import { Disclosure } from "@headlessui/react";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { ICycle } from "@operoz/types";
 import { Row } from "@operoz/ui";
@@ -99,7 +99,7 @@ export const ActiveCycleRoot = observer(function ActiveCycleRoot(props: IActiveC
   const { workspaceSlug, projectId, cycleId: propsCycleId, showHeader = true } = props;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { currentProjectActiveCycleId } = useCycle();

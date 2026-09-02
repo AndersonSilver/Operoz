@@ -2,7 +2,7 @@
 import type { ICycle, IModule, IProjectView, IWorkspaceView } from "@operoz/types";
 import type { TContextMenuItem } from "@operoz/ui";
 // hooks
-import { useQuickActionsFactory } from "@/plane-web/components/common/quick-actions-factory";
+import { useQuickActionsFactory } from "@/operoz-web/components/common/quick-actions-factory";
 
 // Types
 interface UseCycleMenuItemsProps {

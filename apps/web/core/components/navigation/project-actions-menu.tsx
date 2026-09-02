@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { useNavigate } from "react-router";
 import { LogOut, MoreHorizontal, Settings, Share2, ArchiveIcon } from "lucide-react";
-// plane imports
+// operoz imports
 import { MEMBER_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon } from "@operoz/propel/icons";

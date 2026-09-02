@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { cn } from "@operoz/utils";
 // components

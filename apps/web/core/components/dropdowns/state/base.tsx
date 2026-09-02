@@ -4,7 +4,7 @@ import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { usePopper } from "react-popper";
 import { Combobox } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { SearchIcon, StateGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
 import type { IState } from "@operoz/types";
@@ -19,8 +19,8 @@ import { getIssueDropdownPopperOptions } from "@/components/dropdowns/popper-con
 import type { TDropdownProps } from "@/components/dropdowns/types";
 // hooks
 import { useDropdown } from "@/hooks/use-dropdown";
-// plane web imports
-import { StateOption } from "@/plane-web/components/workflow";
+// operoz web imports
+import { StateOption } from "@/operoz-web/components/workflow";
 
 export type TWorkItemStateDropdownBaseProps = TDropdownProps & {
   alwaysAllowStateChange?: boolean;

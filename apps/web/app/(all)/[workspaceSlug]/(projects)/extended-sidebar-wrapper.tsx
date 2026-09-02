@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EXTENDED_SIDEBAR_WIDTH, SIDEBAR_WIDTH } from "@operoz/constants";
 import { useLocalStorage } from "@operoz/hooks";
 import { cn } from "@operoz/utils";

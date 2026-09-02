@@ -6,7 +6,7 @@ import { Loader } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 import { ComboboxPortalOptions } from "@/components/dropdowns/combobox-portal-options";
 import { getIssueDropdownPopperOptions } from "@/components/dropdowns/popper-config";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, getRandomLabelColor } from "@operoz/constants";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";

@@ -8,7 +8,7 @@ import { cn } from "@operoz/utils";
 import { BOARD_HUB_IMMERSIVE_TEXT_SHADOW, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 import { useProjectWorkSurface } from "@/components/project/project-view-shell";
 import { useProject } from "@/hooks/store/use-project";
-import { getProjectFeatureNavigation } from "@/plane-web/components/projects/navigation/helper";
+import { getProjectFeatureNavigation } from "@/operoz-web/components/projects/navigation/helper";
 type ProjectFeaturePageTitleProps = {
   featureKey?: EProjectFeatureKey;
   title?: string;

@@ -1,13 +1,13 @@
 import { useCallback } from "react";
-// plane types
+// operoz types
 import type { TSearchEntities } from "@operoz/types";
 // helpers
 import { getBase64Image, getEditorAssetSrc } from "@operoz/utils";
 import type { TCustomComponentsMetaData } from "@operoz/utils";
 // hooks
 import { useMember } from "@/hooks/store/use-member";
-// plane web hooks
-import { useAdditionalEditorMention } from "@/plane-web/hooks/use-additional-editor-mention";
+// operoz web hooks
+import { useAdditionalEditorMention } from "@/operoz-web/hooks/use-additional-editor-mention";
 
 type TArgs = {
   projectId?: string;

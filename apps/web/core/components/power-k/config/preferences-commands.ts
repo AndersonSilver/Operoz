@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useTheme } from "next-themes";
 import { Calendar, Earth, Languages, Palette } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import type { EStartOfTheWeek, TUserProfile } from "@operoz/types";

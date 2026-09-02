@@ -1,5 +1,5 @@
 import { sortBy } from "lodash-es";
-// plane imports
+// operoz imports
 import type {
   TPage,
   TPageFilterProps,

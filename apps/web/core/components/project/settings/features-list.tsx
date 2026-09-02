@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { setPromiseToast } from "@operoz/propel/toast";
 import { Tooltip } from "@operoz/propel/tooltip";
@@ -10,8 +10,8 @@ import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-it
 import { SettingsHeading } from "@/components/settings/heading";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
-// plane web imports
-import { UpgradeBadge } from "@/plane-web/components/workspace/upgrade-badge";
+// operoz web imports
+import { UpgradeBadge } from "@/operoz-web/components/workspace/upgrade-badge";
 // local imports
 import { ProjectFeatureToggle } from "./helper";
 

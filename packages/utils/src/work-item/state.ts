@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TDraggableData } from "@operoz/constants";
 import { STATE_GROUPS } from "@operoz/constants";
 import type { IState, IStateResponse } from "@operoz/types";

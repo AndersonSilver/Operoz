@@ -41,5 +41,5 @@ export enum ETranslationFiles {
 
 export const LANGUAGE_STORAGE_KEY = "userLanguage";
 
-/** One-time flag: migrates legacy Plane default (localStorage `en`) to Operoz default. */
+/** One-time flag: migrates legacy Operoz default (localStorage `en`) to Operoz default. */
 export const LEGACY_LOCALE_MIGRATION_KEY = "operozLegacyEnLocaleMigrated";

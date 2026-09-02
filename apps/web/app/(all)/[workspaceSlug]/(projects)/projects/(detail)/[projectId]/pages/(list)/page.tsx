@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { TPageNavigationTabs } from "@operoz/types";
@@ -20,8 +20,8 @@ import { PagesListView } from "@/components/pages/pages-list-view";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web hooks
-import { EPageStoreType } from "@/plane-web/hooks/store";
+// operoz web hooks
+import { EPageStoreType } from "@/operoz-web/hooks/store";
 import type { Route } from "./+types/page";
 
 const getPageType = (pageType?: string | null): TPageNavigationTabs => {
@@ -38,7 +38,7 @@ function ProjectPagesPage({ params }: Route.ComponentProps) {
   const { workspaceSlug, projectId } = params;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { getProjectById, currentProjectDetails } = useProject();

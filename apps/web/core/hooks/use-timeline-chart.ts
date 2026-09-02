@@ -3,9 +3,9 @@ import { useContext } from "react";
 import type { TTimelineType } from "@operoz/types";
 // lib
 import { StoreContext } from "@/lib/store-context";
-// Plane-web
-import { getTimelineStore } from "@/plane-web/hooks/use-timeline-chart";
-import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
+// Operoz-web
+import { getTimelineStore } from "@/operoz-web/hooks/use-timeline-chart";
+import type { IBaseTimelineStore } from "@/operoz-web/store/timeline/base-timeline.store";
 import { useTimeLineType } from "../components/gantt-chart/contexts";
 
 export const useTimeLineChart = (timelineType: TTimelineType): IBaseTimelineStore => {

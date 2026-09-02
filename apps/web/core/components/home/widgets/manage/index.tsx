@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
-// plane types
-// plane ui
+// operoz types
+// operoz ui
 import { useTranslation } from "@operoz/i18n";
 import { EModalWidth, ModalCore } from "@operoz/ui";
 import { WidgetList } from "./widget-list";

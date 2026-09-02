@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Header, EHeaderVariant } from "@operoz/ui";
 // hooks
 import { useProjectInbox } from "@/hooks/store/use-project-inbox";

@@ -1,6 +1,6 @@
 // helpers
 import { API_BASE_URL } from "@operoz/constants";
-// plane web constants
+// operoz web constants
 import type { AI_EDITOR_TASKS } from "@/constants/ai";
 // services
 import { APIService } from "@/services/api.service";

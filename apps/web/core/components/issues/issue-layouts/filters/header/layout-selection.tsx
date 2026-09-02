@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { ISSUE_LAYOUTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Tooltip } from "@operoz/propel/tooltip";

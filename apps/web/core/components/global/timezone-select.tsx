@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { CustomSearchSelect } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 // hooks

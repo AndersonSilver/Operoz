@@ -1,6 +1,6 @@
 import React from "react";
 import type { LegendProps } from "recharts";
-// plane imports
+// operoz imports
 import type { TChartLegend } from "@operoz/types";
 import { cn } from "../../utils/classname";
 

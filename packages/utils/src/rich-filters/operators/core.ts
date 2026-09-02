@@ -1,5 +1,5 @@
 import { get } from "lodash-es";
-// plane imports
+// operoz imports
 import { DATE_OPERATOR_LABELS_MAP, EMPTY_OPERATOR_LABEL, OPERATOR_LABELS_MAP } from "@operoz/constants";
 import type {
   TAllAvailableOperatorsForDisplay,

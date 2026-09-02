@@ -4,7 +4,7 @@ import { ISSUE_PRIORITIES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PriorityIcon } from "@operoz/propel/icons";
 import type { TIssuePriorities } from "@operoz/types";
-// plane constants
+// operoz constants
 // components
 import { FilterHeader, FilterOption } from "@/components/issues/issue-layouts/filters";
 // hooks

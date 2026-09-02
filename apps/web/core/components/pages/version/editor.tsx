@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type { TDisplayConfig } from "@operoz/editor";
 import type { JSONContent, TPageVersion } from "@operoz/types";
 import { Loader } from "@operoz/ui";
@@ -10,8 +10,8 @@ import { DocumentEditor } from "@/components/editor/document/editor";
 // hooks
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { usePageFilters } from "@/hooks/use-page-filters";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 
 export type TVersionEditorProps = {
   activeVersion: string | null;

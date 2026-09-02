@@ -1,5 +1,5 @@
-// plane imports
-import type { TExtendedFileHandler } from "@/plane-editor/types/config";
+// operoz imports
+import type { TExtendedFileHandler } from "@/operoz-editor/types/config";
 
 export type TFileHandler = {
   assetsUploadStatus: Record<string, number>; // blockId => progress percentage

@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 import { useParams } from "next/navigation";
 import { Star, StarOff, Users } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, ModuleStatusIcon } from "@operoz/propel/icons";

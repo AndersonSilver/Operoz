@@ -1,7 +1,7 @@
 import React from "react";
-// plane utils
+// operoz utils
 import { calculateTimeAgo, cn, getIconForLink } from "@operoz/utils";
-// plane ui
+// operoz ui
 import type { TContextMenuItem } from "../dropdowns/context-menu/root";
 import { CustomMenu } from "../dropdowns/custom-menu";
 

@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-// plane ui
+// operoz ui
 import { ModuleIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useModule } from "@/hooks/store/use-module";

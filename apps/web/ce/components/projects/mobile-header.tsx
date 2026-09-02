@@ -2,7 +2,7 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ListFilter } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { ChevronDownIcon } from "@operoz/propel/icons";
 import type { TProjectFilters } from "@operoz/types";

@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IUserLite, TFilterProperty } from "@operoz/types";
 import { EQUALITY_OPERATOR } from "@operoz/types";
 // local imports

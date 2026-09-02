@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components
@@ -12,8 +12,8 @@ import { SettingsHeading } from "@/components/settings/heading";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web imports
-import { ProjectTeamspaceList } from "@/plane-web/components/projects/teamspaces/teamspace-list";
+// operoz web imports
+import { ProjectTeamspaceList } from "@/operoz-web/components/projects/teamspaces/teamspace-list";
 // local imports
 import type { Route } from "./+types/page";
 import { MembersProjectSettingsHeader } from "./header";
@@ -21,7 +21,7 @@ import { MembersProjectSettingsHeader } from "./header";
 function MembersSettingsPage({ params }: Route.ComponentProps) {
   // router
   const { workspaceSlug, projectId } = params;
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { currentProjectDetails } = useProject();

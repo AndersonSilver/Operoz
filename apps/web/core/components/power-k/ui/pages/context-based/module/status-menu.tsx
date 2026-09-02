@@ -1,6 +1,6 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { MODULE_STATUS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { ModuleStatusIcon } from "@operoz/propel/icons";

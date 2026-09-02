@@ -2,7 +2,7 @@ import { observer } from "mobx-react";
 // icons
 import { DATE_BEFORE_FILTER_OPTIONS } from "@operoz/constants";
 import { CloseIcon } from "@operoz/propel/icons";
-// plane constants
+// operoz constants
 import { renderFormattedDate, capitalizeFirstLetter } from "@operoz/utils";
 // helpers
 type Props = {

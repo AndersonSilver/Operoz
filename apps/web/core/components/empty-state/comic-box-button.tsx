@@ -2,7 +2,7 @@ import type { Ref } from "react";
 import { Fragment, useState } from "react";
 import { usePopper } from "react-popper";
 import { Popover } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 
 type Props = {

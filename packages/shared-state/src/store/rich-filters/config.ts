@@ -1,7 +1,7 @@
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import { EMPTY_OPERATOR_LABEL } from "@operoz/constants";
 import type {
   TSupportedOperators,

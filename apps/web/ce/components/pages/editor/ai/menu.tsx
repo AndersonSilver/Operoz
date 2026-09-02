@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
 import { CornerDownRight, RefreshCcw, Sparkles, TriangleAlert } from "lucide-react";
-// plane editor
+// operoz editor
 import type { EditorRefApi } from "@operoz/editor";
 import { ChevronRightIcon } from "@operoz/propel/icons";
-// plane ui
+// operoz ui
 import { Tooltip } from "@operoz/propel/tooltip";
 // components
 import { cn } from "@operoz/utils";
 import { RichTextEditor } from "@/components/editor/rich-text";
-// plane web constants
+// operoz web constants
 import { AI_EDITOR_TASKS, LOADING_TEXTS } from "@/constants/ai";
-// plane web services
+// operoz web services
 import type { TTaskPayload } from "@/services/ai.service";
 import { AIService } from "@/services/ai.service";
 import { AskPiMenu } from "./ask-pi-menu";

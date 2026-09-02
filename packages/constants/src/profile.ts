@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EStartOfTheWeek } from "@operoz/types";
 
 export const PROFILE_VIEWER_TAB = [

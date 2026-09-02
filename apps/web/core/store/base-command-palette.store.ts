@@ -1,6 +1,6 @@
 import { observable, action, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { TCreateModalStoreTypes, TCreatePageModal } from "@operoz/constants";
 import { DEFAULT_CREATE_PAGE_MODAL_DATA, EPageAccess } from "@operoz/constants";
 import type { TProfileSettingsTabs } from "@operoz/types";

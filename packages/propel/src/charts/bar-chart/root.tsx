@@ -10,7 +10,7 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
-// plane imports
+// operoz imports
 import { AXIS_LABEL_CLASSNAME } from "@operoz/constants";
 import type { TBarChartProps } from "@operoz/types";
 // local components
