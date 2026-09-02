@@ -13,7 +13,7 @@ export type THomeWidgetKeys =
   | "notifications"
   | "drafts"
   | "my_stickies"
-  | "new_at_plane"
+  | "new_at_operoz"
   | "quick_tutorial";
 
 export type THomeWidgetProps = {

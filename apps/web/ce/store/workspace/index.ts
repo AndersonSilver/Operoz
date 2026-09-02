@@ -1,6 +1,6 @@
 // store
 import { BaseWorkspaceRootStore } from "@/store/workspace";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 
 export class WorkspaceRootStore extends BaseWorkspaceRootStore {
   constructor(_rootStore: RootStore) {

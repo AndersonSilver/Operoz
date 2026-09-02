@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { EProjectFeatureKey } from "@operoz/constants";
 import { Breadcrumbs } from "@operoz/ui";
 // components

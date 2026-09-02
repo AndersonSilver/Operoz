@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL, MCP_BASE_URL } from "@operoz/constants";
 // services
 import { APIService } from "@/services/api.service";

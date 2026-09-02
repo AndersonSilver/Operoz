@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { DATE_BEFORE_FILTER_OPTIONS } from "@operoz/constants";
 import { isInDateFormat } from "@operoz/utils";
 // components

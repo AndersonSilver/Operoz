@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "react";
-// plane imports
+// operoz imports
 import type { EventToPayloadMap } from "@operoz/editor";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 // types
@@ -9,8 +9,8 @@ import type { TEditorBodyHandlers } from "@/components/pages/editor/editor-body"
 // hooks
 import { useUser } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";
 

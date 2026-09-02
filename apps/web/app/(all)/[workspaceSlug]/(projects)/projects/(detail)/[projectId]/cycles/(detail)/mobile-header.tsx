@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EIssueFilterType, ISSUE_LAYOUTS, ISSUE_DISPLAY_FILTERS_BY_PAGE } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { CalendarLayoutIcon, BoardLayoutIcon, ListLayoutIcon, ChevronDownIcon } from "@operoz/propel/icons";
@@ -28,7 +28,7 @@ export const CycleIssuesMobileHeader = observer(function CycleIssuesMobileHeader
   const { workspaceSlug, projectId, cycleId } = useParams();
   // states
   const [analyticsModal, setAnalyticsModal] = useState(false);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { currentProjectDetails } = useProject();

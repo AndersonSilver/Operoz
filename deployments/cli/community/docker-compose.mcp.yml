@@ -1,5 +1,5 @@
 # Overlay opcional: MCP no mesmo projeto compose que api/web.
-# Uso em plane-app:
+# Uso em operoz-app:
 #   docker compose -f docker-compose.yaml -f .../docker-compose.mcp.yml --env-file operoz.env --env-file operoz-mcp.env up -d mcp
 #
 # Requer ficheiro operoz-mcp.env (ver deployments/mcp/operoz-mcp.env.example)

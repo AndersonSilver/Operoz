@@ -1,8 +1,8 @@
 import { forwardRef } from "react";
 import { range } from "lodash-es";
-// plane ui
+// operoz ui
 import { ContentWrapper } from "@operoz/ui";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 
 export const KanbanIssueBlockLoader = forwardRef(function KanbanIssueBlockLoader(

@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { ChevronDownIcon, ChevronUpIcon } from "@operoz/propel/icons";
 
 type Props = {

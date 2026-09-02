@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { BarChart } from "@operoz/propel/charts/bar-chart";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";

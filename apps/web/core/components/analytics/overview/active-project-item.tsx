@@ -1,9 +1,9 @@
-// plane package imports
+// operoz package imports
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { ProjectIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";
-// plane web hooks
+// operoz web hooks
 import { useProject } from "@/hooks/store/use-project";
 
 type Props = {

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ArchiveIcon } from "@operoz/propel/icons";
 import { renderFormattedDate } from "@operoz/utils";
 // store

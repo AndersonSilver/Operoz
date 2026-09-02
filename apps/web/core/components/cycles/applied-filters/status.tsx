@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { CYCLE_STATUS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";

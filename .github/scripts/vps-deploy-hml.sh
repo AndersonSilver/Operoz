@@ -54,7 +54,7 @@ cp "${COMPOSE_SOURCE}" "${HML_APP_PATH}/docker-compose.yaml"
 # No all-in-one so o front ainda consome imagem separada; o resto vive dentro do
 # container unico.
 SERVICES=(
-  "plane-frontend:myoperoz/plane-frontend"
+  "operoz-frontend:myoperoz/operoz-frontend"
 )
 
 for entry in "${SERVICES[@]}"; do
@@ -87,11 +87,11 @@ cd "${HML_APP_PATH}"
 # servicos que o all-in-one substituiu. Os volumes nomeados (hml_pgdata,
 # hml_redisdata, hml_uploads) nao sao tocados — os dados de homologacao ficam.
 echo "==> Recriar stack HML (all-in-one)"
-docker compose --env-file hml.env -p plane-app-hml up -d \
+docker compose --env-file hml.env -p operoz-hml up -d \
   --pull never --force-recreate --remove-orphans
 
 echo "==> Estado HML"
-docker compose --env-file hml.env -p plane-app-hml ps
+docker compose --env-file hml.env -p operoz-hml ps
 
 echo "==> Health check HML (via Caddy interno do all-in-one)"
 HML_PORT=$(grep -E '^LISTEN_HTTP_PORT=' "${HML_ENV_FILE}" | cut -d= -f2 | tr -d '"' || echo "8081")
@@ -108,7 +108,7 @@ for attempt in $(seq 1 90); do
   fi
   if [[ "${attempt}" -eq 90 ]]; then
     echo "::error::Health check HML falhou apos 6 min" >&2
-    docker compose --env-file hml.env -p plane-app-hml logs --tail=60 hml-api 2>/dev/null || true
+    docker compose --env-file hml.env -p operoz-hml logs --tail=60 hml-api 2>/dev/null || true
     exit 1
   fi
   sleep 4

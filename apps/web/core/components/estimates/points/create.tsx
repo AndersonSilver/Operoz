@@ -14,7 +14,7 @@ import { EstimateInputRoot } from "@/components/estimates/inputs/root";
 // helpers
 // hooks
 import { useEstimate } from "@/hooks/store/estimates/use-estimate";
-// plane web constants
+// operoz web constants
 
 type TEstimatePointCreate = {
   workspaceSlug: string;

@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TDateRangeFilterFieldConfig, TFilterConditionNodeForDisplay, TFilterProperty } from "@operoz/types";
 import { cn, isValidDate, renderFormattedPayloadDate, toFilterArray } from "@operoz/utils";
 // components

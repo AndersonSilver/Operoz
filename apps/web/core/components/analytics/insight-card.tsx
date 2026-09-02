@@ -1,4 +1,4 @@
-// plane package imports
+// operoz package imports
 import React from "react";
 import type { IAnalyticsResponseFields } from "@operoz/types";
 import { Loader } from "@operoz/ui";

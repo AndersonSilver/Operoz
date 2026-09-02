@@ -1,6 +1,6 @@
 import type { Dispatch, SetStateAction } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // hooks
 import { useNotification } from "@/hooks/store/notifications/use-notification";

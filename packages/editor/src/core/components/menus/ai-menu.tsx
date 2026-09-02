@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import tippy from "tippy.js";
 import type { Instance } from "tippy.js";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // types
 import type { TAIHandler } from "@/types";

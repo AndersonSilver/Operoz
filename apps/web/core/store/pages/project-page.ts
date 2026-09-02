@@ -3,8 +3,8 @@ import { computedFn } from "mobx-utils";
 // constants
 import { EPageAccess, EUserPermissions } from "@operoz/constants";
 import type { TPage } from "@operoz/types";
-// plane web store
-import type { RootStore } from "@/plane-web/store/root.store";
+// operoz web store
+import type { RootStore } from "@/operoz-web/store/root.store";
 // services
 import { ProjectPageService } from "@/services/page";
 const projectPageService = new ProjectPageService();

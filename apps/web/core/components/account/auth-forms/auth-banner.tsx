@@ -1,5 +1,5 @@
 import { Info } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";
 // helpers

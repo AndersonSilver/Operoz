@@ -1,5 +1,5 @@
 import { isNil, orderBy } from "lodash-es";
-// plane imports
+// operoz imports
 import { SPACE_BASE_PATH, SPACE_BASE_URL } from "@operoz/constants";
 import type { IProjectView, TViewFilterProps, TViewFiltersSortBy, TViewFiltersSortKey } from "@operoz/types";
 // local imports

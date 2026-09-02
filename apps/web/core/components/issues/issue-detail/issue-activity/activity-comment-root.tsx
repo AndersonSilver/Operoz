@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { E_SORT_ORDER } from "@operoz/constants";
 import { EActivityFilterType, BASE_ACTIVITY_FILTER_TYPES } from "@operoz/constants";
 import type { TCommentsOperations, TIssueActivityComment } from "@operoz/types";
@@ -7,9 +7,9 @@ import type { TCommentsOperations, TIssueActivityComment } from "@operoz/types";
 import { CommentCard } from "@/components/comments/card/root";
 // hooks
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";
-// plane web components
-import { IssueAdditionalPropertiesActivity } from "@/plane-web/components/issues/issue-details/issue-properties-activity";
-import { IssueActivityWorklog } from "@/plane-web/components/issues/worklog/activity/root";
+// operoz web components
+import { IssueAdditionalPropertiesActivity } from "@/operoz-web/components/issues/issue-details/issue-properties-activity";
+import { IssueActivityWorklog } from "@/operoz-web/components/issues/worklog/activity/root";
 // local imports
 import { IssueActivityItem } from "./activity/activity-list";
 import { IssueActivityLoader } from "./loader";

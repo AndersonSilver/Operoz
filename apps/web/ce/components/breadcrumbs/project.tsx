@@ -1,14 +1,14 @@
 import { observer } from "mobx-react";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { ProjectIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { ICustomSearchSelectOption } from "@operoz/types";
 import { BreadcrumbNavigationSearchDropdown, Breadcrumbs } from "@operoz/ui";
 import { SwitcherLabel } from "@/components/common/switcher-label";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
-import type { TProject } from "@/plane-web/types";
+import type { TProject } from "@/operoz-web/types";
 
 type TProjectBreadcrumbProps = {
   workspaceSlug: string;

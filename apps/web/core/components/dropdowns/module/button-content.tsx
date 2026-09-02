@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { CloseIcon, ModuleIcon, ChevronDownIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/utils";

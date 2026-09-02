@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ContrastIcon } from "@operoz/propel/icons";
 import type { ICycle } from "@operoz/types";
 // local imports

@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import type { IUserSettings } from "@operoz/types";
 // services
 import { UserService } from "@/services/user.service";

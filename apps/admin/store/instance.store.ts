@@ -1,6 +1,6 @@
 import { set } from "lodash-es";
 import { observable, action, computed, makeObservable, runInAction } from "mobx";
-// plane internal packages
+// operoz internal packages
 import type { TInstanceStatus } from "@operoz/constants";
 import { EInstanceStatus } from "@operoz/constants";
 import { InstanceService } from "@operoz/services";

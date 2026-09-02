@@ -1,8 +1,8 @@
-// plane package imports
+// operoz package imports
 import type { ReactNode } from "react";
 import React from "react";
 import { Calendar } from "lucide-react";
-// plane package imports
+// operoz package imports
 import { ANALYTICS_DURATION_FILTER_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { CustomSearchSelect } from "@operoz/ui";

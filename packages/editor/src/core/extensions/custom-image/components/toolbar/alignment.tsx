@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-// plane imports
+// operoz imports
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { ChevronDownIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";

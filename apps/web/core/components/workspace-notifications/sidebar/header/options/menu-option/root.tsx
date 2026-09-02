@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { CheckCircle, Clock, MoreVertical } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { ArchiveIcon, CheckIcon } from "@operoz/propel/icons";
 import type { TNotificationFilter } from "@operoz/types";
 import { PopoverMenu } from "@operoz/ui";

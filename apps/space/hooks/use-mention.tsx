@@ -1,6 +1,6 @@
 import { useRef, useEffect } from "react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { UserService } from "@operoz/services";
 import type { IUser } from "@operoz/types";
 

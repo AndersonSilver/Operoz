@@ -29,14 +29,14 @@ import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useProject } from "@/hooks/store/use-project";
 import { useUserPermissions } from "@/hooks/store/user";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 import {
   getIssueFormControlClass,
   issueFormControlBaseClass,
   IssueFormField,
-} from "@/plane-web/components/issues/issue-modal/issue-form-field";
-import { IssueModalAssigneeField } from "@/plane-web/components/issues/issue-modal/issue-modal-assignee-field";
+} from "@/operoz-web/components/issues/issue-modal/issue-form-field";
+import { IssueModalAssigneeField } from "@/operoz-web/components/issues/issue-modal/issue-modal-assignee-field";
 
 type TIssueDefaultPropertiesProps = {
   control: Control<TIssue>;

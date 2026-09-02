@@ -71,14 +71,14 @@ x-app-env:
 services:
   web:
     container_name: hml-web
-    image: myoperoz/plane-frontend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-frontend:${APP_RELEASE:-hml}
     restart: unless-stopped
     depends_on:
     - hml-api
     - hml-worker
   hml-api:
     container_name: hml-api
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-api.sh
     restart: unless-stopped
     volumes:
@@ -144,7 +144,7 @@ services:
         - api
   hml-worker:
     container_name: hml-worker
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-worker.sh
     restart: unless-stopped
     volumes:
@@ -203,7 +203,7 @@ services:
     - hml-redis
   hml-beat-worker:
     container_name: hml-beat-worker
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-beat.sh
     restart: unless-stopped
     volumes:
@@ -262,7 +262,7 @@ services:
     - hml-redis
   hml-migrator:
     container_name: hml-migrator
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-migrator.sh
     restart: on-failure
     volumes:
@@ -321,7 +321,7 @@ services:
 
   hml-assistant-worker:
     container_name: hml-assistant-worker
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-assistant-worker.sh
     restart: unless-stopped
     volumes:
@@ -380,7 +380,7 @@ services:
     - hml-redis
   hml-automation-worker:
     container_name: hml-automation-worker
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-automation-worker.sh
     restart: unless-stopped
     volumes:
@@ -439,7 +439,7 @@ services:
     - hml-redis
   hml-automation-email-worker:
     container_name: hml-automation-email-worker
-    image: myoperoz/plane-backend:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-backend:${APP_RELEASE:-hml}
     command: ./bin/docker-entrypoint-automation-email-worker.sh
     restart: unless-stopped
     volumes:
@@ -498,7 +498,7 @@ services:
     - hml-redis
   hml-space:
     container_name: hml-space
-    image: myoperoz/plane-space:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-space:${APP_RELEASE:-hml}
     restart: unless-stopped
     depends_on:
     - hml-api
@@ -510,7 +510,7 @@ services:
         - space
   hml-live:
     container_name: hml-live
-    image: myoperoz/plane-live:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-live:${APP_RELEASE:-hml}
     restart: unless-stopped
     environment:
       API_BASE_URL: ${API_BASE_URL:-http://hml-api:8000}
@@ -528,7 +528,7 @@ services:
 
   hml-admin:
     container_name: hml-admin
-    image: myoperoz/plane-admin:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-admin:${APP_RELEASE:-hml}
     restart: unless-stopped
     depends_on:
     - web
@@ -539,7 +539,7 @@ services:
         - admin
   hml-proxy:
     container_name: hml-proxy
-    image: myoperoz/plane-proxy:${APP_RELEASE:-hml}
+    image: myoperoz/operoz-proxy:${APP_RELEASE:-hml}
     restart: unless-stopped
     environment:
       APP_DOMAIN: ${APP_DOMAIN:-hml.operoz.io}

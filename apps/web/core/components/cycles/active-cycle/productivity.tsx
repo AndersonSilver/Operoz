@@ -2,7 +2,7 @@ import { Fragment } from "react";
 import { observer } from "mobx-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { ICycle, TCycleEstimateType } from "@operoz/types";
 import { Loader } from "@operoz/ui";
@@ -28,7 +28,7 @@ export const ActiveCycleProductivity = observer(function ActiveCycleProductivity
   const { workspaceSlug, projectId, cycle } = props;
   // theme hook
   const { resolvedTheme } = useTheme();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // hooks
   const { getEstimateTypeByCycleId, setEstimateType } = useCycle();

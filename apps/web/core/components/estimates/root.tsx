@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // components
 import { SettingsBoxedControlItem } from "@/components/settings/boxed-control-item";
@@ -10,8 +10,8 @@ import { SettingsHeading } from "@/components/settings/heading";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useProject } from "@/hooks/store/use-project";
-// plane web components
-import { UpdateEstimateModal } from "@/plane-web/components/estimates";
+// operoz web components
+import { UpdateEstimateModal } from "@/operoz-web/components/estimates";
 // local imports
 import { CreateEstimateModal } from "./create/modal";
 import { DeleteEstimateModal } from "./delete/modal";

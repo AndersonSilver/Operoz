@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 // assets
 import maintenanceModeDarkModeImage from "@/app/assets/instance/maintenance-mode-dark.svg?url";
@@ -11,7 +11,7 @@ const linkMap = [
   {
     key: "mail_to",
     label: "Contact Support",
-    value: "mailto:support@plane.so",
+    value: "mailto:support@operoz.so",
   },
   {
     key: "status",
@@ -20,8 +20,8 @@ const linkMap = [
   },
   {
     key: "twitter_handle",
-    label: "@planepowers",
-    value: "https://x.com/planepowers",
+    label: "@operozpowers",
+    value: "https://x.com/operozpowers",
   },
 ];
 

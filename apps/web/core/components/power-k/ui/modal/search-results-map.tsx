@@ -1,5 +1,5 @@
 import { Briefcase, FileText, Layers, LayoutGrid } from "lucide-react";
-// plane imports
+// operoz imports
 import { ContrastIcon, DiceIcon } from "@operoz/propel/icons";
 import type {
   IWorkspaceDefaultSearchResult,
@@ -11,9 +11,9 @@ import type {
 import { generateWorkItemLink } from "@operoz/utils";
 // components
 import type { TPowerKSearchResultsKeys } from "@/components/power-k/core/types";
-// plane web imports
-import { SEARCH_RESULTS_GROUPS_MAP_EXTENDED } from "@/plane-web/components/command-palette/power-k/search/search-results-map";
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web imports
+import { SEARCH_RESULTS_GROUPS_MAP_EXTENDED } from "@/operoz-web/components/command-palette/power-k/search/search-results-map";
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 
 export type TPowerKSearchResultGroupDetails = {
   icon?: React.ComponentType<{ className?: string }>;

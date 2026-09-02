@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TProfileSettingsTabs } from "@operoz/types";
 
 export enum PROFILE_SETTINGS_CATEGORY {

@@ -1,5 +1,5 @@
 import { useRouter } from "next/navigation";
-// plane types
+// operoz types
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import type { TActivityEntityData, TProjectEntityData } from "@operoz/types";
 import { calculateTimeAgo } from "@operoz/utils";

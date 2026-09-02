@@ -1,8 +1,8 @@
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Tabs } from "@operoz/propel/tabs";
-// plane web components
-import { ORDERED_PAGE_NAVIGATION_TABS_LIST } from "@/plane-web/components/pages/navigation-pane";
+// operoz web components
+import { ORDERED_PAGE_NAVIGATION_TABS_LIST } from "@/operoz-web/components/pages/navigation-pane";
 
 export function PageNavigationPaneTabsList() {
   // translation

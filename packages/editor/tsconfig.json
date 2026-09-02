@@ -8,7 +8,7 @@
     "paths": {
       "src/*": ["./src/*"],
       "@/*": ["./src/core/*"],
-      "@/plane-editor/*": ["./src/ce/*"],
+      "@/operoz-editor/*": ["./src/ce/*"],
       "@/styles/*": ["./src/styles/*"]
     }
   },

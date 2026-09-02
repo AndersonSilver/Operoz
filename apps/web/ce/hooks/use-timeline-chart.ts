@@ -1,9 +1,9 @@
 // types
 import type { TTimelineTypeCore } from "@operoz/types";
 import { GANTT_TIMELINE_TYPE } from "@operoz/types";
-// Plane-web
+// Operoz-web
 
-import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
+import type { IBaseTimelineStore } from "@/operoz-web/store/timeline/base-timeline.store";
 import type { ITimelineStore } from "../store/timeline";
 
 export const getTimelineStore = (

@@ -5,7 +5,7 @@ import { Outlet } from "react-router";
 import { NotAuthorizedView } from "@/components/auth-screens/not-authorized-view";
 import { getWorkspaceActivePath, isBoardDetailSettingsPath, pathnameToAccessKey } from "@/components/settings/helper";
 import { SettingsMobileNav } from "@/components/settings/mobile/nav";
-// plane imports
+// operoz imports
 import { WORKSPACE_SETTINGS_ACCESS } from "@operoz/constants";
 import type { EUserWorkspaceRoles } from "@operoz/types";
 // components

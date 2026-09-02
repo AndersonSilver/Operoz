@@ -5,7 +5,7 @@ import { usePopper } from "react-popper";
 import { Component, Loader } from "lucide-react";
 import { Combobox } from "@headlessui/react";
 import { getRandomLabelColor } from "@operoz/constants";
-// plane imports
+// operoz imports
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
 import { CheckIcon, SearchIcon, LabelPropertyIcon } from "@operoz/propel/icons";
@@ -58,7 +58,7 @@ export const WorkItemLabelSelectBase = observer(function WorkItemLabelSelectBase
   const [popperElement, setPopperElement] = useState<HTMLDivElement | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [submitting, setSubmitting] = useState<boolean>(false);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { isMobile } = usePlatformOS();

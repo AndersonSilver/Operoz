@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { Toast } from "@operoz/propel/toast";
 import { resolveGeneralTheme } from "@operoz/utils";
 

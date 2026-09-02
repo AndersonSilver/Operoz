@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TOAuthConfigs } from "@operoz/types";
 // local imports
 import { useCoreOAuthConfig } from "./core";

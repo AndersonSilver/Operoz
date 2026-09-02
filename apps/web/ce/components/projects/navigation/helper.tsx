@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { EUserPermissions, EProjectFeatureKey } from "@operoz/constants";
 import { CycleIcon, IntakeIcon, ModuleIcon, PageIcon, ViewsIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import { LifeBuoy } from "lucide-react";

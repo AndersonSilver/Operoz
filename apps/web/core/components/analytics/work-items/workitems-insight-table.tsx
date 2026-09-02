@@ -7,9 +7,9 @@ import { UserRound } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { ProjectIcon } from "@operoz/propel/icons";
-// plane package imports
+// operoz package imports
 import type { AnalyticsTableDataMap, WorkItemInsightColumns } from "@operoz/types";
-// plane web components
+// operoz web components
 import { Avatar } from "@operoz/ui";
 import { getFileURL } from "@operoz/utils";
 // hooks
@@ -17,7 +17,7 @@ import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";
 import { useAnalytics } from "@/hooks/store/use-analytics";
 import { useProject } from "@/hooks/store/use-project";
 import { AnalyticsService } from "@/services/analytics.service";
-// plane web components
+// operoz web components
 import { exportCSV } from "../export";
 import { InsightTable } from "../insight-table";
 

@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-// Plane
+// Operoz
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IBlockUpdateDependencyData, IGanttBlock } from "@operoz/types";
 // hooks

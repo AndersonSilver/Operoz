@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TIssueServiceType } from "@operoz/types";
 // computed
 import { useIssueDetail } from "@/hooks/store/use-issue-detail";

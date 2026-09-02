@@ -1,7 +1,7 @@
 import React, { forwardRef } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal, Star } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { IFavorite } from "@operoz/types";
 import { CustomMenu } from "@operoz/ui";

@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import type { TIssueComment, TCommentsOperations } from "@operoz/types";
-// plane web imports
-import { CommentBlock, CommentCardDisplay } from "@/plane-web/components/comments";
+// operoz web imports
+import { CommentBlock, CommentCardDisplay } from "@/operoz-web/components/comments";
 // local imports
 import { CommentQuickActions } from "../quick-actions";
 

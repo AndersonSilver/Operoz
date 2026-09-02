@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TFilterValue, TFilterProperty } from "@operoz/types";
 // local imports
 import type { TFilterValueInputProps } from "@/components/rich-filters/shared";

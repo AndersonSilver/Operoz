@@ -1,6 +1,6 @@
 import type { Params } from "react-router";
-// plane web imports
-import { detectExtendedContextFromURL } from "@/plane-web/components/command-palette/power-k/context-detector";
+// operoz web imports
+import { detectExtendedContextFromURL } from "@/operoz-web/components/command-palette/power-k/context-detector";
 // local imports
 import type { TPowerKContextType } from "./types";
 

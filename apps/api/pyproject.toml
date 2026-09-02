@@ -1,5 +1,5 @@
 [project]
-name = "Plane"
+name = "Operoz"
 version = "0.24.0"
 description = "Open-source project management that unlocks customer value"
 
@@ -77,7 +77,7 @@ max-complexity = 10
 combine-as-imports = true
 detect-same-package = true
 force-wrap-aliases = true
-known-first-party = ["plane"]
+known-first-party = ["operoz"]
 known-third-party = ["rest_framework"]
 relative-imports-order = "closest-to-furthest"
 

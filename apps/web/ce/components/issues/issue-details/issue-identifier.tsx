@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TIssueIdentifierProps, TIssueTypeIdentifier, TIssueIdentifierSize } from "@operoz/types";
 // hooks

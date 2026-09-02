@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";

@@ -1,7 +1,7 @@
 import { isEqual, concat, get, indexOf, isEmpty, orderBy, pull, set, uniq, update, clone } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane constants
+// operoz constants
 import { ALL_ISSUES, ISSUE_PRIORITIES } from "@operoz/constants";
 // types
 import type {
@@ -23,8 +23,8 @@ import type {
 import { EIssueServiceType, EIssueLayoutTypes } from "@operoz/types";
 // helpers
 import { convertToISODateString, renderFormattedPayloadDate } from "@operoz/utils";
-// plane web imports
-import { workItemSortWithOrderByExtended } from "@/plane-web/store/issue/helpers/base-issue.store";
+// operoz web imports
+import { workItemSortWithOrderByExtended } from "@/operoz-web/store/issue/helpers/base-issue.store";
 // services
 import { CycleService } from "@/services/cycle.service";
 import { IssueArchiveService, IssueService } from "@/services/issue";

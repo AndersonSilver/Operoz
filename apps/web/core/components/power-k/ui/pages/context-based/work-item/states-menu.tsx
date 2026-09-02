@@ -1,13 +1,13 @@
 import { Command } from "cmdk";
 import { observer } from "mobx-react";
-// plane types
+// operoz types
 import { useParams } from "next/navigation";
 import type { TIssue } from "@operoz/types";
 import { Spinner } from "@operoz/ui";
 // hooks
 import { useProjectState } from "@/hooks/store/use-project-state";
 // local imports
-import { PowerKProjectStatesMenuItems } from "@/plane-web/components/command-palette/power-k/pages/context-based/work-item/state-menu-item";
+import { PowerKProjectStatesMenuItems } from "@/operoz-web/components/command-palette/power-k/pages/context-based/work-item/state-menu-item";
 
 type Props = {
   handleSelect: (stateId: string) => void;

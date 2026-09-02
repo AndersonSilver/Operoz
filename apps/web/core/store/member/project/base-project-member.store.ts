@@ -1,7 +1,7 @@
 import { uniq, unset, set, update, sortBy } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import { EUserPermissions } from "@operoz/constants";
 import type {
   EUserProjectRoles,
@@ -10,8 +10,8 @@ import type {
   IUserLite,
   TProjectMembership,
 } from "@operoz/types";
-// plane web imports
-import type { RootStore } from "@/plane-web/store/root.store";
+// operoz web imports
+import type { RootStore } from "@/operoz-web/store/root.store";
 // services
 import { ProjectMemberService, ProjectService } from "@/services/project";
 // store

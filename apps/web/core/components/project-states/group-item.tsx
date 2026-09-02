@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { observer } from "mobx-react";
 
-// plane imports
+// operoz imports
 import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { PlusIcon, StateGroupIcon, ChevronDownIcon } from "@operoz/propel/icons";
@@ -41,7 +41,7 @@ export const GroupItem = observer(function GroupItem(props: TGroupItem) {
   } = props;
   // refs
   const dropElementRef = useRef<HTMLDivElement | null>(null);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // state
   const [createState, setCreateState] = useState(false);

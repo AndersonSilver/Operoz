@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import type { TInboxIssue, TIssue, TInboxIssueWithPagination, THubMode } from "@operoz/types";
 import { EInboxIssueSource, EHubMode } from "@operoz/types";

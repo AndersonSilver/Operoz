@@ -1,8 +1,8 @@
 import { observer } from "mobx-react";
-// plane ui
+// operoz ui
 import { CycleIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 //hooks
 import { useCycle } from "@/hooks/store/use-cycle";

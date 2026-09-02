@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { useRef } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { CommentReplyIcon } from "@operoz/propel/icons";
 import type { TIssueComment } from "@operoz/types";
 import { cn } from "@operoz/utils";

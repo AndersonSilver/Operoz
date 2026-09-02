@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
-// plane types
+// operoz types
 import type { ILinkDetails } from "@operoz/types";
 // components
 import { ModulesLinksListItem } from "@/components/modules";

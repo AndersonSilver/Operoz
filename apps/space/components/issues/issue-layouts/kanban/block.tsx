@@ -2,11 +2,11 @@ import type { MutableRefObject } from "react";
 import { observer } from "mobx-react";
 import { Link } from "react-router";
 import { useParams, useSearchParams } from "next/navigation";
-// plane types
+// operoz types
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { IIssueDisplayProperties } from "@operoz/types";
-// plane ui
-// plane utils
+// operoz ui
+// operoz utils
 import { cn } from "@operoz/utils";
 // components
 import { WithDisplayPropertiesHOC } from "@/components/issues/issue-layouts/with-display-properties-HOC";

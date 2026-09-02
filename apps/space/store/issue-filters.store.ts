@@ -1,7 +1,7 @@
 import { cloneDeep, isEqual, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane internal
+// operoz internal
 import { ISSUE_DISPLAY_FILTERS_BY_LAYOUT } from "@operoz/constants";
 import type { IssuePaginationOptions, TIssueParams } from "@operoz/types";
 // store

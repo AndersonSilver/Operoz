@@ -1,7 +1,7 @@
 import type { MutableRefObject } from "react";
 import { useRef, useState } from "react";
 import type { LucideIcon } from "lucide-react";
-// plane helpers
+// operoz helpers
 import { PROJECT_SETTINGS_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import type { ISvgIcons } from "@operoz/propel/icons";

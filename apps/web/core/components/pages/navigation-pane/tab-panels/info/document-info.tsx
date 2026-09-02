@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { TDocumentInfo } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
 import { getReadTimeFromWordsCount } from "@operoz/utils";

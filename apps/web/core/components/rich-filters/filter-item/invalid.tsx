@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { CircleAlert } from "lucide-react";
-// plane imports
+// operoz imports
 import type { TExternalFilter, TFilterProperty } from "@operoz/types";
 // local imports
 import { FilterItemCloseButton } from "./close-button";

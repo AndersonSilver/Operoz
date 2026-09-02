@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ENotificationTab } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
@@ -11,7 +11,7 @@ type TNotificationEmptyStateProps = {
 export const NotificationEmptyState = observer(function NotificationEmptyState({
   currentNotificationTab,
 }: TNotificationEmptyStateProps) {
-  // plane imports
+  // operoz imports
   const { t } = useTranslation();
 
   return (

@@ -21,7 +21,7 @@ class TestAssistantAccess:
         from operoz.db.models import User
 
         outsider = create_user
-        member = User.objects.create(email="member@plane.so", username="member-user")
+        member = User.objects.create(email="member@operoz.so", username="member-user")
         WorkspaceMember.objects.create(workspace=workspace, member=member, role=ROLE.MEMBER.value)
 
         project = Project.objects.create(

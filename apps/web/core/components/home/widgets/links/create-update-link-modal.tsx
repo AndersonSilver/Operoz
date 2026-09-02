@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
-// plane types
-// plane ui
+// operoz types
+// operoz ui
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import type { TLinkEditableFields } from "@operoz/types";

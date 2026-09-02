@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { useSearchParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { OAuthOptions } from "@operoz/ui";
 // helpers
 import type { TAuthErrorInfo } from "@/helpers/authentication.helper";

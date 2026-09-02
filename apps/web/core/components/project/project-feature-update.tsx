@@ -8,8 +8,8 @@ import { Row } from "@operoz/ui";
 // components
 // hooks
 import { useProject } from "@/hooks/store/use-project";
-// plane web imports
-import { ProjectFeaturesList } from "@/plane-web/components/projects/settings/features-list";
+// operoz web imports
+import { ProjectFeaturesList } from "@/operoz-web/components/projects/settings/features-list";
 
 type Props = {
   workspaceSlug: string;

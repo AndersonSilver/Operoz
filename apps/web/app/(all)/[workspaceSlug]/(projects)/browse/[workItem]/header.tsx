@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { Header, Row } from "@operoz/ui";
 import { cn } from "@operoz/utils";
 // components

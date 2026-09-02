@@ -99,7 +99,11 @@ jobs:
       packages: write
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
-      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-frontend
+      # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
+      # trocam depois, quando a imagem nova existir em todas as tags que eles
+      # referenciam — senao abre uma janela pedindo imagem inexistente.
+      WEB_IMAGE_NAME_NOVO: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-web
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
@@ -115,7 +119,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build e push plane-frontend
+      - name: Build e push operoz-frontend
         if: ${{ github.event_name == 'push' || inputs.deploy_target == 'web' || inputs.deploy_target == 'full' }}
         uses: docker/build-push-action@10e90e3645eae34f1e60eeb005ba3a3d33f178e8 # v6
         with:
@@ -126,6 +130,9 @@ jobs:
             ${{ env.WEB_IMAGE_NAME }}:${{ env.RELEASE_TAG }}
             ${{ env.WEB_IMAGE_NAME }}:stable
             ${{ env.WEB_IMAGE_NAME }}:${{ github.sha }}
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:${{ env.RELEASE_TAG }}
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:stable
+            ${{ env.WEB_IMAGE_NAME_NOVO }}:${{ github.sha }}
           build-args: |
             VITE_ENABLE_BOARDS=true
             VITE_API_BASE_URL=${{ vars.OPEROZ_WEB_URL || vars.OPERIS_WEB_URL || 'https://www.operoz.io' }}
@@ -162,19 +169,19 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - service: plane-backend
+          - service: operoz-backend
             context: apps/api
             file: apps/api/Dockerfile.api
-          - service: plane-space
+          - service: operoz-space
             context: .
             file: apps/space/Dockerfile.space
-          - service: plane-admin
+          - service: operoz-admin
             context: .
             file: apps/admin/Dockerfile.admin
-          - service: plane-live
+          - service: operoz-live
             context: .
             file: apps/live/Dockerfile.live
-          - service: plane-proxy
+          - service: operoz-proxy
             context: apps/proxy
             file: apps/proxy/Dockerfile.ce
     steps:
@@ -205,7 +212,7 @@ jobs:
   # Builda e publica a imagem "backend-all-in-one" (api+worker+beat+
   # migrator+admin+space+live+proxy num container so, ver deployments/aio/operoz/).
   # So publica no GHCR — NAO substitui o deploy full atual (job `deploy` abaixo
-  # continua usando plane-backend/space/admin/live/proxy separados). Troca de
+  # continua usando operoz-backend/space/admin/live/proxy separados). Troca de
   # verdade na VPS e passo manual, feito depois de validar a imagem publicada.
   build-aio:
     needs: [meta, build-full]
@@ -240,11 +247,11 @@ jobs:
             ${{ env.IMAGE_PREFIX }}/operoz-aio-api:stable
             ${{ env.IMAGE_PREFIX }}/operoz-aio-api:${{ github.sha }}
           build-args: |
-            BACKEND_IMAGE=${{ env.IMAGE_PREFIX }}/plane-backend:${{ env.RELEASE_TAG }}
-            SPACE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-space:${{ env.RELEASE_TAG }}
-            ADMIN_IMAGE=${{ env.IMAGE_PREFIX }}/plane-admin:${{ env.RELEASE_TAG }}
-            LIVE_IMAGE=${{ env.IMAGE_PREFIX }}/plane-live:${{ env.RELEASE_TAG }}
-            PROXY_IMAGE=${{ env.IMAGE_PREFIX }}/plane-proxy:${{ env.RELEASE_TAG }}
+            BACKEND_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-backend:${{ env.RELEASE_TAG }}
+            SPACE_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-space:${{ env.RELEASE_TAG }}
+            ADMIN_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-admin:${{ env.RELEASE_TAG }}
+            LIVE_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-live:${{ env.RELEASE_TAG }}
+            PROXY_IMAGE=${{ env.IMAGE_PREFIX }}/operoz-proxy:${{ env.RELEASE_TAG }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -259,7 +266,11 @@ jobs:
       packages: read
     env:
       RELEASE_TAG: ${{ needs.meta.outputs.release_tag }}
-      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/plane-frontend
+      WEB_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-frontend
+      # Etapa 1 de 2 do rename: publica tambem sob operoz-web. Os compose so
+      # trocam depois, quando a imagem nova existir em todas as tags que eles
+      # referenciam — senao abre uma janela pedindo imagem inexistente.
+      WEB_IMAGE_NAME_NOVO: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-web
       MCP_IMAGE_NAME: ghcr.io/${{ needs.meta.outputs.image_repo }}/operoz-mcp
       IMAGE_PREFIX: ghcr.io/${{ needs.meta.outputs.image_repo }}
       IMAGE_TAG: ${{ needs.meta.outputs.release_tag }}
@@ -267,7 +278,7 @@ jobs:
       GIT_REF: ${{ needs.meta.outputs.release_tag }}
       GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       OPEROZ_REPO_PATH: ${{ vars.OPEROZ_REPO_PATH || '/root/operis-selfhost/Operis' }}
-      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/plane-app' }}
+      OPEROZ_APP_PATH: ${{ vars.OPEROZ_APP_PATH || '/root/operis-selfhost/operoz-app' }}
       GITHUB_ACTOR: ${{ github.actor }}
     steps:
       - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4

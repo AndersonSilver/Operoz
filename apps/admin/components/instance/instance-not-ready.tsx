@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { Button } from "@operoz/propel/button";
 // assets
-import PlaneTakeOffImage from "@/app/assets/images/plane-takeoff.png?url";
+import OperozTakeOffImage from "@/app/assets/images/operoz-takeoff.png?url";
 
 export function InstanceNotReady() {
   return (
     <div className="relative container mx-auto flex h-full w-full items-center justify-center px-5">
       <div className="relative w-auto max-w-2xl space-y-8 py-10">
         <div className="relative flex flex-col items-center justify-center space-y-4">
-          <h1 className="pb-3 text-24 font-bold">Welcome aboard Plane!</h1>
-          <img src={PlaneTakeOffImage} alt="Plane Logo" />
+          <h1 className="pb-3 text-24 font-bold">Welcome aboard Operoz!</h1>
+          <img src={OperozTakeOffImage} alt="Operoz Logo" />
           <p className="text-14 font-medium text-placeholder">Get started by setting up your instance and workspace</p>
         </div>
 

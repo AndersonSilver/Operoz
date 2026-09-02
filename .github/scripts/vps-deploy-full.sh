@@ -14,13 +14,17 @@ SCRIPT_DIR="${OPEROZ_REPO_PATH}/.github/scripts"
 # shellcheck source=vps-compose-utils.sh
 source "${SCRIPT_DIR}/vps-compose-utils.sh"
 
+# Formato: <nome no GHCR>:<nome local>. O nome local precisa continuar
+# myoperoz/operoz-*: e o que os compose antigos (nao-AIO) declaram, e
+# operoz_tag_legacy_image_aliases ainda deriva dele os aliases myoperis/*.
+# So o lado do GHCR foi renomeado.
 SERVICES=(
-  "plane-frontend:myoperoz/plane-frontend"
-  "plane-backend:myoperoz/plane-backend"
-  "plane-space:myoperoz/plane-space"
-  "plane-admin:myoperoz/plane-admin"
-  "plane-live:myoperoz/plane-live"
-  "plane-proxy:myoperoz/plane-proxy"
+  "operoz-frontend:myoperoz/operoz-frontend"
+  "operoz-backend:myoperoz/operoz-backend"
+  "operoz-space:myoperoz/operoz-space"
+  "operoz-admin:myoperoz/operoz-admin"
+  "operoz-live:myoperoz/operoz-live"
+  "operoz-proxy:myoperoz/operoz-proxy"
 )
 
 ENV_FILE="$(operoz_app_env_file "${OPEROZ_APP_PATH}")"
@@ -44,7 +48,7 @@ source "${SCRIPT_DIR}/vps-compose-utils.sh"
 # resto vive dentro do container all-in-one.
 if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
   echo "==> Topologia all-in-one detectada"
-  SERVICES=("plane-frontend:myoperoz/plane-frontend")
+  SERVICES=("operoz-frontend:myoperoz/operoz-frontend")
 fi
 
 for entry in "${SERVICES[@]}"; do
@@ -67,7 +71,7 @@ fi
 
 legacy_hub="$(operoz_compose_image_hub "${OPEROZ_APP_PATH}")"
 if [[ "${legacy_hub}" == "myoperis" ]]; then
-  echo "==> Compose legado usa ${legacy_hub}/plane-* (aliases criados)"
+  echo "==> Compose legado usa ${legacy_hub}/operoz-* (aliases criados)"
 fi
 
 if [[ ! -f "${ENV_FILE}" ]]; then
@@ -83,7 +87,7 @@ cd "${OPEROZ_APP_PATH}"
 if operoz_compose_is_aio "${OPEROZ_APP_PATH}"; then
   echo "==> Migrações rodam dentro do container AIO (programa migrator do supervisord)"
 elif operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" config --services 2>/dev/null | grep -qx migrator; then
-  echo "==> Migrações Django (nova imagem plane-backend)"
+  echo "==> Migrações Django (nova imagem operoz-backend)"
   operoz_dc "${OPEROZ_APP_PATH}" "${OPEROZ_REPO_PATH}" run --rm --no-deps migrator
 else
   echo "WARN: serviço migrator não encontrado — aplique migrações manualmente se necessário."

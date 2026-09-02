@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import type { LucideIcon } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
 import { ChevronDownIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { IUserLite } from "@operoz/types";
 import { ComboDropDown } from "@operoz/ui";
 // helpers

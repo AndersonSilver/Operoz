@@ -1,5 +1,5 @@
 import { isEmpty } from "lodash-es";
-// plane constants
+// operoz constants
 import type { EIssueFilterType } from "@operoz/constants";
 import {
   EIssueGroupByToServerOptions,
@@ -24,7 +24,7 @@ import { EIssueLayoutTypes } from "@operoz/types";
 import { getComputedDisplayFilters, getComputedDisplayProperties } from "@operoz/utils";
 // lib
 import { storage } from "@/lib/local-storage";
-import { getEnabledDisplayFilters } from "@/plane-web/store/issue/helpers/filter-utils";
+import { getEnabledDisplayFilters } from "@/operoz-web/store/issue/helpers/filter-utils";
 
 interface ILocalStoreIssueFilters {
   key: EIssuesStoreType;

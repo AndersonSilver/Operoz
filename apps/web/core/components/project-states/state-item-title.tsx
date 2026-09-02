@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { GripVertical } from "lucide-react";
 import { EIconSize, STATE_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { EditIcon, StateGroupIcon } from "@operoz/propel/icons";
 import type { IState, TStateOperationsCallbacks } from "@operoz/types";
 // local imports

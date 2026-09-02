@@ -1,7 +1,7 @@
 import type { MouseEvent } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import type { IGanttBlock } from "@operoz/types";
 import { Row } from "@operoz/ui";
 import { cn } from "@operoz/utils";

@@ -83,7 +83,7 @@ export default {
       already_have_an_account: "Už máte účet?",
       login: "Přihlásit se",
       create_account: "Vytvořit účet",
-      new_to_plane: "Nový v Plane?",
+      new_to_operoz: "Nový v Operoz?",
       back_to_sign_in: "Zpět k přihlášení",
       resend_in: "Znovu odeslat za {seconds} sekund",
       sign_in_with_unique_code: "Přihlásit se pomocí jedinečného kódu",
@@ -402,7 +402,7 @@ export default {
   full_changelog: "Úplný změnový protokol",
   support: "Podpora",
   forum: "Forum",
-  powered_by_plane_pages: "Poháněno Plane Pages",
+  powered_by_operoz_pages: "Poháněno Operoz Pages",
   please_select_at_least_one_invitation: "Vyberte alespoň jednu pozvánku.",
   please_select_at_least_one_invitation_description:
     "Vyberte alespoň jednu pozvánku pro připojení k pracovnímu prostoru.",
@@ -563,7 +563,7 @@ export default {
       not_right_now: "Teď ne",
       create_project: {
         title: "Vytvořit projekt",
-        description: "Většina věcí začíná projektem v Plane.",
+        description: "Většina věcí začíná projektem v Operoz.",
         cta: "Začít",
       },
       invite_team: {
@@ -577,7 +577,7 @@ export default {
         cta: "Konfigurovat tento prostor",
       },
       personalize_account: {
-        title: "Přizpůsobte si Plane.",
+        title: "Přizpůsobte si Operoz.",
         description: "Vyberte si obrázek, barvy a další.",
         cta: "Personalizovat nyní",
       },
@@ -610,8 +610,8 @@ export default {
         issues: "Úkoly",
       },
     },
-    new_at_plane: {
-      title: "Novinky v Plane",
+    new_at_operoz: {
+      title: "Novinky v Operoz",
     },
     quick_tutorial: {
       title: "Rychlý tutoriál",
@@ -1267,7 +1267,7 @@ export default {
   },
   workspace_creation: {
     heading: "Vytvořte si pracovní prostor",
-    subheading: "Pro používání Plane musíte vytvořit nebo se připojit k pracovnímu prostoru.",
+    subheading: "Pro používání Operoz musíte vytvořit nebo se připojit k pracovnímu prostoru.",
     form: {
       name: {
         label: "Pojmenujte svůj pracovní prostor",
@@ -1321,11 +1321,11 @@ export default {
       general: {
         title: "Přehled projektů, aktivit a metrik",
         description:
-          "Vítejte v Plane, jsme rádi, že jste zde. Vytvořte první projekt, sledujte pracovní položky a tato stránka se promění v prostor pro váš pokrok. Správci zde uvidí i položky pomáhající týmu.",
+          "Vítejte v Operoz, jsme rádi, že jste zde. Vytvořte první projekt, sledujte pracovní položky a tato stránka se promění v prostor pro váš pokrok. Správci zde uvidí i položky pomáhající týmu.",
         primary_button: {
           text: "Vytvořte první projekt",
           comic: {
-            title: "Vše začíná projektem v Plane",
+            title: "Vše začíná projektem v Operoz",
             description: "Projektem může být roadmapa produktu, marketingová kampaň nebo uvedení nového auta.",
           },
         },
@@ -1458,7 +1458,7 @@ export default {
         primary_button: {
           text: "Začněte první projekt",
           comic: {
-            title: "Vše začíná projektem v Plane",
+            title: "Vše začíná projektem v Operoz",
             description: "Projektem může být roadmapa produktu, marketingová kampaň nebo uvedení nového auta.",
           },
         },
@@ -1469,7 +1469,7 @@ export default {
         primary_button: {
           text: "Začněte první projekt",
           comic: {
-            title: "Vše začíná projektem v Plane",
+            title: "Vše začíná projektem v Operoz",
             description: "Projektem může být roadmapa produktu, marketingová kampaň nebo uvedení nového auta.",
           },
         },
@@ -1568,7 +1568,7 @@ export default {
     page_label: "{workspace} - Obecná nastavení",
     key_created: "Klíč vytvořen",
     copy_key:
-      "Zkopírujte a uložte tento klíč do Plane Pages. Po zavření jej neuvidíte. CSV soubor s klíčem byl stažen.",
+      "Zkopírujte a uložte tento klíč do Operoz Pages. Po zavření jej neuvidíte. CSV soubor s klíčem byl stažen.",
     token_copied: "Token zkopírován do schránky.",
     settings: {
       general: {
@@ -1731,7 +1731,7 @@ export default {
     empty_state: {
       api_tokens: {
         title: "Žádné API tokeny",
-        description: "Používejte API pro integraci Plane s externími systémy.",
+        description: "Používejte API pro integraci Operoz s externími systémy.",
       },
       webhooks: {
         title: "Žádné webhooky",
@@ -1945,12 +1945,12 @@ export default {
       label: "Automatizace",
       "auto-archive": {
         title: "Automaticky archivovat uzavřené pracovní položky",
-        description: "Plane bude automaticky archivovat pracovní položky, které byly dokončeny nebo zrušeny.",
+        description: "Operoz bude automaticky archivovat pracovní položky, které byly dokončeny nebo zrušeny.",
         duration: "Automaticky archivovat pracovní položky, které jsou uzavřené po dobu",
       },
       "auto-close": {
         title: "Automaticky uzavírat pracovní položky",
-        description: "Plane automaticky uzavře pracovní položky, které nebyly dokončeny nebo zrušeny.",
+        description: "Operoz automaticky uzavře pracovní položky, které nebyly dokončeny nebo zrušeny.",
         duration: "Automaticky uzavřít pracovní položky, které jsou neaktivní po dobu",
         auto_close_status: "Stav automatického uzavření",
       },
@@ -2607,8 +2607,8 @@ export default {
     edited_by: "Upraveno uživatelem",
   },
   self_hosted_maintenance_message: {
-    plane_didnt_start_up_this_could_be_because_one_or_more_plane_services_failed_to_start:
-      "Plane se nespustil. To může být způsobeno tím, že se jeden nebo více služeb Plane nepodařilo spustit.",
+    operoz_didnt_start_up_this_could_be_because_one_or_more_operoz_services_failed_to_start:
+      "Operoz se nespustil. To může být způsobeno tím, že se jeden nebo více služeb Operoz nepodařilo spustit.",
     choose_view_logs_from_setup_sh_and_docker_logs_to_be_sure:
       "Vyberte View Logs z setup.sh a Docker logů, abyste si byli jisti.",
   },

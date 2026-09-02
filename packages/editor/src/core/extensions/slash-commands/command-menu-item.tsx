@@ -1,4 +1,4 @@
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // types
 import type { ISlashCommandItem } from "@/types";

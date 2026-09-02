@@ -30,9 +30,9 @@ class TestWorkspaceAPI:
 
         # Test with valid data - include all required fields
         workspace_data = {
-            "name": "Plane",
+            "name": "Operoz",
             "slug": "pla-ne-test",
-            "company_name": "Plane Inc.",
+            "company_name": "Operoz Inc.",
         }
 
         # Make the request
@@ -63,10 +63,10 @@ class TestWorkspaceAPI:
         url = reverse("workspace")
 
         # Create first workspace
-        session_client.post(url, {"name": "Plane", "slug": "pla-ne"}, format="json")
+        session_client.post(url, {"name": "Operoz", "slug": "pla-ne"}, format="json")
 
         # Try to create a workspace with the same slug
-        response = session_client.post(url, {"name": "Plane", "slug": "pla-ne"}, format="json")
+        response = session_client.post(url, {"name": "Operoz", "slug": "pla-ne"}, format="json")
 
         # The API returns 400 BAD REQUEST for duplicate slugs, not 409 CONFLICT
         assert response.status_code == status.HTTP_400_BAD_REQUEST
@@ -78,7 +78,7 @@ class TestWorkspaceAPI:
     def test_transfer_workspace_ownership(self, session_client, workspace, create_user):
         suffix = uuid.uuid4().hex[:8]
         new_owner = User.objects.create(
-            email=f"new-owner-{suffix}@plane.so",
+            email=f"new-owner-{suffix}@operoz.so",
             username=f"new_owner_{suffix}",
             first_name="New",
             last_name="Owner",
@@ -99,7 +99,7 @@ class TestWorkspaceAPI:
     def test_transfer_workspace_ownership_forbidden_for_non_owner(self, session_client, workspace):
         suffix = uuid.uuid4().hex[:8]
         other_user = User.objects.create(
-            email=f"other-{suffix}@plane.so",
+            email=f"other-{suffix}@operoz.so",
             username=f"other_user_{suffix}",
             first_name="Other",
             last_name="User",

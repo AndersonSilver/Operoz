@@ -4,7 +4,7 @@ import { computedFn } from "mobx-utils";
 // types
 import type { EUserPermissions } from "@operoz/constants";
 import type { IWorkspaceBulkInviteFormData, IWorkspaceMember, IWorkspaceMemberInvitation } from "@operoz/types";
-// plane-web constants
+// operoz-web constants
 // services
 import { WorkspaceService } from "@/services/workspace.service";
 // types
@@ -14,7 +14,7 @@ import type { IUserStore } from "@/store/user";
 import type { IMemberRootStore } from "../index.ts";
 import type { IWorkspaceMemberFiltersStore } from "./workspace-member-filters.store";
 import { WorkspaceMemberFiltersStore } from "./workspace-member-filters.store";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 
 export interface IWorkspaceMembership {
   id: string;

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { setPromiseToast } from "@operoz/propel/toast";
 import type { IProject } from "@operoz/types";
 import { ToggleSwitch } from "@operoz/ui";

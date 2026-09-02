@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
 import { LinkIcon, EditIcon, TrashIcon, CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TIssue, TIssueServiceType } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
@@ -13,9 +13,9 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useProject } from "@/hooks/store/use-project";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+// operoz web imports
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 // local imports
 import { useRelationOperations } from "../issue-detail-widgets/relations/helper";
 import { RelationIssueProperty } from "./properties";

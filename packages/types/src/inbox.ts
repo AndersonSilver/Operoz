@@ -1,4 +1,4 @@
-// plane types
+// operoz types
 import type { TPaginationInfo } from "./common";
 import type { TIssuePriorities } from "./issues";
 import type { TIssue } from "./issues/issue";

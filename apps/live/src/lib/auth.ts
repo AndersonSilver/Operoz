@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IncomingHttpHeaders } from "http";
 import type { TUserDetails } from "@operoz/editor";
 import { logger } from "@operoz/logger";

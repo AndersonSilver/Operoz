@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { observer } from "mobx-react";
 import { useParams, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { THomeWidgetKeys, THomeWidgetProps } from "@operoz/types";
 // assets
@@ -13,8 +13,8 @@ import { SimpleEmptyState } from "@/components/empty-state/simple-empty-state-ro
 // hooks
 import { useHome } from "@/hooks/store/use-home";
 import { useProject } from "@/hooks/store/use-project";
-// plane web components
-import { HomePageHeader } from "@/plane-web/components/home/header";
+// operoz web components
+import { HomePageHeader } from "@/operoz-web/components/home/header";
 // local imports
 import { StickiesWidget } from "../stickies/widget";
 import { HomeLoader, NoProjectsEmptyState, RecentActivityWidget } from "./widgets";
@@ -26,7 +26,7 @@ import { HomeShortcutsWidget } from "./widgets/home-shortcuts";
 import { DashboardQuickLinks } from "./widgets/links";
 import { ManageWidgetsModal } from "./widgets/manage";
 import { MyWorkWidget } from "./widgets/my-work";
-import { NewAtPlaneWidget } from "./widgets/new-at-plane";
+import { NewAtOperozWidget } from "./widgets/new-at-operoz";
 import { NotificationsWidget } from "./widgets/notifications";
 import { QuickTutorialWidget } from "./widgets/quick-tutorial";
 
@@ -87,10 +87,10 @@ export const HOME_WIDGETS_LIST: {
     fullWidth: true,
     title: "stickies.title",
   },
-  new_at_plane: {
-    component: NewAtPlaneWidget,
+  new_at_operoz: {
+    component: NewAtOperozWidget,
     fullWidth: false,
-    title: "home.new_at_plane.title",
+    title: "home.new_at_operoz.title",
   },
   quick_tutorial: {
     component: QuickTutorialWidget,
@@ -102,7 +102,8 @@ export const HOME_WIDGETS_LIST: {
 function renderWidgetGrid(widgetNodes: ReactNode[], gridKey: string) {
   if (widgetNodes.length === 0) return null;
 
-  const colsClass = widgetNodes.length >= 3 ? "md:grid-cols-3" : widgetNodes.length === 2 ? "md:grid-cols-2" : "md:grid-cols-1";
+  const colsClass =
+    widgetNodes.length >= 3 ? "md:grid-cols-3" : widgetNodes.length === 2 ? "md:grid-cols-2" : "md:grid-cols-1";
 
   return (
     <div key={gridKey} className={`grid grid-cols-1 gap-4 py-4 ${colsClass}`}>
@@ -122,7 +123,7 @@ export const DashboardWidgets = observer(function DashboardWidgets() {
   const { toggleWidgetSettings, widgetsMap, showWidgetSettings, orderedWidgets, isAnyWidgetEnabled, loading } =
     useHome();
   const { loader } = useProject();
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // derived values
   const noWidgetsResolvedPath = resolvedTheme === "light" ? lightWidgetsAsset : darkWidgetsAsset;

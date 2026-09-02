@@ -188,7 +188,7 @@ describe("remove-directives", () => {
       'use-client';
       import type { FC } from "react";
       import { useState } from "react";
-      // plane imports
+      // operoz imports
       import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 
       export function MyComponent() {
@@ -201,7 +201,7 @@ describe("remove-directives", () => {
     expect(result).toMatchInlineSnapshot(`
       "import type { FC } from "react";
             import { useState } from "react";
-            // plane imports
+            // operoz imports
             import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 
             export function MyComponent() {
@@ -241,7 +241,7 @@ describe("remove-directives", () => {
 
       import type { FC } from "react";
       import { useState } from "react";
-      // plane imports
+      // operoz imports
       import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
       // hooks
       import useKeypress from "@/hooks/use-keypress";
@@ -266,7 +266,7 @@ describe("remove-directives", () => {
     expect(result).toMatchInlineSnapshot(`
       "import type { FC } from "react";
             import { useState } from "react";
-            // plane imports
+            // operoz imports
             import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
             // hooks
             import useKeypress from "@/hooks/use-keypress";

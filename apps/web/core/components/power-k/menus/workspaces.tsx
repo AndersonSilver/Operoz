@@ -1,5 +1,5 @@
 import React from "react";
-// plane imports
+// operoz imports
 import type { IWorkspace } from "@operoz/types";
 // components
 import { WorkspaceLogo } from "@/components/workspace/logo";

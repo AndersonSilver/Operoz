@@ -4,7 +4,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { useTheme } from "next-themes";
 import useSWR from "swr";
-// plane package imports
+// operoz package imports
 import { Download } from "lucide-react";
 import type { ChartXAxisDateGrouping } from "@operoz/constants";
 import {
@@ -18,7 +18,7 @@ import { Button } from "@operoz/propel/button";
 import { BarChart } from "@operoz/propel/charts/bar-chart";
 import { EmptyStateCompact } from "@operoz/propel/empty-state";
 import type { TBarItem, TChart, TChartDatum, ChartXAxisProperty, ChartYAxisMetric } from "@operoz/types";
-// plane web components
+// operoz web components
 import { generateExtendedColors, parseChartData } from "@/components/chart/utils";
 // hooks
 import { useAnalyticsFilterParams } from "@/hooks/use-analytics-filter-params";

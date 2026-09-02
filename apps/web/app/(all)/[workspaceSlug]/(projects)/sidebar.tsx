@@ -13,8 +13,8 @@ import { ENABLE_WORKSPACE_BOARDS } from "@/constants/enable-boards";
 // hooks
 import { useFavorite } from "@/hooks/store/use-favorite";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web components
-import { SidebarTeamsList } from "@/plane-web/components/workspace/sidebar/teams-sidebar-list";
+// operoz web components
+import { SidebarTeamsList } from "@/operoz-web/components/workspace/sidebar/teams-sidebar-list";
 
 export const AppSidebar = observer(function AppSidebar() {
   const { t } = useTranslation();

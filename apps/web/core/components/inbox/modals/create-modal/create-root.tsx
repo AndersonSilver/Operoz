@@ -1,7 +1,7 @@
 import type { FormEvent } from "react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 import type { EditorRefApi } from "@operoz/editor";
 import { useTranslation } from "@operoz/i18n";
@@ -19,10 +19,10 @@ import { getInboxHubIssueUrl } from "@/utils/inbox-hub";
 import { useAppRouter } from "@/hooks/use-app-router";
 import useKeypress from "@/hooks/use-keypress";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { DeDupeButtonRoot } from "@/plane-web/components/de-dupe/de-dupe-button";
-import { DuplicateModalRoot } from "@/plane-web/components/de-dupe/duplicate-modal";
-import { useDebouncedDuplicateIssues } from "@/plane-web/hooks/use-debounced-duplicate-issues";
+// operoz web imports
+import { DeDupeButtonRoot } from "@/operoz-web/components/de-dupe/de-dupe-button";
+import { DuplicateModalRoot } from "@/operoz-web/components/de-dupe/duplicate-modal";
+import { useDebouncedDuplicateIssues } from "@/operoz-web/hooks/use-debounced-duplicate-issues";
 // services
 import { FileService } from "@/services/file.service";
 // local imports

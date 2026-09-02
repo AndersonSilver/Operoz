@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react";
 import { usePopper } from "react-popper";
 import { Popover } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { CloseIcon } from "@operoz/propel/icons";
 
@@ -21,7 +21,7 @@ export function ForgotPasswordPopover() {
       },
     ],
   });
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
 
   return (

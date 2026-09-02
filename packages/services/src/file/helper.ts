@@ -1,6 +1,6 @@
 // external imports
 import { fileTypeFromBuffer } from "file-type";
-// plane imports
+// operoz imports
 import type { TFileMetaDataLite, TFileSignedURLResponse } from "@operoz/types";
 import { DANGEROUS_EXTENSIONS } from "@operoz/constants";
 

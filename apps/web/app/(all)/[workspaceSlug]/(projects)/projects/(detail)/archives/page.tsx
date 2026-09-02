@@ -1,4 +1,4 @@
-import { ProjectPageRoot } from "@/plane-web/components/projects/page";
+import { ProjectPageRoot } from "@/operoz-web/components/projects/page";
 
 function ProjectsPage() {
   return <ProjectPageRoot />;

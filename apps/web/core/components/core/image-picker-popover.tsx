@@ -6,7 +6,7 @@ import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
 import useSWR from "swr";
 import { Popover } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { ACCEPTED_COVER_IMAGE_MIME_TYPES_FOR_REACT_DROPZONE, MAX_FILE_SIZE } from "@operoz/constants";
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { Tabs } from "@operoz/propel/tabs";

@@ -1,5 +1,5 @@
 import { createContext } from "react";
-// plane admin store
+// operoz admin store
 import { RootStore } from "../store/root.store";
 
 let rootStore = new RootStore();

@@ -7,7 +7,7 @@ import type {
   IEstimatePoint as IEstimatePointType,
   TEstimateSystemKeys,
 } from "@operoz/types";
-// plane web services
+// operoz web services
 import estimateService from "@/services/estimate.service";
 // store
 import type { IEstimatePoint } from "@/store/estimates/estimate-point";

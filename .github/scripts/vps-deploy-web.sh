@@ -34,9 +34,9 @@ source "${SCRIPT_DIR}/vps-compose-utils.sh"
 echo "==> Pull imagem web: ${WEB_IMAGE}"
 operoz_docker_pull "${WEB_IMAGE}"
 
-echo "==> Tags locais (compose plane-app)"
-operoz_tag_pulled_image "${WEB_IMAGE}" "myoperoz/plane-frontend" "${LOCAL_RELEASE_TAG}"
-operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "plane-frontend"
+echo "==> Tags locais (compose operoz-app)"
+operoz_tag_pulled_image "${WEB_IMAGE}" "myoperoz/operoz-frontend" "${LOCAL_RELEASE_TAG}"
+operoz_tag_legacy_image_aliases "${OPEROZ_APP_PATH}" "operoz-frontend"
 
 if [[ ! -f "${ENV_FILE}" ]]; then
   echo "ERRO: operoz.env ou operis.env não encontrado em ${OPEROZ_APP_PATH}"

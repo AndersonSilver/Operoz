@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { History } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TDescriptionVersion } from "@operoz/types";
 import { CustomMenu } from "@operoz/ui";

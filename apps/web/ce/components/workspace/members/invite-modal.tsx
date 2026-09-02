@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { IWorkspaceBulkInviteFormData } from "@operoz/types";
 import { EModalWidth, EModalPosition, ModalCore } from "@operoz/ui";

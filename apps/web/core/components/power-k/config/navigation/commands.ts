@@ -1,5 +1,5 @@
 import { BarChart2, Briefcase, FileText, Home, Inbox, Layers, LifeBuoy, PenSquare, Settings } from "lucide-react";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel } from "@operoz/constants";
 import { ArchiveIcon, UserActivityIcon, LayersIcon, ContrastIcon, DiceIcon, Intake } from "@operoz/propel/icons";
 import type { ICycle, IModule, IPartialProject, IProjectView, IWorkspace } from "@operoz/types";

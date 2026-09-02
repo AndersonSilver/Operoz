@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { DEFAULT_GLOBAL_VIEWS_LIST } from "@operoz/constants";
 // components
 import { PageHead } from "@/components/core/page-title";

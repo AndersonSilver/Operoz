@@ -1,6 +1,6 @@
 import { set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import { UserService } from "@operoz/services";
 import type { TUserProfile } from "@operoz/types";
 import { EStartOfTheWeek } from "@operoz/types";

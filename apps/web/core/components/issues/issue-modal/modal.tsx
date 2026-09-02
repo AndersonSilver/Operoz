@@ -1,10 +1,10 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type { EIssuesStoreType, TIssue } from "@operoz/types";
-// plane web imports
-import { IssueModalProvider } from "@/plane-web/components/issues/issue-modal/provider";
+// operoz web imports
+import { IssueModalProvider } from "@/operoz-web/components/issues/issue-modal/provider";
 import { CreateUpdateIssueModalBase } from "./base";
 
 export interface IssuesModalProps {

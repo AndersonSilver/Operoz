@@ -4,8 +4,8 @@ import { cn } from "../utils";
 const NATIVE_TRIGGER_TAGS = new Set(["button", "a"]);
 
 const FORWARDING_TRIGGER_DISPLAY_NAMES = new Set([
-  "plane-ui-icon-button",
-  "plane-ui-button",
+  "operoz-ui-icon-button",
+  "operoz-ui-button",
   "Tooltip",
   "IssueDetailWidgetButton",
 ]);

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TDescriptionVersion } from "@operoz/types";
 import { Avatar, CustomMenu } from "@operoz/ui";

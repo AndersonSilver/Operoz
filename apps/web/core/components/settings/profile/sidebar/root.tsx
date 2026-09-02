@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { ScrollArea } from "@operoz/propel/scrollarea";
 import type { TProfileSettingsTabs } from "@operoz/types";
 import { cn } from "@operoz/utils";

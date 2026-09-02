@@ -1,9 +1,9 @@
 import type { LucideIcon } from "lucide-react";
-// plane ui
+// operoz ui
 import { useTranslation } from "@operoz/i18n";
 import type { ISvgIcons } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 
 type Props = {

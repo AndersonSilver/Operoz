@@ -2,9 +2,9 @@ import { autorun, makeObservable, observable, reaction, runInAction } from "mobx
 import { isEqual, set } from "lodash-es";
 import { computedFn } from "mobx-utils";
 import type { IBoardModule, TIssue, TIssueRelationMap } from "@operoz/types";
-import type { RootStore } from "@/plane-web/store/root.store";
-import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
-import { BaseTimeLineStore } from "@/plane-web/store/timeline/base-timeline.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
+import type { IBaseTimelineStore } from "@/operoz-web/store/timeline/base-timeline.store";
+import { BaseTimeLineStore } from "@/operoz-web/store/timeline/base-timeline.store";
 import {
   getModuleIdFromBoardBlock,
   getProjectIdFromBoardBlock,

@@ -2,7 +2,7 @@ import { useParams } from "next/navigation";
 import useSWR from "swr";
 import { Users } from "lucide-react";
 import { Link } from "react-router";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Popover } from "@operoz/propel/popover";
 import { cn } from "@operoz/utils";
@@ -37,9 +37,7 @@ export function EditorCircleMention(props: Props) {
   const circleLink = `/${workspaceSlug}/settings/boards/${circle.board_slug}/circulos`;
 
   return (
-    <div
-      className={cn("not-prose inline rounded-sm bg-success-subtle px-1 py-0.5 text-success-primary no-underline")}
-    >
+    <div className={cn("not-prose inline rounded-sm bg-success-subtle px-1 py-0.5 text-success-primary no-underline")}>
       <Popover delay={100} openOnHover>
         <Popover.Button>
           <span className="inline-flex items-center gap-1">

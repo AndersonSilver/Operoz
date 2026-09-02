@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-// plane imports
+// operoz imports
 import { IS_FAVORITE_MENU_OPEN } from "@operoz/constants";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { EPageAccess } from "@operoz/types";

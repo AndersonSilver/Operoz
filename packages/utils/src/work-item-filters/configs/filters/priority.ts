@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TIssuePriorities } from "@operoz/constants";
 import { ISSUE_PRIORITIES } from "@operoz/constants";
 import type { TFilterProperty, TSupportedOperators } from "@operoz/types";

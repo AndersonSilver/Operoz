@@ -2,15 +2,15 @@ import { useCallback } from "react";
 import { useParams } from "next/navigation";
 import { ArchiveIcon, ArchiveRestoreIcon, LockKeyhole, LockKeyholeOpen, Star, StarOff } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { LinkIcon, GlobeIcon, LockIcon } from "@operoz/propel/icons";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";
 import { EPageAccess } from "@operoz/types";
 import { copyTextToClipboard } from "@operoz/utils";
 // components
 import type { TPowerKCommandConfig } from "@/components/power-k/core/types";
-// plane web imports
-import { EPageStoreType, usePageStore } from "@/plane-web/hooks/store";
+// operoz web imports
+import { EPageStoreType, usePageStore } from "@/operoz-web/hooks/store";
 
 export const usePowerKPageContextBasedActions = (): TPowerKCommandConfig[] => {
   // navigation

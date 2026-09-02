@@ -1,6 +1,6 @@
 import type { Editor } from "@tiptap/core";
 import { useState } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // local imports
 import type { TCustomImageAlignment } from "../../types";

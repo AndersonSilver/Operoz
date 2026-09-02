@@ -8,8 +8,8 @@ import type {
   TProjectIssuesSearchParams,
 } from "@operoz/types";
 // helpers
-// plane web types
-import type { TProject, TPartialProject } from "@/plane-web/types";
+// operoz web types
+import type { TProject, TPartialProject } from "@/operoz-web/types";
 // services
 import { APIService } from "@/services/api.service";
 

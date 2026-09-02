@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // assets
 import darkAssetsAsset from "@/app/assets/empty-state/wiki/navigation-pane/assets-dark.webp?url";

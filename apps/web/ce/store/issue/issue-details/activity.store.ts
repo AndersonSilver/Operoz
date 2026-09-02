@@ -1,7 +1,7 @@
 import { concat, orderBy, set, uniq, update } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane package imports
+// operoz package imports
 import type { E_SORT_ORDER } from "@operoz/constants";
 import { EActivityFilterType } from "@operoz/constants";
 import type {
@@ -12,7 +12,7 @@ import type {
   TIssueServiceType,
 } from "@operoz/types";
 import { EIssueServiceType } from "@operoz/types";
-// plane web constants
+// operoz web constants
 // services
 import { IssueActivityService } from "@/services/issue";
 // store

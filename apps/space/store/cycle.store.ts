@@ -1,5 +1,5 @@
 import { action, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import { SitesCycleService } from "@operoz/services";
 import type { TPublicCycle } from "@/types/cycle";
 // store

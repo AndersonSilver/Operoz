@@ -1,7 +1,7 @@
 import { get, set, concat, uniq, update } from "lodash-es";
 import { action, observable, makeObservable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import { ALL_ISSUES } from "@operoz/constants";
 import type {
   TIssue,

@@ -14,7 +14,7 @@ export default {
     },
     not_found: {
       title: "Ups! Coś wydaje się nie tak",
-      description: "Obecnie nie możemy pobrać Twojego konta plane. Może to być błąd sieci.",
+      description: "Obecnie nie możemy pobrać Twojego konta operoz. Może to być błąd sieci.",
       cta_primary: "Spróbuj przeładować",
     },
     server_error: {

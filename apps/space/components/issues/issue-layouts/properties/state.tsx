@@ -1,9 +1,9 @@
 import { observer } from "mobx-react";
-// plane ui
+// operoz ui
 import { StateGroupIcon } from "@operoz/propel/icons";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { TStateGroups } from "@operoz/types";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 //hooks
 import { useStates } from "@/hooks/store/use-state";

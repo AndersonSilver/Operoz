@@ -1,5 +1,5 @@
 import { useState } from "react";
-// plane imports
+// operoz imports
 import { EUserPermissions, EUserPermissionsLevel } from "@operoz/constants";
 import type { IWorkspaceMember, TProjectMembership } from "@operoz/types";
 import { renderFormattedDate } from "@operoz/utils";

@@ -1,5 +1,5 @@
 import type { AxiosRequestConfig } from "axios";
-// plane types
+// operoz types
 import { API_BASE_URL } from "@operoz/constants";
 import { getFileMetaDataForUpload, generateFileUploadPayload } from "@operoz/services";
 import type { EFileAssetType, TFileEntityInfo, TFileSignedURLResponse } from "@operoz/types";

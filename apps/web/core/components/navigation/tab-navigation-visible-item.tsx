@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { PinOff } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { ContextMenu } from "@operoz/propel/context-menu";
 import { SetAsDefaultIcon } from "@operoz/propel/icons";

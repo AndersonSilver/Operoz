@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IMarking } from "@operoz/editor";
 import { cn } from "@operoz/utils";
 

@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ROLE_DETAILS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { IconButton } from "@operoz/propel/icon-button";
@@ -10,8 +10,8 @@ import { WorkspaceLogo } from "@/components/workspace/logo";
 import { useUserPermissions } from "@/hooks/store/user";
 import { useAppRouter } from "@/hooks/use-app-router";
 import { useWorkspace } from "@/hooks/store/use-workspace";
-// plane web imports
-import { SubscriptionPill } from "@/plane-web/components/common/subscription/subscription-pill";
+// operoz web imports
+import { SubscriptionPill } from "@/operoz-web/components/common/subscription/subscription-pill";
 
 export const WorkspaceSettingsSidebarHeader = observer(function WorkspaceSettingsSidebarHeader() {
   // router

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "propel-storybook",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "@operoz/propel", "storybook"],
+      "port": 6006
+    }
+  ]
+}

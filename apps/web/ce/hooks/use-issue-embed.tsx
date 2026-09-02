@@ -1,9 +1,9 @@
 // editor
 import type { TEmbedConfig } from "@operoz/editor";
-// plane types
+// operoz types
 import type { TSearchEntityRequestPayload, TSearchResponse } from "@operoz/types";
-// plane web components
-import { IssueEmbedUpgradeCard } from "@/plane-web/components/pages";
+// operoz web components
+import { IssueEmbedUpgradeCard } from "@/operoz-web/components/pages";
 
 export type TIssueEmbedHookProps = {
   fetchEmbedSuggestions?: (payload: TSearchEntityRequestPayload) => Promise<TSearchResponse>;

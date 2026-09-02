@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane utils
+// operoz utils
 import { cn, renderFormattedDate } from "@operoz/utils";
 //helpers
 //

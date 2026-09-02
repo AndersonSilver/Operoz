@@ -21,7 +21,7 @@ const Titles: TAuthHeaderDetails = {
   },
   [EAuthModes.SIGN_UP]: {
     header: "View, comment, and do more",
-    subHeader: "Sign up or log in to work with Plane work items and Pages.",
+    subHeader: "Sign up or log in to work with Operoz work items and Pages.",
   },
 };
 
@@ -35,7 +35,7 @@ export function AuthHeader(props: TAuthHeader) {
 
     return {
       header: "Comment or react to work items",
-      subHeader: "Use plane to add your valuable inputs to features.",
+      subHeader: "Use operoz to add your valuable inputs to features.",
     };
   };
 

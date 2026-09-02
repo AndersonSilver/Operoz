@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { CircleCheck, XCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { AuthService } from "@operoz/services";

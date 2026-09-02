@@ -2,7 +2,7 @@ import { useState } from "react";
 import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import { EUserPermissionsLevel, WORK_ITEM_TRACKER_ELEMENTS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { EmptyStateDetailed } from "@operoz/propel/empty-state";
@@ -25,7 +25,7 @@ export const CycleEmptyState = observer(function CycleEmptyState() {
   const cycleId = routerCycleId ? routerCycleId.toString() : undefined;
   // states
   const [cycleIssuesListModal, setCycleIssuesListModal] = useState(false);
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // store hooks
   const { getCycleById } = useCycle();

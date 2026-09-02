@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { Ban } from "lucide-react";
 import { EUserProjectRoles } from "@operoz/types";
-// plane ui
+// operoz ui
 import { Avatar, CustomSearchSelect } from "@operoz/ui";
 // helpers
 import { getFileURL } from "@operoz/utils";

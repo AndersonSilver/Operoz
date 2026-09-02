@@ -2,7 +2,7 @@ import type { MutableRefObject } from "react";
 import { Fragment, forwardRef, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { useTranslation } from "@operoz/i18n";
-// plane types
+// operoz types
 import type {
   IGroupByColumn,
   TIssueGroupByOptions,
@@ -10,7 +10,7 @@ import type {
   TPaginationData,
   TLoader,
 } from "@operoz/types";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useIntersectionObserver } from "@/hooks/use-intersection-observer";

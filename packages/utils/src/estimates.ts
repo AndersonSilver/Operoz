@@ -1,4 +1,4 @@
-// plane web constants
+// operoz web constants
 import { EEstimateSystem } from "@operoz/constants";
 
 export const isEstimatePointValuesRepeated = (

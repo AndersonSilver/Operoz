@@ -1,7 +1,7 @@
 import { useCallback, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import type { TDescriptionVersionDetails, TDescriptionVersionsListResponse } from "@operoz/types";
 import { cn } from "@operoz/utils";
 // local imports

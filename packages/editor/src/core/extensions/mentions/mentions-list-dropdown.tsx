@@ -3,7 +3,7 @@ import type { SuggestionProps } from "@tiptap/suggestion";
 import { forwardRef, useCallback, useEffect, useImperativeHandle, useLayoutEffect, useRef, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { debounce } from "lodash-es";
-// plane utils
+// operoz utils
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { cn } from "@operoz/utils";
 // helpers

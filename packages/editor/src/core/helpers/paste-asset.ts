@@ -1,4 +1,4 @@
-import { assetDuplicationHandlers } from "@/plane-editor/helpers/asset-duplication";
+import { assetDuplicationHandlers } from "@/operoz-editor/helpers/asset-duplication";
 
 // Utility function to process HTML content with all registered handlers
 export const processAssetDuplication = (htmlContent: string): { processedHtml: string } => {

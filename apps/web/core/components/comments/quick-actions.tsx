@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
 import { MoreHorizontal } from "lucide-react";
-// plane imports
+// operoz imports
 import { EIssueCommentAccessSpecifier } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { IconButton } from "@operoz/propel/icon-button";

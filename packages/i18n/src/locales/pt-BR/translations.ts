@@ -87,7 +87,7 @@ export default {
       already_have_an_account: "Já tem uma conta?",
       login: "Login",
       create_account: "Criar conta",
-      new_to_plane: "Novo no Plane?",
+      new_to_operoz: "Novo no Operoz?",
       back_to_sign_in: "Voltar ao login",
       resend_in: "Reenviar em {seconds} segundos",
       sign_in_with_unique_code: "Login com código único",
@@ -1825,7 +1825,7 @@ export default {
   full_changelog: "Changelog completo",
   support: "Suporte",
   forum: "Forum",
-  powered_by_plane_pages: "Desenvolvido por Plane Pages",
+  powered_by_operoz_pages: "Desenvolvido por Operoz Pages",
   please_select_at_least_one_invitation: "Selecione pelo menos um convite.",
   please_select_at_least_one_invitation_description:
     "Selecione pelo menos um convite para entrar no espaço de trabalho.",
@@ -2111,7 +2111,7 @@ export default {
       not_right_now: "Agora não",
       create_project: {
         title: "Criar um cliente",
-        description: "A maioria das coisas começa com um cliente no Plane.",
+        description: "A maioria das coisas começa com um cliente no Operoz.",
         cta: "Começar",
       },
       invite_team: {
@@ -2199,16 +2199,16 @@ export default {
       empty: "Nenhum ciclo ativo no momento.",
       completed: "concluídos",
     },
-    new_at_plane: {
-      title: "Novidades no Plane",
+    new_at_operoz: {
+      title: "Novidades no Operoz",
       items: {
         boards: {
           title: "Notas de versão",
-          description: "Veja o que há de novo nas últimas versões do Plane.",
+          description: "Veja o que há de novo nas últimas versões do Operoz.",
         },
         home: {
           title: "Documentação",
-          description: "Aprenda a tirar mais proveito do Plane.",
+          description: "Aprenda a tirar mais proveito do Operoz.",
         },
       },
     },
@@ -3140,7 +3140,7 @@ export default {
   },
   workspace_creation: {
     heading: "Crie seu espaço de trabalho",
-    subheading: "Para começar a usar o Plane, você precisa criar ou entrar em um espaço de trabalho.",
+    subheading: "Para começar a usar o Operoz, você precisa criar ou entrar em um espaço de trabalho.",
     form: {
       name: {
         label: "Nomeie seu espaço de trabalho",
@@ -3364,11 +3364,11 @@ export default {
       general: {
         title: "Visão geral dos seus clientes, atividades e métricas",
         description:
-          "Bem-vindo ao Plane, estamos animados por tê-lo aqui. Crie seu primeiro cliente e rastreie seus itens de trabalho, e esta página se transformará em um espaço que ajuda você a progredir. Os administradores também verão itens que ajudam sua equipe a progredir.",
+          "Bem-vindo ao Operoz, estamos animados por tê-lo aqui. Crie seu primeiro cliente e rastreie seus itens de trabalho, e esta página se transformará em um espaço que ajuda você a progredir. Os administradores também verão itens que ajudam sua equipe a progredir.",
         primary_button: {
           text: "Construa seu primeiro cliente",
           comic: {
-            title: "Tudo começa com um cliente no Plane",
+            title: "Tudo começa com um cliente no Operoz",
             description:
               "Um cliente pode ser o planejamento de um produto, uma campanha de marketing ou o lançamento de um novo carro.",
           },
@@ -3503,7 +3503,7 @@ export default {
         primary_button: {
           text: "Comece seu primeiro cliente",
           comic: {
-            title: "Tudo começa com um cliente no Plane",
+            title: "Tudo começa com um cliente no Operoz",
             description:
               "Um cliente pode ser o roteiro de um produto, uma campanha de marketing ou o lançamento de um novo carro.",
           },
@@ -3516,7 +3516,7 @@ export default {
         primary_button: {
           text: "Comece seu primeiro cliente",
           comic: {
-            title: "Tudo começa com um cliente no Plane",
+            title: "Tudo começa com um cliente no Operoz",
             description:
               "Um cliente pode ser o roteiro de um produto, uma campanha de marketing ou o lançamento de um novo carro.",
           },
@@ -4262,7 +4262,7 @@ export default {
         delete: {
           title: "Excluir token de API",
           description:
-            "Qualquer aplicativo que use este token não terá mais acesso aos dados do Plane. Esta ação não pode ser desfeita.",
+            "Qualquer aplicativo que use este token não terá mais acesso aos dados do Operoz. Esta ação não pode ser desfeita.",
           success: {
             title: "Sucesso!",
             message: "O token de API foi excluído com sucesso",
@@ -4278,7 +4278,7 @@ export default {
       api_tokens: {
         title: "Nenhum token de API criado",
         description:
-          "As APIs do Plane podem ser usadas para integrar seus dados no Plane com qualquer sistema externo. Crie um token para começar.",
+          "As APIs do Operoz podem ser usadas para integrar seus dados no Operoz com qualquer sistema externo. Crie um token para começar.",
       },
       webhooks: {
         title: "Nenhum webhook adicionado",
@@ -4342,7 +4342,7 @@ export default {
       activity: {
         title: "Nenhuma atividade ainda",
         description:
-          "Comece criando um novo item de trabalho! Adicione detalhes e propriedades a ele. Explore mais no Plane para ver sua atividade.",
+          "Comece criando um novo item de trabalho! Adicione detalhes e propriedades a ele. Explore mais no Operoz para ver sua atividade.",
       },
       assigned: {
         title: "Nenhum item de trabalho atribuído a você",
@@ -4777,12 +4777,12 @@ export default {
       label: "Automações",
       "auto-archive": {
         title: "Arquivar automaticamente itens de trabalho fechados",
-        description: "O Plane arquivará automaticamente os itens de trabalho que foram concluídos ou cancelados.",
+        description: "O Operoz arquivará automaticamente os itens de trabalho que foram concluídos ou cancelados.",
         duration: "Arquivar automaticamente itens de trabalho que estão fechados por",
       },
       "auto-close": {
         title: "Fechar automaticamente itens de trabalho",
-        description: "O Plane fechará automaticamente os itens de trabalho que não foram concluídos ou cancelados.",
+        description: "O Operoz fechará automaticamente os itens de trabalho que não foram concluídos ou cancelados.",
         duration: "Fechar automaticamente itens de trabalho que estão inativos por",
         auto_close_status: "Status de fechamento automático",
       },
@@ -5153,9 +5153,9 @@ export default {
         primary_button: {
           text: "Crie seu primeiro item de trabalho",
           comic: {
-            title: "Os itens de trabalho são blocos de construção no Plane.",
+            title: "Os itens de trabalho são blocos de construção no Operoz.",
             description:
-              "Redesenhar a interface do usuário do Plane, reformular a marca da empresa ou lançar o novo sistema de injeção de combustível são exemplos de itens de trabalho que provavelmente têm subitens de trabalho.",
+              "Redesenhar a interface do usuário do Operoz, reformular a marca da empresa ou lançar o novo sistema de injeção de combustível são exemplos de itens de trabalho que provavelmente têm subitens de trabalho.",
           },
         },
       },
@@ -5304,9 +5304,9 @@ export default {
     empty_state: {
       general: {
         title:
-          "Escreva uma nota, um documento ou uma base de conhecimento completa. Peça a Galileo, o assistente de IA do Plane, para ajudá-lo a começar",
+          "Escreva uma nota, um documento ou uma base de conhecimento completa. Peça a Galileo, o assistente de IA do Operoz, para ajudá-lo a começar",
         description:
-          "As páginas são espaço para registrar pensamentos no Plane. Anote notas de reunião, formate-as facilmente, incorpore itens de trabalho, organize-os usando uma biblioteca de componentes e mantenha-os todos no contexto do seu cliente. Para facilitar qualquer documento, invoque Galileo, a IA do Plane, com um atalho ou o clique de um botão.",
+          "As páginas são espaço para registrar pensamentos no Operoz. Anote notas de reunião, formate-as facilmente, incorpore itens de trabalho, organize-os usando uma biblioteca de componentes e mantenha-os todos no contexto do seu cliente. Para facilitar qualquer documento, invoque Galileo, a IA do Operoz, com um atalho ou o clique de um botão.",
         primary_button: {
           text: "Crie sua primeira página",
         },
@@ -5741,7 +5741,7 @@ export default {
     edited_by: "Editado por",
   },
   self_hosted_maintenance_message: {
-    plane_didnt_start_up_this_could_be_because_one_or_more_plane_services_failed_to_start:
+    operoz_didnt_start_up_this_could_be_because_one_or_more_operoz_services_failed_to_start:
       "O Operoz não está disponível. Um ou mais serviços podem não ter iniciado corretamente.",
     choose_view_logs_from_setup_sh_and_docker_logs_to_be_sure:
       "Verifique os logs do Docker ou execute docker compose logs api para diagnosticar.",
@@ -5970,7 +5970,7 @@ export default {
     help_actions: {
       open_operoz_manual: "Abrir Manual Operoz",
       open_keyboard_shortcuts: "Abrir atalhos de teclado",
-      open_plane_documentation: "Abrir documentação do Plane",
+      open_operoz_documentation: "Abrir documentação do Operoz",
       join_forum: "Participar do fórum",
       report_bug: "Reportar um bug",
     },

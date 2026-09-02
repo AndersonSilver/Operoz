@@ -163,7 +163,7 @@ O token é **account-wide** — não há seleção de workspace nesta versão.
 3. Pôr o **mesmo** `MCP_WEB_CALLBACK_SECRET` e o `MCP_WEB_CALLBACK_BASE_URL` do lado
    da API. Em HML é `deployments/hml/docker-compose.yaml`; em **produção é o
    `operoz.env` residente NA VPS** (`OPEROZ_APP_PATH`, default
-   `/root/operis-selfhost/plane-app`) — fora deste repositório, edição manual.
+   `/root/operis-selfhost/operoz-app`) — fora deste repositório, edição manual.
 4. Buildar o frontend com `VITE_MCP_BASE_URL` apontando para este MCP (é build-time:
    trocar o host depois exige **rebuild**, não só restart).
 5. No Claude, adicionar `https://mcp.operoz.io/mcp` como conector personalizado.
@@ -176,7 +176,7 @@ falha mais barato; o inverso deixa o `/authorize` a redirecionar para uma págin
 
 Configs existentes com **token estático continuam a funcionar sem qualquer
 alteração**, com ou sem OAuth ligado: `X-Api-Key`, `Authorization: Bearer <token
-Operoz>` (incluindo `plane_api_…` pré-rebrand) e `X-Operoz-Session` seguem o caminho
+Operoz>` (incluindo `operoz_api_…` pré-rebrand) e `X-Operoz-Session` seguem o caminho
 legado intacto. O discriminador é o prefixo dos tokens que **nós** emitimos
 (`ozmcp_at_`), por isso nenhum token de terceiros colide com ele.
 

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { WORKSPACE_SETTINGS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Breadcrumbs } from "@operoz/ui";

@@ -1,6 +1,6 @@
 import React from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ModuleStatusIcon } from "@operoz/propel/icons";
 import type { IModule } from "@operoz/types";
 // local imports

@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IProject, TOperatorConfigMap, TSupportedOperators } from "@operoz/types";
 import { COMPARISON_OPERATOR, EQUALITY_OPERATOR } from "@operoz/types";
 // local imports

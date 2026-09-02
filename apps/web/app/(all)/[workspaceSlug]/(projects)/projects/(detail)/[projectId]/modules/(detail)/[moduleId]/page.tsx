@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 import { BOARD_HUB_GLASS_PANEL, useBoardHubHasBackground } from "@/components/board/board-hub-background";
 // assets

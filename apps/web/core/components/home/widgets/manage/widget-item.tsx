@@ -12,12 +12,12 @@ import { attachInstruction } from "@atlaskit/pragmatic-drag-and-drop-hitbox/tree
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
-// plane types
+// operoz types
 import { useTranslation } from "@operoz/i18n";
 import type { InstructionType } from "@operoz/types";
-// plane ui
+// operoz ui
 import { DropIndicator, ToggleSwitch } from "@operoz/ui";
-// plane utils
+// operoz utils
 import { cn } from "@operoz/utils";
 // hooks
 import { useHome } from "@/hooks/store/use-home";

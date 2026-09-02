@@ -25,9 +25,9 @@ import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 import { usePlatformOS } from "@/hooks/use-platform-os";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import { useListGridColumnsContextOptional } from "./list-grid-columns-context";
-// plane web components
-import { IssueIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
-import { IssueStats } from "@/plane-web/components/issues/issue-layouts/issue-stats";
+// operoz web components
+import { IssueIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
+import { IssueStats } from "@/operoz-web/components/issues/issue-layouts/issue-stats";
 // types
 import { WithDisplayPropertiesHOC } from "../properties/with-display-properties-HOC";
 import { IssueAssigneeIndicator, IssueSubIssuesIndicator } from "../issue-row-indicators";

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-// plane imports
+// operoz imports
 import { TOOLBAR_ITEMS } from "@operoz/editor";
 import type { ToolbarMenuItem, EditorRefApi } from "@operoz/editor";
 import { Button } from "@operoz/propel/button";

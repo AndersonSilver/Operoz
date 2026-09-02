@@ -1,6 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ROLE_DETAILS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Logo } from "@operoz/propel/emoji-icon-picker";

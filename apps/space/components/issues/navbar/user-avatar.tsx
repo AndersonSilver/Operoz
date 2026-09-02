@@ -5,7 +5,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { usePopper } from "react-popper";
 import { LogOut } from "lucide-react";
 import { Popover, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { API_BASE_URL } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { AuthService } from "@operoz/services";

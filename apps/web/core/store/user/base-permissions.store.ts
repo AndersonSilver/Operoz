@@ -1,7 +1,7 @@
 import { unset, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction } from "mobx";
 import { computedFn } from "mobx-utils";
-// plane imports
+// operoz imports
 import type { TUserPermissions, TUserPermissionsLevel } from "@operoz/constants";
 import {
   EUserPermissions,
@@ -10,9 +10,9 @@ import {
 } from "@operoz/constants";
 import type { EUserProjectRoles, IUserProjectsRole, IWorkspaceMemberMe, TProjectMembership } from "@operoz/types";
 import { EUserWorkspaceRoles } from "@operoz/types";
-// plane web imports
+// operoz web imports
 import { WorkspaceService } from "@/services/workspace.service";
-import type { RootStore } from "@/plane-web/store/root.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
 // services
 import projectMemberService from "@/services/project/project-member.service";
 import userService from "@/services/user.service";
@@ -20,7 +20,7 @@ import userService from "@/services/user.service";
 // derived services
 const workspaceService = new WorkspaceService();
 
-type ETempUserRole = TUserPermissions | EUserWorkspaceRoles | EUserProjectRoles; // TODO: Remove this once we have migrated user permissions to enums to plane constants package
+type ETempUserRole = TUserPermissions | EUserWorkspaceRoles | EUserProjectRoles; // TODO: Remove this once we have migrated user permissions to enums to operoz constants package
 
 export interface IBaseUserPermissionStore {
   loader: boolean;

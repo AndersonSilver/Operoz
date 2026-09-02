@@ -2,13 +2,13 @@ import { useRef, useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { useTranslation } from "@operoz/i18n";
-// plane types
+// operoz types
 import { PageIcon, ProjectIcon, WorkItemsIcon } from "@operoz/propel/icons";
 import type { TActivityEntityData, THomeWidgetProps, TRecentActivityFilterKeys } from "@operoz/types";
-// plane ui
+// operoz ui
 // components
 import { ContentOverflowWrapper } from "@/components/core/content-overflow-HOC";
-// plane web services
+// operoz web services
 import { WorkspaceService } from "@/services/workspace.service";
 import { RecentsEmptyState } from "../empty-states";
 import { EWidgetKeys, WidgetLoader } from "../loaders";

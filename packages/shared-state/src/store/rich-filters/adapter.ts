@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IFilterAdapter, TExternalFilter, TFilterExpression, TFilterProperty } from "@operoz/types";
 
 /**

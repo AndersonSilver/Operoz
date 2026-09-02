@@ -1,6 +1,6 @@
 import type { Node as ProseMirrorNode } from "@tiptap/pm/model";
 import type { EditorState, Selection } from "@tiptap/pm/state";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // constants
 import { CORE_EXTENSIONS } from "@/constants/extension";

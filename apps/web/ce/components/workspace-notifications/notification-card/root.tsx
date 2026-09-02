@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { ENotificationLoader, ENotificationQueryParamType } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components

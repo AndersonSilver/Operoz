@@ -1,5 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
-// plane imports
+// operoz imports
 import { NETWORK_CHOICES, ETabIndices } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { IProject } from "@operoz/types";

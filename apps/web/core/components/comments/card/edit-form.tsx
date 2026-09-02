@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import { useForm } from "react-hook-form";
 import type { EditorRefApi } from "@operoz/editor";
 import { CheckIcon, CloseIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import type { TCommentsOperations, TIssueComment } from "@operoz/types";
 import { cn, isCommentEmpty } from "@operoz/utils";
 // components

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { observer } from "mobx-react";
 import { Eye, EyeOff, XCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { API_BASE_URL, E_PASSWORD_STRENGTH } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import { AuthService } from "@operoz/services";

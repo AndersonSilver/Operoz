@@ -3,7 +3,7 @@ import { Link2 } from "lucide-react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import { ChevronRightIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Popover } from "@operoz/propel/popover";
 import { Tooltip } from "@operoz/propel/tooltip";
@@ -29,8 +29,8 @@ import {
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
 import useIssuePeekOverviewRedirection from "@/hooks/use-issue-peek-overview-redirection";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// plane web imports
-import { IssueIdentifier, IssueTypeIdentifier } from "@/plane-web/components/issues/issue-details/issue-identifier";
+// operoz web imports
+import { IssueIdentifier, IssueTypeIdentifier } from "@/operoz-web/components/issues/issue-details/issue-identifier";
 // local imports
 import { getLocalizedStateName } from "@/components/project-states/state-display.utils";
 import { IssueAssigneeIndicator, IssueSubIssuesIndicator } from "../issue-row-indicators";

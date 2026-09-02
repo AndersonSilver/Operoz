@@ -6,8 +6,8 @@ import { CreatePageModal } from "@/components/pages/modals/create-page-modal";
 import { CreateUpdateProjectViewModal } from "@/components/views/modal";
 // hooks
 import { useCommandPalette } from "@/hooks/store/use-command-palette";
-// plane web hooks
-import { EPageStoreType } from "@/plane-web/hooks/store";
+// operoz web hooks
+import { EPageStoreType } from "@/operoz-web/hooks/store";
 
 export type TProjectLevelModalsProps = {
   workspaceSlug: string;

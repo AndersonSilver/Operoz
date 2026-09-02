@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { observer } from "mobx-react";
 import type { UseFormSetValue } from "react-hook-form";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { setToast, TOAST_TYPE } from "@operoz/propel/toast";

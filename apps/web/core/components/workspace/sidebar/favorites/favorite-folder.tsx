@@ -15,7 +15,7 @@ import { useParams } from "next/navigation";
 import { createRoot } from "react-dom/client";
 import { Star, MoreHorizontal, GripVertical } from "lucide-react";
 import { Disclosure, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { useTranslation } from "@operoz/i18n";
 import { DraftIcon, FavoriteFolderIcon, ChevronRightIcon } from "@operoz/propel/icons";

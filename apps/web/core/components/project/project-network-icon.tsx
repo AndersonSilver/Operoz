@@ -1,5 +1,5 @@
 import type { TNetworkChoiceIconKey } from "@operoz/constants";
-// plane imports
+// operoz imports
 import { GlobeIcon, LockIcon } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";
 

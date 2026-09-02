@@ -1,7 +1,7 @@
 import { AxiosError } from "axios";
 import { set } from "lodash-es";
 import { action, computed, makeObservable, observable, runInAction } from "mobx";
-// plane imports
+// operoz imports
 import { UserService } from "@operoz/services";
 import type { ActorDetail, IUser } from "@operoz/types";
 // store types

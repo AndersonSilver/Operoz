@@ -1,5 +1,5 @@
 import { useTheme } from "next-themes";
-// plane package imports
+// operoz package imports
 import { cn } from "@operoz/utils";
 // assets
 import darkBackgroundAsset from "@/app/assets/empty-state/analytics/empty-grid-background-dark.webp?url";

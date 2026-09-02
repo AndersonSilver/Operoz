@@ -1,7 +1,7 @@
 import React from "react";
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-// plane imports
+// operoz imports
 import type { TButtonSize, TButtonVariant } from "@operoz/propel/button";
 import { getButtonStyling } from "@operoz/propel/button";
 import type { IFilterInstance } from "@operoz/shared-state";

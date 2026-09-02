@@ -1,12 +1,12 @@
 import { cloneDeep, set } from "lodash-es";
 import { action, makeObservable, observable, runInAction, computed } from "mobx";
-// plane imports
+// operoz imports
 import { EUserPermissions, API_BASE_URL } from "@operoz/constants";
 import type { IUser, TUserPermissions } from "@operoz/types";
-// plane web imports
-import type { RootStore } from "@/plane-web/store/root.store";
-import type { IUserPermissionStore } from "@/plane-web/store/user/permission.store";
-import { UserPermissionStore } from "@/plane-web/store/user/permission.store";
+// operoz web imports
+import type { RootStore } from "@/operoz-web/store/root.store";
+import type { IUserPermissionStore } from "@/operoz-web/store/user/permission.store";
+import { UserPermissionStore } from "@/operoz-web/store/user/permission.store";
 // services
 import { AuthService } from "@/services/auth.service";
 import { UserService } from "@/services/user.service";

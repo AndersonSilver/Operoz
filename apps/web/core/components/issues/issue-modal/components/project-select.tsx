@@ -2,7 +2,7 @@ import React from "react";
 import { observer } from "mobx-react";
 import type { Control } from "react-hook-form";
 import { Controller } from "react-hook-form";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 // types
 import type { TIssue } from "@operoz/types";
@@ -16,7 +16,7 @@ import {
   issueFormControlBaseClass,
   issueFormControlWidthClass,
   type IssueFormControlWidth,
-} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+} from "@/operoz-web/components/issues/issue-modal/issue-form-field";
 
 type TIssueProjectSelectProps = {
   control: Control<TIssue>;

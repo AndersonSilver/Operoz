@@ -1,5 +1,5 @@
 import { useState } from "react";
-// plane imports
+// operoz imports
 import { ROLE } from "@operoz/constants";
 import { Button } from "@operoz/propel/button";
 import type { IWorkspaceMemberInvitation } from "@operoz/types";

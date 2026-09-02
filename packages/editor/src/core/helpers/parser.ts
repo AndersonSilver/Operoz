@@ -1,10 +1,10 @@
-// plane imports
+// operoz imports
 import type { TDocumentPayload, TDuplicateAssetData, TDuplicateAssetResponse, TEditorAssetType } from "@operoz/types";
-// plane web imports
+// operoz web imports
 import {
   extractAdditionalAssetsFromHTMLContent,
   replaceAdditionalAssetsInHTMLContent,
-} from "@/plane-editor/helpers/parser";
+} from "@/operoz-editor/helpers/parser";
 // local imports
 import { convertHTMLDocumentToAllFormats } from "./yjs-utils";
 

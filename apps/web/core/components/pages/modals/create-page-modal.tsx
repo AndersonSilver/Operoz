@@ -6,9 +6,9 @@ import type { TPage } from "@operoz/types";
 import { EModalPosition, EModalWidth, ModalCore } from "@operoz/ui";
 // hooks
 import { useAppRouter } from "@/hooks/use-app-router";
-// plane web hooks
-import type { EPageStoreType } from "@/plane-web/hooks/store";
-import { usePageStore } from "@/plane-web/hooks/store";
+// operoz web hooks
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
+import { usePageStore } from "@/operoz-web/hooks/store";
 // local imports
 import { PageForm } from "./page-form";
 

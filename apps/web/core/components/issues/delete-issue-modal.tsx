@@ -13,7 +13,7 @@ import { AlertModalCore } from "@operoz/ui";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser, useUserPermissions } from "@/hooks/store/user";
-// plane-web
+// operoz-web
 
 type Props = {
   isOpen: boolean;

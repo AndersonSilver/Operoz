@@ -1,11 +1,11 @@
 import type { ReactNode } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { Row } from "@operoz/ui";
 // components
 import { cn } from "@operoz/utils";
 import { useBoardHubHasBackground } from "@/components/board/board-hub-background";
-import { ExtendedAppHeader } from "@/plane-web/components/common/extended-app-header";
+import { ExtendedAppHeader } from "@/operoz-web/components/common/extended-app-header";
 
 export interface AppHeaderProps {
   header: ReactNode;

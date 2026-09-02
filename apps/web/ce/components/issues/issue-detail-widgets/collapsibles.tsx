@@ -1,4 +1,4 @@
-// plane types
+// operoz types
 import type { TIssueServiceType, TWorkItemWidgets } from "@operoz/types";
 
 export type TWorkItemAdditionalWidgetCollapsiblesProps = {

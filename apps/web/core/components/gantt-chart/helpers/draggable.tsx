@@ -5,8 +5,8 @@ import { observer } from "mobx-react";
 import type { IGanttBlock } from "@operoz/types";
 // helpers
 import { cn } from "@operoz/utils";
-//  Plane-web
-import { LeftDependencyDraggable, RightDependencyDraggable } from "@/plane-web/components/gantt-chart";
+//  Operoz-web
+import { LeftDependencyDraggable, RightDependencyDraggable } from "@/operoz-web/components/gantt-chart";
 import { useTimeLineChartStore } from "@/hooks/use-timeline-chart";
 //
 import { LeftResizable } from "./blockResizables/left-resizable";

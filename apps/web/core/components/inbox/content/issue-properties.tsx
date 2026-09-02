@@ -23,7 +23,7 @@ import { IssueLabel } from "@/components/issues/issue-detail/label";
 // hooks
 import { useProject } from "@/hooks/store/use-project";
 import { useAppRouter } from "@/hooks/use-app-router";
-import { WorkItemCustomFieldsProperties } from "@/plane-web/components/issues/issue-details/work-item-custom-fields-properties";
+import { WorkItemCustomFieldsProperties } from "@/operoz-web/components/issues/issue-details/work-item-custom-fields-properties";
 
 type Props = {
   workspaceSlug: string;

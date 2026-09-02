@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import { useCallback, useEffect, useState } from "react";
 import { observer } from "mobx-react";
 import { usePathname } from "next/navigation";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import { useHashScroll } from "@operoz/hooks";
 import { GlobeIcon, LockIcon } from "@operoz/propel/icons";

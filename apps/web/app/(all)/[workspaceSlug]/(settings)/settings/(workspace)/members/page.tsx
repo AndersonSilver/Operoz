@@ -20,12 +20,12 @@ import { WorkspaceMembersSettingsHero } from "@/components/workspace/settings/wo
 import { useMember } from "@/hooks/store/use-member";
 import { useWorkspace } from "@/hooks/store/use-workspace";
 import { useUserPermissions } from "@/hooks/store/user";
-// plane web components
+// operoz web components
 import {
   SendWorkspaceInvitationModal,
   MembersActivityButton,
   MembersCsvImportButton,
-} from "@/plane-web/components/workspace/members";
+} from "@/operoz-web/components/workspace/members";
 // local imports
 import type { Route } from "./+types/page";
 import { MembersWorkspaceSettingsHeader } from "./header";

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import { cn } from "@operoz/propel/utils";
 import type { SingleOrArray, TFilterValue } from "@operoz/types";

@@ -3,7 +3,7 @@ import { combine } from "@atlaskit/pragmatic-drag-and-drop/combine";
 import { autoScrollForElements } from "@atlaskit/pragmatic-drag-and-drop-auto-scroll/element";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane constants
+// operoz constants
 import { ALL_ISSUES } from "@operoz/constants";
 // types
 import type {
@@ -24,10 +24,10 @@ import { MultipleSelectGroup } from "@/components/core/multiple-select";
 import { useProjectEstimates } from "@/hooks/store/estimates";
 import { useProject } from "@/hooks/store/use-project";
 import { useIssueStoreType } from "@/hooks/use-issue-layout-store";
-// plane web components
-import { IssueBulkOperationsRoot } from "@/plane-web/components/issues/bulk-operations";
-// plane web hooks
-import { useBulkOperationStatus } from "@/plane-web/hooks/use-bulk-operation-status";
+// operoz web components
+import { IssueBulkOperationsRoot } from "@/operoz-web/components/issues/bulk-operations";
+// operoz web hooks
+import { useBulkOperationStatus } from "@/operoz-web/hooks/use-bulk-operation-status";
 import type { TSelectionHelper } from "@/hooks/use-multiple-select";
 // utils
 import type { GroupDropLocation } from "../utils";
@@ -86,7 +86,7 @@ export const List = observer(function List(props: IList) {
   const { workspaceSlug, projectId: routerProjectId, boardSlug } = useParams();
   const { currentProjectDetails } = useProject();
   const { areEstimateEnabledByProjectId } = useProjectEstimates();
-  // plane web hooks
+  // operoz web hooks
   const isBulkOperationsEnabled = useBulkOperationStatus();
 
   const useListGridLayout =
@@ -97,11 +97,11 @@ export const List = observer(function List(props: IList) {
   const listGridStorageKey = useMemo(() => {
     if (!workspaceSlug || !useListGridLayout) return undefined;
     if (storeType === EIssuesStoreType.BOARD && boardSlug) {
-      return `plane-list-grid-columns:${workspaceSlug}:board:${boardSlug}`;
+      return `operoz-list-grid-columns:${workspaceSlug}:board:${boardSlug}`;
     }
     if (routerProjectId) {
       const scope = storeType === EIssuesStoreType.MODULE ? "module" : "project";
-      return `plane-list-grid-columns:${workspaceSlug}:${scope}:${routerProjectId}`;
+      return `operoz-list-grid-columns:${workspaceSlug}:${scope}:${routerProjectId}`;
     }
     return undefined;
   }, [workspaceSlug, boardSlug, routerProjectId, storeType, useListGridLayout]);

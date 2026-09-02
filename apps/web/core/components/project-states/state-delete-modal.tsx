@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// Plane imports
+// Operoz imports
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { IState } from "@operoz/types";
 // ui

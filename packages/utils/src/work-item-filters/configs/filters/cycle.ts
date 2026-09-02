@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { ICycle, TCycleGroups, TFilterProperty, TSupportedOperators } from "@operoz/types";
 import { EQUALITY_OPERATOR, COLLECTION_OPERATOR } from "@operoz/types";
 // local imports

@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TCallbackMentionComponentProps } from "@operoz/editor";
 
 export type TEditorMentionComponentProps = TCallbackMentionComponentProps;

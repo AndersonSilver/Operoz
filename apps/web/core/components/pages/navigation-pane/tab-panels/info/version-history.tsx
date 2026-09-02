@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import useSWR from "swr";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import type { TPageVersion } from "@operoz/types";
 import { Avatar } from "@operoz/ui";

@@ -1,4 +1,4 @@
-// plane package imports
+// operoz package imports
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";

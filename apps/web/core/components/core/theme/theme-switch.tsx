@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { I_THEME_OPTION } from "@operoz/constants";
 import { THEME_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";

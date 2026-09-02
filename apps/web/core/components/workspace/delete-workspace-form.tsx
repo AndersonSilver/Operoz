@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Controller, useForm } from "react-hook-form";
 import { AlertTriangle } from "lucide-react";
-// Plane Imports
+// Operoz Imports
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";

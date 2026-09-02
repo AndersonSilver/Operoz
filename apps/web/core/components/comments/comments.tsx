@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type { E_SORT_ORDER } from "@operoz/constants";
 import type { TCommentsOperations, TIssueComment } from "@operoz/types";
 // local components

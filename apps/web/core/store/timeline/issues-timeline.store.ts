@@ -1,10 +1,10 @@
 import { isEqual, set } from "lodash-es";
 import { autorun, reaction, runInAction } from "mobx";
-// Plane-web
+// Operoz-web
 import type { TIssueRelationMap, TIssue } from "@operoz/types";
-import type { RootStore } from "@/plane-web/store/root.store";
-import type { IBaseTimelineStore } from "@/plane-web/store/timeline/base-timeline.store";
-import { BaseTimeLineStore } from "@/plane-web/store/timeline/base-timeline.store";
+import type { RootStore } from "@/operoz-web/store/root.store";
+import type { IBaseTimelineStore } from "@/operoz-web/store/timeline/base-timeline.store";
+import { BaseTimeLineStore } from "@/operoz-web/store/timeline/base-timeline.store";
 import { trackGanttIssueFields } from "./track-gantt-issue-fields";
 import {
   resolveBlockingAndBlockedByIds,

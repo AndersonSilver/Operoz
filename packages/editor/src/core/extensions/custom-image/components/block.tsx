@@ -1,6 +1,6 @@
 import { NodeSelection } from "@tiptap/pm/state";
 import React, { useRef, useState, useCallback, useLayoutEffect, useEffect } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // local imports
 import { ECustomImageAttributeNames } from "../types";

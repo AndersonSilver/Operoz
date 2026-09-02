@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { Outlet } from "react-router";
-// plane imports
+// operoz imports
 import { Header } from "@operoz/ui";
 // components
 import {

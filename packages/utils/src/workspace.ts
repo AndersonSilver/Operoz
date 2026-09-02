@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { IWorkspace } from "@operoz/types";
 
 export const orderWorkspacesList = (workspaces: IWorkspace[]): IWorkspace[] =>

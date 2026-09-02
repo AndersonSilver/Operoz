@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { ArrowDownWideNarrow, ArrowUpWideNarrow } from "lucide-react";
 import { useTranslation } from "@operoz/i18n";
-// plane imports
+// operoz imports
 import { getButtonStyling } from "@operoz/propel/button";
 // types
 import { CheckIcon } from "@operoz/propel/icons";

@@ -1,8 +1,8 @@
 import React from "react";
 // components
 import { Logo } from "@operoz/propel/emoji-icon-picker";
-// plane imports
-import type { TPartialProject } from "@/plane-web/types";
+// operoz imports
+import type { TPartialProject } from "@/operoz-web/types";
 // local imports
 import { PowerKMenuBuilder } from "./builder";
 

@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import Link from "next/link";
 
 import { EditIcon, CloseIcon } from "@operoz/propel/icons";
-// Plane
+// Operoz
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { ISearchIssueResponse } from "@operoz/types";
@@ -15,9 +15,9 @@ import { useIssueDetail } from "@/hooks/store/use-issue-detail";
 import { useIssues } from "@/hooks/store/use-issues";
 import { useProject } from "@/hooks/store/use-project";
 import { usePlatformOS } from "@/hooks/use-platform-os";
-// Plane web imports
-import { useTimeLineRelationOptions } from "@/plane-web/components/relations";
-import type { TIssueRelationTypes } from "@/plane-web/types";
+// Operoz web imports
+import { useTimeLineRelationOptions } from "@/operoz-web/components/relations";
+import type { TIssueRelationTypes } from "@/operoz-web/types";
 import type { TRelationObject } from "../issue-detail-widgets/relations";
 
 type TIssueRelationSelect = {

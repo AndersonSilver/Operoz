@@ -16,7 +16,7 @@ export default {
     not_found: {
       title: "Oops! Qualcosa sembra andare storto",
       description:
-        "Al momento non riusciamo a recuperare il tuo account plane. Potrebbe trattarsi di un errore di rete.",
+        "Al momento non riusciamo a recuperare il tuo account operoz. Potrebbe trattarsi di un errore di rete.",
       cta_primary: "Prova a ricaricare",
     },
     server_error: {

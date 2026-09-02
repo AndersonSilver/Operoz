@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // components
 import { PageRenderer } from "@/components/editors";

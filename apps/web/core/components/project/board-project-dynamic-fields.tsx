@@ -8,13 +8,13 @@ import { cn, projectIdentifierSanitizer } from "@operoz/utils";
 import { MemberDropdown } from "@/components/dropdowns/member/dropdown";
 import { ProjectNetworkIcon } from "@/components/project/project-network-icon";
 import { TimezoneSelect } from "@/components/global";
-import { BoardCustomFieldFormField } from "@/plane-web/components/issues/issue-modal/board-custom-field-form-field";
+import { BoardCustomFieldFormField } from "@/operoz-web/components/issues/issue-modal/board-custom-field-form-field";
 import { getBoardProjectFieldDisplayName } from "@/components/settings/board/board-project-field-display";
 import {
   getIssueFormControlClass,
   issueFormControlBaseClass,
   IssueFormField,
-} from "@/plane-web/components/issues/issue-modal/issue-form-field";
+} from "@/operoz-web/components/issues/issue-modal/issue-form-field";
 import type { IProjectCustomFieldLite } from "@operoz/types";
 import type { TCustomFieldValue } from "@operoz/types";
 import { projectFieldRequiredRules } from "./project-layout-validation";

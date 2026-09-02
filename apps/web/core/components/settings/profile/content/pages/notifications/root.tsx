@@ -1,6 +1,6 @@
 import useSWR from "swr";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 // components
 import { ProfileSettingsHeading } from "@/components/settings/profile/heading";

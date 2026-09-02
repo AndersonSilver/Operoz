@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { useParams, usePathname } from "next/navigation";
 import { SIDEBAR_WIDTH } from "@operoz/constants";
 import { useLocalStorage } from "@operoz/hooks";

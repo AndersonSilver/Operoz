@@ -1,7 +1,7 @@
 import { observer } from "mobx-react";
 import { Paperclip } from "lucide-react";
 import { LinkIcon, ViewsIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { Tooltip } from "@operoz/propel/tooltip";
 import type { IIssueDisplayProperties } from "@operoz/types";
 import { cn } from "@operoz/utils";

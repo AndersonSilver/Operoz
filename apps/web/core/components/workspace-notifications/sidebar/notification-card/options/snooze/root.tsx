@@ -3,7 +3,7 @@ import { Fragment } from "react";
 import { observer } from "mobx-react";
 import { Clock } from "lucide-react";
 import { Popover, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { NOTIFICATION_SNOOZE_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";

@@ -19,7 +19,7 @@ function Copy-EnvIfExample {
     return $true
 }
 
-function New-PlaneSecretKey {
+function New-OperozSecretKey {
     $chars = [char[]](([int[]](97..122)) + ([int[]](48..57)))
     $rng = [System.Security.Cryptography.RandomNumberGenerator]::Create()
     $buf = New-Object byte[] 50
@@ -67,7 +67,7 @@ if ($ok -and (Test-Path $apiEnv)) {
     if ($content -match '(?m)^SECRET_KEY=') {
         Write-Host "SECRET_KEY ja existe em apps\api\.env - nao alterado." -ForegroundColor Yellow
     } else {
-        $sk = New-PlaneSecretKey
+        $sk = New-OperozSecretKey
         $line = 'SECRET_KEY="' + $sk + '"'
         Add-Content -LiteralPath $apiEnv -Value $line
         Write-Host "OK  SECRET_KEY adicionado em apps\api\.env" -ForegroundColor Green

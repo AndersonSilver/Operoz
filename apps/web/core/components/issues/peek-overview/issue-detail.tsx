@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import { EFileAssetType } from "@operoz/types";
 import type { TNameDescriptionLoader } from "@operoz/types";
@@ -15,11 +15,11 @@ import { useMember } from "@/hooks/store/use-member";
 import { useProject } from "@/hooks/store/use-project";
 import { useUser } from "@/hooks/store/user";
 import useReloadConfirmations from "@/hooks/use-reload-confirmation";
-// plane web components
-import { DeDupeIssuePopoverRoot } from "@/plane-web/components/de-dupe/duplicate-popover";
-import { IssueTypeSwitcher } from "@/plane-web/components/issues/issue-details/issue-type-switcher";
-// plane web hooks
-import { useDebouncedDuplicateIssues } from "@/plane-web/hooks/use-debounced-duplicate-issues";
+// operoz web components
+import { DeDupeIssuePopoverRoot } from "@/operoz-web/components/de-dupe/duplicate-popover";
+import { IssueTypeSwitcher } from "@/operoz-web/components/issues/issue-details/issue-type-switcher";
+// operoz web hooks
+import { useDebouncedDuplicateIssues } from "@/operoz-web/hooks/use-debounced-duplicate-issues";
 // services
 import { WorkItemVersionService } from "@/services/issue";
 // local components

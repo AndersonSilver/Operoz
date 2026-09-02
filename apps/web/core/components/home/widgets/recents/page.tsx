@@ -1,7 +1,7 @@
 import { useRouter } from "next/navigation";
 import { Logo } from "@operoz/propel/emoji-icon-picker";
 import { PageIcon } from "@operoz/propel/icons";
-// plane import
+// operoz import
 import type { TActivityEntityData, TPageEntityData } from "@operoz/types";
 import { Avatar } from "@operoz/ui";
 import { calculateTimeAgo, getFileURL, getPageName } from "@operoz/utils";

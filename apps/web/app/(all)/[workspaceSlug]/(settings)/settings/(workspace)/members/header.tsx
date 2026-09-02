@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { WORKSPACE_SETTINGS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Breadcrumbs } from "@operoz/ui";
@@ -9,7 +9,7 @@ import { SettingsPageHeader } from "@/components/settings/page-header";
 import { WORKSPACE_SETTINGS_ICONS } from "@/components/settings/workspace/sidebar/item-icon";
 
 export const MembersWorkspaceSettingsHeader = observer(function MembersWorkspaceSettingsHeader() {
-  // plane hooks
+  // operoz hooks
   const { t } = useTranslation();
   // derived values
   const settingsDetails = WORKSPACE_SETTINGS.members;

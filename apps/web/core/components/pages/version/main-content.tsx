@@ -2,13 +2,13 @@ import { useState } from "react";
 import { observer } from "mobx-react";
 import useSWR from "swr";
 import { EyeIcon, TriangleAlert } from "lucide-react";
-// plane imports
+// operoz imports
 import { Button } from "@operoz/propel/button";
 import { TOAST_TYPE, setToast } from "@operoz/propel/toast";
 import type { TPageVersion } from "@operoz/types";
 import { renderFormattedDate, renderFormattedTime } from "@operoz/utils";
 // helpers
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 // local imports
 import type { TVersionEditorProps } from "./editor";
 

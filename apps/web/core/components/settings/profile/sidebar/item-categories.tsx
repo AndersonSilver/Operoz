@@ -3,7 +3,7 @@ import type { LucideIcon } from "lucide-react";
 import { Activity, Bell, CircleUser, KeyRound, LockIcon, Settings2 } from "lucide-react";
 import { observer } from "mobx-react";
 import { useParams } from "react-router";
-// plane imports
+// operoz imports
 import { GROUPED_PROFILE_SETTINGS, PROFILE_SETTINGS_CATEGORIES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import type { ISvgIcons } from "@operoz/propel/icons";

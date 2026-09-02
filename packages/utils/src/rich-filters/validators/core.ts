@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { SingleOrArray, TFilterExpression, TFilterProperty, TFilterValue } from "@operoz/types";
 // local imports
 import { getGroupChildren } from "../types";

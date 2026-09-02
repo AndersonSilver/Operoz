@@ -49,7 +49,7 @@ function ProjectSupportPage({ params }: Route.ComponentProps) {
 
   const pageTitle = currentProjectDetails?.name
     ? t("inbox_issue.page_label_support", { workspace: currentProjectDetails.name })
-    : t("inbox_issue.page_label_support", { workspace: "Plane" });
+    : t("inbox_issue.page_label_support", { workspace: "Operoz" });
 
   const currentNavigationTab = navigationTab
     ? navigationTab === "open"

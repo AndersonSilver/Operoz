@@ -1,12 +1,12 @@
 import { createContext } from "react";
 // ce imports
 import type { UseFormReset, UseFormWatch } from "react-hook-form";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import type { ISearchIssueResponse, TIssue } from "@operoz/types";
-// plane web imports
-import type { TIssuePropertyValues, TIssuePropertyValueErrors } from "@/plane-web/types/issue-types";
-import type { TIssueFields } from "@/plane-web/components/issues/issue-modal";
+// operoz web imports
+import type { TIssuePropertyValues, TIssuePropertyValueErrors } from "@/operoz-web/types/issue-types";
+import type { TIssueFields } from "@/operoz-web/components/issues/issue-modal";
 
 export type TPropertyValuesValidationProps = {
   projectId: string | null;

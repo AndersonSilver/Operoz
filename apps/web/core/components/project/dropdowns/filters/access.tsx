@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { NETWORK_CHOICES } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // components

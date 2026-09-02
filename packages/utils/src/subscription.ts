@@ -1,5 +1,5 @@
 import { orderBy } from "lodash-es";
-// plane imports
+// operoz imports
 import type { IPaymentProduct, TProductSubscriptionType, TSubscriptionPrice } from "@operoz/types";
 import { EProductSubscriptionEnum } from "@operoz/types";
 

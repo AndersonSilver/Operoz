@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { observer } from "mobx-react";
-// plane-i18n
+// operoz-i18n
 import { useTranslation } from "@operoz/i18n";
 // types
 import type { TIssueServiceType } from "@operoz/types";

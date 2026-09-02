@@ -5,7 +5,7 @@ This module provides a well-organized structure for OpenAPI/drf-spectacular util
 ## Structure
 
 ```
-plane/utils/openapi/
+operoz/utils/openapi/
 ├── __init__.py          # Main module that re-exports everything
 ├── auth.py              # Authentication extensions
 ├── parameters.py        # Common OpenAPI parameters
@@ -89,17 +89,17 @@ from operoz.utils.openapi.responses import UNAUTHORIZED_RESPONSE
 
 ### Files updated:
 
-- `plane/api/views/asset.py` - All methods use new `@asset_docs` helpers
-- `plane/api/views/project.py` - Import updated
-- `plane/api/views/user.py` - Import updated
-- `plane/api/views/state.py` - Import updated
-- `plane/api/views/intake.py` - Import updated
-- `plane/api/views/member.py` - Import updated
-- `plane/api/views/module.py` - Import updated
-- `plane/api/views/cycle.py` - Import updated
-- `plane/api/views/issue.py` - Import updated
-- `plane/settings/common.py` - Hook paths updated
-- `plane/api/apps.py` - Auth extension import updated
+- `operoz/api/views/asset.py` - All methods use new `@asset_docs` helpers
+- `operoz/api/views/project.py` - Import updated
+- `operoz/api/views/user.py` - Import updated
+- `operoz/api/views/state.py` - Import updated
+- `operoz/api/views/intake.py` - Import updated
+- `operoz/api/views/member.py` - Import updated
+- `operoz/api/views/module.py` - Import updated
+- `operoz/api/views/cycle.py` - Import updated
+- `operoz/api/views/issue.py` - Import updated
+- `operoz/settings/common.py` - Hook paths updated
+- `operoz/api/apps.py` - Auth extension import updated
 
 ## Benefits
 

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import type { IWorkspaceMemberInvitation } from "@operoz/types";
 import { ECreateOrJoinWorkspaceViews, EOnboardingSteps } from "@operoz/types";
 // hooks

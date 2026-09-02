@@ -63,11 +63,11 @@ describe("resolveRequestAuth — tabela de decisão", () => {
     expect(verifier.verifyAccessToken).not.toHaveBeenCalled();
   });
 
-  it("3b. Bearer com token pré-rebrand plane_api_ → LEGADO", async () => {
-    const resolved = await resolveRequestAuth(request({ authorization: "Bearer plane_api_antigo" }), BASE);
+  it("3b. Bearer com token pré-rebrand operoz_api_ → LEGADO", async () => {
+    const resolved = await resolveRequestAuth(request({ authorization: "Bearer operoz_api_antigo" }), BASE);
 
     expect(resolved.kind).toBe("legacy");
-    expect(resolved.kind === "legacy" && resolved.config.apiKey).toBe("plane_api_antigo");
+    expect(resolved.kind === "legacy" && resolved.config.apiKey).toBe("operoz_api_antigo");
   });
 
   it("4. nada → 401", async () => {

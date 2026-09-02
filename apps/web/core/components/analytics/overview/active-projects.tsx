@@ -2,13 +2,13 @@ import React from "react";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane package imports
+// operoz package imports
 import { useTranslation } from "@operoz/i18n";
 import { Loader } from "@operoz/ui";
-// plane web hooks
+// operoz web hooks
 import { useAnalytics } from "@/hooks/store/use-analytics";
 import { useProject } from "@/hooks/store/use-project";
-// plane web components
+// operoz web components
 import AnalyticsSectionWrapper from "../analytics-section-wrapper";
 import ActiveProjectItem from "./active-project-item";
 

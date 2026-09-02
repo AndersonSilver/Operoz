@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 
 type Props = {

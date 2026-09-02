@@ -1,4 +1,4 @@
-// plane imports
+// operoz imports
 import type { TEditorAsset } from "@operoz/editor";
 // store
 import type { TPageInstance } from "@/store/pages/base-page";

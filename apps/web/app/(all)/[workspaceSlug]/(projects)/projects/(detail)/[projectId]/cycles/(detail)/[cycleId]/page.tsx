@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { cn } from "@operoz/utils";
 // assets
 import emptyCycle from "@/app/assets/empty-state/cycle.svg?url";

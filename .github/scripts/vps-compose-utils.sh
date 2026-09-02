@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Funções partilhadas pelos scripts de deploy no VPS (plane-app + overlay assistente).
+# Funções partilhadas pelos scripts de deploy no VPS (operoz-app + overlay assistente).
 
 # Resolve operoz.env ou fallback legado operis.env (VPS pré-rebrand).
 operoz_app_env_file() {
@@ -85,7 +85,7 @@ operoz_set_aio_image() {
   echo "==> Imagem AIO fixada: $(grep -m1 'operoz-aio-api' "${base}" | tr -d ' ')"
 }
 
-# VPS instalada antes do rebrand: serviços operis-db, imagens myoperis/plane-*.
+# VPS instalada antes do rebrand: serviços operis-db, imagens myoperis/operoz-*.
 operoz_compose_uses_legacy_operis_names() {
   local app_path="${1:?app_path required}"
   local base
@@ -122,7 +122,7 @@ operoz_compose_image_hub() {
   local app_path="${1:?app_path required}"
   local base
   base="$(operoz_compose_base "${app_path}")"
-  if grep -q 'myoperis/plane-' "${base}" 2>/dev/null; then
+  if grep -q 'myoperis/operoz-' "${base}" 2>/dev/null; then
     echo "myoperis"
   else
     echo "myoperoz"
@@ -161,7 +161,7 @@ operoz_sync_git_ref() {
 # Aplica tags locais usadas pelo docker compose após pull do GHCR.
 operoz_tag_pulled_image() {
   local source_image="${1:?source_image required}"
-  local local_name="${2:?local_name required}" # ex. myoperoz/plane-frontend
+  local local_name="${2:?local_name required}" # ex. myoperoz/operoz-frontend
   local primary_tag="${3:?primary_tag required}" # ex. stable ou hml
 
   docker tag "${source_image}" "${local_name}:${primary_tag}"
@@ -177,10 +177,10 @@ operoz_tag_pulled_image() {
   esac
 }
 
-# Duplica tags myoperoz/* → myoperis/* quando o plane-app ainda referencia myoperis.
+# Duplica tags myoperoz/* → myoperis/* quando o operoz-app ainda referencia myoperis.
 operoz_tag_legacy_image_aliases() {
   local app_path="${1:?app_path required}"
-  local image_name="${2:?image_name required}" # ex. plane-frontend
+  local image_name="${2:?image_name required}" # ex. operoz-frontend
 
   local legacy_hub
   legacy_hub="$(operoz_compose_image_hub "${app_path}")"

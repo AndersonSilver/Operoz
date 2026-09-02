@@ -1,13 +1,13 @@
 import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
-// plane imports
+// operoz imports
 import type { TPageVersion } from "@operoz/types";
 import { cn } from "@operoz/utils";
 // hooks
 import { useQueryParams } from "@/hooks/use-query-params";
-// plane web imports
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+// operoz web imports
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 // local imports
 import { PAGE_NAVIGATION_PANE_VERSION_QUERY_PARAM, PAGE_NAVIGATION_PANE_WIDTH } from "../navigation-pane";
 import type { TVersionEditorProps } from "./editor";

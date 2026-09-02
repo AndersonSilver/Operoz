@@ -2,17 +2,17 @@ import type { ChangeEvent } from "react";
 import type { UseFormSetValue } from "react-hook-form";
 import { Controller, useFormContext } from "react-hook-form";
 import { InfoIcon } from "@operoz/propel/icons";
-// plane imports
+// operoz imports
 import { ETabIndices } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 // ui
 import { Tooltip } from "@operoz/propel/tooltip";
 import { Input, TextArea } from "@operoz/ui";
 import { cn, projectIdentifierSanitizer, getTabIndex } from "@operoz/utils";
-// plane utils
+// operoz utils
 // helpers
-// plane-web types
-import type { TProject } from "@/plane-web/types/projects";
+// operoz-web types
+import type { TProject } from "@/operoz-web/types/projects";
 import {
   ProjectFormFieldError,
   projectFormTextAreaErrorBgClass,

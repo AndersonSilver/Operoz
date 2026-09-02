@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-// plane imports
+// operoz imports
 import { useOutsideClickDetector } from "@operoz/hooks";
 import { IconButton } from "@operoz/propel/icon-button";
 import { SearchIcon, CloseIcon } from "@operoz/propel/icons";

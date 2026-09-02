@@ -1,7 +1,7 @@
 import { Disclosure } from "@headlessui/react";
 import type { Editor } from "@tiptap/core";
 import { Ban, Palette } from "lucide-react";
-// plane imports
+// operoz imports
 import { ChevronRightIcon } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";
 // constants

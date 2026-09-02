@@ -8,8 +8,8 @@ import { useEffect, useMemo } from "react";
 import { HeadingListExtension, SideMenuExtension } from "@/extensions";
 // hooks
 import { useEditor } from "@/hooks/use-editor";
-// plane editor extensions
-import { DocumentEditorAdditionalExtensions } from "@/plane-editor/extensions";
+// operoz editor extensions
+import { DocumentEditorAdditionalExtensions } from "@/operoz-editor/extensions";
 // types
 import type {
   TCollaborativeEditorHookProps,

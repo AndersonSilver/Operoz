@@ -1,7 +1,7 @@
 import { memo } from "react";
 import { ALargeSmall, Ban } from "lucide-react";
 import { Popover } from "@headlessui/react";
-// plane editor
+// operoz editor
 import { COLORS_LIST } from "@operoz/editor";
 import type { TEditorCommands } from "@operoz/editor";
 // helpers

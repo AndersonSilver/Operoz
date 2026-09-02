@@ -1,6 +1,6 @@
 import { GANTT_SIDEBAR_MAX_WIDTH, GANTT_SIDEBAR_MIN_WIDTH, SIDEBAR_WIDTH } from "../constants";
 
-const STORAGE_KEY = "plane_gantt_sidebar_width_preferences";
+const STORAGE_KEY = "operoz_gantt_sidebar_width_preferences";
 
 type GanttSidebarWidthPreferences = Record<string, number>;
 

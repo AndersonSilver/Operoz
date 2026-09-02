@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { Controller, useForm } from "react-hook-form";
-// plane imports
+// operoz imports
 import type { EditorRefApi } from "@operoz/editor";
 import type { TSticky } from "@operoz/types";
 import { cn, isCommentEmpty } from "@operoz/utils";

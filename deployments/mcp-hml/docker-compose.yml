@@ -1,7 +1,7 @@
 # Operoz MCP — instância de HOMOLOGAÇÃO, aponta para a API do HML.
 # Existe para testar mudanças no MCP server contra dados/API de HML antes de
 # ir para produção (deployments/mcp/docker-compose.yml). Serviço avulso,
-# fora da stack plane-app-hml.
+# fora da stack operoz-app-hml.
 #
 # Uso: docker compose --env-file operoz-mcp-hml.env up -d
 #

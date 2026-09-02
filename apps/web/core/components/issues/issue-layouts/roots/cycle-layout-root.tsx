@@ -3,7 +3,7 @@ import { isEmpty } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
 import useSWR from "swr";
-// plane constants
+// operoz constants
 import { ISSUE_DISPLAY_FILTERS_BY_PAGE, PROJECT_VIEW_TRACKER_ELEMENTS } from "@operoz/constants";
 import { EIssuesStoreType, EIssueLayoutTypes } from "@operoz/types";
 import { cn } from "@operoz/utils";

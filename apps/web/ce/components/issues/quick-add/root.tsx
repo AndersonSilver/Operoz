@@ -2,8 +2,8 @@ import type { FC } from "react";
 import { useEffect, useRef } from "react";
 import { observer } from "mobx-react";
 import type { UseFormRegister, UseFormSetFocus } from "react-hook-form";
-// plane constants
-// plane helpers
+// operoz constants
+// operoz helpers
 import { useOutsideClickDetector } from "@operoz/hooks";
 // types
 import type { TIssue } from "@operoz/types";

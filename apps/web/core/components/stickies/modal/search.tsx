@@ -2,7 +2,7 @@ import { useCallback, useRef, useState } from "react";
 import { debounce } from "lodash-es";
 import { observer } from "mobx-react";
 import { useParams } from "next/navigation";
-// plane hooks
+// operoz hooks
 import { useOutsideClickDetector } from "@operoz/hooks";
 // helpers
 import { useTranslation } from "@operoz/i18n";

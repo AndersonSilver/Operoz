@@ -1,6 +1,6 @@
 import { observer } from "mobx-react";
 import { ListFilter } from "lucide-react";
-// plane imports
+// operoz imports
 import type { ENotificationFilterType } from "@operoz/constants";
 import { FILTER_TYPE_OPTIONS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";

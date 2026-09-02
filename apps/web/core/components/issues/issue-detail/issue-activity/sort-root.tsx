@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { ArrowUpWideNarrow, ArrowDownWideNarrow } from "lucide-react";
-// plane package imports
+// operoz package imports
 import { E_SORT_ORDER } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Tooltip } from "@operoz/propel/tooltip";

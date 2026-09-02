@@ -2,16 +2,16 @@ import { useCallback } from "react";
 import { observer } from "mobx-react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRightCircle } from "lucide-react";
-// plane imports
+// operoz imports
 import { useTranslation } from "@operoz/i18n";
 import { Tabs } from "@operoz/propel/tabs";
 import { Tooltip } from "@operoz/propel/tooltip";
 // hooks
 import { useQueryParams } from "@/hooks/use-query-params";
-// plane web components
-import type { TPageNavigationPaneTab } from "@/plane-web/components/pages/navigation-pane";
+// operoz web components
+import type { TPageNavigationPaneTab } from "@/operoz-web/components/pages/navigation-pane";
 // store
-import type { EPageStoreType } from "@/plane-web/hooks/store";
+import type { EPageStoreType } from "@/operoz-web/hooks/store";
 import type { TPageInstance } from "@/store/pages/base-page";
 // local imports
 import type { TPageRootHandlers } from "../editor/page-root";

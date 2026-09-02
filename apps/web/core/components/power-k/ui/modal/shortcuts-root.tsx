@@ -1,6 +1,6 @@
 import { useState, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-// plane imports
+// operoz imports
 import { CloseIcon, SearchIcon } from "@operoz/propel/icons";
 import { ScrollArea } from "@operoz/propel/scrollarea";
 import { Input } from "@operoz/ui";

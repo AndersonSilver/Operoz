@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { EEstimateSystem, ESTIMATE_SYSTEMS } from "@operoz/constants";
 import { useTranslation } from "@operoz/i18n";
 import { Button } from "@operoz/propel/button";

@@ -1,5 +1,5 @@
 import { observer } from "mobx-react";
-// plane imports
+// operoz imports
 import { IconButton } from "@operoz/propel/icon-button";
 import { FilterIcon, FilterAppliedIcon } from "@operoz/propel/icons";
 import { cn } from "@operoz/utils";
